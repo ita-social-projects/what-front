@@ -1,11 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { addOne, subtractOne } from './redux/test-actions';
 import { counterSelector } from './redux/test-selectors';
 
 export const TestComponent = () => {
-  const counter = useSelector(counterSelector);
+  const counter = useSelector(counterSelector, shallowEqual);
   const dispatch = useDispatch();
 
   return (
