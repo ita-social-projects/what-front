@@ -4,7 +4,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { addOne, subtractOne } from './redux/test-actions';
 import { counterSelector } from './redux/test-selectors';
 
-export const TestComponent = () => {
+export const TestFeature = () => {
   const counter = useSelector(counterSelector, shallowEqual);
   const dispatch = useDispatch();
 

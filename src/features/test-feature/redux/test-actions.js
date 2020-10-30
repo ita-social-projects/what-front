@@ -1,4 +1,4 @@
-import testActionTypes from './test-types';
+import { testActionTypes } from './test-types';
 
 export const addOne = () => ({
   type: testActionTypes.ADD_ONE

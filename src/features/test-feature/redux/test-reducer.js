@@ -1,4 +1,4 @@
-import testActionTypes from './test-types';
+import { testActionTypes } from './test-types';
 
 const INITIAL_STATE = {
   counter: 0
