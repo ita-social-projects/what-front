@@ -1,4 +1,4 @@
-import { testActionTypes } from './test-types';
+import * as actions from './test-types';
 
 const INITIAL_STATE = {
   counter: 0
@@ -6,12 +6,12 @@ const INITIAL_STATE = {
 
 export const testReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case testActionTypes.ADD_ONE:
+    case actions.COUNTER_ADD_ONE:
       return {
         ...state,
         counter: ++state.counter
       };
-    case testActionTypes.SUBTRACT_ONE:
+    case actions.COUNTER_SUBTRACT_ONE:
       return {
         ...state,
         counter: --state.counter

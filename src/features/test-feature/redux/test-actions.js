@@ -1,9 +1,9 @@
-import { testActionTypes } from './test-types';
+import * as actions from './test-types';
 
-export const addOne = () => ({
-  type: testActionTypes.ADD_ONE
+export const addOne = () => (dispatch) => dispatch({
+  type: actions.COUNTER_ADD_ONE
 });
 
-export const subtractOne = () => ({
-  type: testActionTypes.SUBTRACT_ONE
+export const subtractOne = () => (dispatch) => dispatch({
+  type: actions.COUNTER_SUBTRACT_ONE
 });

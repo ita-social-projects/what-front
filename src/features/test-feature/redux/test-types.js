@@ -1,4 +1,2 @@
-export const testActionTypes = {
-  ADD_ONE: 'ADD_ONE',
-  SUBTRACT_ONE: 'SUBTRACT_ONE',
-};
+export const COUNTER_ADD_ONE = 'COUNTER/ADD_ONE';
+export const COUNTER_SUBTRACT_ONE= 'COUNTER/SUBTRACT_ONE';

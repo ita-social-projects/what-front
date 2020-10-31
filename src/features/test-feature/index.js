@@ -1,6 +1,5 @@
-import { TestFeature } from './test-feature';
-import { addOne, subtractOne } from './redux/test-actions';
-import { counterSelector } from './redux/test-selectors';
+import TestFeature from './test-feature';
 
-
-export { TestFeature, addOne, subtractOne, counterSelector };
+export { TestFeature };
+export { addOne, subtractOne } from './redux/test-actions';
+export { counterSelector } from './redux/test-selectors';
