@@ -5,5 +5,5 @@ import { rootReducer } from './reducer';
 
 export const configureStore = () => createStore(
     rootReducer,
-    composeWithDevTools
+    composeWithDevTools()
 );
