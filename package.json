@@ -2,6 +2,8 @@
   "name": "what",
   "version": "1.0.0",
   "description": "see README.md to find more information",
+  "license": "MIT",
+  "author": "",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -11,8 +13,6 @@
     "type": "git",
     "url": "git+https://github.com/ita-social-projects/what-front.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/ita-social-projects/what-front/issues"
   },
