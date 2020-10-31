@@ -7,7 +7,7 @@ import { useActions } from "../../shared/hooks";
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
-  const { incrementCounter, decrementCounter } = useActions({ ...counterActions });
+  const { incrementCounter, decrementCounter } = useActions(counterActions);
 
   return (
     <div>
