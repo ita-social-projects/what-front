@@ -27,7 +27,7 @@ export const EditGroup = () => {
                   id="name"
                   required
                   placeholder="group name"
-                  value="Current name"/>
+                  defaultValue="Current name"/>
               </div>
             </div>
             <div className="row mb-3">
@@ -51,7 +51,7 @@ export const EditGroup = () => {
                   name="start-date"
                   id="start-date"
                   required
-                  value={'2020-10-08'} />
+                  defaultValue={'2020-10-08'}/>
               </div>
             </div>
             <div className="row mb-3">
@@ -65,12 +65,12 @@ export const EditGroup = () => {
                   name="end-date"
                   id="finish-date"
                   required
-                  value={'2020-11-21'}/>
+                  defaultValue={'2020-11-21'}/>
               </div>
             </div>
             <div className="row justify-content-around mt-4">
               <input type="reset" name="reset-btn" className="btn btn-danger w-25" value="Clear all" />
-              <input type="submit" name="submit-btn" className="btn btn-success w-25" value="Create" />
+              <input type="submit" name="submit-btn" className="btn btn-success w-25" value="Confirm" />
             </div>
           </form>
         </div>
