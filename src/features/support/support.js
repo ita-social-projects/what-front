@@ -23,7 +23,7 @@ export const Support = () => {
                                       rows="7"
                                       cols="50"/>
                         </div>
-                        <button type="submit" className="btn btn-success float-right">Submit</button>
+                        <button type="submit" className="btn btn-success float-right">Send</button>
                         <button type="cancel" className="btn btn-danger mr-4">Cancel</button>
                     </form>
                 </div>
