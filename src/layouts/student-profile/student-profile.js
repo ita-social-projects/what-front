@@ -1,45 +1,47 @@
 import React from 'react';
 import './student-profile.css';
 
-const arrow = (
-  <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-chevron-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+const dot = (
+  <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-dot" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
   </svg>
 );
 
+
 export const StudentProfile = () => {
   return (
-    <div className="container mt-4 mb-4 border rounded bg-light">
+    <div className="container mt-4 border rounded bg-white shadow">
       <h1 className="text-center pt-4 pb-4">Student Details</h1>
+      <span className="close__student-details">&times;</span>
       <hr />
-      <div className="row">
-        <div className="col-12 col-md-8"><span>{arrow} First Name: </span></div>
-        <div className="col-6 col-md-4"><span>Maksym</span></div>
+      <div className="row lead">
+        <div className="col-12 col-md-6"><span>{dot} First Name: </span></div>
+        <div className="col-6 col-md-6"><span>John</span></div>
       </div>
       <hr />
-      <div className="row">
-        <div className="col-12 col-md-8"><span>{arrow} Last Name: </span></div>
-        <div className="col-6 col-md-4"><span>Mozdolevskyi</span></div>
+      <div className="row lead">
+        <div className="col-12 col-md-6"><span>{dot} Last Name: </span></div>
+        <div className="col-6 col-md-6"><span>Smith</span></div>
       </div>
       <hr />
-      <div className="row">
-        <div className="col-12 col-md-8"><span>{arrow} Group: </span></div>
-        <div className="col-6 col-md-4"><span>My group</span></div>
+      <div className="row lead">
+        <div className="col-12 col-md-6"><span>{dot} Group: </span></div>
+        <div className="col-6 col-md-6"><span>My group</span></div>
       </div>
       <hr />
-      <div className="row">
-        <div className="col-12 col-md-8"><span>{arrow} Courses: </span></div>
-        <div className="col-6 col-md-4"><span>My courses</span></div>
+      <div className="row lead">
+        <div className="col-12 col-md-6 "><span>{dot} Courses: </span></div>
+        <div className="col-6 col-md-6"><span>My courses</span></div>
       </div>
       <hr />
-      <div className="row">
-        <div className="col-12 col-md-8"><span>{arrow} E-mail: </span></div>
-        <div className="col-6 col-md-4"><span>My E-mail</span></div>
+      <div className="row lead">
+        <div className="col-12 col-md-6"><span>{dot} E-mail: </span></div>
+        <div className="col-6 col-md-6"><span>My E-mail</span></div>
       </div>
       <hr />
-      <div className="row">
-        <div className="col-12 col-md-8"><span>{arrow} Phone number: </span></div>
-        <div className="col-6 col-md-4"><span>My phone number: </span></div>
+      <div className="row lead">
+        <div className="col-12 col-md-6"><span>{dot} Phone number: </span></div>
+        <div className="col-6 col-md-6"><span>My phone number: </span></div>
       </div>
       <hr />
     </div>

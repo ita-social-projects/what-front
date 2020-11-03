@@ -1,4 +1,22 @@
 .container {
-  height: 550px;
+  height: 525px;
   cursor: default;
+  width: 40%;
+  position: relative;
+  box-shadow: 0,0,0,10px rgba(0,0,0,0.8);
+}
+
+.close__student-details {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  font-size: 34px;
+  cursor: pointer;
+}
+.close__student-details:hover {
+  opacity: 0.5;
+}
+
+.lead div:nth-child(odd) {
+  font-weight: bold;
 }
