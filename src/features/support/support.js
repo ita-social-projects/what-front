@@ -24,7 +24,7 @@ export const Support = () => {
                                       cols="50"/>
                         </div>
                         <button type="submit" className="btn btn-success float-right">Send</button>
-                        <button type="cancel" className="btn btn-danger mr-4">Cancel</button>
+                        <button type="cancel" className="btn btn-danger">Cancel</button>
                     </form>
                 </div>
             </div>
