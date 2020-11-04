@@ -17,6 +17,7 @@ $colors: (
         buttonSuccess-color: $success-color,
         buttonReject-color: $danger-color,
         buttonCustom-color: $theme-colorN1,
+        buttonDisabled-color: $disable-colorN1,
         selectedTab-color: $theme-colorN1,
         diselectedTab-color: $disable-colorN1,
         checkboxSuccess-color: $success-color,
@@ -55,39 +56,11 @@ $button-padding: 5px 15px;
 
 
 //mixins
-@mixin buttonAdd() {
-        background-color: map-get($colors, buttonCustom-color);
+@mixin button() {
         font-family: $accent-font;
         font-style: italic;
-        color: map-get($colors, textAccentN2-color);
         border-radius: map-get($border-radius, button-borRad);
         box-shadow: map-get($box-shadows, button-boxShadow);
-}
-
-@mixin buttonMore() {
-        background-color: map-get($colors, buttonCustom-color);
-        font-family: $accent-font;
-        border-radius: map-get($border-radius, button-borRad);
-        color: map-get($colors, textMain-color);
-        box-shadow: map-get($box-shadows, button-boxShadow);
-        padding: $button-padding;
-}
-
-@mixin buttonReject() {
-        background-color: map-get($colors, buttonReject-color);
-        font-family: $accent-font;
-        border-radius: map-get($border-radius, button-borRad);
-        color: map-get($colors, textAdd-color);
-        box-shadow: map-get($box-shadows, button-boxShadow);
-        padding: $button-padding;
-}
-
-@mixin buttonSuccess() {
-        background-color: map-get($colors, buttonSuccess-color);
-        font-family: $accent-font;
-        border-radius: map-get($border-radius, button-borRad);
-        box-shadow: map-get($box-shadows, button-boxShadow);
-        padding: $button-padding;
 }
 
 @mixin modalWindow() {
