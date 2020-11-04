@@ -17,18 +17,9 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        use: [
-          {
-            loader: 'svg-url-loader',
-            options: {
-              outputPath: 'svg',
-              name: '[name]-[sha1:hash:7].[ext]',
-              limit: 10000,
-            },
-          },
-        ],
+        use: ['@svgr/webpack'],
       }
-    ]
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
