@@ -87,7 +87,8 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
     ```
     git branch branch_name
     ```
-  - Branch name format: `surname-#issue-name_of_issue`
+  - Branch name format: `[surname]-[#issue]-[name_of_issue]`
+  - Branch name example: `drozdov-3-project_documentation`
 
 #### Step 2
 
