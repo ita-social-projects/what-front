@@ -29,7 +29,6 @@ $colors: (
 $main-font: "Libre Franklin', sans-serif";
 $accent-font: "Libre Baskerville', serif";
 
-
 // custom border-radius
 $main-borRad: 3px;
 $add-borRad: 5px;
@@ -51,9 +50,9 @@ $box-shadows: (
       tab-boxShadow: 0 -4px 10px rgba(0, 0, 0, 0.25),
 
 );
+
 //custom paddings
 $button-padding: 5px 15px;
-
 
 //mixins
 @mixin button() {
@@ -62,7 +61,6 @@ $button-padding: 5px 15px;
         border-radius: map-get($border-radius, button-borRad);
         box-shadow: map-get($box-shadows, button-boxShadow);
 }
-
 @mixin modalWindow() {
         background-color: map-get($colors, backgroung-color);
         box-shadow: map-get($box-shadows, button-boxShadow);
@@ -70,9 +68,18 @@ $button-padding: 5px 15px;
         z-index: 100;
         border-radius: map-get($border-radius, page-borRad);
 }
-
 @mixin pageWindow() {
         background-color: map-get($colors, backgroung-color);
         box-shadow: map-get($box-shadows, page-boxShadow);
         border-radius: map-get($border-radius, page-borRad);
+}
+@mixin card() {
+        background-color: map-get($colors, backgroung-color);
+        box-shadow: map-get($box-shadows: card-boxShadow);
+        border-radius: map-get($border-radius, card-boRad);
+}
+@mixin input() {
+        border-radius: map-get($border-radius, input-borRad);
+        border: 1px solid map-get($colors, textAccentN1-color);
+        width: 200px;
 }
