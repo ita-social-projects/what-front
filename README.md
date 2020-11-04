@@ -9,42 +9,30 @@
 ## 2. Where to find back-end part of the project
 Here is the back-end part of our project: _https://github.com/ita-social-projects/what-back_.
 
-`dev` branch of the back-end corresponds to `dev` branch on the front-end. The same thing with `master` branches.
-
 ---
 
 ## Table of Contents
 
 - [Installation](#installation)
   - [Required to install](#Required-to-install)
-  - [Environment](#Environment)
   - [Clone](#Clone)
   - [Setup](#Setup)
   - [How to run local](#How-to-run-local)
-  - [How to run Docker](#How-to-run-Docker)
-- [Usage](#Usage)
-  - [How to work with swagger UI](#How-to-work-with-swagger-UI)
-  - [How to run tests](#How-to-run-tests)
-  - [How to Checkstyle](#How-to-Checkstyle)
+  - [Production](#Production)
 - [Documentation](#Documentation)
-- [Contributing](#contributing)
-  - [git flow](#git-flow)
-  - [issue flow](#git-flow)
+  - [Git flow](#git-flow)
+  - [Issue flow](#issue-flow)
+  - [Debugging](#Debugging)
+- [Team](#Team)
 - [FAQ](#faq)
-- [Support](#support)
 - [License](#license)
 
 ---
 
 ## Installation
 
-- All the `code` required to get started
-- Images of what it should look like
-
 ### Required to install
 * NodeJS (14.15.0)
-
-### Environment
 
 ### Clone
 
@@ -65,14 +53,12 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
   ```
 - open _http://localhost:8080_ to view it in the browser.
 
-### How to run Docker
+### Production
 
----
-
-## Usage
-### How to work with swagger UI
-### How to run tests
-### How to Checkstyle
+- To create production build use:
+  ```properties
+  npm run build
+  ```
 
 ---
 
@@ -80,9 +66,8 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
 
 ---
 
-## Contributing
-
 ### Git flow
+
 > We have **master** , **dev** and **feature** branches.  
 >>All **feature** branches must be merged into **[dev](https://github.com/ita-social-projects/what-front/tree/dev)** branch.
 
@@ -95,24 +80,40 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
   - To clone repo to your local machine write:
     ```
     git clone https://github.com/ita-social-projects/what-front.git
-    ```
+    ```    
 
 - **Create new feature branch**
   - To create new branch write:
     ```
-    git branch [name of new branch]
+    git branch branch_name
     ```
   - Branch name format: `surname-#issue-name_of_issue`
 
 #### Step 2
 
 - Add files to staged 
-- Add commits to your branch
+  - to add all files
+    ```
+    git add .
+    ```
+  - to add a specific file
+    ```
+    git add file_name
+    ```
+- Add commits to your branch changes
+  ```
+  add commit -m 'messege'
+  ```
 - Push new changes to repo
+  ```
+  git push origin branch_name
+  ```
 
 #### Step 3
 
 - Create a new pull request using _<a href="https://github.com/ita-social-projects/what-front/compare/" target="_blank">github.com/ita-social-projects/what-front</a>_.
+
+---
 
 ### Issue flow
 
@@ -125,6 +126,14 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
 
 - Choose assignee to issue.
 - Move issue on dashboard according to its status.
+
+### Debugging
+
+#### Useful plugins for chrome to debugging 
+
+- _[React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)_
+- _[Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)_
+
 ---
 
 ## Team
@@ -136,7 +145,7 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
 [![@Anastasiia0999](https://avatars0.githubusercontent.com/u/55295369?s=200&v=4)](https://github.com/Anastasiia0999)
 [![@Icemandov](https://avatars2.githubusercontent.com/u/50587976?s=200&v=4)](https://github.com/Icemandov)
 [![@Winchestery](https://avatars1.githubusercontent.com/u/56606870?s=200&v=4)](https://github.com/Winchestery)
-[![@MarinaPasternak](https://)](https://github.com/MarinaPasternak)
+[![@MarinaPasternak](https://avatars3.githubusercontent.com/u/31963187?s=200&v=4)](https://github.com/MarinaPasternak)
 [![@PavelKundenko](https://avatars1.githubusercontent.com/u/47292994?s=200&v=4)](https://github.com/PavelKundenko)
 [![@iklopov](https://avatars3.githubusercontent.com/u/22566554?s=200&v=4)](https://github.com/iklopov)
 [![@MozdolevskyiMaksym](https://avatars1.githubusercontent.com/u/72501713?s=200&v=4)](https://github.com/MozdolevskyiMaksym)
@@ -144,10 +153,6 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
 ---
 
 ## FAQ
-
----
-
-## Support
 
 ---
 
