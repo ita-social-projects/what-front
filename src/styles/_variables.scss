@@ -63,14 +63,6 @@ $button-padding: 5px 15px;
         box-shadow: map-get($box-shadows, button-boxShadow);
 }
 
-@mixin modalWindow() {
-        background-color: map-get($colors, backgroung-color);
-        box-shadow: map-get($box-shadows, button-boxShadow);
-        position: absolute;
-        z-index: 100;
-        border-radius: map-get($border-radius, page-borRad);
-}
-
 @mixin pageWindow() {
         background-color: map-get($colors, backgroung-color);
         box-shadow: map-get($box-shadows, page-boxShadow);
