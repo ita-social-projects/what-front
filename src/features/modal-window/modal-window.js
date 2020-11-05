@@ -2,6 +2,8 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+import styles from './modal-window.module.scss';
+
 export const ModalWindow = ({
   children,
   toShow,
@@ -17,7 +19,7 @@ export const ModalWindow = ({
     <Modal.Header closeButton>
       <h4>{headline}</h4>
     </Modal.Header>
-    <Modal.Body>
+    <Modal.Body className={styles['modal-body']}>
       {children}
     </Modal.Body>
     <Modal.Footer className="justify-content-around">
