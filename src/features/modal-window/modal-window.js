@@ -22,9 +22,9 @@ export const ModalWindow = ({
     <Modal.Body className={styles['modal-body']}>
       {children}
     </Modal.Body>
-    <Modal.Footer className="justify-content-around">
-      <button className="btn btn-secondary" type="button" onClick={cancelHandler}>{cancelButtonText}</button>
-      <button className={`btn ${isActionDangerous ? 'btn-danger' : 'btn-success'}`} type="submit" onClick={submitHandler}>{submitButtonText}</button>
+    <Modal.Footer className={`${styles['modal-footer']} justify-content-around`}>
+      <button className={`btn btn-secondary ${styles['modal-btn']}`} type="button" onClick={cancelHandler}>{cancelButtonText}</button>
+      <button className={`btn ${isActionDangerous ? 'btn-danger' : 'btn-success'} ${styles['modal-btn']}`} type="submit" onClick={submitHandler}>{submitButtonText}</button>
     </Modal.Footer>
   </Modal>
 );

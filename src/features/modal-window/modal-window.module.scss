@@ -3,3 +3,7 @@
 .modal-body {
   font-family: $main-font;
 }
+
+.modal-btn {
+  @include button();
+}
