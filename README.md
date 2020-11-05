@@ -7,61 +7,32 @@
 "WHAT" (Who is absent today) is a project for control education process in the training centers. The main purpose is to control the quality of education: attendance, achievement, materials studied, etc.
 
 ## 2. Where to find back-end part of the project
-Here is the back-end part of our project: _link here_.
-
-`dev` branch of the back-end corresponds to `dev` branch on the front-end. The same thing with `master` branches.
+Here is the back-end part of our project: _https://github.com/ita-social-projects/what-back_.
 
 ---
 
-## Table of Contents (Optional)
-
-> If your `README` has a lot of info, section headers might be nice.
+## Table of Contents
 
 - [Installation](#installation)
   - [Required to install](#Required-to-install)
-  - [Environment](#Environment)
   - [Clone](#Clone)
   - [Setup](#Setup)
   - [How to run local](#How-to-run-local)
-  - [How to run Docker](#How-to-run-Docker)
-- [Usage](#Usage)
-  - [How to work with swagger UI](#How-to-work-with-swagger-UI)
-  - [How to run tests](#How-to-run-tests)
-  - [How to Checkstyle](#How-to-Checkstyle)
-- [Documentation](#Documentation))
-- [Contributing](#contributing)
-  - [git flow](#git-flow)
-  - [issue flow](#git-flow)
+  - [Production](#Production)
+- [Documentation](#Documentation)
+  - [Git flow](#git-flow)
+  - [Issue flow](#issue-flow)
+  - [Debugging](#Debugging)
+- [Team](#Team)
 - [FAQ](#faq)
-- [Support](#support)
 - [License](#license)
 
 ---
 
 ## Installation
 
-- All the `code` required to get started
-- Images of what it should look like
-
 ### Required to install
-* Python (3.6.3)
-* PostgreSQL (9.5.9)
-* Django (1.11.6)
-* NodeJS (6.11.4)
-* Redis (3.0.6)
-
-### Environment
-environmental variables
-```properties
-spring.datasource.url=${DATASOURCE_URL}
-spring.datasource.username=${DATASOURCE_USER}
-spring.datasource.password=${DATASOURCE_PASSWORD}
-spring.mail.username=${EMAIL_ADDRESS}
-spring.mail.password=${EMAIL_PASSWORD}
-cloud.name=${CLOUD_NAME}
-api.key=${API_KEY}
-api.secret=${API_SECRET}
-```
+* NodeJS (14.15.0)
 
 ### Clone
 
@@ -69,34 +40,25 @@ api.secret=${API_SECRET}
 
 ### Setup
 
-- If you want more syntax highlighting, format your code like this:
-
-> update and install this package first
-
-```shell
-$ brew update
-$ brew install SOMEREPOproductions
-```
-
-> now install npm and bower packages
-
-```shell
-$ npm install
-$ bower install
-```
-
-- For all the possible languages that support syntax highlithing on GitHub (which is basically all of them), refer <a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml" target="_blank">here</a>.
-
+- install npm packages:
+  ```properties
+  npm install
+  ```
 ### How to run local
 
-### How to run Docker
+- open terminal
+- write to start:
+  ```properties
+  npm run dev
+  ```
+- open _http://localhost:8080_ to view it in the browser.
 
----
+### Production
 
-## Usage
-### How to work with swagger UI
-### How to run tests
-### How to Checkstyle
+- To create production build use:
+  ```properties
+  npm run build
+  ```
 
 ---
 
@@ -104,62 +66,94 @@ $ bower install
 
 ---
 
-## Contributing
-
 ### Git flow
-> To get started...
+
+> We have **master** , **dev** and **feature** branches.  
+>>All **feature** branches must be merged into **[dev](https://github.com/ita-social-projects/what-front/tree/dev)** branch.
+
+![Github flow](https://www.programmersought.com/images/446/b01b2a0649fee64c9ba71fc10a0ef886.png)
+
 #### Step 1
 
-- **Option 1**
-    - 🍴 Fork this repo!
+- **Clone dev**
+  - Open terminal
+  - To clone repo to your local machine write:
+    ```
+    git clone https://github.com/ita-social-projects/what-front.git
+    ```    
 
-- **Option 2**
-    - 👯 Clone this repo to your local machine using `https://github.com/ita-social-projects/SOMEREPO.git`
+- **Create new feature branch**
+  - To create new branch write:
+    ```
+    git branch branch_name
+    ```
+  - Branch name format: `[surname]-[#issue]-[name_of_issue]`
+  - Branch name example: `drozdov-3-project_documentation`
 
 #### Step 2
 
-- **HACK AWAY!** 🔨🔨🔨
+- Add files to staged 
+  - to add all files
+    ```
+    git add .
+    ```
+  - to add a specific file
+    ```
+    git add file_name
+    ```
+- Add commits to your branch changes
+  ```
+  add commit -m 'messege'
+  ```
+- Push new changes to repo
+  ```
+  git push origin branch_name
+  ```
 
 #### Step 3
 
-- 🔃 Create a new pull request using <a href="https://github.com/ita-social-projects/SOMEREPO/compare/" target="_blank">github.com/ita-social-projects/SOMEREPO</a>.
+- Create a new pull request using _<a href="https://github.com/ita-social-projects/what-front/compare/" target="_blank">github.com/ita-social-projects/what-front</a>_.
+
+---
 
 ### Issue flow
+
+#### Step 1
+
+- To create new issue go to _[issue](https://github.com/ita-social-projects/what-front/issues)_ and press **New issue** button.
+- When creating _[issue](https://github.com/ita-social-projects/what-front/issues)_ you should add name of the issue, description, choose label and project.
+
+#### Step 2
+
+- Choose assignee to issue.
+- Move issue on dashboard according to its status.
+
+### Debugging
+
+#### Useful plugins for chrome to debugging 
+
+- _[React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)_
+- _[Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)_
 
 ---
 
 ## Team
 
-> Or Contributors/People
+### Front-end development team
 
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam)
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam)
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam)
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam) 
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam)
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam)
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam)
-[![@lhalam](https://avatars3.githubusercontent.com/u/3837059?s=100&v=4)](https://github.com/lhalam)  
-
-- You can just grab their GitHub profile image URL
-- You should probably resize their picture using `?s=200` at the end of the image URL.
+[![@so2niko](https://avatars2.githubusercontent.com/u/9075641?s=200&v=4)](https://github.com/so2niko)
+[![@archontis-cpu](https://avatars0.githubusercontent.com/u/57407473?s=200&v=4)](https://github.com/archontis-cpu)
+[![@Anastasiia0999](https://avatars0.githubusercontent.com/u/55295369?s=200&v=4)](https://github.com/Anastasiia0999)
+[![@Icemandov](https://avatars2.githubusercontent.com/u/50587976?s=200&v=4)](https://github.com/Icemandov)
+[![@Winchestery](https://avatars1.githubusercontent.com/u/56606870?s=200&v=4)](https://github.com/Winchestery)
+[![@MarinaPasternak](https://avatars3.githubusercontent.com/u/31963187?s=200&v=4)](https://github.com/MarinaPasternak)
+[![@PavelKundenko](https://avatars1.githubusercontent.com/u/47292994?s=200&v=4)](https://github.com/PavelKundenko)
+[![@iklopov](https://avatars3.githubusercontent.com/u/22566554?s=200&v=4)](https://github.com/iklopov)
+[![@MozdolevskyiMaksym](https://avatars1.githubusercontent.com/u/72501713?s=200&v=4)](https://github.com/MozdolevskyiMaksym)
 
 ---
 
 ## FAQ
-
-- **How do I do *specifically* so and so?**
-    - No problem! Just do this.
-
----
-
-## Support
-
-Reach out to me at one of the following places!
-
-- Website at <a href="http://Website.com" target="_blank">`Website.com`</a>
-- Facebook at <a href="https://www.facebook.com/LiubomyrHalamaha/" target="_blank">`Liubomyr Halamaha`</a>
-- Insert more social links here.
 
 ---
 
