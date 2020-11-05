@@ -30,18 +30,8 @@ export const StudentProfile = () => {
           </div>
           <hr />
           <div className="row lead">
-            <div className="col-12 col-md-6 font-weight-bold"><span>{dot} Courses: </span></div>
-            <div className="col-6 col-md-6"><span>My courses</span></div>
-          </div>
-          <hr />
-          <div className="row lead">
             <div className="col-12 col-md-6 font-weight-bold"><span>{dot} E-mail: </span></div>
             <div className="col-6 col-md-6"><span>My E-mail</span></div>
-          </div>
-          <hr />
-          <div className="row lead">
-            <div className="col-12 col-md-6 font-weight-bold"><span>{dot} Phone number: </span></div>
-            <div className="col-6 col-md-6"><span>My phone number </span></div>
           </div>
           <hr />
         </div>
