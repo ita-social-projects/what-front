@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import { validateEmail, validatePassword, validateConfirmPassword } from './validation-helpers.js';
 
-export const Registration = () => {
+export const FormExample = () => {
   const onSubmit = (values, actions) => {
     console.log(values);
     actions.resetForm();

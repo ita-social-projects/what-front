@@ -1,1 +1,1 @@
-export { Registration } from './form-example.js';
+export { FormExample } from './form-example.js';
