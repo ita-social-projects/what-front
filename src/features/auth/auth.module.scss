@@ -5,7 +5,15 @@
   background-color: #01073A;  
 }
 
-.auth-container {
+.form {
   background-color: #fff;
-  margin-top: 40vh;  
+  margin-top: 40vh;
+  border-radius: 3px;;
+}
+
+.link { 
+
+  &:hover {
+    text-decoration: none;    
+  }
 }
