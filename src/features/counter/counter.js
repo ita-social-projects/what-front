@@ -3,7 +3,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 
 import { counterSelector, counterActions } from './redux';
 import { useActions } from "../../shared/hooks";
-import styles from "./Button.css";
+import styles from './button.scss';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);

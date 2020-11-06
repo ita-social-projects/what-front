@@ -1,8 +1,0 @@
-@value colors: "../../colors.css";
-@value customBlue from colors;
-
-.baseButton {
-    border: 2px solid darkgray;
-    background-color: gray;
-    color: customBlue;
-}
