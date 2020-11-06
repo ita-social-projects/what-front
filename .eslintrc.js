@@ -31,7 +31,7 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
     'import/prefer-default-export': 'off',
     'import/extensions': ['error', 'ignorePackages', {
-      js: 'never',
+      js: 'always',
     }],
     'object-curly-spacing': [2, 'always'],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],

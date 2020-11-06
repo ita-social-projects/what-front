@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
-import { counterSelector, counterActions } from './redux';
-import { useActions } from '../../shared/hooks';
-import { ModalWindow } from '../modal-window/modal-window';
+import { counterSelector, counterActions } from './redux/index.js';
+import { useActions } from '../../shared/hooks/index.js';
+import { ModalWindow } from '../modal-window/index.js';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
@@ -30,9 +30,8 @@ export const Counter = () => {
       <button type="button" onClick={showModalHandler}>Show modal</button>
       <ModalWindow
         toShow={toShowModal}
-        submitHandler={submitModalHandler}
-        closeHandler={closeModalHandler}
-        cancelHandler={closeModalHandler}
+        onSubmit={submitModalHandler}
+        onClose={closeModalHandler}
       >
         *some action that you should confirm (or not confirm)*
       </ModalWindow>
