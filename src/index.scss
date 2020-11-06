@@ -1,6 +1,2 @@
 @import  '~bootstrap/scss/bootstrap';
-@import './styles/_variables.scss';
-
-h2 {
-  color: map-get($colors, header-color);
-}
+@import './styles/_variables';
