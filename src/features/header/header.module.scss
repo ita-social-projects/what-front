@@ -1,4 +1,46 @@
 .header {
+  height: 75px;
+  padding: 0 3rem !important;
+
   background-color: #01073A;
-  height: 50px;
+
+  &__container-links {
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  &__container-links > a {
+    width: 18%;
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: white;
+
+    font-weight: bold;
+  } 
+
+  &__account {
+    width: 20%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    color: white;
+    cursor: default;
+
+    // &-fullname {
+    //   padding-right: 2.5rem;
+    // }
+
+    &-logout:hover {
+      cursor: pointer;
+      opacity: 0.5;
+    }
+  }
 }
+
