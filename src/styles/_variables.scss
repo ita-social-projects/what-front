@@ -1,13 +1,5 @@
-//google fonts
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital@0;1&family=Libre+Franklin:ital,wght@0,300;0,400;0,600;1,400&display=swap');
-
-//fonts variables
-$libre-baskerville: 'Libre Baskerville', serif;
-$libre-franklin: 'Libre Franklin', sans-serif;
-
-$bold: 600;
-$regular: 400;
-$light: 300;
+//custom fonts
+@import '_fonts';
 
 //colors variables
 $theme-yellow: #FFB800;
@@ -60,29 +52,6 @@ $box-shadows: (
 
 //custom paddings
 $button-padding: 5px 15px;
-
-//fonts mixins
-@mixin baskerville-regular() {
-  font-family: $libre-baskerville;
-  font-weight: $regular;
-}
-@mixin baskerville-italic() {
-  font-family: $libre-baskerville;
-  font-weight: $regular;
-  font-style: italic;
-}
-@mixin franklin-regular() {
-  font-family: $libre-franklin;
-  font-weight: $regular;
-}
-@mixin franklin-light() {
-  font-family: $libre-franklin;
-  font-weight: $light;
-}
-@mixin franklin-semibold() {
-  font-family: $libre-franklin;
-  font-weight: $bold;
-}
 
 //mixins
 @mixin button() {
