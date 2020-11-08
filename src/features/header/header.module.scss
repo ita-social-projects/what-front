@@ -33,13 +33,9 @@
     color: white;
     cursor: default;
 
-    // &-fullname {
-    //   padding-right: 2.5rem;
-    // }
-
     &-logout:hover {
-      cursor: pointer;
       opacity: 0.5;
+      cursor: pointer;
     }
   }
 }
