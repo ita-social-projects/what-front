@@ -3,6 +3,7 @@
   padding: 0 3rem !important;
 
   background-color: #01073A;
+  // font-size: 25px
 
   &__container-links {
     width: 50%;
@@ -14,13 +15,14 @@
   }
 
   &__container-links > a {
-    width: 18%;
+    width: 20%;
 
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     background-color: white;
 
     font-weight: bold;
+    font-size: 20px;
   } 
 
   &__account {
@@ -30,6 +32,8 @@
     justify-content: flex-end;
     align-items: center;
 
+    font-size: 22px;
+    
     color: white;
     cursor: default;
 
