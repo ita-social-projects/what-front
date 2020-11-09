@@ -13,7 +13,7 @@ export const ModalWindow = ({
   title,
   cancelButtonText,
   submitButtonText,
-  isActionDangerous,
+  useRedButton,
 }) => (
   <Modal show={toShow} onHide={onClose} onExited={onAfterClose} onEscapeKeyDown={onClose}>
     <Modal.Header closeButton>
@@ -24,7 +24,7 @@ export const ModalWindow = ({
     </Modal.Body>
     <Modal.Footer className="justify-content-around">
       <button className={`btn btn-secondary ${styles['modal-btn']}`} type="button" onClick={onClose}>{cancelButtonText}</button>
-      <button className={`btn ${isActionDangerous ? 'btn-danger' : 'btn-success'} ${styles['modal-btn']}`} type="submit" onClick={onSubmit}>{submitButtonText}</button>
+      <button className={`btn ${useRedButton ? 'btn-danger' : 'btn-success'} ${styles['modal-btn']}`} type="submit" onClick={onSubmit}>{submitButtonText}</button>
     </Modal.Footer>
   </Modal>
 );
@@ -42,13 +42,13 @@ ModalWindow.propTypes = {
   title: PropTypes.string,
   cancelButtonText: PropTypes.string,
   submitButtonText: PropTypes.string,
-  isActionDangerous: PropTypes.bool,
+  useRedButton: PropTypes.bool,
 };
 
 ModalWindow.defaultProps = {
   title: 'Confirm action',
   cancelButtonText: 'Cancel',
   submitButtonText: 'Confirm',
-  isActionDangerous: false,
+  useRedButton: false,
   onAfterClose: () => false,
 };
