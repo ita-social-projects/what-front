@@ -26,11 +26,6 @@ export const StudentProfile = () => {
           </div>
           <hr />
           <div className={`row ${styles.lead}`}>
-            <div className="col-12 col-md-6 font-weight-bold"><span>{dot} Group: </span></div>
-            <div className={`col-12 col-md-6 ${styles.details}`}><span>My group</span></div>
-          </div>
-          <hr />
-          <div className={`row ${styles.lead}`}>
             <div className="col-12 col-md-6 font-weight-bold"><span>{dot} E-mail: </span></div>
             <div className={`col-12 col-md-6 ${styles.details}`}><span>My E-mail</span></div>
           </div>
