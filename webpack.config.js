@@ -1,12 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
-  mode: "development",
+  mode: 'development',
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: '[name].bundle.js'
+    filename: '[name].bundle.js',
   },
   module: {
     rules: [
@@ -27,16 +28,49 @@ module.exports = {
             },
           },
         ],
+      },  
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          {loader: 'style-loader'},
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              modules: {
+                localIdentName: '[path]__[name]__[local]___[hash:base64:5]',
+              },
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    'autoprefixer',
+                  ],
+                ],
+                sourceMap: true
+              }
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          }
+        ],
       },
-      
-    ],
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
     }),
   ],
   devServer: {
-    open: true
-  }
+    open: true,
+  },
 };
