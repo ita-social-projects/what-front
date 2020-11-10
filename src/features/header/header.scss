@@ -7,10 +7,10 @@
 
   &__sidebar {
     position: absolute;
-    left: -27%;
+    left: -29%;
     top: 0;
 
-    width: 27%;
+    width: 29%;
     min-height: 500px;
 
     background-color: rgba(#01073A, 0.9);
@@ -49,6 +49,14 @@
 
       color: white;
       background-color: transparent;
+
+      &:focus {
+        background-color: orange;
+      }
+      &:hover {
+        background-color: orange;
+        color: #212529;
+      }
     }
   }
 
@@ -67,10 +75,20 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 
+    text-align: center;
     font-weight: bold;
     font-size: 18px;
 
+    color: #212529;
     background-color: white;
+
+      &:focus {
+        background-color: orange;
+      }
+      &:hover {
+        background-color: orange;
+        color: #212529;
+      }
   } 
 
   &__account {
@@ -117,7 +135,7 @@
     padding: 0 1.5rem !important;
 
     &__navbar-links  {
-      display: none !important;
+      display: none;
     }
 
     &__account-user--fullname {
@@ -132,8 +150,8 @@
 
 @media(max-width: 480px) {
   .header__sidebar {
-    width: 55%;
-    left: -55%;
+    width: 50%;
+    left: -50%;
   }
 }
 

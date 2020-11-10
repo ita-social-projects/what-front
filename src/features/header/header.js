@@ -19,15 +19,15 @@ const sidebarToggler = (
   </svg>
 );
 
-const links = [
-  {id: 0, name: 'Progress'},
-  {id: 1, name: 'Schedule'},
-  {id: 2, name: 'Support'},
-];
-
 export const Header = () => {
+  const links = [
+    {id: 0, name: 'Progress'},
+    {id: 1, name: 'Schedule'},
+    {id: 2, name: 'Support'},
+  ];
+
   const [sidebar, setSidebar] = useState({
-    active: false
+    active: false,
   })
 
   function showSidebar() {
@@ -45,17 +45,17 @@ export const Header = () => {
 
         <div className={`${styles['header__sidebar-toggler']}`} onClick={showSidebar}>{sidebarToggler}</div>
 
-        <div className={`${styles['header__sidebar']} ${sidebar.active ? styles['sidebar--active'] : styles['']}`}>
+        <div className={`${styles['header__sidebar']} ${sidebar.active ? styles['sidebar--active'] : ''}`}>
           <div className={`${styles['header__sidebar-links']}`}>
             {links.map(({ id, name }) => (
-              <a className='btn-warning nav-item nav-link' href={`#${name}`} key={id}>{name}</a>
+              <a className='nav-item nav-link' href={`#${name}`} key={id} onClick={showSidebar}>{name}</a>
             ))}
           </div>
         </div>
 
         <div className={`navbar-nav nav-tabs ${styles['header__navbar-links']}`}>
-          {links.map(({ id, name }) => (
-            <a className='btn btn-warning nav-item nav-link' href={`#${name}`} key={id}>{name}</a>
+          {links.map(({ id, name, active }) => (
+            <a className={`nav-item nav-link`} href={`#${name}`} key={id}>{name}</a>
           ))}
         </div>
 
