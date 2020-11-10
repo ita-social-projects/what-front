@@ -15,7 +15,12 @@ export const Button = ({
   <button
     type={type}
     onClick={onClick}
-    className={classNames(styles.button, 'btn', { [`btn-${variant}`]: variant }, { [additionalCssClasses.join(' ')]: additionalCssClasses.length })}
+    className={classNames(
+      styles.button,
+      'btn',
+      { [`btn-${variant}`]: variant },
+      { [additionalCssClasses.join(' ')]: additionalCssClasses.length },
+    )}
     disabled={disabled}
   >
     {children}
