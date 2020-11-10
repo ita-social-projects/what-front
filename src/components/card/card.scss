@@ -2,6 +2,7 @@
 
 .card-component{
   @include card();
+  padding:15px;
 }
 
 .card-component:hover{
@@ -14,22 +15,23 @@
   display:flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-end;
 }
 
 .card-title{
    @include baskerville-italic();
-  font-size:14px;
+  font-size:18px;
 }
 
 .card-text{
   @include franklin-regular();
-  font-size:14px;
+  font-size:16px;
+  padding-top:5px;
 }
 
 .card-date{
   @include baskerville-regular();
-  font-size: 12px;
+  font-size: 14px;
   text-decoration: underline;
   color: map-get($colors, textAccentN1-color);
   margin-bottom:0;

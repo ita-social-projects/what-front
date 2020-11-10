@@ -8,7 +8,7 @@ const Icon = ({ size, color, icon, className, style, viewBox }) => {
   return (
     <svg
       className={className}
-      //style={styles}
+      fill={color}
       viewBox={viewBox}
       width={`${size}px`}
       height={`${size}px`}
