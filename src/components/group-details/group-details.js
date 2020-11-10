@@ -2,18 +2,6 @@ import React from 'react';
 import propTypes from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
 
-/**
- * @param group {object} Information about group
- * @param group.name {string}
- * @param group.courseId {number} Course id which bind with this group
- * @param group.startDate {string}
- * @param group.finishDate {string}
- * @param group.studentIds {array} List of students ids which bind with this group
- *
- * @param mentors {array} List of objects with information about mentors assigned to this group
- * @param mentors.firstName
- * @param mentors.lastName
- */
 export const GroupDetails = ({ group, mentors }) => {
   /**
    * These students just are mocks,
@@ -57,7 +45,6 @@ export const GroupDetails = ({ group, mentors }) => {
               {`Course: ${group.courseId}`}
             </p>
             <div>
-              <a href="/" className="btn btn-warning mr-2">Edit</a>
               <a href="/" className="btn btn-danger">Delete</a>
             </div>
           </div>
