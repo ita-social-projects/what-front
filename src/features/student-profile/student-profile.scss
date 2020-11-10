@@ -1,0 +1,14 @@
+@media(min-width: 768px) {
+  .lead {
+    font-size: 1.25rem;
+  }
+}
+
+@media(max-width: 767px) {
+  .details {
+    padding-left: 2.25rem;
+  }
+  .header {
+    font-size: 1.25rem;
+  }
+}

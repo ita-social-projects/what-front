@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './student-profile.scss';
 
 const dot = (
   <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-dot" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -11,29 +12,28 @@ export const StudentProfile = () => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-8 col-sm-12 py-4 px-4 card shadow">
-          <h1>Student Details</h1>
+        <div className="col-auto col-md-8 col-sm-8 col-lg-7 col-xl-7 py-4 px-4 card shadow">
+          <h1 className={`${styles.header}`}>Student Details</h1>
           <hr />
-          <div className="row lead">
+          <div className={`row ${styles.lead}`}>
             <div className="col-12 col-md-6 font-weight-bold"><span>{dot} First name: </span></div>
-            <div className="col-6 col-md-6"><span>Name</span></div>
+            <div className={`col-12 col-md-6 ${styles.details}`}><span>Name</span></div>
           </div>
           <hr />
-          <div className="row lead">
+          <div className={`row ${styles.lead}`}>
             <div className="col-12 col-md-6 font-weight-bold"><span>{dot} Last name: </span></div>
-            <div className="col-6 col-md-6"><span>Surname</span></div>
+            <div className={`col-12 col-md-6 ${styles.details}`}><span>Surname</span></div>
           </div>
           <hr />
-          <div className="row lead">
+          <div className={`row ${styles.lead}`}>
             <div className="col-12 col-md-6 font-weight-bold"><span>{dot} Group: </span></div>
-            <div className="col-6 col-md-6"><span>My group</span></div>
+            <div className={`col-12 col-md-6 ${styles.details}`}><span>My group</span></div>
           </div>
           <hr />
-          <div className="row lead">
+          <div className={`row ${styles.lead}`}>
             <div className="col-12 col-md-6 font-weight-bold"><span>{dot} E-mail: </span></div>
-            <div className="col-6 col-md-6"><span>My E-mail</span></div>
+            <div className={`col-12 col-md-6 ${styles.details}`}><span>My E-mail</span></div>
           </div>
-          <hr />
         </div>
       </div>
     </div>
