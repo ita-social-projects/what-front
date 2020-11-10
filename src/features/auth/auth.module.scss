@@ -1,0 +1,19 @@
+.wrapper {
+  position: absolute;
+  width: 100%;
+  min-height: 100%;  
+  background-color: #01073A;  
+}
+
+.form {
+  background-color: #fff;
+  margin-top: 40vh;
+  border-radius: 3px;;
+}
+
+.link { 
+
+  &:hover {
+    text-decoration: none;    
+  }
+}

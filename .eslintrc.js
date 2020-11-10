@@ -35,5 +35,6 @@ module.exports = {
     }],
     'object-curly-spacing': [2, 'always'],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'react/jsx-one-expression-per-line': 0,
   },
 };

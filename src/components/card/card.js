@@ -1,22 +1,20 @@
 import React from 'react';
-import styles from './card.module.scss';
+import styles from './card.scss';
 
-export const Card = ({ data }) => {
-  const { title, date, button } = data;
-  const objectIncludes = {
-    titleF: Object.keys(data).includes('title'),
-    dateF: Object.keys(data).includes('date'),
-    buttonF: Object.keys(data).includes('button'),
-  };
-  console.log(styles);
+export const Card = ({ data, children }) => {
+  const { title, date, button, icon } = data;
   return (
     <div className="container">
-      <div className="card col-sm-6 col-md-4">
-        <div className="card-body pb-0">
-          <h5 className="card-title">{title}</h5>
-          <div className={styles.cont}>
-            <p className="card-text">{date}</p>
-            {objectIncludes.buttonF ? <button className="btn btn-card">{button}</button> : null}
+      <div className={`card col-sm-12 col-md-4 col-lg-3 ${styles['card-component']}`}>
+          <div className="card-header">
+              {title ? <h5 className={styles['card-title']}>{title}</h5> : null}
+              {icon ? }
+          </div>
+        <div className="card-body">
+          {children ? <p className={styles['card-text']}>{children}</p> : null}
+          <div className={styles.content}>
+            {date ? <p className={styles['card-date']}>{date}</p> : null}
+            {button ? <button className={styles['btn-card']}>{button}</button> : null}
           </div>
         </div>
       </div>

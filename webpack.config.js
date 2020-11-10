@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
   mode: 'development',
@@ -16,18 +17,50 @@ module.exports = {
         use: ['babel-loader'],
       },
       {
-        test: /\.scss$/,
+        test: /\.svg$/,
         use: [
-          'style-loader',
+          {
+            loader: 'svg-url-loader',
+            options: {
+              outputPath: 'svg',
+              name: '[name]-[sha1:hash:7].[ext]',
+              limit: 10000,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          { loader: 'style-loader' },
           {
             loader: 'css-loader',
             options: {
+              sourceMap: true,
               modules: {
                 localIdentName: '[path]__[name]__[local]___[hash:base64:5]',
               },
             },
           },
-          'sass-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    'autoprefixer',
+                  ],
+                ],
+                sourceMap: true,
+              },
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
       },
     ],
