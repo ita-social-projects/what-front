@@ -3,11 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
-  mode: "development",
+  mode: 'development',
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: '[name].bundle.js'
+    filename: '[name].bundle.js',
   },
   module: {
     rules: [
@@ -54,10 +54,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
     }),
   ],
   devServer: {
-    open: true
-  }
+    open: true,
+  },
 };

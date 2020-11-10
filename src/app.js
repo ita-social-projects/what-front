@@ -8,7 +8,7 @@ const store = configureStore();
 
 export const App = () => (
   <Provider store={store}>
-    <h1>Hello, I'm App Component!</h1>
+    <h1>Hello, I&apos;m App Component!</h1>
     <Counter />
   </Provider>
 );
