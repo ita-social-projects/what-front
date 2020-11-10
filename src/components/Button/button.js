@@ -8,12 +8,15 @@ export const Button = ({
   children,
   type,
   onClick,
+  variant,
   additionalCssClasses,
+  disabled,
 }) => (
   <button
     type={type}
     onClick={onClick}
-    className={classNames('btn', 'btn-secondary', styles.button, { [additionalCssClasses.join(' ')]: additionalCssClasses.length })}
+    className={classNames(styles.button, 'btn', { [`btn-${variant}`]: variant }, { [additionalCssClasses.join(' ')]: additionalCssClasses.length })}
+    disabled={disabled}
   >
     {children}
   </button>
@@ -28,9 +31,13 @@ Button.propTypes = {
   type: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   additionalCssClasses: PropTypes.arrayOf(PropTypes.string),
+  disabled: PropTypes.bool,
+  variant: PropTypes.string,
 };
 
 Button.defaultProps = {
   type: 'button',
   additionalCssClasses: [],
+  disabled: false,
+  variant: 'secondary',
 };
