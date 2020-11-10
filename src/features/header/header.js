@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './header.module.scss';
+import styles from './header.scss';
 
 const logout = (
   <svg width='1.5em' height='2em' viewBox="0 0 16 16" className='bi bi-door-closed-fill' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
