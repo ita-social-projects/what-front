@@ -1,0 +1,42 @@
+@import "../../styles/variables";
+
+.card-component{
+  @include card();
+}
+
+.card-component:hover{
+  transform: scale(1.2);
+  cursor:pointer;
+}
+
+
+.content{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.card-title{
+   @include baskerville-italic();
+  font-size:14px;
+}
+
+.card-text{
+  @include franklin-regular();
+  font-size:14px;
+}
+
+.card-date{
+  @include baskerville-regular();
+  font-size: 12px;
+  text-decoration: underline;
+  color: map-get($colors, textAccentN1-color);
+  margin-bottom:0;
+}
+
+.btn-card{
+  @include button();
+  background: $theme-yellow;
+  border:none;
+}

@@ -105,7 +105,7 @@ $button-padding: 5px 15px;
 }
 @mixin card() {
         background-color: map-get($colors, backgroung-color);
-        box-shadow: map-get($box-shadows: card-boxShadow);
+        box-shadow: map-get($box-shadows, card-boxShadow);
         border-radius: map-get($border-radius, card-boRad);
 }
 @mixin input() {
