@@ -1,6 +1,7 @@
 @import '../../styles/variables';
 
 .modal-body {
+  @include franklin-regular();
 }
 
 .modal-btn {
