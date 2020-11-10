@@ -56,7 +56,6 @@
     "babel-plugin-react-css-modules": "^5.2.6",
     "bootstrap": "^4.5.3",
     "classnames": "^2.2.6",
-    "css-loader": "^5.0.0",
     "precss": "^4.0.0",
     "formik": "^2.2.1",
     "prop-types": "^15.7.2",
