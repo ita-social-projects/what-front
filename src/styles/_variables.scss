@@ -1,0 +1,120 @@
+//custom colors
+$theme-colorN1: #FFB800;
+$theme-colorN2: #01073A;
+$disable-colorN1: #ACABA9;
+$disable-colorN2: #B7B5B5;
+$neutral-colorN1: #FFFFFF;
+$neutral-colorN2: #000000;
+$danger-color: #FF2121;
+$success-color: #329B00;
+
+$colors: (
+        backgroung-color: $neutral-colorN1,
+        header-color: $theme-colorN2,
+        textMain-color: $neutral-colorN2,
+        textAdd-color: $neutral-colorN1,
+        textAccentN1-color: $theme-colorN1,
+        buttonSuccess-color: $success-color,
+        buttonReject-color: $danger-color,
+        buttonCustom-color: $theme-colorN1,
+        buttonDisabled-color: $disable-colorN1,
+        selectedTab-color: $theme-colorN1,
+        diselectedTab-color: $disable-colorN1,
+        checkboxSuccess-color: $success-color,
+        checkboxReject-color: $danger-color,
+        dropdownButton-color: $theme-colorN1,
+);
+
+//custom fonts
+@import '_fonts';
+
+//colors variables
+$theme-yellow: #FFB800;
+$theme-navy: #01073A;
+$theme-disabledN1: #ACABA9;
+$theme-disabledN2: #B7B5B5;
+$white: #FFFFFF;
+$black: #000000;
+$theme-red: #FF2121;
+$theme-green: #329B00;
+
+$colors: (
+        backgroung-color: $white,
+        header-color: $theme-navy,
+        textMain-color: $black,
+        textAdd-color: $white ,
+        textAccentN1-color: $theme-yellow,
+        buttonSuccess-color: $theme-green,
+        buttonReject-color: $theme-red,
+        buttonDisabled-color: $theme-disabledN1,
+        selectedTab-color: $theme-yellow,
+        diselectedTab1-color: $theme-disabledN1,
+        diselectedTab2-color: $theme-disabledN2,
+        checkboxSuccess-color: $theme-green,
+        checkboxReject-color: $theme-red ,
+        dropdownButton-color: $theme-yellow,
+);
+
+// custom border-radius
+$main-borRad: 3px;
+$add-borRad: 5px;
+$border-radius: (
+        button-borRad: $add-borRad,
+        card-boRad: $main-borRad,
+        tab-borRad: $main-borRad,
+        page-borRad: $add-borRad,
+        input-borRad: $main-borRad,
+        form-borRad: $main-borRad,
+);
+
+// custom box-shadows
+$box-shadows: (
+      card-boxShadow: 0 0 20px rgba(0, 0, 0, 0.25),
+      button-boxShadow: 0 0 10px rgba(0, 0, 0, 0.25),
+      iconEdit-boxShadow: 0 4px 4px rgba(0, 0, 0, 0.25),
+      page-boxShadow: 0 4px 10px rgba(0, 0, 0, 0.25),
+      tab-boxShadow: 0 -4px 10px rgba(0, 0, 0, 0.25),
+
+);
+//custom paddings
+$button-padding: 5px 15px;
+
+
+//mixins
+@mixin button() {
+        font-family: $accent-font;
+        font-style: italic;
+        border-radius: map-get($border-radius, button-borRad);
+        box-shadow: map-get($box-shadows, button-boxShadow);
+}
+
+//mixins
+@mixin button() {
+       @include baskerville-italic;
+        border-radius: map-get($border-radius, button-borRad);
+        box-shadow: map-get($box-shadows, button-boxShadow);
+}
+@mixin modalWindow() {
+        @include franklin-regular;
+        background-color: map-get($colors, backgroung-color);
+        box-shadow: map-get($box-shadows, button-boxShadow);
+        position: absolute;
+        z-index: 100;
+        border-radius: map-get($border-radius, page-borRad);
+}
+@mixin pageWindow() {
+        background-color: map-get($colors, backgroung-color);
+        box-shadow: map-get($box-shadows, page-boxShadow);
+        border-radius: map-get($border-radius, page-borRad);
+}
+@mixin card() {
+        background-color: map-get($colors, backgroung-color);
+        box-shadow: map-get($box-shadows: card-boxShadow);
+        border-radius: map-get($border-radius, card-boRad);
+}
+@mixin input() {
+        @include franklin-regular;
+        border-radius: map-get($border-radius, input-borRad);
+        border: 1px solid map-get($colors, textAccentN1-color);
+        width: 200px;
+}
