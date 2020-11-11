@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
 import { counterSelector, counterActions } from './redux/index.js';
@@ -13,13 +13,19 @@ export const Counter = () => {
 
   const [toShowModal, setShowModal] = useState(false);
 
-  const showModalHandler = () => setShowModal(true);
+  const handleShowModal = () => setShowModal(true);
 
-  const closeModalHandler = () => setShowModal(false);
+  const handleCloseModal = () => setShowModal(false);
 
-  const submitModalHandler = () => {
+  const handleSubmitModal = () => {
     console.log('Modal submitted, something happened!');
-    closeModalHandler();
+    handleCloseModal();
+  };
+
+  const searchRef = useRef();
+
+  const handleSearch = () => {
+    console.log(`Search value = ${searchRef.current.value}`);
   };
 
   return (
@@ -29,12 +35,14 @@ export const Counter = () => {
       </h2>
       <button className={styles.baseButton} type="button" onClick={incrementCounter}>Increment</button>
       <button className={styles.baseButton} type="button" onClick={decrementCounter}>Decrement</button>
-      <button type="button" onClick={showModalHandler}>Show modal</button>
-      <Search />
+      <button type="button" onClick={handleShowModal}>Show modal</button>
+      <div className="m-3">
+        <Search onSearch={handleSearch} inputRef={searchRef} />
+      </div>
       <ModalWindow
         toShow={toShowModal}
-        onSubmit={submitModalHandler}
-        onClose={closeModalHandler}
+        onSubmit={handleSubmitModal}
+        onClose={handleCloseModal}
       >
         *some action that you should confirm (or not confirm)*
       </ModalWindow>
