@@ -1,14 +1,14 @@
 @media(min-width: 768px) {
-  .lead {
+  .profile__details-wrapper {
     font-size: 1.25rem;
   }
 }
 
 @media(max-width: 767px) {
-  .details {
+  .profile__details {
     padding-left: 2.25rem;
   }
-  .header {
+  .profile__header {
     font-size: 1.25rem;
   }
 }
