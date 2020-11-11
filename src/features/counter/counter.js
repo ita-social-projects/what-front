@@ -26,7 +26,8 @@ export const Counter = () => {
       <h2>
         Test counter: {counter}
       </h2>
-      <button className={"btn btn-primary"} type="button" onClick={incrementCounter}>Increment</button>
+      {/*<button className={"btn btn-primary"} type="button" onClick={incrementCounter}>Increment</button>*/}
+      <button className={styles.baseButton} type="button" onClick={incrementCounter}>Increment</button>
       <button className={styles.baseButton} type="button" onClick={decrementCounter}>Decrement</button>
       <button type="button" onClick={showModalHandler}>Show modal</button>
       <ModalWindow

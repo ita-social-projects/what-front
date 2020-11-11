@@ -17,6 +17,19 @@ module.exports = {
         use: ['babel-loader'],
       },
       {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-url-loader',
+            options: {
+              outputPath: 'svg',
+              name: '[name]-[sha1:hash:7].[ext]',
+              limit: 10000,
+            },
+          },
+        ],
+      },
+      {
         test: /\.(sa|sc|c)ss$/,
         use: [
           {loader: 'style-loader'},
