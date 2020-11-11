@@ -1,0 +1,21 @@
+.tab {
+  flex: 1;
+
+  text-align: center;
+
+  color: black;
+  background-color: lightgrey;
+
+  &:hover {
+    background-color: orange;
+    color: black;
+  }
+  &:focus {
+    background-color: darkorange;
+    color: black;
+  }
+}
+
+.active {
+  background-color: darkorange;
+}
