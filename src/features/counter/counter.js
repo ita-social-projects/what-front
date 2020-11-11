@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
+
 import { counterSelector, counterActions } from './redux/index.js';
 import { useActions } from '../../shared/hooks/index.js';
 import { ModalWindow } from '../modal-window/index.js';
+import { Search } from '../../components/search/search.js';
 import styles from './button.scss';
-
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
@@ -29,6 +30,7 @@ export const Counter = () => {
       <button className={styles.baseButton} type="button" onClick={incrementCounter}>Increment</button>
       <button className={styles.baseButton} type="button" onClick={decrementCounter}>Decrement</button>
       <button type="button" onClick={showModalHandler}>Show modal</button>
+      <Search />
       <ModalWindow
         toShow={toShowModal}
         onSubmit={submitModalHandler}
