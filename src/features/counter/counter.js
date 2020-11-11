@@ -37,7 +37,11 @@ export const Counter = () => {
       <button className={styles.baseButton} type="button" onClick={decrementCounter}>Decrement</button>
       <button type="button" onClick={handleShowModal}>Show modal</button>
       <div className="m-3">
-        <Search onSearch={handleSearch} inputRef={searchRef} />
+        <Search
+          onSearch={handleSearch}
+          inputRef={searchRef}
+          placeholder="Search something"
+        />
       </div>
       <ModalWindow
         toShow={toShowModal}

@@ -9,6 +9,7 @@ export const Search = ({
   onSearch,
   onChange,
   inputRef,
+  placeholder,
   additionalCssClasses,
 }) => (
   <div className={classNames(
@@ -20,6 +21,7 @@ export const Search = ({
       type="text"
       className={styles.search__input}
       onChange={onChange}
+      placeholder={placeholder}
       ref={inputRef}
     />
     <div onClick={onSearch} className={styles.search__button}>
@@ -33,6 +35,7 @@ Search.propTypes = {
   inputRef: PropTypes.shape({
     current: PropTypes.oneOf([undefined]),
   }).isRequired,
+  placeholder: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   additionalCssClasses: PropTypes.arrayOf(PropTypes.string),
 };
