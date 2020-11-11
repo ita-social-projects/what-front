@@ -29,7 +29,6 @@ export const App = () => (
     <Card
       data={{
         title: 'Title',
-        button: 'Details',
         date: '15.10.20',
       }}
       onClick={handleClick}

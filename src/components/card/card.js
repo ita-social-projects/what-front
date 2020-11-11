@@ -19,10 +19,10 @@ export const Card = ({ data, children, onDetails }) => {
         </div>
         <div className="card-body">
           {children ? <p className={styles['card-text']}>{children}</p> : null}
-          <div className={styles.content}>
             {date ? <p className={styles['card-date']}>{date}</p> : null}
-            {button ? <Button type="button" variant="warning" onClick={onDetails}>{button}</Button> : null}
-          </div>
+            <div className="btn-card float-right">
+                {button ? <Button type="button" variant="warning" onClick={onDetails}>{button}</Button> : null}
+            </div>
         </div>
       </div>
     </div>
