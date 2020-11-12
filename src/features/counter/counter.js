@@ -5,7 +5,7 @@ import { counterSelector, counterActions } from './redux/index.js';
 import { useActions } from '../../shared/hooks/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Search } from '../../components/search/search.js';
-import { Button } from '../../components/Button/index.js';
+import { Button } from '../../components/button/index.js';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
