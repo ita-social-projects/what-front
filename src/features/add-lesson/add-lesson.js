@@ -4,9 +4,7 @@ import styles from './add-lesson.module.scss';
 
 export const AddLesson = () => {
     
-    const names = ["Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
+    const names = [
         "Taras Tarasov",
         "Taras Tarasov",
         "Taras Tarasov",
