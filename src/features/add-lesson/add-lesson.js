@@ -1,26 +1,28 @@
 import React from 'react';
+import classNames from 'classnames';
 import styles from './add-lesson.module.scss';
+import faker from 'faker';
 
 
 export const AddLesson = () => {
     
     const names = [
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
-        "Taras Tarasov",
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
     ];
     
     return (
-        <div className={`container  ${styles.page}`}>
+        <div className={ classNames( styles.page, 'container')}>
             <div className="row">
                 <form id='form'>
                     <div className="col-lg-6">
@@ -63,19 +65,19 @@ export const AddLesson = () => {
                             </thead>
                             <tbody>
                             { names.map((value, index) => {
-                                return <tr>
-                                    <th scope="row">{ index+1 }</th>
-                                    <td><a href="#">{ value }</a></td>
-                                    <td><input className={`${styles.align}`} type="number" max='12' min='2'/></td>
-                                    <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                                </tr>
+                                return  <tr>
+                                        <th scope="row">{ index+1 }</th>
+                                        <td><a href="#">{ value }</a></td>
+                                        <td><input className={`${styles.mode}`} type="number" max='12' min='2'/></td>
+                                        <td><input className={`${styles.mode}`} type="checkbox" required/></td>
+                                    </tr>
                             }) }
                             </tbody>
                         </table>
                     </div>
                 </form>
             </div>
-            <div className={`${styles.display}`}>
+            <div className={`${styles.placement}`}>
                 <button form="form" type="button" className="btn btn-secondary mx-5 btn-lg">Cancel</button>
                 <button form="form" type="button" className="btn btn-success btn-lg">Save</button>
             </div>

@@ -16,7 +16,7 @@ table{
   border: 1px !important;
 }
 
-.align {
+.mode {
   display: block;
   margin: auto !important;
 }
@@ -25,7 +25,7 @@ a {
   color: map-get($colors, textMain-color) !important;
 }
 
-.display {
+.placement {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
