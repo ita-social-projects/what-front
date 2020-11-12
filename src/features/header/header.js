@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
+
 import styles from './header.scss';
 
 const logout = (
@@ -21,9 +23,9 @@ const sidebarToggler = (
 
 export const Header = () => {
   const links = [
-    {id: 0, name: 'Progress'},
-    {id: 1, name: 'Schedule'},
-    {id: 2, name: 'Support'},
+    {id: 0, name: 'Progress', active: true},
+    {id: 1, name: 'Schedule', active: false},
+    {id: 2, name: 'Support', active: false},
   ];
 
   const [sidebar, setSidebar] = useState({
@@ -40,12 +42,12 @@ export const Header = () => {
   }
 
   return (
-    <nav className={`navbar navbar-expand-md ${styles.header}`}>
+    <nav className={classNames('navbar navbar-expand-md', styles.header)}>
       <div className='collapse navbar-collapse d-flex justify-content-between h-100'>
 
         <div className={`${styles['header__sidebar-toggler']}`} onClick={showSidebar}>{sidebarToggler}</div>
 
-        <div className={`${styles['header__sidebar']} ${sidebar.active ? styles['sidebar--active'] : ''}`}>
+        <div className={classNames(styles['header__sidebar'], {[styles['sidebar--active']]: sidebar.active})}>
           <div className={`${styles['header__sidebar-links']}`}>
             {links.map(({ id, name }) => (
               <a className='nav-item nav-link' href={`#${name}`} key={id} onClick={showSidebar}>{name}</a>
@@ -53,9 +55,9 @@ export const Header = () => {
           </div>
         </div>
 
-        <div className={`navbar-nav nav-tabs ${styles['header__navbar-links']}`}>
+        <div className={classNames('navbar-nav nav-tabs', styles['header__navbar-links'])}>
           {links.map(({ id, name, active }) => (
-            <a className={`nav-item nav-link`} href={`#${name}`} key={id}>{name}</a>
+            <a className='nav-item nav-link' href={`#${name}`} key={id}>{name}</a>
           ))}
         </div>
 
@@ -73,3 +75,6 @@ export const Header = () => {
     </nav>
   );
 };
+
+// className={classNames('navbar navbar-expand-md', styles.header)}
+
