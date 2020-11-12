@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import PropTypes, { func } from 'prop-types';
 import classNames from 'classnames';
 
 import Icon from '../../icon.js';
@@ -7,40 +7,35 @@ import styles from './search.module.scss';
 
 export const Search = ({
   onSearch,
-  onChange,
-  inputRef,
   placeholder,
-  additionalCssClasses,
-}) => (
-  <div className={classNames(
-    styles.search,
-    { [additionalCssClasses.join()]: additionalCssClasses.length },
-  )}
-  >
-    <input
-      type="text"
-      className={styles.search__input}
-      onChange={onChange}
-      placeholder={placeholder}
-      ref={inputRef}
-    />
-    <div onClick={onSearch} className={styles.search__button}>
-      <Icon icon="Search" size={32} viewBox="0 0 50 50" />
+  className,
+}) => {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSearch = () => onSearch(inputValue);
+  const handleChange = (event) => setInputValue(event.target.value);
+
+  return (
+    <div className={classNames(styles.search, className)}>
+      <input
+        type="text"
+        className={styles.searchInput}
+        onChange={handleChange}
+        placeholder={placeholder}
+      />
+      <div onClick={handleSearch} className={styles.searchButton}>
+        <Icon icon="Search" size={32} viewBox="0 0 50 50" />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 Search.propTypes = {
-  onSearch: PropTypes.func.isRequired,
-  inputRef: PropTypes.shape({
-    current: PropTypes.oneOf([undefined]),
-  }).isRequired,
+  onSearch: func.isRequired,
   placeholder: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
-  additionalCssClasses: PropTypes.arrayOf(PropTypes.string),
+  className: PropTypes.string,
 };
 
 Search.defaultProps = {
-  onChange: () => false,
-  additionalCssClasses: [],
+  className: '',
 };

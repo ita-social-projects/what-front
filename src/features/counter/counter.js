@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
 import { counterSelector, counterActions } from './redux/index.js';
@@ -22,10 +22,8 @@ export const Counter = () => {
     handleCloseModal();
   };
 
-  const searchRef = useRef();
-
-  const handleSearch = () => {
-    console.log(`Search value = ${searchRef.current.value}`);
+  const handleSearch = (inputValue) => {
+    console.log(`Search value = ${inputValue}`);
   };
 
   return (
@@ -39,7 +37,6 @@ export const Counter = () => {
       <div className="m-3">
         <Search
           onSearch={handleSearch}
-          inputRef={searchRef}
           placeholder="Search something"
         />
       </div>
