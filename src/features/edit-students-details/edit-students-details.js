@@ -20,8 +20,6 @@ export const EditStudentsDetails = () => {
   return (
     <div className={styles.wrapper}>
       <div className="container shadow pb-3">
-        {/* <h3>Edit student's details</h3> */}
-        {/* first name */}
         <div className="row m-0 pt-3">
           <div className="col-md-4">
             <label htmlFor="first-name">First Name:</label>
@@ -30,7 +28,6 @@ export const EditStudentsDetails = () => {
             <input type="text" className={`${styles['input-style']} form-control`} id='first-name' placeholder={student.firstName} />
           </div>
         </div>
-        {/* second name */}
         <div className="row m-0 pt-3">
           <div className="col-md-4">
             <label htmlFor="second-name">Second Name:</label>
@@ -38,8 +35,7 @@ export const EditStudentsDetails = () => {
           <div className="col-md-8">
             <input type="text" className={`${styles['input-style']} form-control`} id='second-name' placeholder={student.secondName} />
           </div>
-        </div>
-        {/* email */}
+        </div> 
         <div className="row m-0 pt-3">
           <div className="col-md-4">
             <label htmlFor="email">Email:</label>
@@ -48,7 +44,6 @@ export const EditStudentsDetails = () => {
             <input type="text" className={`${styles['input-style']} form-control`} id='email' placeholder={student.email} />
           </div>
         </div>
-        {/* add group */}
         <div className="row m-0 pt-3">
           <div className="col-md-4">
             <label htmlFor="groups">Group('s):</label>
@@ -64,16 +59,14 @@ export const EditStudentsDetails = () => {
               </div>
             </div>
           </div>          
-        </div>
-        {/* groups */}
+        </div> 
         <div className="row m-0 pt-3">
           <div className="col-md-8 offset-md-4">
             <ul className="d-flex flex-wrap justify-content-between p-0">
               {student.groups.map(({ id, name }) => <li className={`${styles['list-element']} d-flex bg-light border border-outline-secondary rounded`} key={id}>{name}<button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger">X</button></li>)}
             </ul>
           </div>
-        </div>
-        {/* buttons */}
+        </div>    
         <div className='row m-0 pt-3'>
           <div className="col-md-3 col-4">
             <div className={`${styles.button} btn btn-danger w-100`}>Exclude</div>
@@ -85,8 +78,7 @@ export const EditStudentsDetails = () => {
             <div className={`${styles.button} btn btn-success w-100`}>Save</div>
           </div>
         </div>
-      </div>
-      {/* <Icon icon="Plus" /> */}
+      </div>   
     </div>
   )
 }
