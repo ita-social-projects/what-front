@@ -4,6 +4,23 @@ import styles from './add-lesson.module.scss';
 
 export const AddLesson = () => {
     
+    const names = ["Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+        "Taras Tarasov",
+    ];
+    
     return (
         <div className={`container  ${styles.page}`}>
             <div className="row">
@@ -11,7 +28,6 @@ export const AddLesson = () => {
                     <div className="col-lg-6">
                         <h3>Lesson's starting</h3>
                         <hr />
-                        <form>
                             <div className="mt-5 form-group row">
                                 <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
                                 <div className="col-sm-8">
@@ -36,7 +52,6 @@ export const AddLesson = () => {
                                         defaultValue={'2020-09-05'}/>
                                 </div>
                             </div>
-                        </form>
                     </div>
                     <div className="col-lg-6">
                         <table className="table table-bordered table-hover">
@@ -49,89 +64,18 @@ export const AddLesson = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">5</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">6</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">7</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">8</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">9</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">10</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">11</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">12</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2' required/></td>
-                                <td><input className={`${styles.align}`} type="checkbox"/></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">13</th>
-                                <td><a href="#">Taras Tarasov</a></td>
-                                <td><input className={`${styles.align}`} type="number" max='5' min='2'/></td>
-                                <td><input className={`${styles.align}`} type="checkbox" required/></td>
-                            </tr>
+                            { names.map((value, index) => {
+                                return <tr>
+                                    <th scope="row">{ index+1 }</th>
+                                    <td><a href="#">{ value }</a></td>
+                                    <td><input className={`${styles.align}`} type="number" max='12' min='2'/></td>
+                                    <td><input className={`${styles.align}`} type="checkbox" required/></td>
+                                </tr>
+                            }) }
                             </tbody>
                         </table>
                     </div>
                 </form>
-               
             </div>
             <div className={`${styles.display}`}>
                 <button form="form" type="button" className="btn btn-secondary mx-5 btn-lg">Cancel</button>
