@@ -57,3 +57,11 @@
   border: 1px solid map-get($colors, textAccentN1-color);
   width: 200px;
 }
+@mixin tab() {
+  @include franklin-regular;
+  text-align: center;
+  box-shadow: map-get($box-shadows, tab-boxShadow);
+  color: map-get($colors, textMain-color);
+  background-color: map-get($colors, diselectedTab-color);
+  border-radius: map-get($border-radius, tab-borRad);
+}
