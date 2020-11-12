@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@import '../../styles/main';
 
 .card-component{
   @include card();
@@ -19,13 +19,14 @@
 
 .card-title{
    @include baskerville-italic();
-  font-size:18px;
+  font-size:20px;
 }
 
-.card-text{
+.card-content{
   @include franklin-regular();
-  font-size:16px;
-  padding-top:5px;
+  font-size:18px;
+  padding-top:10px;
+  margin:0;
 }
 
 .card-date{
@@ -36,8 +37,22 @@
   margin-bottom:0;
 }
 
-.btn-card{
-  @include button();
-  background: $theme-yellow;
-  border:none;
+.card-head{
+ display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.card-icon:hover{
+  transform: scale(1.2);
+}
+
+.card-btn{
+ text-align:right;
+}
+
+.card-icon{
+ position:absolute;
+  right:4%;
 }

@@ -9,13 +9,18 @@ export const Button = ({
   type,
   onClick,
   variant,
-  additionalCssClasses,
+  className,
   disabled,
 }) => (
   <button
     type={type}
     onClick={onClick}
-    className={classNames(styles.button, 'btn', { [`btn-${variant}`]: variant }, { [additionalCssClasses.join(' ')]: additionalCssClasses.length })}
+    className={classNames(
+      styles.button,
+      'btn',
+      { [`btn-${variant}`]: variant },
+      className,
+    )}
     disabled={disabled}
   >
     {children}
@@ -30,14 +35,14 @@ Button.propTypes = {
   ]).isRequired,
   type: PropTypes.string,
   onClick: PropTypes.func.isRequired,
-  additionalCssClasses: PropTypes.arrayOf(PropTypes.string),
+  className: PropTypes.string,
   disabled: PropTypes.bool,
   variant: PropTypes.string,
 };
 
 Button.defaultProps = {
   type: 'button',
-  additionalCssClasses: [],
+  className: '',
   disabled: false,
   variant: 'secondary',
 };

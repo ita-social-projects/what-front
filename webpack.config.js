@@ -32,7 +32,7 @@ module.exports = {
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
-          { loader: 'style-loader' },
+          {loader: 'style-loader'},
           {
             loader: 'css-loader',
             options: {
@@ -51,19 +51,19 @@ module.exports = {
                     'autoprefixer',
                   ],
                 ],
-                sourceMap: true,
-              },
-            },
+                sourceMap: true
+              }
+            }
           },
           {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
             },
-          },
+          }
         ],
       },
-    ],
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({

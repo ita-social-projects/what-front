@@ -1,8 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-
-import { configureStore } from './store';
-import { Counter } from './features';
+import { configureStore } from './store.js';
+import { Counter } from './features/index.js';
 import Icon from './icon.js';
 import { Card } from './components/card/index.js';
 
@@ -27,15 +26,15 @@ export const App = () => (
     <Icon icon="Plus" size={32} color="#f78259" />
     <Icon icon="Edit" />
     <Card
-      data={{
-        title: 'Title',
-        date: '15.10.20',
-      }}
+        title='Title'
+      date="15.15.15"
       onClick={handleClick}
       onEdit={handleEdit}
       onDetails={handleDetails}
+      buttonName="save"
+      iconName="Edit"
     >
-        <p>SomeText</p>
+      <p>SomeText</p>
     </Card>
   </Provider>
 );
