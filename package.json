@@ -57,6 +57,7 @@
     "bootstrap": "^4.5.3",
     "classnames": "^2.2.6",
     "faker": "^5.1.0",
+    "precss": "^4.0.0",
     "formik": "^2.2.1",
     "precss": "^4.0.0",
     "prop-types": "^15.7.2",
