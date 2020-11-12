@@ -9,8 +9,9 @@ import { Tabs } from './components';
 
 const store = configureStore();
 const tabs = [
-  {id: 1, title: 'Mentor`s details', active: false, link: 'students'},
-  {id: 2, title: 'List of mentors', active: false, link: 'mentors'}
+  {id: 0, title: 'Mentor`s details', active: false, link: 'students'},
+  {id: 1, title: 'List of mentors', active: false, link: 'mentors'},
+  {id: 2, title: 'das', active: false, link: 'mentors'},
 ];
 
 export const App = () => (
@@ -21,7 +22,7 @@ export const App = () => (
       <Icon icon="Plus" size={32} color="#f78259" /> 
       <Icon icon="Edit"/>
       <div className='nav nav-tabs w-50'>
-        <Tabs props={tabs}/>
+        <Tabs tabs={tabs}/>
       </div>
     </Provider>
 );
