@@ -6,15 +6,11 @@
   @include tab;
 
   &:hover {
-    background-color: orange;
     color: black;
+    background-color: orange;
+
     z-index: 3;
   }
-}
-
-.back {
-  display: flex;
-  align-items: center;
 }
 
 .active {
