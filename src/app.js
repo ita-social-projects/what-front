@@ -1,9 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-
-import { configureStore } from './store';
-import { Counter } from './features';
+import { configureStore } from './store.js';
+import { Counter } from './features/index.js';
 import Icon from './icon.js';
 import { Tabs } from './components';
 
@@ -18,13 +17,13 @@ const back = 'back'
 
 export const App = () => (
   
-    <Provider store={store}>
-      {/*<h1>Hello, I'm App Component!</h1>
-      <Counter />
-      <Icon icon="Plus" size={32} color="#f78259" /> 
+  <Provider store={store}>
+    {/*<h1>Hello, I'm App Component!</h1>
+    <Counter />
+    <Icon icon="Plus" size={32} color="#f78259" /> 
 <Icon icon="Edit"/>*/}
-      <div className='nav nav-tabs w-50'>
-        <Tabs initialTabs={tabs} back={back}/>
-      </div>
-    </Provider>
+    <div className='nav nav-tabs w-50 ml-3'>
+      <Tabs initialTabs={tabs} back={back}/>
+    </div>
+  </Provider>
 );

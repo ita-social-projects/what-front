@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import propTypes from 'prop-types';
+import classNames from 'classnames';
+
 import styles from './Tabs.scss';
 
 const arrow = (
@@ -15,7 +17,6 @@ export const Tabs = ({initialTabs, back}) => {
 
   const toggleActive = (event) => {
     setTabs((prevstate) => {
-
       prevstate.find((tab) => {
         if(tab.active) {
           tab.active = false
@@ -37,10 +38,13 @@ export const Tabs = ({initialTabs, back}) => {
 
   return (
     <>
-      <a className={`nav-item nav-link ${styles.back}`} href={`#${back}`} onClick={toggleActive}>{arrow}</a>
+      <a className={classNames('nav-item nav-link', styles.back)} 
+        href={`#${back}`} 
+        onClick={toggleActive}
+      >{arrow}</a>
       {tabs.map(tab => {
         return (
-        <a className={`${styles['tab']} nav-item nav-link ${tab.active ? styles['active'] : ''}`}
+        <a className={classNames('nav-item nav-link', styles.tab, {[`${styles.active}`]:  tab.active})}
         href={`#${tab.link}`}
         key={tab.id}
         data-id={tab.id} 
