@@ -24,7 +24,7 @@ export const AddLesson = () => {
     return (
         <div className={ classNames( styles.page, 'container')}>
             <div className="row">
-                <form id='form'>
+                <form id='form' className={`${styles.size}`}>
                     <div className="col-lg-6">
                         <h3>Lesson's starting</h3>
                         <hr />
@@ -78,7 +78,7 @@ export const AddLesson = () => {
                 </form>
             </div>
             <div className={`${styles.placement}`}>
-                <button form="form" type="button" className="btn btn-secondary mx-5 btn-lg">Cancel</button>
+                <button form="form" type="button" className="btn btn-secondary btn-lg">Cancel</button>
                 <button form="form" type="button" className="btn btn-success btn-lg">Save</button>
             </div>
         </div>
