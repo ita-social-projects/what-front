@@ -1,4 +1,4 @@
-import * as actions from './action-types';
+import * as actions from './action-types.js';
 
 export const incrementCounter = () => ({
   type: actions.COUNTER_INCREMENT,

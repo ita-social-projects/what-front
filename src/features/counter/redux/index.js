@@ -1,3 +1,5 @@
-export { counterReducer } from './reducer';
-export * as counterActions from './actions';
-export { counterSelector } from './selectors';
+import * as counterActions from './actions.js';
+
+export { counterActions };
+export { counterReducer } from './reducer.js';
+export { counterSelector } from './selectors.js';

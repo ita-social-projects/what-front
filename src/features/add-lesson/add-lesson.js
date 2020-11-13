@@ -24,7 +24,7 @@ export const AddLesson = () => {
       <div className="row">
         <form id="form">
           <div className="col-lg-6">
-            <h3>Lesson's starting</h3>
+            <h3>Lesson&apos;s starting</h3>
             <hr />
             <div className="mt-5 form-group row">
               <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
@@ -57,7 +57,7 @@ export const AddLesson = () => {
               <thead>
                 <tr>
                   <th scope="col" />
-                  <th scope="col">Full Student's Name</th>
+                  <th scope="col">Full Student&apos;s Name</th>
                   <th scope="col" className="text-center">Mark</th>
                   <th scope="col" className="text-center">Presence</th>
                 </tr>
@@ -66,7 +66,7 @@ export const AddLesson = () => {
                 { names.map((value, index) => (
                   <tr>
                     <th scope="row">{ index + 1 }</th>
-                    <td><a href="#">{ value }</a></td>
+                    <td><a href="/">{ value }</a></td>
                     <td><input className={`${styles.mode}`} type="number" max="12" min="2" /></td>
                     <td><input className={`${styles.mode}`} type="checkbox" required /></td>
                   </tr>
