@@ -55,6 +55,8 @@
     "autoprefixer": "^10.0.1",
     "babel-plugin-react-css-modules": "^5.2.6",
     "bootstrap": "^4.5.3",
+    "classnames": "^2.2.6",
+    "faker": "^5.1.0",
     "formik": "^2.2.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
