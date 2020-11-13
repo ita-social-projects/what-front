@@ -27,7 +27,8 @@ export const EditGroup = () => {
                   id="name"
                   required
                   placeholder="group name"
-                  defaultValue="Current name"/>
+                  defaultValue="Current name"
+                />
               </div>
             </div>
             <div className="row mb-3">
@@ -51,7 +52,8 @@ export const EditGroup = () => {
                   name="start-date"
                   id="start-date"
                   required
-                  defaultValue={'2020-10-08'}/>
+                  defaultValue="2020-10-08"
+                />
               </div>
             </div>
             <div className="row mb-3">
@@ -65,7 +67,8 @@ export const EditGroup = () => {
                   name="end-date"
                   id="finish-date"
                   required
-                  defaultValue={'2020-11-21'}/>
+                  defaultValue="2020-11-21"
+                />
               </div>
             </div>
             <div className="row justify-content-around mt-4">
@@ -76,5 +79,5 @@ export const EditGroup = () => {
         </div>
       </div>
     </div>
-  )
+  );
 };

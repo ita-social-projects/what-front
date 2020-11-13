@@ -5,11 +5,11 @@ export const validateEmail = (value) => {
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
     error = 'Invalid email address.';
   }
-  
-  return error;
-}
 
-export const validatePassword = value => {
+  return error;
+};
+
+export const validatePassword = (value) => {
   let error;
   const passwordRegex = /(?=.*[0-9])/;
   if (!value) {
@@ -24,10 +24,10 @@ export const validatePassword = value => {
 
 export const validateConfirmPassword = (pass, value) => {
   let error;
-  if(!value) {
+  if (!value) {
     error = 'You should confirm your password.';
-  } else if(pass && value) {
-    if(pass !== value) {
+  } else if (pass && value) {
+    if (pass !== value) {
       error = 'Password do not match.';
     }
   }

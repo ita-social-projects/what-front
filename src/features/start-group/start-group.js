@@ -20,8 +20,14 @@ export const StartGroup = () => {
                 <label className="mb-0" htmlFor="name">Group name</label>
               </div>
               <div className="col-md-8">
-                <input className="form-control" type="text" name="group-name" id="name" required
-                       placeholder="group name" />
+                <input
+                  className="form-control"
+                  type="text"
+                  name="group-name"
+                  id="name"
+                  required
+                  placeholder="group name"
+                />
               </div>
             </div>
             <div className="row mb-3">
@@ -74,5 +80,5 @@ export const StartGroup = () => {
         </div>
       </div>
     </div>
-  )
+  );
 };

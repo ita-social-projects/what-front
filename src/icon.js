@@ -1,14 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-//const defaultStyles = { display: "inline-block", verticalAlign: "middle" };
+// const defaultStyles = { display: "inline-block", verticalAlign: "middle" };
 
-const Icon = ({ size, color, icon, className, style, viewBox }) => {
-  //const styles = { ...defaultStyles, ...style };
-  return (
+const Icon = ({
+  size, color, icon, className, style, viewBox,
+}) =>
+  // const styles = { ...defaultStyles, ...style };
+  (
     <svg
       className={className}
-      //style={styles}
+      // style={styles}
       viewBox={viewBox}
       width={`${size}px`}
       height={`${size}px`}
@@ -16,14 +18,12 @@ const Icon = ({ size, color, icon, className, style, viewBox }) => {
       <use xlinkHref={`src/svg/${icon}.svg#${icon}`} />
     </svg>
   );
-};
-
 Icon.defaultProps = {
   size: 16,
-  color: "#000000",
-  viewBox: "0 0 24 24",
+  color: '#000000',
+  viewBox: '0 0 24 24',
   style: {},
-  className: "",
+  className: '',
 };
 
 Icon.propTypes = {
@@ -31,7 +31,7 @@ Icon.propTypes = {
   color: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   viewBox: PropTypes.string.isRequired,
-  //style: PropTypes.shape(PropTypes.object),
+  // style: PropTypes.shape(PropTypes.object),
   className: PropTypes.string,
 };
 
