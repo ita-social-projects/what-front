@@ -7,15 +7,11 @@ import { Card } from './components/card/index.js';
 
 const store = configureStore();
 
-const handleClick = (id) => {
-  console.log(`card with id ${id} was clicked`);
-};
-
 const handleEdit = (id) => {
   console.log(`card with id ${id} will be edited`);
 };
 
-const handleDetails = (id) => {
+const handleShowDetails = (id) => {
   console.log(`details for card with id ${id}`);
 };
 
@@ -26,11 +22,10 @@ export const App = () => (
     <Icon icon="Plus" size={32} color="#f78259" />
     <Icon icon="Edit" />
     <Card
-        title='Title'
+      title="Title"
       date="15.15.15"
-      onClick={handleClick}
       onEdit={handleEdit}
-      onDetails={handleDetails}
+      onDetails={handleShowDetails}
       buttonName="save"
       iconName="Edit"
     >

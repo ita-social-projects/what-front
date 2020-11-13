@@ -14,12 +14,11 @@ export const Card = ({
   iconName,
   children,
   onDetails,
-  onClick,
   onEdit,
   className,
 }) => (
   <div
-    onClick={onClick}
+    onClick={onDetails}
     className={classNames(
       'card col-sm-12 col-md-4 col-lg-3 ',
       styles['card-component'],
@@ -52,7 +51,6 @@ Card.propTypes = {
   buttonName: string,
   iconName: string,
   onDetails: func,
-  onClick: func,
   onEdit: func,
   children: PropTypes.oneOfType([
     element,
@@ -68,7 +66,6 @@ Card.defaultProps = {
   children: null,
   buttonName: 'Details',
   iconName: 'Edit',
-  onClick: undefined,
   onDetails: undefined,
   onEdit: undefined,
   className: '',
