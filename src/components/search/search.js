@@ -3,7 +3,7 @@ import PropTypes, { func } from 'prop-types';
 import classNames from 'classnames';
 
 import Icon from '../../icon.js';
-import styles from './search.module.scss';
+import styles from './search.scss';
 
 export const Search = ({
   onSearch,
