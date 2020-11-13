@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './edit-students-details.scss';
 import Icon from '../../icon';
+import { Button } from '../../components/Button';
 
 export const EditStudentsDetails = () => {
   const student = {
@@ -35,7 +36,7 @@ export const EditStudentsDetails = () => {
           <div className="col-md-8">
             <input type="text" className={`${styles['input-style']} form-control`} id='second-name' placeholder={student.secondName} />
           </div>
-        </div> 
+        </div>
         <div className="row m-0 pt-3">
           <div className="col-md-4">
             <label htmlFor="email">Email:</label>
@@ -50,35 +51,38 @@ export const EditStudentsDetails = () => {
           </div>
           <div className="col-md-8">
             <div className="input-group flex-nowrap">
-              <input className={`${styles['input-style']} form-control`} list="group-list" placeholder="Type name of group" />              
-              <datalist id="group-list">                
+              <input className={`${styles['input-style']} form-control`} list="group-list" placeholder="Type name of group" />
+              <datalist id="group-list">
                 {student.groups.map(({ id, name }) => <option key={id}>{name}</option>)}
               </datalist>
-              <div className="input-group-append">
-                <button className="btn btn-warning" type="button"><Icon icon="Plus" /></button>
+              <div className="input-group-append">                
+                <Button variant="warning"><Icon icon="Plus" /></Button>
               </div>
             </div>
-          </div>          
-        </div> 
+          </div>
+        </div>
         <div className="row m-0 pt-3">
           <div className="col-md-8 offset-md-4">
             <ul className="d-flex flex-wrap justify-content-between p-0">
-              {student.groups.map(({ id, name }) => <li className={`${styles['list-element']} d-flex bg-light border border-outline-secondary rounded`} key={id}>{name}<button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger">X</button></li>)}
+              {student.groups.map(({ id, name }) => <li className={`${styles['list-element']} d-flex bg-light border border-outline-secondary rounded`} key={id}>{name}
+                <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger">X</button>
+              </li>)}
             </ul>
           </div>
-        </div>    
+        </div>
         <div className='row m-0 pt-3'>
-          <div className="col-md-3 col-4">
-            <div className={`${styles.button} btn btn-danger w-100`}>Exclude</div>
+          <div className="col-md-3 col-4">            
+            <Button className="w-100" variant="danger">Exclude</Button>
           </div>
-          <div className="col-md-3 offset-md-3 col-4">
-            <div className={`${styles.button} btn btn-secondary w-100`}>Clear</div>
+          <div className="col-md-3 offset-md-3 col-4">            
+            <Button className="w-100">Clear</Button>
           </div>
-          <div className="col-md-3 col-4">
-            <div className={`${styles.button} btn btn-success w-100`}>Save</div>
+          <div className="col-md-3 col-4">            
+            <Button className="w-100" variant="success">Save</Button>
           </div>
         </div>
-      </div>   
+
+      </div>
     </div>
   )
 }
