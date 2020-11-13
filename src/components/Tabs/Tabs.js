@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import propTypes from 'prop-types';
 import classNames from 'classnames';
 
-import styles from './Tabs.scss';
+import styles from './tabs.scss';
 
 const arrow = (
   <svg width='1em' height='1em' viewBox='0 0 16 16' className='bi bi-arrow-left' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>

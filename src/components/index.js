@@ -1,2 +1,2 @@
-export { Tabs } from './Tabs/index';
+export { Tabs } from './tabs/index';
 export { Button } from './Button/index.js';

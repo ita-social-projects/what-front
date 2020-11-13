@@ -1,1 +1,1 @@
-export { Tabs } from './Tabs.js'
+export { Tabs } from './tabs.js'
