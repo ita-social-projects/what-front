@@ -1,4 +1,5 @@
 import React from 'react';
+import className from 'classnames';
 import styles from './edit-students-details.scss';
 import Icon from '../../icon';
 import { Button } from '../../components/Button';
@@ -25,8 +26,8 @@ export const EditStudentsDetails = () => {
           <div className="col-md-4">
             <label htmlFor="first-name">First Name:</label>
           </div>
-          <div className="col-md-8">
-            <input type="text" className={`${styles['input-style']} form-control`} id='first-name' placeholder={student.firstName} />
+          <div className="col-md-8">          
+            <input type="text" className='form-control' id='first-name' placeholder={student.firstName} />
           </div>
         </div>
         <div className="row m-0 pt-3">
@@ -34,7 +35,7 @@ export const EditStudentsDetails = () => {
             <label htmlFor="second-name">Second Name:</label>
           </div>
           <div className="col-md-8">
-            <input type="text" className={`${styles['input-style']} form-control`} id='second-name' placeholder={student.secondName} />
+            <input type="text" className='form-control' id='second-name' placeholder={student.secondName} />
           </div>
         </div>
         <div className="row m-0 pt-3">
@@ -42,7 +43,7 @@ export const EditStudentsDetails = () => {
             <label htmlFor="email">Email:</label>
           </div>
           <div className="col-md-8">
-            <input type="text" className={`${styles['input-style']} form-control`} id='email' placeholder={student.email} />
+            <input type="text" className='form-control' id='email' placeholder={student.email} />
           </div>
         </div>
         <div className="row m-0 pt-3">
@@ -51,7 +52,7 @@ export const EditStudentsDetails = () => {
           </div>
           <div className="col-md-8">
             <div className="input-group flex-nowrap">
-              <input className={`${styles['input-style']} form-control`} list="group-list" placeholder="Type name of group" />
+              <input className='form-control' list="group-list" placeholder="Type name of group" />
               <datalist id="group-list">
                 {student.groups.map(({ id, name }) => <option key={id}>{name}</option>)}
               </datalist>
@@ -64,7 +65,7 @@ export const EditStudentsDetails = () => {
         <div className="row m-0 pt-3">
           <div className="col-md-8 offset-md-4">
             <ul className="d-flex flex-wrap justify-content-between p-0">
-              {student.groups.map(({ id, name }) => <li className={`${styles['list-element']} d-flex bg-light border border-outline-secondary rounded`} key={id}>{name}
+              {student.groups.map(({ id, name }) => <li className={className(styles['list-element'], 'd-flex bg-light border border-outline-secondary rounded')} key={id}>{name}
                 <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger">X</button>
               </li>)}
             </ul>
@@ -81,7 +82,6 @@ export const EditStudentsDetails = () => {
             <Button className="w-100" variant="success">Save</Button>
           </div>
         </div>
-
       </div>
     </div>
   )

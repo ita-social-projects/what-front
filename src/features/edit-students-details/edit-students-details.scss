@@ -6,16 +6,12 @@
   @include franklin-regular(); 
 }
 
-.input-style {
-  width: 100%;  
-}
-
 .list-element {
   width: 45%;  
   margin-top: 10px;
-  padding-left: 5px;  
-}
+  padding-left: 5px;
 
-.button {
-  @include button();
+  button:focus {
+    box-shadow: none;
+  }
 }
