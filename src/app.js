@@ -7,11 +7,13 @@ import { Card } from './components/card/index.js';
 
 const store = configureStore();
 
-const handleEdit = (id) => {
+const handleEdit = (event, id) => {
+  event.preventDefault();
   console.log(`card with id ${id} will be edited`);
 };
 
-const handleShowDetails = (id) => {
+const handleShowDetails = (event, id) => {
+  event.preventDefault();
   console.log(`details for card with id ${id}`);
 };
 
