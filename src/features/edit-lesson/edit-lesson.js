@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import styles from './edit-lesson.module.scss';
+import styles from './edit-lesson.scss';
 import faker from 'faker';
 
 
@@ -24,7 +24,7 @@ export const EditLesson = () => {
     return (
         <div className={ classNames( styles.page, 'container')}>
             <div className="row">
-                <form id='form' className={`${styles.size}`}>
+                <form id='form' className={styles.size}>
                     <div className="col-lg-6">
                         <h3>Lesson's starting</h3>
                         <hr />
@@ -57,7 +57,7 @@ export const EditLesson = () => {
                         <table className="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th scope="col"></th>
+                                <th scope="col" aria-label="first_col" />
                                 <th scope="col">Full Student's Name</th>
                                 <th scope="col" className='text-center'>Mark</th>
                                 <th scope="col" className='text-center'>Presence</th>
@@ -68,8 +68,8 @@ export const EditLesson = () => {
                                 return  <tr>
                                     <th scope="row">{ index+1 }</th>
                                     <td><a href="#">{ value }</a></td>
-                                    <td><input className={`${styles.mode}`} type="number" max='12' min='2'/></td>
-                                    <td><input className={`${styles.mode}`} type="checkbox" required/></td>
+                                    <td><input className={styles.mode} type="number" max='12' min='2'/></td>
+                                    <td><input className={styles.mode} type="checkbox" required/></td>
                                 </tr>
                             }) }
                             </tbody>
@@ -77,9 +77,9 @@ export const EditLesson = () => {
                     </div>
                 </form>
             </div>
-            <div className={`${styles.placement}`}>
+            <div className={styles.placement}>
                 <button form="form" type="button" className="btn btn-danger btn-lg">Delete</button>
-                <div className={`${styles.placement}`}>
+                <div className={styles.placement}>
                     <button form="form" type="button" className="btn btn-secondary btn-lg mr-5">Cancel</button>
                     <button form="form" type="button" className="btn btn-success btn-lg">Save</button>
                 </div>
