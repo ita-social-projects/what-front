@@ -56,7 +56,7 @@ export const AddLesson = () => {
             <table className="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <th scope="col" />
+                  <th scope="col" aria-label="first_col" />
                   <th scope="col">Full Student&apos;s Name</th>
                   <th scope="col" className="text-center">Mark</th>
                   <th scope="col" className="text-center">Presence</th>
