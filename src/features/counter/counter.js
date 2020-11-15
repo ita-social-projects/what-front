@@ -17,7 +17,6 @@ export const Counter = () => {
   const closeModalHandler = () => setShowModal(false);
 
   const submitModalHandler = () => {
-    console.log('Modal submitted, something happened!');
     closeModalHandler();
   };
 

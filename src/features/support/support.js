@@ -33,7 +33,7 @@ export const Support = () => (
             />
           </div>
           <button type="submit" className="btn btn-success float-right">Send</button>
-          <button type="cancel" className="btn btn-danger">Cancel</button>
+          <button type="button" className="btn btn-danger">Cancel</button>
         </form>
       </div>
     </div>
