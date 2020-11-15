@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import styles from './add-lesson.module.scss';
+import styles from './add-lesson.scss';
 import faker from 'faker';
 
 
