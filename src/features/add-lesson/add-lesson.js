@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import faker from 'faker';
-import styles from './add-lesson.module.scss';
+import styles from './add-lesson.scss';
 
 export const AddLesson = () => {
   const names = [
@@ -67,8 +67,8 @@ export const AddLesson = () => {
                   <tr>
                     <th scope="row">{ index + 1 }</th>
                     <td><a href="/">{ value }</a></td>
-                    <td><input className={`${styles.mode}`} type="number" max="12" min="2" /></td>
-                    <td><input className={`${styles.mode}`} type="checkbox" required /></td>
+                    <td><input className={styles.mode} type="number" max="12" min="2" /></td>
+                    <td><input className={styles.mode} type="checkbox" required /></td>
                   </tr>
                 )) }
               </tbody>
@@ -76,7 +76,7 @@ export const AddLesson = () => {
           </div>
         </form>
       </div>
-      <div className={`${styles.placement}`}>
+      <div className={styles.placement}>
         <button form="form" type="button" className="btn btn-secondary mx-5 btn-lg">Cancel</button>
         <button form="form" type="button" className="btn btn-success btn-lg">Save</button>
       </div>
