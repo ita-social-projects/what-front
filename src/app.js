@@ -1,10 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-// eslint-disable-next-line import/extensions
-import { configureStore } from './store';
-// eslint-disable-next-line import/extensions
-import { Counter } from './features';
+import { configureStore } from './store.js';
+import { Counter } from './features/counter/counter.js';
 import Icon from './icon.js';
 
 const store = configureStore();

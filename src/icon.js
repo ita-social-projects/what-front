@@ -1,5 +1,5 @@
-/* eslint-disable react/require-default-props */
 /* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import PropTypes from 'prop-types';
 
