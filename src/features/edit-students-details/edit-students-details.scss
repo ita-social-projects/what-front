@@ -1,0 +1,17 @@
+@import '../../styles/main';
+
+.wrapper {
+  max-width: 700px;  
+  margin: 0 auto;
+  @include franklin-regular(); 
+}
+
+.list-element {
+  width: 45%;  
+  margin-top: 10px;
+  padding-left: 5px;
+
+  button:focus {
+    box-shadow: none;
+  }
+}
