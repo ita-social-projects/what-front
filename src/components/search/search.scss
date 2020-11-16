@@ -1,0 +1,43 @@
+@import '../../styles/main';
+
+.search {
+  position: relative;
+  display: flex;
+
+  &Input{
+    @include input;
+    width: 164px;
+    padding: 5px;
+    transition: all .1s;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
+      & + .searchButton {
+        box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
+      }
+    }
+  }
+
+  &Button {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid map-get($colors, textAccentN1-color);
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+
+    & > svg {
+      position: absolute;
+      top: 7px;
+      right: -5px;
+    }
+  }
+}
