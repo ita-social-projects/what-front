@@ -1,0 +1,58 @@
+@import '../../styles/main';
+
+.card-component{
+  @include card();
+  padding:15px;
+}
+
+.card-component:hover{
+  transform: scale(1.2);
+  cursor:pointer;
+}
+
+.content{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.card-title{
+   @include baskerville-italic();
+  font-size:20px;
+}
+
+.card-content{
+  @include franklin-regular();
+  font-size:18px;
+  padding-top:10px;
+  margin:0;
+}
+
+.card-date{
+  @include baskerville-regular();
+  font-size: 14px;
+  text-decoration: underline;
+  color: map-get($colors, textAccentN1-color);
+  margin-bottom:0;
+}
+
+.card-head{
+ display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.card-icon:hover{
+  transform: scale(1.2);
+}
+
+.card-btn{
+ text-align:right;
+}
+
+.card-icon{
+ position:absolute;
+  right:4%;
+}

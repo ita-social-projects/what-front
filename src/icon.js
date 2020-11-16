@@ -16,6 +16,7 @@ const Icon = ({
   </svg>
 );
 
+
 Icon.defaultProps = {
   size: 16,
   color: 'black',

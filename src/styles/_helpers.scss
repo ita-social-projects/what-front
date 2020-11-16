@@ -1,0 +1,67 @@
+@import "_fonts";
+@import "_variables";
+@import "_sizes";
+@import "_color-palette";
+
+//fonts mixins
+@mixin baskerville-regular() {
+  font-family: $libre-baskerville;
+  font-weight: $regular;
+}
+@mixin baskerville-italic() {
+  font-family: $libre-baskerville;
+  font-weight: $regular;
+  font-style: italic;
+}
+@mixin franklin-regular() {
+  font-family: $libre-franklin;
+  font-weight: $regular;
+}
+@mixin franklin-light() {
+  font-family: $libre-franklin;
+  font-weight: $light;
+}
+@mixin franklin-semibold() {
+  font-family: $libre-franklin;
+  font-weight: $bold;
+}
+
+
+//mixins
+@mixin button() {
+  @include baskerville-italic;
+  border-radius: map-get($border-radius, button-borRad);
+  box-shadow: map-get($box-shadows, button-boxShadow);
+}
+@mixin modalWindow() {
+  @include franklin-regular;
+  background-color: map-get($colors, backgroung-color);
+  box-shadow: map-get($box-shadows, button-boxShadow);
+  position: absolute;
+  z-index: 100;
+  border-radius: map-get($border-radius, page-borRad);
+}
+@mixin pageWindow() {
+  background-color: map-get($colors, backgroung-color);
+  box-shadow: map-get($box-shadows, page-boxShadow);
+  border-radius: map-get($border-radius, page-borRad);
+}
+@mixin card() {
+  background-color: map-get($colors, backgroung-color);
+  box-shadow: map-get($box-shadows, card-boxShadow);
+  border-radius: map-get($border-radius, card-boRad);
+}
+@mixin input() {
+  @include franklin-regular;
+  border-radius: map-get($border-radius, input-borRad);
+  border: 1px solid map-get($colors, textAccentN1-color);
+  width: 200px;
+}
+@mixin tab() {
+  @include franklin-regular;
+  text-align: center;
+  box-shadow: map-get($box-shadows, tab-boxShadow);
+  color: map-get($colors, textMain-color);
+  background-color: map-get($colors, diselectedTab-color);
+  border-radius: map-get($border-radius, tab-borRad);
+}
