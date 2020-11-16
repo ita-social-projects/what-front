@@ -1,29 +1,27 @@
-import React from "react";
-import PropTypes from "prop-types";
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/default-props-match-prop-types */
+import React from 'react';
+import PropTypes from 'prop-types';
 
-//const defaultStyles = { display: "inline-block", verticalAlign: "middle" };
-
-const Icon = ({ size, color, icon, className, style, viewBox }) => {
-  //const styles = { ...defaultStyles, ...style };
-  return (
-    <svg
-      className={className}
-      //style={styles}
-      viewBox={viewBox}
-      width={`${size}px`}
-      height={`${size}px`}
-    >
-      <use xlinkHref={`src/svg/${icon}.svg#${icon}`} />
-    </svg>
-  );
-};
+const Icon = ({
+  size, icon, color, className, viewBox,
+}) => (
+  <svg
+    className={className}
+    viewBox={viewBox}
+    width={`${size}px`}
+    height={`${size}px`}
+  >
+    <use xlinkHref={`src/svg/${icon}.svg#${icon}`} fill={color} />
+  </svg>
+);
 
 Icon.defaultProps = {
   size: 16,
-  color: "#000000",
-  viewBox: "0 0 24 24",
+  color: 'black',
+  viewBox: '0 0 24 24',
   style: {},
-  className: "",
+  className: '',
 };
 
 Icon.propTypes = {
@@ -31,7 +29,6 @@ Icon.propTypes = {
   color: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   viewBox: PropTypes.string.isRequired,
-  //style: PropTypes.shape(PropTypes.object),
   className: PropTypes.string,
 };
 
