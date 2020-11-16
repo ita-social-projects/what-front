@@ -33,6 +33,7 @@ module.exports = {
     'import/extensions': ['error', 'ignorePackages', {
       js: 'always',
     }],
+    'react/button-has-type': 'off',
     'object-curly-spacing': [2, 'always'],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-one-expression-per-line': 0,
