@@ -3,35 +3,16 @@ import { Provider } from 'react-redux';
 import { configureStore } from './store.js';
 import { Counter } from './features/index.js';
 import Icon from './icon.js';
-import { Card } from './components/card/index.js';
+import {EditLesson} from "./features/edit-lesson";
+import {AddLesson} from "./features/add-lesson";
 
 const store = configureStore();
 
-const handleEdit = (event, id) => {
-  event.preventDefault();
-  console.log(`card with id ${id} will be edited`);
-};
-
-const handleShowDetails = (event, id) => {
-  event.preventDefault();
-  console.log(`details for card with id ${id}`);
-};
-
 export const App = () => (
-  <Provider store={store}>
-    <h1>Hello, I`m App Component!</h1>
-    <Counter />
-    <Icon icon="Plus" size={32} color="#f78259" />
-    <Icon icon="Edit" />
-    <Card
-      title="Title"
-      date="15.15.15"
-      onEdit={handleEdit}
-      onDetails={handleShowDetails}
-      buttonName="save"
-      iconName="Edit"
-    >
-      <p>SomeText</p>
-    </Card>
-  </Provider>
+    <Provider store={store}>
+      <h1>Hello, I'm App Component!</h1>
+      <Counter />
+      <Icon icon="Plus" size={32} color="#f78259" />
+      <Icon icon="Edit"/>
+    </Provider>
 );
