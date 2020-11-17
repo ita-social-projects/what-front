@@ -54,11 +54,13 @@ const RoleList = () => {
 const Role = () => {
 
   const { role } = useParams();
-  const history = useHistory();
-  
+  const history = useHistory();  
+
   return (
     <div className="m-3">
-      <h3>{`${role[0].toUpperCase() + role.slice(1)}`}</h3>            
+      <h3>{`${role[0].toUpperCase() + role.slice(1)}`}</h3>      
+      <Button type="button" onClick={() => (history.push('/counter'))} variant="warning">Counter</Button>
+      <br />
       <Button type="button" onClick={history.goBack} variant="primary">Go Back</Button>
     </div>
   );
