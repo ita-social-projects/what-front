@@ -41,9 +41,7 @@ export const ListOfGroups = () => {
 
   const setGroupList = () => {
     const listByName = data.filter((group) => group.name.toUpperCase().includes(searchGroupName.toUpperCase()));
-    console.log('serach date'+searchStartDate);
     const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
-    console.log(listByDate);
     const resultListOfGroups = listByDate.map((group) => {
       const resultDate = group.startDate.replaceAll('-', '.');
       return (
