@@ -1,0 +1,34 @@
+@import '../../styles/main';
+
+.page {
+  @include pageWindow();
+  @include franklin-regular();
+  padding: 30px;
+  font-size: 16px;
+}
+h3{
+  @include franklin-semibold();
+  font-weight: $bold !important;
+  font-size: 22px !important;
+}
+
+table{
+  border: 1px !important;
+}
+.size {
+  width: 100%;
+}
+.mode {
+  display: block;
+  margin: auto !important;
+}
+
+a {
+  color: map-get($colors, textMain-color) !important;
+}
+
+.placement {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
