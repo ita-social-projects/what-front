@@ -59,10 +59,11 @@ export const Tabs = ({initialTabs, linkBack}) => {
 }
 
 Tabs.propTypes = {
-  tabs: propTypes.arrayOf(propTypes.shape({
+  initialTabs: propTypes.arrayOf(propTypes.shape({
     id: propTypes.number.isRequired,
     title: propTypes.string.isRequired,
-    active: propTypes.bool
+    active: propTypes.bool,
+    content: propTypes.node.isRequired
   })),
   linkBack: propTypes.string.isRequired
 }
