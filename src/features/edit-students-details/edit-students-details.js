@@ -17,7 +17,7 @@ export const EditStudentsDetails = () => {
       { id: 5, name: 'Group 5' },
       { id: 6, name: 'Group 6' }
     ]
-  }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -85,4 +85,4 @@ export const EditStudentsDetails = () => {
       </div>
     </div>
   )
-}
+};
