@@ -38,18 +38,21 @@ export const Tabs = ({initialTabs, linkBack}) => {
 
   return (
     <>
-      <a className='nav-item nav-link d-flex align-items-center'
+      <a className={classNames('nav-item nav-link d-flex align-items-center')}
         href={`#${linkBack}`} 
         onClick={toggleActive}
       >{arrow}</a>
       {tabs.map(tab => {
         return (
-        <a className={classNames('nav-item nav-link', styles.tab, {[`${styles.active}`]:  tab.active})}
-        href={`#${tab.link}`}
-        key={tab.id}
-        data-id={tab.id} 
-        onClick={toggleActive}
-        >{tab.title}</a>)
+          <a className={classNames('nav-item nav-link', styles.tab, {[`${styles.active}`]:  tab.active})}
+            key={tab.id}
+            data-id={tab.id} 
+            onClick={toggleActive}
+          >{tab.title}</a>
+        )
+      })}
+      {tabs.map(({id, active, content}) => {
+        return active ? <div className='w-100' key={id}>{content}</div> : null
       })}
     </>
   );
@@ -59,8 +62,7 @@ Tabs.propTypes = {
   tabs: propTypes.arrayOf(propTypes.shape({
     id: propTypes.number.isRequired,
     title: propTypes.string.isRequired,
-    active: propTypes.bool,
-    link: propTypes.string.isRequired
+    active: propTypes.bool
   })),
   linkBack: propTypes.string.isRequired
 }
