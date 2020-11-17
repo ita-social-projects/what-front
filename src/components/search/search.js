@@ -13,7 +13,9 @@ export const Search = ({
   const [inputValue, setInputValue] = useState('');
 
   const handleSearch = () => onSearch(inputValue);
-  const handleChange = (event) => setInputValue(event.target.value);
+  const handleChange = (event) => {
+    onSearch(event.target.value);
+  };
 
   return (
     <div className={classNames(styles.search, className)}>

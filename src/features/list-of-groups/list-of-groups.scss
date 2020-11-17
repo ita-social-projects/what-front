@@ -1,0 +1,19 @@
+@import '../../styles/main';
+
+.list-head{
+  display:flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin-bottom:30px;
+}
+
+.calendar-input{
+  @include input;
+  width:20%;
+}
+
+.calendar-input:focus {
+  outline: none;
+  box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
+  border-color: map-get($colors, textAccentN1-color);
+}

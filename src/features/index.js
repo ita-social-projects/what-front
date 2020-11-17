@@ -4,6 +4,6 @@ export * from './edit-group';
 export * from './support';
 export * from './start-group';
 export * from './auth';
-export * from './header'
+export * from './header';
 export * from './edit-students-details';
-
+export * from './list-of-groups';

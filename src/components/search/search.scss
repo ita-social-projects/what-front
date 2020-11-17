@@ -6,11 +6,9 @@
 
   &Input{
     @include input;
-    width: 164px;
     padding: 5px;
     transition: all .1s;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-right:0;
 
     &:focus {
       outline: none;
@@ -23,16 +21,15 @@
 
   &Button {
     cursor: pointer;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     border: 1px solid map-get($colors, textAccentN1-color);
     border-left: none;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius:0 3px 3px 0;
 
     & > svg {
       position: absolute;
