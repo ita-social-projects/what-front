@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from './store.js';
 import { Counter, ListOfStudents } from './features/index.js';
 
-import Icon from './icon.js'
+import Icon from './icon.js';
 
 const store = configureStore();
 

@@ -1,97 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
 import { shallowEqual, useSelector } from 'react-redux';
-import faker from 'faker';
 import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
 import { actions, searchStudentValue } from './redux/index.js';
 import { useActions } from '../../shared/hooks/index.js';
-
 import styles from './list-of-students.scss';
-
-// Students data
-const data = [
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 1,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 2,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 3,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 4,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 5,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 6,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 7,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 8,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 9,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 10,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 11,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 12,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 13,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 14,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 15,
-  },
-  {
-    firstName: `${faker.name.firstName()}`,
-    lastName: ` ${faker.name.lastName()}`,
-    id: 16,
-  },
-];
+import { data } from './students-dataList.js';
 
 export const ListOfStudents = () => {
   // Search input
