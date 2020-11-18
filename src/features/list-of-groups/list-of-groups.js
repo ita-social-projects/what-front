@@ -73,14 +73,14 @@ export const ListOfGroups = () =>{
             onChange={handleCalendarChange}
             placeholder="year-month-day"
           />
-          <Search onSearch={handleSearch} placeholder="Search group" className="col-4" />
+          <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
           <Button onClick={handleAddGroup} variant="warning">
             <Icon icon="Plus" size={20} className="icon" />
             Add Group
           </Button>
         </div>
         <hr className="col-8" />
-        <div className={classNames(styles['group-list'], 'col-12 d-flex flex-row flex-wrap justify-content-center')}>
+        <div className={classNames(styles['group-list'], 'col-12')}>
           {
                setGroupList()
           }

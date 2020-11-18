@@ -2,39 +2,23 @@
 
 .search {
   position: relative;
-  display: flex;
+  display: inline-block;
 
-  &Input{
+  &Input {
     @include input;
-    padding: 5px;
+    position: relative;
+    padding: 5px 5px 5px 32px;
     transition: all .1s;
-    border-right:0;
 
     &:focus {
       outline: none;
       box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
-      & + .searchButton {
-        box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
-      }
     }
   }
 
-  &Button {
-    cursor: pointer;
-    width: 38px;
-    height: 38px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid map-get($colors, textAccentN1-color);
-    border-left: none;
-    border-radius:0 3px 3px 0;
-
-    & > svg {
+    &Icon {
       position: absolute;
+      left: 7px;
       top: 7px;
-      right: -5px;
     }
-  }
 }

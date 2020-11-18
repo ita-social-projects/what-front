@@ -55,7 +55,6 @@
   @include franklin-regular;
   border-radius: map-get($border-radius, input-borRad);
   border: 1px solid map-get($colors, textAccentN1-color);
-  width: 200px;
 }
 @mixin tab() {
   @include franklin-regular;

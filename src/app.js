@@ -5,9 +5,9 @@ import { Counter, ListOfGroups } from './features/index.js';
 import { Card } from './components/index.js';
 
 import Icon from './icon.js';
-import { EditLesson } from './features/edit-lesson';
-import { AddLesson } from './features/add-lesson';
-
+import {EditLesson} from "./features/edit-lesson";
+import {AddLesson} from "./features/add-lesson";
+import { StudentScheduale } from './features/schedule-student/scheduale.js';
 const store = configureStore();
 
 export const App = () => (
