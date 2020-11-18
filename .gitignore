@@ -2,3 +2,6 @@
 /shelf/
 /workspace.xml
 /.idea
+/node_modules
+.vscode
+/dist

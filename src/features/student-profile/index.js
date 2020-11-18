@@ -1,0 +1,1 @@
+export { StudentProfile } from './student-profile.js';
