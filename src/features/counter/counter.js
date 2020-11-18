@@ -36,7 +36,7 @@ export const Counter = () => {
       <Button type="button" onClick={handleShowModal} variant="success">Show modal</Button>
       <div className="m-3">
         <Search
-          onChange={handleSearch}
+          onSearch={handleSearch}
           placeholder="Search something"
         />
       </div>

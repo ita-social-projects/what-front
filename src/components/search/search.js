@@ -6,11 +6,11 @@ import Icon from '../../icon.js';
 import styles from './search.scss';
 
 export const Search = ({
-  onChange,
+  onSearch,
   placeholder,
   className,
 }) => {
-  const handleChange = (event) => onChange(event.target.value);
+  const handleChange = (event) => onSearch(event.target.value);
 
   return (
     <div className={styles.search}>
@@ -26,7 +26,7 @@ export const Search = ({
 };
 
 Search.propTypes = {
-  onChange: func.isRequired,
+  onSearch: func.isRequired,
   placeholder: PropTypes.string.isRequired,
   className: PropTypes.string,
 };
