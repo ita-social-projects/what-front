@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes, { func } from 'prop-types';
 import classNames from 'classnames';
 
@@ -10,22 +10,17 @@ export const Search = ({
   placeholder,
   className,
 }) => {
-  const [inputValue, setInputValue] = useState('');
-
-  const handleSearch = () => onSearch(inputValue);
-  const handleChange = (event) => setInputValue(event.target.value);
+  const handleChange = (event) => onSearch(event.target.value);
 
   return (
-    <div className={classNames(styles.search, className)}>
+    <div className={styles.search}>
       <input
         type="text"
-        className={styles.searchInput}
+        className={classNames(styles.searchInput, className)}
         onChange={handleChange}
         placeholder={placeholder}
       />
-      <div onClick={handleSearch} className={styles.searchButton}>
-        <Icon icon="Search" size={32} viewBox="0 0 50 50" />
-      </div>
+      <Icon className={styles.searchIcon} icon="Search" size={32} viewBox="0 0 50 50" />
     </div>
   );
 };
