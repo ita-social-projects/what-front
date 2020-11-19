@@ -11,8 +11,7 @@ import styles from './list-of-groups.scss';
 // use it temporary
 import { data } from './groups.js';
 
-export const ListOfGroups = () =>{
-
+export const ListOfGroups = () => {
   const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
 
   const searchGroupName = useSelector(searchGroup, shallowEqual);
