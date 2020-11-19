@@ -7,4 +7,4 @@ export * from './auth';
 export * from './routes';
 export * from './header';
 export * from './edit-students-details';
-
+export * from './schedule-student';

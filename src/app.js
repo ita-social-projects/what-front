@@ -5,8 +5,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { configureStore } from './store.js';
 import { Counter, Routes } from './features/index.js';
 import Icon from './icon.js';
-import { EditLesson } from "./features/edit-lesson";
-import { AddLesson } from "./features/add-lesson";
 
 const store = configureStore();
 

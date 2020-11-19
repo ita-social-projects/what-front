@@ -1,0 +1,5 @@
+<svg id="LogOut" width="34" height="28" viewBox="0 0 34 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.75 20.25V23.375C20.75 24.2038 20.4208 24.9987 19.8347 25.5847C19.2487 26.1708 18.4538 26.5 17.625 26.5H5.125C4.2962 26.5 3.50134 26.1708 2.91529 25.5847C2.32924 24.9987 2 24.2038 2 23.375V4.625C2 3.7962 2.32924 3.00134 2.91529 2.41529C3.50134 1.82924 4.2962 1.5 5.125 1.5H17C18.7258 1.5 20.75 2.89922 20.75 4.625V7.75" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25.75 20.25L32 14L25.75 7.75" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.75 14H30.75" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
