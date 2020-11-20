@@ -8,6 +8,10 @@ import Icon from './icon.js';
 import {EditLesson} from "./features/edit-lesson";
 import {AddLesson} from "./features/add-lesson";
 import { StudentScheduale } from './features/schedule-student/scheduale.js';
+import { Counter, ListOfStudents } from './features/index.js';
+
+import Icon from './icon.js';
+
 const store = configureStore();
 
 export const App = () => (
@@ -19,6 +23,6 @@ export const App = () => (
     <Icon icon="Plus" size={32} className="icon" color="#FFFFFF" />
     <Icon icon="Plus" size={32} className="icon" color="#FFB800" />
     <Icon icon="Edit" viewBox="0 0 50 50" color="#FFB800" />
-    <ListOfGroups />
+    <ListOfStudents />
   </Provider>
 );
