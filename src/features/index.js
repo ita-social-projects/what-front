@@ -8,3 +8,4 @@ export * from './header';
 export * from './edit-students-details';
 export * from './list-of-students';
 export * from './schedule-student';
+export * from './list-of-courses';
