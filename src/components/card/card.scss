@@ -1,13 +1,17 @@
 @import '../../styles/main';
 
 .card-component{
-  @include card();
   padding:15px;
+<<<<<<< HEAD
+  margin: 15px;
+  @include card();
+=======
   margin: 15px 20px;
+>>>>>>> dev
 }
 
 .card-component:hover{
-  transform: scale(1.2);
+  transform: scale(1.1);
   cursor:pointer;
 }
 
