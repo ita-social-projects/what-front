@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
-import { counterReducer } from './features';
+import { counterReducer, listOfStudentsReducer } from './features';
 
 export const rootReducer = combineReducers({
     features: combineReducers({
-        counter: counterReducer
+        counter: counterReducer,
+        listOfStudents: listOfStudentsReducer,
     })
 });

@@ -3,6 +3,7 @@
 .card-component{
   @include card();
   padding:15px;
+  margin: 15px 20px;
 }
 
 .card-component:hover{
