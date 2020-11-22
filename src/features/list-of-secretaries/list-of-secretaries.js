@@ -51,7 +51,7 @@ export const ListOfSecretaries = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mb-2">
       <div className="row">
         <div className="col-lg-4 col-md-6 offset-lg-4 col-12 text-center mt-2">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
