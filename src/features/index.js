@@ -9,3 +9,4 @@ export * from './edit-students-details';
 export * from './list-of-groups';
 export * from './list-of-students';
 export * from './schedule-student';
+export * from './list-of-secretaries';
