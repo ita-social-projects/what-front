@@ -93,6 +93,31 @@ module.exports = {
       },
 
       {
+        test: /\.css$/,
+        use: [
+          {
+            loader: isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    'autoprefixer',
+                  ],
+                ],
+                sourceMap: isDev,
+              },
+            },
+          },
+        ],
+      },
+
+      {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
         type: 'asset/resource',
       },
