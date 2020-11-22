@@ -1,0 +1,1 @@
+export const searchSecretarySelector = (state) => state.features.listOfSecretaries.searchSecretary;
