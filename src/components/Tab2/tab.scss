@@ -1,0 +1,17 @@
+@import '../../index.scss';
+
+.tab {
+  flex: 1;
+  @include tab;
+
+  &:not(:last-of-type) {
+    margin-right: -2%;
+  }
+
+  &:hover {
+    color: black;
+    background-color: #FFB800;
+
+    z-index: 3;
+  }
+}
