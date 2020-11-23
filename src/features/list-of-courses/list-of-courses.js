@@ -33,7 +33,8 @@ export const ListOfCourses = () => {
       <Card
         key={course.id}
         id={course.id}
-        button='Details'
+        buttonName='Details'
+        iconName='Edit'
         onEdit={courseEdit}
         onDetails={courseDetails}
         >{course.name}
