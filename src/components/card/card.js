@@ -78,7 +78,7 @@ Card.defaultProps = {
   title: '',
   date: '',
   children: null,
-  buttonName: 'Details',
+  buttonName: '',
   iconName: 'Edit',
   onDetails: undefined,
   onEdit: undefined,

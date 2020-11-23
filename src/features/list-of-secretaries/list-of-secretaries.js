@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
+import className from 'classnames';
 import { Button, Search, Card } from '../../components/index.js';
 import { useActions } from '../../shared/hooks/index.js';
 import { listOfSecretariesActions, searchSecretarySelector } from './redux/index.js';
 import Icon from '../../icon.js';
-import className from 'classnames';
 import styles from './list-of-secretaries.scss';
 
 import { data } from './secretariesData.js';
@@ -26,12 +26,7 @@ export const ListOfSecretaries = () => {
     alert(`router to Edit Secretary ${id}`);
   };
 
-  const handleSecretarysDetails = (id) => {
-    alert(`router to Secretary's ${id} Details`);
-  };
-
   const secretaries = () => {
-    console.log(data);
     const sortSecretariesByName = data.filter((secretary) => (
       (secretary.firstName.concat(secretary.lastName)).toUpperCase())
       .includes(searchSecretaryByName.toUpperCase()));
@@ -39,12 +34,11 @@ export const ListOfSecretaries = () => {
       <Card
         key={secretary.id}
         id={secretary.id}
-        button="Details"
-        date=" "
+        iconName="Edit"
         onEdit={handleEditSecretary}
-        onDetails={handleSecretarysDetails}
       >
-        <span className={className(styles['card-name'], 'd-flex mt-2')}>{secretary.firstName} {secretary.lastName}</span>
+        <span className={className(styles['card-name'], 'd-flex')}>{secretary.firstName}</span>
+        <span className={className(styles['card-name'], 'd-flex')}>{secretary.lastName}</span>
         <span className={className(styles['card-email'], 'd-flex mt-2 mb-2')}>{secretary.email}</span>
       </Card>
     ));
