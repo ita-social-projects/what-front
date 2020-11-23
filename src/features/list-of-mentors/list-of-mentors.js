@@ -3,22 +3,22 @@ import classNames from 'classnames';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
-import { actions, searchStudentValue } from './redux/index.js';
+import { actions, searchMentorValue } from './redux/index.js';
 import { useActions } from '../../shared/hooks/index.js';
-import styles from './list-of-students.scss';
-import { dataList } from './students-data-list.js';
+import styles from './list-of-mentors.scss';
+import { dataList } from './mentors-dataList.js';
 
-export const ListOfStudents = () => {
+export const ListOfMentors = () => {
   // Search input
-  const { setSearchStudentValue } = useActions(actions);
-  const searchStudentName = useSelector(searchStudentValue, shallowEqual);
+  const { setSearchMentorValue } = useActions(actions);
+  const searchMentorName = useSelector(searchMentorValue, shallowEqual);
 
   const handleSearch = (inputValue) => {
-    setSearchStudentValue(inputValue);
+    setSearchMentorValue(inputValue);
   };
 
   // Add a Student
-  const addStudent = () => {
+  const addMentor = () => {
   };
 
   // Student's details
@@ -29,18 +29,18 @@ export const ListOfStudents = () => {
   const cardEditing = (id) => {
   };
 
-  const studentsList = () => {
-    const listByStudentName = dataList.filter((student) => student.name.toUpperCase()
-      .includes(searchStudentName.toUpperCase()));
+  const mentorsList = () => {
+    const listByMentorName = dataList.filter((mentor) => mentor.name.toUpperCase()
+      .includes(searchMentorName.toUpperCase()));
 
-    return listByStudentName.map((student) => (
+    return listByMentorName.map((mentor) => (
       <Card
-        key={student.uuid}
-        id={student.uuid}
+        key={mentor.uuid}
+        id={mentor.uuid}
         button="Details"
         onEdit={cardEditing}
         onDetails={cardDetails}
-      > { student.name }
+      > { mentor.name }
       </Card>
     ));
   };
@@ -50,17 +50,17 @@ export const ListOfStudents = () => {
       <div className="row">
         <div className={classNames(styles.heading, 'col-12 mb-3')}>
           <div className={styles.search__container}>
-            <Search onSearch={handleSearch} placeholder="Enter a student's name" />
+            <Search onSearch={handleSearch} placeholder="Enter a mentor's name" />
           </div>
-          <Button onClick={addStudent} variant="warning">
+          <Button onClick={addMentor} variant="warning">
             <Icon icon="Plus" className="icon" />
-            Add a Student
+            Add a Mentor
           </Button>
         </div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
           {
-            studentsList()
+            mentorsList()
           }
         </div>
       </div>
