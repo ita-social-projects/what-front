@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import propTypes from 'prop-types';
 
 const arrow = (
   <svg width='1em' height='1em' viewBox='0 0 16 16' className='bi bi-arrow-left' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -6,7 +7,7 @@ const arrow = (
   </svg>
 );
 
-export const Tabs = ({className, children, defaultIndex}) => {
+export const Tabs = ({className, children, defaultIndex, linkBack}) => {
 
   const [tabs, setTabs] = useState({
     activeTabIndex: defaultIndex,
@@ -18,7 +19,7 @@ export const Tabs = ({className, children, defaultIndex}) => {
     setTabs((prevState) => {
       return {
         ...prevState,
-        activeTabIndex: tabIndex === activeTabIndex ? defaultIndex : tabIndex,
+        activeTabIndex: tabIndex,
       };
     });
   };
@@ -43,7 +44,7 @@ export const Tabs = ({className, children, defaultIndex}) => {
     <div className={className}>
       <div className='nav nav-tabs'>
         <a className='nav-item nav-link d-flex align-items-center'
-          href='#arrow'
+          href={`#${linkBack}`}
         >{arrow}</a>
         {renderTabs()}
       </div>
@@ -52,4 +53,15 @@ export const Tabs = ({className, children, defaultIndex}) => {
       </div>
     </div>
   );
+};
+
+Tabs.propTypes = {
+  className: propTypes.string,
+  defaultIndex: propTypes.number,
+  children: propTypes.node.isRequired,
+  linkBack: propTypes.string.isRequired
+};
+
+Tabs.defaultProps = {
+  defaultIndex: 0
 };
