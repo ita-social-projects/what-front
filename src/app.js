@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { configureStore } from './store.js';
-import { Counter, EditGroup, FormExample, Support } from './features/index.js';
+import { Counter, EditGroup, FormExample, StudentProfile, Support } from './features/index.js';
 
 import Icon from './icon.js';
 import {EditLesson} from "./features/edit-lesson";
@@ -13,21 +13,22 @@ const store = configureStore();
 export const App = () => (
   
   <Provider store={store}>
-    <h1>Hello, I`m App Component!</h1>
+    {/*<h1>Hello, I`m App Component!</h1>
     <Counter />
     <Icon icon="Plus" size={32} />
     <Icon icon="Edit" viewBox="0 0 50 50" />
     <Icon icon="Plus" size={32} className="icon" color="#FFFFFF" />
     <Icon icon="Plus" size={32} className="icon" color="#FFB800" />
-    <Icon icon="Edit" viewBox="0 0 50 50" color="#FFB800" />
-    {/*<Tabs2>
-      <Tab2 title='Support'>
+    <Icon icon="Edit" viewBox="0 0 50 50" color="#FFB800" />*/}
+
+    <Tabs2 activeTabIndex='0'>
+      <Tab2 title='Support' id='0'>
         <Support />
       </Tab2>
-      <Tab2 title='Form Example'>
+      <Tab2 title='Group editing' id='1'>
         <EditGroup />
       </Tab2>
-    </Tabs2>*/}
+    </Tabs2>
 
   </Provider>
 );
