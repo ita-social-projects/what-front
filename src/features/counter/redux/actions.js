@@ -24,7 +24,7 @@ export const counterFetchingEnd = ({ counter }) => ({
 });
 
 export const counterFetchFailed = (error) => ({
-  type: actions.COUNTER_LOADING_FINISHED,
+  type: actions.COUNTER_LOADING_FAILED,
   payload: {
     error,
   },
