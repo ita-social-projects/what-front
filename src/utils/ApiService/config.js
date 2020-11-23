@@ -1,0 +1,17 @@
+export const ApiConfig = {
+  BASE_URL: 'http://localhost:3000',
+  AUTH_URL: '/api/accounts/auth',
+  REGISTER_URL: '/api/accounts/reg',
+  ACCOUNTS_URL: '/api/accounts',
+  NOT_ASSIGNED_URL: '/api/accounts/NotAssigned',
+  COURSES_URL: '/api/courses',
+  LESSONS_URL: '/api/lessons',
+  LESSON_ASSIGN_URL: '/api/lessons/assign',
+  STUDENT_LESSONS_URL: '/api/lessons/students',
+  MENTORS_URL: '/api/mentors',
+  STUDENTS_URL: '/api/students',
+  GROUPS_URL: '/api/student_groups',
+  THEMES_URL: '/api/themes',
+  SECRETARIES_URL: '/api/secretaries',
+  SCHEDULE_URL: '/api/schedules',
+};
