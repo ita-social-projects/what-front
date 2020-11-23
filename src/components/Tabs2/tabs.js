@@ -11,38 +11,44 @@ export const Tabs2 = ({children, defaultIndex}) => {
 
   const [tabs, setTabs] = useState({
     activeTabIndex: defaultIndex,
-    isActive: defaultIndex
   });
 
-  const toggleActive = (event, tabIndex) => {
+  const toggleActive = (tabIndex) => {
     
     setTabs((prevState) => {
       return {
         ...prevState,
-        activeTabIndex: event.target.dataset.id,
-        isActive: tabIndex == tabs.activeTabIndex ? defaultIndex : tabIndex
+        activeTabIndex: tabIndex == tabs.activeTabIndex ? defaultIndex : tabIndex,
       };
     });
   };
 
+  const renderContent = () => {
+    if(children[tabs.activeTabIndex]) {
+      return children[tabs.activeTabIndex].props.children
+    }
+  }
+
+  const renderTabs = () => {
+    return React.Children.map(children, (child, index) => {
+      return React.cloneElement(child, {
+        tabIndex: index,
+        isActive: index == tabs.activeTabIndex,
+        onClick: toggleActive,
+      })
+    })
+  }
+
   return (
     <div className='w-75 m-5'>
-      <div className='nav nav-tabs' onClick={toggleActive}>
+      <div className='nav nav-tabs'>
         <a className={classNames('nav-item nav-link d-flex align-items-center')}
           href='#arrow'
         >{arrow}</a>
-        {React.Children.map(children, (child, index) => {
-          return React.cloneElement(child, {
-            tabIndex: index,
-            isActive: index == tabs.isActive,
-          })
-        })}
+        {renderTabs()}
       </div>
-      <div>{children.map((child, index) => {
-        if (tabs.activeTabIndex == index) {
-          return children[index].props.children
-        };
-      })}
+      <div>
+        {renderContent()}
       </div>
     </div>
   );
