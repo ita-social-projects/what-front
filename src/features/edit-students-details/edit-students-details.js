@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import className from 'classnames';
+import { Formik, Form, Field } from 'formik';
 import styles from './edit-students-details.scss';
 import Icon from '../../icon.js';
 import { Button } from '../../components/index.js';
@@ -92,6 +93,7 @@ export const EditStudentsDetails = () => {
     setInputValue(value);
   };
 
+
   return (
     <div className={styles.wrapper}>
       <div className="container shadow pb-3">
@@ -99,80 +101,113 @@ export const EditStudentsDetails = () => {
           <div className="col-md-12">
             { error ? <div className="alert alert-danger">{error}</div> : null}
           </div>
-          <div className="col-md-4">
-            <label htmlFor="first-name">First Name:</label>
-          </div>
-          <div className="col-md-8">
-            <input type="text" className="form-control" id="first-name" placeholder={student.firstName} />
-          </div>
-        </div>
-        <div className="row m-0 pt-3">
-          <div className="col-md-4">
-            <label htmlFor="second-name">Second Name:</label>
-          </div>
-          <div className="col-md-8">
-            <input type="text" className="form-control" id="second-name" placeholder={student.secondName} />
-          </div>
-        </div>
-        <div className="row m-0 pt-3">
-          <div className="col-md-4">
-            <label htmlFor="email">Email:</label>
-          </div>
-          <div className="col-md-8">
-            <input type="text" className="form-control" id="email" placeholder={student.email} />
-          </div>
-        </div>
-        <div className="row m-0 pt-3">
-          <div className="col-md-4">
-            <label htmlFor="groups">Group('s):</label>
-          </div>
-          <div className="col-md-8">
-            <div className="input-group flex-nowrap">
-              <input
-                className="form-control"
-                list="group-list"
-                placeholder={groupInput}
-                onChange={handleInputChange}
-              />
-              <datalist id="group-list">
-                {groupList.map(({ id, name }) => (
-                  <option key={id}>{name}</option>
-                ))}
-              </datalist>
-              <div className="input-group-append">
-                <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row m-0 pt-3">
-          <div className="col-md-8 offset-md-4">
-            <ul className="d-flex flex-wrap justify-content-between p-0">
-              {groups.map(({ id, name }) => (
-                <li
-                  className={className(styles['list-element'],
-                    'd-flex bg-light border border-outline-secondary rounded')}
-                  key={id}
-                  data-groupId={id}
-                  data-groupName={name}
-                >
-                  {name}
-                  <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger" onClick={handleGroupDelete}>X</button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="row m-0 pt-3">
-          <div className="col-md-3 col-4">
-            <Button className="w-100" variant="danger">Exclude</Button>
-          </div>
-          <div className="col-md-3 offset-md-3 col-4">
-            <Button className="w-100">Clear</Button>
-          </div>
-          <div className="col-md-3 col-4">
-            <Button className="w-100" variant="success">Save</Button>
-          </div>
+          <Formik
+            initialValues={{
+              firstName: '',
+              lastName: '',
+              email: '',
+              groups: '',
+            }}
+            //validationSchema={SignupSchema}
+            onSubmit={(values) => {
+              // same shape as initial values
+              console.log(values);
+            }}
+          >
+            {({ errors, touched }) => (
+              <Form>
+                <div className="row m-0 pt-3">
+                  <div className="col-md-4">
+                    <label htmlFor="firstName">First Name:</label>
+                  </div>
+                  <div className="col-md-8">
+                    <Field type="text" className="form-control" name="firstName" placeholder={student.firstName} />
+                    {errors.firstName && touched.firstName ? (
+                      <div>{errors.firstName}</div>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="row m-0 pt-3">
+                  <div className="col-md-4">
+                    <label htmlFor="lastName">Second Name:</label>
+                  </div>
+                  <div className="col-md-8">
+                    <Field type="text" className="form-control" name="lastName" placeholder={student.secondName} />
+                    {errors.lastName && touched.lastName ? (
+                      <div>{errors.lastName}</div>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="row m-0 pt-3">
+                  <div className="col-md-4">
+                    <label htmlFor="email">Email:</label>
+                  </div>
+                  <div className="col-md-8">
+                    <Field type="text" className="form-control" name="email" placeholder={student.email} />
+                    {errors.email && touched.email ? <div>{errors.email}</div> : null}
+                  </div>
+                </div>
+
+                <div className="row m-0 pt-3">
+                  <div className="col-md-4">
+                    <label htmlFor="groups">Group('s):</label>
+                  </div>
+                  <div className="col-md-8">
+                    <div className="input-group flex-nowrap">
+                      <Field
+                        name="groups"
+                        className="form-control"
+                        list="group-list"
+                        placeholder={groupInput}
+                        onChange={handleInputChange}
+                      />
+                      <datalist id="group-list">
+                        {groupList.map(({ id, name }) => (
+                          <option key={id}>{name}</option>
+                        ))}
+                      </datalist>
+                      <div className="input-group-append">
+                        <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row m-0 pt-3">
+                  <div className="col-md-8 offset-md-4">
+                    <ul className="d-flex flex-wrap justify-content-between p-0">
+                      {groups.map(({ id, name }) => (
+                        <li
+                          className={className(styles['list-element'],
+                            'd-flex bg-light border border-outline-secondary rounded')}
+                          key={id}
+                          data-groupId={id}
+                          data-groupName={name}
+                        >
+                          {name}
+                          <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger" onClick={handleGroupDelete}>X</button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="row m-0 pt-3">
+                  <div className="col-md-3 col-4">
+                    <Button className="w-100" variant="danger">Exclude</Button>
+                  </div>
+                  <div className="col-md-3 offset-md-3 col-4">
+                    <Button className="w-100">Clear</Button>
+                  </div>
+                  <div className="col-md-3 col-4">
+                    <Button className="w-100" variant="success" type="submit">Save</Button>
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>
