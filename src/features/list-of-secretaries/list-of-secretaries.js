@@ -39,14 +39,14 @@ export const ListOfSecretaries = () => {
       >
         <span className={className(styles['card-name'], 'd-flex')}>{secretary.firstName}</span>
         <span className={className(styles['card-name'], 'd-flex')}>{secretary.lastName}</span>
-        <span className={className(styles['card-email'], 'd-flex mt-2 mb-2')}>{secretary.email}</span>
+        <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{secretary.email}</span>
       </Card>
     ));
   };
 
   return (
     <div className="container mb-2">
-      <div className="row">
+      <div className="row mb-4">
         <div className="col-lg-4 col-md-6 offset-lg-4 col-12 text-center mt-2">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
@@ -58,7 +58,7 @@ export const ListOfSecretaries = () => {
         </div>
       </div>
       <hr className="col-8" />
-      <div className="row d-flex flex-wrap justify-content-center">
+      <div className="col-12 d-flex flex-wrap justify-content-center">
         {secretaries()}
       </div>
     </div>
