@@ -5,12 +5,13 @@ const INITIAL_STATE = {
 };
 
 export const listOfCoursesReducer = (state = INITIAL_STATE, action) => {
-  if (action.type === types.SET_SEARCH_VALUE) {
-    return {
+  switch (action.type) {
+    case types.SET_SEARCH_VALUE:
+      return {
       ...state,
       searchCourseValue: action.payload.courseName,
-    }
-  } else {
-    return state;
+      };
+    default:
+      return state;
   }
 };
