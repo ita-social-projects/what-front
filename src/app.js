@@ -21,12 +21,15 @@ export const App = () => (
     <Icon icon="Plus" size={32} className="icon" color="#FFB800" />
     <Icon icon="Edit" viewBox="0 0 50 50" color="#FFB800" />*/}
 
-    <Tabs2 activeTabIndex='0'>
-      <Tab2 title='Support' id='0'>
+    <Tabs2 defaultIndex={1}>
+      <Tab2 title='Support'>
         <Support />
       </Tab2>
-      <Tab2 title='Group editing' id='1'>
+      <Tab2 title='Edit Group'>
         <EditGroup />
+      </Tab2>
+      <Tab2 title='Edit Lesson'>
+        <EditLesson />
       </Tab2>
     </Tabs2>
 

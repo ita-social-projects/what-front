@@ -7,25 +7,21 @@ const arrow = (
   </svg>
 );
 
-export const Tabs2 = ({children, activeTabIndex}) => {
+export const Tabs2 = ({children, defaultIndex}) => {
 
-  const [activeTab, setActiveTab] = useState({
-    activeTabIndex,
+  const [tabs, setTabs] = useState({
+    activeTabIndex: defaultIndex,
+    isActive: defaultIndex
   });
 
-  // const {activeTabIndex} = activeTab;
-
-  const toggleActive = (event) => {
-    setActiveTab((prevState) => {
-      console.log(prevState)
-      console.log(event.target)
-      children.map((child, index) => {
-        console.log(index)
-      })
+  const toggleActive = (event, tabIndex) => {
+    
+    setTabs((prevState) => {
       return {
         ...prevState,
-        activeTabIndex: event.target.dataset.id
-      }
+        activeTabIndex: event.target.dataset.id,
+        isActive: tabIndex == tabs.activeTabIndex ? defaultIndex : tabIndex
+      };
     });
   };
 
@@ -35,16 +31,19 @@ export const Tabs2 = ({children, activeTabIndex}) => {
         <a className={classNames('nav-item nav-link d-flex align-items-center')}
           href='#arrow'
         >{arrow}</a>
-        {children.map((child) => {
-          return child
+        {React.Children.map(children, (child, index) => {
+          return React.cloneElement(child, {
+            tabIndex: index,
+            isActive: index == tabs.isActive,
+          })
         })}
       </div>
       <div>{children.map((child, index) => {
-        if(activeTab.activeTabIndex == index) {
-          console.log(children[index].props.children);
-          return children[index].props.children;
-        }
-      })}</div>
+        if (tabs.activeTabIndex == index) {
+          return children[index].props.children
+        };
+      })}
+      </div>
     </div>
   );
-}
+};
