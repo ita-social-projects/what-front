@@ -17,15 +17,15 @@ export const ListOfMentors = () => {
     setSearchMentorValue(inputValue);
   };
 
-  // Add a Student
+  // Add a Mentor
   const addMentor = () => {
   };
 
-  // Student's details
+  // Mentors details
   const cardDetails = (id) => {
   };
 
-  // Edit Student's details
+  // Edit Mentor's details
   const cardEditing = (id) => {
   };
 
