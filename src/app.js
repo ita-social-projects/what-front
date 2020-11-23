@@ -6,7 +6,7 @@ import { Counter, EditGroup, FormExample, StudentProfile, Support } from './feat
 import Icon from './icon.js';
 import {EditLesson} from "./features/edit-lesson";
 import {AddLesson} from "./features/add-lesson";
-import { Tabs2, Tab2 } from './components/index.js';
+import { Tabs, Tab } from './components/index.js';
 
 const store = configureStore();
 
@@ -21,17 +21,14 @@ export const App = () => (
     <Icon icon="Plus" size={32} className="icon" color="#FFB800" />
     <Icon icon="Edit" viewBox="0 0 50 50" color="#FFB800" />*/}
 
-    <Tabs2 defaultIndex={1}>
-      <Tab2 title='Support'>
+    <Tabs defaultIndex={1} className='w-75 m-5'>                           
+      <Tab title='Support'>
         <Support />
-      </Tab2>
-      <Tab2 title='Edit Group'>
+      </Tab>
+      <Tab title='Edit Group'>
         <EditGroup />
-      </Tab2>
-      <Tab2 title='Edit Lesson'>
-        <EditLesson />
-      </Tab2>
-    </Tabs2>
+      </Tab>
+    </Tabs>
 
   </Provider>
 );

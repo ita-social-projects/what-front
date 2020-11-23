@@ -1,8 +1,4 @@
 import React, { useState } from 'react';
-import propTypes from 'prop-types';
-import classNames from 'classnames';
-
-import styles from './tabs.scss';
 
 const arrow = (
   <svg width='1em' height='1em' viewBox='0 0 16 16' className='bi bi-arrow-left' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -10,61 +6,50 @@ const arrow = (
   </svg>
 );
 
-export const Tabs = ({initialTabs, linkBack}) => {
-  
-  const [tabs, setTabs] = useState(initialTabs);
+export const Tabs = ({className, children, defaultIndex}) => {
 
-  const toggleActive = (event) => {
+  const [tabs, setTabs] = useState({
+    activeTabIndex: defaultIndex,
+  });
 
-    setTabs((prevstate) => {
-      prevstate.find((tab) => {
-        if(tab.active) {
-          tab.active = false
-        } 
-      })
-      
-      return prevstate.map((tab, index) => {
-        if(index == event.target.dataset.id) {
-          return {
-            ...tab,
-            active: !tab.active,
-          }
-        } else {
-          return tab
-        }
-      })
-    })
+  const {activeTabIndex} = tabs;
+
+  const toggleActiveTab = (tabIndex) => {
+    setTabs((prevState) => {
+      return {
+        ...prevState,
+        activeTabIndex: tabIndex === activeTabIndex ? defaultIndex : tabIndex,
+      };
+    });
+  };
+
+  const renderContent = () => {
+    if(children[activeTabIndex]) {
+      return children[activeTabIndex].props.children
+    }
+  }
+
+  const renderTabs = () => {
+    return React.Children.map(children, (child, index) => {
+      return React.cloneElement(child, {
+        tabIndex: index,
+        isActive: index === activeTabIndex,
+        onClick: toggleActiveTab,
+      });
+    });
   };
 
   return (
-    <>
-      <a className={classNames('nav-item nav-link d-flex align-items-center')}
-        href={`#${linkBack}`} 
-        onClick={toggleActive}
-      >{arrow}</a>
-      {tabs.map(tab => {
-        return (
-          <a className={classNames('nav-item nav-link', styles.tab, {[`${styles.active}`]:  tab.active})}
-            key={tab.id}
-            data-id={tab.id} 
-            onClick={toggleActive}
-          >{tab.title}</a>
-        )
-      })}
-      {tabs.map(({id, active, content}) => {
-        return active ? <div className='w-100' key={id}>{content}</div> : null
-      })}
-    </>
+    <div className={className}>
+      <div className='nav nav-tabs'>
+        <a className='nav-item nav-link d-flex align-items-center'
+          href='#arrow'
+        >{arrow}</a>
+        {renderTabs()}
+      </div>
+      <div>
+        {renderContent()}
+      </div>
+    </div>
   );
-}
-
-Tabs.propTypes = {
-  initialTabs: propTypes.arrayOf(propTypes.shape({
-    id: propTypes.number.isRequired,
-    title: propTypes.string.isRequired,
-    active: propTypes.bool,
-    content: propTypes.node.isRequired
-  })),
-  linkBack: propTypes.string.isRequired
-}
-
+};

@@ -1,1 +1,0 @@
-export { Tabs2 } from './tabs.js'
