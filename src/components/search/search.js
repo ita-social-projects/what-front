@@ -20,7 +20,7 @@ export const Search = ({
         onChange={handleChange}
         placeholder={placeholder}
       />
-      <Icon className={styles.searchIcon} icon="Search" size={32} viewBox="0 0 50 50" />
+      <Icon className={styles.searchIcon} icon="Search" size={32} />
     </div>
   );
 };
