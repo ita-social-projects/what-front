@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-  counterReducer, listOfStudentsReducer, listOfGroupsReducer, listOfSecretariesReducer,
+  counterReducer, listOfStudentsReducer, listOfGroupsReducer,
 } from './features/index.js';
 
 export const rootReducer = combineReducers({
@@ -8,6 +8,5 @@ export const rootReducer = combineReducers({
     counter: counterReducer,
     listOfStudents: listOfStudentsReducer,
     listOfGroups: listOfGroupsReducer,
-    listOfSecretaries: listOfSecretariesReducer,
   }),
 });
