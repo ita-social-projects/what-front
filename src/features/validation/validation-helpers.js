@@ -33,3 +33,11 @@ export const validateConfirmPassword = (pass, value) => {
   }
   return error;
 };
+
+export const validate = (value) => {
+  let error;
+  if(!value) {
+    error = 'This field is required';
+  }
+  return error;
+}
