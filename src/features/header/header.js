@@ -22,16 +22,37 @@ const sidebarToggler = (
 );
 
 export const Header = () => {
-  const tabs = [
-    {id: 0, title: 'Progress', link: 'progress'},
-    {id: 1, title: 'Schedule', link: 'schedule'},
-    {id: 2, title: 'Support', link: 'support'},
-  ];
+  
+  const [tabs, setTabs] = useState([
+    {id: 0, title: 'Progress', link: 'progress', active: false},
+    {id: 1, title: 'Schedule', link: 'schedule', active: false},
+    {id: 2, title: 'Support', link: 'support', active: false},
+  ])
 
   const [sidebar, setSidebar] = useState({
     active: false,
   });
 
+  const toggleActiveTab = (event) => {
+    setTabs((prevstate) => {
+      prevstate.find((tab) => {
+        if(tab.active) {
+          tab.active = false
+        } 
+      })
+      
+      return prevstate.map((tab, index) => {
+        if(index == event.target.dataset.id) {
+          return {
+            ...tab,
+            active: !tab.active,
+          }
+        } else {
+          return tab
+        }
+      })
+    })
+  }
 
   function toggleSidebar() {
     setSidebar((prevState) => {
@@ -61,17 +82,22 @@ export const Header = () => {
         </div>
 
         <div className={classNames('navbar-nav nav-tabs', styles['header__navbar-links'])}>
-          {tabs.map(({id, title, link}) => (
-            <a className='nav-item nav-link'
+          {tabs.map(({id, title, link, active}) => (
+            <a className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
               href={`#${link}`} 
               key={id}
+              data-id={id}
+              onClick={toggleActiveTab}
             >{title}</a>
           ))}
         </div>
             
         <div className={styles['header__account']}>
           <div className={styles['header__account-user']}>
-            <div className={styles['header__account-user--icon']}>{user}</div> 
+            <a className={styles['header__account-user--icon']}
+              onClick={toggleActiveTab}
+              href='#studentProfile'
+            >{user}</a> 
             <span className={styles['header__account-user--fullname']}>Name<br />Surname</span>
           </div>
           <div className={styles['header__account-logout']}>
