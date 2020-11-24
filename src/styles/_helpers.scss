@@ -68,4 +68,5 @@
   color: map-get($colors, textMain-color);
   background-color: map-get($colors, diselectedTab-color);
   border-radius: map-get($border-radius, tab-borRad);
+  cursor: pointer;
 }
