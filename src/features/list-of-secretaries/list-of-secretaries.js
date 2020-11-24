@@ -49,8 +49,8 @@ export const ListOfSecretaries = () => {
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
         <div className="col-lg-4 col-md-6 col-12 text-center mt-2">
-          <Button onClick={handleAddSecretary} variant="warning" className="pb-0">
-            <Icon icon="Plus" className="icon" size={30} />
+          <Button onClick={handleAddSecretary} variant="warning">
+            <Icon icon="Plus" className="icon" size={20} />
             <span>Add a secretary</span>
           </Button>
         </div>
