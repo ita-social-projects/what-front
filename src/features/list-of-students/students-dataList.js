@@ -3,61 +3,66 @@ import faker from 'faker';
 export const dataList = [
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 0,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 1,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 2,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 3,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 4,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 5,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 6,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 7,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
-  }, {
+    id: 8,
+  }, 
+  {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 9,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 10,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 11,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 12,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 13,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: faker.random.uuid(),
+    id: 14,
+  },
+  {
+    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    id: 15,
   },
 ];
