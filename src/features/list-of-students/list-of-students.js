@@ -37,7 +37,8 @@ export const ListOfStudents = () => {
       <Card
         key={student.uuid}
         id={student.uuid}
-        button="Details"
+        buttonName="Details"
+        iconName="Edit"
         onEdit={cardEditing}
         onDetails={cardDetails}
       > { student.name }
