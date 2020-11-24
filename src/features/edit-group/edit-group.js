@@ -73,7 +73,7 @@ export const EditGroup = () => {
                 </div>
                 <div className='col-md-8'>
                   <Field as='select' 
-                    className={classNames('custom-select', {['border-danger']: errors.courseId})} 
+                    className={classNames('custom-select')} 
                     name='courseId' 
                     id='course' 
                   >
@@ -87,7 +87,7 @@ export const EditGroup = () => {
                 </div>
                 <div className='col-md-8'>
                   <Field
-                    className={classNames('form-control', {['border-danger']: errors.startDate})}
+                    className={classNames('form-control', {['border-danger']: errors.finishDate})}
                     type='date'
                     name='startDate'
                     id='start-date'
