@@ -1,9 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { configureStore } from './store.js';
-import { Counter, ListOfStudents, NotFound } from './features/index.js';
-
+import { Counter, Routes } from './features/index.js';
 import Icon from './icon.js';
 
 
@@ -14,16 +13,9 @@ export const App = () => (
     <Router>
       <h1>Hello, I`m App Component!</h1>
       <Counter />
-      <Icon icon="Plus" size={32} />
-      <Icon icon="Edit" viewBox="0 0 50 50" />
-      <Icon icon="Plus" size={32} className="icon" color="#FFFFFF" />
       <Icon icon="Plus" size={32} className="icon" color="#FFB800" />
       <Icon icon="Edit" viewBox="0 0 50 50" color="#FFB800" />
-      <ListOfStudents />
-      <Switch>
-        <Route exact path="/" render={() => (<h1>Home Page</h1>)} />
-        <Route component={NotFound} />
-      </Switch>
+      <Routes />
     </Router>
   </Provider>
 );

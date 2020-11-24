@@ -16,7 +16,7 @@ export const Auth = () => (
               </div>
               <button type="submit" className="btn btn-block btn-warning">Sign in</button>
               <div className="text-center mt-3">
-                <p>Don't have an account? <a href="/" className="text-primary text-decoration-none">Registration</a></p>
+                <p>Don't have an account? <a href="#" className={styles.link}>Registration</a></p>
               </div>
             </form>
           </div>

@@ -14,7 +14,7 @@ export const StudentProfile = () => {
     <div className='container mt-5'>
       <div className='row justify-content-center'>
         <div className='col-auto col-md-8 col-sm-8 col-lg-7 col-xl-7 py-4 px-4 card shadow'>
-          <h1 className={classNames(styles['profile__header'])}>Student Details</h1>
+          <h1 className={classNames(styles['profile__header'])}>My profile</h1>
           <hr />
           <div className={classNames('row', styles['profile__details-wrapper'])}>
             <div className='col-12 col-md-6 font-weight-bold'><span>{dot} First name: </span></div>

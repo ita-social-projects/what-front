@@ -1,8 +1,8 @@
 import React from 'react';
 import className from 'classnames';
 import styles from './edit-students-details.scss';
-import Icon from '../../icon.js';
-import { Button } from '../../components/index.js';
+import Icon from '../../icon';
+import { Button } from '../../components/button/index.js';
 
 export const EditStudentsDetails = () => {
   const student = {
