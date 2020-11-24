@@ -1,2 +1,2 @@
-export const searchTheme = (state) => state.features.listOfGroups.lessonTheme;
-export const searchDate = (state) => state.features.listOfGroups.lessonDate;
+export const searchTheme = (state) => state.features.listOfLessons.lessonTheme;
+export const searchLessonThemeDate = (state) => state.features.listOfLessons.lessonDate;
