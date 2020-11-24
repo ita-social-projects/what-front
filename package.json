@@ -65,7 +65,8 @@
     "react-icons": "^3.11.0",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "^2.13.8",
+    "yup": "^0.31.0"
   },
   "browserslist": [
     "last 1 version",

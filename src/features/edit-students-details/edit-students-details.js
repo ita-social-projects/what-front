@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import className from 'classnames';
 import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import styles from './edit-students-details.scss';
 import Icon from '../../icon.js';
 import { Button } from '../../components/index.js';
 
 export const EditStudentsDetails = () => {
+  // temporary
   const student = {
     firstName: 'Taras',
     secondName: 'Tarasov',
-    email: 'tarastarasov.@gmail.com',
+    email: 'tarastarasov@gmail.com',
     groups: [
       { id: 1, name: 'Group 1' },
       { id: 2, name: 'Group 2' },
@@ -20,6 +22,7 @@ export const EditStudentsDetails = () => {
     ],
   };
 
+  // temporary
   const groupList = [
     { id: 1, name: 'Group 1' },
     { id: 2, name: 'Group 2' },
@@ -35,32 +38,6 @@ export const EditStudentsDetails = () => {
   const [groups, setGroups] = useState(student.groups || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
   const [error, setError] = useState(null);
-
-  /*  const editStudent = (student, changedData) => {
-    const studentsList = dataList;
-    const studentOnChange = student;
-    for (const key in changedData) {
-      const prop = key;
-      if (changedData[key]) {
-        switch (prop) {
-          case 'firstName':
-            studentOnChange[prop] = changedData[prop];
-            break;
-          case 'lastName':
-            studentOnChange[prop] = changedData[prop];
-            break;
-          case 'email':
-            studentOnChange[prop] = changedData[prop];
-            break;
-          default:
-            return null;
-        }
-      }
-      const index = studentsList.indexOf(student);
-      studentsList[index] = studentOnChange;
-      return studentsList;
-    }
-  }; */
 
   const handleGroupDelete = (evt) => {
     setError('');
@@ -82,7 +59,7 @@ export const EditStudentsDetails = () => {
         ];
         setGroups(res);
       } else {
-        setError('Incorrect Group Name');
+        setError('Incorrect group name');
       }
     }
   };
@@ -93,123 +70,182 @@ export const EditStudentsDetails = () => {
     setInputValue(value);
   };
 
+  const validate = Yup.object().shape({
+    firstName: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .matches(
+        '^[A-Za-zа-яА-ЯёЁ]+$',
+        'Incorrect data',
+      ),
+    lastName: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .matches(
+        '^[A-Za-zа-яА-ЯёЁ]+$',
+        'Incorrect data',
+      ),
+    email: Yup.string().email('Invalid email'),
+  });
+
+  const validateStudentData = (values) => {
+    const { firstName, lastName, email } = values;
+    const name = firstName[0].toUpperCase() + firstName.slice(1);
+    const surname = lastName[0].toUpperCase() + lastName.slice(1);
+    const studentGroupIds = groups.map((el) => el.id);
+    const editedStudent = {
+      firstName: name,
+      lastName: surname,
+      email,
+      studentGroupIds,
+    };
+    //put method waiting for saga
+  };
+
+  const handleExclude = () => {
+    // waiting for saga
+  };
+
+  const onSubmit = (values, actions) => {
+    actions.resetForm();
+    setGroups(student.groups);
+    validateStudentData(values);
+  };
+
+  const resetInput = () => {
+    setGroups(student.groups);
+  };
 
   return (
-    <div className={styles.wrapper}>
-      <div className="container shadow pb-3">
-        <div className="row m-0 pt-3">
-          <div className="col-md-12">
-            { error ? <div className="alert alert-danger">{error}</div> : null}
-          </div>
-          <Formik
-            initialValues={{
-              firstName: '',
-              lastName: '',
-              email: '',
-              groups: '',
-            }}
-            //validationSchema={SignupSchema}
-            onSubmit={(values) => {
-              // same shape as initial values
-              console.log(values);
-            }}
-          >
-            {({ errors, touched }) => (
-              <Form>
-                <div className="row m-0 pt-3">
-                  <div className="col-md-4">
-                    <label htmlFor="firstName">First Name:</label>
-                  </div>
-                  <div className="col-md-8">
-                    <Field type="text" className="form-control" name="firstName" placeholder={student.firstName} />
-                    {errors.firstName && touched.firstName ? (
-                      <div>{errors.firstName}</div>
-                    ) : null}
-                  </div>
+    <Formik
+      initialValues={{
+        firstName: student.firstName,
+        lastName: student.secondName,
+        email: student.email,
+        groups: '',
+      }}
+      validationSchema={validate}
+      onSubmit={onSubmit}
+    >
+      {({ values, errors }) => (
+        <Form>
+          <div className={styles.wrapper}>
+            <div className="container shadow pb-3">
+              <div className="row m-0 pt-3">
+                <div className="col-md-4">
+                  <label htmlFor="firstName">First Name:</label>
                 </div>
-
-                <div className="row m-0 pt-3">
-                  <div className="col-md-4">
-                    <label htmlFor="lastName">Second Name:</label>
-                  </div>
-                  <div className="col-md-8">
-                    <Field type="text" className="form-control" name="lastName" placeholder={student.secondName} />
-                    {errors.lastName && touched.lastName ? (
-                      <div>{errors.lastName}</div>
-                    ) : null}
-                  </div>
+                <div className="col-md-8">
+                  <Field
+                    type="text"
+                    className="form-control"
+                    name="firstName"
+                    id="firstName"
+                    value={values.firstName}
+                  />
+                  { errors.firstName ? <div className="alert alert-danger">{errors.firstName}</div> : null }
                 </div>
+              </div>
 
-                <div className="row m-0 pt-3">
-                  <div className="col-md-4">
-                    <label htmlFor="email">Email:</label>
-                  </div>
-                  <div className="col-md-8">
-                    <Field type="text" className="form-control" name="email" placeholder={student.email} />
-                    {errors.email && touched.email ? <div>{errors.email}</div> : null}
-                  </div>
+              <div className="row m-0 pt-3">
+                <div className="col-md-4">
+                  <label htmlFor="lastName">Second Name:</label>
                 </div>
+                <div className="col-md-8">
+                  <Field
+                    type="text"
+                    className="form-control"
+                    name="lastName"
+                    id="lastName"
+                    value={values.lastName}
+                  />
+                  { errors.lastName ? <div className="alert alert-danger">{errors.lastName}</div> : null }
+                </div>
+              </div>
 
-                <div className="row m-0 pt-3">
-                  <div className="col-md-4">
-                    <label htmlFor="groups">Group('s):</label>
-                  </div>
-                  <div className="col-md-8">
-                    <div className="input-group flex-nowrap">
-                      <Field
-                        name="groups"
-                        className="form-control"
-                        list="group-list"
-                        placeholder={groupInput}
-                        onChange={handleInputChange}
-                      />
-                      <datalist id="group-list">
-                        {groupList.map(({ id, name }) => (
-                          <option key={id}>{name}</option>
-                        ))}
-                      </datalist>
-                      <div className="input-group-append">
-                        <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
-                      </div>
+              <div className="row m-0 pt-3">
+                <div className="col-md-4">
+                  <label htmlFor="email">Email:</label>
+                </div>
+                <div className="col-md-8">
+                  <Field
+                    type="email"
+                    className="form-control"
+                    name="email"
+                    id="email"
+                    value={values.email}
+                  />
+                  { errors.email ? <div className="alert alert-danger">{errors.email}</div> : null }
+                </div>
+              </div>
+
+              <div className="row m-0 pt-3">
+                <div className="col-md-4">
+                  <label htmlFor="groupsInput">Group(`s):</label>
+                </div>
+                <div className="d-flex flex-column col-md-8">
+                  <div className="d-flex flex-row flex-nowrap input-group">
+                    <Field
+                      name="groupsInput"
+                      id="groupsInput"
+                      className={className('form-control col-md-11', styles['group-input'])}
+                      list="group-list"
+                      placeholder={groupInput}
+                      onChange={handleInputChange}
+                    />
+                    <datalist id="group-list">
+                      {groupList.map(({ id, name }) => (
+                        <option key={id}>{name}</option>
+                      ))}
+                    </datalist>
+                    <div className="input-group-append">
+                      <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
                     </div>
                   </div>
+                  { error ? <div className="alert alert-danger mt-2">{error}</div> : null}
                 </div>
+              </div>
 
-                <div className="row m-0 pt-3">
-                  <div className="col-md-8 offset-md-4">
-                    <ul className="d-flex flex-wrap justify-content-between p-0">
-                      {groups.map(({ id, name }) => (
-                        <li
-                          className={className(styles['list-element'],
-                            'd-flex bg-light border border-outline-secondary rounded')}
-                          key={id}
-                          data-groupId={id}
-                          data-groupName={name}
-                        >
-                          {name}
-                          <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger" onClick={handleGroupDelete}>X</button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+              <div className="row m-0 pt-3">
+                <div className="col-md-8 offset-md-4">
+                  <ul className="d-flex flex-wrap justify-content-between p-0">
+                    {groups.map(({ id, name }) => (
+                      <li
+                        className={className(styles['list-element'],
+                          'd-flex bg-light border border-outline-secondary rounded')}
+                        key={id}
+                        data-groupId={id}
+                        data-groupName={name}
+                      >
+                        {name}
+                        <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger" onClick={handleGroupDelete}>X</button>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+              </div>
 
-                <div className="row m-0 pt-3">
-                  <div className="col-md-3 col-4">
-                    <Button className="w-100" variant="danger">Exclude</Button>
-                  </div>
-                  <div className="col-md-3 offset-md-3 col-4">
-                    <Button className="w-100">Clear</Button>
-                  </div>
-                  <div className="col-md-3 col-4">
-                    <Button className="w-100" variant="success" type="submit">Save</Button>
-                  </div>
+              <div className="row m-0 pt-3">
+                <div className="col-md-3 col-4">
+                  <Button className="w-100" variant="danger" onClick={handleExclude}>Exclude</Button>
                 </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </div>
-    </div>
+                <div className="col-md-3 offset-md-3 col-4">
+                  <button
+                    className={className('w-100 btn btn-secondary', styles.button)}
+                    type="reset"
+                    onClick={resetInput}
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div className="col-md-3 col-4">
+                  <button className={className('w-100 btn btn-success', styles.button)} type="submit">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
 };
