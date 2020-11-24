@@ -1,22 +1,36 @@
-import React from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+// import { shallowEqual, useSelector } from 'react-redux';
 import className from 'classnames';
 import { Button, Search, Card } from '../../components/index.js';
-import { useActions } from '../../shared/hooks/index.js';
-import { listOfSecretariesActions, searchSecretarySelector } from './redux/index.js';
+// import { useActions } from '../../shared/hooks/index.js';
+// import { listOfSecretariesActions, searchSecretarySelector } from './redux/index.js';
 import Icon from '../../icon.js';
 import styles from './list-of-secretaries.scss';
 
 import { data } from './secretariesData.js';
 
 export const ListOfSecretaries = () => {
-  const { setSerchSecretaryValue } = useActions(listOfSecretariesActions);
+  // const { setSerchSecretaryValue } = useActions(listOfSecretariesActions);
 
-  const searchSecretaryByName = useSelector(searchSecretarySelector, shallowEqual);
+  // const searchSecretaryByName = useSelector(searchSecretarySelector, shallowEqual);
+
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = (val) => {
-    setSerchSecretaryValue(val);
+    setSearch(val);
   };
+
+  useEffect(() => {
+    const results = data.filter((secretary) => (
+      (secretary.firstName.concat(secretary.lastName)).toUpperCase())
+      .includes(search.toUpperCase()));
+    setSearchResults(results);
+  }, [search]);
+
+  // const handleSearch = (val) => {
+  //   setSerchSecretaryValue(val);
+  // };
 
   const handleAddSecretary = () => {
     alert('router to Add Secretary page');
@@ -26,23 +40,36 @@ export const ListOfSecretaries = () => {
     alert(`router to Edit Secretary ${id}`);
   };
 
-  const secretaries = () => {
-    const sortSecretariesByName = data.filter((secretary) => (
-      (secretary.firstName.concat(secretary.lastName)).toUpperCase())
-      .includes(searchSecretaryByName.toUpperCase()));
-    return sortSecretariesByName.map((secretary) => (
-      <Card
-        key={secretary.id}
-        id={secretary.id}
-        iconName="Edit"
-        onEdit={handleEditSecretary}
-      >
-        <span className={className(styles['card-name'], 'd-flex')}>{secretary.firstName}</span>
-        <span className={className(styles['card-name'], 'd-flex')}>{secretary.lastName}</span>
-        <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{secretary.email}</span>
-      </Card>
-    ));
-  };
+  const secretaries = () => searchResults.map((secretary) => (
+    <Card
+      key={secretary.id}
+      id={secretary.id}
+      iconName="Edit"
+      onEdit={handleEditSecretary}
+    >
+      <span className={className(styles['card-name'], 'd-flex')}>{secretary.firstName}</span>
+      <span className={className(styles['card-name'], 'd-flex')}>{secretary.lastName}</span>
+      <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{secretary.email}</span>
+    </Card>
+  ));
+
+  // const secretaries = () => {
+  //   const sortSecretariesByName = data.filter((secretary) => (
+  //     (secretary.firstName.concat(secretary.lastName)).toUpperCase())
+  //     .includes(searchSecretaryByName.toUpperCase()));
+  //   return sortSecretariesByName.map((secretary) => (
+  //     <Card
+  //       key={secretary.id}
+  //       id={secretary.id}
+  //       iconName="Edit"
+  //       onEdit={handleEditSecretary}
+  //     >
+  //       <span className={className(styles['card-name'], 'd-flex')}>{secretary.firstName}</span>
+  //       <span className={className(styles['card-name'], 'd-flex')}>{secretary.lastName}</span>
+  //       <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{secretary.email}</span>
+  //     </Card>
+  //   ));
+  // };
 
   return (
     <div className="container mb-2">
