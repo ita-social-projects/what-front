@@ -11,7 +11,7 @@ export const ListOfStudents = () => {
 
   useEffect(() => {
     const students = dataList.filter((student) => student.name.toUpperCase()
-      .includes(searchValue.toUpperCase()));
+      .includes(searchStudentValue.toUpperCase()));
       setFilteredStudentsList(students);
   }, [searchStudentValue]);
 
@@ -36,7 +36,7 @@ export const ListOfStudents = () => {
         iconName='Edit'
         onEdit={studentEditing}
         onDetails={studentDetails}
-        > <span>{course.name}</span>
+        > <span>{student.name}</span>
       </Card>
     ));
   };
