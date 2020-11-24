@@ -20,11 +20,7 @@ export const Search = ({
         onChange={handleChange}
         placeholder={placeholder}
       />
-<<<<<<< HEAD
-      <Icon className={styles.searchIcon} icon="Search" size={60} viewBox="0 0 50 50" />
-=======
       <Icon className={styles.searchIcon} icon="Search" size={32} />
->>>>>>> dev
     </div>
   );
 };

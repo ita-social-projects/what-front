@@ -9,7 +9,7 @@ export const EditGroup = () => {
   ];
 
   return (
-    <div className="container mt-5">
+    <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6 col-sm-8 card shadow">
           <form className="px-2 py-4 " name="start-group">
@@ -36,7 +36,7 @@ export const EditGroup = () => {
               </div>
               <div className="col-md-8">
                 <select className="custom-select" name="group-course" id="course" required>
-                  { courses.map(({ id, name }) => <option value={id}>{name}</option>) }
+                  { courses.map(({ id, name }) => <option value={id} key={id}>{name}</option>) }
                 </select>
               </div>
             </div>
