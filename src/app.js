@@ -5,6 +5,7 @@ import { configureStore } from './store.js';
 import { Counter, Routes } from './features/index.js';
 import Icon from './icon.js';
 
+
 const store = configureStore();
 
 export const App = () => (

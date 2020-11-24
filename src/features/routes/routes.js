@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Counter } from '../index.js';
+import { Counter, NotFound } from '../index.js';
 import { Links, RoleList, Role } from './helpers.js';
 
 export const Routes = () => (
@@ -11,7 +11,7 @@ export const Routes = () => (
       <Route exact path="/counter" component={Counter} />
       <Route exact path="/role-list" component={RoleList} />
       <Route exact path="/role-list/:role" component={Role} />
-      <Route render={() => <h2 className="m-3">Page Not Found</h2>} />
+      <Route component={NotFound} />
     </Switch>
   </>
 );
