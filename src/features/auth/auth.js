@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './auth.scss';
 
-export const Auth = () => {  
-  return (
+export const Auth = () => (
     <div className={styles.wrapper}>    
       <div className="container">
         <div className="row justify-content-center">
@@ -25,5 +24,4 @@ export const Auth = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
