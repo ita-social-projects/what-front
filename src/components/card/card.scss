@@ -2,7 +2,8 @@
 
 .card-component{
   padding:15px;
-  margin: 15px 20px;
+  margin: 15px;
+  @include card();
 }
 
 .card-component:hover{
