@@ -3,7 +3,7 @@ import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
 import classNames from 'classnames';
 import styles from './list-of-students.scss';
-import { dataList } from './students-data-list';
+import { dataList } from './students-dataList.js';
 
 export const ListOfStudents = () => {
   const [searchStudentValue, setSearchStudentValue] = useState('');
