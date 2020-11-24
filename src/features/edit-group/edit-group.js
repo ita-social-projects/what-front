@@ -1,22 +1,37 @@
 import React from 'react';
 import { Formik, Field, Form } from 'formik';
-import { Button } from '../../components';
-import { validate } from '../validation/validation-helpers.js';
+import { validateGroupName, validateDate } from '../validation/validation-helpers.js';
 
 import classNames from 'classnames';
 import styles from './edit-groups.scss';
 
 export const EditGroup = () => {
-  const courses = [
-    { id: 0, name: 'WebUI' },
-    { id: 1, name: 'Java' },
-    { id: 2, name: '.Net' },
-    { id: 3, name: 'Kotlin' },
-  ];
+
+  const group = {
+    name: 'Group 1',
+    startDate: '2021-01-14',
+    finishate: '2021-03-15',
+    courses: [
+      { id: 0, name: 'WebUI' },
+      { id: 1, name: 'Java' },
+      { id: 2, name: '.Net' },
+      { id: 3, name: 'Kotlin' },
+    ],
+  };
+
+  const editGroup = (values) => {
+    const {name} = values;
+    const groupName = name[0].toUpperCase() + name.slice(1);
+    const editedGroup = {
+      ...values,
+      name: groupName,
+    };
+    // put method waiting for saga
+  };
 
   const onSubmit = (values, actions) => {
-    console.log(values)
     actions.resetForm();
+    editGroup(values);
   };
 
   return (
@@ -25,10 +40,10 @@ export const EditGroup = () => {
         <div className='col-md-6 col-sm-8 card shadow'>
           <Formik
             initialValues={{
-              name: '',
-              startDate: '',
-              finishDate: '',
-              courseId: courses[0].id
+              name: group.name,
+              startDate: group.startDate,
+              finishDate: group.finishate,
+              courseId: group.courses[0].id
             }}
             onSubmit={onSubmit}
           >
@@ -47,9 +62,9 @@ export const EditGroup = () => {
                     name='name'
                     id='name'
                     placeholder='group name'
-                    validate={validate}
+                    validate={validateGroupName}
                   />
-                  {/*{errors.groupName && <p className='text-danger mb-0'>{errors.groupName}</p>}*/}
+                  {errors.name && <p className='text-danger mb-0'>{errors.name}</p>}
                 </div>
               </div>
               <div className='row mb-3'>
@@ -62,7 +77,7 @@ export const EditGroup = () => {
                     name='courseId' 
                     id='course' 
                   >
-                    { courses.map(({ id, name }) => <option value={name} key={id}>{name}</option>) }
+                    { group.courses.map(({ id, name }) => <option value={id} key={id}>{name}</option>) }
                   </Field>
                 </div>
               </div>
@@ -76,9 +91,7 @@ export const EditGroup = () => {
                     type='date'
                     name='startDate'
                     id='start-date'
-                    validate={validate}
                   />
-                  {/*{errors.startDate && <p className='text-danger mb-0'>{errors.startDate}</p>}*/}
                 </div>
               </div>
               <div className='row mb-3'>
@@ -91,16 +104,16 @@ export const EditGroup = () => {
                     type='date'
                     name='finishDate'
                     id='finish-date'
-                    validate={validate}
+                    validate={(value) => validateDate(values.startDate, value)}
                   />
-                  {/*{errors.endDate && <p className='text-danger mb-0'>{errors.endDate}</p>}*/}
+                  {errors.finishDate && <p className='text-danger mb-0'>{errors.finishDate}</p>}
                 </div>
               </div>
               <div className='row justify-content-around mt-4'>
                 <input type="reset" 
                   name="reset-btn" 
                   className={classNames("btn btn-secondary w-25", styles.button)} 
-                  value="Clear all" 
+                  value="Clear all"
                 />
                 <input type="submit" 
                   name="submit-btn" 
@@ -114,5 +127,5 @@ export const EditGroup = () => {
         </div>
       </div>
     </div>
-  )
+  );
 };
