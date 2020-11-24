@@ -9,7 +9,7 @@ const mode = process.env.NODE_ENV;
 const isDev = mode === 'development';
 
 // eslint-disable-next-line no-console
-console.log(chalk.black.bgGreen.bold(`Environment set to ${mode}, mode`));
+console.log(chalk.black.bgGreen.bold(`Environment set to ${mode} mode`));
 
 module.exports = {
   entry: [`${paths.src._}/index.js`],
