@@ -143,7 +143,7 @@ export const EditStudentsDetails = () => {
                     id="firstName"
                     value={values.firstName}
                   />
-                  { errors.firstName ? <div className="alert alert-danger">{errors.firstName}</div> : null }
+                  { errors.firstName ? <div className="alert alert-danger mt-2">{errors.firstName}</div> : null }
                 </div>
               </div>
 
@@ -159,7 +159,7 @@ export const EditStudentsDetails = () => {
                     id="lastName"
                     value={values.lastName}
                   />
-                  { errors.lastName ? <div className="alert alert-danger">{errors.lastName}</div> : null }
+                  { errors.lastName ? <div className="alert alert-danger mt-2">{errors.lastName}</div> : null }
                 </div>
               </div>
 
@@ -175,7 +175,7 @@ export const EditStudentsDetails = () => {
                     id="email"
                     value={values.email}
                   />
-                  { errors.email ? <div className="alert alert-danger">{errors.email}</div> : null }
+                  { errors.email ? <div className="alert alert-danger mt-2">{errors.email}</div> : null }
                 </div>
               </div>
 
