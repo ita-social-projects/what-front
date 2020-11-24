@@ -64,8 +64,8 @@ export const EditGroup = () => {
                     placeholder='group name'
                     validate={validateGroupName}
                   />
-                  {errors.name && <p className='text-danger mb-0'>{errors.name}</p>}
                 </div>
+                {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
               </div>
               <div className='row mb-3'>
                 <div className='col d-flex align-items-center'>
@@ -106,8 +106,8 @@ export const EditGroup = () => {
                     id='finish-date'
                     validate={(value) => validateDate(values.startDate, value)}
                   />
-                  {errors.finishDate && <p className='text-danger mb-0'>{errors.finishDate}</p>}
                 </div>
+                {errors.finishDate && <p className={classNames('text-danger mb-0', styles.error)}>{errors.finishDate}</p>}
               </div>
               <div className='row justify-content-around mt-4'>
                 <input type="reset" 
