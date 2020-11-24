@@ -1,7 +1,4 @@
-import React from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
-import { actions, searchCourseValue } from './redux/index.js';
-import { useActions } from '../../shared/hooks/index.js';
+import React, { useState, useEffect } from 'react';
 import { dataCourses } from './courses-data-list.js';
 import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
@@ -9,11 +6,17 @@ import classNames from 'classnames';
 import styles from './list-of-courses.scss';
 
 export const ListOfCourses = () => {
-  const { setSearchCourseValue } = useActions(actions);
-  const searchCourseName = useSelector(searchCourseValue, shallowEqual);
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredCourses, setFilteredCourses] = useState([]);
+
+  useEffect(() => {
+    const courses = dataCourses.filter((course) => course.name.toUpperCase()
+      .includes(searchValue.toUpperCase()));
+      setFilteredCourses(courses);
+  }, [searchValue]);
 
   const handleSearch = (inputValue) => {
-    setSearchCourseValue(inputValue);
+    setSearchValue(inputValue);
   };
 
   const addCourse = () => {
@@ -26,10 +29,8 @@ export const ListOfCourses = () => {
   };
 
   const coursesList = () => {
-    const listByCourseName = dataCourses.filter((course) => course.name.toUpperCase()
-      .includes(searchCourseName.toUpperCase()));
 
-    return listByCourseName.map((course) => (
+    return filteredCourses.map((course) => (
       <Card
         key={course.id}
         id={course.id}

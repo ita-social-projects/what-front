@@ -1,1 +1,0 @@
-export const searchCourseValue = (state) => state.features.listOfCourses.searchCourseValue;
