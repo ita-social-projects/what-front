@@ -76,7 +76,7 @@
     border-bottom-right-radius: 0;
 
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 18px;
 
     color: #212529;
@@ -111,6 +111,7 @@
       &--icon {
         padding-right: 1rem;
 
+        color: white;
         cursor: pointer;
 
         &:hover {
@@ -159,3 +160,7 @@
   left: 0;
 }
 
+.active {
+  background-color: #FFB800 !important;
+  font-weight: bold !important;
+}

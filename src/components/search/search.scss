@@ -4,7 +4,7 @@
   position: relative;
   display: inline-block;
 
-  &Input{
+  &Input {
     @include input;
     position: relative;
     padding: 5px 5px 5px 32px;
@@ -16,9 +16,9 @@
     }
   }
 
-  &Icon {
-    position: absolute;
-    left: 7px;
-    top: 7px;
-  }
+    &Icon {
+      position: absolute;
+      left: 7px;
+      top: 7px;
+    }
 }

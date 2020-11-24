@@ -14,7 +14,7 @@ $colors: (
         buttonCustom-color: $theme-colorN1,
         buttonDisabled-color: $disable-colorN1,
         selectedTab-color: $theme-colorN1,
-        diselectedTab-color: $disable-colorN1,
+        diselectedTab-color: $disable-colorN3,
         checkboxSuccess-color: $success-color,
         checkboxReject-color: $danger-color,
         dropdownButton-color: $theme-colorN1,
@@ -39,3 +39,4 @@ $box-shadows: (
       tab-boxShadow: 0 -4px 10px rgba(0, 0, 0, 0.25),
 
 );
+
