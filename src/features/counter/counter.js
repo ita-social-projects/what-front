@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
+import { Spinner } from 'react-bootstrap';
 
-import { counterSelector, counterActions } from './redux/index.js';
+import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
 import { useActions } from '../../shared/hooks/index.js';
 import { ModalWindow } from '../modal-window/index.js';
-import { Search } from '../../components/search/search.js';
-import { Button } from '../../components/button/index.js';
+import { Button, Search } from '../../components/index.js';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
-  const { incrementCounter, decrementCounter } = useActions(counterActions);
+  const isLoading = useSelector(counterIsLoadingSelector, shallowEqual);
 
+  const { incrementCounter, decrementCounter, fetchCounter } = useActions(counterActions);
   const [toShowModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
@@ -28,12 +29,20 @@ export const Counter = () => {
 
   return (
     <div>
-      <h2>
-        Test counter: {counter}
-      </h2>
-      <Button type="button" onClick={incrementCounter}>Increment</Button>
-      <Button type="button" onClick={decrementCounter} variant="warning">Decrement</Button>
-      <Button type="button" onClick={handleShowModal} variant="success">Show modal</Button>
+      {
+        !isLoading
+          ? (
+            <div>
+              <h2>
+                Test counter: {counter}
+              </h2>
+              <Button type="button" onClick={incrementCounter}>Increment</Button>
+              <Button type="button" onClick={decrementCounter} variant="warning">Decrement</Button>
+              <Button type="button" onClick={handleShowModal} variant="success">Show modal</Button>
+              <Button onClick={fetchCounter} variant="primary">Fetch counter</Button>
+            </div>
+          ) : <Spinner animation="grow" size="lg" />
+      }
       <div className="m-3">
         <Search
           onSearch={handleSearch}
