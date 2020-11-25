@@ -5,7 +5,7 @@ import faker from 'faker';
 
 
 export const AddLesson = () => {
-    
+
     const names = [
         `${faker.name.firstName()} ${faker.name.lastName()}`,
         `${faker.name.firstName()} ${faker.name.lastName()}`,
@@ -20,11 +20,11 @@ export const AddLesson = () => {
         `${faker.name.firstName()} ${faker.name.lastName()}`,
         `${faker.name.firstName()} ${faker.name.lastName()}`,
     ];
-    
+
     return (
         <div className={ classNames( styles.page, 'container')}>
-            <div className="row">
                 <form id='form' className={styles.size}>
+                  <div className="row">
                     <div className="col-lg-6">
                         <h3>Lesson starting</h3>
                         <hr />
@@ -53,7 +53,10 @@ export const AddLesson = () => {
                                 </div>
                             </div>
                     </div>
+                  </div>
+
                     <div className="col-lg-6">
+                      <div className="row">
                         <table className="table table-bordered table-hover">
                             <thead>
                             <tr>
@@ -75,8 +78,9 @@ export const AddLesson = () => {
                             </tbody>
                         </table>
                     </div>
+                  </div>
                 </form>
-            </div>
+
             <div className={styles.placement}>
                 <button form="form" type="button" className="btn btn-secondary btn-lg">Cancel</button>
                 <button form="form" type="button" className="btn btn-success btn-lg">Save</button>
