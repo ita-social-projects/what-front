@@ -59,7 +59,7 @@ export const EditStudentsDetails = () => {
         ];
         setGroups(res);
       } else {
-        setError('Incorrect group name');
+        setError('Invalid group name');
       }
     }
   };
@@ -76,14 +76,14 @@ export const EditStudentsDetails = () => {
       .max(50, 'Too Long!')
       .matches(
         '^[A-Za-zа-яА-ЯёЁ]+$',
-        'Incorrect data',
+        'Invalid first name',
       ),
     lastName: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
       .matches(
         '^[A-Za-zа-яА-ЯёЁ]+$',
-        'Incorrect data',
+        'Invalid second name',
       ),
     email: Yup.string().email('Invalid email'),
   });
@@ -99,7 +99,7 @@ export const EditStudentsDetails = () => {
       email,
       studentGroupIds,
     };
-    //put method waiting for saga
+    // put method waiting for saga
   };
 
   const handleExclude = () => {
@@ -138,12 +138,12 @@ export const EditStudentsDetails = () => {
                 <div className="col-md-8">
                   <Field
                     type="text"
-                    className="form-control"
+                    className={className('form-control', { 'border-danger': errors.firstName })}
                     name="firstName"
                     id="firstName"
                     value={values.firstName}
                   />
-                  { errors.firstName ? <div className="alert alert-danger mt-2">{errors.firstName}</div> : null }
+                  { errors.firstName ? <div className={styles.error}>{errors.firstName}</div> : null }
                 </div>
               </div>
 
@@ -154,12 +154,12 @@ export const EditStudentsDetails = () => {
                 <div className="col-md-8">
                   <Field
                     type="text"
-                    className="form-control"
+                    className={className('form-control', { 'border-danger': errors.lastName })}
                     name="lastName"
                     id="lastName"
                     value={values.lastName}
                   />
-                  { errors.lastName ? <div className="alert alert-danger mt-2">{errors.lastName}</div> : null }
+                  { errors.lastName ? <div className={styles.error}>{errors.lastName}</div> : null }
                 </div>
               </div>
 
@@ -170,12 +170,12 @@ export const EditStudentsDetails = () => {
                 <div className="col-md-8">
                   <Field
                     type="email"
-                    className="form-control"
+                    className={className('form-control', { 'border-danger': errors.email })}
                     name="email"
                     id="email"
                     value={values.email}
                   />
-                  { errors.email ? <div className="alert alert-danger mt-2">{errors.email}</div> : null }
+                  { errors.email ? <div className={styles.error}>{errors.email}</div> : null }
                 </div>
               </div>
 
@@ -188,7 +188,11 @@ export const EditStudentsDetails = () => {
                     <Field
                       name="groupsInput"
                       id="groupsInput"
-                      className={className('form-control col-md-11', styles['group-input'])}
+                      className={className(
+                        'form-control col-md-11',
+                        styles['group-input'],
+                        { 'border-danger': error },
+                      )}
                       list="group-list"
                       placeholder={groupInput}
                       onChange={handleInputChange}
@@ -202,7 +206,7 @@ export const EditStudentsDetails = () => {
                       <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
                     </div>
                   </div>
-                  { error ? <div className="alert alert-danger mt-2">{error}</div> : null}
+                  { error ? <div className={styles.error}>{error}</div> : null}
                 </div>
               </div>
 
