@@ -18,7 +18,5 @@ export const App = () => (
     <Counter />
     <Icon icon="Plus" size={32} className="icon" color="#FFB800" />
     <Icon icon="Edit" viewBox="0 0 50 50" color="#FFB800" />
-    <EditStudentsDetails />
-      <ListOfStudents />
   </Provider>
 );
