@@ -17,7 +17,7 @@ export const dataList = [
   {
     date: '2020-09-10',
     id: 4,
-    themeName: 'REact Hooks',
+    themeName: 'React Hooks',
   },
   {
     date: '2020-09-09',
@@ -28,22 +28,22 @@ export const dataList = [
     date: '2020-09-09',
     id: 6,
     themeName: 'Form validation',
-  }, 
+  },
   {
     date: '2020-09-09',
     id: 7,
     themeName: 'HTML and CSS',
-  }, 
+  },
   {
     date: '2020-09-09',
     id: 8,
     themeName: 'Webpack',
-  }, 
+  },
   {
     date: '2020-09-09',
     id: 10,
     themeName: 'Thunk and Saga',
-  }, 
+  },
   {
     date: '2020-09-09',
     id: 11,

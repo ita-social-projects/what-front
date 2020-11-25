@@ -1,6 +1,0 @@
-const types = {
-  SET_LESSON_THEME_SEARCH_VALUE: 'SET_LESSON_THEME_SEARCH_VALUE',
-  SET_LESSON_DATE: 'SET_LESSON_DATE',
-};
-
-export default types;

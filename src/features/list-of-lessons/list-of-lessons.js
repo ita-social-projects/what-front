@@ -1,12 +1,4 @@
-import React from 'react';
-import classNames from 'classnames';
-import { shallowEqual, useSelector } from 'react-redux';
-import { Card, Search, Button } from '../../components/index.js';
-import { useActions } from '../../shared/hooks/index.js';
-import { listOfLessonsActions, searchTheme, searchLessonThemeDate } from './redux/index.js';
-import Icon from '../../icon.js';
-import styles from './list-of-lessons.scss';
-import { dataList } from './lessons-dataList.js';
+
 
 export const ListOfLessons = () => {
   const { setSearchLessonTheme, setSearchLessonDate } = useActions(listOfLessonsActions);
