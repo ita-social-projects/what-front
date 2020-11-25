@@ -45,7 +45,7 @@ export const ListOfStudents = () => {
     <div className="container">
       <div className="row">
         <div className={classNames(styles.heading, 'col-12 mb-2')}>
-          <div className={styles.seach_container}>
+          <div className={styles.search_container}>
             <Search onSearch={handleSearch} placeholder="Enter a course's name" />
           </div>
           <Button onClick={addStudent} variant="warning">
