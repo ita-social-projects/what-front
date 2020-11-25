@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { configureStore } from './store.js';
-import { Counter, ListOfGroups, ListOfStudents, ListOfLessons } from './features/index.js';
+import { Counter } from './features/index.js';
 import Icon from './icon.js';
 
 const store = configureStore();
@@ -12,9 +12,5 @@ export const App = () => (
     <Counter />
     <Icon icon="Plus" size={32} className="icon" color="#FFB800" />
     <Icon icon="Edit" color="#FFB800" />
-    
-    <ListOfGroups/>
-    <ListOfStudents/>
-    <ListOfLessons/>
   </Provider>
 );

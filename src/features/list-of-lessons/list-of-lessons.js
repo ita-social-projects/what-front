@@ -29,7 +29,7 @@ export const ListOfLessons = () => {
     const listByTheme = dataList.filter((lesson) => lesson.themeName.toUpperCase()
     .includes(searchThemeName.toUpperCase()));
     const listByDate = listByTheme.filter((lesson) => lesson.date.includes(searchThemeDate));
-    const resultList= listByDate.map((lesson) => {
+    const resultList = listByDate.map((lesson) => {
       return (
         <Card
           key={lesson.id}
@@ -46,23 +46,23 @@ export const ListOfLessons = () => {
   return (
     <div className="container">
       <div className="row">
-        <div className={classNames(styles['list-head'], 'col-12')}>
+        <div className={classNames(styles.heading, "col-12")}>
           <input
             className={classNames('form-control ', styles['calendar-input'])}
             type="date"
             name="lesson_date"
             required
             onChange={handleSearchDate}
-            placeholder="day-month-year"
+            placeholder="year-month-date"
           />
-          <Search onSearch={handleSearchTheme} placeholder="Enter a lesson theme"/>
+          <Search onSearch={handleSearchTheme} placeholder="Enter a lesson theme" />
           <Button onClick={handleAddLesson} variant="warning">
             <Icon icon="Plus" size={20} className="icon" />
             Add a lesson
           </Button>
         </div>
         <hr className="col-8" />
-        <div className={classNames(styles['lesson-list'], 'col-12')}>
+        <div className={classNames(styles.list, "col-12")}>
           {
             lessonsList()
           }

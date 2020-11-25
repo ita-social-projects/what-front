@@ -1,6 +1,6 @@
 @import '../../styles/main';
 
-.list-head {
+.heading {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
@@ -18,7 +18,7 @@
   border-color: map-get($colors, textAccentN1-color);
 }
 
-.lesson-list {
+.list {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
