@@ -48,7 +48,7 @@ export const ListOfStudents = () => {
           <div className={styles.seach_container}>
             <Search onSearch={handleSearch} placeholder="Enter a course's name" />
           </div>
-          <Button onClick={addStudent} variant="warning" className={styles.button}>
+          <Button onClick={addStudent} variant="warning">
             <Icon icon="Plus" className="icon" />
             Add a Student
           </Button>
@@ -62,4 +62,4 @@ export const ListOfStudents = () => {
       </div>
     </div>
   );
-} 
+}
