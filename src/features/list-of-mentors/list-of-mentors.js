@@ -6,8 +6,8 @@ import styles from './list-of-mentors.scss';
 import { dataList } from './mentors-dataList.js';
 
 export const ListOfMentors = () => {
-    const [searchMentorValue, setSearchMentorValue] = useState('');
-    const [filteredMentorList, setFilteredMentorList] = useState([]);
+    const [ searchMentorValue, setSearchMentorValue ] = useState('');
+    const [ filteredMentorList, setFilteredMentorList ] = useState([]);
   
     useEffect(() => {
       const mentors = dataList.filter((mentor) => mentor.name.toUpperCase()
@@ -37,7 +37,7 @@ export const ListOfMentors = () => {
           onEdit={mentorEditing}
           onDetails={mentorDetails}
       >
-        <span>{mentor.name}</span> 
+        <span>{mentor.name}</span>
         </Card>
       ));
     };
@@ -49,7 +49,7 @@ export const ListOfMentors = () => {
           <div className={styles.search__container}>
             <Search onSearch={handleSearch} placeholder="Enter a mentor's name" />
           </div>
-          <Button onClick={addMentor} variant="warning" className={styles.button}>
+          <Button onClick={addMentor} variant="warning">
             <Icon icon="Plus" className="icon" />
             Add a Mentor
           </Button>
