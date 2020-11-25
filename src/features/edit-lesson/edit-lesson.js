@@ -26,7 +26,7 @@ export const EditLesson = () => {
             <div className="row">
                 <form id='form' className={styles.size}>
                     <div className="col-lg-6">
-                        <h3>Lesson's editing</h3>
+                        <h3>Lesson editing</h3>
                         <hr />
                         <div className="mt-5 form-group row">
                             <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
