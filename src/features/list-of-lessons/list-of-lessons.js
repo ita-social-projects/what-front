@@ -1,66 +1,78 @@
-
+import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
+import { Card, Search, Button } from '../../components/index.js';
+import Icon from '../../icon.js';
+import styles from './list-of-lessons.scss';
+import { dataList } from './lessons-dataList.js';
 
 export const ListOfLessons = () => {
-  const { setSearchLessonTheme, setSearchLessonDate } = useActions(listOfLessonsActions);
-  const searchThemeName = useSelector(searchTheme, shallowEqual);
-  const searchThemeDate = useSelector(searchLessonThemeDate, shallowEqual);
+  const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
+  const [filteredLessonsList, setFilteredLessonsList] = useState([]);
+  const [searchLessonsThemeDateValue, setSearchLessonsThemeDateValue] = useState('');
 
-  const handleSearchTheme = (inputValue) => {
-    setSearchLessonTheme(inputValue);
-  };
+  useEffect(() => {
+    const lessons = dataList.filter(
+      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
+    ).filter(
+      (lesson) => lesson.date.includes(searchLessonsThemeDateValue),
+    );
+    setFilteredLessonsList(lessons);
+  }, [searchLessonsThemeDateValue, searchLessonsThemeValue]);
+
   const handleSearchDate = (event) => {
-    const date = event.target.value;
-    setSearchLessonDate(date);
+    setSearchLessonsThemeDateValue(event.target.value);
+  };
+  const handleSearch = (inputValue) => {
+    setSearchLessonsThemeValue(inputValue);
   };
 
-  const handleAddLesson = () => {};
-  const handleEditLesson = (id) => {};
-  
+  const lessonAdding = () => {
+  };
 
-  const lessonsList = () => {
-    const listByTheme = dataList.filter((lesson) => lesson.themeName.toUpperCase()
-    .includes(searchThemeName.toUpperCase()));
-    const listByDate = listByTheme.filter((lesson) => lesson.date.includes(searchThemeDate));
-    const resultList = listByDate.map((lesson) => {
-        const resultDate = lesson.date.replace(/-/g, '.');
+  const lessonEditing = (id) => {
+  };
+
+  const studentsList = () => {
+    return filteredLessonsList.map((lesson) => {
       return (
         <Card
           key={lesson.id}
           id={lesson.id}
           title={lesson.themeName}
-          date={resultDate}
-          onEdit={handleEditLesson}
+          iconName='Edit'
+          date={lesson.date}
+          onEdit={lessonEditing}
         />
       );
     });
-    return resultList;
   };
 
   return (
     <div className="container">
       <div className="row">
-        <div className={classNames(styles.heading, "col-12")}>
-          <input
-            className={classNames('form-control ', styles['calendar-input'])}
-            type="date"
-            name="lesson_date"
-            required
-            onChange={handleSearchDate}
-            placeholder="year-month-date"
-          />
-          <Search onSearch={handleSearchTheme} placeholder="Enter a lesson theme" />
-          <Button onClick={handleAddLesson} variant="warning">
-            <Icon icon="Plus" size={20} className="icon" />
-            Add a lesson
+        <div className={classNames(styles.heading, 'col-12 mb-2')}>
+          <div>
+            <input
+              className={classNames('form-control ', styles['calendar-input'])}
+              type="date"
+              name="lesson_date"
+              required
+              onChange={handleSearchDate}
+            />
+          </div>
+          <Search onSearch={handleSearch} placeholder="Enter a lesson theme name" />
+          <Button onClick={lessonAdding} variant="warning">
+            <Icon icon="Plus" className="icon" />
+            Add a Student
           </Button>
         </div>
         <hr className="col-8" />
-        <div className={classNames(styles.list, "col-12")}>
+        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
           {
-            lessonsList()
+            studentsList()
           }
         </div>
       </div>
     </div>
   );
-};
+}

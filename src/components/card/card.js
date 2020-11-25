@@ -74,13 +74,13 @@ Card.propTypes = {
 };
 
 Card.defaultProps = {
-  id: null,
-  title: '',
-  date: '',
-  children: null,
-  buttonName: 'Details',
-  iconName: 'Edit',
-  onDetails: undefined,
-  onEdit: undefined,
-  className: '',
+    id: null,
+    title: '',
+    date: '',
+    children: null,
+    buttonName: '',
+    iconName: '',
+    onDetails: undefined,
+    onEdit: undefined,
+    className: '',
 };

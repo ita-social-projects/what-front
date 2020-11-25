@@ -4,18 +4,17 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin-bottom: 30px;
 }
 
 .calendar-input {
-  @include input;
+  border-color: map-get($colors, textAccentN1-color) !important;
   width: 18%;
 }
 
 .calendar-input:focus {
   outline: none;
-  box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
-  border-color: map-get($colors, textAccentN1-color);
+  box-shadow: 0 0 10px map-get($colors, textAccentN1-color) !important;
+  border-color: map-get($colors, textAccentN1-color) !important;
 }
 
 .list {

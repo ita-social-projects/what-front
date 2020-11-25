@@ -27,7 +27,6 @@ export const ListOfStudents = () => {
   };
 
   const studentsList = () => {
-
     return filteredStudentsList.map((student) => (
       <Card
         key={student.id}
@@ -45,8 +44,8 @@ export const ListOfStudents = () => {
     <div className="container">
       <div className="row">
         <div className={classNames(styles.heading, 'col-12 mb-2')}>
-          <div className={styles.seach_container}>
-            <Search onSearch={handleSearch} placeholder="Enter a course's name" />
+          <div className={styles.search_container}>
+            <Search onSearch={handleSearch} placeholder="Enter a student's name" />
           </div>
           <Button onClick={addStudent} variant="warning">
             <Icon icon="Plus" className="icon" />
