@@ -10,5 +10,6 @@ export * from './edit-students-details';
 export * from './validation'
 export * from './list-of-groups';
 export * from './list-of-students';
+export * from './list-of-courses';
 export * from './schedule-student';
 export * from './not-found';
