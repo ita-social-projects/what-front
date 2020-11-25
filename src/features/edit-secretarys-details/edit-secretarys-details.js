@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from './edit-secretarys-details.scss';
+import { Formik, Form, Field } from 'formik';
 import { Button } from '../../components/button/index.js';
+import styles from './edit-secretarys-details.scss';
 
 export const EditSecretarysDetails = () => {
   const secretary = {
@@ -12,7 +13,7 @@ export const EditSecretarysDetails = () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className="container shadow pb-3">
+      <div className="container rounded shadow pb-3">
         <div className="row m-0 pt-3">
           <div className="col-md-4">
             <label htmlFor="first-name">First Name:</label>
