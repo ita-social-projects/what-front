@@ -1,6 +1,33 @@
 import axios from 'axios';
 
 import { ApiConfig } from './config.js';
+import { getCookie } from '../helpers/index.js';
+
+axios.interceptors.response.use((response) => {
+  const authHeader = response.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split('Bearer ')[1];
+    document.cookie = `jwt=${token};max-age=86400`;
+  }
+  return response;
+});
+
+axios.interceptors.request.use((config) => {
+  const requestConfig = { ...config };
+  if (requestConfig.url !== `${ApiConfig.BASE_URL}${ApiConfig.AUTH_URL}` && requestConfig.url !== `${ApiConfig.BASE_URL}${ApiConfig.REGISTER_URL}`) {
+    const token = getCookie('jwt');
+
+    if (requestConfig.headers) {
+      requestConfig.headers.Authorization = `Bearer ${token}`;
+    } else {
+      requestConfig.headers = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+  }
+  return requestConfig;
+},
+(error) => Promise.reject(error));
 
 export class ApiService {
   static sendRequest = async (
@@ -12,9 +39,9 @@ export class ApiService {
   ) => {
     const reqHeaders = { ...headers };
 
-    if (jwt) {
-      reqHeaders.Authorization = `Bearer ${jwt}`;
-    }
+    // if (jwt) {
+    //   reqHeaders.Authorization = `Bearer ${jwt}`;
+    // }
     if (data) {
       reqHeaders['Content-Type'] = 'application/json';
     }
