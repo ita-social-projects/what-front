@@ -25,6 +25,15 @@ axios.interceptors.request.use((config) => {
       };
     }
   }
+  if (requestConfig.data) {
+    if (requestConfig.headers) {
+      requestConfig.headers['Content-Type'] = 'application/json';
+    } else {
+      requestConfig.headers = {
+        'Content-Type': 'application/json',
+      };
+    }
+  }
   return requestConfig;
 },
 (error) => Promise.reject(error));
@@ -33,19 +42,10 @@ export class ApiService {
   static sendRequest = async (
     url,
     method,
-    jwt = '',
     data = null,
     headers = {},
   ) => {
     const reqHeaders = { ...headers };
-
-    // if (jwt) {
-    //   reqHeaders.Authorization = `Bearer ${jwt}`;
-    // }
-    if (data) {
-      reqHeaders['Content-Type'] = 'application/json';
-    }
-
     const response = await axios(url, {
       method,
       data,
@@ -59,91 +59,91 @@ export class ApiService {
   };
 
   // accounts
-  static userAuth = (userData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.AUTH_URL}`, 'POST', '', userData);
+  static userAuth = (userData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.AUTH_URL}`, 'POST', userData);
 
-  static userRegister = (userData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.REGISTER_URL}`, 'POST', '', userData);
+  static userRegister = (userData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.REGISTER_URL}`, 'POST', userData);
 
-  static getAccounts = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.ACCOUNTS_URL}`, 'GET', jwt);
+  static getAccounts = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.ACCOUNTS_URL}`, 'GET');
 
-  static getUnassignedAccounts = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.NOT_ASSIGNED_URL}`, 'GET', jwt);
+  static getUnassignedAccounts = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.NOT_ASSIGNED_URL}`, 'GET');
 
   // Courses
-  static addCourse = (jwt, courseData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.COURSES_URL}`, 'POST', jwt, courseData);
+  static addCourse = (courseData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.COURSES_URL}`, 'POST', courseData);
 
-  static getCourses = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.COURSES_URL}`, 'GET', jwt);
+  static getCourses = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.COURSES_URL}`, 'GET');
 
-  static editCourse = (jwt, id, courseData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.COURSES_URL}/${id}`, 'PUT', jwt, courseData);
+  static editCourse = (id, courseData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.COURSES_URL}/${id}`, 'PUT', courseData);
 
-  static deleteCourse = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.COURSES_URL}/${id}`, 'DELETE', jwt);
+  static deleteCourse = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.COURSES_URL}/${id}`, 'DELETE');
 
   // Lessons
-  static addLesson = (jwt, lessonData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSONS_URL}`, 'POST', jwt, lessonData);
+  static addLesson = (lessonData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSONS_URL}`, 'POST', lessonData);
 
-  static getLessons = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSONS_URL}`, 'GET', jwt);
+  static getLessons = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSONS_URL}`, 'GET');
 
-  static assignMentorToLesson = (jwt, assignData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSON_ASSIGN_URL}`, 'POST', jwt, assignData);
+  static assignMentorToLesson = (assignData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSON_ASSIGN_URL}`, 'POST', assignData);
 
-  static getLessonsByStudent = (jwt, studentId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENT_LESSONS_URL}/${studentId}`, 'GET', jwt);
+  static getLessonsByStudent = (studentId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENT_LESSONS_URL}/${studentId}`, 'GET');
 
-  static editLesson = (jwt, id, lessonData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSONS_URL}/${id}`, 'PUT', jwt, lessonData);
+  static editLesson = (id, lessonData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSONS_URL}/${id}`, 'PUT', lessonData);
 
   // mentors
-  static assignMentor = (jwt, userId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSONS_URL}/${userId}`, 'POST', jwt);
+  static assignMentor = (userId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.LESSONS_URL}/${userId}`, 'POST');
 
-  static getMentors = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.MENTORS_URL}`, 'GET', jwt);
+  static getMentors = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.MENTORS_URL}`, 'GET');
 
-  static editMentor = (jwt, id, mentorData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.MENTORS_URL}/${id}`, 'PUT', jwt, mentorData);
+  static editMentor = (id, mentorData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.MENTORS_URL}/${id}`, 'PUT', mentorData);
 
-  static deleteMentor = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.MENTORS_URL}/${id}`, 'DELETE', jwt);
+  static deleteMentor = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.MENTORS_URL}/${id}`, 'DELETE');
 
   // Students
-  static assignStudent = (jwt, userId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}/${userId}`, 'POST', jwt);
+  static assignStudent = (userId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}/${userId}`, 'POST');
 
-  static getStudentsById = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}/${id}`, 'GET', jwt);
+  static getStudentsById = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}/${id}`, 'GET');
 
-  static getStudents = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}`, 'GET', jwt);
+  static getStudents = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}`, 'GET');
 
-  static deleteStudent = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}/${id}`, 'DELETE', jwt);
+  static deleteStudent = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}/${id}`, 'DELETE');
 
-  static editStudent = (jwt, id, studentData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}/${id}`, 'PUT', jwt, studentData);
+  static editStudent = (id, studentData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.STUDENTS_URL}/${id}`, 'PUT', studentData);
 
   // Groups
-  static addGroup = (jwt, groupData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}`, 'POST', jwt, groupData);
+  static addGroup = (groupData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}`, 'POST', groupData);
 
-  static getGroups = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}`, 'GET', jwt);
+  static getGroups = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}`, 'GET');
 
-  static editGroup = (jwt, id, groupData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}/${id}`, 'PUT', jwt, groupData);
+  static editGroup = (id, groupData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}/${id}`, 'PUT', groupData);
 
-  static getGroupById = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}/${id}`, 'GET', jwt);
+  static getGroupById = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}/${id}`, 'GET');
 
-  static editGroupStudents = (jwt, id, studentsData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}/${id}/students`, 'PUT', jwt, studentsData);
+  static editGroupStudents = (id, studentsData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}/${id}/students`, 'PUT', studentsData);
 
-  static deleteGroup = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}/${id}`, 'DELETE', jwt);
+  static deleteGroup = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.GROUPS_URL}/${id}`, 'DELETE');
 
   // Themes
-  static getThemes = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.THEMES_URL}`, 'GET', jwt);
+  static getThemes = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.THEMES_URL}`, 'GET');
 
-  static addTheme = (jwt, themeData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.THEMES_URL}`, 'POST', jwt, themeData);
+  static addTheme = (themeData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.THEMES_URL}`, 'POST', themeData);
 
   // Secretaries
-  static assignSecretary = (jwt, userId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SECRETARIES_URL}/${userId}`, 'POST', jwt);
+  static assignSecretary = (userId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SECRETARIES_URL}/${userId}`, 'POST');
 
-  static getSecretaries = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SECRETARIES_URL}`, 'GET', jwt);
+  static getSecretaries = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SECRETARIES_URL}`, 'GET');
 
-  static editSecretary = (jwt, id, secretaryData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SECRETARIES_URL}/${id}`, 'PUT', jwt, secretaryData);
+  static editSecretary = (id, secretaryData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SECRETARIES_URL}/${id}`, 'PUT', secretaryData);
 
-  static deleteSecretary = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SECRETARIES_URL}/${id}`, 'DELETE', jwt);
+  static deleteSecretary = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SECRETARIES_URL}/${id}`, 'DELETE');
 
   // Schedules
-  static addSchedule = (jwt, scheduleData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}`, 'POST', jwt, scheduleData);
+  static addSchedule = (scheduleData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}`, 'POST', scheduleData);
 
-  static getSchedules = (jwt) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}`, 'GET', jwt);
+  static getSchedules = () => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}`, 'GET');
 
-  static getScheduleById = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}/${id}`, 'GET', jwt);
+  static getScheduleById = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}/${id}`, 'GET');
 
-  static editSchedule = (jwt, id, scheduleData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}/${id}`, 'PUT', jwt, scheduleData);
+  static editSchedule = (id, scheduleData) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}/${id}`, 'PUT', scheduleData);
 
-  static deleteSchedule = (jwt, id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}/${id}`, 'DELETE', jwt);
+  static deleteSchedule = (id) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}/${id}`, 'DELETE');
 
-  static getGroupSchedule = (jwt, groupId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}/${groupId}/groupSchedule`, 'GET', jwt);
+  static getGroupSchedule = (groupId) => ApiService.sendRequest(`${ApiConfig.BASE_URL}${ApiConfig.SCHEDULE_URL}/${groupId}/groupSchedule`, 'GET');
 }
