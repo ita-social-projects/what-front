@@ -37,7 +37,8 @@ export const ListOfStudents = () => {
       <Card
         key={student.uuid}
         id={student.uuid}
-        button="Details"
+        buttonName="Details"
+        iconName="Edit"
         onEdit={cardEditing}
         onDetails={cardDetails}
       > { student.name }
@@ -48,7 +49,7 @@ export const ListOfStudents = () => {
   return (
     <div className="container">
       <div className="row">
-        <div className={classNames(styles.heading, 'col-12')}>
+        <div className={classNames(styles.heading, 'col-12 mb-3')}>
           <div className={styles.search__container}>
             <Search onSearch={handleSearch} placeholder="Enter a student's name" />
           </div>
