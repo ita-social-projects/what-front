@@ -1,1 +1,1 @@
-export { EditStudentsDetails } from './edit-students-details';
+export { EditStudentsDetails } from './edit-students-details.js';
