@@ -5,7 +5,7 @@ import faker from 'faker';
 
 
 export const EditLesson = () => {
-    
+
     const names = [
         `${faker.name.firstName()} ${faker.name.lastName()}`,
         `${faker.name.firstName()} ${faker.name.lastName()}`,
@@ -20,13 +20,13 @@ export const EditLesson = () => {
         `${faker.name.firstName()} ${faker.name.lastName()}`,
         `${faker.name.firstName()} ${faker.name.lastName()}`,
     ];
-    
+
     return (
         <div className={ classNames( styles.page, 'container')}>
             <div className="row">
                 <form id='form' className={styles.size}>
                     <div className="col-lg-6">
-                        <h3>Lesson's starting</h3>
+                        <h3>Lesson's editing</h3>
                         <hr />
                         <div className="mt-5 form-group row">
                             <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
