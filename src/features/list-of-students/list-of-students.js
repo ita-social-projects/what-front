@@ -1,46 +1,42 @@
-import React from 'react';
-import classNames from 'classnames';
-import { shallowEqual, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
-import { actions, searchStudentValue } from './redux/index.js';
-import { useActions } from '../../shared/hooks/index.js';
+import classNames from 'classnames';
 import styles from './list-of-students.scss';
-import { dataList } from './students-data-list.js';
+import { dataList } from './students-dataList.js';
 
 export const ListOfStudents = () => {
-  // Search input
-  const { setSearchStudentValue } = useActions(actions);
-  const searchStudentName = useSelector(searchStudentValue, shallowEqual);
+  const [searchStudentValue, setSearchStudentValue] = useState('');
+  const [filteredStudentsList, setFilteredStudentsList] = useState([]);
+
+  useEffect(() => {
+    const students = dataList.filter((student) => student.name.toUpperCase()
+      .includes(searchStudentValue.toUpperCase()));
+      setFilteredStudentsList(students);
+  }, [searchStudentValue]);
 
   const handleSearch = (inputValue) => {
     setSearchStudentValue(inputValue);
   };
 
-  // Add a Student
   const addStudent = () => {
   };
-
-  // Student's details
-  const cardDetails = (id) => {
+  const studentDetails = (id) => {
   };
-
-  // Edit Student's details
-  const cardEditing = (id) => {
+  const studentEditing = (id) => {
   };
 
   const studentsList = () => {
-    const listByStudentName = dataList.filter((student) => student.name.toUpperCase()
-      .includes(searchStudentName.toUpperCase()));
 
-    return listByStudentName.map((student) => (
+    return filteredStudentsList.map((student) => (
       <Card
-        key={student.uuid}
-        id={student.uuid}
-        button="Details"
-        onEdit={cardEditing}
-        onDetails={cardDetails}
-      > { student.name }
+        key={student.id}
+        id={student.id}
+        buttonName='Details'
+        iconName='Edit'
+        onEdit={studentEditing}
+        onDetails={studentDetails}
+        > <span>{student.name}</span>
       </Card>
     ));
   };
@@ -48,9 +44,9 @@ export const ListOfStudents = () => {
   return (
     <div className="container">
       <div className="row">
-        <div className={classNames(styles.heading, 'col-12')}>
-          <div className={styles.search__container}>
-            <Search onSearch={handleSearch} placeholder="Enter a student's name" />
+        <div className={classNames(styles.heading, 'col-12 mb-2')}>
+          <div className={styles.seach_container}>
+            <Search onSearch={handleSearch} placeholder="Enter a course's name" />
           </div>
           <Button onClick={addStudent} variant="warning">
             <Icon icon="Plus" className="icon" />
@@ -66,4 +62,4 @@ export const ListOfStudents = () => {
       </div>
     </div>
   );
-};
+}

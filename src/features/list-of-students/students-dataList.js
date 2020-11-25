@@ -3,61 +3,66 @@ import faker from 'faker';
 export const dataList = [
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 1,
+    id: 0,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 2,
+    id: 1,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 3,
+    id: 2,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 4,
+    id: 3,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 5,
+    id: 4,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 6,
+    id: 5,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 7,
+    id: 6,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 8,
+    id: 7,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 9,
-  }, {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 10,
+    id: 8,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 11,
+    id: 9,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 12,
+    id: 10,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 13,
+    id: 11,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 14,
+    id: 12,
   },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    uuid: 15,
+    id: 13,
+  },
+  {
+    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    id: 14,
+  },
+  {
+    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    id: 15,
   },
 ];

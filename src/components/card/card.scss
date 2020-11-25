@@ -1,7 +1,7 @@
 @import '../../styles/main';
 
-.card-component {
-  padding: 15px;
+.card-component{
+  padding:15px;
   margin: 15px;
   @include card();
 }
