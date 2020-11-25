@@ -30,12 +30,13 @@ export const ListOfLessons = () => {
     .includes(searchThemeName.toUpperCase()));
     const listByDate = listByTheme.filter((lesson) => lesson.date.includes(searchThemeDate));
     const resultList = listByDate.map((lesson) => {
+        const resultDate = lesson.date.replace(/-/g, '.');
       return (
         <Card
           key={lesson.id}
           id={lesson.id}
           title={lesson.themeName}
-          date={lesson.date}
+          date={resultDate}
           onEdit={handleEditLesson}
         />
       );
