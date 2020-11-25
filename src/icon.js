@@ -12,14 +12,13 @@ const Icon = ({
     width={`${size}px`}
     height={`${size}px`}
   >
-    <use xlinkHref={`src/svg/${icon}.svg#${icon}`} fill={color} />
+    <use href={`./assets/svg/${icon}.svg#${icon}`} fill={color} />
   </svg>
 );
 
-
 Icon.defaultProps = {
   size: 16,
-  color: 'black',
+  color: '',
   viewBox: '0 0 24 24',
   style: {},
   className: '',

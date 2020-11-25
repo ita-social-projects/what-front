@@ -65,7 +65,7 @@ export const EditLesson = () => {
                             </thead>
                             <tbody>
                             { names.map((value, index) => {
-                                return  <tr>
+                                return  <tr key={index}>
                                     <th scope="row">{ index+1 }</th>
                                     <td><a href="#">{ value }</a></td>
                                     <td><input className={styles.mode} type="number" max='12' min='2'/></td>

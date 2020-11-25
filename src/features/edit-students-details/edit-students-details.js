@@ -67,7 +67,7 @@ export const EditStudentsDetails = () => {
             <ul className="d-flex flex-wrap justify-content-between p-0">
               {student.groups.map(({ id, name }) => (
                 <li className={className(styles['list-element'], 'd-flex bg-light border border-outline-secondary rounded')} key={id}>{name}
-                  <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger">X</button>
+                  <button type="button" className="btn p-0 ml-auto mr-2 font-weight-bold text-danger">X</button>
                 </li>
               ))}
             </ul>
