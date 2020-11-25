@@ -23,10 +23,10 @@ export const EditLesson = () => {
     
     return (
         <div className={ classNames( styles.page, 'container')}>
-            <div className="row">
                 <form id='form' className={styles.size}>
+                  <div className="row">
                     <div className="col-lg-6">
-                        <h3>Lesson's starting</h3>
+                        <h3>Lesson editing</h3>
                         <hr />
                         <div className="mt-5 form-group row">
                             <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
@@ -75,8 +75,8 @@ export const EditLesson = () => {
                             </tbody>
                         </table>
                     </div>
+                  </div>
                 </form>
-            </div>
             <div className={styles.placement}>
                 <button form="form" type="button" className="btn btn-danger btn-lg">Delete</button>
                 <div className={styles.placement}>
