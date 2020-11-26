@@ -3,8 +3,12 @@ import classNames from 'classNames';
 import styles from './add-secretary.scss';
 import { Formik, Field, Form } from 'formik';
 import { validateEmail, validateName } from '../validation/validation-helpers.js';
+import { useHistory } from 'react-router-dom';
+
 
 export const AddSecretary = () => {
+
+  const history = useHistory();
 
   const addNewSecretary = (values) => {
     const { firstName, lastName, email } = values;
@@ -15,14 +19,15 @@ export const AddSecretary = () => {
       firstName: name,
       lastName: surName,
       email,
-    }
+    };
+    history.push('/#back');
     console.log(secretary)
     // post method
   }
 
   const onSubmit = (values, actions) => {
     actions.resetForm();
-    addNewSecretary(values)
+    addNewSecretary(values);
   };
 
   return (
@@ -108,4 +113,4 @@ export const AddSecretary = () => {
       </div>
     </div>
   );
-}
+};
