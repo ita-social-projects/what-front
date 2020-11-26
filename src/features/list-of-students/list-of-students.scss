@@ -1,12 +1,12 @@
 @import '../../styles/main';
 
 .heading {
-  display:flex;
+  display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  margin-bottom: 20px;
+  justify-content: space-between;
 }
-.search__container {
+
+.search_container {
   display: block;
   margin: auto;
 }
