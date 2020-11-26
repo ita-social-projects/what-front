@@ -19,7 +19,6 @@ export const Card = ({
   className,
 }) => (
   <div
-    onClick={() => onDetails(id)}
     className={classNames(
       'card col-sm-12 col-md-4 col-lg-3 ',
       styles['card-component'],

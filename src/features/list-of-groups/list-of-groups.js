@@ -53,7 +53,14 @@ export const ListOfGroups = () => {
           button="Details"
           onEdit={handleCardEdit}
           onDetails={handleCardDetails}
-        />
+          iconName="Edit"
+          buttonName="Details"
+        >
+          <ul>
+            <li>Hello</li>
+            <li>Hello 2</li>
+          </ul>
+        </Card>
       );
     });
 
@@ -63,9 +70,9 @@ export const ListOfGroups = () => {
   return (
     <div className="container">
       <div className="row">
-        <div className={classNames(styles['list-head'], 'col-12')}>
+        <div className={classNames(styles['list-head'], 'col-12 mt-5')}>
           <input
-            className={classNames('form-control ', styles['calendar-input'])}
+            className={classNames('form-control col-2', styles['calendar-input'])}
             type="date"
             name="group_date"
             required

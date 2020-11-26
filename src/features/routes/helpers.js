@@ -7,7 +7,7 @@ import { Button } from '../../components/index.js';
 export const Links = () => (
   <div className="mt-3">
     <ul className="nav nav-tabs">
-      <li className="nav-item">
+      {/*<li className="nav-item">
         <Link to="/" className="nav-link">Home</Link>
       </li>
       <li className="nav-item">
@@ -15,7 +15,16 @@ export const Links = () => (
       </li>
       <li className="nav-item">
         <Link to="/role-list" className="nav-link">Role List</Link>
-      </li>
+      </li>*/}
+        <li className="nav-item">
+            <Link to="/groups" className="nav-link">Groups List</Link>
+        </li>
+        <li className="nav-item">
+            <Link to="/edit-student" className="nav-link">Edit Student</Link>
+        </li>
+        <li className="nav-item">
+            <Link to="/add-lesson" className="nav-link">Add Lesson</Link>
+        </li>
     </ul>
   </div>
 );

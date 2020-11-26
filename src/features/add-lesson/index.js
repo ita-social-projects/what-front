@@ -1,1 +1,1 @@
-export { AddLesson } from './add-lesson';
+export { AddLesson } from './add-lesson.js';
