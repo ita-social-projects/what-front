@@ -50,7 +50,8 @@ export const ListOfGroups = () => {
           id={group.id}
           title={group.name}
           date={resultDate}
-          button="Details"
+          buttonName="Details"
+          iconName="Edit"
           onEdit={handleCardEdit}
           onDetails={handleCardDetails}
         />

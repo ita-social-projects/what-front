@@ -5,5 +5,5 @@ export const rootReducer = combineReducers({
   features: combineReducers({
     counter: counterReducer,
     listOfGroups: listOfGroupsReducer,
-    })
+  }),
 });

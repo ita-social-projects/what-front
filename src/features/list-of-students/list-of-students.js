@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
-import classNames from 'classnames';
 import styles from './list-of-students.scss';
 import { dataList } from './students-dataList.js';
 
@@ -12,7 +12,7 @@ export const ListOfStudents = () => {
   useEffect(() => {
     const students = dataList.filter((student) => student.name.toUpperCase()
       .includes(searchStudentValue.toUpperCase()));
-      setFilteredStudentsList(students);
+    setFilteredStudentsList(students);
   }, [searchStudentValue]);
 
   const handleSearch = (inputValue) => {
@@ -26,20 +26,17 @@ export const ListOfStudents = () => {
   const studentEditing = (id) => {
   };
 
-  const studentsList = () => {
-
-    return filteredStudentsList.map((student) => (
-      <Card
-        key={student.id}
-        id={student.id}
-        buttonName='Details'
-        iconName='Edit'
-        onEdit={studentEditing}
-        onDetails={studentDetails}
-        > <span>{student.name}</span>
-      </Card>
-    ));
-  };
+  const studentsList = () => filteredStudentsList.map((student) => (
+    <Card
+      key={student.id}
+      id={student.id}
+      buttonName="Details"
+      iconName="Edit"
+      onEdit={studentEditing}
+      onDetails={studentDetails}
+    > <span>{student.name}</span>
+    </Card>
+  ));
 
   return (
     <div className="container">
@@ -62,4 +59,4 @@ export const ListOfStudents = () => {
       </div>
     </div>
   );
-}
+};
