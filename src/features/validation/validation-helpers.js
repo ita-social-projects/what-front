@@ -1,11 +1,10 @@
 export const validateEmail = (value) => {
   let error;
   if (!value) {
-    error = 'Email is required.';
+    error = 'This field is required.';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
     error = 'Invalid email address.';
   }
-  
   return error;
 }
 
@@ -33,6 +32,17 @@ export const validateConfirmPassword = (pass, value) => {
   }
   return error;
 };
+
+export const validateName = (value) => {
+  let error;
+  const name = /^[a-zA-Z'][a-zA-Z-' ]+[a-zA-Z']?$/;
+  if (!value) {
+    error = 'This field is required';
+  } else if(!name.test(value)) {
+    error = 'Invalid name';
+  }
+  return error;
+}
 
 export const validateGroupName = (value) => {
   let error;

@@ -1,0 +1,1 @@
+export { AddSecretary } from './add-secretary';
