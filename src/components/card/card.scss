@@ -1,59 +1,61 @@
 @import '../../styles/main';
 
-.card-component{
-  padding:15px;
-  margin: 15px;
+.card-component {
   @include card();
+  padding: 15px;
+  margin: 15px;
+  transition: all ease .5s;
 }
 
-.card-component:hover{
+.card-component:hover {
+  @include card();
   transform: scale(1.1);
-  cursor:pointer;
+  cursor: pointer;
 }
 
-.content{
-  display:flex;
+.content {
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
 }
 
-.card-title{
-   @include baskerville-italic();
-  font-size:20px;
+.card-title {
+  @include baskerville-italic();
+  font-size: 20px;
 }
 
-.card-content{
+.card-content {
   @include franklin-regular();
-  font-size:18px;
-  padding-top:10px;
-  margin:0;
+  font-size: 18px;
+  padding-top: 10px;
+  margin: 0;
 }
 
-.card-date{
+.card-date {
   @include baskerville-regular();
   font-size: 14px;
   text-decoration: underline;
   color: map-get($colors, textAccentN1-color);
-  margin-bottom:0;
+  margin-bottom: 0;
 }
 
-.card-head{
- display:flex;
+.card-head {
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
 }
 
-.card-icon:hover{
+.card-icon:hover {
   transform: scale(1.2);
 }
 
-.card-btn{
- text-align:right;
+.card-btn {
+  text-align: right;
 }
 
-.card-icon{
- position:absolute;
-  right:4%;
+.card-icon {
+  position: absolute;
+  right: 4%;
 }
