@@ -1,0 +1,1 @@
+export { ListOfSecretaries } from './list-of-secretaries.js';

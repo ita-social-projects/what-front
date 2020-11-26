@@ -1,1 +1,2 @@
-export { EditGroup } from './edit-group';
+export { EditGroup } from './edit-group.js';
+
