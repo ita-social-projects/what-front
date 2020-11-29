@@ -37,7 +37,7 @@ export const EditMentor = () => {
             onSubmit={onSubmit}
           >
             {({ values, errors }) => (
-              <Form className="px-2 py-4" name="mentor_first_name">
+              <Form className="px-2 py-4" name="firstName">
                 <h3>Mentor Editing</h3>
                 <hr />
                 <div className="row mb-3">
@@ -48,8 +48,8 @@ export const EditMentor = () => {
                     <Field
                       className={classNames('form-control', {['border-danger']: errors.firstName})}
                       type="text"
-                      name="first_name"
-                      id="first_name"
+                      name="firstName"
+                      id="firstName"
                       placeholder="First name"
                       validate={validateName}
                     />
@@ -58,23 +58,23 @@ export const EditMentor = () => {
                 </div>
                 <div className="row mb-3">
                   <div className="col d-flex align-items-center">
-                    <label className="mb-0" htmlFor="mentor_last_name">Last Name</label>
+                    <label className="mb-0" htmlFor="lastName">Last Name</label>
                   </div>
                   <div className="col-md-8">
                     <Field
                       className={classNames('form-control', {['border-danger']: errors.lastName})}
                       type="text"
-                      name="last_name"
-                      id="last_name"
+                      name="lastName"
+                      id="lastName"
                       placeholder="Last name"
                       validate={validateName}
                     />
                   </div>
-                {errors.lastName && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.lastName}</p>}
+                  {errors.lastName && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.lastName}</p>}
                 </div>
                 <div className="row mb-3">
                   <div className="col d-flex align-items-center">
-                    <label className="mb-0" htmlFor="mentor_email">Email</label>
+                    <label className="mb-0" htmlFor="email">Email</label>
                   </div>
                   <div className="col-md-8">
                     <Field
