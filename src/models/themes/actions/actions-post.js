@@ -1,8 +1,11 @@
 import { CREATE_THEME, CREATING_THEME_FAILED, CREATING_THEME_STARTED, CREATING_THEME_SUCCESS } from "../types"
 
-export const createTheme = () => {
+export const createTheme = (theme) => {
   return {
     type: CREATE_THEME,
+    payload: {
+      theme,
+    },
   };
 };
 
@@ -25,7 +28,7 @@ export const creatingThemeFailed = (error) => {
   return {
     type: CREATING_THEME_FAILED,
     payload: {
-      error,
+      error: error.message,
     },
   };
 };

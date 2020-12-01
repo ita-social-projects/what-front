@@ -25,7 +25,7 @@ export const loadingThemesFailed = (error) => {
   return {
     type: LOADING_THEMES_FAILED,
     payload: {
-      error,
+      error: error.message,
     },
   };
 };

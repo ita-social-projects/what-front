@@ -1,8 +1,12 @@
 import { EDITING_THEME_FAILED, EDITING_THEME_STARTED, EDITING_THEME_SUCCESS, EDIT_THEME } from "../types"
 
-export const editTheme = () => {
+export const editTheme = (theme, id) => {
   return {
     type: EDIT_THEME,
+    payload: {
+      theme,
+      id,
+    },
   };
 };
 
@@ -25,7 +29,7 @@ export const editingThemeFailed = (error) => {
   return {
     type: EDITING_THEME_FAILED,
     payload: {
-      error,
+      error: error.message,
     },
   };
 };
