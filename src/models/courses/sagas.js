@@ -56,7 +56,7 @@ function* editCourseWorker(data) {
   }
 }
 
-export function* coursesSaga() {
+export function* coursesWatcher() {
   yield all([
     fork(loadCoursesWatcher),
     fork(createCourseWatcher),
