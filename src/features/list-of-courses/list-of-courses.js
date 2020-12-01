@@ -4,10 +4,18 @@ import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
+import { coursesDataSelector, createCourse, editCourse, getCourses } from '@/models/index.js';
+import { useActions } from '@/shared/hooks/index.js';
+import { shallowEqual, useSelector } from 'react-redux';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
+
+  const [fetchCourses] = useActions([getCourses]);
+  const [addCoursee] = useActions([createCourse]);
+  const [editCoursee] = useActions([editCourse]);
+  const mycourses = useSelector(coursesDataSelector, shallowEqual);
 
   useEffect(() => {
     const courses = dataCourses.filter((course) => course.name.toUpperCase()
@@ -21,6 +29,9 @@ export const ListOfCourses = () => {
 
   const addCourse = () => {
   };
+  const value = {
+    name: 'hello'
+  }
 
   const courseDetails = (id) => {
   };
@@ -43,6 +54,8 @@ export const ListOfCourses = () => {
     ));
   };
 
+  console.log(mycourses)
+
   return (
     <div className="container">
       <div className="row">
@@ -61,6 +74,9 @@ export const ListOfCourses = () => {
             coursesList()
           }
         </div>
+        <button type='button' onClick={fetchCourses}>Загрузить</button>
+        <button type='button' onClick={addCoursee}>Создать новый курс</button>
+        <button type='button' onClick={editCoursee}>Изменить курс</button>
       </div>
     </div>
   );
