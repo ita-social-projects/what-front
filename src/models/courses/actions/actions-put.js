@@ -8,7 +8,7 @@ export const editCourse = (course, id) => {
     payload: {
       course,
       id,
-    }
+    },
   };
 };
 
