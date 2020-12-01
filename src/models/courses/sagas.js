@@ -1,5 +1,9 @@
 import { put, call, takeLatest, select } from 'redux-saga/effects';
-import { creatingCourseFailed, creatingCourseSucceed, creatingCourseStarted, loadingCoursesFailed, loadingCoursesStarted, loadingCoursesSucceed, editingCourseStarted, editingCourseFailed, editingCourseSucceed } from './actions';
+import { ApiService } from '../api-service';
+import { creatingCourseFailed, creatingCourseSucceed, creatingCourseStarted, 
+  loadingCoursesFailed, loadingCoursesStarted, loadingCoursesSucceed, 
+  editingCourseStarted, editingCourseFailed, editingCourseSucceed, 
+} from './actions/index.js';
 import { coursesDataSelector } from './selectors';
 import { CREATE_COURSE, EDIT_COURSE, GET_COURSES } from './types';
 
@@ -18,8 +22,8 @@ export function* editCourseWatcher() {
 function* loadCoursesWorker() {
   try {
     yield put(loadingCoursesStarted());
-    const coursesData = yield call(fetchData);
-    yield put(loadingCoursesSucceed(coursesData));
+    const courses = yield call(ApiService.load, '/courses');
+    yield put(loadingCoursesSucceed(courses));
   } catch (error) {
     yield put(loadingCoursesFailed(error));
   }
@@ -28,7 +32,7 @@ function* loadCoursesWorker() {
 function* createCourseWorker(data) {
   try {
     yield put(creatingCourseStarted());
-    const course = yield call(createCourse, data.payload.course);
+    const course = yield call(ApiService.create, '/courses', data.payload.course);
     yield put(creatingCourseSucceed(course));
   } catch (error) {
     yield put(creatingCourseFailed(error));
@@ -38,43 +42,16 @@ function* createCourseWorker(data) {
 function* editCourseWorker(data) {
   try {
     yield put(editingCourseStarted());
-    const course = yield call(editCourse, data.payload.course, data.payload.id);
+    const course = yield call(ApiService.update, `/courses/${data.payload.id}`, data.payload.course);
     const courses = yield select(coursesDataSelector);
     const updatedCourses = courses.map((item) => {
-      if(item.id == course.id) {
-        return course
+      if(item.id === course.id) {
+        return course;
       }
       return item;
     });
-    yield put(editingCourseSucceed(updatedCourses))
+    yield put(editingCourseSucceed(updatedCourses));
   } catch (error) {
     yield put(editingCourseFailed(error));
   }
-}
-
-async function fetchData() {
-  const response = await fetch('http://localhost:3000/api/courses');
-  return await response.json();
-}
-
-async function createCourse(course) {
-  const response = await fetch('http://localhost:3000/api/courses', {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json;charset=utf-8',
-    },
-    body: JSON.stringify(course),
-  })
-  return await response.json();
-}
-
-async function editCourse(editedCourse, id) {
-  const response = await fetch(`http://localhost:3000/api/courses/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-type': 'application/json;charset=utf-8',
-    },
-    body: JSON.stringify(editedCourse)
-  });
-  return await response.json();
 }

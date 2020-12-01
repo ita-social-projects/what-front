@@ -6,7 +6,7 @@ import { CREATING_COURSE_FAILED,
    EDITING_COURSE_SUCCESS, 
    LOADING_COURSES_FAILED, 
    LOADING_COURSES_STARTED, 
-   LOADING_COURSES_SUCCESS 
+   LOADING_COURSES_SUCCESS, 
 } from './types';
 
 const initialState = {
@@ -58,8 +58,8 @@ export const coursesReducer = (state = initialState, action) => {
           ...state,
           isLoading: false,
           loaded: false,
-          error: action.payload.error
-        }
+          error: action.payload.error,
+        };
       case EDITING_COURSE_STARTED:
         return {
           ...state,
@@ -72,7 +72,7 @@ export const coursesReducer = (state = initialState, action) => {
           isLoading: false,
           loaded: true,
           courses: action.payload.courses,
-          error: ''
+          error: '',
         };
       case EDITING_COURSE_FAILED:
         return {
@@ -80,7 +80,7 @@ export const coursesReducer = (state = initialState, action) => {
           isLoading: false,
           loaded: false,
           error: action.payload.error,
-        }
+        };
     default: return state;
   }
 };
