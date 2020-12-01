@@ -57,7 +57,7 @@ function* editThemeWorker(data) {
     });
     yield put(editingThemeSucceed(updatedThemes));
   } catch (error) {
-    yield put(editingThemeFailed(error))
+    yield put(editingThemeFailed(error));
   }
 }
 

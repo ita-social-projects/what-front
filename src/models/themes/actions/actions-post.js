@@ -1,4 +1,4 @@
-import { CREATE_THEME, CREATING_THEME_FAILED, CREATING_THEME_STARTED, CREATING_THEME_SUCCESS } from "../types"
+import { CREATE_THEME, CREATING_THEME_FAILED, CREATING_THEME_STARTED, CREATING_THEME_SUCCESS } from '../types.js';
 
 export const createTheme = (theme) => {
   return {

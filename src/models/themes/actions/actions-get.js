@@ -1,4 +1,4 @@
-import { GET_THEMES, LOADING_THEMES_FAILED, LOADING_THEMES_STARTED, LOADING_THEMES_SUCCESS } from "../types"
+import { GET_THEMES, LOADING_THEMES_FAILED, LOADING_THEMES_STARTED, LOADING_THEMES_SUCCESS } from '../types';
 
 export const getThemes = () => {
   return {

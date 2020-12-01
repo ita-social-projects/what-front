@@ -1,4 +1,4 @@
-import { EDITING_THEME_FAILED, EDITING_THEME_STARTED, EDITING_THEME_SUCCESS, EDIT_THEME } from "../types"
+import { EDITING_THEME_FAILED, EDITING_THEME_STARTED, EDITING_THEME_SUCCESS, EDIT_THEME } from '../types.js';
 
 export const editTheme = (theme, id) => {
   return {

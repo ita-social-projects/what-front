@@ -1,4 +1,4 @@
-import { DELETE_THEME, DELETING_THEME_FAILED, DELETING_THEME_STARTED, DELETING_THEME_SUCCESS } from "../types"
+import { DELETE_THEME, DELETING_THEME_FAILED, DELETING_THEME_STARTED, DELETING_THEME_SUCCESS } from '../types';
 
 export const deleteTheme = (id) => {
   return {
