@@ -67,7 +67,9 @@ function* deleteThemeWorker(data) {
     const theme = yield call(ApiService.remove, `/themes/${data.payload.id}`);
     const themes = yield select(themesDataSelector);
     const themeIndex = themes.findIndex((item) => item.id === theme.id);
-    themes.splice(themeIndex, 1);
+    if (themeIndex > -1) {
+      themes.splice(themeIndex, 1);
+    }
     yield put(deletingThemeSucceed(themes));
   } catch(error) {
     yield put(deletingThemeFailed(error));
