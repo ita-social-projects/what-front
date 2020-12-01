@@ -4,18 +4,14 @@ import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
-import { coursesDataSelector, createCourse, editCourse, getCourses } from '@/models/index.js';
+import { createCourse, editCourse, getCourses } from '@/models/index.js';
 import { useActions } from '@/shared/hooks/index.js';
-import { shallowEqual, useSelector } from 'react-redux';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
 
-  const [fetchCourses] = useActions([getCourses]);
-  const [addCoursee] = useActions([createCourse]);
-  const [editCoursee] = useActions([editCourse]);
-  const mycourses = useSelector(coursesDataSelector, shallowEqual);
+  const [loadCourses, createNewCourse, updateCourse] = useActions([getCourses, createCourse, editCourse])
 
   useEffect(() => {
     const courses = dataCourses.filter((course) => course.name.toUpperCase()
@@ -28,15 +24,22 @@ export const ListOfCourses = () => {
   };
 
   const addCourse = () => {
+    const course = {
+      name: 'new course'
+    };
+    createNewCourse(course);
   };
-  const value = {
-    name: 'hello'
-  }
 
   const courseDetails = (id) => {
   };
 
+  const id = 3
+
   const courseEdit = (id) => {
+    const editedCourse = {
+      name: 'editedNameCourse'
+    };
+    updateCourse(editedCourse, id)
   };
 
   const coursesList = () => {
@@ -53,8 +56,6 @@ export const ListOfCourses = () => {
       </Card>
     ));
   };
-
-  console.log(mycourses)
 
   return (
     <div className="container">
@@ -74,9 +75,9 @@ export const ListOfCourses = () => {
             coursesList()
           }
         </div>
-        <button type='button' onClick={fetchCourses}>Загрузить</button>
-        <button type='button' onClick={addCoursee}>Создать новый курс</button>
-        <button type='button' onClick={editCoursee}>Изменить курс</button>
+        <button type='button' onClick={loadCourses}>Загрузить</button>
+        <button type='button' onClick={addCourse}>Создать новый курс</button>
+        <button type='button' onClick={() => courseEdit(id)}>Изменить курс</button>
       </div>
     </div>
   );

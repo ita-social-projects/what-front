@@ -39,9 +39,12 @@ export const loadingCoursesFailed = (error) => {
   };
 };
 
-export const createCourse = () => {
+export const createCourse = (course) => {
   return {
     type: CREATE_COURSE,
+    payload: {
+      course
+    }
   };
 };
 
@@ -69,9 +72,13 @@ export const creatingCourseFailed = (error) => {
   };
 };
 
-export const editCourse = () => {
+export const editCourse = (course, id) => {
   return {
     type: EDIT_COURSE,
+    payload: {
+      course,
+      id,
+    }
   };
 };
 

@@ -25,28 +25,27 @@ function* loadCoursesWorker() {
   }
 }
 
-function* createCourseWorker() {
+function* createCourseWorker(data) {
   try {
     yield put(creatingCourseStarted());
-    const course = yield call(createCourse);
+    const course = yield call(createCourse, data.payload.course);
     yield put(creatingCourseSucceed(course));
   } catch (error) {
     yield put(creatingCourseFailed(error));
   }
 }
 
-function* editCourseWorker() {
+function* editCourseWorker(data) {
   try {
     yield put(editingCourseStarted());
-    const course = yield call(editCourse);
-    const data = yield select(coursesDataSelector);
-    const updatedCourses = data.map((item) => {
+    const course = yield call(editCourse, data.payload.course, data.payload.id);
+    const courses = yield select(coursesDataSelector);
+    const updatedCourses = courses.map((item) => {
       if(item.id == course.id) {
         return course
       }
       return item;
     });
-    console.log(updatedCourses)
     yield put(editingCourseSucceed(updatedCourses))
   } catch (error) {
     yield put(editingCourseFailed(error));
@@ -58,25 +57,19 @@ async function fetchData() {
   return await response.json();
 }
 
-async function createCourse() {
-  let mycourse = {
-    name: "2mycourse777"
-  }
+async function createCourse(course) {
   const response = await fetch('http://localhost:3000/api/courses', {
     method: 'POST',
     headers: {
       'Content-type': 'application/json;charset=utf-8',
     },
-    body: JSON.stringify(mycourse),
+    body: JSON.stringify(course),
   })
   return await response.json();
 }
 
-async function editCourse() {
-  let editedCourse = {
-    name: 'editedNameCourse'
-  };
-  const response = await fetch('http://localhost:3000/api/courses/2', {
+async function editCourse(editedCourse, id) {
+  const response = await fetch(`http://localhost:3000/api/courses/${id}`, {
     method: 'PUT',
     headers: {
       'Content-type': 'application/json;charset=utf-8',
