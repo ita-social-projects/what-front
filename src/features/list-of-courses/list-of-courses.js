@@ -4,10 +4,14 @@ import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
+import { createCourse, editCourse, getCourses } from '@/models/index.js';
+import { useActions } from '@/shared/hooks/index.js';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
+
+  const [loadCourses, createNewCourse, updateCourse] = useActions([getCourses, createCourse, editCourse])
 
   useEffect(() => {
     const courses = dataCourses.filter((course) => course.name.toUpperCase()
@@ -20,12 +24,22 @@ export const ListOfCourses = () => {
   };
 
   const addCourse = () => {
+    const course = {
+      name: 'new course'
+    };
+    createNewCourse(course);
   };
 
   const courseDetails = (id) => {
   };
 
+  const id = 3
+
   const courseEdit = (id) => {
+    const editedCourse = {
+      name: 'editedNameCourse'
+    };
+    updateCourse(editedCourse, id)
   };
 
   const coursesList = () => {
@@ -61,6 +75,9 @@ export const ListOfCourses = () => {
             coursesList()
           }
         </div>
+        <button type='button' onClick={loadCourses}>Загрузить</button>
+        <button type='button' onClick={addCourse}>Создать новый курс</button>
+        <button type='button' onClick={() => courseEdit(id)}>Изменить курс</button>
       </div>
     </div>
   );

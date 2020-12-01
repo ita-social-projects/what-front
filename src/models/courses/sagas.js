@@ -1,4 +1,4 @@
-import { put, call, takeLatest, select } from 'redux-saga/effects';
+import { all, fork, put, call, takeLatest, select } from 'redux-saga/effects';
 import { ApiService } from '../api-service';
 import { creatingCourseFailed, creatingCourseSucceed, creatingCourseStarted, 
   loadingCoursesFailed, loadingCoursesStarted, loadingCoursesSucceed, 
@@ -54,4 +54,12 @@ function* editCourseWorker(data) {
   } catch (error) {
     yield put(editingCourseFailed(error));
   }
+}
+
+export function* coursesSaga() {
+  yield all([
+    fork(loadCoursesWatcher),
+    fork(createCourseWatcher),
+    fork(editCourseWatcher),
+  ]);
 }
