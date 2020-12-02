@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import faker from 'faker';
+import { useSelector, shallowEqual } from 'react-redux';
 import styles from './add-lesson.scss';
-import {data} from "@features/add-lesson/lessons";
+import { useActions } from '../../shared/hooks/index.js';
+import {
+  addLessonActions, mentorsSelector, groupsSelector, studentsSelector,
+} from './redux/index.js';
 
 export const AddLesson = () => {
+  const mentors = useSelector(mentorsSelector, shallowEqual);
+  const groups = useSelector(groupsSelector, shallowEqual);
+  const students = useSelector(studentsSelector, shallowEqual);
+
+  const { fetchMentors, fetchStudents, fetchGroups } = useActions(addLessonActions);
+  // const [toShowModal, setShowModal] = useState(false);
+
+  fetchMentors();
+  fetchStudents();
+  fetchGroups();
+
   const names = [
     `${faker.name.firstName()} ${faker.name.lastName()}`,
     `${faker.name.firstName()} ${faker.name.lastName()}`,
@@ -20,9 +35,7 @@ export const AddLesson = () => {
     `${faker.name.firstName()} ${faker.name.lastName()}`,
   ];
 
-    const groupId = 2;
-    const lessonsByGroup = data.filter((lesson) => lesson.studentGroupId === groupId);
-    console.log(lessonsByGroup);
+  console.log(mentors);
 
   return (
     <div className={classNames(styles.page, 'container')}>
