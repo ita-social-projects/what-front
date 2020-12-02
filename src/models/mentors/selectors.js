@@ -1,3 +1,3 @@
-export const mentorsDataSelector = (state) => state.models.mentors.mentors;
-
-export const mentorsIsLoadingSelector = (state) => state.models.mentors.isLoading;
+export const mentorsSelector = (state) => state.models.mentors.mentors;
+export const mentorsIsLoading = (state) => state.models.mentors.isLoading;
+export const mentorsIsLoaded = (state) => state.models.mentors.isLoaded;

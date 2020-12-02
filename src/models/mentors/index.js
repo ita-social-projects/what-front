@@ -1,4 +1,5 @@
-export { mentorsReducer } from './reducer.js';
-export { loadMentors } from './actions.js';
-export { loadMentorsWatcher } from './sagas.js';
-export { mentorsDataSelector, mentorsIsLoadingSelector } from './selectors.js';
+export { mentorsModelReducer } from './reducer.js';
+export * from './actions.js';
+export {
+ mentorsSelector, mentorsIsLoading, mentorsError, mentorsIsLoaded
+} from './selectors.js';

@@ -5,13 +5,11 @@ import { counterSelector, counterIsLoadingSelector, counterActions } from './red
 import { useActions } from '../../shared/hooks/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
-import { loadMentors } from '../../models/index.js';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
   const isLoading = useSelector(counterIsLoadingSelector, shallowEqual);
   const { incrementCounter, decrementCounter, fetchCounter } = useActions(counterActions);
-  const [fetchMentors] = useActions([loadMentors]);
   const [toShowModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
@@ -38,7 +36,6 @@ export const Counter = () => {
           <Button type="button" onClick={decrementCounter} variant="warning">Decrement</Button>
           <Button type="button" onClick={handleShowModal} variant="success">Show modal</Button>
           <Button onClick={fetchCounter} variant="primary">Fetch counter</Button>
-          <Button onClick={fetchMentors} variant="primary">Fetch mentors</Button>
         </div>
         <div className="m-3">
           <Search
