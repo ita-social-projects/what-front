@@ -29,7 +29,7 @@
 
 //mixins
 @mixin button() {
-  @include baskerville-italic;
+  @include baskerville-regular;
   border-radius: map-get($border-radius, button-borRad);
   box-shadow: map-get($box-shadows, button-boxShadow);
 }

@@ -29,9 +29,8 @@ export const Button = ({
 
 Button.propTypes = {
   children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
   ]).isRequired,
   type: PropTypes.string,
   onClick: PropTypes.func.isRequired,

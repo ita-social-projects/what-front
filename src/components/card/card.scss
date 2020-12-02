@@ -4,6 +4,7 @@
   @include card();
   padding: 15px;
   margin: 15px;
+  transition: all ease .5s;
 }
 
 .card-component:hover {

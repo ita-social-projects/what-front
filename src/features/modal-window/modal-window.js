@@ -32,9 +32,8 @@ export const ModalWindow = ({
 ModalWindow.propTypes = {
   toShow: PropTypes.bool.isRequired,
   children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
   ]).isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
