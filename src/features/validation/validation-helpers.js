@@ -54,3 +54,14 @@ export const validateDate = (start, finish) => {
   }
   return error;
 }
+
+export const validateName = (value) => {
+  let error;
+  const name = /^[a-zA-Z]+/;
+  if(!value) {
+    error = 'This field is required';
+  } else if(!name.test(value)) {
+    error = 'Invalid mentor name';
+  }
+  return error;
+}
