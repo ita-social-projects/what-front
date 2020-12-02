@@ -7,6 +7,7 @@ export const rootReducer = combineReducers({
     counter: counterReducer,
     listOfGroups: listOfGroupsReducer,
   }),
+
   models: combineReducers({
     courses: coursesReducer,
     mentors: mentorsReducer,
