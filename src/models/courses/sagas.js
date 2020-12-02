@@ -1,6 +1,5 @@
-import { all, fork, put, call, takeLatest, select } from 'redux-saga/effects';
+import { all, fork, put, call, takeLatest } from 'redux-saga/effects';
 import { ApiService } from '../api-service';
-import { coursesDataSelector } from './selectors';
 import * as actionTypes from './types';
 
 export const getCourses = () => {
