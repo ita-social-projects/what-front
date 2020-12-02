@@ -24,7 +24,7 @@ export function themesReducer(state = initialState, action) {
       ...state,
       isLoading: false,
       loaded: true,
-      themes: action.payload.data,
+      themes: action.payload.themes,
     };
   case LOADING_THEMES_FAILED:
     return {
