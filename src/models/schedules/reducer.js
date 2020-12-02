@@ -31,6 +31,27 @@ export function schedulesReducer(state = initialState, action) {
         loaded: false,
         error: action.payload.error,
       };
+    case actionsTypes.LOADING_GROUP_SCHEDULE_STARTED:
+      return {
+        ...state,
+        isLoading: true,
+        loaded: false,
+        error: '',
+      };
+    case actionsTypes.LOADING_GROUP_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        loaded: true,
+        groupSchedule: action.payload.schedule
+      };
+    case actionsTypes.LOADING_GROUP_SCHEDULE_FAILED: 
+      return {
+        ...state,
+        isLoading: false,
+        loaded: false,
+        error: action.payload.error,
+      }
     case actionsTypes.CREATING_SCHEDULE_STARTED:
       return {
         ...state,
@@ -64,8 +85,8 @@ export function schedulesReducer(state = initialState, action) {
         ...state,
         isLoading: false,
         loaded: true,
-        data: state.data.map((schedule) => (schedule.id === action.payload.schedule.id
-          ? action.payload.schedule : schedule)),
+        data: [...state.data.map((schedule) => (schedule.id === action.payload.schedule.id
+          ? action.payload.schedule : schedule))],
       };
     case actionsTypes.EDITING_SCHEDULE_FAILED:
       return {
@@ -86,7 +107,7 @@ export function schedulesReducer(state = initialState, action) {
         ...state,
         isLoading: false,
         loaded: true,
-        data: action.payload.schedules,
+        data: [...state.data.filter((schedule) => schedule.id !== action.payload.schedule.id)]
       };
     case actionsTypes.DELETING_SCHEDULE_FAILED:
       return {
@@ -95,27 +116,6 @@ export function schedulesReducer(state = initialState, action) {
         loaded: false,
         error: action.payload.error,
       };
-    case actionsTypes.LOADING_GROUP_SCHEDULE_STARTED:
-      return {
-        ...state,
-        isLoading: true,
-        loaded: false,
-        error: '',
-      };
-    case actionsTypes.LOADING_GROUP_SCHEDULE_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        loaded: true,
-        groupSchedule: action.payload.schedule
-      };
-    case actionsTypes.LOADING_GROUP_SCHEDULE_FAILED: 
-      return {
-        ...state,
-        isLoading: false,
-        loaded: false,
-        error: action.payload.error,
-      }
     default: return state;
   }
 }

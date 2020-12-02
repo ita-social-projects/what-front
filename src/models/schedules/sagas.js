@@ -110,12 +110,7 @@ function* deleteScheduleWorker(data) {
   try {
     yield put({type: actionsTypes.DELETING_SCHEDULE_STARTED});
     const schedule = yield call(ApiService.remove, `/schedules/${data.payload.id}`);
-    const schedules = yield select(schedulesDataSelector);
-    const scheduleIndex = schedules.findIndex((item) => item.id === schedule.id);
-    if(scheduleIndex > -1) {
-      schedules.splice(scheduleIndex, 1);
-    }
-    yield put({type: actionsTypes.DELETING_SCHEDULE_SUCCESS, payload: {schedules}});
+    yield put({type: actionsTypes.DELETING_SCHEDULE_SUCCESS, payload: {schedule}});
   } catch (error) {
     yield put({type: actionsTypes.DELETING_SCHEDULE_FAILED, payload: {error: error.message}});
   }
