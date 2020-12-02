@@ -1,6 +1,5 @@
-import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects';
+import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import { ApiService } from '../api-service';
-import { themesDataSelector } from './selectors.js';
 import * as actionTypes from './types.js';
 
 export const getThemes = () => {
