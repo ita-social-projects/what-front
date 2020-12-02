@@ -4,7 +4,7 @@ import { CREATING_COURSE_FAILED, CREATING_COURSE_STARTED, CREATING_COURSE_SUCCES
 } from './types';
 
 const initialState = {
-  courses: null,
+  data: null,
   isLoading: false,
   loaded: false,
   error: '',
@@ -23,7 +23,7 @@ export const coursesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: true,
-        courses: action.payload.data,
+        data: action.payload.courses,
         error: '',
       };
     case LOADING_COURSES_FAILED:
@@ -44,7 +44,7 @@ export const coursesReducer = (state = initialState, action) => {
           ...state,
           isLoading: false,
           loaded: true,
-          courses: state.courses.concat([action.payload.course]),
+          data: state.data.concat([action.payload.course]),
           error: '',
         };
       case CREATING_COURSE_FAILED:
@@ -65,7 +65,7 @@ export const coursesReducer = (state = initialState, action) => {
           ...state,
           isLoading: false,
           loaded: true,
-          courses: action.payload.courses,
+          data: action.payload.courses,
           error: '',
         };
       case EDITING_COURSE_FAILED:
