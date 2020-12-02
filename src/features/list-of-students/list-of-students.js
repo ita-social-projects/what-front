@@ -26,17 +26,19 @@ export const ListOfStudents = () => {
   const studentEditing = (id) => {
   };
 
-  const studentsList = () => filteredStudentsList.map((student) => (
-    <Card
-      key={student.id}
-      id={student.id}
-      buttonName="Details"
-      iconName="Edit"
-      onEdit={studentEditing}
-      onDetails={studentDetails}
-    > <span>{student.name}</span>
-    </Card>
-  ));
+  const studentsList = () => {
+    return filteredStudentsList.map((student) => (
+      <Card
+        key={student.id}
+        id={student.id}
+        buttonName='Details'
+        iconName='Edit'
+        onEdit={studentEditing}
+        onDetails={studentDetails}
+        > <span>{student.name}</span>
+      </Card>
+    ));
+  };
 
   return (
     <div className="container">
