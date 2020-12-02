@@ -1,6 +1,5 @@
 import { ApiService } from '../api-service';
-import { all, fork, put, call, select, takeLatest } from 'redux-saga/effects';
-import { schedulesDataSelector } from './selectors.js';
+import { all, fork, put, call, takeLatest } from 'redux-saga/effects';
 import * as actionsTypes from './types.js';
 
 export const fetchSchedules = () => {
@@ -76,10 +75,10 @@ function* fetchSchedulesWorker() {
   }
 }
 
-function* fetchGroupScheduleWorker({id}) {
+function* fetchGroupScheduleWorker(data) {
   try {
     yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_STARTED});
-    const schedule = yield call(ApiService.load, `/schedules/${id}/groupSchedule`);
+    const schedule = yield call(ApiService.load, `/schedules/${data.payload.id}/groupSchedule`);
     yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_SUCCESS, payload: {schedule}});
   } catch (error) {
     yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_FAILED, payload: {error: error.message}});
