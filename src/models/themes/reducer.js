@@ -1,8 +1,4 @@
-import { CREATING_THEME_FAILED, CREATING_THEME_STARTED, CREATING_THEME_SUCCESS, 
-  DELETING_THEME_FAILED, DELETING_THEME_STARTED, DELETING_THEME_SUCCESS, 
-  EDITING_THEME_FAILED, EDITING_THEME_STARTED, EDITING_THEME_SUCCESS, 
-  LOADING_THEMES_FAILED, LOADING_THEMES_STARTED, LOADING_THEMES_SUCCESS 
-} from './types.js'
+import * as actionTypes from './types.js'
 
 const initialState = {
   data: null,
@@ -13,80 +9,81 @@ const initialState = {
 
 export function themesReducer(state = initialState, action) {
   switch (action.type) {
-  case LOADING_THEMES_STARTED:
+  case actionTypes.LOADING_THEMES_STARTED:
     return {
       ...state,
       isLoading: true,
       error: '',
     };
-  case LOADING_THEMES_SUCCESS: 
+  case actionTypes.LOADING_THEMES_SUCCESS: 
     return {
       ...state,
       isLoading: false,
       loaded: true,
       data: action.payload.themes,
     };
-  case LOADING_THEMES_FAILED:
+  case actionTypes.LOADING_THEMES_FAILED:
     return {
       ...state,
       isLoading: false,
       loaded: false,
       error: action.payload.error,
     };
-  case CREATING_THEME_STARTED:
+  case actionTypes.CREATING_THEME_STARTED:
     return {
       ...state,
       isLoading: true,
       error: '',
     };
-  case CREATING_THEME_SUCCESS: 
+  case actionTypes.CREATING_THEME_SUCCESS: 
     return {
       ...state,
       isLoading: false,
       loaded: true,
       data: state.data.concat([action.payload.theme])
     };
-  case CREATING_THEME_FAILED:
+  case actionTypes.CREATING_THEME_FAILED:
     return {
       ...state,
       isLoading: false,
       loaded: false,
       error: action.payload.error,
     };
-  case EDITING_THEME_STARTED: 
+  case actionTypes.EDITING_THEME_STARTED: 
     return {
       ...state,
       isLoading: true,
       error: '',
     };
-  case EDITING_THEME_SUCCESS:
+  case actionTypes.EDITING_THEME_SUCCESS:
     return {
       ...state,
       isLoading: false,
       loaded: true,
-      data: action.payload.themes,
+      data: state.data.map((theme) => (theme.id === action.payload.theme.id
+      ? action.payload.theme : theme)),
     };
-  case EDITING_THEME_FAILED:
+  case actionTypes.EDITING_THEME_FAILED:
     return {
       ...state,
       isLoading: false,
       loaded: false,
       error: action.payload.error,
     };
-  case DELETING_THEME_STARTED:
+  case actionTypes.DELETING_THEME_STARTED:
     return {
       ...state,
       isLoading: true,
       error: '',
     };
-  case DELETING_THEME_SUCCESS:
+  case actionTypes.DELETING_THEME_SUCCESS:
     return {
       ...state,
       isLoading: false,
       loaded: true,
-      data: action.payload.themes,
+      data: state.data.filter((theme) => theme.id !== action.payload.theme.id),
     };
-  case DELETING_THEME_FAILED:
+  case actionTypes.DELETING_THEME_FAILED:
     return {
       ...state,
       isLoading: false,
