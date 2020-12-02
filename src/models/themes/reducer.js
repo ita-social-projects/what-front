@@ -5,7 +5,7 @@ import { CREATING_THEME_FAILED, CREATING_THEME_STARTED, CREATING_THEME_SUCCESS,
 } from './types.js'
 
 const initialState = {
-  themes: null,
+  data: null,
   isLoading: false,
   loaded: false,
   error: '',
@@ -24,7 +24,7 @@ export function themesReducer(state = initialState, action) {
       ...state,
       isLoading: false,
       loaded: true,
-      themes: action.payload.themes,
+      data: action.payload.themes,
     };
   case LOADING_THEMES_FAILED:
     return {
@@ -44,7 +44,7 @@ export function themesReducer(state = initialState, action) {
       ...state,
       isLoading: false,
       loaded: true,
-      themes: state.themes.concat([action.payload.theme])
+      data: state.data.concat([action.payload.theme])
     };
   case CREATING_THEME_FAILED:
     return {
@@ -64,7 +64,7 @@ export function themesReducer(state = initialState, action) {
       ...state,
       isLoading: false,
       loaded: true,
-      themes: action.payload.themes,
+      data: action.payload.themes,
     };
   case EDITING_THEME_FAILED:
     return {
@@ -84,7 +84,7 @@ export function themesReducer(state = initialState, action) {
       ...state,
       isLoading: false,
       loaded: true,
-      themes: action.payload.themes,
+      data: action.payload.themes,
     };
   case DELETING_THEME_FAILED:
     return {
