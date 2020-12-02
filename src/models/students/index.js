@@ -1,3 +1,3 @@
 export { studentsReducer } from './reducer.js';
-export { loadStudents } from './actions.js';
-export { watchLoadingStudents } from './sagas.js';
+export * from './actions.js';
+export * from './selectors.js';
