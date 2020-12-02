@@ -76,10 +76,10 @@ function* fetchSchedulesWorker() {
   }
 }
 
-function* fetchGroupScheduleWorker(data) {
+function* fetchGroupScheduleWorker({id}) {
   try {
     yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_STARTED});
-    const schedule = yield call(ApiService.load, `/schedules/${data.payload.id}/groupSchedule`);
+    const schedule = yield call(ApiService.load, `/schedules/${id}/groupSchedule`);
     yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_SUCCESS, payload: {schedule}});
   } catch (error) {
     yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_FAILED, payload: {error: error.message}});

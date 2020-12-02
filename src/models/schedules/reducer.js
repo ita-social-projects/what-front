@@ -85,8 +85,8 @@ export function schedulesReducer(state = initialState, action) {
         ...state,
         isLoading: false,
         loaded: true,
-        data: [...state.data.map((schedule) => (schedule.id === action.payload.schedule.id
-          ? action.payload.schedule : schedule))],
+        data: state.data.map((schedule) => (schedule.id === action.payload.schedule.id
+          ? action.payload.schedule : schedule)),
       };
     case actionsTypes.EDITING_SCHEDULE_FAILED:
       return {
@@ -107,7 +107,7 @@ export function schedulesReducer(state = initialState, action) {
         ...state,
         isLoading: false,
         loaded: true,
-        data: [...state.data.filter((schedule) => schedule.id !== action.payload.schedule.id)]
+        data: state.data.filter((schedule) => schedule.id !== action.payload.schedule.id),
       };
     case actionsTypes.DELETING_SCHEDULE_FAILED:
       return {
