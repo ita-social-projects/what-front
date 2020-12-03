@@ -63,7 +63,7 @@ export const secretariesReducer = (state = initialState, action) => {
         isLoading: false,
         loaded: true,
         data: state.data.map((secretary) => (
-          secretary.id === action.payload.id ? action.payload.updataData : secretary
+          secretary.id === action.payload.updatedData.id ? action.payload.updatedData : secretary
         )),
         error: '',
       };
@@ -85,7 +85,7 @@ export const secretariesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: true,
-        data: state.filter((secretary) => secretary.id !== action.payload.id),
+        data: state.data.filter((secretary) => secretary.id !== action.payload.secretaryId),
         erroe: '',
       };
     case actions.SECRETARY_DELETING_FAILED:

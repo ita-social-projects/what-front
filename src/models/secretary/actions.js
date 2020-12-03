@@ -1,5 +1,5 @@
 import {
-  all, fork, call, put, takeLatest,
+  all, fork, call, put, takeLatest, takeEvery,
 } from 'redux-saga/effects';
 import { ApiService } from '../api-service/api-service.js';
 import * as actions from './action-types.js';
@@ -66,20 +66,20 @@ function* deleteSecretaryWorker({ payload }) {
   }
 }
 
-function* createSecretaryWatcher() {
-  yield takeLatest(CREATE_SECRETARY, createSecretaryWorker);
-}
-
 function* fetchSecretariesWatcher() {
   yield takeLatest(FETCH_SECRETARIES, fetchSecretaryWorker);
 }
 
+function* createSecretaryWatcher() {
+  yield takeEvery(CREATE_SECRETARY, createSecretaryWorker);
+}
+
 function* updateSecretaryWatcher() {
-  yield takeLatest(UPDATE_SECRETARY, updateSecretaryWorker);
+  yield takeEvery(UPDATE_SECRETARY, updateSecretaryWorker);
 }
 
 function* deleteSecretaryWatcher() {
-  yield takeLatest(DELETE_SECRETARY, deleteSecretaryWorker);
+  yield takeEvery(DELETE_SECRETARY, deleteSecretaryWorker);
 }
 
 export function* secretariesWatcher() {
