@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
+import { all, call, fork, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import { ApiService } from '../api-service';
 import * as actionTypes from './types.js';
 
@@ -36,20 +36,20 @@ export const deleteTheme = (id) => {
   };
 };
 
-export function* loadThemesWatcher() {
+function* loadThemesWatcher() {
   yield takeLatest(actionTypes.FETCH_THEMES, loadThemesWorker);
 }
 
-export function* createThemeWatcher() {
-  yield takeLatest(actionTypes.CREATE_THEME, createThemeWorker);
+function* createThemeWatcher() {
+  yield takeEvery(actionTypes.CREATE_THEME, createThemeWorker);
 }
 
-export function* editThemeWatcher() {
-  yield takeLatest(actionTypes.EDIT_THEME, editThemeWorker);
+function* editThemeWatcher() {
+  yield takeEvery(actionTypes.EDIT_THEME, editThemeWorker);
 }
 
-export function* deleteThemeWatcher() {
-  yield takeLatest(actionTypes.DELETE_THEME, deleteThemeWorker);
+function* deleteThemeWatcher() {
+  yield takeEvery(actionTypes.DELETE_THEME, deleteThemeWorker);
 }
 
 function* loadThemesWorker() {
