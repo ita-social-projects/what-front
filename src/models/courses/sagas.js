@@ -32,11 +32,11 @@ export function* loadCoursesWatcher() {
 }
 
 export function* createCourseWatcher() {
-  yield takeLatest(actionTypes.CREATE_COURSE, createCourseWorker);
+  yield takeEvery(actionTypes.CREATE_COURSE, createCourseWorker);
 }
 
 export function* editCourseWatcher() {
-  yield takeLatest(actionTypes.EDIT_COURSE, editCourseWorker);
+  yield takeEvery(actionTypes.EDIT_COURSE, editCourseWorker);
 }
 
 function* loadCoursesWorker() {
