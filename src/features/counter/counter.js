@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
-
 import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
 import { useActions } from '../../shared/hooks/index.js';
 import { ModalWindow } from '../modal-window/index.js';
@@ -24,7 +23,7 @@ export const Counter = () => {
   const handleSearch = (inputValue) => {
     console.log(`Search value = ${inputValue}`);
   };
-
+  
   return (
     <WithLoading isLoading={isLoading}>
       <div>

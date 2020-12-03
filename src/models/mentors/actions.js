@@ -26,7 +26,7 @@ export const deleteMentor = (id) => ({
 
 function* fetchAsyncMentors() {
   try {
-    yield put({ type: types.LOADING_SUCCESS });
+    yield put({ type: types.LOADING_STARTED });
     const mentors = yield call(ApiService.load, '/mentors');
     yield put({ type: types.FETCHING_MENTORS_SUCCESS, payload: { mentors } });
   } catch (error) {
@@ -36,7 +36,7 @@ function* fetchAsyncMentors() {
 
 function* addAsyncMentor({ payload }) {
   try {
-    yield put({ type: types.LOADING_SUCCESS });
+    yield put({ type: types.LOADING_STARTED });
     const uuid = payload.id;
     const mentor = yield call(ApiService.create, `/mentors/${uuid}`);
     yield put({ type: types.ADDING_MENTOR_SUCCESS, payload: { mentor } });
@@ -47,7 +47,7 @@ function* addAsyncMentor({ payload }) {
 
 function* editAsyncMentor({ payload }) {
   try {
-    yield put({ type: types.LOADING_SUCCESS });
+    yield put({ type: types.LOADING_STARTED });
     const mentorId = payload.id;
     const newMentor = payload.data;
     const mentor = yield call(ApiService.update, `/mentors/${mentorId}`, newMentor);
@@ -59,7 +59,7 @@ function* editAsyncMentor({ payload }) {
 
 function* deleteAsyncMentor({ payload }) {
   try {
-    yield put({ type: types.LOADING_SUCCESS });
+    yield put({ type: types.LOADING_STARTED });
     const mentorId = payload.id;
     yield call(ApiService.remove, `/mentors/${mentorId}`);
     yield put({ type: types.DELETING_MENTOR_SUCCESS, payload: { id: mentorId } });

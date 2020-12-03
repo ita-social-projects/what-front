@@ -10,7 +10,7 @@ const initialState = {
 
 export const mentorsModelReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.LOADING_SUCCESS:
+    case types.LOADING_STARTED:
       return {
         ...state,
         isLoading: true,
@@ -29,7 +29,7 @@ export const mentorsModelReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        error: action.payload.data,
+        mentors: action.payload.data,
       };
     case types.ADDING_MENTOR_SUCCESS:
       return {
