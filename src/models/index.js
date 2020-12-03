@@ -5,5 +5,5 @@ export {
 export {
   lessonsReducer, fetchLessons, fetchStudentLessons, editLesson, addLesson,
   lessonsWatcher,
-  dataIsLoadingSelector, lessonsListSelector, studentLessonsSelector,
+  dataIsLoadingSelector, lessonsListSelector, studentLessonsSelector, dataIsLoadedSelector, errorsSelector,
 } from './lessons/index.js';
