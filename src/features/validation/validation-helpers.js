@@ -33,3 +33,24 @@ export const validateConfirmPassword = (pass, value) => {
   }
   return error;
 };
+
+export const validateGroupName = (value) => {
+  let error;
+  const groupName = /^[a-zA-Z]+(?:\s*[a-zA-Z0-9-_\.]){1,20}$/;
+  if(!value) {
+    error = 'This field is required';
+  } else if(!groupName.test(value)) {
+    error = 'Invalid group name';
+  }
+  return error;
+}
+
+export const validateDate = (start, finish) => {
+  let error;
+  const startDate = Date.parse(start);
+  const finishDate = Date.parse(finish);
+  if(finishDate < startDate || finishDate === startDate) {
+    error = 'Invalid date';
+  }
+  return error;
+}

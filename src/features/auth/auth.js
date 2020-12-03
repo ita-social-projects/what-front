@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './auth.module.scss';
+import styles from './auth.scss';
 
 export const Auth = () => (
   <div className={styles.wrapper}>
@@ -16,7 +16,7 @@ export const Auth = () => (
               </div>
               <button type="submit" className="btn btn-block btn-warning">Sign in</button>
               <div className="text-center mt-3">
-                <p>Don&apos;t have an account? <a href="/" className={styles.link}>Registration</a></p>
+                <p>Don't have an account? <a href="#" className={styles.link}>Registration</a></p>
               </div>
             </form>
           </div>

@@ -14,10 +14,9 @@ export function useActions(actions, deps) {
 
       if (Object.prototype.toString.apply(actions) === '[object Object]') {
         return Object.entries(actions).reduce((bindActions, [actionName, action]) => {
-          const bindActionsCopy = { ...bindActions };
-          bindActionsCopy[actionName] = bindActionCreators(action, dispatch);
+          bindActions[actionName] = bindActionCreators(action, dispatch);
 
-          return bindActionsCopy;
+          return bindActions;
         }, {});
       }
 

@@ -1,5 +1,4 @@
-import * as counterActions from './actions.js';
-
-export { counterActions };
 export { counterReducer } from './reducer.js';
-export { counterSelector } from './selectors.js';
+export * as counterActions from './actions';
+export { counterSelector, counterIsLoadingSelector } from './selectors.js';
+export { watchFetchCounter } from './sagas.js';
