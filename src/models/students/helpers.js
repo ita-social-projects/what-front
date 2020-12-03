@@ -1,13 +1,8 @@
 export function updateStudentsData(students, newStudentData) {
-  if (!students) {
-    return null;
-  }
+  // eslint-disable-next-line max-len
   return students.map((student) => (student.id === newStudentData.id ? { ...student, ...newStudentData } : student));
 }
 
 export function removeStudentFromList(students, removableId) {
-  if (!students) {
-    return null;
-  }
   return students.filter((student) => student.id !== removableId);
 }
