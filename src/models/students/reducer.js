@@ -2,10 +2,10 @@ import * as actionTypes from './action-types.js';
 import { updateStudentsData, removeStudentFromList } from './helpers.js';
 
 const INITIAL_STATE = {
-  allStudents: null,
+  allStudents: [],
   currentStudent: null,
-  activeStudents: null,
-  currentStudentGroups: null,
+  activeStudents: [],
+  currentStudentGroups: [],
   isLoading: false,
   isLoaded: false,
   error: '',
