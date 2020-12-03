@@ -2,7 +2,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 
 import * as actions from './action-types.js';
 import { counterFetchingStart, counterFetchingEnd, counterFetchFailed } from './actions.js';
-import { fetchCounter } from './heplers.js';
+import { fetchCounter } from './helpers.js';
 
 function* fetchCounterAsync() {
   try {
