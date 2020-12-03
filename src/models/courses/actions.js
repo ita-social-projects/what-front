@@ -2,7 +2,7 @@ import { all, fork, put, call, takeLatest, takeEvery } from 'redux-saga/effects'
 import { ApiService } from '../api-service';
 import * as actionTypes from './types';
 
-export const getCourses = () => {
+export const fetchCourses = () => {
   return {
     type: actionTypes.FETCH_COURSES,
   };
@@ -27,7 +27,7 @@ export const editCourse = (course, id) => {
   };
 };
 
-function* loadCoursesWatcher() {
+function* fetchCoursesWatcher() {
   yield takeLatest(actionTypes.FETCH_COURSES, loadCoursesWorker);
 }
 
@@ -71,7 +71,7 @@ function* editCourseWorker(data) {
 
 export function* coursesWatcher() {
   yield all([
-    fork(loadCoursesWatcher),
+    fork(fetchCoursesWatcher),
     fork(createCourseWatcher),
     fork(editCourseWatcher),
   ]);
