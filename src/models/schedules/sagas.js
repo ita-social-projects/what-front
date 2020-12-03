@@ -1,5 +1,5 @@
 import { ApiService } from '../api-service';
-import { all, fork, put, call, takeLatest } from 'redux-saga/effects';
+import { all, fork, put, call, takeLatest, takeEvery } from 'redux-saga/effects';
 import * as actionsTypes from './types.js';
 
 export const fetchSchedules = () => {
@@ -45,24 +45,24 @@ export const deleteSchedule = (id) => {
   };
 };
 
-export function* fetchSchedulesWatcher() {
+function* fetchSchedulesWatcher() {
   yield takeLatest(actionsTypes.FETCH_SCHEDULES, fetchSchedulesWorker);
 }
 
-export function* fetchGroupScheduleWatcher() {
+function* fetchGroupScheduleWatcher() {
   yield takeLatest(actionsTypes.FETCH_GROUP_SCHEDULE, fetchGroupScheduleWorker);
 }
 
-export function* createScheduleWatcher() {
-  yield takeLatest(actionsTypes.CREATE_SCHEDULE, createScheduleWorker);
+function* createScheduleWatcher() {
+  yield takeEvery(actionsTypes.CREATE_SCHEDULE, createScheduleWorker);
 }
 
-export function* editScheduleWatcher() {
-  yield takeLatest(actionsTypes.EDIT_SCHEDULE, editScheduleWorker);
+function* editScheduleWatcher() {
+  yield takeEvery(actionsTypes.EDIT_SCHEDULE, editScheduleWorker);
 }
 
-export function* deleteScheduleWatcher() {
-  yield takeLatest(actionsTypes.DELETE_SCHEDULE, deleteScheduleWorker);
+function* deleteScheduleWatcher() {
+  yield takeEvery(actionsTypes.DELETE_SCHEDULE, deleteScheduleWorker);
 }
 
 function* fetchSchedulesWorker() {
