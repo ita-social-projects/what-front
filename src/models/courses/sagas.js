@@ -27,15 +27,15 @@ export const editCourse = (course, id) => {
   };
 };
 
-export function* loadCoursesWatcher() {
+function* loadCoursesWatcher() {
   yield takeLatest(actionTypes.FETCH_COURSES, loadCoursesWorker);
 }
 
-export function* createCourseWatcher() {
+function* createCourseWatcher() {
   yield takeEvery(actionTypes.CREATE_COURSE, createCourseWorker);
 }
 
-export function* editCourseWatcher() {
+function* editCourseWatcher() {
   yield takeEvery(actionTypes.EDIT_COURSE, editCourseWorker);
 }
 
