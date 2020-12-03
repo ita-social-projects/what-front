@@ -23,8 +23,8 @@ export const AddLesson = () => {
     
     return (
         <div className={ classNames( styles.page, 'container')}>
-            <div className="row">
                 <form id='form' className={styles.size}>
+                  <div className="row">
                     <div className="col-lg-6">
                         <h3>Lesson starting</h3>
                         <hr />
@@ -75,8 +75,8 @@ export const AddLesson = () => {
                             </tbody>
                         </table>
                     </div>
+                  </div>
                 </form>
-            </div>
             <div className={styles.placement}>
                 <button form="form" type="button" className="btn btn-secondary btn-lg">Cancel</button>
                 <button form="form" type="button" className="btn btn-success btn-lg">Save</button>
