@@ -1,5 +1,5 @@
 import {
-  put, call, takeLatest, fork, all,
+  put, call, takeLatest, fork, all, takeEvery,
 } from 'redux-saga/effects';
 import * as actionsTypes from './action-types.js';
 
@@ -25,7 +25,7 @@ function* fetchLessonsAsync() {
     yield put({
       type: actionsTypes.LOADING_LESSONS_FAILED,
       payload: {
-        error,
+        error: error.message,
       },
     });
   }
@@ -58,7 +58,7 @@ function* fetchStudentLessonsAsync(lessonData) {
     yield put({
       type: actionsTypes.LOADING_STUDENT_LESSONS_FAILED,
       payload: {
-        error,
+        error: error.message,
       },
     });
   }
@@ -91,47 +91,14 @@ function* addLessonAsync(lessonData) {
     yield put({
       type: actionsTypes.ADDING_FAILED,
       payload: {
-        error,
+        error: error.message,
       },
     });
   }
 }
 
 export function* addLessonWatcher() {
-  yield takeLatest(actionsTypes.ADD_LESSON, addLessonAsync);
-}
-
-export const assignLesson = (data) => ({
-  type: actionsTypes.ASSIGN_LESSON,
-  payload: {
-    data,
-  },
-});
-
-function* assignLessonAsync(assignData) {
-  try {
-    yield put({ type: actionsTypes.ADDING_STARTED });
-
-    const data = yield call(ApiService.create, '/lessons/assign', assignData.payload.data);
-
-    yield put({
-      type: actionsTypes.ASSIGN_FINISHED,
-      payload: {
-        data,
-      },
-    });
-  } catch (error) {
-    yield put({
-      type: actionsTypes.ASSIGN_FAILED,
-      payload: {
-        error,
-      },
-    });
-  }
-}
-
-export function* assignLessonWatcher() {
-  yield takeLatest(actionsTypes.ASSIGN_LESSON, assignLessonAsync);
+  yield takeEvery(actionsTypes.ADD_LESSON, addLessonAsync);
 }
 
 export const editLesson = (data, id) => ({
@@ -158,14 +125,14 @@ function* editLessonAsync(editData) {
     yield put({
       type: actionsTypes.EDITING_FAILED,
       payload: {
-        error,
+        error: error.message,
       },
     });
   }
 }
 
 export function* editLessonWatcher() {
-  yield takeLatest(actionsTypes.EDIT_LESSON, editLessonAsync);
+  yield takeEvery(actionsTypes.EDIT_LESSON, editLessonAsync);
 }
 
 export function* lessonsWatcher() {
@@ -173,7 +140,6 @@ export function* lessonsWatcher() {
     fork(fetchLessonsWatcher),
     fork(fetchStudentLessonsWatcher),
     fork(addLessonWatcher),
-    fork(assignLessonWatcher),
     fork(editLessonWatcher),
   ]);
 }

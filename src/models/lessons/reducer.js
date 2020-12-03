@@ -1,7 +1,7 @@
 import * as actionsTypes from './action-types.js';
 
 const INITIAL_STATE = {
-  data: null,
+  data: [],
   isLoading: false,
   loaded: false,
   error: '',
@@ -67,29 +67,6 @@ export const lessonsReducer = (state = INITIAL_STATE, action) => {
         error: '',
       };
     case actionsTypes.ADDING_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        loaded: false,
-        error: action.payload.error,
-      };
-    case actionsTypes.ASSIGN_STARTED:
-      return {
-        ...state,
-        isLoading: true,
-        error: '',
-      };
-    case actionsTypes.ASSIGN_FINISHED:
-      return {
-        ...state,
-        isLoading: false,
-        loaded: true,
-        data: state.data.map((lesson) => (lesson.id === action.payload.data.id
-          ? action.payload.data
-          : lesson)),
-        error: '',
-      };
-    case actionsTypes.ASSIGN_FAILED:
       return {
         ...state,
         isLoading: false,

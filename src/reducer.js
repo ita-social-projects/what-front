@@ -9,6 +9,6 @@ export const rootReducer = combineReducers({
   }),
   models: combineReducers({
     mentors: mentorsReducer,
-    lessons: lessonsReducer
+    lessons: lessonsReducer,
   }),
 });
