@@ -1,8 +1,8 @@
 import * as actionsTypes from './types.js'
 
 const initialState = {
-  data: null,
-  groupSchedule: null,
+  data: [],
+  groupSchedule: [],
   isLoading: false,
   loaded: false,
   error: '',
