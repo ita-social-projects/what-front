@@ -2,10 +2,10 @@ import * as actionTypes from './action-types.js';
 import { updateStudentsData, removeStudentFromList } from './helpers.js';
 
 const INITIAL_STATE = {
-  allStudents: null,
+  allStudents: [],
   currentStudent: null,
-  activeStudents: null,
-  currentStudentGroups: null,
+  activeStudents: [],
+  currentStudentGroups: [],
   isLoading: false,
   isLoaded: false,
   error: '',
@@ -66,10 +66,8 @@ export const studentsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        allStudents: state.allStudents ? [...state.allStudents, action.payload.data] : null,
-        activeStudents: state.activeStudents
-          ? [...state.activeStudents, action.payload.data]
-          : null,
+        allStudents: [...state.allStudents, action.payload.data],
+        activeStudents: [...state.activeStudents, action.payload.data],
       };
 
     case actionTypes.EDITING_STUDENT_SUCCEED:
