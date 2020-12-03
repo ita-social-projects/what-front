@@ -11,7 +11,7 @@ const initialState = {
   error: '',
 };
 
-export function authReducer(state=initialState, action){
+export function authReducer(state=initialState, action) {
   switch (action.type) {
     case actionTypes.LOGIN_REQUESTING:
       return {
@@ -25,13 +25,13 @@ export function authReducer(state=initialState, action){
         isLoading: true,
         error: '',
       };
-    case actionTypes.LOGIN_SUCCESS: 
-    return {
-      ...state,
-      isLoading: false,
-      loaded: true,
-      currentUser: action.payload.logUser,
-    };
+    case actionTypes.LOGIN_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        loaded: true,
+        currentUser: action.payload.logUser,
+      };
     case actionTypes.LOGIN_ERROR:
       return {
         ...state,
@@ -39,7 +39,6 @@ export function authReducer(state=initialState, action){
         loaded: false,
         error: action.payload.error,
       };
-
 
     case actionTypes.REGIST_REQUSTING:
       return {
@@ -54,13 +53,13 @@ export function authReducer(state=initialState, action){
         isLoading: true,
         error: '',
       };
-      
-    case actionTypes.REGIST_SUCCESS: 
+
+    case actionTypes.REGIST_SUCCESS:
       return {
         ...state,
         isLoading: false,
         loaded: true,
-        users:   state.users.concat([action.payload.regUser]),
+        users: state.users.concat([action.payload.regUser]),
       };
     case actionTypes.REGIST_ERROR:
       return {
@@ -70,15 +69,14 @@ export function authReducer(state=initialState, action){
         error: action.payload.error,
       };
 
-
     case actionTypes.FETCH_ASSIGNED:
       return {
         ...state,
         isLoading: true,
         error: '',
       };
-        
-    case actionTypes.FETCH_ASSIGNED_SUCCESS: 
+
+    case actionTypes.FETCH_ASSIGNED_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -99,9 +97,7 @@ export function authReducer(state=initialState, action){
         error: '',
       };
 
-      //UNASSIGNED
-          
-    case actionTypes.FETCH_UNASSIGNED_SUCCESS: 
+    case actionTypes.FETCH_UNASSIGNED_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -117,12 +113,10 @@ export function authReducer(state=initialState, action){
       };
 
     case actionTypes.CLEAR_USER:
-      return{
+      return {
         ...state,
         currentUser: null,
       };
-    default: return state
+    default: return state;
   }
 }
-
-
