@@ -1,7 +1,7 @@
 import * as actions from './action-types.js';
 
 const initialState = {
-  secretaries: null,
+  data: null,
   isLoading: false,
   loaded: false,
   error: '',
@@ -9,27 +9,6 @@ const initialState = {
 
 export const secretariesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actions.SECRETARY_CREATING_STARTED:
-      return {
-        ...state,
-        isLoading: true,
-        error: '',
-      };
-    case actions.SECRETARY_CREATING_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        loaded: true,
-        secretaries: [...state.secretaries, action.payload.data],
-        error: '',
-      };
-    case actions.SECRETARY_CREATING_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        loaded: false,
-        error: action.payload.error,
-      };
     case actions.SECRETARIES_LOADING_STARTED:
       return {
         ...state,
@@ -41,7 +20,7 @@ export const secretariesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: true,
-        secretaries: action.payload.data,
+        data: action.payload.secretaries,
         error: '',
       };
     case actions.SECRETARIES_LOADING_FAILED:
@@ -49,7 +28,28 @@ export const secretariesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: false,
-        error: action.payload.error,
+        error: action.payload.error.message,
+      };
+    case actions.SECRETARY_CREATING_STARTED:
+      return {
+        ...state,
+        isLoading: true,
+        error: '',
+      };
+    case actions.SECRETARY_CREATING_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        loaded: true,
+        data: [...state.data, action.payload.newSecretary],
+        error: '',
+      };
+    case actions.SECRETARY_CREATING_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        loaded: false,
+        error: action.payload.error.message,
       };
     case actions.SECRETARY_UPDATING_STARTED:
       return {
@@ -62,10 +62,9 @@ export const secretariesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: true,
-        secretaries: action.payload.newData,
-        // secretaries: state.secretaries.slice(0, action.payload.id)
-        //   .concat(...action.payload.newData)
-        //   .concat(state.secretaries.slice(action.payload.id + 1)),
+        data: state.data.map((secretary) => (
+          secretary.id === action.payload.id ? action.payload.updataData : secretary
+        )),
         error: '',
       };
     case actions.SECRETARY_UPDATING_FAILED:
@@ -73,7 +72,7 @@ export const secretariesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: false,
-        error: action.payload.error,
+        error: action.payload.error.message,
       };
     case actions.SECRETARY_DELETING_STARTED:
       return {
@@ -86,7 +85,7 @@ export const secretariesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: true,
-        secretaries: state.filter((secretary) => secretary.id !== action.payload.id),
+        data: state.filter((secretary) => secretary.id !== action.payload.id),
         erroe: '',
       };
     case actions.SECRETARY_DELETING_FAILED:
@@ -94,7 +93,7 @@ export const secretariesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: false,
-        error: action.payload.error,
+        error: action.payload.error.message,
       };
     default:
       return state;
