@@ -1,9 +1,8 @@
 import {
   put, call, takeLatest, fork, all, takeEvery,
 } from 'redux-saga/effects';
+import { ApiService } from '../../shared/index.js';
 import * as actionsTypes from './action-types.js';
-
-import { ApiService } from '../index.js';
 
 export const fetchLessons = () => ({
   type: actionsTypes.FETCH_LESSONS,
