@@ -9,18 +9,17 @@ import {
 } from '../../components/index.js';
 import Icon from '../../icon.js';
 import {
-  loadStudents, studentsSelector, studentIsLoadingSelector,
+  loadActiveStudents, activeStudentsSelector,
 } from '../../models/index.js';
 import styles from './list-of-students.scss';
 
 export const ListOfStudents = () => {
-  const [fetchStudents] = useActions([loadStudents]);
+  const [fetchStudents] = useActions([loadActiveStudents]);
 
   const [filteredStudentsList, setFilteredStudentsList] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
-  const studentsData = useSelector(studentsSelector, shallowEqual);
-  const isLoading = useSelector(studentIsLoadingSelector, shallowEqual);
+  const { data, isLoading } = useSelector(activeStudentsSelector, shallowEqual);
 
   const history = useHistory();
 
@@ -29,12 +28,12 @@ export const ListOfStudents = () => {
   }, [fetchStudents]);
 
   useEffect(() => {
-    setFilteredStudentsList(studentsData);
-  }, [studentsData]);
+    setFilteredStudentsList(data);
+  }, [data]);
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
-    setFilteredStudentsList(studentsData.filter(({ firstName, lastName }) => {
+    setFilteredStudentsList(data.filter(({ firstName, lastName }) => {
       const name = `${firstName} ${lastName}`;
 
       return name.toLowerCase().includes(inputValue.toLowerCase());
@@ -54,7 +53,7 @@ export const ListOfStudents = () => {
   };
 
   const getStudents = () => {
-    const data = filteredStudentsList.map(({ id, firstName, lastName }) => (
+    const students = filteredStudentsList.map(({ id, firstName, lastName }) => (
       <Card
         key={id}
         id={id}
@@ -67,11 +66,11 @@ export const ListOfStudents = () => {
       </Card>
     ));
 
-    if (!data.length && searchValue) {
+    if (!students.length && searchValue) {
       return <h4>Student not found</h4>;
     }
 
-    return data;
+    return students;
   };
 
   return (
