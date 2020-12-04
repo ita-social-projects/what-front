@@ -1,3 +1,5 @@
 export { studentsReducer } from './reducer.js';
 export * from './actions.js';
-export * from './selectors.js';
+export {
+  studentsSelector, activeStudentsSelector, currentStudentGroupsSelector, currentStudentSelector,
+} from './selectors.js';

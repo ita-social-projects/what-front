@@ -2,7 +2,7 @@ import {
   call, put, takeLatest, all, fork, takeEvery,
 } from 'redux-saga/effects';
 
-import { ApiService } from '../api-service/index.js';
+import { ApiService } from '../../shared/api-service/index.js';
 import * as actionTypes from './action-types.js';
 
 export const loadStudents = () => ({
@@ -40,70 +40,70 @@ export const removeStudent = (id) => ({
 
 function* loadStudentsAsync() {
   try {
-    yield put({ type: actionTypes.LOADING_STARTED });
+    yield put({ type: actionTypes.LOADING_STUDENTS_STARTED });
 
     const data = yield call(ApiService.load, '/students');
 
     yield put({ type: actionTypes.LOADING_STUDENTS_SUCCEED, payload: { data } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_FAILED, payload: { error } });
+    yield put({ type: actionTypes.LOADING_STUDENTS_FAILED, payload: { error } });
   }
 }
 
 function* loadStudentByIdAsync({ payload }) {
   try {
-    yield put({ type: actionTypes.LOADING_STARTED });
+    yield put({ type: actionTypes.LOADING_BY_ID_STARTED });
 
     const studentId = payload.id;
     const data = yield call(ApiService.load, `/students/${studentId}`);
 
     yield put({ type: actionTypes.LOADING_BY_ID_SUCCEED, payload: { data } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_FAILED, payload: { error } });
+    yield put({ type: actionTypes.LOADING_BY_ID_FAILED, payload: { error } });
   }
 }
 
 function* loadActiveStudentsAsync() {
   try {
-    yield put({ type: actionTypes.LOADING_STARTED });
+    yield put({ type: actionTypes.LOADING_ACTIVE_STARTED });
 
     const data = yield call(ApiService.load, '/students/active');
 
     yield put({ type: actionTypes.LOADING_ACTIVE_SUCCEED, payload: { data } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_FAILED, payload: { error } });
+    yield put({ type: actionTypes.LOADING_ACTIVE_SUCCEED, payload: { error } });
   }
 }
 
 function* loadStudentGroupsAsync({ payload }) {
   try {
-    yield put({ type: actionTypes.LOADING_STARTED });
+    yield put({ type: actionTypes.LOADING_STUDENT_GROUPS_STARTED });
 
     const studentId = payload.id;
     const data = yield call(ApiService.load, `/students/${studentId}/groups`);
 
     yield put({ type: actionTypes.LOADING_STUDENT_GROUPS_SUCCEED, payload: { data } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_FAILED, payload: { error } });
+    yield put({ type: actionTypes.LOADING_STUDENT_GROUPS_FAILED, payload: { error } });
   }
 }
 
 function* addStudentAsync({ payload }) {
   try {
-    yield put({ type: actionTypes.LOADING_STARTED });
+    yield put({ type: actionTypes.ADDING_STUDENT_STARTED });
 
     const userId = payload.id;
     const data = yield call(ApiService.create, `/students/${userId}`);
 
     yield put({ type: actionTypes.ADDING_STUDENT_SUCCEED, payload: { data } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_FAILED, payload: { error } });
+    yield put({ type: actionTypes.ADDING_STUDENT_SUCCEED, payload: { error } });
   }
 }
 
 function* editStudentAsync({ payload }) {
   try {
-    yield put({ type: actionTypes.LOADING_STARTED });
+    yield put({ type: actionTypes.EDITING_STUDENT_STARTED });
 
     const studentId = payload.id;
     const newStudentData = payload.data;
@@ -111,13 +111,13 @@ function* editStudentAsync({ payload }) {
 
     yield put({ type: actionTypes.EDITING_STUDENT_SUCCEED, payload: { data } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_FAILED, payload: { error } });
+    yield put({ type: actionTypes.EDITING_STUDENT_FAILED, payload: { error } });
   }
 }
 
 function* removeStudentAsync({ payload }) {
   try {
-    yield put({ type: actionTypes.LOADING_STARTED });
+    yield put({ type: actionTypes.REMOVING_STUDENT_STARTED });
 
     const studentId = payload.id;
 
@@ -125,7 +125,7 @@ function* removeStudentAsync({ payload }) {
 
     yield put({ type: actionTypes.REMOVING_STUDENT_SUCCEED, payload: { id: studentId } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_FAILED, payload: { error } });
+    yield put({ type: actionTypes.REMOVING_STUDENT_FAILED, payload: { error } });
   }
 }
 
