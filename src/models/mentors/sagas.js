@@ -1,6 +1,6 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 
-import { ApiService } from '../index.js';
+import { ApiService } from '../../shared/index.js';
 import * as actionTypes from './action-types.js';
 import {
   loadingMentorsFailed,

@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
 import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
-import { useActions } from '../../shared/hooks/index.js';
+import { useActions, ApiService } from '../../shared/index.js';
 import { ModalWindow } from '../modal-window/index.js';
-import { loadStudents, ApiService } from '../../models/index.js';
+import { loadStudents } from '../../models/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
   const isLoading = useSelector(counterIsLoadingSelector, shallowEqual);
   const { incrementCounter, decrementCounter, fetchCounter } = useActions(counterActions);
-  const [fetchStudents] = useActions([loadStudents]);
+  const fetchStudents = useActions(loadStudents);
   const [toShowModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
