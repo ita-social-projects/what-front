@@ -1,8 +1,8 @@
 import { all, call, fork, put, takeLatest, takeEvery } from 'redux-saga/effects';
-import { ApiService } from '../api-service';
+import { ApiService } from '../../shared/api-service';
 import * as actionTypes from './types.js';
 
-export const getThemes = () => {
+export const fetchThemes = () => {
   return {
     type: actionTypes.FETCH_THEMES,
   };
