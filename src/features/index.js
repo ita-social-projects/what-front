@@ -14,4 +14,5 @@ export * from './list-of-lessons';
 export * from './list-of-courses';
 export * from './schedule-student';
 export * from './list-of-secretaries';
+export * from './edit-secretarys-details';
 export * from './not-found';
