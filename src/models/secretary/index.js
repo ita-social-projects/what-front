@@ -1,3 +1,5 @@
 export { secretariesReducer } from './reducer.js';
-export * from './actions.js';
-export * from './selectors';
+export {
+  fetchSecretaries, createSecretary, updateSecretary, deleteSecretary, secretariesWatcher,
+} from './actions.js';
+export { secretariesSelector, secretariesIsLoading, secretariesLoaded } from './selectors.js';

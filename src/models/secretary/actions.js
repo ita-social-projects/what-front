@@ -1,7 +1,7 @@
 import {
   all, fork, call, put, takeLatest, takeEvery,
 } from 'redux-saga/effects';
-import { ApiService } from '../api-service/api-service.js';
+import { ApiService } from '../../shared/api-service/api-service.js';
 import * as actions from './action-types.js';
 import {
   CREATE_SECRETARY, DELETE_SECRETARY, FETCH_SECRETARIES, UPDATE_SECRETARY,

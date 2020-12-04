@@ -1,7 +1,7 @@
 import * as actions from './action-types.js';
 
 const initialState = {
-  data: null,
+  data: [],
   isLoading: false,
   loaded: false,
   error: '',
