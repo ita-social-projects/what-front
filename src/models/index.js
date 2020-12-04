@@ -1,4 +1,4 @@
-export { ApiService } from './api-service/index.js';
+export { ApiService } from '../shared/api-service/index.js';
 export { 
     coursesDataSelector, coursesIsLoadingSelector, coursesReducer, fetchCourses,  
     createCourse, editCourse, coursesWatcher, 
