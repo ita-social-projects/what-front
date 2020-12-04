@@ -32,20 +32,16 @@ export const ListOfLessons = () => {
   const lessonEditing = (id) => {
   };
 
-  const studentsList = () => {
-    return filteredLessonsList.map((lesson) => {
-      return (
-        <Card
-          key={lesson.id}
-          id={lesson.id}
-          title={lesson.themeName}
-          iconName='Edit'
-          date={lesson.date}
-          onEdit={lessonEditing}
-        />
-      );
-    });
-  };
+  const studentsList = () => filteredLessonsList.map((lesson) => (
+    <Card
+      key={lesson.id}
+      id={lesson.id}
+      title={lesson.themeName}
+      iconName="Edit"
+      date={lesson.date}
+      onEdit={lessonEditing}
+    />
+  ));
 
   return (
     <div className="container">
@@ -75,4 +71,4 @@ export const ListOfLessons = () => {
       </div>
     </div>
   );
-}
+};

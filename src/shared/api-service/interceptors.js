@@ -1,5 +1,5 @@
 import { BASE_URL } from './config.js';
-import { getCookie } from '../../utils/index.js';
+import { getCookie } from '@utils/index.js';
 
 export const requestInterceptor = (config) => {
   const requestConfig = { ...config };
