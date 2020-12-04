@@ -45,23 +45,23 @@ export const deleteSchedule = (id) => {
   };
 };
 
-export function* fetchSchedulesWatcher() {
+function* fetchSchedulesWatcher() {
   yield takeLatest(actionsTypes.FETCH_SCHEDULES, fetchSchedulesWorker);
 }
 
-export function* fetchGroupScheduleWatcher() {
+function* fetchGroupScheduleWatcher() {
   yield takeLatest(actionsTypes.FETCH_GROUP_SCHEDULE, fetchGroupScheduleWorker);
 }
 
-export function* createScheduleWatcher() {
+function* createScheduleWatcher() {
   yield takeEvery(actionsTypes.CREATE_SCHEDULE, createScheduleWorker);
 }
 
-export function* editScheduleWatcher() {
+function* editScheduleWatcher() {
   yield takeEvery(actionsTypes.EDIT_SCHEDULE, editScheduleWorker);
 }
 
-export function* deleteScheduleWatcher() {
+function* deleteScheduleWatcher() {
   yield takeEvery(actionsTypes.DELETE_SCHEDULE, deleteScheduleWorker);
 }
 
