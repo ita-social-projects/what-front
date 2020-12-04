@@ -18,7 +18,7 @@ WithLoading.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
-  ]).isRequired,
+  ]),
   className: PropTypes.string,
   animation: PropTypes.string,
   variant: PropTypes.string,

@@ -1,5 +1,11 @@
 @import '../../styles/main';
 
+.wrapper {
+  position: absolute;
+  top: 30%;
+  left: 8%;
+}
+
 .list-head {
   display:flex;
   flex-flow: row wrap;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 
 import styles from './header.scss';
+import { Link } from 'react-router-dom';
 
 const logout = (
   <svg width='1.5em' height='2em' viewBox="0 0 16 16" className='bi bi-door-closed-fill' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -24,9 +25,10 @@ const sidebarToggler = (
 export const Header = () => {
   
   const [tabs, setTabs] = useState([
-    {id: 0, title: 'Progress', link: 'progress', active: false},
+    {id: 0, title: 'Progress', link: 'progress', active: true},
     {id: 1, title: 'Schedule', link: 'schedule', active: false},
     {id: 2, title: 'Support', link: 'support', active: false},
+    {id: 3, title: 'Courses', link: 'courses', active: false}
   ])
 
   const [sidebar, setSidebar] = useState({
@@ -83,12 +85,12 @@ export const Header = () => {
 
         <div className={classNames('navbar-nav nav-tabs', styles['header__navbar-links'])}>
           {tabs.map(({id, title, link, active}) => (
-            <a className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
-              href={`#${link}`} 
+            <Link className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
+              to={`/${link}`} 
               key={id}
               data-id={id}
               onClick={toggleActiveTab}
-            >{title}</a>
+            >{title}</Link>
           ))}
         </div>
             
