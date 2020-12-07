@@ -28,4 +28,5 @@ WithLoading.defaultProps = {
   className: '',
   animation: 'border',
   variant: 'warning',
+  children: '',
 };

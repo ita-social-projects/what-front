@@ -1,1 +1,1 @@
-export { getCookie } from './helpers/index.js';
+export { Cookie } from './helpers/index.js';

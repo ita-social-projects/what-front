@@ -95,6 +95,7 @@ const GroupPropTypesInterface = propTypes.shape({
 const MentorPropTypesInterface = propTypes.shape({
   firstName: propTypes.string,
   lastName: propTypes.string,
+  id: propTypes.string,
 });
 
 GroupDetails.propTypes = {
