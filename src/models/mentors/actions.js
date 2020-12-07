@@ -14,9 +14,9 @@ export const addMentor = (id) => ({
   payload: { id },
 });
 
-export const editMentor = (id, data) => ({
+export const editMentor = (id, mentor) => ({
   type: types.EDIT_MENTOR,
-  payload: { id, data },
+  payload: { id, mentor },
 });
 
 export const deleteMentor = (id) => ({

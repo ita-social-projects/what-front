@@ -2,7 +2,7 @@ import * as types from './types.js';
 import { updateMentor, deleteMentor } from './helper-functions.js';
 
 const initialState = {
-  mentors: [],
+  data: [],
   isLoading: false,
   isLoaded: false,
   error: '',
@@ -29,28 +29,28 @@ export const mentorsModelReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        mentors: action.payload.data,
+        data: action.payload.mentors,
       };
     case types.ADDING_MENTOR_SUCCESS:
       return {
         ...state,
         isLoading: false,
         isLoaded: true,
-        mentors: state.mentors ? [...state.mentors, action.payload.data] : null,
+        data: state.data ? [...state.data, action.payload.mentor] : null,
       };
     case types.EDITING_MENTOR_SUCCESS:
       return {
         ...state,
         isLoading: false,
         isLoaded: true,
-        mentors: updateMentor(state.mentor, action.payload.data),
+        data: updateMentor(state.mentor, action.payload.mentor),
       };
     case types.DELETING_MENTOR_SUCCESS:
       return {
         ...state,
         isLoading: false,
         isLoaded: true,
-        mentors: deleteMentor(state.mentors, action.payload.id),
+        data: deleteMentor(state.data, action.payload.id),
       };
     default:
       return state;
