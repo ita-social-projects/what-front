@@ -21,8 +21,7 @@ export const responseInterceptor = (response) => {
   const authHeader = response.headers.authorization;
   if (authHeader) {
     const token = authHeader.split('Bearer ')[1];
-    //document.cookie = `jwt=${token};max-age=86400`;
-    Cookie.set('jwt', token, 1)
+    Cookie.set('jwt', token, 1);
   }
   return response;
 };

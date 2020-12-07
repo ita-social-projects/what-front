@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
+import {
+  login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList,
+} from '@/models/index.js';
 import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
-import { login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList, } from  '@/models/index.js';
 import { useActions } from '../../shared/hooks/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
@@ -13,7 +15,7 @@ export const Counter = () => {
   const isLoading = useSelector(counterIsLoadingSelector, shallowEqual);
   const { incrementCounter, decrementCounter, fetchCounter } = useActions(counterActions);
   const [fetchMentors] = useActions([loadMentors]);
-  const [logIn, logout, regist, usersList, unAssignedUserList] = useActions([login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList]);
+  const [logIn, logout, regist, usersList, unAssignedUserList] =   useActions([login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList]);
   const [toShowModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
@@ -42,11 +44,16 @@ export const Counter = () => {
           <Button onClick={fetchCounter} variant="primary">Fetch counter</Button>
           <Button onClick={fetchMentors} variant="primary">Fetch mentors</Button>
 
-          <Button onClick={() => logIn({email: 'admin.@gmail.com', password: 'admin'})} variant="primary">LogIn</Button>
-          <Button onClick={()=>logout()} variant="primary">LogOut</Button>
-          <Button onClick={()=>usersList()} variant="primary">Assigned</Button>
-          <Button onClick={()=>unAssignedUserList()} variant="primary">UnAssigned</Button>
-          <Button onClick={() => regist({email: "example2@example.com",firstName: "Bob",lastName: "Marley",password: "qwerty1!",confirmPassword: "qwerty1!"})} variant="primary">Regist</Button>
+          <Button onClick={() => logIn({ email: 'admin.@gmail.com', password: 'admin' })} variant="primary">LogIn</Button>
+          <Button onClick={() => logout()} variant="primary">LogOut</Button>
+          <Button onClick={() => usersList()} variant="primary">Assigned</Button>
+          <Button onClick={() => unAssignedUserList()} variant="primary">UnAssigned</Button>
+          <Button
+            onClick={() => regist({
+              email: 'example2@example.com', firstName: 'Bob', lastName: 'Marley', password: 'qwerty1!', confirmPassword: 'qwerty1!'})}
+            variant="primary"
+          >Regist
+          </Button>
         </div>
         <div className="m-3">
           <Search

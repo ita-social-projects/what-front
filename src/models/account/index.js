@@ -1,7 +1,8 @@
 export { authReducer } from './reducer.js';
 export {
-  authWatcher, login, registretion, logOut, fetchUsersList, fetchUnAssignedUserList } from './sagas.js';
+  authWatcher, login, registretion, logOut, fetchUsersList, fetchUnAssignedUserList,
+} from './sagas.js';
 export {
   currentUserSelector, newUserSelector,
-  fetchAssignedUsersSelector, fetchUnAssignedUsersSelector, fuserLoading,
+  fetchAssignedUsersSelector, fetchUnAssignedUsersSelector, userLoading,
 } from './selectors.js';
