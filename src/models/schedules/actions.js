@@ -8,15 +8,6 @@ export const fetchSchedules = () => {
   };
 };
 
-export const fetchGroupSchedule = (id) => {
-  return {
-    type: actionsTypes.FETCH_GROUP_SCHEDULE,
-    payload: {
-      id,
-    },
-  };
-};
-
 export const createSchedule = (schedule) => {
   return {
     type: actionsTypes.CREATE_SCHEDULE,
@@ -49,10 +40,6 @@ function* fetchSchedulesWatcher() {
   yield takeLatest(actionsTypes.FETCH_SCHEDULES, fetchSchedulesWorker);
 }
 
-function* fetchGroupScheduleWatcher() {
-  yield takeLatest(actionsTypes.FETCH_GROUP_SCHEDULE, fetchGroupScheduleWorker);
-}
-
 function* createScheduleWatcher() {
   yield takeEvery(actionsTypes.CREATE_SCHEDULE, createScheduleWorker);
 }
@@ -72,16 +59,6 @@ function* fetchSchedulesWorker() {
     yield put({type: actionsTypes.LOADING_SCHEDULES_SUCCESS, payload: {schedules}});
   } catch (error) {
     yield put({type: actionsTypes.LOADING_SCHEDULES_FAILED, payload: {error: error.message}});
-  }
-}
-
-function* fetchGroupScheduleWorker(data) {
-  try {
-    yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_STARTED});
-    const schedule = yield call(ApiService.load, `/schedules/${data.payload.id}/groupSchedule`);
-    yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_SUCCESS, payload: {schedule}});
-  } catch (error) {
-    yield put({type: actionsTypes.LOADING_GROUP_SCHEDULE_FAILED, payload: {error: error.message}});
   }
 }
 
@@ -118,7 +95,6 @@ function* deleteScheduleWorker(data) {
 export function* schedulesWatcher() {
   yield all([
     fork(fetchSchedulesWatcher),
-    fork(fetchGroupScheduleWatcher),
     fork(createScheduleWatcher),
     fork(editScheduleWatcher),
     fork(deleteScheduleWatcher),

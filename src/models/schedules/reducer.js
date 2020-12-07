@@ -2,7 +2,6 @@ import * as actionsTypes from './types.js'
 
 const initialState = {
   data: [],
-  groupSchedule: [],
   isLoading: false,
   loaded: false,
   error: '',
@@ -31,27 +30,6 @@ export function schedulesReducer(state = initialState, action) {
         loaded: false,
         error: action.payload.error,
       };
-    case actionsTypes.LOADING_GROUP_SCHEDULE_STARTED:
-      return {
-        ...state,
-        isLoading: true,
-        loaded: false,
-        error: '',
-      };
-    case actionsTypes.LOADING_GROUP_SCHEDULE_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        loaded: true,
-        groupSchedule: action.payload.schedule
-      };
-    case actionsTypes.LOADING_GROUP_SCHEDULE_FAILED: 
-      return {
-        ...state,
-        isLoading: false,
-        loaded: false,
-        error: action.payload.error,
-      }
     case actionsTypes.CREATING_SCHEDULE_STARTED:
       return {
         ...state,
