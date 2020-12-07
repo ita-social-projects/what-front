@@ -25,10 +25,10 @@ const sidebarToggler = (
 export const Header = () => {
   
   const [tabs, setTabs] = useState([
-    {id: 0, title: 'Progress', link: 'progress', active: true},
+    {id: 0, title: 'Progress', link: 'progress', active: false},
     {id: 1, title: 'Schedule', link: 'schedule', active: false},
     {id: 2, title: 'Support', link: 'support', active: false},
-    {id: 3, title: 'Courses', link: 'courses', active: false}
+    {id: 3, title: 'Courses', link: 'courses', active: true}
   ])
 
   const [sidebar, setSidebar] = useState({

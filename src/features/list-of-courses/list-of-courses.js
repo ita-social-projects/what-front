@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-// import { dataCourses } from './courses-data-list.js';
+import { shallowEqual, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useActions } from '@/shared/index.js';
 import { Card, Search, Button, WithLoading } from '../../components/index.js';
+import { fetchCourses, coursesSelector } from '@/models/index.js';
 import Icon from '../../icon.js';
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
-import { useActions } from '@/shared/index.js';
-import { coursesDataSelector, fetchCourses, coursesIsLoadingSelector } from '@/models/index.js';
-import { shallowEqual, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 export const ListOfCourses = () => {
   const [loadCourses] = useActions([fetchCourses]);
+
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
 
-  const data = useSelector(coursesDataSelector, shallowEqual);
-  const isLoading = useSelector(coursesIsLoadingSelector, shallowEqual)
+  const {data, isLoading} = useSelector(coursesSelector, shallowEqual);
 
   const history = useHistory();
 
@@ -29,8 +28,8 @@ export const ListOfCourses = () => {
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
-    setFilteredCourses(data.filter((course) => {
-      return course.name.toUpperCase().includes(inputValue.toUpperCase());
+    setFilteredCourses(data.filter(({name}) => {
+      return name.toUpperCase().includes(inputValue.toUpperCase());
     }))
   };
 
@@ -43,7 +42,7 @@ export const ListOfCourses = () => {
   };
 
   const courseEdit = (id) => {
-    history.push(`/courses/${id}`)
+    history.push(`/courses/edit-courses/${id}`)
   };
 
   const coursesList = () => {
