@@ -5,7 +5,7 @@ import { counterSelector, counterIsLoadingSelector, counterActions } from './red
 import { useActions, ApiService } from '../../shared/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
-import { loadMentors, loadStudents } from '../../models/index.js';
+import { loadStudents } from '../../models/index.js';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);

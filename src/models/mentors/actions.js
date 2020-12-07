@@ -2,7 +2,7 @@ import {
   call, put, takeLatest, all, fork, takeEvery,
 } from 'redux-saga/effects';
 
-import { ApiService } from '../api-service/index.js';
+import { ApiService } from '../../shared/api-service/index.js';
 import * as types from './types.js';
 
 export const fetchMentors = () => ({
