@@ -1,0 +1,1 @@
+export const secretariesSelector = (state) => state.models.secretaries;
