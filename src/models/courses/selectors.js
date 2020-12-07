@@ -1,0 +1,1 @@
+export const coursesSelector = (state) => state.models.courses;
