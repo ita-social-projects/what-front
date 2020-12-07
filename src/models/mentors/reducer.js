@@ -1,38 +1,57 @@
-import * as actionsTypes from './action-types.js';
+import * as types from './types.js';
+import { updateMentor, deleteMentor } from './helper-functions.js';
 
-const INITIAL_STATE = {
-  mentors: null,
+const initialState = {
+  mentors: [],
   isLoading: false,
-  loaded: false,
+  isLoaded: false,
   error: '',
 };
 
-export const mentorsReducer = (state = INITIAL_STATE, action) => {
+export const mentorsModelReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionsTypes.LOADING_MENTORS_STARTED:
+    case types.LOADING_STARTED:
       return {
         ...state,
         isLoading: true,
+        isLoaded: false,
         error: '',
       };
-
-    case actionsTypes.LOADING_MENTORS_SUCCESS:
+    case types.LOADING_FAILED:
       return {
         ...state,
         isLoading: false,
-        loaded: true,
+        isLoaded: false,
+        error: action.payload.error.message,
+      };
+    case types.FETCHING_MENTORS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isLoaded: true,
         mentors: action.payload.data,
-        error: '',
       };
-
-    case actionsTypes.LOADING_MENTORS_FAILED:
+    case types.ADDING_MENTOR_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        loaded: false,
-        error: action.payload.error,
+        isLoaded: true,
+        mentors: state.mentors ? [...state.mentors, action.payload.data] : null,
       };
-
+    case types.EDITING_MENTOR_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isLoaded: true,
+        mentors: updateMentor(state.mentor, action.payload.data),
+      };
+    case types.DELETING_MENTOR_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isLoaded: true,
+        mentors: deleteMentor(state.mentors, action.payload.id),
+      };
     default:
       return state;
   }
