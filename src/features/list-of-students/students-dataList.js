@@ -36,7 +36,7 @@ export const dataList = [
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     id: 8,
-  }, 
+  },
   {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     id: 9,

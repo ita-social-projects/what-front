@@ -157,7 +157,7 @@ function* watchRemovingStudent() {
   yield takeEvery(actionTypes.REMOVE_STUDENT, removeStudentAsync);
 }
 
-export function* studentsSaga() {
+export function* studentsWatcher() {
   yield all([
     fork(watchLoadingStudents),
     fork(watchLoadingStudentById),
