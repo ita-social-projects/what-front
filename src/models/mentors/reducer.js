@@ -2,7 +2,7 @@ import * as types from './types.js';
 import { updateMentor, deleteMentor } from './helper-functions.js';
 
 const initialState = {
-  mentors: null,
+  mentors: [],
   isLoading: false,
   isLoaded: false,
   error: '',
