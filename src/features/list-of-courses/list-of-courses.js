@@ -34,15 +34,15 @@ export const ListOfCourses = () => {
   };
 
   const addCourse = () => {
-    history.push('/add-course');
+    history.push('/courses/add-course');
   };
 
   const courseDetails = (id) => {
-    history.push(`/courses/${id}`);
+    history.push(`/courses/edit-course/${id}`);
   };
 
   const courseEdit = (id) => {
-    history.push(`/courses/edit-courses/${id}`)
+    history.push(`/courses/edit-course/${id}`)
   };
 
   const coursesList = () => {
