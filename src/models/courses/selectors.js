@@ -1,2 +1,1 @@
-export const coursesDataSelector = (state) => state.models.courses.data;
-export const coursesIsLoadingSelector = (state) => state.models.courses.isLoading; 
+export const coursesSelector = (state) => state.models.courses;
