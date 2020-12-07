@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-
 import styles from './header.scss';
 import { Link } from 'react-router-dom';
 
@@ -28,8 +27,7 @@ export const Header = () => {
     {id: 0, title: 'Progress', link: 'progress', active: false},
     {id: 1, title: 'Schedule', link: 'schedule', active: false},
     {id: 2, title: 'Support', link: 'support', active: false},
-    {id: 3, title: 'Courses', link: 'courses', active: true}
-  ])
+  ]);
 
   const [sidebar, setSidebar] = useState({
     active: false,
@@ -39,22 +37,22 @@ export const Header = () => {
     setTabs((prevstate) => {
       prevstate.find((tab) => {
         if(tab.active) {
-          tab.active = false
+          tab.active = false;
         } 
-      })
+      });
       
       return prevstate.map((tab, index) => {
         if(index == event.target.dataset.id) {
           return {
             ...tab,
             active: !tab.active,
-          }
+          };
         } else {
-          return tab
+          return tab;
         }
-      })
-    })
-  }
+      });
+    });
+  };
 
   function toggleSidebar() {
     setSidebar((prevState) => {
@@ -62,7 +60,7 @@ export const Header = () => {
         ...prevState,
         active: !prevState.active,
       };
-    })
+    });
   }
 
   return (
