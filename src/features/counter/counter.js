@@ -21,6 +21,13 @@ export const Counter = () => {
 
   const handleCloseModal = () => setShowModal(false);
 
+  const auth = async () => {
+    await ApiService.create('/accounts/auth', {
+      email: 'admin.@gmail.com',
+      password: 'admin',
+    });
+  };
+
   const handleSubmitModal = () => {
     console.log('Modal submitted, something happened!');
     handleCloseModal();
@@ -42,6 +49,7 @@ export const Counter = () => {
           <Button type="button" onClick={handleShowModal} variant="success">Show modal</Button>
           <Button onClick={fetchCounter} variant="primary">Fetch counter</Button>
           <Button onClick={fetchMentors} variant="primary">Fetch mentors</Button>
+          <Button onClick={auth} variant="primary">Auth as admin</Button>
         </div>
         <div className="m-3">
           <Search

@@ -56,20 +56,30 @@ export const ListOfLessons = () => {
     history.push(`lessons/edit-lesson/${id}`);
   };
 
-  const transformDate = (dateTime) => dateTime.slice(0, 10);
+  const transformDateTime = (dateTime) => {
+    const arr = dateTime.split('T');
+    const date = arr[0].split('-');
+    const resultDate = date.reverse().join('.');
+    return {
+      date: resultDate,
+      time: arr[1].slice(0, 5),
+    };
+  };
 
   const getLessonsList = () => {
     const lessonsList = filteredLessonsList.map((lesson) => {
-      const resultDate = transformDate(lesson.lessonDate);
+      const { date, time } = transformDateTime(lesson.lessonDate);
       return (
         <Card
           key={lesson.id}
           id={lesson.id}
           title={lesson.themeName}
           iconName="Edit"
-          date={resultDate}
           onEdit={editLesson}
-        />
+        >
+          <p className={styles.timeDate}>Date: {date}</p>
+          <p className={styles.timeDate}>Time: {time}</p>
+        </Card>
       );
     });
     if (!lessonsList.length && searchLessonsDateValue) {

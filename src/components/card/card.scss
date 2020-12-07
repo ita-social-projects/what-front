@@ -21,7 +21,7 @@
 }
 
 .card-title {
-  @include baskerville-italic();
+  @include baskerville-regular();
   font-size: 20px;
 }
 
@@ -41,8 +41,9 @@
 }
 
 .card-head {
+  padding-top: 5px;
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   justify-content: space-between;
   align-items: baseline;
 }

@@ -44,7 +44,7 @@ export const Card = ({
       }
 
     </div>
-    {children ? <p className={styles['card-content']}>{children}</p> : null}
+    {children ? <div className={styles['card-content']}>{children}</div> : null}
     <div className={styles.content}>
       {date ? <p className={styles['card-date']}>{date}</p> : null}
       <div className={styles['card-btn']}>
