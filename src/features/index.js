@@ -7,10 +7,12 @@ export * from './auth';
 export * from './routes';
 export * from './header';
 export * from './edit-students-details';
-export * from './validation'
+export * from './validation';
 export * from './list-of-groups';
 export * from './list-of-students';
+export * from './list-of-lessons';
 export * from './list-of-courses';
 export * from './schedule-student';
 export * from './list-of-secretaries';
+export * from './edit-secretarys-details';
 export * from './not-found';

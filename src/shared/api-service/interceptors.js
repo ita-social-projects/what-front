@@ -1,5 +1,9 @@
 import { BASE_URL } from './config.js';
+<<<<<<< HEAD:src/models/api-service/interceptors.js
 import { Cookie } from '../../utils/index.js';
+=======
+import { getCookie } from '@/utils/index.js';
+>>>>>>> dev:src/shared/api-service/interceptors.js
 
 export const requestInterceptor = (config) => {
   const requestConfig = { ...config };
@@ -25,3 +29,4 @@ export const responseInterceptor = (response) => {
   }
   return response;
 };
+

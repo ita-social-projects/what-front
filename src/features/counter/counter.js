@@ -5,10 +5,10 @@ import {
   login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList,
 } from '@/models/index.js';
 import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
-import { useActions } from '../../shared/hooks/index.js';
+import { useActions, ApiService } from '../../shared/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
-import { loadMentors } from '../../models/index.js';
+import { loadStudents } from '../../models/index.js';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
@@ -16,6 +16,7 @@ export const Counter = () => {
   const { incrementCounter, decrementCounter, fetchCounter } = useActions(counterActions);
   const [fetchMentors] = useActions([loadMentors]);
   const [logIn, logout, regist, usersList, unAssignedUserList] =   useActions([login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList]);
+  const fetchStudents = useActions(loadStudents);
   const [toShowModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
@@ -31,6 +32,13 @@ export const Counter = () => {
     console.log(`Search value = ${inputValue}`);
   };
 
+  const auth = async () => {
+    await ApiService.create('/accounts/auth', {
+      email: 'admin.@gmail.com',
+      password: 'admin',
+    });
+  };
+
   return (
     <WithLoading isLoading={isLoading}>
       <div>
@@ -41,6 +49,7 @@ export const Counter = () => {
           <Button type="button" onClick={incrementCounter}>Increment</Button>
           <Button type="button" onClick={decrementCounter} variant="warning">Decrement</Button>
           <Button type="button" onClick={handleShowModal} variant="success">Show modal</Button>
+          <Button onClick={auth}>Auth</Button>
           <Button onClick={fetchCounter} variant="primary">Fetch counter</Button>
           <Button onClick={fetchMentors} variant="primary">Fetch mentors</Button>
 
@@ -54,6 +63,7 @@ export const Counter = () => {
             variant="primary"
           >Regist
           </Button>
+          <Button onClick={fetchStudents} variant="primary">Fetch students</Button>
         </div>
         <div className="m-3">
           <Search
