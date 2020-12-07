@@ -1,3 +1,23 @@
+import * as Yup from 'yup';
+
+export const formValidate = Yup.object().shape({
+  firstName: Yup.string()
+    .matches('[^А-Яа-я]+', 'Only Latin letters allowed')
+    .min(2, 'Too Short!')
+    .matches('^[A-Za-z]+$', 'Invalid Name')
+    .max(50, 'Too Long!')
+    .required('This field is required'),
+  lastName: Yup.string()
+    .matches('[^А-Яа-я]+', 'Only Latin letters allowed')
+    .min(2, 'Too Short!')
+    .matches('^[A-Za-z]+$', 'Invalid Last Name')
+    .max(50, 'Too Long!')
+    .required('This field is required'),
+  email: Yup.string()
+    .email('Invalid Email')
+    .required('This field is required'),
+});
+
 export const validateEmail = (value) => {
   let error;
   if (!value) {
@@ -5,11 +25,11 @@ export const validateEmail = (value) => {
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
     error = 'Invalid email address.';
   }
-  
-  return error;
-}
 
-export const validatePassword = value => {
+  return error;
+};
+
+export const validatePassword = (value) => {
   let error;
   const passwordRegex = /(?=.*[0-9])/;
   if (!value) {
@@ -24,10 +44,10 @@ export const validatePassword = value => {
 
 export const validateConfirmPassword = (pass, value) => {
   let error;
-  if(!value) {
+  if (!value) {
     error = 'You should confirm your password.';
-  } else if(pass && value) {
-    if(pass !== value) {
+  } else if (pass && value) {
+    if (pass !== value) {
       error = 'Password do not match.';
     }
   }
@@ -37,31 +57,31 @@ export const validateConfirmPassword = (pass, value) => {
 export const validateGroupName = (value) => {
   let error;
   const groupName = /^[a-zA-Z]+(?:\s*[a-zA-Z0-9-_\.]){1,20}$/;
-  if(!value) {
+  if (!value) {
     error = 'This field is required';
-  } else if(!groupName.test(value)) {
+  } else if (!groupName.test(value)) {
     error = 'Invalid group name';
   }
   return error;
-}
+};
 
 export const validateDate = (start, finish) => {
   let error;
   const startDate = Date.parse(start);
   const finishDate = Date.parse(finish);
-  if(finishDate < startDate || finishDate === startDate) {
+  if (finishDate < startDate || finishDate === startDate) {
     error = 'Invalid date';
   }
   return error;
-}
+};
 
 export const validateName = (value) => {
   let error;
   const name = /^[a-zA-Z]+/;
-  if(!value) {
+  if (!value) {
     error = 'This field is required';
-  } else if(!name.test(value)) {
+  } else if (!name.test(value)) {
     error = 'Invalid mentor name';
   }
   return error;
-}
+};

@@ -4,9 +4,15 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  position: relative;
 }
 
-.search_container {
+.search-container {
   display: block;
   margin: auto;
+}
+
+.button-container {
+  position: absolute;
+  right: 0;
 }
