@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes, {
-   string, func, number,
+  string, func, number,
 } from 'prop-types';
 import classNames from 'classnames';
 import styles from './card.scss';
