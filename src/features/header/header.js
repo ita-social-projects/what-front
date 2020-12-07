@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import styles from './header.scss';
 
 const logout = (
-  <svg width='1.5em' height='2em' viewBox="0 0 16 16" className='bi bi-door-closed-fill' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
-    <path fillRule='evenodd' d='M4 1a1 1 0 0 0-1 1v13H1.5a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2a1 1 0 0 0-1-1H4zm2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z'/>
+  <svg width="1.5em" height="2em" viewBox="0 0 16 16" className="bi bi-door-closed-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" d="M4 1a1 1 0 0 0-1 1v13H1.5a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2a1 1 0 0 0-1-1H4zm2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
   </svg>
 );
 
