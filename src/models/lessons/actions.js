@@ -34,39 +34,6 @@ export function* fetchLessonsWatcher() {
   yield takeLatest(actionsTypes.FETCH_LESSONS, fetchLessonsAsync);
 }
 
-export const fetchStudentLessons = (id) => ({
-  type: actionsTypes.FETCH_STUDENT_LESSONS,
-  payload: {
-    id,
-  },
-});
-
-function* fetchStudentLessonsAsync(lessonData) {
-  try {
-    yield put({ type: actionsTypes.LOADING_STUDENT_LESSONS_STARTED });
-
-    const data = yield call(ApiService.load, `/lessons/students/${lessonData.payload.id}`);
-
-    yield put({
-      type: actionsTypes.LOADING_STUDENT_LESSONS_FINISHED,
-      payload: {
-        data,
-      },
-    });
-  } catch (error) {
-    yield put({
-      type: actionsTypes.LOADING_STUDENT_LESSONS_FAILED,
-      payload: {
-        error: error.message,
-      },
-    });
-  }
-}
-
-export function* fetchStudentLessonsWatcher() {
-  yield takeLatest(actionsTypes.FETCH_STUDENT_LESSONS, fetchStudentLessonsAsync);
-}
-
 export const addLesson = (data) => ({
   type: actionsTypes.ADD_LESSON,
   payload: {
@@ -137,7 +104,6 @@ export function* editLessonWatcher() {
 export function* lessonsWatcher() {
   yield all([
     fork(fetchLessonsWatcher),
-    fork(fetchStudentLessonsWatcher),
     fork(addLessonWatcher),
     fork(editLessonWatcher),
   ]);

@@ -8,6 +8,7 @@ import { Button, Search, WithLoading } from '../../components/index.js';
 import {
   loadMentors
 } from '../../models/index.js';
+import {ApiService} from "@/shared";
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);

@@ -31,27 +31,6 @@ export const lessonsReducer = (state = INITIAL_STATE, action) => {
         loaded: false,
         error: action.payload.error,
       };
-    case actionsTypes.LOADING_STUDENT_LESSONS_STARTED:
-      return {
-        ...state,
-        isLoading: true,
-        error: '',
-      };
-    case actionsTypes.LOADING_STUDENT_LESSONS_FINISHED:
-      return {
-        ...state,
-        isLoading: false,
-        loaded: true,
-        lessonsByStudent: action.payload.data,
-        error: '',
-      };
-    case actionsTypes.LOADING_STUDENT_LESSONS_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        loaded: false,
-        error: action.payload.error,
-      };
     case actionsTypes.ADDING_STARTED:
       return {
         ...state,

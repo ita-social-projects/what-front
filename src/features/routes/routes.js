@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Counter, NotFound } from '../index.js';
+import {Counter, ListOfLessons, NotFound} from '../index.js';
 import { Links, RoleList, Role } from './helpers.js';
 
 export const Routes = () => (
