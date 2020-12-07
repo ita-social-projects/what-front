@@ -4,7 +4,7 @@ import {
 
 import { Cookie } from '@/utils/index.js';
 import * as actionTypes from './types.js';
-import { ApiService } from '../api-service/index.js';
+import { ApiService } from '../../shared/index.js';
 
 export const login = (currentUser) => ({
   type: actionTypes.LOGIN_REQUESTING,

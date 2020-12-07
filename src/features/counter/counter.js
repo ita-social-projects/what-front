@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
-import {
-  login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList,
-} from '@/models/index.js';
 import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
 import { useActions, ApiService } from '../../shared/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
-import { loadStudents } from '../../models/index.js';
+import {
+  login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList, loadStudents
+} from '../../models/index.js';
 
 export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
   const isLoading = useSelector(counterIsLoadingSelector, shallowEqual);
   const { incrementCounter, decrementCounter, fetchCounter } = useActions(counterActions);
-  const [fetchMentors] = useActions([loadMentors]);
-  const [logIn, logout, regist, usersList, unAssignedUserList] =   useActions([login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList]);
+  const [fetchMentors] = useActions([loadStudents]);
+  const [
+    logIn,
+    logout,
+    regist,
+    usersList,
+    unAssignedUserList,
+  ] = useActions([login, logOut, registretion, fetchUsersList, fetchUnAssignedUserList]);
   const fetchStudents = useActions(loadStudents);
   const [toShowModal, setShowModal] = useState(false);
 
@@ -61,7 +66,8 @@ export const Counter = () => {
             onClick={() => regist({
               email: 'example2@example.com', firstName: 'Bob', lastName: 'Marley', password: 'qwerty1!', confirmPassword: 'qwerty1!'})}
             variant="primary"
-          >Regist
+          >
+            Regist
           </Button>
           <Button onClick={fetchStudents} variant="primary">Fetch students</Button>
         </div>
