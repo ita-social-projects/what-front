@@ -4,11 +4,18 @@ import { Card, Search, Button } from '../../components/index.js';
 import Icon from '../../icon.js';
 import styles from './list-of-lessons.scss';
 import { dataList } from './lessons-dataList.js';
+import { fetchLessons } from '../../models/index.js';
+import {shallowEqual, useSelector} from "react-redux";
+import {counterActions, counterIsLoadingSelector} from "@/features";
+import {useActions} from "@/shared";
 
 export const ListOfLessons = () => {
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [searchLessonsThemeDateValue, setSearchLessonsThemeDateValue] = useState('');
+
+  const isLoading = useSelector(counterIsLoadingSelector, shallowEqual);
+  const { fetchLesson } = useActions(lessonsActions);
 
   useEffect(() => {
     const lessons = dataList.filter(
