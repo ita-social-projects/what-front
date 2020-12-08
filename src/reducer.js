@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { counterReducer, listOfGroupsReducer } from './features/index.js';
 import {
-  mentorsModelReducer, themesReducer, coursesReducer,
+  mentorsReducer, themesReducer, coursesReducer,
   schedulesReducer, studentsReducer, lessonsReducer,
   accountReducer, secretariesReducer,
 } from './models/index.js';
@@ -16,7 +16,7 @@ export const rootReducer = combineReducers({
     courses: coursesReducer,
     lessons: lessonsReducer,
     students: studentsReducer,
-    mentors: mentorsModelReducer,
+    mentors: mentorsReducer,
     schedules: schedulesReducer,
     themes: themesReducer,
     secretaries: secretariesReducer,

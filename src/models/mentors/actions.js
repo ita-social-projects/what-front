@@ -57,8 +57,8 @@ function* fetchAsyncMentors() {
 function* fetchAsyncMentorById({ payload }) {
   try {
     yield put({ type: types.FETCHING_BY_ID_STARTED });
-    const id = payload.id;
-    const mentor = yield call(ApiService.load, `/mentors/${id}`);
+    const mentorId = payload.id;
+    const mentor = yield call(ApiService.load, `/mentors/${mentorId}`);
     yield put({ type: types.FETCHING_BY_ID_SUCCEED, payload: { mentor } });
   } catch (error) {
     yield put({ type: types.FETCHING_BY_ID_FAILED, payload: { error } });
@@ -78,8 +78,8 @@ function* fetchAsyncActiveMentors() {
 function* fetchAsyncMentorsGroups({ payload }) {
   try {
     yield put({ type: types.FETCHING_MENTOR_GROUPS_STARTED });
-    const id = payload.id;
-    const mentorGroups = yield call(ApiService.load, `/mentors/${id}/groups`);
+    const mentorId = payload.id;
+    const mentorGroups = yield call(ApiService.load, `/mentors/${mentorId}/groups`);
     yield put({ type: types.FETCHING_MENTOR_GROUPS_SUCCEED, payload: { mentorGroups } });
   } catch (error) {
     yield put({ type: types.FETCHING_MENTOR_GROUPS_FAILED, payload: { error } });
@@ -89,8 +89,8 @@ function* fetchAsyncMentorsGroups({ payload }) {
 function* fetchAsyncMentorsCourses({ payload }) {
   try {
     yield put({ type: types.FETCHING_MENTOR_COURSES_STARTED });
-    const id = payload.id;
-    const mentorCourses = yield call(ApiService.load, `/mentors/${id}/courses`);
+    const mentorId = payload.id;
+    const mentorCourses = yield call(ApiService.load, `/mentors/${mentorId}/courses`);
     yield put({ type: types.FETCHING_MENTOR_COURSES_SUCCEED, payload: { mentorCourses } });
   } catch (error) {
     yield put({ type: types.FETCHING_MENTOR_COURSES_FAILED, payload: { error } });
@@ -100,8 +100,8 @@ function* fetchAsyncMentorsCourses({ payload }) {
 function* addAsyncMentor({ payload }) {
   try {
     yield put({ type: types.ADDING_MENTOR_STARTED });
-    const id = payload.id;
-    const mentor = yield call(ApiService.create, `/mentors/${id}`);
+    const mentorId = payload.id;
+    const mentor = yield call(ApiService.create, `/mentors/${mentorId}`);
     yield put({ type: types.ADDING_MENTOR_SUCCEED, payload: { mentor } });
   } catch (error) {
     yield put({ type: types.ADDING_MENTOR_FAILED, payload: { error } });
@@ -111,9 +111,9 @@ function* addAsyncMentor({ payload }) {
 function* editAsyncMentor({ payload }) {
   try {
     yield put({ type: types.EDITING_MENTOR_STARTED });
-    const id = payload.id;
+    const mentorId = payload.id;
     const newMentor = payload.data;
-    const mentor = yield call(ApiService.update, `/mentors/${id}`, newMentor);
+    const mentor = yield call(ApiService.update, `/mentors/${mentorId}`, newMentor);
     yield put({ type: types.EDITING_MENTOR_SUCCEED, payload: { mentor } });
   } catch (error) {
     yield put({ type: types.EDITING_MENTOR_FAILED, payload: { error } });
@@ -123,9 +123,9 @@ function* editAsyncMentor({ payload }) {
 function* deleteAsyncMentor({ payload }) {
   try {
     yield put({ type: types.DELETING_MENTOR_STARTED });
-    const id = payload.id;
-    yield call(ApiService.remove, `/mentors/${id}`);
-    yield put({ type: types.DELETING_MENTOR_SUCCEED, payload: { id: id } });
+    const mentorId = payload.id;
+    yield call(ApiService.remove, `/mentors/${mentorId}`);
+    yield put({ type: types.DELETING_MENTOR_SUCCEED, payload: { id: mentorId } });
   } catch (error) {
     yield put({ type: types.DELETING_MENTOR_FAILED, payload: { error } });
   }

@@ -6,17 +6,18 @@ import { Card, Search, Button, WithLoading } from '../../components/index.js';
 import Icon from '../../icon.js';
 import styles from './list-of-mentors.scss';
 import { useActions } from '@/shared/index.js';
-import { fetchMentors, mentorsSelector } from '@/models/index.js';
+import { fetchActiveMentors, mentorsActiveSelector } from '@/models/index.js';
+
 
 export const ListOfMentors = () => {
-  const [loadMentors] = useActions([fetchMentors]);
+  const [loadActiveMentors] = useActions([fetchActiveMentors]);
   const [searchMentorValue, setSearchMentorValue] = useState('');
   const [filteredMentorList, setFilteredMentorList] = useState([]);
-  const {data, isLoading} = useSelector(mentorsSelector, shallowEqual);
+  const {data, isLoading} = useSelector(mentorsActiveSelector, shallowEqual);
 
   useEffect(() => {
-    loadMentors();
-  }, [loadMentors]);
+    loadActiveMentors();
+  }, [loadActiveMentors]);
 
   useEffect(() => {
     const mentors = data.filter((mentor) => mentor.firstName.toUpperCase()
@@ -34,33 +35,40 @@ export const ListOfMentors = () => {
   };
   
   const mentorDetails = (id) => {
-    history.push(`/mentors/${id}`);
+    history.push(`/mentors/mentor-tabs/${id}`);
   };
   
   const mentorEditing = (id) => {
-    history.push(`/mentors/edit-mentor/${id}`);
+    history.push(`/mentors/mentor-tabs/${id}`);
   };
 
 
   const mentorsList = () => {
-    return filteredMentorList.map((mentor) => (
+   const mentors = filteredMentorList.map((mentor) => (
       <Card
         key={mentor.id}
         id={mentor.id}
         buttonName='Details'
         iconName='Edit'
-        onEdit={mentorEditing}
-        onDetails={mentorDetails}
+        onEdit={() => mentorEditing(mentor.id)}
+        onDetails={() => mentorDetails(mentor.id)}
     >
-      <span>{mentor.firstName}</span>
+      <span className="mb-2">{mentor.firstName}</span>
+        <span className="pl-2">{mentor.lastName}</span>
+        <p>{mentor.email}</p>
       </Card>
     ));
+    
+    if (!mentors.length && searchMentorValue) {
+      return <h4>Mentor is not found</h4>;
+    }
+    return mentors;
   };
 
   return (
   <div className="container">
     <div className="row">
-      <div className={classNames(styles.heading, "col-12 mb-3")}>
+      <div className={classNames(styles.heading, "col-12 mb-2")}>
         <div className={styles.search__container}>
           <Search onSearch={handleSearch} placeholder="Enter a mentor's name" />
         </div>
