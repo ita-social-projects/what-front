@@ -48,12 +48,17 @@
   align-items: baseline;
 }
 
+.card-title {
+  width:90%;
+  height: 50%;
+}
+
 .card-icon:hover {
   transform: scale(1.2);
 }
 
 .card-btn {
-  text-align: right;
+  padding-top:5px;
 }
 
 .card-icon {

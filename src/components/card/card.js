@@ -17,42 +17,52 @@ export const Card = ({
   onDetails,
   onEdit,
   className,
-}) => (
-  <div
-    onClick={() => onDetails(id)}
-    className={classNames(
-      'card col-sm-12 col-md-4 col-lg-3 ',
-      styles['card-component'],
-      className,
-    )}
-    id={id}
-  >
-    <div className={classNames(
-      styles.content,
-      styles['card-head'],
-    )}
+}) => {
+  const handleDetailsClick = (ev) => {
+    const cardId = ev.target.closest('div').dataset.id;
+    onDetails(cardId);
+  };
+
+  const handleEditClick = (ev) => {
+    const cardId = ev.target.closest('div').dataset.id;
+    onEdit(cardId);
+  };
+
+  return (
+    <div
+      className={classNames(
+        'card col-sm-12 col-md-4 col-lg-3 ',
+        styles['card-component'],
+        className,
+      )}
+      id={id}
     >
-      {title ? <h5 className={styles['card-title']}>{title}</h5> : null}
+      <div className={classNames(
+        styles.content,
+        styles['card-head'],
+      )}
+      >
+        {title ? <h5 className={styles['card-title']}>{title}</h5> : null}
 
-      {iconName
-        ? (
-          <div onClick={() => onEdit(id)} className={styles['card-icon']} data-group={id}>
-            <Icon viewBox="0 0 45 45" size={25} icon={iconName} />
-          </div>
-        )
-        : null
-      }
+        {iconName
+          ? (
+            <div onClick={handleEditClick} className={styles['card-icon']} data-id={id}>
+              <Icon viewBox="0 0 45 45" size={25} icon={iconName} />
+            </div>
+          )
+          : null}
 
-    </div>
-    {children ? <div className={styles['card-content']}>{children}</div> : null}
-    <div className={styles.content}>
-      {date ? <p className={styles['card-date']}>{date}</p> : null}
-      <div className={styles['card-btn']}>
-        {buttonName ? <Button type="button" variant="warning" onClick={() => onDetails(id)}>{buttonName}</Button> : null}
+      </div>
+      {children ? <div className={styles['card-content']}>{children}</div> : null}
+      <div className={styles.content}>
+        {date ? <p className={styles['card-date']}>{date}</p> : null}
+        <div className={styles['card-btn']} data-id={id}>
+          {buttonName ? <Button type="button" variant="warning" onClick={handleDetailsClick}>{buttonName}</Button> : null}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 Card.propTypes = {
   id: number.isRequired,
