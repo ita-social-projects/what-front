@@ -16,3 +16,4 @@ export * from './schedule-student';
 export * from './list-of-secretaries';
 export * from './edit-secretarys-details';
 export * from './not-found';
+export * from './list-of-mentors';
