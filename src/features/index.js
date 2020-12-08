@@ -19,7 +19,12 @@ export * from './edit-group';
 export * from './edit-lesson';
 export * from './edit-mentor';
 export * from './add-lesson';
-export * from './add-course';
 export * from './group-details';
 export * from './not-found';
 export * from './modal-window';
+export * from './edit-course';
+export * from './add-course';
+
+
+
+
