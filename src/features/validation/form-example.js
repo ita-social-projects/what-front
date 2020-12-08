@@ -4,7 +4,6 @@ import { validateEmail, validatePassword, validateConfirmPassword } from './vali
 
 export const FormExample = () => {
   const onSubmit = (values, actions) => {
-    console.log(values);
     actions.resetForm();
   };
 

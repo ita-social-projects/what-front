@@ -1,1 +1,1 @@
-export { Support } from './support';
+export { Support } from './support.js';

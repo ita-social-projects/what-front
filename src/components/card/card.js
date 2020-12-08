@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes, {
-  element, string, func, number,
+  string, func, number,
 } from 'prop-types';
 import classNames from 'classnames';
 import styles from './card.scss';
@@ -43,7 +43,7 @@ export const Card = ({
       }
 
     </div>
-    {children ? <p className={styles['card-content']}>{children}</p> : null}
+    {children ? <div className={styles['card-content']}>{children}</div> : null}
     <div className={styles.content}>
       {date ? <p className={styles['card-date']}>{date}</p> : null}
       <div className={styles['card-btn']}>
@@ -62,15 +62,13 @@ Card.propTypes = {
   onDetails: func,
   onEdit: func,
   children: PropTypes.oneOfType([
-    element,
-    string,
-    PropTypes.arrayOf(element),
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
   ]),
   className: string,
 };
 
 Card.defaultProps = {
-  id: null,
   title: '',
   date: '',
   children: null,
