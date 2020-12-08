@@ -1,1 +1,1 @@
-export { EditCourse } from './edit-course.js';
+export { EditCourse } from "./edit-course";

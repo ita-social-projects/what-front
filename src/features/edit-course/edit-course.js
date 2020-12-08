@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
 import { coursesSelector, editCourse } from '@/models';
@@ -56,11 +56,10 @@ export const EditCourse = (props) => {
                 {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
               </div>
               <div className='row justify-content-around mt-4'>
-                <input type='reset' 
-                  name='reset-btn' 
+                <Link
+                  to='/courses' 
                   className={classNames('btn btn-secondary w-25', styles.button)} 
-                  value='Clear'
-                />
+                >Back</Link>
                 <input type='submit' 
                   name='submit-btn'
                   disabled={isLoading || errors.name}
