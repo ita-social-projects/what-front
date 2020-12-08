@@ -1,5 +1,5 @@
-export { mentorsModelReducer } from './reducer.js';
+export { mentorsReducer } from './reducer.js';
 export * from './actions.js';
 export {
- mentorsSelector, mentorsIsLoading, mentorsError, mentorsIsLoaded
+ mentorsSelector, mentorsActiveSelector, mentorIdSelector, mentorGroupsSelector, mentorCoursesSelector
 } from './selectors.js';
