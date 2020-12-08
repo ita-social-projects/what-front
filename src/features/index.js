@@ -15,7 +15,6 @@ export * from './list-of-secretaries';
 export * from './list-of-mentors';
 export * from './edit-secretarys-details';
 export * from './edit-students-details';
-export * from './edit-course';
 export * from './edit-group';
 export * from './edit-lesson';
 export * from './edit-mentor';
