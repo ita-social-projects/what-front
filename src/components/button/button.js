@@ -33,7 +33,7 @@ Button.propTypes = {
     PropTypes.node,
   ]).isRequired,
   type: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   className: PropTypes.string,
   disabled: PropTypes.bool,
   variant: PropTypes.string,
@@ -44,4 +44,5 @@ Button.defaultProps = {
   className: '',
   disabled: false,
   variant: 'secondary',
+  onClick: undefined,
 };
