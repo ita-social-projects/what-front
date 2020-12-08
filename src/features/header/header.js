@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-
 import styles from './header.scss';
+import { Link } from 'react-router-dom';
 
 const logout = (
-  <svg width='1.5em' height='2em' viewBox="0 0 16 16" className='bi bi-door-closed-fill' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
-    <path fillRule='evenodd' d='M4 1a1 1 0 0 0-1 1v13H1.5a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2a1 1 0 0 0-1-1H4zm2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z'/>
+  <svg width="1.5em" height="2em" viewBox="0 0 16 16" className="bi bi-door-closed-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" d="M4 1a1 1 0 0 0-1 1v13H1.5a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2a1 1 0 0 0-1-1H4zm2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
   </svg>
 );
 
@@ -22,16 +22,37 @@ const sidebarToggler = (
 );
 
 export const Header = () => {
-  const tabs = [
-    {id: 0, title: 'Progress', link: 'progress'},
-    {id: 1, title: 'Schedule', link: 'schedule'},
-    {id: 2, title: 'Support', link: 'support'},
-  ];
+  
+  const [tabs, setTabs] = useState([
+    {id: 0, title: 'Progress', link: 'progress', active: false},
+    {id: 1, title: 'Schedule', link: 'schedule', active: false},
+    {id: 2, title: 'Support', link: 'support', active: false},
+  ]);
 
   const [sidebar, setSidebar] = useState({
     active: false,
   });
 
+  const toggleActiveTab = (event) => {
+    setTabs((prevstate) => {
+      prevstate.find((tab) => {
+        if(tab.active) {
+          tab.active = false;
+        } 
+      });
+      
+      return prevstate.map((tab, index) => {
+        if(index == event.target.dataset.id) {
+          return {
+            ...tab,
+            active: !tab.active,
+          };
+        } else {
+          return tab;
+        }
+      });
+    });
+  };
 
   function toggleSidebar() {
     setSidebar((prevState) => {
@@ -39,7 +60,7 @@ export const Header = () => {
         ...prevState,
         active: !prevState.active,
       };
-    })
+    });
   }
 
   return (
@@ -61,17 +82,22 @@ export const Header = () => {
         </div>
 
         <div className={classNames('navbar-nav nav-tabs', styles['header__navbar-links'])}>
-          {tabs.map(({id, title, link}) => (
-            <a className='nav-item nav-link'
-              href={`#${link}`} 
+          {tabs.map(({id, title, link, active}) => (
+            <Link className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
+              to={`/${link}`} 
               key={id}
-            >{title}</a>
+              data-id={id}
+              onClick={toggleActiveTab}
+            >{title}</Link>
           ))}
         </div>
             
         <div className={styles['header__account']}>
           <div className={styles['header__account-user']}>
-            <div className={styles['header__account-user--icon']}>{user}</div> 
+            <a className={styles['header__account-user--icon']}
+              onClick={toggleActiveTab}
+              href='#studentProfile'
+            >{user}</a> 
             <span className={styles['header__account-user--fullname']}>Name<br />Surname</span>
           </div>
           <div className={styles['header__account-logout']}>

@@ -1,1 +1,1 @@
-export { useActions } from './use-actions';
+export { useActions } from './use-actions.js';

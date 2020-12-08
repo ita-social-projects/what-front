@@ -7,13 +7,18 @@
 
 .form {
   background-color: #fff;
-  margin-top: 40vh;
-  border-radius: 3px;;
-}
+  margin-top: 30vh;
+  border-radius: 3px;
+  transition: all ease .5s;
 
-.link { 
+  @media (max-width: 768px) {
+    margin-top: 20vh;
+    transition: all ease .5s;
+  }
 
-  &:hover {
-    text-decoration: none;    
+  @media (max-width: 576px) {
+    margin-top: 10vh;
+    transition: all ease .5s;
   }
 }
+

@@ -1,12 +1,18 @@
 @import '../../styles/main';
 
 .heading {
-  display:flex;
+  display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  position: relative;
 }
-.search__container {
+
+.search-container {
   display: block;
   margin: auto;
+}
+
+.button-container {
+  position: absolute;
+  right: 0;
 }

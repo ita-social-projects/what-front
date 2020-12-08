@@ -1,67 +1,99 @@
-import React from 'react';
-import classNames from 'classnames';
+import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import { Card, Search, Button } from '../../components/index.js';
+import { useHistory } from 'react-router-dom';
+import classNames from 'classnames';
+
+import { useActions } from '../../shared/index.js';
+import {
+  Card, Search, Button, WithLoading,
+} from '../../components/index.js';
 import Icon from '../../icon.js';
-import { actions, searchStudentValue } from './redux/index.js';
-import { useActions } from '../../shared/hooks/index.js';
+import {
+  loadActiveStudents, activeStudentsSelector,
+} from '../../models/index.js';
 import styles from './list-of-students.scss';
-import { dataList } from './students-data-list.js';
 
 export const ListOfStudents = () => {
-  // Search input
-  const { setSearchStudentValue } = useActions(actions);
-  const searchStudentName = useSelector(searchStudentValue, shallowEqual);
+  const [fetchStudents] = useActions([loadActiveStudents]);
+
+  const [filteredStudentsList, setFilteredStudentsList] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+
+  const { data, isLoading } = useSelector(activeStudentsSelector, shallowEqual);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    fetchStudents();
+  }, [fetchStudents]);
+
+  useEffect(() => {
+    setFilteredStudentsList(data);
+  }, [data]);
 
   const handleSearch = (inputValue) => {
-    setSearchStudentValue(inputValue);
+    setSearchValue(inputValue);
+    setFilteredStudentsList(data.filter(({ firstName, lastName }) => {
+      const name = `${firstName} ${lastName}`;
+
+      return name.toLowerCase().includes(inputValue.toLowerCase());
+    }));
   };
 
-  // Add a Student
   const addStudent = () => {
+    history.push('/add-student');
   };
 
-  // Student's details
-  const cardDetails = (id) => {
+  const studentDetails = (id) => {
+    history.push(`/students/${id}`);
   };
 
-  // Edit Student's details
-  const cardEditing = (id) => {
+  const studentEditing = (id) => {
+    history.push(`/students/edit-student/${id}`);
   };
 
-  const studentsList = () => {
-    const listByStudentName = dataList.filter((student) => student.name.toUpperCase()
-      .includes(searchStudentName.toUpperCase()));
-
-    return listByStudentName.map((student) => (
+  const getStudents = () => {
+    const students = filteredStudentsList.map(({ id, firstName, lastName }) => (
       <Card
-        key={student.uuid}
-        id={student.uuid}
-        button="Details"
-        onEdit={cardEditing}
-        onDetails={cardDetails}
-      > { student.name }
+        key={id}
+        id={id}
+        buttonName="Details"
+        iconName="Edit"
+        onEdit={() => studentEditing(id)}
+        onDetails={() => studentDetails(id)}
+      >
+        <p className="mb-2">{firstName} {lastName}</p>
       </Card>
     ));
+
+    if (!students.length && searchValue) {
+      return <h4>Student not found</h4>;
+    }
+
+    return students;
   };
 
   return (
     <div className="container">
       <div className="row">
-        <div className={classNames(styles.heading, 'col-12')}>
-          <div className={styles.search__container}>
+        <div className={classNames(styles.heading, 'col-12 mb-2')}>
+          <div className={styles['search-container']}>
             <Search onSearch={handleSearch} placeholder="Enter a student's name" />
           </div>
-          <Button onClick={addStudent} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            Add a Student
-          </Button>
+          <div className={styles['button-container']}>
+            <Button onClick={addStudent} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              Add a Student
+            </Button>
+          </div>
         </div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
-          {
-            studentsList()
-          }
+          <WithLoading isLoading={isLoading}>
+            {
+              getStudents()
+            }
+          </WithLoading>
         </div>
       </div>
     </div>
