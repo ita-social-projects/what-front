@@ -4,7 +4,7 @@ import { watchFetchCounter } from './features/counter/redux/index.js';
 import {
   mentorsSaga, themesWatcher, coursesWatcher,
   schedulesWatcher, studentsWatcher, lessonsWatcher,
-  authWatcher, secretariesWatcher,
+  authWatcher, secretariesWatcher, studentGroupsWatcher,
 } from './models/index.js';
 
 export function* rootSaga() {
@@ -18,5 +18,6 @@ export function* rootSaga() {
     fork(themesWatcher),
     fork(lessonsWatcher),
     fork(secretariesWatcher),
+    fork(studentGroupsWatcher),
   ]);
 }
