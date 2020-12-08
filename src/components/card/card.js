@@ -19,23 +19,26 @@ export const Card = ({
   className,
 }) => {
   const handleDetailsClick = (ev) => {
+    ev.stopPropagation();
     const cardId = ev.target.closest('div').dataset.id;
     onDetails(cardId);
   };
 
   const handleEditClick = (ev) => {
+    ev.stopPropagation();
     const cardId = ev.target.closest('div').dataset.id;
     onEdit(cardId);
   };
 
   return (
     <div
+        onClick={onDetails ? handleDetailsClick : null}
       className={classNames(
         'card col-sm-12 col-md-4 col-lg-3 ',
         styles['card-component'],
         className,
       )}
-      id={id}
+      data-id={id}
     >
       <div className={classNames(
         styles.content,
