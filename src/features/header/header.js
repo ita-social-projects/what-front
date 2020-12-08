@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-
 import styles from './header.scss';
+import { Link } from 'react-router-dom';
 
 const logout = (
   <svg width="1.5em" height="2em" viewBox="0 0 16 16" className="bi bi-door-closed-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +27,7 @@ export const Header = () => {
     {id: 0, title: 'Progress', link: 'progress', active: false},
     {id: 1, title: 'Schedule', link: 'schedule', active: false},
     {id: 2, title: 'Support', link: 'support', active: false},
-  ])
+  ]);
 
   const [sidebar, setSidebar] = useState({
     active: false,
@@ -37,22 +37,22 @@ export const Header = () => {
     setTabs((prevstate) => {
       prevstate.find((tab) => {
         if(tab.active) {
-          tab.active = false
+          tab.active = false;
         } 
-      })
+      });
       
       return prevstate.map((tab, index) => {
         if(index == event.target.dataset.id) {
           return {
             ...tab,
             active: !tab.active,
-          }
+          };
         } else {
-          return tab
+          return tab;
         }
-      })
-    })
-  }
+      });
+    });
+  };
 
   function toggleSidebar() {
     setSidebar((prevState) => {
@@ -60,7 +60,7 @@ export const Header = () => {
         ...prevState,
         active: !prevState.active,
       };
-    })
+    });
   }
 
   return (
@@ -83,12 +83,12 @@ export const Header = () => {
 
         <div className={classNames('navbar-nav nav-tabs', styles['header__navbar-links'])}>
           {tabs.map(({id, title, link, active}) => (
-            <a className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
-              href={`#${link}`} 
+            <Link className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
+              to={`/${link}`} 
               key={id}
               data-id={id}
               onClick={toggleActiveTab}
-            >{title}</a>
+            >{title}</Link>
           ))}
         </div>
             
