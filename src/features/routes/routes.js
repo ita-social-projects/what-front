@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Counter, ListOfStudents, NotFound, ListOfCourses } from '../index.js';
+import { Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse } from '../index.js';
 import { RoleList, Role } from './helpers.js';
 
 export const Routes = () => (
@@ -12,6 +12,7 @@ export const Routes = () => (
       <Route exact path="/role-list/:role" component={Role} />
       <Route exact path="/students" component={ListOfStudents} />
       <Route exact path='/courses' component={ListOfCourses}/>
+      <Route exact path='/add-course' component={AddCourse} />
       <Route component={NotFound} />
     </Switch>
   </>

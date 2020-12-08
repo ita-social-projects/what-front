@@ -24,7 +24,7 @@ table{
 }
 
 a {
-  color: map-get($colors, textMain-color) !important;
+  color: map-get($colors, textMain-color);
 }
 
 .placement {
