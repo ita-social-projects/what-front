@@ -66,7 +66,7 @@ export const ListOfCourses = () => {
   };
 
   return (
-    <div className={classNames('container')}>
+    <div className='container'>
       <div className="row">
         <div className={classNames(styles['list-head'], 'col-12 mb-2')}>
           <div className={styles['search-container']}>

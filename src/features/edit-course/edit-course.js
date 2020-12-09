@@ -10,25 +10,24 @@ import { validateGroupName } from '../validation/validation-helpers';
 import styles from './edit-course.scss';
 import classNames from 'classnames';
 
-export const EditCourse = (props) => {
+export const EditCourse = ({id}) => {
 
   const history = useHistory();
 
   const updateCourse = useActions(editCourse);
   const {data, isLoading} = useSelector(coursesSelector, shallowEqual);
 
-  const courseId = props.match.params.id;
-  const course = data.find((course) => course.id == courseId);
+  const course = data.find((course) => course.id == id);
 
   const onSubmit = (values) => {
-    updateCourse(values, courseId);
+    updateCourse(values, id);
     history.push('/courses');
   };
 
   return (
-    <div className='container mt-5'>
+    <div className='container'>
       <div className='row justify-content-center'>
-        <div className='col-md-6 col-sm-8 card shadow'>
+        <div className='col-md-12 col-sm-8 card shadow'>
           <Formik
             initialValues={{
               name: course.name,
