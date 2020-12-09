@@ -2,12 +2,12 @@ import React from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
-import * as yup from 'yup';
 import classNames from 'classnames';
 
 import { Button, WithLoading } from '../../components/index.js';
 import { useActions } from '../../shared/index.js';
 import { login, currentUserSelector } from '../../models/index.js';
+import { authValidationSchema } from '../validation/validation-helpers.js';
 import styles from './auth.scss';
 
 export const Auth = () => {
@@ -27,13 +27,6 @@ export const Auth = () => {
     history.push('/home');
   }
 
-  const validationSchema = yup.object().shape({
-    email: yup.string()
-      .required('Email is required'),
-    password: yup.string()
-      .required('Password is required'),
-  });
-
   return (
     <div className={styles.wrapper}>
       <div className="container">
@@ -48,7 +41,7 @@ export const Auth = () => {
                 onSubmit={submitHandler}
                 validateOnChange={false}
                 validateOnMount={false}
-                validationSchema={validationSchema}
+                validationSchema={authValidationSchema}
               >
                 {({
                   errors,
