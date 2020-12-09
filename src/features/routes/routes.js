@@ -1,7 +1,11 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse, EditCourse } from '../index.js';
+import { Switch, Route, Redirect } from 'react-router-dom';
+
+import {
+  Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse, EditCourse, GroupDetails,
+} from '../index.js';
 import { RoleList, Role } from './helpers.js';
+import { GroupsTabs } from '../../screens/index.js';
 
 export const Routes = () => (
   <>
@@ -11,10 +15,13 @@ export const Routes = () => (
       <Route exact path="/role-list" component={RoleList} />
       <Route exact path="/role-list/:role" component={Role} />
       <Route exact path="/students" component={ListOfStudents} />
-      <Route exact path='/courses' component={ListOfCourses}/>
-      <Route exact path='/courses/edit-course/:id' component={EditCourse} />
-      <Route exact path='/add-course' component={AddCourse} />
-      <Route component={NotFound} />
+      <Route exact path="/courses" component={ListOfCourses} />
+      <Route exact path="/courses/edit-course/:id" component={EditCourse} />
+      <Route exact path="/add-course" component={AddCourse} />
+      <Route exact path="/groups/:id" component={() => <GroupsTabs index={0} />} />
+      <Route exact path="/groups/edit/:id" component={() => <GroupsTabs index={1} />} />
+      <Route exact path="/404" component={NotFound} />
+      <Redirect to="/404" />
     </Switch>
   </>
 );

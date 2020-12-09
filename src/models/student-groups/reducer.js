@@ -50,7 +50,7 @@ export const studentGroupsReducer = (state = INITIAL_STATE, action) => {
         isLoaded: false,
         error: 'Student Groups loading by id was failed',
       };
-    case actionTypes.LOADING_STUDENT_GROUP_STARTED:
+    case actionTypes.LOADING_STUDENT_GROUPS_STARTED:
       return {
         ...state,
         isLoading: true,

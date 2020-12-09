@@ -27,8 +27,8 @@ export const deleteMentor = (id) => ({
 function* fetchAsyncMentors() {
   try {
     yield put({ type: types.LOADING_STARTED });
-    const mentors = yield call(ApiService.load, '/mentors');
-    yield put({ type: types.FETCHING_MENTORS_SUCCESS, payload: { mentors } });
+    const data = yield call(ApiService.load, '/mentors');
+    yield put({ type: types.FETCHING_MENTORS_SUCCESS, payload: { data } });
   } catch (error) {
     yield put({ type: types.LOADING_FAILED, payload: { error } });
   }
