@@ -18,8 +18,6 @@ export const EditMentor = () => {
       ...values,
       firstName: mentorFirstname,
       lastName: mentorLastname,
-      
-      
     };
   };
   const onSubmit = (values, actions) => {
