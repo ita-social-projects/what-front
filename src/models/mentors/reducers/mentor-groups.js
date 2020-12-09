@@ -7,7 +7,6 @@ const initialState = {
   error: '',
 };
 
-
 export const mentorGroupsReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.FETCHING_MENTOR_GROUPS_STARTED:

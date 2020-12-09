@@ -34,9 +34,9 @@ export const addMentor = (id) => ({
   payload: { id },
 });
 
-export const editMentor = (id, mentor) => ({
+export const editMentor = (id, data) => ({
   type: types.EDIT_MENTOR,
-  payload: { id, mentor },
+  payload: { id, data },
 });
 
 export const deleteMentor = (id) => ({
@@ -47,8 +47,8 @@ export const deleteMentor = (id) => ({
 function* fetchAsyncMentors() {
   try {
     yield put({ type: types.FETCHING_MENTORS_STARTED });
-    const mentors = yield call(ApiService.load, '/mentors');
-    yield put({ type: types.FETCHING_MENTORS_SUCCEED, payload: { mentors } });
+    const data = yield call(ApiService.load, '/mentors');
+    yield put({ type: types.FETCHING_MENTORS_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.FETCHING_MENTORS_FAILED, payload: { error } });
   }
@@ -58,8 +58,8 @@ function* fetchAsyncMentorById({ payload }) {
   try {
     yield put({ type: types.FETCHING_BY_ID_STARTED });
     const mentorId = payload.id;
-    const mentor = yield call(ApiService.load, `/mentors/${mentorId}`);
-    yield put({ type: types.FETCHING_BY_ID_SUCCEED, payload: { mentor } });
+    const data = yield call(ApiService.load, `/mentors/${mentorId}`);
+    yield put({ type: types.FETCHING_BY_ID_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.FETCHING_BY_ID_FAILED, payload: { error } });
   }
@@ -68,8 +68,8 @@ function* fetchAsyncMentorById({ payload }) {
 function* fetchAsyncActiveMentors() {
   try {
     yield put({ type: types.FETCHING_ACTIVE_STARTED });
-    const mentorsActive = yield call(ApiService.load, '/mentors/active');
-    yield put({ type: types.FETCHING_ACTIVE_SUCCEED, payload: { mentorsActive } });
+    const data = yield call(ApiService.load, '/mentors/active');
+    yield put({ type: types.FETCHING_ACTIVE_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.FETCHING_ACTIVE_SUCCEED, payload: { error } });
   }
@@ -79,8 +79,8 @@ function* fetchAsyncMentorsGroups({ payload }) {
   try {
     yield put({ type: types.FETCHING_MENTOR_GROUPS_STARTED });
     const mentorId = payload.id;
-    const mentorGroups = yield call(ApiService.load, `/mentors/${mentorId}/groups`);
-    yield put({ type: types.FETCHING_MENTOR_GROUPS_SUCCEED, payload: { mentorGroups } });
+    const data = yield call(ApiService.load, `/mentors/${mentorId}/groups`);
+    yield put({ type: types.FETCHING_MENTOR_GROUPS_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.FETCHING_MENTOR_GROUPS_FAILED, payload: { error } });
   }
@@ -90,8 +90,8 @@ function* fetchAsyncMentorsCourses({ payload }) {
   try {
     yield put({ type: types.FETCHING_MENTOR_COURSES_STARTED });
     const mentorId = payload.id;
-    const mentorCourses = yield call(ApiService.load, `/mentors/${mentorId}/courses`);
-    yield put({ type: types.FETCHING_MENTOR_COURSES_SUCCEED, payload: { mentorCourses } });
+    const data = yield call(ApiService.load, `/mentors/${mentorId}/courses`);
+    yield put({ type: types.FETCHING_MENTOR_COURSES_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.FETCHING_MENTOR_COURSES_FAILED, payload: { error } });
   }
@@ -101,8 +101,8 @@ function* addAsyncMentor({ payload }) {
   try {
     yield put({ type: types.ADDING_MENTOR_STARTED });
     const mentorId = payload.id;
-    const mentor = yield call(ApiService.create, `/mentors/${mentorId}`);
-    yield put({ type: types.ADDING_MENTOR_SUCCEED, payload: { mentor } });
+    const data = yield call(ApiService.create, `/mentors/${mentorId}`);
+    yield put({ type: types.ADDING_MENTOR_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.ADDING_MENTOR_FAILED, payload: { error } });
   }
@@ -113,8 +113,8 @@ function* editAsyncMentor({ payload }) {
     yield put({ type: types.EDITING_MENTOR_STARTED });
     const mentorId = payload.id;
     const newMentor = payload.data;
-    const mentor = yield call(ApiService.update, `/mentors/${mentorId}`, newMentor);
-    yield put({ type: types.EDITING_MENTOR_SUCCEED, payload: { mentor } });
+    const data = yield call(ApiService.update, `/mentors/${mentorId}`, newMentor);
+    yield put({ type: types.EDITING_MENTOR_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.EDITING_MENTOR_FAILED, payload: { error } });
   }
@@ -131,47 +131,47 @@ function* deleteAsyncMentor({ payload }) {
   }
 }
 
-function* watchFetchingMentors() {
+function* fetchingMentorsWatcher() {
   yield takeLatest(types.FETCH_MENTORS, fetchAsyncMentors);
 }
 
-function* watchFetchingMentorsById() {
+function* fetchingMentorsByIdWatcher() {
   yield takeLatest(types.FETCH_MENTOR_BY_ID, fetchAsyncMentorById);
 }
 
-function* watchFetchingActiveMentors() {
+function* fetchingActiveMentorsWatcher() {
   yield takeLatest(types.FETCH_ACTIVE_MENTORS, fetchAsyncActiveMentors);
 }
 
-function* watchFetchingMentorsGroups() {
+function* fetchingMentorsGroupsWatcher() {
   yield takeLatest(types.FETCH_MENTOR_GROUPS, fetchAsyncMentorsGroups);
 }
 
-function* watchFetchingMentorsCourses() {
+function* fetchingMentorsCoursesWatcher() {
   yield takeLatest(types.FETCH_MENTOR_GROUPS, fetchAsyncMentorsCourses);
 }
 
-function* watchAddingMentor() {
+function* addingMentorWatcher() {
   yield takeEvery(types.ADD_MENTOR, addAsyncMentor);
 }
 
-function* watchEditingMentor() {
+function* editingMentorWatcher() {
   yield takeEvery(types.EDIT_MENTOR, editAsyncMentor);
 }
 
-function* watchDeletingMentor() {
+function* deletingMentorWatcher() {
   yield takeEvery(types.DELETE_MENTOR, deleteAsyncMentor);
 }
 
 export function* mentorsSaga() {
   yield all([
-    fork(watchFetchingMentors),
-    fork(watchFetchingActiveMentors),
-    fork(watchFetchingMentorsById),
-    fork(watchFetchingMentorsGroups),
-    fork(watchFetchingMentorsCourses),
-    fork(watchAddingMentor),
-    fork(watchEditingMentor),
-    fork(watchDeletingMentor),
+    fork(fetchingMentorsWatcher),
+    fork(fetchingMentorsByIdWatcher),
+    fork(fetchingActiveMentorsWatcher),
+    fork(fetchingMentorsGroupsWatcher),
+    fork(fetchingMentorsCoursesWatcher),
+    fork(addingMentorWatcher),
+    fork(editingMentorWatcher),
+    fork(deletingMentorWatcher),
   ]);
 }
