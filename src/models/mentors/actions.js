@@ -2,8 +2,8 @@ import {
   call, put, takeLatest, all, fork, takeEvery,
 } from 'redux-saga/effects';
 
-import { ApiService } from '../../shared/api-service/index.js';
 import * as types from '@models/mentors/types';
+import { ApiService } from '../../shared/api-service/index.js';
 
 
 export const fetchMentors = () => ({
@@ -163,7 +163,7 @@ function* deletingMentorWatcher() {
   yield takeEvery(types.DELETE_MENTOR, deleteAsyncMentor);
 }
 
-export function* mentorsSaga() {
+export function* mentorsWatcher() {
   yield all([
     fork(fetchingMentorsWatcher),
     fork(fetchingMentorsByIdWatcher),
