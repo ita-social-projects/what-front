@@ -4,7 +4,7 @@ export * from './support';
 export * from './start-group';
 export * from './schedule-student';
 export * from './auth';
-export * from './routes';
+export * from '../shared/routes';
 export * from './header';
 export * from './validation';
 export * from './list-of-groups';

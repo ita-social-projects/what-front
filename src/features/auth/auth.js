@@ -5,7 +5,7 @@ import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
 
 import { Button, WithLoading } from '../../components/index.js';
-import { useActions } from '../../shared/index.js';
+import { useActions, homepages } from '../../shared/index.js';
 import { login, currentUserSelector } from '../../models/index.js';
 import { authValidationSchema } from '../validation/validation-helpers.js';
 import styles from './auth.scss';
@@ -15,6 +15,7 @@ export const Auth = () => {
     isLoading,
     error: requestError,
     loaded,
+    currentUser,
   } = useSelector(currentUserSelector, shallowEqual);
   const dispatchLogIn = useActions(login);
   const history = useHistory();
@@ -24,7 +25,7 @@ export const Auth = () => {
   };
 
   if (loaded && !requestError) {
-    history.push('/home');
+    history.push(homepages[currentUser.role]);
   }
 
   return (
