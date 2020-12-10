@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import {
-  Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse, EditCourse, GroupDetails,
+  Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse, EditCourse,
 } from '../index.js';
 import { RoleList, Role } from './helpers.js';
 import { GroupsTabs } from '../../screens/index.js';
@@ -18,8 +18,8 @@ export const Routes = () => (
       <Route exact path="/courses" component={ListOfCourses} />
       <Route exact path="/courses/edit-course/:id" component={EditCourse} />
       <Route exact path="/add-course" component={AddCourse} />
-      <Route exact path="/groups/:id" component={() => <GroupsTabs index={0} />} />
       <Route exact path="/groups/edit/:id" component={() => <GroupsTabs index={1} />} />
+      <Route exact path="/groups/:id" component={() => <GroupsTabs index={0} />} />
       <Route exact path="/404" component={NotFound} />
       <Redirect to="/404" />
     </Switch>
