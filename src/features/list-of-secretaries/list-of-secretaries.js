@@ -38,11 +38,11 @@ export const ListOfSecretaries = () => {
   };
 
   const handleAddSecretary = () => {
-    history.push('/add-secretary');
+    history.push('/add');
   };
 
   const handleEditSecretary = (id) => {
-    history.push(`/secretaries/edit-secretary/${id}`);
+    history.push(`/secretaries/edit/${id}`);
   };
 
   const hadndleSecretarysDetails = (id) => {
