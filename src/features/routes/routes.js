@@ -1,7 +1,10 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Counter, ListOfStudents, NotFound, ListOfMentors } from '../index.js';
-import { Links, RoleList, Role } from './helpers.js';
+import { MentorTabs } from '@/screens';
+import {
+  Counter, ListOfStudents, NotFound, ListOfMentors,
+} from '../index.js';
+import { RoleList, Role } from './helpers.js';
 
 export const Routes = () => (
   <>
@@ -12,6 +15,8 @@ export const Routes = () => (
       <Route exact path="/role-list/:role" component={Role} />
       <Route exact path="/students" component={ListOfStudents} />
       <Route exact path="/mentors" component={ListOfMentors} />
+      <Route exact path="/mentors/:id" component={() => <MentorTabs index={0} />} />
+      <Route exact path="/mentors/edit/:id" component={() => <MentorTabs index={1} />} />
       <Route component={NotFound} />
     </Switch>
   </>
