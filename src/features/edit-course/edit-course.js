@@ -2,19 +2,31 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
-import { coursesSelector, editCourse, fetchCourses } from '@/models';
+import { coursesSelector, editCourse, editedCourseSelector, fetchCourses } from '@/models';
 
 import { Formik, Form, Field } from 'formik';
 import { validateGroupName } from '../validation/validation-helpers';
+import { WithLoading } from '@/components';
 
 import styles from './edit-course.scss';
 import classNames from 'classnames';
-import { WithLoading } from '@/components';
 
 export const EditCourse = ({id}) => {
+  const { 
+    data, 
+    isLoading: isCourseLoading,
+    loaded: isCourseLoaded,
+    error: courseLoadingError, 
+  } = useSelector(coursesSelector, shallowEqual);
+
+  const {  
+    isLoading: isEditedLoading,
+    loaded: isEditedLoaded,
+    error: isEditedError,
+  } = useSelector(editedCourseSelector, shallowEqual);
+
   const [loadCourses] = useActions([fetchCourses]);
   const updateCourse = useActions(editCourse);
-  const {data, isLoading} = useSelector(coursesSelector, shallowEqual);
 
   const course = data.find((course) => course.id == id);
 
@@ -24,9 +36,20 @@ export const EditCourse = ({id}) => {
     loadCourses();
   }, [loadCourses]);
 
+  useEffect(() => {
+    if (!course || courseLoadingError) {
+      history.push('/404');
+    }
+  }, [course, courseLoadingError]);
+
+  useEffect(() => {
+    if (!isEditedError && isEditedLoaded) {
+      history.push('/courses');
+    }
+  }, [isEditedError, isEditedLoaded]);
+
   const onSubmit = (values) => {
     updateCourse(values, id);
-    history.push('/courses');
   };
 
   return (
@@ -36,7 +59,9 @@ export const EditCourse = ({id}) => {
           <div className='px-2 py-4'>
             <h3>Course Editing</h3>
             <hr />
-              <WithLoading isLoading={isLoading} className={classNames(styles['loader-centered'])}>
+              <WithLoading isLoading={isCourseLoading || !isCourseLoaded} 
+                className={classNames(styles['loader-centered'])}
+              >
                 <Formik
                   initialValues={{
                     name: course?.name,
@@ -69,7 +94,7 @@ export const EditCourse = ({id}) => {
                       />
                       <input type='submit' 
                         name='submit-btn'
-                        disabled={isLoading || errors.name}
+                        disabled={isEditedLoading || errors.name}
                         className={classNames('btn btn-success w-25', styles.button)} 
                         value='Save' 
                       />
