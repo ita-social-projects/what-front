@@ -14,7 +14,7 @@ export const SecretariesTabs = () => {
   }, [loadSecretaries]);
 
   return (
-    <Tabs defaultIndex={0} className="container w-50" linkBack="/secretaries">
+    <Tabs defaultIndex={0} className="container col-lg-6 col-md-8 col-sm-12" linkBack="/secretaries">
       <Tab title="Secretary's details" index={0}>
         <SecretarysDetails id={Number(id)} />
       </Tab>

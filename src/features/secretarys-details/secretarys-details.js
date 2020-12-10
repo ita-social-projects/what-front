@@ -13,22 +13,26 @@ export const SecretarysDetails = ({ id }) => {
 
   return (
     <div className={styles.wrapper}>
-      <div className="container shadow">
-        <h3 className="text-center py-3">Secretary&apos;s details</h3>
-        <div className="container pb-3">
+      <div className="container-fluid shadow">
+        <div className="container pb-2">
+          <h3 className="pt-3">Secretary&apos;s details</h3>
+          <hr />
           <WithLoading isLoading={isLoading} className="d-block mx-auto">
-            <div className="row border-bottom mt-3">
-              <div className="col-12 col-md-6">First Name:</div>
-              <div className="col-12 col-md-6">{secretary?.firstName}</div>
+            <div className="row mt-3">
+              <div className="col-4 font-weight-bold">First Name:</div>
+              <div className="col-8">{secretary?.firstName}</div>
             </div>
-            <div className="row border-bottom mt-3">
-              <div className="col-12 col-md-6">Last Name:</div>
-              <div className="col-12 col-md-6">{secretary?.lastName}</div>
+            <hr />
+            <div className="row mt-3">
+              <div className="col-4 font-weight-bold">Last Name:</div>
+              <div className="col-8">{secretary?.lastName}</div>
             </div>
-            <div className="row border-bottom mt-3">
-              <div className="col-12 col-md-6">Email address:</div>
-              <div className="col-12 col-md-6">{secretary?.email}</div>
+            <hr />
+            <div className="row mt-3">
+              <div className="col-4 font-weight-bold">Email address:</div>
+              <div className="col-8">{secretary?.email}</div>
             </div>
+            <hr />
           </WithLoading>
         </div>
       </div>
