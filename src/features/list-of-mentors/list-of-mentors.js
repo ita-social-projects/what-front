@@ -32,14 +32,15 @@ export const ListOfMentors = () => {
   };
 
   const addMentor = () => {
+    history.push(`/add-role`);
   };
   
   const mentorDetails = (id) => {
-    history.push(`/mentors/mentor-tabs/${id}`);
+    history.push(`/mentors/details/${id}`);
   };
   
   const mentorEditing = (id) => {
-    history.push(`/mentors/mentor-tabs/${id}`);
+    history.push(`/mentors/edit/${id}`);
   };
 
 
