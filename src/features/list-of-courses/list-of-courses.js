@@ -38,7 +38,7 @@ export const ListOfCourses = () => {
   };
 
   const courseDetails = (id) => {
-    history.push(`/courses/${id}`);
+    history.push(`/courses/details/${id}`);
   };
 
   const courseEdit = (id) => {
