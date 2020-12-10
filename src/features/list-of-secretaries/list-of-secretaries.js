@@ -45,6 +45,10 @@ export const ListOfSecretaries = () => {
     history.push(`/secretaries/edit-secretary/${id}`);
   };
 
+  const hadndleSecretarysDetails = (id) => {
+    history.push(`/secretaries/${id}`);
+  };
+
   const getSecretaries = () => {
     const secretarise = searchResults.map(({
       id, firstName, lastName, email,
@@ -53,7 +57,9 @@ export const ListOfSecretaries = () => {
         key={id}
         id={id}
         iconName="Edit"
+        buttonName="Details"
         onEdit={() => handleEditSecretary(id)}
+        onDetails={() => hadndleSecretarysDetails(id)}
       >
         <span className={className(styles['card-name'], 'd-flex')}>{firstName}</span>
         <span className={className(styles['card-name'], 'd-flex')}>{lastName}</span>
