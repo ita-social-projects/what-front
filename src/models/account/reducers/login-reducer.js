@@ -14,6 +14,7 @@ export function loginReducer(state = initialState, action) {
       return {
         ...state,
         isLoading: true,
+        loaded: false,
         error: '',
       };
     case actionTypes.LOGIN_STARTED:
