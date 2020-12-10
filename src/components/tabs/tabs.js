@@ -44,7 +44,7 @@ export const Tabs = ({className, children, defaultIndex, linkBack}) => {
     <div className={className}>
       <div className='nav nav-tabs'>
         <a className='nav-item nav-link d-flex align-items-center'
-          href={`/${linkBack}`}
+          href={linkBack}
         >{arrow}</a>
         {renderTabs()}
       </div>

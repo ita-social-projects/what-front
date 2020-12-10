@@ -38,11 +38,11 @@ export const ListOfCourses = () => {
   };
 
   const courseDetails = (id) => {
-    history.push(`/courses/course-details/${id}`);
+    history.push(`/courses/${id}`);
   };
 
   const courseEdit = (id) => {
-    history.push(`/courses/edit-course/${id}`)
+    history.push(`/courses/edit/${id}`)
   };
 
   const coursesList = () => {
