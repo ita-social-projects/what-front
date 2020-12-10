@@ -25,9 +25,9 @@ export const EditMentor = () => {
     editMentor(values);
   };
   return (
-    <div className="container mt-5">
+    <div className="w-100">
       <div className="row justify-content-center">
-        <div className="col-md-6 col-sm-8 card shadow">
+        <div className="w-100 card shadow">
           <Formik
             initialValues={{
               firstName: mentor.firstName,

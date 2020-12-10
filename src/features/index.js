@@ -17,3 +17,5 @@ export * from './list-of-secretaries';
 export * from './edit-secretarys-details';
 export * from './not-found';
 export * from './list-of-mentors';
+export * from '.edit-mentor';
+export * from '.metor-details';
