@@ -56,7 +56,7 @@ export const validateConfirmPassword = (pass, value) => {
 
 export const validateGroupName = (value) => {
   let error;
-  const groupName = /^[a-zA-Z]+(?:\s*[a-zA-Z0-9-_\.]){1,20}$/;
+  const groupName = /^[a-zа-яёА-ЯЁA-Z]+(?:\s*[a-zа-яёА-ЯЁA-Z0-9-_\.]){1,20}$/;
   if (!value) {
     error = 'This field is required';
   } else if (!groupName.test(value)) {

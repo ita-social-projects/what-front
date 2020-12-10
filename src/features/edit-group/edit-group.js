@@ -53,7 +53,7 @@ export const EditGroup = () => {
               <hr />
               <div className='row mb-3'>
                 <div className='col d-flex align-items-center'>
-                  <label className='mb-0' htmlFor='name'>Group name</label>
+                  <label className='mb-0' htmlFor='name'>Group name:</label>
                 </div>
                 <div className='col-md-8'>
                   <Field
@@ -69,7 +69,7 @@ export const EditGroup = () => {
               </div>
               <div className='row mb-3'>
                 <div className='col d-flex align-items-center'>
-                  <label className='mb-0' htmlFor='course'>Course</label>
+                  <label className='mb-0' htmlFor='course'>Course:</label>
                 </div>
                 <div className='col-md-8'>
                   <Field as='select' 
@@ -83,7 +83,7 @@ export const EditGroup = () => {
               </div>
               <div className='row mb-3'>
                 <div className='col d-flex align-items-center'>
-                  <label className='mb-0' htmlFor='start-date'>Start date</label>
+                  <label className='mb-0' htmlFor='start-date'>Start date:</label>
                 </div>
                 <div className='col-md-8'>
                   <Field
@@ -96,7 +96,7 @@ export const EditGroup = () => {
               </div>
               <div className='row mb-3'>
                 <div className='col d-flex align-items-center'>
-                  <label className='mb-0' htmlFor='finish-date'>Finish date</label>
+                  <label className='mb-0' htmlFor='finish-date'>Finish date:</label>
                 </div>
                 <div className='col-md-8'>
                   <Field
