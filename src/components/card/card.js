@@ -40,13 +40,12 @@ export const Card = ({
             <Icon viewBox="0 0 45 45" size={25} icon={iconName} />
           </div>
         )
-        : null
-      }
+        : null}
 
     </div>
     {children ? <div className={styles['card-content']}>{children}</div> : null}
     <div className={styles.content}>
-      {date ? <p className={styles['card-date']}>{date}</p> : null}
+      {date ? <p className={styles['card-date']}>{date}</p> : <p />}
       <div className={styles['card-btn']}>
         {buttonName ? <Button type="button" variant="warning" onClick={() => onDetails(id)}>{buttonName}</Button> : null}
       </div>
