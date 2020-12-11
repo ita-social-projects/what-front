@@ -27,9 +27,6 @@ module.exports = merge(common, {
       new CssMinimizerPlugin(),
       new TerserPlugin(),
     ],
-    runtimeChunk: {
-      name: 'runtime',
-    },
     splitChunks: {
       chunks: 'all',
     },
@@ -37,7 +34,5 @@ module.exports = merge(common, {
   },
   performance: {
     hints: 'warning',
-    maxEntrypointSize: 512000,
-    maxAssetSize: 512000,
   },
 });
