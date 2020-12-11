@@ -9,7 +9,6 @@
 
 .calendar-input{
   @include input;
-  width:18%;
 }
 
 .calendar-input:focus {
@@ -18,7 +17,7 @@
   border-color: map-get($colors, textAccentN1-color);
 }
 .search{
-  width:200px;
+  width:300px;
 }
 
 .group-list{
