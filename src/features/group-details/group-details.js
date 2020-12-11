@@ -1,50 +1,24 @@
-import React, { useEffect } from 'react';
-import { number } from 'prop-types';
+import React from 'react';
+import { shape } from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
-import { shallowEqual, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
-import { useActions } from '../../shared/index.js';
 import { WithLoading } from '../../components/index.js';
 import {
-  studentGroupsSelector, loadStudentGroupsById, studentsSelector,
-  loadStudents, fetchMentors, mentorsSelector,
-  coursesSelector, fetchCourses,
-} from '../../models/index.js';
+  studentGroupsStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
+} from '../../shared/index.js';
 import styles from './group-details.scss';
 
-export const GroupDetails = ({ id }) => {
+export const GroupDetails = ({
+  studentGroupData, studentsData, mentorsData, coursesData,
+}) => {
   const {
     studentGroupById: group,
     isLoading: isGroupLoading,
     isLoaded: isGroupLoaded,
-    error: groupLoadingError,
-  } = useSelector(studentGroupsSelector, shallowEqual);
-  const { data: students, isLoading: areStudentsLoading } = useSelector(studentsSelector);
-  const { mentors, isLoading: areMentorsLoading } = useSelector(mentorsSelector, shallowEqual);
-  const {
-    data: courses,
-    isLoading: areCoursesLoading,
-  } = useSelector(coursesSelector, shallowEqual);
-
-  const [
-    dispatchLoadGroup,
-    dispatchLoadStudents,
-    dispatchLoadMentors,
-    dispatchLoadCourses,
-  ] = useActions([loadStudentGroupsById, loadStudents, fetchMentors, fetchCourses]);
-  const history = useHistory();
-
-  useEffect(() => {
-    dispatchLoadGroup(id);
-    dispatchLoadStudents();
-    dispatchLoadMentors();
-    dispatchLoadCourses();
-  }, [dispatchLoadGroup, dispatchLoadStudents, dispatchLoadMentors, dispatchLoadCourses, id]);
-
-  if (groupLoadingError) {
-    history.push('/404');
-  }
+  } = studentGroupData;
+  const { data: students, isLoading: areStudentsLoading } = studentsData;
+  const { mentors, isLoading: areMentorsLoading } = mentorsData;
+  const { data: courses, isLoading: areCoursesLoading } = coursesData;
 
   return (
     <div className="w-100">
@@ -123,5 +97,8 @@ export const GroupDetails = ({ id }) => {
 };
 
 GroupDetails.propTypes = {
-  id: number.isRequired,
+  studentGroupData: shape(studentGroupsStateShape).isRequired,
+  studentsData: shape(studentsStateShape).isRequired,
+  mentorsData: shape(mentorsStateShape).isRequired,
+  coursesData: shape(coursesStateShape).isRequired,
 };
