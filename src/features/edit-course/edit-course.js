@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
-import { coursesSelector, editCourse, editedCourseSelector, fetchCourses } from '@/models';
+import { coursesSelector, editCourse, editedCourseSelector } from '@/models';
 
 import { Formik, Form, Field } from 'formik';
 import { validateGroupName } from '../validation/validation-helpers';
@@ -25,16 +25,11 @@ export const EditCourse = ({id}) => {
     error: isEditedError,
   } = useSelector(editedCourseSelector, shallowEqual);
 
-  const [loadCourses] = useActions([fetchCourses]);
   const updateCourse = useActions(editCourse);
 
   const course = data.find((course) => course.id == id);
 
   const history = useHistory();
-
-  useEffect(() => {
-    loadCourses();
-  }, [loadCourses]);
 
   useEffect(() => {
     if (!course || courseLoadingError) {

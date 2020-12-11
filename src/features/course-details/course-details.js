@@ -1,19 +1,13 @@
-import React, { useEffect } from 'react';
-import { coursesSelector, fetchCourses } from '@/models';
+import React from 'react';
+import { coursesSelector } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions } from '@/shared';
 import { WithLoading } from '@/components';
 import styles from './course-details.scss';
 
 export const CourseDetails = ({id}) => {
-  const [loadCourses] = useActions([fetchCourses]);
   const { data, isLoading } = useSelector(coursesSelector, shallowEqual);
 
   const course = data.find((course) => course.id == id);
-
-  useEffect(() => {
-    loadCourses();
-  }, [loadCourses]);
   
   return (
     <div className='container'>
