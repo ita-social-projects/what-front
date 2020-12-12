@@ -39,10 +39,10 @@ export const ListOfGroups = () => {
     history.push(`/${id}`);
   }, [history]);
 
-  const handleCalendarChange = useCallback((event) => {
+  const handleCalendarChange = (event) => {
     const date = event.target.value;
     inputGroupStartDate(date);
-  }, [inputGroupStartDate]);
+  };
 
   const getGroupList = () => {
     if (isLoaded && error.length > 0) {
