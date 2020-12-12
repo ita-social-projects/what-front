@@ -1,9 +1,5 @@
-@import '../../styles/main.scss';
-
-.button {
-  @include button();
-}
-
-.error {
-  margin-left: 37%;
+.datalist-item {
+  width: 45%;
+  margin-top: 10px;
+  padding-left: 5px;
 }

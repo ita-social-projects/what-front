@@ -40,7 +40,7 @@ export const GroupsTabs = () => {
 
   return (
     <Tabs linkBack="/groups" className="container w-50">
-      <Tab title="Group details" tabIndex={0}>
+      <Tab title="Group details" tabIndex="0">
         <GroupDetails
           id={Number(id)}
           studentGroupData={groups}
@@ -49,8 +49,14 @@ export const GroupsTabs = () => {
           studentsData={students}
         />
       </Tab>
-      <Tab title="Edit group" tabIndex={1}>
-        <EditGroup id={Number(id)} />
+      <Tab title="Edit group" tabIndex="1">
+        <EditGroup
+          id={Number(id)}
+          studentGroupData={groups}
+          mentorsData={mentors}
+          coursesData={courses}
+          studentsData={students}
+        />
       </Tab>
     </Tabs>
   );
