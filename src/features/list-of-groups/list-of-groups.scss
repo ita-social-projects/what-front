@@ -4,7 +4,7 @@
   display:flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin-bottom:30px;
+  margin-bottom: 30px;
 }
 
 .calendar-input{
@@ -17,7 +17,7 @@
   border-color: map-get($colors, textAccentN1-color);
 }
 .search{
-  width:300px;
+  width: 250px;
 }
 
 .group-list{

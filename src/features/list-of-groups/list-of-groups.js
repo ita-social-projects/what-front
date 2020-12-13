@@ -3,9 +3,10 @@ import classNames from 'classnames';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useActions } from '@shared/hooks/index.js';
-import { Search, WithLoading } from '@components/index.js';
+import { Button, Search, WithLoading } from '@components/index.js';
 import { globalLoadStudentGroups, studentGroupsSelector } from '@models/index.js';
 import { Card } from '@components/card/index.js';
+import Icon from '@/icon.js';
 import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
 
@@ -26,6 +27,11 @@ export const ListOfGroups = () => {
       fetchListOfGroups();
     }
   }, [error, isLoaded, fetchListOfGroups]);
+
+  const handleAddGroup = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log('Redirect to add group form');
+  }, []);
 
   const handleSearch = useCallback((inputValue) => {
     setSearchGroupValue(inputValue);
@@ -78,7 +84,7 @@ export const ListOfGroups = () => {
       <div className="row">
         <div className={classNames(styles['list-head'], 'col-12')}>
           <input
-            className={classNames('form-control ', styles['calendar-input'], 'col-4')}
+            className={classNames('form-control ', styles['calendar-input'], 'col-2')}
             type="date"
             name="group_date"
             required
@@ -86,6 +92,10 @@ export const ListOfGroups = () => {
             placeholder="year-month-day"
           />
           <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
+          <Button onClick={handleAddGroup} variant="warning">
+            <Icon icon="Plus" size={20} className="icon" />
+            Add Group
+          </Button>
         </div>
         <hr className="col-8" />
         <div className={classNames(styles['group-list'], 'col-12')}>
