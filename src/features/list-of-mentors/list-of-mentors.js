@@ -21,7 +21,7 @@ export const ListOfMentors = () => {
   }, [loadActiveMentors]);
 
   useEffect(() => {
-    const mentors = data.filter((mentor) => mentor.firstName.toUpperCase()
+    const mentors = data.filter((mentor) => mentor.firstName.concat(mentor.lastName).toUpperCase()
       .includes(searchMentorValue.toUpperCase()));
     setFilteredMentorList(mentors);
   }, [data, searchMentorValue]);

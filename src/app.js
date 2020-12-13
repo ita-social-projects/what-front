@@ -1,8 +1,5 @@
 import React from 'react';
-import { MentorTabs } from '@/screens';
-import {
-  Counter, EditMentor, ListOfMentors, Routes,
-} from './features/index.js';
+import { Counter, Routes } from './features/index.js';
 import Icon from './icon.js';
 
 export const App = () => (
@@ -11,9 +8,6 @@ export const App = () => (
     <Icon icon="Plus" size={32} className="icon" color="#FFB800" />
     <Icon icon="Edit" viewBox="0 0 50 50" color="#FFB800" />
     <Counter />
-    {/* <ListOfMentors /> */}
-    {/* <MentorTabs /> */}
-    {/* <EditMentor /> */}
     <Routes />
   </>
 );

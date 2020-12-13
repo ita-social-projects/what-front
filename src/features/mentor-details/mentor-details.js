@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { number } from 'prop-types';
 import { useActions } from '../../shared/index.js';
 import { Button, WithLoading } from '../../components/index.js';
 import {
@@ -28,6 +29,7 @@ export const MentorDetails = ({ id }) => {
   if (error) {
     history.push('/404');
   }
+
   const mentorDeleting = (id) => {
     deleteMentor(id);
     history.push('/mentors');
@@ -63,4 +65,8 @@ export const MentorDetails = ({ id }) => {
       </WithLoading>
     </div>
   );
+};
+
+MentorDetails.propTypes = {
+  id: number.isRequired,
 };
