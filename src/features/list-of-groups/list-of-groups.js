@@ -27,9 +27,9 @@ export const ListOfGroups = () => {
     }
   }, [error, isLoaded, fetchListOfGroups]);
 
-  const handleSearch = (inputValue) => {
+  const handleSearch = useCallback((inputValue) => {
     setSearchGroupValue(inputValue);
-  };
+  }, [setSearchGroupValue]);
 
   const handleCardEdit = useCallback((id) => {
     history.push(`/edit/${id}`);
