@@ -24,7 +24,4 @@ export * from './not-found';
 export * from './modal-window';
 export * from './edit-course';
 export * from './add-course';
-
-
-
-
+export * from './unassigned-list';
