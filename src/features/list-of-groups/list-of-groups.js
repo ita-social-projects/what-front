@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useActions } from '@shared/hooks/index.js';
 import { Button, Search, WithLoading } from '@components/index.js';
-import { globalLoadStudentGroups, studentGroupsSelector } from '@models/index.js';
+import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
 import { Card } from '@components/card/index.js';
 import Icon from '@/icon.js';
 import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
@@ -13,8 +13,8 @@ import styles from './list-of-groups.scss';
 export const ListOfGroups = () => {
   const history = useHistory();
 
-  const studentGroupsState = useSelector(studentGroupsSelector, shallowEqual);
-  const { studentGroups, isLoading, isLoaded, error } = studentGroupsState;
+  const studentGroupsState = useSelector(loadStudentGroupsSelector, shallowEqual);
+  const { groups, isLoading, isLoaded, error } = studentGroupsState;
 
   const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
   const searchGroupName = useSelector(searchGroup, shallowEqual);
@@ -55,11 +55,11 @@ export const ListOfGroups = () => {
       return <h4>{error}</h4>;
     }
 
-    if (isLoaded && !studentGroups.length) {
+    if (isLoaded && !groups.length) {
       return <h4>List of groups is empty</h4>;
     }
 
-    const listByName = studentGroups.filter((group) => {
+    const listByName = groups.filter((group) => {
       const normalizedName = group.name.toUpperCase();
       return normalizedName.includes(searchGroupName.toUpperCase());
     });
