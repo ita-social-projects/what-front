@@ -38,5 +38,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-one-expression-per-line': 0,
     'import/no-extraneous-dependencies': 'off',
+    'import/no-unresolved': 'off',
+    'object-curly-newline': 'off',
   },
 };
