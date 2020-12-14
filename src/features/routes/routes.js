@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import { StudentsTabs, CoursesTabs, GroupsTabs } from '@/screens/index.js';
+import { StudentsTabs, CoursesTabs, GroupsTabs, SecretariesTabs } from '@/screens/index.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
-  Auth, UnAssignedList,
+  Auth, UnAssignedList, ListOfSecretaries,
 } from '../index.js';
 
 export const Routes = () => (
@@ -16,7 +16,10 @@ export const Routes = () => (
       <Route exact path="/students" component={ListOfStudents} />
       <Route exact path="/students/:id" component={() => <StudentsTabs index={0}/>} />
       <Route exact path="/students/edit/:id" component={() => <StudentsTabs index={1} />} />
-      <Route exact path="/courses" component={ListOfCourses}/>
+      <Route exact path="/secretaries" component={ListOfSecretaries} />
+      <Route exact path="/secretaries/:id" render={() => <SecretariesTabs index={0} />} />
+      <Route exact path="/secretaries/edit/:id" render={() => <SecretariesTabs index={1} />} />
+      <Route exact path="/courses" component={ListOfCourses} />
       <Route exact path="/courses/add-course" component={AddCourse} />
       <Route exact path="/courses/:id" component={() => <CoursesTabs index={0}/>} />
       <Route exact path="/courses/edit/:id" component={() => <CoursesTabs index={1}/>} />
