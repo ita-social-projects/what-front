@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
-import { activeStudentsSelector, studentGroupsSelector, editStudent, removeStudent } from '@/models';
+import { activeStudentsSelector, loadStudentGroupsSelector, editStudentSelector, 
+  removeStudentSelector, editStudent, removeStudent } from '@/models';
 
 import { Formik, Form, Field } from 'formik';
 import { formValidate } from '../validation/validation-helpers.js';
@@ -15,35 +16,57 @@ import classNames from 'classnames';
 
 export const EditStudentsDetails = ({id}) => {
   const { 
-    data,
+    data: students,
     isLoading: isStudentLoading, 
-    isLoaded: isStudentLoaded, 
+    isLoaded: isStudentLoaded,
+    error: studentLoadingError 
   } = useSelector(activeStudentsSelector, shallowEqual);
 
   const { 
-    studentGroups,
+    data: studentGroups,
     isLoading: areGroupsLoading,
     isLoaded: areGroupsLoaded,
-  } = useSelector(studentGroupsSelector, shallowEqual);
+    error: studentGroupsLoadingError,
+  } = useSelector(loadStudentGroupsSelector, shallowEqual);
+
+  const {
+    isLoading: isEditedLoading,
+    isLoaded: isEditedLoaded,
+    error: isEditedError,
+  } = useSelector(editStudentSelector, shallowEqual);
+
+  const {
+    isLoading: isRemovedLoading,
+    isLoaded: isRemovedLoaded,
+    error: isRemovedError,
+  } = useSelector(removeStudentSelector, shallowEqual);
    
   const [updateStudent, deleteStudent] = useActions([editStudent, removeStudent]);
-  const student = data.find((student) => student.id ==id);
-  student.groups = [
-    { id: 5, name: 'Griffindor', startDate: "2018-09-01T00:00:00", finishDate: "2022-09-01T00:00:00", courseId: 5, studentIds: [20,19,18,17,29,16], mentorIds: [11,4,6,5] },
-    { id: 6, name: '122_17_1', startDate: "2019-09-01T00:00:00", finishDate: "2022-09-01T00:00:00", courseId: 6, studentIds: [21,22,25,23,24], mentorIds: [] },
-  ];
-  console.log(student);
+
   const history = useHistory();
+
+  const student = students.find((student) => student.id ==id);
 
   const [groups, setGroups] = useState(student.groups || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
   const [error, setError] = useState(null);
 
-  const handleGroupDelete = (event) => {
+  useEffect(() => {
+    if (!student || studentLoadingError || studentGroupsLoadingError) {
+      history.push('/404');
+    }
+  }, [student, studentLoadingError, studentGroupsLoadingError]);
+
+  useEffect(() => {
+    if (!isEditedError && isEditedLoaded || !isRemovedError && isRemovedLoaded) {
+      history.push('/students');
+    }
+  }, [isEditedError, isEditedLoaded, isRemovedError, isRemovedLoaded]);
+
+  const handleInputChange = (event) => {
     setError('');
-    const element = event.target.closest('li');
-    const groupsList = groups.filter((group) => group.name !== element.dataset.groupname);
-    setGroups(groupsList);
+    const { value } = event.target;
+    setInputValue(value);
   };
 
   const handleGroupAdd = () => {
@@ -52,7 +75,6 @@ export const EditStudentsDetails = ({id}) => {
       setError('This group was already added to the list');
     } else {
       const groupObject = studentGroups.find((group) => group.name === groupInput);
-      console.log(groupObject);
       if (groupObject) {
         const res = [
           ...groups,
@@ -65,34 +87,33 @@ export const EditStudentsDetails = ({id}) => {
     }
   };
 
-  const handleInputChange = (evt) => {
+  const handleGroupDelete = (event) => {
     setError('');
-    const { value } = evt.target;
-    setInputValue(value);
+    const element = event.target.closest('li');
+    const groupsList = groups.filter((group) => group.name !== element.dataset.groupname);
+    setGroups(groupsList);
   };
 
   const validateStudentData = (values) => {
     const { firstName, lastName, email } = values;
     const name = firstName[0].toUpperCase() + firstName.slice(1);
     const surname = lastName[0].toUpperCase() + lastName.slice(1);
-    const studentGroupIds = groups.map((el) => el.id);
+    const studentGroupIds = groups.map((group) => group.id);
     const editedStudent = {
       firstName: name,
       lastName: surname,
       email,
       studentGroupIds,
     };
-    // updateStudent(id, editedStudent)
-    console.log(editedStudent);
+    updateStudent(id, editedStudent)
+  };
+
+  const onSubmit = (values) => {
+    validateStudentData(values);
   };
 
   const handleExclude = () => {
     deleteStudent(id)
-  };
-
-  const onSubmit = (values) => {
-    setGroups(student.groups);
-    validateStudentData(values);
   };
 
   const resetInput = () => {
@@ -100,14 +121,14 @@ export const EditStudentsDetails = ({id}) => {
   };
 
   return (
-    <div className='container'>
-      <div className='row justify-content-center'>
-        <div className='col-md-12 col-sm-8 card shadow'>
-          <div className='px-2 py-4'>
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-md-12 col-sm-8 card shadow">
+          <div className="px-2 py-4">
             <h3>Student Editing</h3>
             <hr />
             <WithLoading isLoading={isStudentLoading || !isStudentLoaded || areGroupsLoading || !areGroupsLoaded} 
-              className={classNames(styles['loader-centered'])}
+              className={classNames(styles["loader-centered"])}
             >
               <Formik
                 initialValues={{
@@ -128,7 +149,7 @@ export const EditStudentsDetails = ({id}) => {
                       <div className="col-md-8">
                         <Field
                           type="text"
-                          className={classNames('form-control', { 'border-danger': errors.firstName })}
+                          className={classNames("form-control", { "border-danger": errors.firstName })}
                           name="firstName"
                           id="firstName"
                           value={values.firstName}
@@ -144,7 +165,7 @@ export const EditStudentsDetails = ({id}) => {
                       <div className="col-md-8">
                         <Field
                           type="text"
-                          className={classNames('form-control', { 'border-danger': errors.lastName })}
+                          className={classNames("form-control", { "border-danger": errors.lastName })}
                           name="lastName"
                           id="lastName"
                           value={values.lastName}
@@ -160,7 +181,7 @@ export const EditStudentsDetails = ({id}) => {
                       <div className="col-md-8">
                         <Field
                           type="email"
-                          className={classNames('form-control', { 'border-danger': errors.email })}
+                          className={classNames("form-control", { "border-danger": errors.email })}
                           name="email"
                           id="email"
                           value={values.email}
@@ -179,9 +200,9 @@ export const EditStudentsDetails = ({id}) => {
                             name="groupsInput"
                             id="groupsInput"
                             className={classNames(
-                              'form-control col-md-11',
-                              styles['group-input'],
-                              { 'border-danger': error },
+                              "form-control col-md-11",
+                              styles["group-input"],
+                              { "border-danger": error },
                             )}
                             list="group-list"
                             placeholder={groupInput}
@@ -204,14 +225,14 @@ export const EditStudentsDetails = ({id}) => {
                         <ul className="d-flex flex-wrap justify-content-between p-0">
                           {groups.map(({ id, name }) => (
                             <li
-                              className={classNames(styles['list-element'],
-                                'd-flex bg-light border border-outline-secondary rounded')}
+                              className={classNames(styles["list-element"],
+                                "d-flex bg-light border border-outline-secondary rounded")}
                               key={id}
                               data-groupid={id}
                               data-groupname={name}
                             >{name}
                             <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger" 
-                              type='button'
+                              type="button"
                               onClick={handleGroupDelete}>X</button>
                             </li>
                           ))}
@@ -220,18 +241,25 @@ export const EditStudentsDetails = ({id}) => {
                     </div>       
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
-                        <Button className="w-100" variant="danger" onClick={handleExclude}>Exclude</Button>
+                        <Button className="w-100" variant="danger" 
+                          onClick={handleExclude}
+                          disabled={isEditedLoading || isRemovedLoading}
+                        >Exclude</Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
                         <button
-                          className={classNames('w-100 btn btn-secondary', styles.button)}
+                          className={classNames("w-100 btn btn-secondary", styles.button)}
                           type="reset"
                           onClick={resetInput}
                         >Clear
                         </button>
                       </div>
                       <div className="col-md-3 col-4">
-                        <button className={classNames('w-100 btn btn-success', styles.button)} type="submit">Save</button>
+                        <button className={classNames("w-100 btn btn-success", styles.button)} 
+                          type="submit"
+                          disabled={isEditedLoading || isRemovedLoading || 
+                            errors.firstName || errors.lastName || errors.email}
+                        >Save</button>
                       </div>
                     </div>
                   </Form>

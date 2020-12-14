@@ -21,7 +21,7 @@ export const StudentsTabs = ({index}) => {
   return (
     <Tabs defaultIndex={index} className='container w-50' linkBack='/students'>
       <Tab title='Student details'>
-        <CourseDetails id={id} />
+        <h1>Student details</h1>
       </Tab>
       <Tab title='Edit student details'>
         <EditStudentsDetails id={id} />
