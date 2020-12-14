@@ -35,9 +35,9 @@ export const EditGroup = () => {
   };
 
   return (
-    <div className='container mt-5'>
+    <div className='w-100'>
       <div className='row justify-content-center'>
-        <div className='col-md-6 col-sm-8 card shadow'>
+        <div className='w-100 card shadow p-3'>
           <Formik
             initialValues={{
               name: group.name,
@@ -72,10 +72,10 @@ export const EditGroup = () => {
                   <label className='mb-0' htmlFor='course'>Course:</label>
                 </div>
                 <div className='col-md-8'>
-                  <Field as='select' 
-                    className={classNames('custom-select')} 
-                    name='courseId' 
-                    id='course' 
+                  <Field as='select'
+                    className={classNames('custom-select')}
+                    name='courseId'
+                    id='course'
                   >
                     { group.courses.map(({ id, name }) => <option value={id} key={id}>{name}</option>) }
                   </Field>
@@ -110,15 +110,15 @@ export const EditGroup = () => {
                 {errors.finishDate && <p className={classNames('text-danger mb-0', styles.error)}>{errors.finishDate}</p>}
               </div>
               <div className='row justify-content-around mt-4'>
-                <input type="reset" 
-                  name="reset-btn" 
-                  className={classNames("btn btn-secondary w-25", styles.button)} 
+                <input type="reset"
+                  name="reset-btn"
+                  className={classNames("btn btn-secondary w-25", styles.button)}
                   value="Clear all"
                 />
-                <input type="submit" 
-                  name="submit-btn" 
-                  className={classNames('btn btn-success w-25', styles.button)} 
-                  value="Confirm" 
+                <input type="submit"
+                  name="submit-btn"
+                  className={classNames('btn btn-success w-25', styles.button)}
+                  value="Confirm"
                 />
               </div>
             </Form>
