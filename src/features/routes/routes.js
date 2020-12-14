@@ -5,7 +5,7 @@ import { CoursesTabs, GroupsTabs } from '@/screens/index.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
-  Auth, UnAssignedList,
+  Auth, UnAssignedList, ListOfSecretaries,
 } from '../index.js';
 
 export const Routes = () => (
@@ -14,6 +14,7 @@ export const Routes = () => (
       <Route exact path="/" render={() => (<h1 className="m-3">Welcome to the WHAT project!</h1>)} />
       <Route exact path="/counter" component={Counter} />
       <Route exact path="/students" component={ListOfStudents} />
+      <Route exact path="/secretaries" component={ListOfSecretaries} />
       <Route exact path="/courses" component={ListOfCourses} />
       <Route exact path="/courses/add-course" component={AddCourse} />
       <Route exact path="/courses/:id" component={() => <CoursesTabs index={0} />} />
