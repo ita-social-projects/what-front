@@ -15,8 +15,7 @@ export const EditCourse = ({id}) => {
   const { 
     data, 
     isLoading: isCourseLoading,
-    loaded: isCourseLoaded,
-    error: courseLoadingError, 
+    loaded: isCourseLoaded, 
   } = useSelector(coursesSelector, shallowEqual);
 
   const {  
@@ -32,10 +31,10 @@ export const EditCourse = ({id}) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!course || courseLoadingError) {
+    if (!course && isCourseLoaded) {
       history.push('/404');
     }
-  }, [course, courseLoadingError]);
+  }, [course, isCourseLoaded]);
 
   useEffect(() => {
     if (!isEditedError && isEditedLoaded) {
