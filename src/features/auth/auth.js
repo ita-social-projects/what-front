@@ -5,7 +5,9 @@ import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
 
 import { Button, WithLoading } from '../../components/index.js';
-import { useActions, homepages } from '../../shared/index.js';
+import {
+  useActions, paths,
+} from '../../shared/index.js';
 import { login, currentUserSelector } from '../../models/index.js';
 import { authValidationSchema } from '../validation/validation-helpers.js';
 import styles from './auth.scss';
@@ -19,6 +21,18 @@ export const Auth = () => {
   } = useSelector(currentUserSelector, shallowEqual);
   const dispatchLogIn = useActions(login);
   const history = useHistory();
+
+  if (currentUser) {
+    history.push(paths.NOT_FOUND);
+  }
+
+  const homepages = {
+    0: paths.HOME, // unassigned user
+    1: paths.HOME, // student homepage
+    2: paths.STUDENTS, // mentor homepage
+    3: paths.MENTORS, // secretary
+    4: paths.STUDENTS, // admin homepage
+  };
 
   const submitHandler = (values) => {
     dispatchLogIn(values);

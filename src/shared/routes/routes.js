@@ -7,7 +7,7 @@ import {
   Auth,
 } from '../../features/index.js';
 import { ProtectedRoute } from '../../components/index.js';
-import * as paths from './paths.js';
+import { paths } from './index.js';
 
 export const Routes = () => (
   <>
@@ -16,7 +16,7 @@ export const Routes = () => (
       <ProtectedRoute roles={[0, 4]} exact path={paths.COUNTER} component={Counter} />
       <ProtectedRoute roles={[2, 3, 4]} exact path={paths.STUDENTS} component={ListOfStudents} />
       <ProtectedRoute roles={[2, 3, 4]} exact path={paths.COURSES} component={ListOfCourses} />
-      <ProtectedRoute roles={[3, 4]} exact path={paths.COURSE_EDIT()} component={EditCourse} />
+      <ProtectedRoute roles={[3, 4]} exact path={`${paths.COURSE_EDIT}/:id`} component={EditCourse} />
       <ProtectedRoute roles={[3, 4]} exact path={paths.COURSE_ADD} component={AddCourse} />
       <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.NOT_FOUND} component={NotFound} />
       <Route exact path={paths.AUTH} component={Auth} />

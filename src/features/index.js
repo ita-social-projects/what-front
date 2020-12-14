@@ -4,7 +4,6 @@ export * from './support';
 export * from './start-group';
 export * from './schedule-student';
 export * from './auth';
-export * from '../shared/routes';
 export * from './header';
 export * from './validation';
 export * from './list-of-groups';
@@ -24,7 +23,3 @@ export * from './not-found';
 export * from './modal-window';
 export * from './edit-course';
 export * from './add-course';
-
-
-
-

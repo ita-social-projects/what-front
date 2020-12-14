@@ -1,2 +1,2 @@
 export { Routes } from './routes.js';
-export * from './paths.js';
+export * as paths from './paths.js';
