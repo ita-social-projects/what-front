@@ -5,7 +5,7 @@ import { CoursesTabs, GroupsTabs } from '@/screens/index.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
-  Auth,
+  Auth, UnAssignedList,
 } from '../index.js';
 
 export const Routes = () => (
@@ -21,8 +21,9 @@ export const Routes = () => (
       <Route exact path="/groups" component={ListOfGroups} />
       <Route exact path="/groups/:id" render={() => <GroupsTabs index={0} />} />
       <Route exact path="/groups/edit/:id" render={() => <GroupsTabs index={1} />} />
-      <Route exact path="/404" component={NotFound} />
+      <Route exact path="/unassigned" component={UnAssignedList} />
       <Route exact path="/auth" component={Auth} />
+      <Route exact path="/404" component={NotFound} />
       <Redirect to="/404" />
     </Switch>
   </>

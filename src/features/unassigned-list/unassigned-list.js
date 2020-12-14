@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useActions } from '@/shared/index.js';
-import { newUserSelector, currentUserSelector } from '@/models/index.js';
+import { newUserSelector, currentUserSelector, addMentor, createSecretary, addStudent } from '@/models/index.js';
 import className from 'classnames';
-import { addMentor, createSecretary, addStudent } from '@/models/index.js';
 
 import Icon from '../../icon.js';
 import { Search, Button, WithLoading } from '../../components/index.js';
@@ -102,7 +101,8 @@ export const UnAssignedList = () => {
               <Button
                 className={styles.btn}
                 onClick={() => handleButtonClick(user.id)}
-                variant="warning">
+                variant="warning"
+              >
                 <Icon icon="Plus" size={20} className="icon" />
                 Add role
               </Button>
