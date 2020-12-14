@@ -32,13 +32,12 @@ export const ListOfSecretaries = () => {
     setSearch(val);
     setSearchResults(data.filter(({ firstName, lastName }) => {
       const fullName = `${firstName} ${lastName}`;
-
       return fullName.toUpperCase().includes(val.toUpperCase());
     }));
   };
 
   const handleAddSecretary = () => {
-    history.push('/add');
+    history.push('/add-role');
   };
 
   const handleEditSecretary = (id) => {

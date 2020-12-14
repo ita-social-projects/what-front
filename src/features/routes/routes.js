@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import { CoursesTabs, GroupsTabs } from '@/screens/index.js';
+import { CoursesTabs, GroupsTabs, SecretariesTabs } from '@/screens/index.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
@@ -15,6 +15,8 @@ export const Routes = () => (
       <Route exact path="/counter" component={Counter} />
       <Route exact path="/students" component={ListOfStudents} />
       <Route exact path="/secretaries" component={ListOfSecretaries} />
+      <Route exact path="/secretaries/:id" render={() => <SecretariesTabs index={0} />} />
+      <Route exact path="/secretaries/edit/:id" render={() => <SecretariesTabs index={1} />} />
       <Route exact path="/courses" component={ListOfCourses} />
       <Route exact path="/courses/add-course" component={AddCourse} />
       <Route exact path="/courses/:id" component={() => <CoursesTabs index={0} />} />
