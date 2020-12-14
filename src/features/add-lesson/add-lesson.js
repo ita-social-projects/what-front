@@ -1,26 +1,25 @@
 import React from 'react';
 import classNames from 'classnames';
-import faker from 'faker';
 import styles from './add-lesson.scss';
 
 export const AddLesson = () => {
   const names = [
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
-    `${faker.name.firstName()} ${faker.name.lastName()}`,
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
   ];
   return (
     <div className={classNames(styles.page, 'container')}>
-      <form id='form' className={styles.size}>
+      <form id="form" className={styles.size}>
         <div className="row">
           <div className="col-lg-6">
             <h3>Lesson starting</h3>
@@ -28,13 +27,13 @@ export const AddLesson = () => {
             <div className="mt-5 form-group row">
               <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
               <div className="col-sm-8">
-                <input type="text" className="form-control" id="inputLessonTheme" placeholder="Lesson Theme" required/>
+                <input type="text" className="form-control" id="inputLessonTheme" placeholder="Lesson Theme" required />
               </div>
             </div>S
             <div className="form-group row">
               <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name:</label>
               <div className="col-sm-8">
-                <input type="text" className="form-control" id="inputGroupName" placeholder="Group Name" required/>
+                <input type="text" className="form-control" id="inputGroupName" placeholder="Group Name" required />
               </div>
             </div>
             <div className="form-group row">
@@ -46,7 +45,8 @@ export const AddLesson = () => {
                   name="choose-date/time"
                   id="choose-date/time"
                   required
-                  defaultValue={'2020-09-05'}/>
+                  defaultValue="2020-09-05"
+                />
               </div>
             </div>
           </div>
@@ -79,5 +79,5 @@ export const AddLesson = () => {
         <button form="form" type="button" className="btn btn-success btn-lg">Save</button>
       </div>
     </div>
-  )
+  );
 };

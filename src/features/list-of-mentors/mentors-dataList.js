@@ -1,68 +1,66 @@
-import faker from 'faker';
-
 export const dataList = [
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 0,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 1,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 2,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 3,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 4,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 5,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 6,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 7,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 8,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 9,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 10,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 11,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 12,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 13,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 14,
   },
   {
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    name: 'FirstName LastName',
     id: 15,
-  }
+  },
 ];
