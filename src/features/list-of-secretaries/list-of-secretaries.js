@@ -28,11 +28,11 @@ export const ListOfSecretaries = () => {
     setSearchResults(data);
   }, [data]);
 
-  const handleSearch = (val) => {
-    setSearch(val);
+  const handleSearch = (value) => {
+    setSearch(value);
     setSearchResults(data.filter(({ firstName, lastName }) => {
       const fullName = `${firstName} ${lastName}`;
-      return fullName.toUpperCase().includes(val.toUpperCase());
+      return fullName.toUpperCase().includes(value.toUpperCase());
     }));
   };
 
