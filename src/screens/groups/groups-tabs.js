@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
 
-import { useActions } from '../../shared/index.js';
+import { useActions, paths } from '../../shared/index.js';
 import { Tabs, Tab } from '../../components/index.js';
 import { EditGroup, GroupDetails } from '../../features/index.js';
 import {
@@ -35,7 +35,7 @@ export const GroupsTabs = () => {
   const history = useHistory();
 
   if (groups.error) {
-    history.push('/404');
+    history.push(paths.NOT_FOUND);
   }
 
   return (

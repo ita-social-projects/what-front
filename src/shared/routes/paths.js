@@ -28,3 +28,5 @@ export const SECRETARIES = '/secretaries';
 export const SECRETARIES_DETAILS = '/secretaries';
 export const SECRETARY_EDIT = '/secretaries/edit';
 export const SECRETARY_ADD = '/secretaries/add';
+
+export const UNASSIGNED_USERS = '/unassigned';

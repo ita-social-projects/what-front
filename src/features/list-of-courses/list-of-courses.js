@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions } from '@/shared/index.js';
+import { useActions, paths } from '@/shared/index.js';
 import { fetchCourses, coursesSelector } from '@/models/index.js';
+import classNames from 'classnames';
 import { Card, Search, Button, WithLoading } from '../../components/index.js';
 import Icon from '../../icon.js';
-import classNames from 'classnames';
 import styles from './list-of-courses.scss';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
 
-  const {data, isLoading} = useSelector(coursesSelector, shallowEqual);
+  const { data, isLoading } = useSelector(coursesSelector, shallowEqual);
 
   const [loadCourses] = useActions([fetchCourses]);
 
@@ -28,45 +28,42 @@ export const ListOfCourses = () => {
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
-    setFilteredCourses(data.filter(({name}) => {
-      return name.toUpperCase().includes(inputValue.toUpperCase());
-    }));
+    setFilteredCourses(data.filter(({ name }) => name.toUpperCase().includes(inputValue.toUpperCase())));
   };
 
   const addCourse = () => {
-    history.push('/courses/add-course');
+    history.push(paths.COURSE_ADD);
   };
 
   const courseDetails = (id) => {
-    history.push(`/courses/${id}`);
+    history.push(`${paths.COURSE_DETAILS}/${id}`);
   };
 
   const courseEdit = (id) => {
-    history.push(`/courses/edit/${id}`)
+    history.push(`${paths.COURSE_EDIT}/${id}`);
   };
 
   const coursesList = () => {
-
     const courses = filteredCourses.map((course) => (
       <Card
         key={course.id}
         id={course.id}
-        buttonName='Details'
-        iconName='Edit'
+        buttonName="Details"
+        iconName="Edit"
         onEdit={() => courseEdit(course.id)}
         onDetails={() => courseDetails(course.id)}
-        >{course.name}
+      >{course.name}
       </Card>
     ));
 
-    if(!courses.length && searchValue) {
-      return <h4>Courses not found</h4>
+    if (!courses.length && searchValue) {
+      return <h4>Courses not found</h4>;
     }
     return courses;
   };
 
   return (
-    <div className='container'>
+    <div className="container">
       <div className="row">
         <div className={classNames(styles['list-head'], 'col-12 mb-2')}>
           <div className={styles['search-container']}>
@@ -88,4 +85,4 @@ export const ListOfCourses = () => {
       </div>
     </div>
   );
-}
+};

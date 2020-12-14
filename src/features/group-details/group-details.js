@@ -2,10 +2,10 @@ import React from 'react';
 import { shape } from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
 
-import { WithLoading } from '../../components/index.js';
 import {
   studentGroupsStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
-} from '../../shared/index.js';
+} from '@shared/index.js';
+import { WithLoading } from '../../components/index.js';
 import styles from './group-details.scss';
 
 export const GroupDetails = ({

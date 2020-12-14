@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useActions } from '@shared/hooks/index.js';
+import { useActions, paths } from '@shared/index.js';
 import { Button, Search, WithLoading } from '@components/index.js';
 import { globalLoadStudentGroups, studentGroupsSelector } from '@models/index.js';
 import { Card } from '@components/card/index.js';
@@ -38,11 +38,11 @@ export const ListOfGroups = () => {
   }, [setSearchGroupValue]);
 
   const handleCardEdit = useCallback((id) => {
-    history.push(`/edit/${id}`);
+    history.push(`${paths.GROUP_EDIT}/${id}`);
   }, [history]);
 
   const handleCardDetails = useCallback((id) => {
-    history.push(`/${id}`);
+    history.push(`${paths.GROUPS_DETAILS}/${id}`);
   }, [history]);
 
   const handleCalendarChange = (event) => {
