@@ -17,16 +17,14 @@ import classNames from 'classnames';
 export const EditStudentsDetails = ({id}) => {
   const { 
     data: students,
-    isLoading: isStudentLoading, 
-    isLoaded: isStudentLoaded,
-    error: studentLoadingError 
+    isLoading: areStudentsLoading, 
+    isLoaded: areStudentsLoaded,
   } = useSelector(activeStudentsSelector, shallowEqual);
 
   const { 
     data: studentGroups,
     isLoading: areGroupsLoading,
     isLoaded: areGroupsLoaded,
-    error: studentGroupsLoadingError,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
@@ -52,10 +50,10 @@ export const EditStudentsDetails = ({id}) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!student || studentLoadingError || studentGroupsLoadingError) {
+    if (!student && areStudentsLoaded && areGroupsLoaded) {
       history.push('/404');
     }
-  }, [student, studentLoadingError, studentGroupsLoadingError]);
+  }, [student, areStudentsLoaded, areGroupsLoaded]);
 
   useEffect(() => {
     if (!isEditedError && isEditedLoaded || !isRemovedError && isRemovedLoaded) {
@@ -127,7 +125,7 @@ export const EditStudentsDetails = ({id}) => {
           <div className="px-2 py-4">
             <h3>Student Editing</h3>
             <hr />
-            <WithLoading isLoading={isStudentLoading || !isStudentLoaded || areGroupsLoading || !areGroupsLoaded} 
+            <WithLoading isLoading={areStudentsLoading || !areStudentsLoaded || areGroupsLoading || !areGroupsLoaded} 
               className={classNames(styles["loader-centered"])}
             >
               <Formik
