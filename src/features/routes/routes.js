@@ -2,9 +2,10 @@ import { StudentsTabs } from '@/screens/index.js';
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import {
-  Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse, EditCourse, ListOfGroups,
+  Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse, ListOfGroups,
 } from '../index.js';
 import { CoursesTabs, GroupsTabs } from '@/screens/index.js';
+import { Role, RoleList } from './helpers.js';
 
 export const Routes = () => (
   <>
@@ -15,7 +16,7 @@ export const Routes = () => (
       <Route exact path="/role-list/:role" component={Role} />
       <Route exact path="/students" component={ListOfStudents} />
       <Route exact path='/students/:id' component={() => <StudentsTabs index={0}/>} />
-      <Route exact path='/students/edit-student/:id' component={() => <StudentsTabs index={1} />} />
+      <Route exact path='/students/edit/:id' component={() => <StudentsTabs index={1} />} />
       <Route exact path='/courses' component={ListOfCourses}/>
       <Route exact path='/courses/add-course' component={AddCourse} />
       <Route exact path='/courses/:id' component={() => <CoursesTabs index={0}/>} />
