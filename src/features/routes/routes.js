@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { SecretariesTabs } from '@/screens/index.js';
 import {
   Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse, EditCourse, ListOfSecretaries,
@@ -17,7 +17,8 @@ export const Routes = () => (
       <Route exact path="/secretaries" component={ListOfSecretaries} />
       <Route exact path="/secretaries/:id" render={() => <SecretariesTabs index={0} />} />
       <Route exact path="/secretaries/edit/:id" render={() => <SecretariesTabs index={1} />} />
-      <Route component={NotFound} />
+      <Route exact path="/404" component={NotFound} />
+      <Redirect to="/404" />
     </Switch>
   </>
 );

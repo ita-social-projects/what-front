@@ -4,8 +4,9 @@ import { useActions } from '@/shared/index.js';
 import { fetchSecretaries } from '@models/index.js';
 import { Tab, Tabs } from '@/components';
 import { SecretarysDetails, EditSecretarysDetails } from '@/features';
+import { number } from 'prop-types';
 
-export const SecretariesTabs = () => {
+export const SecretariesTabs = ({ index }) => {
   const [loadSecretaries] = useActions([fetchSecretaries]);
   const { id } = useParams();
 
@@ -14,13 +15,17 @@ export const SecretariesTabs = () => {
   }, [loadSecretaries]);
 
   return (
-    <Tabs defaultIndex={0} className="container col-lg-6 col-md-8 col-sm-12" linkBack="/secretaries">
-      <Tab title="Secretary's details" index={0}>
+    <Tabs defaultIndex={index} className="container col-lg-6 col-md-8 col-sm-12" linkBack="/secretaries">
+      <Tab title="Secretary's details">
         <SecretarysDetails id={Number(id)} />
       </Tab>
-      <Tab title="Edit secretary" index={1}>
+      <Tab title="Edit secretary">
         <EditSecretarysDetails id={Number(id)} />
       </Tab>
     </Tabs>
   );
+};
+
+SecretariesTabs.propTypes = {
+  index: number.isRequired,
 };
