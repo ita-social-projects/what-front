@@ -1,36 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { dataCourses } from './courses-data-list.js';
-import { Card, Search, Button } from '../../components/index.js';
+import { shallowEqual, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useActions } from '@/shared/index.js';
+import { Card, Search, Button, WithLoading } from '../../components/index.js';
+import { fetchCourses, coursesSelector } from '@/models/index.js';
 import Icon from '../../icon.js';
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
 
 export const ListOfCourses = () => {
+  const [loadCourses] = useActions([fetchCourses]);
+
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
 
+  const {data, isLoading} = useSelector(coursesSelector, shallowEqual);
+
+  const history = useHistory();
+
   useEffect(() => {
-    const courses = dataCourses.filter((course) => course.name.toUpperCase()
-      .includes(searchValue.toUpperCase()));
-      setFilteredCourses(courses);
-  }, [searchValue]);
+    loadCourses();
+  }, [loadCourses]);
+
+  useEffect(() => {
+    setFilteredCourses(data);
+  }, [data]);
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
+    setFilteredCourses(data.filter(({name}) => {
+      return name.toUpperCase().includes(inputValue.toUpperCase());
+    }))
   };
 
   const addCourse = () => {
+    history.push('/courses/add-course');
   };
 
   const courseDetails = (id) => {
+    history.push(`/courses/course-details/${id}`);
   };
 
   const courseEdit = (id) => {
+    history.push(`/courses/edit-course/${id}`)
   };
 
   const coursesList = () => {
 
-    return filteredCourses.map((course) => (
+    const courses = filteredCourses.map((course) => (
       <Card
         key={course.id}
         id={course.id}
@@ -41,10 +58,15 @@ export const ListOfCourses = () => {
         >{course.name}
       </Card>
     ));
+
+    if(!courses.length && searchValue) {
+      return <h4>Courses not found</h4>
+    }
+    return courses;
   };
 
   return (
-    <div className="container">
+    <div className={classNames('container')}>
       <div className="row">
         <div className={classNames(styles['list-head'], 'col-12 mb-2')}>
           <div className={styles['search-container']}>
@@ -57,9 +79,11 @@ export const ListOfCourses = () => {
         </div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
-          {
-            coursesList()
-          }
+          <WithLoading isLoading={isLoading}>
+            {
+              coursesList()
+            }
+          </WithLoading>
         </div>
       </div>
     </div>

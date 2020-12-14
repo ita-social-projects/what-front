@@ -29,7 +29,7 @@ export const mentorsModelReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        mentors: action.payload.data,
+        mentors: action.payload.mentors,
       };
     case types.ADDING_MENTOR_SUCCESS:
       return {

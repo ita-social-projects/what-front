@@ -53,6 +53,8 @@ function* addLessonAsync(lessonData) {
         data,
       },
     });
+
+    yield put({ type: actionsTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({
       type: actionsTypes.ADDING_FAILED,

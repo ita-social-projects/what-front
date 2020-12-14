@@ -26,11 +26,17 @@ table{
 }
 
 a {
-  color: map-get($colors, textMain-color) !important;
+  color: map-get($colors, textMain-color);
 }
+
 
 .placement {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.error{
+  padding-top:5px;
+  color:red;
 }
