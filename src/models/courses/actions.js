@@ -54,6 +54,7 @@ function* createCourseWorker(data) {
     yield put({type: actionTypes.CREATING_COURSE_STARTED});
     const course = yield call(ApiService.create, '/courses', data.payload.course);
     yield put({type: actionTypes.CREATING_COURSE_SUCCESS, payload: {course}});
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({type: actionTypes.CREATING_COURSE_FAILED, payload: {error: error.message}});
   }
@@ -64,6 +65,7 @@ function* editCourseWorker(data) {
     yield put({type: actionTypes.EDITING_COURSE_STARTED});
     const course = yield call(ApiService.update, `/courses/${data.payload.id}`, data.payload.course);
     yield put({type: actionTypes.EDITING_COURSE_SUCCESS, payload: {course}});
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({type: actionTypes.EDITING_COURSE_FAILED, payload: {error: error.message}});
   }
