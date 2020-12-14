@@ -14,7 +14,7 @@ export const ListOfGroups = () => {
   const history = useHistory();
 
   const studentGroupsState = useSelector(loadStudentGroupsSelector, shallowEqual);
-  const { groups, isLoading, isLoaded, error } = studentGroupsState;
+  const { data, isLoading, isLoaded, error } = studentGroupsState;
 
   const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
   const searchGroupName = useSelector(searchGroup, shallowEqual);
@@ -55,11 +55,11 @@ export const ListOfGroups = () => {
       return <h4>{error}</h4>;
     }
 
-    if (isLoaded && !groups.length) {
+    if (isLoaded && !data.length) {
       return <h4>List of groups is empty</h4>;
     }
 
-    const listByName = groups.filter((group) => {
+    const listByName = data.filter((group) => {
       const normalizedName = group.name.toUpperCase();
       return normalizedName.includes(searchGroupName.toUpperCase());
     });
