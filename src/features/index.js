@@ -26,5 +26,3 @@ export * from './modal-window';
 export * from './edit-course';
 export * from './add-course';
 
-
-
