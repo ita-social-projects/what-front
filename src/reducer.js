@@ -3,7 +3,7 @@ import { counterReducer, listOfGroupsReducer } from './features/index.js';
 import {
   mentorsModelReducer, themesReducer, coursesReducer,
   schedulesReducer, studentsReducer, lessonsReducer,
-  accountReducer,
+  accountReducer, secretariesReducer, studentGroupsReducer,
 } from './models/index.js';
 
 export const rootReducer = combineReducers({
@@ -19,5 +19,7 @@ export const rootReducer = combineReducers({
     mentors: mentorsModelReducer,
     schedules: schedulesReducer,
     themes: themesReducer,
+    secretaries: secretariesReducer,
+    studentGroups: studentGroupsReducer,
   }),
 });
