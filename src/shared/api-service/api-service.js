@@ -20,7 +20,7 @@ export class ApiService {
     });
 
     if (!(response.status >= 200 && response.status < 300)) {
-      throw Error(`Request failed. ${response.statusText}`);
+      throw response;
     }
     return response.data;
   };

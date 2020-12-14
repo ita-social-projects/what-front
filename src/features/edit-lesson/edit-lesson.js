@@ -1,24 +1,22 @@
 import React from 'react';
 import classNames from 'classnames';
 import styles from './edit-lesson.scss';
-import faker from 'faker';
-
 
 export const EditLesson = () => {
 
   const names = [
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
+    'FirstName LastName',
   ];
 
   return (
