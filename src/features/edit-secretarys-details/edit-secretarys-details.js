@@ -40,10 +40,10 @@ export const EditSecretarysDetails = ({ id }) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!secretary || fetchSecretariesError) {
+    if (fetchSecretariesError) {
       history.push('/404');
     }
-  }, [secretary, fetchSecretariesError, history]);
+  }, [fetchSecretariesError, history]);
 
   useEffect(() => {
     if (!secretaryUpdateError && isUpdateLoaded) {
@@ -71,7 +71,7 @@ export const EditSecretarysDetails = ({ id }) => {
         <div className="container pb-2">
           <h3 className="pt-3">Edit Secretary&apos;s details</h3>
           <hr />
-          <WithLoading isLoading={isSecretariesLoading && isSecretariesLoaded} className="d-block mx-auto">
+          <WithLoading isLoading={isSecretariesLoading && !isSecretariesLoaded} className="d-block mx-auto">
             <Formik
               initialValues={{
                 firstName: secretary?.firstName,
