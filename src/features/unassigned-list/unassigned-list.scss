@@ -1,0 +1,65 @@
+@import '../../styles/main';
+
+.conteiner-list{
+    @include franklin-regular(); 
+    width: 80%;
+    margin: auto;
+    box-shadow: rgb(221, 221, 221) 0px 0px 10px 5px;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.list{
+    overflow: scroll;
+    margin: 20px;
+}
+
+.list p{
+    width: 83%;
+    padding: 10px;
+}
+
+.add-role{
+    display: flex;
+}
+
+.card{
+    display: flex;
+    position: relative;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.warning{
+    margin: auto;
+    position: relative;
+    left: 50%;
+}
+
+.btn{ 
+    height: fit-content;
+    margin:10px;
+}
+
+.select{ 
+    height: fit-content;
+    margin:10px;
+    padding: 7px;
+}
+.massage{
+    text-align: center;
+    font-weight: 900;
+    position: relative;
+    padding: 10px;
+    left: 46%;
+    color:#FFB800;
+}
+
+.panel{
+    margin: auto;
+    width: fit-content;
+}

@@ -33,54 +33,6 @@ export const allStudentsReducer = (state = INITIAL_STATE, action) => {
         error: action.payload.error.message,
       };
 
-    case actionTypes.ADDING_STUDENT_STARTED:
-      return {
-        ...state,
-        isLoading: true,
-        isLoaded: false,
-        error: '',
-      };
-
-    case actionTypes.ADDING_STUDENT_SUCCEED:
-      return {
-        ...state,
-        isLoading: false,
-        isLoaded: true,
-        data: [...state.data, action.payload.data],
-      };
-
-    case actionTypes.ADDING_STUDENT_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        isLoaded: false,
-        error: action.payload.error.message,
-      };
-
-    case actionTypes.REMOVING_STUDENT_STARTED:
-      return {
-        ...state,
-        isLoading: true,
-        isLoaded: false,
-        error: '',
-      };
-
-    case actionTypes.REMOVING_STUDENT_SUCCEED:
-      return {
-        ...state,
-        isLoading: false,
-        isLoaded: true,
-        data: state.data.filter((student) => student.id !== action.payload.id),
-      };
-
-    case actionTypes.REMOVING_STUDENT_FAILED:
-      return {
-        ...state,
-        isLoading: true,
-        isLoaded: false,
-        error: '',
-      };
-
     default:
       return state;
   }
