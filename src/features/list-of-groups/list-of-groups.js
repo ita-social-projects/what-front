@@ -1,64 +1,82 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import { shallowEqual, useSelector } from 'react-redux';
-import { Card, Search, Button } from '../../components/index.js';
-import { useActions } from '../../shared/hooks/index.js';
+import { useHistory } from 'react-router-dom';
+import { useActions } from '@shared/hooks/index.js';
+import { Button, Search, WithLoading } from '@components/index.js';
+import { globalLoadStudentGroups, studentGroupsSelector } from '@models/index.js';
+import { Card } from '@components/card/index.js';
+import Icon from '@/icon.js';
 import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
-import Icon from '../../icon.js';
-
 import styles from './list-of-groups.scss';
 
-// use it temporary
-import { data } from './groups.js';
-
 export const ListOfGroups = () => {
-  const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
+  const history = useHistory();
 
+  const studentGroupsState = useSelector(studentGroupsSelector, shallowEqual);
+  const { studentGroups, isLoading, isLoaded, error } = studentGroupsState;
+
+  const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
   const searchGroupName = useSelector(searchGroup, shallowEqual);
   const searchStartDate = useSelector(searchDate, shallowEqual);
 
-  const handleSearch = (inputValue) => {
-    setSearchGroupValue(inputValue);
-  };
+  const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
 
-  // Wait for Routing
-  const handleAddGroup = () => {
+  useEffect(() => {
+    if (!isLoaded && !error) {
+      fetchListOfGroups();
+    }
+  }, [error, isLoaded, fetchListOfGroups]);
+
+  const handleAddGroup = useCallback(() => {
+    // eslint-disable-next-line no-console
     console.log('Redirect to add group form');
-  };
+  }, []);
 
-  const handleCardEdit = (id) => {
-    console.log(`Redirect to card editing ${id}`);
-  };
+  const handleSearch = useCallback((inputValue) => {
+    setSearchGroupValue(inputValue);
+  }, [setSearchGroupValue]);
 
-  const handleCardDetails = (id) => {
-    console.log(`Redirect to card details ${id}`);
-  };
+  const handleCardEdit = useCallback((id) => {
+    history.push(`/edit/${id}`);
+  }, [history]);
+
+  const handleCardDetails = useCallback((id) => {
+    history.push(`/${id}`);
+  }, [history]);
 
   const handleCalendarChange = (event) => {
     const date = event.target.value;
     inputGroupStartDate(date);
   };
 
-  const setGroupList = () => {
-    const listByName = data.filter((group) => group.name.toUpperCase().includes(searchGroupName.toUpperCase()));
-    const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
-    const resultListOfGroups = listByDate.map((group) => {
-      const resultDate = group.startDate.replaceAll('-', '.');
-      return (
-        <Card
-          key={group.id}
-          id={group.id}
-          title={group.name}
-          date={resultDate}
-          buttonName="Details"
-          iconName="Edit"
-          onEdit={handleCardEdit}
-          onDetails={handleCardDetails}
-        />
-      );
+  const getGroupList = () => {
+    if (isLoaded && error.length > 0) {
+      return <h4>{error}</h4>;
+    }
+
+    if (isLoaded && !studentGroups.length) {
+      return <h4>List of groups is empty</h4>;
+    }
+
+    const listByName = studentGroups.filter((group) => {
+      const normalizedName = group.name.toUpperCase();
+      return normalizedName.includes(searchGroupName.toUpperCase());
     });
 
-    return resultListOfGroups;
+    const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
+    return listByDate.map((group) => (
+      <Card
+        key={group.id}
+        id={group.id}
+        title={group.name}
+        date={group.startDate.replaceAll('-', '.').slice(0, 10)}
+        buttonName="Details"
+        iconName="Edit"
+        onEdit={handleCardEdit}
+        onDetails={handleCardDetails}
+      />
+    ));
   };
 
   return (
@@ -66,7 +84,7 @@ export const ListOfGroups = () => {
       <div className="row">
         <div className={classNames(styles['list-head'], 'col-12')}>
           <input
-            className={classNames('form-control ', styles['calendar-input'])}
+            className={classNames('form-control ', styles['calendar-input'], 'col-2')}
             type="date"
             name="group_date"
             required
@@ -81,9 +99,9 @@ export const ListOfGroups = () => {
         </div>
         <hr className="col-8" />
         <div className={classNames(styles['group-list'], 'col-12')}>
-          {
-               setGroupList()
-          }
+          <WithLoading isLoading={isLoading}>
+            {getGroupList()}
+          </WithLoading>
         </div>
       </div>
     </div>

@@ -39,5 +39,6 @@ module.exports = {
     'react/jsx-one-expression-per-line': 0,
     'import/no-extraneous-dependencies': 'off',
     'import/no-unresolved': 'off',
+    'object-curly-newline': 'off',
   },
 };
