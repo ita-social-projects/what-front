@@ -5,22 +5,18 @@ import * as Yup from 'yup';
 import styles from './edit-students-details.scss';
 import Icon from '../../icon.js';
 import { Button } from '../../components/index.js';
+import { useHistory } from 'react-router-dom';
+import { useActions } from '@/shared';
+import { activeStudentsSelector, editStudent, removeStudent } from '@/models';
+import { shallowEqual, useSelector } from 'react-redux';
+import { formValidate } from '../validation/validation-helpers.js';
 
-export const EditStudentsDetails = () => {
-  // temporary
-  const student = {
-    firstName: 'Taras',
-    secondName: 'Tarasov',
-    email: 'tarastarasov@gmail.com',
-    groups: [
-      { id: 1, name: 'Group 1' },
-      { id: 2, name: 'Group 2' },
-      { id: 3, name: 'Group 3' },
-      { id: 4, name: 'Group 4' },
-      { id: 5, name: 'Group 5' },
-      { id: 6, name: 'Group 6' },
-    ],
-  };
+export const EditStudentsDetails = ({id}) => {
+  const { data } = useSelector(activeStudentsSelector, shallowEqual);
+  const [updateStudent, deleteStudent] = useActions([editStudent, removeStudent]);
+  const student = data.find((student) => student.id ==id);
+
+  const history = useHistory();
 
   // temporary
   const groupList = [
@@ -35,7 +31,7 @@ export const EditStudentsDetails = () => {
     { id: 9, name: 'Group 9' },
   ];
 
-  const [groups, setGroups] = useState(student.groups || 0);
+  const [groups, setGroups] = useState(groupList || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
   const [error, setError] = useState(null);
 
@@ -70,24 +66,6 @@ export const EditStudentsDetails = () => {
     setInputValue(value);
   };
 
-  const validate = Yup.object().shape({
-    firstName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .matches(
-        '^[A-Za-zа-яА-ЯёЁ]+$',
-        'Invalid first name',
-      ),
-    lastName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .matches(
-        '^[A-Za-zа-яА-ЯёЁ]+$',
-        'Invalid second name',
-      ),
-    email: Yup.string().email('Invalid email'),
-  });
-
   const validateStudentData = (values) => {
     const { firstName, lastName, email } = values;
     const name = firstName[0].toUpperCase() + firstName.slice(1);
@@ -99,32 +77,32 @@ export const EditStudentsDetails = () => {
       email,
       studentGroupIds,
     };
-    // put method waiting for saga
+    // updateStudent(id, editedStudent)
+    console.log(editedStudent);
   };
 
   const handleExclude = () => {
-    // waiting for saga
+    deleteStudent(id)
   };
 
-  const onSubmit = (values, actions) => {
-    actions.resetForm();
-    setGroups(student.groups);
+  const onSubmit = (values) => {
+    setGroups(groupList);
     validateStudentData(values);
   };
 
   const resetInput = () => {
-    setGroups(student.groups);
+    setGroups(groupList);
   };
 
   return (
     <Formik
       initialValues={{
         firstName: student.firstName,
-        lastName: student.secondName,
+        lastName: student.lastName,
         email: student.email,
         groups: '',
       }}
-      validationSchema={validate}
+      validationSchema={formValidate}
       onSubmit={onSubmit}
     >
       {({ values, errors }) => (
@@ -149,7 +127,7 @@ export const EditStudentsDetails = () => {
 
               <div className="row m-0 pt-3">
                 <div className="col-md-4">
-                  <label htmlFor="lastName">Second Name:</label>
+                  <label htmlFor="lastName">Last Name:</label>
                 </div>
                 <div className="col-md-8">
                   <Field
@@ -218,8 +196,8 @@ export const EditStudentsDetails = () => {
                         className={className(styles['list-element'],
                           'd-flex bg-light border border-outline-secondary rounded')}
                         key={id}
-                        data-groupId={id}
-                        data-groupName={name}
+                        data-groupid={id}
+                        data-groupname={name}
                       >
                         {name}
                         <button className="btn p-0 ml-auto mr-2 font-weight-bold text-danger" onClick={handleGroupDelete}>X</button>

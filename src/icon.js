@@ -12,7 +12,7 @@ const Icon = ({
     width={`${size}px`}
     height={`${size}px`}
   >
-    <use href={`./assets/svg/${icon}.svg#${icon}`} fill={color} />
+    <use href={`/assets/svg/${icon}.svg#${icon}`} fill={color} />
   </svg>
 );
 
