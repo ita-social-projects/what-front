@@ -79,7 +79,7 @@ export const AddLesson = () => {
     }
   }, [studentsError, studentsIsLoaded, getStudents]);
 
-  //for future Lessons Model structure
+  // for future Lessons Model structure
   /* useEffect(() => {
     if (!addingError && IsLoaded) {
       history.push('/courses')
@@ -102,6 +102,10 @@ export const AddLesson = () => {
 
   const openStudentDetails = useCallback((id) => {
     history.push(`/students/${id}`);
+  }, [history]);
+
+  const handleCancel = useCallback(() => {
+    history.push('/lessons');
   }, [history]);
 
   const onSubmit = (values) => {
@@ -394,7 +398,7 @@ export const AddLesson = () => {
           </div>
         </div>
         <div className={classNames(styles.placement, 'col-12')}>
-          <button form="form" type="button" className="btn btn-secondary btn-lg">Cancel</button>
+          <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
           {btnSave
             ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
             : (
