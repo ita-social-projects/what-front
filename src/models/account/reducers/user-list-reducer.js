@@ -1,7 +1,7 @@
 import * as actionTypes from '../types.js';
 
 const initialState = {
-  user: [],
+  users: [],
   isLoading: false,
   loaded: false,
   error: '',
