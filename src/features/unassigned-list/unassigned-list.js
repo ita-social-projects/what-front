@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useActions } from '@/shared/index.js';
-import { newUserSelector } from '@/models/index.js';
+import { newUserSelector, currentUserSelector } from '@/models/index.js';
 import className from 'classnames';
-import { Cookie } from '../../utils/index.js';
-import {addMentor, createSecretary, addStudent } from '@/models/index.js';
+import { addMentor, createSecretary, addStudent } from '@/models/index.js';
 
 import Icon from '../../icon.js';
 import { Search, Button, WithLoading } from '../../components/index.js';
@@ -14,8 +13,9 @@ import { fetchUnAssignedUserList } from '../../models/index.js';
 import styles from './unassigned-list.scss';
 
 export const UnAssignedList = () => {
-  const roles = ['student', 'mentor', 'secretery'];
-  const currentUserRole = JSON.parse(Cookie.get('user') ?? null).role;
+  const roles = ['student', 'mentor', 'secretary'];
+  const { currentUser } = useSelector(currentUserSelector);
+  const currentUserRole = currentUser.role;
   const { loaded, notAssigned } = useSelector(newUserSelector);
 
   const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
@@ -97,7 +97,7 @@ export const UnAssignedList = () => {
       if (searchPersonValue.length !== 0) {
         return (searchPersonValue.map((user) => (
           <div className={styles.card}>
-            <p>{`${user.firstName} ${user.lastName}`}<br />{user.email}</p>
+            <p>{user.firstName} {user.lastName}<br />{user.email}</p>
             <div className={styles['add-role']}>
               <Button
                 className={styles.btn}
