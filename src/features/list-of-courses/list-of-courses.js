@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared/index.js';
-import { Card, Search, Button, WithLoading } from '../../components/index.js';
 import { fetchCourses, coursesSelector } from '@/models/index.js';
+import { Card, Search, Button, WithLoading } from '../../components/index.js';
 import Icon from '../../icon.js';
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
 
 export const ListOfCourses = () => {
-  const [loadCourses] = useActions([fetchCourses]);
-
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
 
   const {data, isLoading} = useSelector(coursesSelector, shallowEqual);
+
+  const [loadCourses] = useActions([fetchCourses]);
 
   const history = useHistory();
 
@@ -30,7 +30,7 @@ export const ListOfCourses = () => {
     setSearchValue(inputValue);
     setFilteredCourses(data.filter(({name}) => {
       return name.toUpperCase().includes(inputValue.toUpperCase());
-    }))
+    }));
   };
 
   const addCourse = () => {
@@ -38,11 +38,11 @@ export const ListOfCourses = () => {
   };
 
   const courseDetails = (id) => {
-    history.push(`/courses/course-details/${id}`);
+    history.push(`/courses/${id}`);
   };
 
   const courseEdit = (id) => {
-    history.push(`/courses/edit-course/${id}`)
+    history.push(`/courses/edit/${id}`)
   };
 
   const coursesList = () => {
@@ -53,8 +53,8 @@ export const ListOfCourses = () => {
         id={course.id}
         buttonName='Details'
         iconName='Edit'
-        onEdit={courseEdit}
-        onDetails={courseDetails}
+        onEdit={() => courseEdit(course.id)}
+        onDetails={() => courseDetails(course.id)}
         >{course.name}
       </Card>
     ));
@@ -66,7 +66,7 @@ export const ListOfCourses = () => {
   };
 
   return (
-    <div className={classNames('container')}>
+    <div className='container'>
       <div className="row">
         <div className={classNames(styles['list-head'], 'col-12 mb-2')}>
           <div className={styles['search-container']}>
