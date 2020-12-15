@@ -88,7 +88,7 @@ export const EditSecretarysDetails = ({ id }) => {
                   <div className="container pb-3 px-0">
                     <div className="row m-0 pt-3">
                       <div className="col-md-4">
-                        <label htmlFor="firstName">First Name:</label>
+                        <label htmlFor="firstName" className="font-weight-bold">First Name:</label>
                       </div>
                       <div className="col-md-8">
                         <Field
@@ -104,7 +104,7 @@ export const EditSecretarysDetails = ({ id }) => {
                     </div>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4">
-                        <label htmlFor="lastName">Last Name:</label>
+                        <label htmlFor="lastName" className="font-weight-bold">Last Name:</label>
                       </div>
                       <div className="col-md-8">
                         <Field
@@ -120,7 +120,7 @@ export const EditSecretarysDetails = ({ id }) => {
                     </div>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4">
-                        <label htmlFor="email">Email:</label>
+                        <label htmlFor="email" className="font-weight-bold">Email:</label>
                       </div>
                       <div className="col-md-8">
                         <Field
