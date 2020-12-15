@@ -11,6 +11,7 @@ import {
 import { formValidate } from '@features/validation/validation-helpers.js';
 import { useHistory } from 'react-router-dom';
 import { useActions } from '@/shared';
+
 import styles from './edit-secretarys-details.scss';
 
 export const EditSecretarysDetails = ({ id }) => {
@@ -18,7 +19,6 @@ export const EditSecretarysDetails = ({ id }) => {
     data,
     isLoading: isSecretariesLoading,
     loaded: isSecretariesLoaded,
-    error: fetchSecretariesError,
   } = useSelector(secretariesSelector, shallowEqual);
 
   const {
@@ -40,10 +40,10 @@ export const EditSecretarysDetails = ({ id }) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (fetchSecretariesError) {
+    if (!secretary && isSecretariesLoaded) {
       history.push('/404');
     }
-  }, [fetchSecretariesError, history]);
+  }, [secretary, isSecretariesLoaded, history]);
 
   useEffect(() => {
     if (!secretaryUpdateError && isUpdateLoaded) {
