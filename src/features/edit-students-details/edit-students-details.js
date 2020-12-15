@@ -22,7 +22,7 @@ export const EditStudentsDetails = ({id}) => {
   } = useSelector(activeStudentsSelector, shallowEqual);
 
   const { 
-    data: studentGroups,
+    data: allGroups,
     isLoading: areGroupsLoading,
     isLoaded: areGroupsLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
@@ -44,8 +44,9 @@ export const EditStudentsDetails = ({id}) => {
   const history = useHistory();
 
   const student = students.find((student) => student.id ==id);
+  const studentGroups = allGroups.filter((group) => student.groupsIds?.includes(group.id));
 
-  const [groups, setGroups] = useState(student.groups || 0);
+  const [groups, setGroups] = useState(studentGroups || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
   const [error, setError] = useState(null);
 
@@ -72,7 +73,7 @@ export const EditStudentsDetails = ({id}) => {
     if (checkName) {
       setError('This group was already added to the list');
     } else {
-      const groupObject = studentGroups.find((group) => group.name === groupInput);
+      const groupObject = allGroups.find((group) => group.name === groupInput);
       if (groupObject) {
         const res = [
           ...groups,
@@ -115,7 +116,7 @@ export const EditStudentsDetails = ({id}) => {
   };
 
   const resetInput = () => {
-    setGroups(student.groups);
+    setGroups(studentGroups);
   };
 
   return (
@@ -207,7 +208,7 @@ export const EditStudentsDetails = ({id}) => {
                             onChange={handleInputChange}
                           />
                           <datalist id="group-list">
-                            {studentGroups.map(({ id, name }) => (
+                            {allGroups.map(({ id, name }) => (
                               <option key={id}>{name}</option>
                             ))}
                           </datalist>
