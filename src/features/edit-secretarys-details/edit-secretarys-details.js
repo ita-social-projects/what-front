@@ -99,7 +99,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           placeholder="Name"
                           value={values?.firstName}
                         />
-                        {touched.firstName && errors.firstName && <div className="text-danger mt-3">{errors.firstName}</div>}
+                        {touched.firstName && errors.firstName && <div className="text-danger mt-3">{errors?.firstName}</div>}
                       </div>
                     </div>
                     <div className="row m-0 pt-3">
@@ -115,7 +115,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           placeholder="Lastname"
                           value={values?.lastName}
                         />
-                        {touched.lastName && errors.lastName && <div className="text-danger mt-3">{errors.lastName}</div>}
+                        {touched.lastName && errors.lastName && <div className="text-danger mt-3">{errors?.lastName}</div>}
                       </div>
                     </div>
                     <div className="row m-0 pt-3">
@@ -131,7 +131,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           placeholder="Email"
                           value={values?.email}
                         />
-                        {touched.email && errors.email && <div className="text-danger mt-3">{errors.email}</div>}
+                        {touched.email && errors.email && <div className="text-danger mt-3">{errors?.email}</div>}
                       </div>
                     </div>
                     <div className="row m-0 pt-3">
@@ -152,7 +152,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           className={className(styles.button, 'btn btn-secondary w-100')}
                           onClick={handleReset}
                         >
-                          Cancel
+                          Clear
                         </Button>
                       </div>
                       <div className="col-md-3 col-4">
