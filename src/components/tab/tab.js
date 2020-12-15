@@ -13,7 +13,7 @@ export const Tab = ({title, tabIndex, isActive, onClick}) => {
   );
 };
 
-Tab.prototype = {
+Tab.propTypes = {
   title: propTypes.string.isRequired,
   onClick: propTypes.func,
   tabIndex: propTypes.number,

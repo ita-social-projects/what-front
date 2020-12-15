@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
-import { coursesSelector, createCourse } from '@/models';
-
+import { createCourse, createdCourseSelector } from '@/models';
 import { Formik, Form, Field } from 'formik';
 import { validateGroupName } from '../validation/validation-helpers';
-
 import styles from './add-course.scss';
 import classNames from 'classnames';
 
 export const AddCourse = () => {
-
-  const history = useHistory();
+  const { isLoading, loaded, error } = useSelector(createdCourseSelector, shallowEqual);
 
   const addCourse = useActions(createCourse);
-  const { isLoading } = useSelector(coursesSelector, shallowEqual);
+  
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!error && loaded) {
+      history.push('/courses')
+    }
+  }, [error, loaded]);
 
   const onSubmit = (values) => {
     addCourse(values);
-    history.push('/courses');
   };
 
   return (
