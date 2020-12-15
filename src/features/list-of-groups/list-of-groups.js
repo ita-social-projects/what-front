@@ -14,7 +14,7 @@ export const ListOfGroups = () => {
   const history = useHistory();
 
   const studentGroupsState = useSelector(loadStudentGroupsSelector, shallowEqual);
-  const { groups, isLoading, isLoaded, error } = studentGroupsState;
+  const { data: groups, isLoading, isLoaded, error } = studentGroupsState;
 
   const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
   const searchGroupName = useSelector(searchGroup, shallowEqual);
