@@ -58,11 +58,12 @@ export const EditGroup = ({
     }
   }, [group.studentIds, students]);
 
-  const addMentor = (mentorFullInfo) => {
+  const addMentor = (mentorFullInfo, clearField) => {
     const [selectedMentorEmail] = mentorFullInfo.split(' ').reverse();
     const mentor = mentors.find(({ email }) => email === selectedMentorEmail);
 
     if (mentor) {
+      clearField();
       setMentorInputError('');
       setGroupMentors((prevState) => [...prevState, mentor]);
     } else {
