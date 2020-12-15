@@ -26,3 +26,4 @@ export * from './modal-window';
 export * from './edit-course';
 export * from './add-course';
 export * from './unassigned-list';
+export * from './edit-mentor';
