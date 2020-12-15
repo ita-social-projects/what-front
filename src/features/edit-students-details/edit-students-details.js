@@ -7,6 +7,7 @@ import { activeStudentsSelector, loadStudentGroupsSelector, editStudentSelector,
 
 import { Formik, Form, Field } from 'formik';
 import { formValidate } from '../validation/validation-helpers.js';
+
 import { WithLoading } from '@/components';
 import { Button } from '../../components/index.js';
 import Icon from '../../icon.js';
@@ -15,6 +16,7 @@ import styles from './edit-students-details.scss';
 import classNames from 'classnames';
 
 export const EditStudentsDetails = ({id}) => {
+  const history = useHistory();
   const { 
     data: students,
     isLoading: areStudentsLoading, 
@@ -41,9 +43,7 @@ export const EditStudentsDetails = ({id}) => {
    
   const [updateStudent, deleteStudent] = useActions([editStudent, removeStudent]);
 
-  const history = useHistory();
-
-  const student = students.find((student) => student.id ==id);
+  const student = students.find((student) => student.id == id);
   const studentGroups = allGroups.filter((group) => student.groupsIds?.includes(group.id));
 
   const [groups, setGroups] = useState(studentGroups || 0);
@@ -126,14 +126,14 @@ export const EditStudentsDetails = ({id}) => {
           <div className="px-2 py-4">
             <h3>Student Editing</h3>
             <hr />
-            <WithLoading isLoading={areStudentsLoading || !areStudentsLoaded || areGroupsLoading || !areGroupsLoaded} 
-              className={classNames(styles["loader-centered"])}
+            <WithLoading isLoading={areStudentsLoading || !areStudentsLoaded} 
+              className={styles["loader-centered"]}
             >
               <Formik
                 initialValues={{
-                  firstName: student.firstName,
-                  lastName: student.lastName,
-                  email: student.email,
+                  firstName: student?.firstName,
+                  lastName: student?.lastName,
+                  email: student?.email,
                   groups: '',
                 }}
                 validationSchema={formValidate}
@@ -219,6 +219,9 @@ export const EditStudentsDetails = ({id}) => {
                         { error ? <div className={styles.error}>{error}</div> : null}
                       </div>
                     </div>
+                    <WithLoading isLoading={areGroupsLoading || !areGroupsLoaded} 
+                      className={styles["loader-centered"]}
+                    >
                     <div className="row m-0 pt-3">
                       <div className="col-md-8 offset-md-4">
                         <ul className="d-flex flex-wrap justify-content-between p-0">
@@ -237,7 +240,8 @@ export const EditStudentsDetails = ({id}) => {
                           ))}
                         </ul>
                       </div>
-                    </div>       
+                    </div>
+                    </WithLoading>       
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button className="w-100" variant="danger" 
@@ -258,7 +262,8 @@ export const EditStudentsDetails = ({id}) => {
                           type="submit"
                           disabled={isEditedLoading || isRemovedLoading || 
                             errors.firstName || errors.lastName || errors.email}
-                        >Save</button>
+                          >Save
+                        </button>
                       </div>
                     </div>
                   </Form>
