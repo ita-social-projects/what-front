@@ -1,7 +1,7 @@
 import * as actionTypes from '../types.js';
 
 const initialState = {
-  notAsssigned: [],
+  notAssigned: [],
   isLoading: false,
   loaded: false,
   error: '',
@@ -28,7 +28,7 @@ export function unAssignedReducer(state = initialState, action) {
         ...state,
         isLoading: false,
         loaded: true,
-        notAsssigned: state.notAsssigned.concat([action.payload.regUser]),
+        notAssigned: state.notAssigned.concat([action.payload.regUser]),
       };
 
     case actionTypes.REGIST_ERROR:
@@ -58,7 +58,7 @@ export function unAssignedReducer(state = initialState, action) {
         ...state,
         isLoading: false,
         loaded: true,
-        notAsssigned: state.notAsssigned.concat([action.payload.unAssigned]),
+        notAssigned: state.notAssigned.concat([action.payload.unAssigned]),
       };
 
     case actionTypes.FETCH_UNASSIGNED_ERROR:

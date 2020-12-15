@@ -1,39 +1,34 @@
 import * as actionTypes from '../types.js';
 
-const initialState = {
-  users: [],
+const INITIAL_STATE = {
+  data: [],
   isLoading: false,
   loaded: false,
   error: '',
-};
+}; 
 
-export function usersListreducer(state = initialState, action) {
+export const allCoursesReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case actionTypes.FETCH_ASSIGNED:
+    case actionTypes.LOADING_COURSES_STARTED:
       return {
         ...state,
         isLoading: true,
         error: '',
       };
-    case actionTypes.FETCH_ASSIGNED_SUCCESS:
+    case actionTypes.LOADING_COURSES_SUCCESS:
       return {
         ...state,
         isLoading: false,
         loaded: true,
-        users: state.users.concat([action.payload.usersList]),
+        data: action.payload.courses,
+        error: '',
       };
-    case actionTypes.FETCH_ASSIGNED_ERROR:
+    case actionTypes.LOADING_COURSES_FAILED:
       return {
         ...state,
         isLoading: false,
         loaded: false,
         error: action.payload.error,
-      };
-    case actionTypes.FETCH_UNASSIGNED:
-      return {
-        ...state,
-        isLoading: true,
-        error: '',
       };
     default: return state;
   }

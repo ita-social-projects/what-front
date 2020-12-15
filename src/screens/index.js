@@ -1,1 +1,3 @@
-export { GroupsTabs } from './groups/index.js';
+export * from './courses/index.js';
+export * from './groups/index.js';
+
