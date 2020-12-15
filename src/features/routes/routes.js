@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-
 import { StudentsTabs, CoursesTabs, GroupsTabs, SecretariesTabs } from '@/screens/index.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
   Auth, UnAssignedList, ListOfSecretaries,
+  ListOfMentors
 } from '../index.js';
 
 export const Routes = () => (
@@ -30,6 +30,8 @@ export const Routes = () => (
       <Route exact path="/auth" component={Auth} />
       <Route exact path="/404" component={NotFound} />
       <Redirect to="/404" />
+      <Route exact path="/mentors" component={ListOfMentors} />
+      <Route component={NotFound} />
     </Switch>
   </>
 );
