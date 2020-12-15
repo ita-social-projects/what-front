@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import * as yup from 'yup';
 
 export const formValidate = Yup.object().shape({
   firstName: Yup.string()
@@ -91,9 +90,9 @@ export const validateName = (value) => {
   return error;
 };
 
-export const authValidationSchema = yup.object().shape({
-  email: yup.string()
+export const authValidationSchema = Yup.object().shape({
+  email: Yup.string()
     .required('Email is required'),
-  password: yup.string()
+  password: Yup.string()
     .required('Password is required'),
 });
