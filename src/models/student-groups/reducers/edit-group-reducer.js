@@ -1,7 +1,7 @@
 import * as actionTypes from '../action-types.js';
 
 const INITIAL_STATE = {
-  group: {},
+  data: [],
   isLoading: false,
   isLoaded: false,
   error: '',
@@ -20,7 +20,7 @@ export const editStudentGroupReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        groups: state.groups.map((group) => {
+        data: state.data.map((group) => {
           if (group.id === action.payload.id) {
             return action.payload;
           }

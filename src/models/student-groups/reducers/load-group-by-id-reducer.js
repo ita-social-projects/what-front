@@ -1,7 +1,7 @@
 import * as actionTypes from '../action-types.js';
 
 const INITIAL_STATE = {
-  group: {},
+  data: {},
   isLoading: false,
   isLoaded: false,
   error: '',
@@ -20,7 +20,7 @@ export const loadStudentGroupByIdReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        group: { ...state.group, ...action.payload },
+        data: { ...state.data, ...action.payload },
       };
     case actionTypes.LOADING_BY_ID_STUDENT_GROUP_FAILED:
       return {
