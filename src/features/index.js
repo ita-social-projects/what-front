@@ -22,6 +22,7 @@ export * from './edit-mentor';
 export * from './add-lesson';
 export * from './group-details';
 export * from './course-details';
+export * from './student-details';
 export * from './not-found';
 export * from './modal-window';
 export * from './edit-course';
