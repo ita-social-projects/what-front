@@ -141,7 +141,7 @@ export const EditStudentsDetails = ({id}) => {
                 {({ values, errors }) => (
                   <Form>
                     <div className="row m-0 pt-3">
-                      <div className="col-md-4">
+                      <div className="col-md-4 font-weight-bolder">
                         <label htmlFor="firstName">First Name:</label>
                       </div>
                       <div className="col-md-8">
@@ -157,7 +157,7 @@ export const EditStudentsDetails = ({id}) => {
                     </div>
 
                     <div className="row m-0 pt-3">
-                      <div className="col-md-4">
+                      <div className="col-md-4 font-weight-bolder">
                         <label htmlFor="lastName">Last Name:</label>
                       </div>
                       <div className="col-md-8">
@@ -173,7 +173,7 @@ export const EditStudentsDetails = ({id}) => {
                     </div>
 
                     <div className="row m-0 pt-3">
-                      <div className="col-md-4">
+                      <div className="col-md-4 font-weight-bolder">
                         <label htmlFor="email">Email:</label>
                       </div>
                       <div className="col-md-8">
@@ -189,7 +189,7 @@ export const EditStudentsDetails = ({id}) => {
                     </div>
 
                     <div className="row m-0 pt-3">
-                      <div className="col-md-4">
+                      <div className="col-md-4 font-weight-bolder">
                         <label htmlFor="groupsInput">Group(`s):</label>
                       </div>
                       <div className="d-flex flex-column col-md-8">
