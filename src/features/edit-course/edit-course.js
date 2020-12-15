@@ -66,7 +66,7 @@ export const EditCourse = ({id}) => {
                   <Form name='start-group'>
                     <div className='row mb-3'>
                       <div className='col d-flex align-items-center'>
-                        <label className='mb-0' htmlFor='name'>Course name:</label>
+                        <label className='mb-0 font-weight-bolder' htmlFor='name'>Course name:</label>
                       </div>
                       <div className='col-md-8'>
                         <Field

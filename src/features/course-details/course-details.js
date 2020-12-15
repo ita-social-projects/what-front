@@ -27,7 +27,7 @@ export const CourseDetails = ({id}) => {
             <hr />
             <WithLoading isLoading={isLoading || !loaded} className={styles['loader-centered']}>
               <div className='row'>
-                <div className='col-12 col-md-6'><span>Course name: </span></div>
+                <div className='col-12 col-md-6 font-weight-bolder'><span>Course name: </span></div>
                 <div className='col-12 col-md-6'><span>{course?.name}</span></div>
               </div>
             </WithLoading>
