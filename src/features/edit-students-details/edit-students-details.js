@@ -104,7 +104,7 @@ export const EditStudentsDetails = ({id}) => {
       email,
       studentGroupIds,
     };
-    updateStudent(id, editedStudent)
+    updateStudent(id, editedStudent);
   };
 
   const onSubmit = (values) => {
@@ -112,7 +112,7 @@ export const EditStudentsDetails = ({id}) => {
   };
 
   const handleExclude = () => {
-    deleteStudent(id)
+    deleteStudent(id);
   };
 
   const resetInput = () => {

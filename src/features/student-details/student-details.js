@@ -6,6 +6,7 @@ import { activeStudentsSelector, coursesSelector, loadStudentGroupsSelector } fr
 import styles from './student-details.scss';
 
 export const StudentDetails = ({id}) => {
+  const history = useHistory();
   const { 
     data: students, 
     isLoading: areStudentsLoading, 
@@ -25,8 +26,6 @@ export const StudentDetails = ({id}) => {
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const student = students.find((student) => student.id == id);
-  
-  const history = useHistory();
 
   useEffect(() => {
     if (!student && areStudentsLoaded) {

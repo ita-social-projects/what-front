@@ -8,7 +8,10 @@ import { EditStudentsDetails, StudentDetails } from '@/features';
 export const StudentsTabs = ({index}) => {
   const { id } = useParams();
 
-  const [fetchStudents, fetchGroups, loadCourses] = useActions([loadActiveStudents, globalLoadStudentGroups, fetchCourses]);
+  const [
+    fetchStudents, 
+    fetchGroups, 
+    loadCourses] = useActions([loadActiveStudents, globalLoadStudentGroups, fetchCourses]);
 
   useEffect(() => {
     fetchStudents();
