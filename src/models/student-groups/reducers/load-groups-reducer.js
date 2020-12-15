@@ -20,7 +20,7 @@ export const loadStudentGroupsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        groups: [...state.groups, ...action.payload],
+        groups: action.payload,
       };
     case actionTypes.LOADING_STUDENT_GROUPS_FAILED:
       return {
