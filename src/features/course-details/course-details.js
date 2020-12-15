@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { coursesSelector } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
 import { WithLoading } from '@/components';
 import styles from './course-details.scss';
 
 export const CourseDetails = ({id}) => {
-  const { data, isLoading } = useSelector(coursesSelector, shallowEqual);
+  const { data, isLoading, loaded } = useSelector(coursesSelector, shallowEqual);
 
   const course = data.find((course) => course.id == id);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!course && loaded) {
+      history.push('/404');
+    }
+  }, [course, loaded]);
   
   return (
     <div className='container'>
@@ -16,9 +25,9 @@ export const CourseDetails = ({id}) => {
           <div className='px-2 py-4'>
             <h3>Course Details</h3>
             <hr />
-            <WithLoading isLoading={isLoading} className={styles['loader-centered']}>
+            <WithLoading isLoading={isLoading || !loaded} className={styles['loader-centered']}>
               <div className='row'>
-                <div className='col-12 col-md-6'><span>Course name: </span></div>
+                <div className='col-12 col-md-6 font-weight-bolder'><span>Course name: </span></div>
                 <div className='col-12 col-md-6'><span>{course?.name}</span></div>
               </div>
             </WithLoading>
