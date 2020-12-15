@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-
 import { useActions } from '../../shared/index.js';
 import {
   Card, Search, Button, WithLoading,
@@ -49,7 +48,7 @@ export const ListOfStudents = () => {
   };
 
   const studentEditing = (id) => {
-    history.push(`/students/edit-student/${id}`);
+    history.push(`/students/edit/${id}`);
   };
 
   const getStudents = () => {
