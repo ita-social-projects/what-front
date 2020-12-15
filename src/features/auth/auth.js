@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
@@ -23,9 +23,11 @@ export const Auth = () => {
     dispatchLogIn(values);
   };
 
-  if (loaded && !requestError) {
-    history.push('/home');
-  }
+  useEffect(() => {
+    if (loaded && !requestError) {
+      history.push('/home');
+    }
+  }, [loaded, requestError, history]);
 
   return (
     <div className={styles.wrapper}>
