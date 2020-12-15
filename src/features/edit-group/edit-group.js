@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { number, shape } from 'prop-types';
 import { Formik, Field, Form } from 'formik';
+import { useSelector, shallowEqual } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { validateGroupName, validateDate } from '../validation/validation-helpers.js';
 import {
   coursesStateShape,
   mentorsStateShape,
-  studentGroupsStateShape,
+  studentGroupsByIdStateShape,
   studentsStateShape, useActions,
 } from '../../shared/index.js';
 import { WithLoading, Button } from '../../components/index.js';
-import { editStudentGroup } from '../../models/index.js';
+import { editStudentGroup, editStudentGroupsSelector } from '../../models/index.js';
 import Icon from '../../icon.js';
 import styles from './edit-groups.scss';
 
@@ -19,9 +21,16 @@ export const EditGroup = ({
   id: groupId, studentGroupData, studentsData, mentorsData, coursesData,
 }) => {
   const {
-    studentGroupById: group,
-    isLoading: isGroupLoading,
-  } = studentGroupData;
+    isLoading: isEditing,
+    isLoaded: isEdited,
+    error: editingError,
+  } = useSelector(editStudentGroupsSelector, shallowEqual);
+
+  const dispatchEditGroup = useActions(editStudentGroup);
+
+  const history = useHistory();
+
+  const { group, isLoading: isGroupLoading } = studentGroupData;
   const { data: students, isLoading: areStudentsLoading } = studentsData;
   const { mentors, isLoading: areMentorsLoading } = mentorsData;
   const { data: courses, isLoading: areCoursesLoading } = coursesData;
@@ -31,7 +40,11 @@ export const EditGroup = ({
   const [groupStudents, setGroupStudents] = useState([]);
   const [studentInputError, setStudentInputError] = useState('');
 
-  const dispatchEditGroup = useActions(editStudentGroup);
+  useEffect(() => {
+    if (!isEditing && isEdited && !editingError) {
+      history.push('/groups');
+    }
+  }, [isEdited, editingError, isEditing, history]);
 
   useEffect(() => {
     if (mentors.length) {
@@ -57,11 +70,12 @@ export const EditGroup = ({
     }
   };
 
-  const addStudent = (studentFullInfo) => {
+  const addStudent = (studentFullInfo, clearField) => {
     const [selectedStudentEmail] = studentFullInfo.split(' ').reverse();
     const student = students.find(({ email }) => email === selectedStudentEmail);
 
     if (student) {
+      clearField();
       setStudentInputError('');
       setGroupStudents((prevState) => [...prevState, student]);
     } else {
@@ -212,10 +226,7 @@ export const EditGroup = ({
                           </datalist>
                           <Button
                             variant="warning"
-                            onClick={() => {
-                              addMentor(values.mentor);
-                              setFieldValue('mentor', '');
-                            }}
+                            onClick={() => addMentor(values.mentor, () => setFieldValue('mentor', ''))}
                           >
                             <Icon icon="Plus" />
                           </Button>
@@ -272,10 +283,7 @@ export const EditGroup = ({
                           </datalist>
                           <Button
                             variant="warning"
-                            onClick={() => {
-                              addStudent(values.student);
-                              setFieldValue('student', '');
-                            }}
+                            onClick={() => addStudent(values.student, () => setFieldValue('student', ''))}
                           >
                             <Icon icon="Plus" />
                           </Button>
@@ -309,13 +317,14 @@ export const EditGroup = ({
                     </ul>
                   </div>
                   <div className="row justify-content-around mt-4">
-                    <Button type="reset" className="btn btn-secondary w-25">
-                      Clear all
+                    <Button type="reset" className="btn btn-secondary w-25" disabled={isEditing}>
+                      Clear
                     </Button>
-                    <Button type="submit" variant="success" className="btn btn-secondary w-25">
+                    <Button type="submit" variant="success" className="btn btn-secondary w-25" disabled={isEditing}>
                       Confirm
                     </Button>
                   </div>
+                  {editingError && <p className="text-danger mt-3 mb-0 text-center">{editingError}</p>}
                 </Form>
               )}
             </Formik>
@@ -328,7 +337,7 @@ export const EditGroup = ({
 
 EditGroup.propTypes = {
   id: number.isRequired,
-  studentGroupData: shape(studentGroupsStateShape).isRequired,
+  studentGroupData: shape(studentGroupsByIdStateShape).isRequired,
   studentsData: shape(studentsStateShape).isRequired,
   mentorsData: shape(mentorsStateShape).isRequired,
   coursesData: shape(coursesStateShape).isRequired,

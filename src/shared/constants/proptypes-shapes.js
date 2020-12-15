@@ -16,8 +16,14 @@ export const studentGroupsStateShape = {
   error: string.isRequired,
   isLoading: bool.isRequired,
   isLoaded: bool.isRequired,
-  studentGroups: oneOfType([arrayOf(shape(studentGroupShape)), arrayOf(undefined)]).isRequired,
-  studentGroupById: oneOfType([shape(studentGroupShape), object]).isRequired,
+  data: oneOfType([arrayOf(shape(studentGroupShape)), arrayOf(undefined)]).isRequired,
+};
+
+export const studentGroupsByIdStateShape = {
+  error: string.isRequired,
+  isLoading: bool.isRequired,
+  isLoaded: bool.isRequired,
+  group: oneOfType([shape(studentGroupShape), object]).isRequired,
 };
 
 export const studentShape = {

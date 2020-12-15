@@ -6,14 +6,14 @@ import { useActions } from '../../shared/index.js';
 import { Tabs, Tab } from '../../components/index.js';
 import { EditGroup, GroupDetails } from '../../features/index.js';
 import {
-  studentGroupsSelector, loadStudentGroupsById, studentsSelector,
+  loadStudentGroupsByIdSelector, loadStudentGroupsById, studentsSelector,
   loadStudents, fetchMentors, mentorsSelector,
   coursesSelector, fetchCourses,
 } from '../../models/index.js';
 
 export const GroupsTabs = () => {
   const { id } = useParams();
-  const groups = useSelector(studentGroupsSelector, shallowEqual);
+  const group = useSelector(loadStudentGroupsByIdSelector, shallowEqual);
   const mentors = useSelector(mentorsSelector, shallowEqual);
   const courses = useSelector(coursesSelector, shallowEqual);
   const students = useSelector(studentsSelector, shallowEqual);
@@ -34,25 +34,25 @@ export const GroupsTabs = () => {
 
   const history = useHistory();
 
-  if (groups.error) {
+  if (group.error) {
     history.push('/404');
   }
 
   return (
     <Tabs linkBack="/groups" className="container w-50">
-      <Tab title="Group details" tabIndex="0">
+      <Tab title="Group details" tabIndex={0}>
         <GroupDetails
           id={Number(id)}
-          studentGroupData={groups}
+          studentGroupData={group}
           mentorsData={mentors}
           coursesData={courses}
           studentsData={students}
         />
       </Tab>
-      <Tab title="Edit group" tabIndex="1">
+      <Tab title="Edit group" tabIndex={1}>
         <EditGroup
           id={Number(id)}
-          studentGroupData={groups}
+          studentGroupData={group}
           mentorsData={mentors}
           coursesData={courses}
           studentsData={students}

@@ -4,7 +4,7 @@ import { Badge, Table } from 'react-bootstrap';
 
 import { WithLoading } from '../../components/index.js';
 import {
-  studentGroupsStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
+  studentGroupsByIdStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
 } from '../../shared/index.js';
 import styles from './group-details.scss';
 
@@ -12,7 +12,7 @@ export const GroupDetails = ({
   studentGroupData, studentsData, mentorsData, coursesData,
 }) => {
   const {
-    studentGroupById: group,
+    group,
     isLoading: isGroupLoading,
     isLoaded: isGroupLoaded,
   } = studentGroupData;
@@ -97,7 +97,7 @@ export const GroupDetails = ({
 };
 
 GroupDetails.propTypes = {
-  studentGroupData: shape(studentGroupsStateShape).isRequired,
+  studentGroupData: shape(studentGroupsByIdStateShape).isRequired,
   studentsData: shape(studentsStateShape).isRequired,
   mentorsData: shape(mentorsStateShape).isRequired,
   coursesData: shape(coursesStateShape).isRequired,
