@@ -34,9 +34,11 @@ export const GroupsTabs = () => {
 
   const history = useHistory();
 
-  if (group.error) {
-    history.push('/404');
-  }
+  useEffect(() => {
+    if (group.error) {
+      history.push('/404');
+    }
+  }, [group, history]);
 
   return (
     <Tabs linkBack="/groups" className="container w-50">
