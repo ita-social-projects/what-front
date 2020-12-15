@@ -39,7 +39,7 @@ export const GroupsTabs = () => {
   }
 
   return (
-    <Tabs linkBack="/groups" className="container w-50">
+    <Tabs linkBack={paths.GROUPS} className="container w-50">
       <Tab title="Group details" tabIndex={0}>
         <GroupDetails
           id={Number(id)}
