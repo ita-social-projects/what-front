@@ -40,7 +40,7 @@ export const ListOfStudents = () => {
   };
 
   const addStudent = () => {
-    history.push('/add-student');
+    history.push(`/add-role`);
   };
 
   const studentDetails = (id) => {
