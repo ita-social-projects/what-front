@@ -1,4 +1,5 @@
 import * as types from '../types.js';
+import * as actionTypes from "@models/courses/types";
 
 const initialState = {
   data: [],
@@ -32,7 +33,13 @@ export const mentorEditingReducer = (state = initialState, action) => {
         isLoaded: false,
         error: action.payload.error.message,
       };
-    
+      
+    case types.CLEAR_LOADED:
+      return {
+        ...state,
+        loaded: false
+      }
+      
     default:
       return state;
   }
