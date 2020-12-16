@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
-import { activeStudentsSelector, loadStudentGroupsSelector, editStudentSelector, 
+import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector, 
   removeStudentSelector, editStudent, removeStudent } from '@/models';
 
 import { Formik, Form, Field } from 'formik';
@@ -18,10 +18,10 @@ import classNames from 'classnames';
 export const EditStudentsDetails = ({id}) => {
   const history = useHistory();
   const { 
-    data: students,
+    data: student,
     isLoading: areStudentsLoading, 
     isLoaded: areStudentsLoaded,
-  } = useSelector(activeStudentsSelector, shallowEqual);
+  } = useSelector(currentStudentSelector, shallowEqual);
 
   const { 
     data: allGroups,
@@ -43,7 +43,7 @@ export const EditStudentsDetails = ({id}) => {
    
   const [updateStudent, deleteStudent] = useActions([editStudent, removeStudent]);
 
-  const student = students.find((student) => student.id == id);
+  // const student = students.find((student) => student.id == id);
   const studentGroups = allGroups.filter((group) => student.groupsIds?.includes(group.id));
 
   const [groups, setGroups] = useState(studentGroups || 0);

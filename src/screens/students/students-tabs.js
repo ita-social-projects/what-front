@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useActions } from '@/shared';
-import { globalLoadStudentGroups, loadActiveStudents } from '@/models';
+import { globalLoadStudentGroups, loadStudentById } from '@/models';
 import { Tab, Tabs } from '@/components';
 import { EditStudentsDetails } from '@/features';
 
 export const StudentsTabs = ({index}) => {
   const { id } = useParams();
 
-  const [fetchStudents, fetchGroups] = useActions([loadActiveStudents, globalLoadStudentGroups]);
+  const [fetchStudentById, fetchGroups] = useActions([loadStudentById, globalLoadStudentGroups]);
 
   useEffect(() => {
-    fetchStudents();
-  }, [fetchStudents]);
+    fetchStudentById(id);
+  }, [fetchStudentById]);
 
   useEffect(() => {
     fetchGroups();
