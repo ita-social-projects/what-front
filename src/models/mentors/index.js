@@ -1,7 +1,7 @@
 export { mentorsReducer } from './reducer.js';
 export * from './actions.js';
 export {
- mentorsSelector,
+  mentorsSelector,
   mentorsActiveSelector,
   mentorIdSelector,
   mentorGroupsSelector,
