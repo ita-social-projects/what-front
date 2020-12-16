@@ -30,15 +30,6 @@ export const ListOfLessons = () => {
     setFilteredLessonsList(data);
   }, [data]);
 
-  const handleSearchTheme = (inputValue) => {
-    setSearchLessonsThemeValue(inputValue);
-  };
-
-  const handleSearchDate = (event) => {
-    const date = event.target.value;
-    setSearchLessonsDateValue(date);
-  };
-
   useEffect(() => {
     const lessons = data.filter(
       (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
@@ -47,6 +38,15 @@ export const ListOfLessons = () => {
     );
     setFilteredLessonsList(lessons);
   }, [searchLessonsDateValue, searchLessonsThemeValue]);
+
+  const handleSearchTheme = (inputValue) => {
+    setSearchLessonsThemeValue(inputValue);
+  };
+
+  const handleSearchDate = (event) => {
+    const date = event.target.value;
+    setSearchLessonsDateValue(date);
+  };
 
   const addLesson = () => {
     history.push('lessons/add-lesson');

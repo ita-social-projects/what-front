@@ -1,1 +1,1 @@
-export { StartGroup } from './start-group';
+export { StartGroup } from './start-group.js';
