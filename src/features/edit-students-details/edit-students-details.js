@@ -43,7 +43,6 @@ export const EditStudentsDetails = ({id}) => {
    
   const [updateStudent, deleteStudent] = useActions([editStudent, removeStudent]);
 
-  // const student = students.find((student) => student.id == id);
   const studentGroups = allGroups.filter((group) => student.groupsIds?.includes(group.id));
 
   const [groups, setGroups] = useState(studentGroups || 0);
