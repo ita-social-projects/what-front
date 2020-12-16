@@ -1,7 +1,7 @@
 import React from 'react';
-import { coursesSelector } from '../../../models';
+import { coursesSelector } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
-import { WithLoading } from '../../../components';
+import { WithLoading } from '@/components';
 import styles from './course-details.scss';
 
 export const CourseDetails = ({id}) => {

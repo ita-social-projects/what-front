@@ -3,8 +3,8 @@ import className from 'classnames';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import styles from './edit-students-details.scss';
-import Icon from '../../../icon.js';
-import { Button } from '../../../components/index.js';
+import Icon from '@/icon.js';
+import { Button } from '@/components/index.js';
 
 export const EditStudentsDetails = () => {
   // temporary

@@ -3,14 +3,14 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { useActions } from '../../../shared/index.js';
+import { useActions } from '@/shared/index.js';
 import {
   Card, Search, Button, WithLoading,
-} from '../../../components/index.js';
-import Icon from '../../../icon.js';
+} from '@/components/index.js';
+import Icon from '@/icon.js';
 import {
   loadActiveStudents, activeStudentsSelector,
-} from '../../../models/index.js';
+} from '@/models/index.js';
 import styles from './list-of-students.scss';
 
 export const ListOfStudents = () => {

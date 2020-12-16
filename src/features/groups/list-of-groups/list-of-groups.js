@@ -2,11 +2,11 @@ import React, { useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useActions } from '../../../shared/hooks/index.js';
-import { Button, Search, WithLoading } from '../../../components/index.js';
-import { globalLoadStudentGroups, studentGroupsSelector } from '../../../models/index.js';
-import { Card } from '../../../components/card/index.js';
-import Icon from '../..//icon.js';
+import { useActions } from '@/shared/hooks/index.js';
+import { Button, Search, WithLoading } from '@/components/index.js';
+import { globalLoadStudentGroups, studentGroupsSelector } from '@/models/index.js';
+import { Card } from '@/components/card/index.js';
+import Icon from '@/icon.js';
 import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
 

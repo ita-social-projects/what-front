@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions } from '../../../shared';
-import { coursesSelector, editCourse, editedCourseSelector } from '../../../models';
+import { useActions } from '@/shared';
+import { coursesSelector, editCourse, editedCourseSelector } from '@/models';
 
 import { Formik, Form, Field } from 'formik';
 import { validateGroupName } from '../../validation/validation-helpers';

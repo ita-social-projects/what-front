@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { Card, Search, Button } from '../../components/index.js';
-import Icon from '../../icon.js';
+import { Card, Search, Button } from '@/components/index.js';
+import Icon from '@/icon.js';
 import styles from './list-of-lessons.scss';
 import { dataList } from './lessons-dataList.js';
 

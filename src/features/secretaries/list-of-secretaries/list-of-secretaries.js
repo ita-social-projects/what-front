@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import className from 'classnames';
-import { fetchSecretaries, secretariesSelector } from '../../../models/index.js';
-import { useActions } from '../../../shared/index.js';
+import { fetchSecretaries, secretariesSelector } from '@/models/index.js';
+import { useActions } from '@/shared/index.js';
 import {
   Button, Search, Card, WithLoading,
-} from '../../../components/index.js';
-import Icon from '../../../icon.js';
+} from '@/components/index.js';
+import Icon from '@/icon.js';
 import styles from './list-of-secretaries.scss';
 
 export const ListOfSecretaries = () => {

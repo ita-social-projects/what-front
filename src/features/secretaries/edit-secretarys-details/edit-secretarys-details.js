@@ -1,7 +1,7 @@
 import React from 'react';
 import className from 'classnames';
 import { Formik, Form, Field } from 'formik';
-import { Button } from '@components/button/index.js';
+import { Button } from '@/components/button/index.js';
 import { formValidate } from '../../validation/validation-helpers.js';
 
 import styles from './edit-secretarys-details.scss';
