@@ -1,2 +1,3 @@
+export const ADD_ALERT = 'ALERT/ADD_ALERT';
 export const SHOW_ALERT = 'ALERT/SHOW_ALERT';
-export const HIDE_ALERT = 'ALERT/HIDE_ALERT';
+export const REMOVE_ALERT = 'ALERT/REMOVE_ALERT';

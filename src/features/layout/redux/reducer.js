@@ -1,9 +1,7 @@
 import * as actionTypes from './action-types.js';
 
 const INITIAL_STATE = {
-  isVisible: false,
-  messages: '',
-  variant: '',
+  messages: [],
 };
 
 export const alertReducer = (state = INITIAL_STATE, action) => {
@@ -11,16 +9,13 @@ export const alertReducer = (state = INITIAL_STATE, action) => {
     case actionTypes.SHOW_ALERT:
       return {
         ...state,
-        isVisible: true,
-        message: action.payload.message,
-        variant: action.payload.variant,
+        messages: [...state.messages, { ...action.payload }],
       };
 
-    case actionTypes.HIDE_ALERT:
+    case actionTypes.REMOVE_ALERT:
       return {
         ...state,
-        isVisible: false,
-        message: '',
+        messages: state.messages.filter((message) => message.id !== action.payload.id),
       };
 
     default:

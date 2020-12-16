@@ -7,7 +7,7 @@ import {
   AddCourse,
   alertSelector,
   Counter,
-  hideAlert,
+  removeAlert,
   ListOfCourses, ListOfGroups,
   ListOfSecretaries,
   ListOfStudents, UnAssignedList,
@@ -18,27 +18,31 @@ import { CoursesTabs, GroupsTabs, SecretariesTabs } from '@/screens';
 import styles from './layout.scss';
 
 export const Layout = () => {
-  const { message, variant, isVisible } = useSelector(alertSelector, shallowEqual);
-  const dispatchHideAlert = useActions(hideAlert);
-
-  useEffect(() => {
-    if (message) {
-      setTimeout(dispatchHideAlert, 10000);
-    }
-  }, [dispatchHideAlert, isVisible, message]);
+  const { messages } = useSelector(alertSelector, shallowEqual);
+  const dispatchRemoveAlert = useActions(removeAlert);
 
   return (
     <>
       <Header />
       {
-        isVisible
-        && (
+        messages.length ? (
           <div className={styles['alert-container']}>
-            <Alert dismissible onClose={dispatchHideAlert} variant={variant}>{message}</Alert>
+            {
+              messages.map(({ variant, message, id }) => (
+                <Alert
+                  variant={variant}
+                  key={id}
+                  dismissible
+                  onClose={() => dispatchRemoveAlert(id)}
+                >
+                  {message}
+                </Alert>
+              ))
+            }
           </div>
-        )
+        ) : null
       }
-      <div className="p-5">
+      <div className="p-5 position-relative">
         <Switch>
           <Route exact path="/counter" component={Counter} />
           <Route exact path="/students" component={ListOfStudents} />
