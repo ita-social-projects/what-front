@@ -1,15 +1,14 @@
 import * as actionTypes from '../action-types.js';
 
 const INITIAL_STATE = {
-  data: [],
   isLoading: false,
   isLoaded: false,
   error: '',
 };
 
-export const allStudentsReducer = (state = INITIAL_STATE, action) => {
+export const removeStudentReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case actionTypes.LOADING_STUDENTS_STARTED:
+    case actionTypes.REMOVING_STUDENT_STARTED:
       return {
         ...state,
         isLoading: true,
@@ -17,20 +16,19 @@ export const allStudentsReducer = (state = INITIAL_STATE, action) => {
         error: '',
       };
 
-    case actionTypes.LOADING_STUDENTS_SUCCEED:
+    case actionTypes.REMOVING_STUDENT_SUCCEED:
       return {
         ...state,
-        data: action.payload.data,
         isLoading: false,
         isLoaded: true,
       };
 
-    case actionTypes.LOADING_STUDENTS_FAILED:
+    case actionTypes.REMOVING_STUDENT_FAILED:
       return {
         ...state,
-        isLoading: false,
+        isLoading: true,
         isLoaded: false,
-        error: action.payload.error.message,
+        error: '',
       };
 
     default:

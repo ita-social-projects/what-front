@@ -1,27 +1,36 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-
+import { CoursesTabs, GroupsTabs, SecretariesTabs } from '@/screens/index.js';
 import {
-  Counter, ListOfStudents, NotFound, ListOfCourses, AddCourse, EditCourse,
+  Counter, ListOfStudents, NotFound,
+  ListOfCourses, AddCourse, ListOfGroups,
+  Auth, UnAssignedList, ListOfSecretaries,
+  ListOfMentors, ListOfLessons
 } from '../index.js';
-import { RoleList, Role } from './helpers.js';
-import { GroupsTabs } from '../../screens/index.js';
 
 export const Routes = () => (
   <>
     <Switch>
       <Route exact path="/" render={() => (<h1 className="m-3">Welcome to the WHAT project!</h1>)} />
       <Route exact path="/counter" component={Counter} />
-      <Route exact path="/role-list" component={RoleList} />
-      <Route exact path="/role-list/:role" component={Role} />
       <Route exact path="/students" component={ListOfStudents} />
+      <Route exact path="/secretaries" component={ListOfSecretaries} />
+      <Route exact path="/secretaries/:id" render={() => <SecretariesTabs index={0} />} />
+      <Route exact path="/secretaries/edit/:id" render={() => <SecretariesTabs index={1} />} />
       <Route exact path="/courses" component={ListOfCourses} />
-      <Route exact path="/courses/edit-course/:id" component={EditCourse} />
-      <Route exact path="/add-course" component={AddCourse} />
+      <Route exact path="/courses/add-course" component={AddCourse} />
+      <Route exact path="/courses/:id" component={() => <CoursesTabs index={0} />} />
+      <Route exact path="/courses/edit/:id" component={() => <CoursesTabs index={1} />} />
+      <Route exact path="/groups" component={ListOfGroups} />
       <Route exact path="/groups/:id" render={() => <GroupsTabs index={0} />} />
       <Route exact path="/groups/edit/:id" render={() => <GroupsTabs index={1} />} />
+      <Route exact path="/unassigned" component={UnAssignedList} />
+      <Route exact path="/lessons" component={ListOfLessons} />
+      <Route exact path="/auth" component={Auth} />
       <Route exact path="/404" component={NotFound} />
       <Redirect to="/404" />
+      <Route exact path="/mentors" component={ListOfMentors} />
+      <Route component={NotFound} />
     </Switch>
   </>
 );

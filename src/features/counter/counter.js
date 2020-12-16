@@ -13,7 +13,6 @@ export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
   const isLoading = useSelector(counterIsLoadingSelector, shallowEqual);
   const { incrementCounter, decrementCounter, fetchCounter } = useActions(counterActions);
-  const [fetchMentors] = useActions([loadStudents]);
   const [
     logIn,
     logout,
@@ -56,8 +55,6 @@ export const Counter = () => {
           <Button type="button" onClick={handleShowModal} variant="success">Show modal</Button>
           <Button onClick={auth}>Auth</Button>
           <Button onClick={fetchCounter} variant="primary">Fetch counter</Button>
-          <Button onClick={fetchMentors} variant="primary">Fetch mentors</Button>
-
           <Button onClick={() => logIn({ email: 'admin.@gmail.com', password: 'admin' })} variant="primary">LogIn</Button>
           <Button onClick={() => logout()} variant="primary">LogOut</Button>
           <Button onClick={() => usersList()} variant="primary">Assigned</Button>

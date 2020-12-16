@@ -1,38 +1,39 @@
-import * as actionTypes from '../action-types.js';
+import * as types from '../types.js';
 
-const INITIAL_STATE = {
+const initialState = {
   data: [],
   isLoading: false,
   isLoaded: false,
   error: '',
 };
 
-export const allStudentsReducer = (state = INITIAL_STATE, action) => {
+
+export const mentorCoursesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.LOADING_STUDENTS_STARTED:
+    case types.FETCHING_MENTOR_COURSES_STARTED:
       return {
         ...state,
         isLoading: true,
         isLoaded: false,
         error: '',
       };
-
-    case actionTypes.LOADING_STUDENTS_SUCCEED:
+    
+    case types.FETCHING_MENTOR_COURSES_SUCCEED:
       return {
         ...state,
         data: action.payload.data,
         isLoading: false,
         isLoaded: true,
       };
-
-    case actionTypes.LOADING_STUDENTS_FAILED:
+    
+    case types.FETCHING_MENTOR_COURSES_FAILED:
       return {
         ...state,
         isLoading: false,
         isLoaded: false,
         error: action.payload.error.message,
       };
-
+    
     default:
       return state;
   }

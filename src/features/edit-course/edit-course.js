@@ -15,8 +15,7 @@ export const EditCourse = ({id}) => {
   const { 
     data, 
     isLoading: isCourseLoading,
-    loaded: isCourseLoaded,
-    error: courseLoadingError, 
+    loaded: isCourseLoaded, 
   } = useSelector(coursesSelector, shallowEqual);
 
   const {  
@@ -32,10 +31,10 @@ export const EditCourse = ({id}) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!course || courseLoadingError) {
+    if (!course && isCourseLoaded) {
       history.push('/404');
     }
-  }, [course, courseLoadingError]);
+  }, [course, isCourseLoaded]);
 
   useEffect(() => {
     if (!isEditedError && isEditedLoaded) {
@@ -67,7 +66,7 @@ export const EditCourse = ({id}) => {
                   <Form name='start-group'>
                     <div className='row mb-3'>
                       <div className='col d-flex align-items-center'>
-                        <label className='mb-0' htmlFor='name'>Course name:</label>
+                        <label className='mb-0 font-weight-bolder' htmlFor='name'>Course name:</label>
                       </div>
                       <div className='col-md-8'>
                         <Field
