@@ -56,8 +56,8 @@ export const AddLesson = () => {
   } = useSelector(activeStudentsSelector, shallowEqual);
 
   const {
-    isLoaded: editIsLoaded,
-    error: editError,
+    isLoaded: addIsLoaded,
+    error: addError,
   } = useSelector(addLessonSelector, shallowEqual);
 
   const [
@@ -86,10 +86,10 @@ export const AddLesson = () => {
   }, [studentsError, studentsIsLoaded, getStudents]);
 
   useEffect(() => {
-    if (!editError && editIsLoaded) {
+    if (!addError && addIsLoaded) {
       history.push('/lessons');
     }
-  }, [editError, editIsLoaded]);
+  }, [addError, addIsLoaded]);
 
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)
