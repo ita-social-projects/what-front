@@ -6,7 +6,6 @@ export {
   studentGroupsWatcher,
 } from './actions.js';
 export {
-  studentGroupsSelector,
   addStudentGroupsSelector,
   editStudentGroupsSelector,
   loadStudentGroupsSelector,
