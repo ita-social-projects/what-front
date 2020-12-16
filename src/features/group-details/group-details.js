@@ -12,12 +12,12 @@ export const GroupDetails = ({
   studentGroupData, studentsData, mentorsData, coursesData,
 }) => {
   const {
-    group,
+    data: group,
     isLoading: isGroupLoading,
     isLoaded: isGroupLoaded,
   } = studentGroupData;
   const { data: students, isLoading: areStudentsLoading } = studentsData;
-  const { mentors, isLoading: areMentorsLoading } = mentorsData;
+  const { data: mentors, isLoading: areMentorsLoading } = mentorsData;
   const { data: courses, isLoading: areCoursesLoading } = coursesData;
 
   return (

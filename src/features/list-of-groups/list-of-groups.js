@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import classNames from 'classnames';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import classNames from 'classnames';
+
 import { useActions } from '@shared/hooks/index.js';
 import { Button, Search, WithLoading } from '@components/index.js';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
@@ -38,11 +39,11 @@ export const ListOfGroups = () => {
   }, [setSearchGroupValue]);
 
   const handleCardEdit = useCallback((id) => {
-    history.push(`/edit/${id}`);
+    history.push(`/groups/edit/${id}`);
   }, [history]);
 
   const handleCardDetails = useCallback((id) => {
-    history.push(`/${id}`);
+    history.push(`/groups/${id}`);
   }, [history]);
 
   const handleCalendarChange = (event) => {
@@ -73,8 +74,8 @@ export const ListOfGroups = () => {
         date={group.startDate.replaceAll('-', '.').slice(0, 10)}
         buttonName="Details"
         iconName="Edit"
-        onEdit={handleCardEdit}
-        onDetails={handleCardDetails}
+        onEdit={() => handleCardEdit(group.id)}
+        onDetails={() => handleCardDetails(group.id)}
       />
     ));
   };

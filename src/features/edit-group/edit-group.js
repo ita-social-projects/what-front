@@ -30,9 +30,9 @@ export const EditGroup = ({
 
   const history = useHistory();
 
-  const { group, isLoading: isGroupLoading } = studentGroupData;
+  const { data: group, isLoading: isGroupLoading } = studentGroupData;
   const { data: students, isLoading: areStudentsLoading } = studentsData;
-  const { mentors, isLoading: areMentorsLoading } = mentorsData;
+  const { data: mentors, isLoading: areMentorsLoading } = mentorsData;
   const { data: courses, isLoading: areCoursesLoading } = coursesData;
 
   const [groupMentors, setGroupMentors] = useState([]);
@@ -101,8 +101,8 @@ export const EditGroup = ({
       courseId,
       startDate: new Date(startDate).toISOString().substring(0, 19),
       finishDate: new Date(finishDate).toISOString().substring(0, 19),
-      studentIds: groupStudents.map(({ id }) => id),
-      mentorIds: groupMentors.map(({ id }) => id),
+      studentIds: [...new Set(groupStudents.map(({ id }) => id))],
+      mentorIds: [...new Set(groupMentors.map(({ id }) => id))],
     };
 
     dispatchEditGroup(newGroupData);

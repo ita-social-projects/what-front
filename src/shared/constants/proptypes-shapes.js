@@ -23,7 +23,7 @@ export const studentGroupsByIdStateShape = {
   error: string.isRequired,
   isLoading: bool.isRequired,
   isLoaded: bool.isRequired,
-  group: oneOfType([shape(studentGroupShape), object]).isRequired,
+  data: oneOfType([shape(studentGroupShape), object]).isRequired,
 };
 
 export const studentShape = {
@@ -51,7 +51,7 @@ export const mentorsStateShape = {
   error: string.isRequired,
   isLoading: bool.isRequired,
   isLoaded: bool.isRequired,
-  mentors: oneOfType([arrayOf(shape(mentorShape)), arrayOf(undefined)]).isRequired,
+  data: oneOfType([arrayOf(shape(mentorShape)), arrayOf(undefined)]).isRequired,
 };
 
 export const courseShape = {
