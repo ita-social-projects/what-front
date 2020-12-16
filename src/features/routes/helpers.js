@@ -13,6 +13,9 @@ export const Links = () => (
       <li className="nav-item">
         <Link to="/counter" className="nav-link">Counter</Link>
       </li>
+        <li className="nav-item">
+            <Link to="/lessons" className="nav-link">List Of Lessons</Link>
+        </li>
       <li className="nav-item">
         <Link to="/role-list" className="nav-link">Role List</Link>
       </li>

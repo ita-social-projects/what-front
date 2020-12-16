@@ -4,12 +4,11 @@
   display:flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin-bottom:30px;
+  margin-bottom: 30px;
 }
 
 .calendar-input{
   @include input;
-  width:18%;
 }
 
 .calendar-input:focus {
@@ -18,7 +17,7 @@
   border-color: map-get($colors, textAccentN1-color);
 }
 .search{
-  width:250px;
+  width: 250px;
 }
 
 .group-list{

@@ -1,11 +1,27 @@
 import {
   put, call, takeLatest, fork, all, takeEvery,
 } from 'redux-saga/effects';
+import * as actionTypes from '@models/courses/types';
 import { ApiService } from '../../shared/index.js';
 import * as actionsTypes from './action-types.js';
 
 export const fetchLessons = () => ({
   type: actionsTypes.FETCH_LESSONS,
+});
+
+export const addLesson = (data) => ({
+  type: actionsTypes.ADD_LESSON,
+  payload: {
+    data,
+  },
+});
+
+export const editLesson = (data, id) => ({
+  type: actionsTypes.EDIT_LESSON,
+  payload: {
+    data,
+    id,
+  },
 });
 
 function* fetchLessonsAsync() {
@@ -29,17 +45,6 @@ function* fetchLessonsAsync() {
     });
   }
 }
-
-export function* fetchLessonsWatcher() {
-  yield takeLatest(actionsTypes.FETCH_LESSONS, fetchLessonsAsync);
-}
-
-export const addLesson = (data) => ({
-  type: actionsTypes.ADD_LESSON,
-  payload: {
-    data,
-  },
-});
 
 function* addLessonAsync(lessonData) {
   try {
@@ -65,18 +70,6 @@ function* addLessonAsync(lessonData) {
   }
 }
 
-export function* addLessonWatcher() {
-  yield takeEvery(actionsTypes.ADD_LESSON, addLessonAsync);
-}
-
-export const editLesson = (data, id) => ({
-  type: actionsTypes.EDIT_LESSON,
-  payload: {
-    data,
-    id,
-  },
-});
-
 function* editLessonAsync(editData) {
   try {
     yield put({ type: actionsTypes.EDITING_STARTED });
@@ -89,6 +82,8 @@ function* editLessonAsync(editData) {
         data,
       },
     });
+
+    yield put({ type: actionsTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({
       type: actionsTypes.EDITING_FAILED,
@@ -97,6 +92,14 @@ function* editLessonAsync(editData) {
       },
     });
   }
+}
+
+export function* fetchLessonsWatcher() {
+  yield takeLatest(actionsTypes.FETCH_LESSONS, fetchLessonsAsync);
+}
+
+export function* addLessonWatcher() {
+  yield takeEvery(actionsTypes.ADD_LESSON, addLessonAsync);
 }
 
 export function* editLessonWatcher() {

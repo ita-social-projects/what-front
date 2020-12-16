@@ -13,7 +13,8 @@ import { useActions } from '../../shared/hooks/index.js';
 import {
   mentorsSelector,
   activeStudentsSelector,
-  studentGroupsSelector,
+  loadStudentGroupsSelector,
+  addLessonSelector,
   fetchMentors,
   globalLoadStudentGroups,
   loadActiveStudents,
@@ -35,24 +36,29 @@ export const AddLesson = () => {
   const [formData, setFormData] = useState([]);
 
   const {
-    mentors,
+    data: mentors,
     isLoading: mentorsLoading,
     isLoaded: mentorsIsLoaded,
     error: mentorsError,
   } = useSelector(mentorsSelector, shallowEqual);
 
   const {
-    studentGroups: groups,
+    studentGroups: data,
     isLoading: groupsLoading,
     isLoaded: groupsIsLoaded,
     error: groupsError,
-  } = useSelector(studentGroupsSelector, shallowEqual);
+  } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
     data: students,
     isLoaded: studentsIsLoaded,
     error: studentsError,
   } = useSelector(activeStudentsSelector, shallowEqual);
+
+  const {
+    isLoaded: editIsLoaded,
+    error: editError,
+  } = useSelector(addLessonSelector, shallowEqual);
 
   const [
     getMentors,
@@ -79,12 +85,11 @@ export const AddLesson = () => {
     }
   }, [studentsError, studentsIsLoaded, getStudents]);
 
-  // for future Lessons Model structure
-  /* useEffect(() => {
-    if (!addingError && IsLoaded) {
-      history.push('/courses')
+  useEffect(() => {
+    if (!editError && editIsLoaded) {
+      history.push('/lessons');
     }
-  }, [addingError, IsLoaded]); */
+  }, [editError, editIsLoaded]);
 
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)
@@ -225,9 +230,9 @@ export const AddLesson = () => {
       <div className={classNames(styles.page, 'mx-auto', `${classRegister ? 'col-12' : 'col-8'}`)}>
         <div className="d-flex flex-row">
           {groupsError && mentorsError && studentsError && (
-          <div className="col-12 alert-danger">
-            Server Problems
-          </div>
+            <div className="col-12 alert-danger">
+              Server Problems
+            </div>
           )}
           <div className={`${classRegister ? 'col-6' : 'col-12'}`}>
             <Formik
@@ -286,10 +291,10 @@ export const AddLesson = () => {
                         </datalist>
                       </div>
                       {
-                        groupError
-                          ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid group name</div>
-                          : null
-                      }
+                            groupError
+                              ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid group name</div>
+                              : null
+                          }
                     </div>
                     <div className="form-group row">
                       <label className="col-sm-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
@@ -324,10 +329,10 @@ export const AddLesson = () => {
                         </datalist>
                       </div>
                       {
-                        mentorError
-                          ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid mentor email</div>
-                          : null
-                      }
+                            mentorError
+                              ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid mentor email</div>
+                              : null
+                          }
                     </div>
                   </div>
                   { classRegister && formData && (

@@ -1,0 +1,1 @@
+export { SecretariesTabs } from './secretaries-tabs.js';

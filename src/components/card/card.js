@@ -58,7 +58,7 @@ export const Card = ({
       </div>
       {children ? <div className={styles['card-content']}>{children}</div> : null}
       <div className={styles.content}>
-        {date ? <p className={styles['card-date']}>{date}</p> : null}
+        {date ? <p className={styles['card-date']}>{date}</p> : <p />}
         <div className={styles['card-btn']} data-id={id}>
           {buttonName ? <Button type="button" variant="warning" onClick={handleDetailsClick}>{buttonName}</Button> : null}
         </div>

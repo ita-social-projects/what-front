@@ -1,0 +1,1 @@
+export { SecretarysDetails } from './secretarys-details.js';

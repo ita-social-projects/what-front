@@ -1,46 +1,76 @@
 import React, { useState, useEffect } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import className from 'classnames';
-import { Button, Search, Card } from '../../components/index.js';
+import { fetchSecretaries, secretariesSelector } from '@models/index.js';
+import { useActions } from '@/shared/index.js';
+import {
+  Button, Search, Card, WithLoading,
+} from '@components/index.js';
 import Icon from '../../icon.js';
 import styles from './list-of-secretaries.scss';
 
-import { data } from './secretariesData.js';
-
 export const ListOfSecretaries = () => {
+  const [loadSecretaries] = useActions([fetchSecretaries]);
+
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearch = (val) => {
-    setSearch(val);
-  };
+  const { data, isLoading } = useSelector(secretariesSelector, shallowEqual);
+
+  const history = useHistory();
 
   useEffect(() => {
-    const results = data.filter((secretary) => (
-      (secretary.firstName.concat(secretary.lastName)).toUpperCase())
-      .includes(search.toUpperCase()));
-    setSearchResults(results);
-  }, [search]);
+    loadSecretaries();
+  }, [loadSecretaries]);
+
+  useEffect(() => {
+    setSearchResults(data);
+  }, [data]);
+
+  const handleSearch = (val) => {
+    setSearch(val);
+    setSearchResults(data.filter(({ firstName, lastName }) => {
+      const fullName = `${firstName} ${lastName}`;
+      return fullName.toUpperCase().includes(val.toUpperCase());
+    }));
+  };
 
   const handleAddSecretary = () => {
-    alert('router to Add Secretary page');
+    history.push('/add-role');
   };
 
   const handleEditSecretary = (id) => {
-    alert(`router to Edit Secretary ${id}`);
+    history.push(`/secretaries/edit/${id}`);
   };
 
-  const secretaries = () => searchResults.map((secretary) => (
-    <Card
-      key={secretary.id}
-      id={secretary.id}
-      iconName="Edit"
-      onEdit={handleEditSecretary}
-    >
-      <span className={className(styles['card-name'], 'd-flex')}>{secretary.firstName}</span>
-      <span className={className(styles['card-name'], 'd-flex')}>{secretary.lastName}</span>
-      <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{secretary.email}</span>
-    </Card>
-  ));
+  const hadndleSecretarysDetails = (id) => {
+    history.push(`/secretaries/${id}`);
+  };
+
+  const getSecretaries = () => {
+    const secretarise = searchResults.map(({
+      id, firstName, lastName, email,
+    }) => (
+      <Card
+        key={id}
+        id={id}
+        iconName="Edit"
+        buttonName="Details"
+        onEdit={() => handleEditSecretary(id)}
+        onDetails={() => hadndleSecretarysDetails(id)}
+      >
+        <span className={className(styles['card-name'], 'd-flex')}>{firstName}</span>
+        <span className={className(styles['card-name'], 'd-flex')}>{lastName}</span>
+        <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{email}</span>
+      </Card>
+    ));
+
+    if (!secretarise.length && search) {
+      return <h4>Secretaries not found</h4>;
+    }
+    return secretarise;
+  };
 
   return (
     <div className="container mb-2">
@@ -57,7 +87,9 @@ export const ListOfSecretaries = () => {
       </div>
       <hr className="col-8" />
       <div className="col-12 d-flex flex-wrap justify-content-center">
-        {secretaries()}
+        <WithLoading isLoading={isLoading}>
+          {getSecretaries()}
+        </WithLoading>
       </div>
     </div>
   );
