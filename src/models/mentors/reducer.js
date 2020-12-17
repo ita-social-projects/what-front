@@ -3,7 +3,6 @@ import {
   mentorsAllReducer, mentorsActiveReducer, mentorCurrentReducer, mentorGroupsReducer, mentorCoursesReducer
 } from './reducers/index.js';
 
-
 export const mentorsReducer = combineReducers({
   mentors: mentorsAllReducer,
   mentorsActive: mentorsActiveReducer,
@@ -11,3 +10,4 @@ export const mentorsReducer = combineReducers({
   mentorByIdGroups: mentorGroupsReducer,
   mentorByIdCourses: mentorCoursesReducer,
 });
+

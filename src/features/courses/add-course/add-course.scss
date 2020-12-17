@@ -1,0 +1,9 @@
+@import '../../../styles/main.scss';
+
+.button {
+  @include button();
+}
+
+.error {
+  margin-left: 37%;
+}
