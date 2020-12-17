@@ -1,18 +1,28 @@
 import React, { useEffect } from 'react';
 import { useParams} from 'react-router-dom';
 import { useActions } from '../../shared/index.js';
-import { fetchActiveMentors } from "@/models";
+import { fetchMentorById, fetchMentorGroups, fetchMentorGroups} from "@/models";
 import { Tabs, Tab } from '../../components/index.js';
 import { EditMentor, MentorDetails } from '../../features/index.js';
 
 export const MentorTabs = ({idx}) => {
   const { id } = useParams();
   
-  const [loadMentors] = useActions([fetchActiveMentors]);
+  const [loadMentor] = useActions([fetchMentorById]);
+  const [loadMentorGroups] = useActions([fetchMentorGroups]);
+  const [loadMentorCourses] = useActions([fetchMentorGroups]);
   
   useEffect(() => {
-    loadMentors();
-  }, [loadMentors]);
+    loadMentor(id);
+  }, [loadMentor]);
+  
+  useEffect(() => {
+    loadMentorGroups(id);
+  }, [loadMentorGroups]);
+  
+  useEffect(() => {
+    loadMentorCourses(id);
+  }, [loadMentorCourses]);
   
   return (
     <Tabs defaultIndex={idx} linkBack="/mentors" className="container w-50">

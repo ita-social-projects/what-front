@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useActions } from '../../shared/index.js';
-import { WithLoading } from '../../components/index.js';
+import { useActions } from '@shared/index.js';
+import { WithLoading } from '@components/index.js';
 import {
-  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector, loadStudentGroupsSelector, coursesSelector,
-  mentorEditingSelector, mentorDeletingSelector, editMentor, deleteMentor
+  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector, mentorGroupsSelector, mentorCoursesSelector,
+  editMentor, deleteMentor,
 } from '../../models/index.js';
 import { Formik, Field, Form } from 'formik';
 import { formValidate } from '../validation/validation-helpers.js';
@@ -23,16 +23,16 @@ export const EditMentor = ({id}) => {
   } = useSelector(mentorIdSelector, shallowEqual);
   
   const {
-    data: allGroups,
+    data: mentorGroups,
     isLoading: groupsAreLoading,
     isLoaded: groupsAreLoaded,
-  } = useSelector(loadStudentGroupsSelector, shallowEqual);
+  } = useSelector(mentorGroupsSelector, shallowEqual);
   
   const {
-    data: allCourses,
+    data: mentorCourses,
     isLoading: coursesAreLoading,
     isLoaded: coursesAreLoaded,
-  } = useSelector(coursesSelector, shallowEqual);
+  } = useSelector(mentorCoursesSelector, shallowEqual);
   
   const {
     isLoading: editedIsLoading,
@@ -62,9 +62,7 @@ export const EditMentor = ({id}) => {
   
   const [updateMentor, removeMentor] = useActions([editMentor, deleteMentor]);
   
-  const mentorGroups = allGroups.filter((el) => mentor.studentGroupIds?.includes(el.id));
   const [groups, setGroups] = useState(mentorGroups || 0);
-  const mentorCourses = allCourses.filter((el) => mentor.courseIds?.includes(el.id));
   const [courses, setCourses] = useState(mentorGroups || 0);
   const [groupInput, setGroupInputValue] = useState('Type name of a group');
   const [courseInput, setCourseInputValue] = useState('Type name of a course');
@@ -86,7 +84,7 @@ export const EditMentor = ({id}) => {
     if (checkName) {
       setError('This group was already added to the list');
     } else {
-      const groupObject = allGroups.find((el) => el.name === groupInput);
+      const groupObject = mentorGroups.find((el) => el.name === groupInput);
       if (groupObject) {
         const res = [
           ...groups,
@@ -104,7 +102,7 @@ export const EditMentor = ({id}) => {
     if (checkName) {
       setError('This course was already added to the list');
     } else {
-      const courseObject = allCourses.find((el) => el.name === courseInput);
+      const courseObject = mentorCourses.find((el) => el.name === courseInput);
       if (courseObject) {
         const res = [
           ...courses,
@@ -155,7 +153,7 @@ export const EditMentor = ({id}) => {
   };
   
   const onFire = () => {
-    deleteMentor(id)
+    removeMentor(id)
   };
   
   const resetInput = () => {
@@ -179,8 +177,8 @@ export const EditMentor = ({id}) => {
                   firstName: mentor?.firstName,
                   lastName: mentor?.lastName,
                   email: mentor?.email,
-                  groups: '',
-                  courses: ''
+                  groups: mentor?.studentGroupIds,
+                  courses: mentor?.courseIds
                 }}
                 validationSchema={formValidate}
                 onSubmit={onSubmit}
@@ -253,7 +251,7 @@ export const EditMentor = ({id}) => {
                             onChange={handleGroupInputChange}
                           />
                           <datalist id="group-list">
-                            {allGroups.map(({ id, name }) => (
+                            {mentorGroups.map(({ id, name }) => (
                               <option key={id}>{name}</option>
                             ))}
                           </datalist>
@@ -307,7 +305,7 @@ export const EditMentor = ({id}) => {
                             onChange={handleCourseInputChange}
                           />
                           <datalist id="course-list">
-                            {allCourses.map(({ id, name }) => (
+                            {mentorCourses.map(({ id, name }) => (
                               <option key={id}>{name}</option>
                             ))}
                           </datalist>
