@@ -26,7 +26,7 @@ function* watchLoadingStudentGroups() {
 
 export const loadStudentGroupsById = (id) => ({
   type: actionTypes.LOAD_STUDENT_GROUP_BY_ID,
-  payload: id,
+  payload: { id },
 });
 
 function* loadStudentGroupsByIdAsync({ payload }) {
@@ -57,6 +57,7 @@ function* editStudentGroupsAsync({ payload }) {
     const group = yield call(ApiService.update, `/student_groups/${payload.id}`, payload);
 
     yield put({ type: actionTypes.EDITING_STUDENT_GROUP_SUCCEED, payload: group });
+    yield put({ type: actionTypes.EDIT_CLEAR_LOADED });
   } catch (e) {
     yield put({ type: actionTypes.EDITING_STUDENT_GROUP_FAILED });
   }
