@@ -56,7 +56,7 @@ function* loadThemesWorker() {
   try {
     yield put({type: actionTypes.LOADING_THEMES_STARTED});
     const themes = yield call(ApiService.load, '/themes');
-    yield put({type: actionTypes.LOADING_THEMES_SUCCESS, payload: {themes,}});
+    yield put({type: actionTypes.LOADING_THEMES_SUCCESS, payload: {themes}});
   } catch (error) {
     yield put({type: actionTypes.LOADING_THEMES_FAILED, payload: {error: error.message}});
   }
@@ -66,9 +66,10 @@ function* createThemeWorker(data) {
   try {
     yield put({type: actionTypes.CREATING_THEME_STARTED});
     const theme = yield call(ApiService.create, '/themes', data.payload.theme);
-    yield put({type: actionTypes.CREATING_THEME_SUCCESS, payload: {theme,}})
+    yield put({type: actionTypes.CREATING_THEME_SUCCESS, payload: {theme}});
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
-    yield put({type: actionTypes.CREATING_THEME_FAILED, payload: {error: error.message}})
+    yield put({type: actionTypes.CREATING_THEME_FAILED, payload: {error: error.message}});
   }
 }
 
@@ -77,6 +78,7 @@ function* editThemeWorker(data) {
     yield put({type: actionTypes.EDITING_THEME_STARTED});
     const theme = yield call(ApiService.update, `/themes/${data.payload.id}`, data.payload.theme);
     yield put({type: actionTypes.EDITING_THEME_SUCCESS, payload: {theme}});
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({type: actionTypes.EDITING_THEME_FAILED, payload: {error: error.message}});
   }
@@ -87,6 +89,7 @@ function* deleteThemeWorker(data) {
     yield put({type: actionTypes.DELETING_THEME_STARTED});
     const theme = yield call(ApiService.remove, `/themes/${data.payload.id}`);
     yield put({type: actionTypes.DELETING_THEME_SUCCESS, payload: {theme}});
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch(error) {
     yield put({type: actionTypes.DELETING_THEME_FAILED, payload: {error: error.message}});
   } 
@@ -98,6 +101,6 @@ export function* themesWatcher() {
     fork(createThemeWatcher),
     fork(editThemeWatcher),
     fork(deleteThemeWatcher),
-  ])
+  ]);
 }
 

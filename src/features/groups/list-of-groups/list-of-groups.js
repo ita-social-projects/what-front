@@ -66,44 +66,44 @@ export const ListOfGroups = () => {
 
     const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
     return listByDate.map((group) => (
-      <Card
-        key={group.id}
-        id={group.id}
-        title={group.name}
-        date={group.startDate.replaceAll('-', '.').slice(0, 10)}
-        buttonName="Details"
-        iconName="Edit"
-        onEdit={handleCardEdit}
-        onDetails={handleCardDetails}
-      />
+        <Card
+            key={group.id}
+            id={group.id}
+            title={group.name}
+            date={group.startDate.replaceAll('-', '.').slice(0, 10)}
+            buttonName="Details"
+            iconName="Edit"
+            onEdit={handleCardEdit}
+            onDetails={handleCardDetails}
+        />
     ));
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className={classNames(styles['list-head'], 'col-12')}>
-          <input
-            className={classNames('form-control ', styles['calendar-input'], 'col-2')}
-            type="date"
-            name="group_date"
-            required
-            onChange={handleCalendarChange}
-            placeholder="year-month-day"
-          />
-          <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
-          <Button onClick={handleAddGroup} variant="warning">
-            <Icon icon="Plus" size={20} className="icon" />
-            Add Group
-          </Button>
-        </div>
-        <hr className="col-8" />
-        <div className={classNames(styles['group-list'], 'col-12')}>
-          <WithLoading isLoading={isLoading}>
-            {getGroupList()}
-          </WithLoading>
+      <div className="container">
+        <div className="row">
+          <div className={classNames(styles['list-head'], 'col-12')}>
+            <input
+                className={classNames('form-control ', styles['calendar-input'], 'col-2')}
+                type="date"
+                name="group_date"
+                required
+                onChange={handleCalendarChange}
+                placeholder="year-month-day"
+            />
+            <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
+            <Button onClick={handleAddGroup} variant="warning">
+              <Icon icon="Plus" size={20} className="icon" />
+              Add Group
+            </Button>
+          </div>
+          <hr className="col-8" />
+          <div className={classNames(styles['group-list'], 'col-12')}>
+            <WithLoading isLoading={isLoading}>
+              {getGroupList()}
+            </WithLoading>
+          </div>
         </div>
       </div>
-    </div>
   );
 };

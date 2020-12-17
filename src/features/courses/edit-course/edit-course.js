@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
 import { coursesSelector, editCourse, editedCourseSelector } from '@/models';
-
 import { Formik, Form, Field } from 'formik';
 import { validateGroupName } from '../../validation/validation-helpers';
 import { WithLoading } from '@/components';
@@ -16,7 +15,6 @@ export const EditCourse = ({id}) => {
     data,
     isLoading: isCourseLoading,
     loaded: isCourseLoaded,
-    error: courseLoadingError,
   } = useSelector(coursesSelector, shallowEqual);
 
   const {
@@ -32,10 +30,10 @@ export const EditCourse = ({id}) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!course || courseLoadingError) {
+    if (!course && isCourseLoaded) {
       history.push('/404');
     }
-  }, [course, courseLoadingError]);
+  }, [course, isCourseLoaded]);
 
   useEffect(() => {
     if (!isEditedError && isEditedLoaded) {
@@ -67,7 +65,7 @@ export const EditCourse = ({id}) => {
                   <Form name='start-group'>
                     <div className='row mb-3'>
                       <div className='col d-flex align-items-center'>
-                        <label className='mb-0' htmlFor='name'>Course name:</label>
+                        <label className='mb-0 font-weight-bolder' htmlFor='name'>Course name:</label>
                       </div>
                       <div className='col-md-8'>
                         <Field
