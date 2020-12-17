@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import { Card, Search, Button, WithLoading } from '@/components/index.js';
 import Icon from '@/icon.js';
-import styles from './list-of-mentors.scss';
-import { useActions } from '@/shared/index.js';
+import { paths, useActions } from '@/shared/index.js';
 import { fetchActiveMentors, mentorsActiveSelector } from '@/models/index.js';
+import styles from './list-of-mentors.scss';
 
 export const ListOfMentors = () => {
   const [loadActiveMentors] = useActions([fetchActiveMentors]);
@@ -31,15 +31,15 @@ export const ListOfMentors = () => {
   };
 
   const addMentor = () => {
-    history.push('/add-role');
+    history.push(paths.UNASSIGNED_USERS);
   };
 
   const mentorDetails = (id) => {
-    history.push(`/mentors/${id}`);
+    history.push(`${paths.MENTORS_DETAILS}/${id}`);
   };
 
   const mentorEditing = (id) => {
-    history.push(`/mentors/edit/${id}`);
+    history.push(`${paths.MENTOR_EDIT}/${id}`);
   };
 
   const mentorsList = () => {
