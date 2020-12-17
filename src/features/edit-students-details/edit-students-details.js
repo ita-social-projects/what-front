@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
 import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector, 
-  removeStudentSelector, editStudent, removeStudent } from '@/models';
+  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent,  } from '@/models';
 
 import { Formik, Form, Field } from 'formik';
 import { formValidate } from '../validation/validation-helpers.js';
@@ -19,8 +19,8 @@ export const EditStudentsDetails = ({id}) => {
   const history = useHistory();
   const { 
     data: student,
-    isLoading: areStudentsLoading, 
-    isLoaded: areStudentsLoaded,
+    isLoading: isStudentLoading, 
+    isLoaded: isStudentLoaded,
   } = useSelector(currentStudentSelector, shallowEqual);
 
   const { 
@@ -28,6 +28,12 @@ export const EditStudentsDetails = ({id}) => {
     isLoading: areGroupsLoading,
     isLoaded: areGroupsLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
+
+  const {
+    data: studentGroups,
+    isLoading: areStudentGroupsLoading,
+    isLoaded: areStudentGroupsLoaded,
+  } = useSelector(currentStudentGroupsSelector, shallowEqual);
 
   const {
     isLoading: isEditedLoading,
@@ -43,17 +49,15 @@ export const EditStudentsDetails = ({id}) => {
    
   const [updateStudent, deleteStudent] = useActions([editStudent, removeStudent]);
 
-  const studentGroups = allGroups.filter((group) => student.groupsIds?.includes(group.id));
-
   const [groups, setGroups] = useState(studentGroups || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!student && areStudentsLoaded && areGroupsLoaded) {
+    if (!student && isStudentLoaded && areGroupsLoaded) {
       history.push('/404');
     }
-  }, [student, areStudentsLoaded, areGroupsLoaded]);
+  }, [student, isStudentLoaded, areGroupsLoaded]);
 
   useEffect(() => {
     if (!isEditedError && isEditedLoaded || !isRemovedError && isRemovedLoaded) {
@@ -125,7 +129,7 @@ export const EditStudentsDetails = ({id}) => {
           <div className="px-2 py-4">
             <h3>Student Editing</h3>
             <hr />
-            <WithLoading isLoading={areStudentsLoading || !areStudentsLoaded} 
+            <WithLoading isLoading={isStudentLoading || !isStudentLoaded && areGroupsLoading || !areGroupsLoaded} 
               className={styles["loader-centered"]}
             >
               <Formik
@@ -218,7 +222,7 @@ export const EditStudentsDetails = ({id}) => {
                         { error ? <div className={styles.error}>{error}</div> : null}
                       </div>
                     </div>
-                    <WithLoading isLoading={areGroupsLoading || !areGroupsLoaded} 
+                    <WithLoading isLoading={areStudentGroupsLoading || !areStudentGroupsLoaded} 
                       className={styles["loader-centered"]}
                     >
                     <div className="row m-0 pt-3">
