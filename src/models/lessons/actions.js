@@ -1,6 +1,7 @@
 import {
   put, call, takeLatest, fork, all, takeEvery,
 } from 'redux-saga/effects';
+import * as actionTypes from '@models/courses/types';
 import { ApiService } from '../../shared/index.js';
 import * as actionsTypes from './action-types.js';
 
@@ -57,6 +58,8 @@ function* addLessonAsync(lessonData) {
         data,
       },
     });
+
+    yield put({ type: actionsTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({
       type: actionsTypes.ADDING_FAILED,
@@ -79,6 +82,8 @@ function* editLessonAsync(editData) {
         data,
       },
     });
+
+    yield put({ type: actionsTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({
       type: actionsTypes.EDITING_FAILED,

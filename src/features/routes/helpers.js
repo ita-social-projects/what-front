@@ -19,6 +19,9 @@ export const Links = () => (
       <li className="nav-item">
         <Link to="/role-list" className="nav-link">Role List</Link>
       </li>
+        <li className="nav-item">
+            <Link to="/lessons/add-lesson" className="nav-link">Add Lesson</Link>
+        </li>
     </ul>
   </div>
 );

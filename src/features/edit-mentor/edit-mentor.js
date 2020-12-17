@@ -42,7 +42,7 @@ export const EditMentor = () => {
                 <hr />
                 <div className="row mb-3">
                   <div className="col d-flex align-items-center">
-                    <label className="mb-0" htmlFor="firs_name">First name</label>
+                    <label className="mb-0" htmlFor="firstName">First name</label>
                   </div>
                   <div className="col-md-8">
                     <Field
