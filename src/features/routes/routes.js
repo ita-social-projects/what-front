@@ -1,11 +1,16 @@
 import React from 'react';
+import {
+  Counter, ListOfStudents, NotFound, ListOfMentors,
+} from '../index.js';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { StudentsTabs, CoursesTabs, GroupsTabs, SecretariesTabs } from '@/screens/index.js';
+
+import { StudentsTabs, CoursesTabs, GroupsTabs, SecretariesTabs, MentorTabs } from '@/screens/index.js';
+
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
   Auth, UnAssignedList, ListOfSecretaries,
-  ListOfMentors
+  ListOfMentors, ListOfLessons, AddLesson,
 } from '../index.js';
 
 export const Routes = () => (
@@ -16,6 +21,9 @@ export const Routes = () => (
       <Route exact path="/students" component={ListOfStudents} />
       <Route exact path="/students/:id" component={() => <StudentsTabs index={0}/>} />
       <Route exact path="/students/edit/:id" component={() => <StudentsTabs index={1} />} />
+      <Route exact path="/mentors" component={ListOfMentors} />
+      <Route exact path="/mentors/:id" component={() => <MentorTabs index={0} />} />
+      <Route exact path="/mentors/edit/:id" component={() => <MentorTabs index={1} />} />
       <Route exact path="/secretaries" component={ListOfSecretaries} />
       <Route exact path="/secretaries/:id" render={() => <SecretariesTabs index={0} />} />
       <Route exact path="/secretaries/edit/:id" render={() => <SecretariesTabs index={1} />} />
@@ -27,6 +35,8 @@ export const Routes = () => (
       <Route exact path="/groups/:id" render={() => <GroupsTabs index={0} />} />
       <Route exact path="/groups/edit/:id" render={() => <GroupsTabs index={1} />} />
       <Route exact path="/unassigned" component={UnAssignedList} />
+      <Route exact path="/lessons" component={ListOfLessons} />
+      <Route exact path="/lessons/add-lesson" component={AddLesson} />
       <Route exact path="/auth" component={Auth} />
       <Route exact path="/404" component={NotFound} />
       <Redirect to="/404" />

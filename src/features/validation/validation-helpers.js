@@ -82,7 +82,7 @@ export const validateDate = (start, finish) => {
 
 export const validateName = (value) => {
   let error;
-  const name = /^[a-zA-Z]+/;
+  const name = /[a-zA-Zа-яА-Я0-9]+/;
   if (!value) {
     error = 'This field is required';
   } else if (!name.test(value)) {
