@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Routes } from '@features/index.js';
 import Icon from './icon.js';
 

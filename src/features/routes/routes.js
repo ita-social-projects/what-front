@@ -1,6 +1,10 @@
 import React from 'react';
+import {
+  Counter, ListOfStudents, NotFound, ListOfMentors,
+} from '../index.js';
+import { RoleList, Role } from './helpers.js';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { CoursesTabs, GroupsTabs, SecretariesTabs } from '@/screens/index.js';
+import { CoursesTabs, GroupsTabs, SecretariesTabs, MentorTabs } from '@/screens/index.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
@@ -8,12 +12,16 @@ import {
   ListOfMentors, ListOfLessons, AddLesson,
 } from '../index.js';
 
+
 export const Routes = () => (
   <>
     <Switch>
       <Route exact path="/" render={() => (<h1 className="m-3">Welcome to the WHAT project!</h1>)} />
       <Route exact path="/counter" component={Counter} />
       <Route exact path="/students" component={ListOfStudents} />
+      <Route exact path="/mentors" component={ListOfMentors} />
+      <Route exact path="/mentors/:id" component={() => <MentorTabs index={0} />} />
+      <Route exact path="/mentors/edit/:id" component={() => <MentorTabs index={1} />} />
       <Route exact path="/secretaries" component={ListOfSecretaries} />
       <Route exact path="/secretaries/:id" render={() => <SecretariesTabs index={0} />} />
       <Route exact path="/secretaries/edit/:id" render={() => <SecretariesTabs index={1} />} />
