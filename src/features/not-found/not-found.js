@@ -10,7 +10,7 @@ import { Button } from '../../components/index.js';
 
 export const NotFound = () => {
   const history = useHistory();
-  const currentUser = useSelector(currentUserSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   return (
     <div className={styles.wrapper}>
