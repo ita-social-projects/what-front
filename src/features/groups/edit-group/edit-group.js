@@ -5,16 +5,17 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { validateGroupName, validateDate } from '../validation/validation-helpers.js';
 import {
   coursesStateShape,
   mentorsStateShape,
-  studentGroupsByIdStateShape,
-  studentsStateShape, useActions,
-} from '../../shared/index.js';
-import { WithLoading, Button } from '../../components/index.js';
-import { editStudentGroup, editStudentGroupsSelector } from '../../models/index.js';
-import Icon from '../../icon.js';
+  studentsStateShape,
+  studentGroupByIdStateShape,
+} from '@/features/shared';
+import { useActions } from '@/shared';
+import { WithLoading, Button } from '@/components/index.js';
+import { editStudentGroup, editStudentGroupsSelector } from '@/models';
+import Icon from '@/icon.js';
+import { validateGroupName, validateDate } from '../../validation/validation-helpers.js';
 import styles from './edit-groups.scss';
 
 export const EditGroup = ({
@@ -338,7 +339,7 @@ export const EditGroup = ({
 
 EditGroup.propTypes = {
   id: number.isRequired,
-  studentGroupData: shape(studentGroupsByIdStateShape).isRequired,
+  studentGroupData: shape(studentGroupByIdStateShape).isRequired,
   studentsData: shape(studentsStateShape).isRequired,
   mentorsData: shape(mentorsStateShape).isRequired,
   coursesData: shape(coursesStateShape).isRequired,

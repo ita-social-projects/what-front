@@ -8,6 +8,7 @@ import { Button, Search, WithLoading } from '@components/index.js';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
 import { Card } from '@components/card/index.js';
 import Icon from '@/icon.js';
+import { paths } from '@/shared';
 import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
 
@@ -15,7 +16,7 @@ export const ListOfGroups = () => {
   const history = useHistory();
 
   const studentGroupsState = useSelector(loadStudentGroupsSelector, shallowEqual);
-  const { groups, isLoading, isLoaded, error } = studentGroupsState;
+  const { data: groups, isLoading, isLoaded, error } = studentGroupsState;
 
   const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
   const searchGroupName = useSelector(searchGroup, shallowEqual);
@@ -24,26 +25,23 @@ export const ListOfGroups = () => {
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
 
   useEffect(() => {
-    if (!isLoaded && !error) {
-      fetchListOfGroups();
-    }
-  }, [error, isLoaded, fetchListOfGroups]);
+    fetchListOfGroups();
+  }, [fetchListOfGroups]);
 
   const handleAddGroup = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('Redirect to add group form');
-  }, []);
+    history.push(paths.GROUP_ADD);
+  }, [history]);
 
   const handleSearch = useCallback((inputValue) => {
     setSearchGroupValue(inputValue);
   }, [setSearchGroupValue]);
 
   const handleCardEdit = useCallback((id) => {
-    history.push(`/groups/edit/${id}`);
+    history.push(`${paths.GROUP_EDIT}/${id}`);
   }, [history]);
 
   const handleCardDetails = useCallback((id) => {
-    history.push(`/groups/${id}`);
+    history.push(`${paths.GROUPS_DETAILS}/${id}`);
   }, [history]);
 
   const handleCalendarChange = (event) => {

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
+import { number } from 'prop-types';
 
 import { useActions } from '../../shared/index.js';
 import { Tabs, Tab } from '../../components/index.js';
@@ -11,7 +12,7 @@ import {
   coursesSelector, fetchCourses,
 } from '../../models/index.js';
 
-export const GroupsTabs = () => {
+export const GroupsTabs = ({ index }) => {
   const { id } = useParams();
   const group = useSelector(loadStudentGroupsByIdSelector, shallowEqual);
   const mentors = useSelector(mentorsSelector, shallowEqual);
@@ -41,8 +42,8 @@ export const GroupsTabs = () => {
   }, [group, history]);
 
   return (
-    <Tabs linkBack="/groups" className="container w-50">
-      <Tab title="Group details" tabIndex={0}>
+    <Tabs defaultIndex={index} linkBack="/groups" className="container w-50">
+      <Tab title="Group details">
         <GroupDetails
           id={Number(id)}
           studentGroupData={group}
@@ -51,7 +52,7 @@ export const GroupsTabs = () => {
           studentsData={students}
         />
       </Tab>
-      <Tab title="Edit group" tabIndex={1}>
+      <Tab title="Edit group">
         <EditGroup
           id={Number(id)}
           studentGroupData={group}
@@ -62,4 +63,8 @@ export const GroupsTabs = () => {
       </Tab>
     </Tabs>
   );
+};
+
+GroupsTabs.propTypes = {
+  index: number.isRequired,
 };
