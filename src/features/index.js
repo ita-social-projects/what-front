@@ -13,3 +13,4 @@ export * from './groups';
 export * from './lessons';
 export * from './secretaries';
 export * from './students';
+export * from './layout';
