@@ -26,7 +26,7 @@ function* watchLoadingStudentGroups() {
 
 export const loadStudentGroupsById = (id) => ({
   type: actionTypes.LOAD_STUDENT_GROUP_BY_ID,
-  payload: { id },
+  payload: id,
 });
 
 function* loadStudentGroupsByIdAsync({ payload }) {

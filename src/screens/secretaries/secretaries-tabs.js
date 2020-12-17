@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useActions } from '@/shared/index.js';
+import { useActions, paths } from '@/shared/index.js';
 import { fetchSecretaries } from '@models/index.js';
 import { Tab, Tabs } from '@/components';
 import { SecretarysDetails, EditSecretarysDetails } from '@/features';
@@ -15,8 +15,8 @@ export const SecretariesTabs = ({ index }) => {
   }, [loadSecretaries]);
 
   return (
-    <Tabs defaultIndex={index} className="container col-lg-6 col-md-8 col-sm-12" linkBack="/secretaries">
-      <Tab title="Secretary's details">
+    <Tabs defaultIndex={index} className="container col-lg-6 col-md-8 col-sm-12" linkBack={paths.SECRETARIES}>
+      <Tab title="Secretary's details" index={0}>
         <SecretarysDetails id={Number(id)} />
       </Tab>
       <Tab title="Edit secretary">
