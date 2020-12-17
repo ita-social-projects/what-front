@@ -119,10 +119,11 @@ export const Registration = () => {
                     <p className="text-danger mb-0">{touched.confirmPassword && errors.confirmPassword}</p>
                   </div>
                   <div className="d-flex justify-content-center">
-                      <WithLoading isLoading={isLoading}>
-                        <Button type="submit" className="btn btn-block btn-warning">Sign up</Button>
-                      </WithLoading>
-                    </div>
+                    <WithLoading isLoading={isLoading}>
+                      <Button type="submit" className="btn btn-block btn-warning">Sign up</Button>
+                    </WithLoading>
+                  </div>
+                  <p className="text-danger text-center mt-2">{error}</p>
                   <div className="text-center mt-3">
                     <p>Already have an account? <Link to={paths.AUTH}>Log in</Link></p>
                   </div>
