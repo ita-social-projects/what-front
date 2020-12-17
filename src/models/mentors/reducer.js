@@ -10,7 +10,6 @@ import {
   mentorDeletingReducer
 } from './reducers/index.js';
 
-
 export const mentorsReducer = combineReducers({
   mentors: mentorsAllReducer,
   mentorsActive: mentorsActiveReducer,
@@ -21,3 +20,4 @@ export const mentorsReducer = combineReducers({
   mentorAdding: mentorAddingReducer,
   mentorDeleting: mentorDeletingReducer
 });
+
