@@ -7,7 +7,7 @@ import className from 'classnames';
 import Icon from '../../icon.js';
 import { Search, Button, WithLoading } from '../../components/index.js';
 
-import { registretion, login, fetchUnAssignedUserList } from '../../models/index.js';
+import { fetchUnAssignedUserList } from '../../models/index.js';
 
 import styles from './unassigned-list.scss';
 
@@ -17,7 +17,7 @@ export const UnAssignedList = () => {
   const currentUserRole = currentUser.role;
   const { loaded, notAssigned } = useSelector(newUserSelector);
 
-  const [regist, logIn, getUnAssignedUserList] = useActions([registretion, login, fetchUnAssignedUserList]);
+  const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
   const [addStudentRole,
     addSecreteryRole,
