@@ -33,7 +33,7 @@ export const ListOfMentors = () => {
   };
 
   const addMentor = () => {
-    history.push('/add-role');
+    history.push('/unassigned');
   };
 
   const mentorDetails = (id) => {

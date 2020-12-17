@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-  Counter, ListOfStudents, NotFound, ListOfMentors,
-} from '../index.js';
 import { RoleList, Role } from './helpers.js';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { CoursesTabs, GroupsTabs, SecretariesTabs, MentorTabs } from '@/screens/index.js';

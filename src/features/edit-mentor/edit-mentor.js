@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useActions } from '@shared/index.js';
-import { WithLoading } from '@components/index.js';
+import { WithLoading, Button } from '@components/index.js';
 import {
   mentorIdSelector, mentorEditingSelector, mentorDeletingSelector, mentorGroupsSelector, mentorCoursesSelector,
   editMentor, deleteMentor,
@@ -10,10 +10,8 @@ import {
 import { Formik, Field, Form } from 'formik';
 import { formValidate } from '../validation/validation-helpers.js';
 import classNames from 'classnames';
-import { Button } from '@/components';
 import styles from './edit-mentor.scss';
 import Icon from "@/icon";
-import * as Yup from "yup";
 
 export const EditMentor = ({id}) => {
   const {
@@ -50,29 +48,31 @@ export const EditMentor = ({id}) => {
     if (!mentor && mentorIsLoading && mentorIsLoaded) {
       history.push('/404');
     }
-  }, [mentor, mentorIsLoading, mentorIsLoaded]);
-  
-  useEffect(() => {
     if (!editedIsError && editedIsLoaded || !deletedIsError && deletedIsLoaded) {
       history.push('/mentors');
     }
-  }, [editedIsError, editedIsLoaded, deletedIsError, deletedIsLoaded]);
+  }, [mentor, mentorIsLoading, mentorIsLoaded, editedIsError, editedIsLoaded, deletedIsError, deletedIsLoaded ]);
   
   const history = useHistory();
   
   const [updateMentor, removeMentor] = useActions([editMentor, deleteMentor]);
-  
   const [groups, setGroups] = useState(mentorGroups || 0);
   const [courses, setCourses] = useState(mentorGroups || 0);
   const [groupInput, setGroupInputValue] = useState('Type name of a group');
   const [courseInput, setCourseInputValue] = useState('Type name of a course');
   const [error, setError] = useState(null);
   
+  useEffect(() => {
+    setGroups(mentorGroups),
+    setCourses(mentorCourses)
+  }, [mentorGroups, mentorCourses])
+  
   const handleGroupInputChange = (e) => {
     setError('');
     const { value } = e.target;
     setGroupInputValue(value);
   };
+  
   const handleCourseInputChange = (e) => {
     setError('');
     const { value } = e.target;
@@ -177,8 +177,8 @@ export const EditMentor = ({id}) => {
                   firstName: mentor?.firstName,
                   lastName: mentor?.lastName,
                   email: mentor?.email,
-                  groups: mentor?.studentGroupIds,
-                  courses: mentor?.courseIds
+                  studentGroupIds: mentor?.studentGroupIds,
+                  courseIds: mentor?.courseIds
                 }}
                 validationSchema={formValidate}
                 onSubmit={onSubmit}
