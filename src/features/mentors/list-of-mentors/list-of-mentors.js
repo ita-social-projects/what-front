@@ -2,19 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-<<<<<<< HEAD:src/features/mentors/list-of-mentors/list-of-mentors.js
 import { Card, Search, Button, WithLoading } from '@/components/index.js';
 import Icon from '@/icon.js';
 import styles from './list-of-mentors.scss';
-=======
->>>>>>> dev:src/features/list-of-mentors/list-of-mentors.js
 import { useActions } from '@/shared/index.js';
 import { fetchActiveMentors, mentorsActiveSelector } from '@/models/index.js';
-import {
-  Card, Search, Button, WithLoading,
-} from '../../components/index.js';
-import Icon from '../../icon.js';
-import styles from './list-of-mentors.scss';
 
 export const ListOfMentors = () => {
   const [loadActiveMentors] = useActions([fetchActiveMentors]);

@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { useSelector, shallowEqual } from 'react-redux';
 import * as Yup from 'yup';
 import { Button } from '@/components';
-import { useActions } from '../../shared/hooks/index.js';
+import { useActions } from '@/shared/hooks/index.js';
 
 import {
   mentorsSelector,
@@ -19,7 +19,7 @@ import {
   globalLoadStudentGroups,
   loadActiveStudents,
   addLesson,
-} from '../../models/index.js';
+} from '@/models/index.js';
 
 import styles from './add-lesson.scss';
 

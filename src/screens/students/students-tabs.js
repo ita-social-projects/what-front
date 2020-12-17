@@ -16,15 +16,9 @@ export const StudentsTabs = ({index}) => {
 
   useEffect(() => {
     fetchStudentById(id);
-  }, [fetchStudentById]);
-
-  useEffect(() => {
-    fetchStudentGroups(id);
-  }, [fetchStudentGroups]);
-
-  useEffect(() => {
     fetchGroups();
-  }, [fetchGroups]);
+    fetchStudentGroups(id);
+  }, [fetchStudentById, fetchStudentGroups, fetchGroups]);
 
   return (
     <Tabs defaultIndex={index} className='container w-50' linkBack='/students'>

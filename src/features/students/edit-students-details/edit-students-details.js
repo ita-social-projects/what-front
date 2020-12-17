@@ -6,11 +6,11 @@ import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector,
   removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent,  } from '@/models';
 
 import { Formik, Form, Field } from 'formik';
-import { formValidate } from '../validation/validation-helpers.js';
+import { formValidate } from '../../validation/validation-helpers.js';
 
 import { WithLoading } from '@/components';
-import { Button } from '../../components/index.js';
-import Icon from '../../icon.js';
+import { Button } from '@/components/index.js';
+import Icon from '@/icon.js';
 
 import styles from './edit-students-details.scss';
 import classNames from 'classnames';
@@ -34,7 +34,7 @@ export const EditStudentsDetails = ({id}) => {
     isLoading: areStudentGroupsLoading,
     isLoaded: areStudentGroupsLoaded,
   } = useSelector(currentStudentGroupsSelector, shallowEqual);
-
+console.log(studentGroups);
   const {
     isLoading: isEditedLoading,
     isLoaded: isEditedLoaded,
@@ -64,6 +64,10 @@ export const EditStudentsDetails = ({id}) => {
       history.push('/students');
     }
   }, [isEditedError, isEditedLoaded, isRemovedError, isRemovedLoaded]);
+
+  useEffect(() => {
+    setGroups(studentGroups)
+  }, [studentGroups]);
 
   const handleInputChange = (event) => {
     setError('');
@@ -222,7 +226,7 @@ export const EditStudentsDetails = ({id}) => {
                         { error ? <div className={styles.error}>{error}</div> : null}
                       </div>
                     </div>
-                    <WithLoading isLoading={areStudentGroupsLoading || !areStudentGroupsLoaded} 
+                    <WithLoading isLoading={!areStudentGroupsLoaded || areStudentGroupsLoading } 
                       className={styles["loader-centered"]}
                     >
                     <div className="row m-0 pt-3">

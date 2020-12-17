@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
 import { Button } from '@/components';
-import { validateName, validateEmail } from '../validation/validation-helpers.js';
+import { validateName, validateEmail } from '../../validation/validation-helpers.js';
 import styles from './edit-mentor.scss';
 
 export const EditMentor = () => {
