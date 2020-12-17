@@ -24,7 +24,6 @@ export const EditStudentsDetails = ({id}) => {
     isLoaded: isStudentLoaded,
     error: studentError,
   } = useSelector(currentStudentSelector, shallowEqual);
-  console.log(student)
 
   const { 
     data: allGroups,

@@ -23,7 +23,7 @@ export const StudentDetails = () => {
 
   useEffect(() => {
     if (studentError && studentGroupsError) {
-      history.push('/404');
+      history.push(paths.NOT_FOUND);
     }
   }, [studentError, studentGroupsError]);
 
