@@ -12,26 +12,11 @@ export const studentGroupShape = {
   mentorIds: arrayOf(number).isRequired,
 };
 
-export const studentGroupsStateShape = {
-  error: string.isRequired,
-  isLoading: bool.isRequired,
-  isLoaded: bool.isRequired,
-  studentGroups: oneOfType([arrayOf(shape(studentGroupShape)), arrayOf(undefined)]).isRequired,
-  studentGroupById: oneOfType([shape(studentGroupShape), object]).isRequired,
-};
-
 export const studentShape = {
   id: number.isRequired,
   email: string.isRequired,
   firstName: string.isRequired,
   lastName: string.isRequired,
-};
-
-export const studentsStateShape = {
-  error: string.isRequired,
-  isLoading: bool.isRequired,
-  isLoaded: bool.isRequired,
-  data: oneOfType([arrayOf(shape(studentShape)), arrayOf(undefined)]).isRequired,
 };
 
 export const mentorShape = {
@@ -41,6 +26,18 @@ export const mentorShape = {
   lastName: string.isRequired,
 };
 
+export const courseShape = {
+  id: number.isRequired,
+  name: string.isRequired,
+};
+
+export const studentsStateShape = {
+  error: string.isRequired,
+  isLoading: bool.isRequired,
+  isLoaded: bool.isRequired,
+  data: oneOfType([arrayOf(shape(studentShape)), arrayOf(undefined)]).isRequired,
+};
+
 export const mentorsStateShape = {
   error: string.isRequired,
   isLoading: bool.isRequired,
@@ -48,14 +45,17 @@ export const mentorsStateShape = {
   mentors: oneOfType([arrayOf(shape(mentorShape)), arrayOf(undefined)]).isRequired,
 };
 
-export const courseShape = {
-  id: number.isRequired,
-  name: string.isRequired,
-};
-
 export const coursesStateShape = {
   error: string.isRequired,
   isLoading: bool.isRequired,
   loaded: bool.isRequired,
   data: oneOfType([arrayOf(shape(courseShape)), arrayOf(undefined)]).isRequired,
+};
+
+export const studentGroupsStateShape = {
+  error: string.isRequired,
+  isLoading: bool.isRequired,
+  isLoaded: bool.isRequired,
+  studentGroups: oneOfType([arrayOf(shape(studentGroupShape)), arrayOf(undefined)]).isRequired,
+  studentGroupById: oneOfType([shape(studentGroupShape), object]).isRequired,
 };

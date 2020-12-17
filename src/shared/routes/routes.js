@@ -2,12 +2,12 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { SecretariesTabs, CoursesTabs, GroupsTabs } from '@/screens/index.js';
+import { ProtectedRoute } from '@/components/index.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
   Auth, ListOfSecretaries, UnAssignedList,
 } from '../../features/index.js';
-import { ProtectedRoute } from '../../components/index.js';
 import { paths } from './index.js';
 
 export const Routes = () => (

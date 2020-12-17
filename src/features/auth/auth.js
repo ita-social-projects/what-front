@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
 
 import { Cookie } from '@/utils';
-import { useActions, paths } from '@/shared/index.js';
+import { useActions, paths, homepages } from '@/shared/index.js';
 import { login, currentUserSelector } from '@/models/index.js';
 import { Button, WithLoading } from '@/components/index.js';
 import { authValidationSchema } from '../validation/validation-helpers.js';
@@ -28,14 +28,6 @@ export const Auth = () => {
     }
   }, [history, jwt]);
 
-  const homepages = useMemo(() => ({
-    0: paths.HOME, // unassigned user
-    1: paths.HOME, // student homepage
-    2: paths.STUDENTS, // mentor homepage
-    3: paths.MENTORS, // secretary
-    4: paths.STUDENTS, // admin homepage
-  }), []);
-
   const submitHandler = (values) => {
     dispatchLogIn(values);
   };
@@ -44,7 +36,7 @@ export const Auth = () => {
     if (loaded && !requestError) {
       history.push(homepages[currentUser.role]);
     }
-  }, [currentUser, history, homepages, loaded, requestError]);
+  }, [currentUser, history, loaded, requestError]);
 
   return (
     <div className={styles.wrapper}>

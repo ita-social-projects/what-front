@@ -6,9 +6,10 @@ import { useActions } from '@/shared/hooks/index.js';
 import { Button, Search, WithLoading } from '@/components/index.js';
 import { Card } from '@/components/card/index.js';
 import Icon from '@/icon.js';
+import classNames from 'classnames';
+import { paths } from '@/shared';
 import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
-import classNames from 'classnames';
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -38,11 +39,11 @@ export const ListOfGroups = () => {
   }, [setSearchGroupValue]);
 
   const handleCardEdit = useCallback((id) => {
-    history.push(`/edit/${id}`);
+    history.push(`${paths.GROUP_EDIT}/${id}`);
   }, [history]);
 
   const handleCardDetails = useCallback((id) => {
-    history.push(`/${id}`);
+    history.push(`${paths.GROUPS_DETAILS}/${id}`);
   }, [history]);
 
   const handleCalendarChange = (event) => {
@@ -66,44 +67,44 @@ export const ListOfGroups = () => {
 
     const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
     return listByDate.map((group) => (
-        <Card
-            key={group.id}
-            id={group.id}
-            title={group.name}
-            date={group.startDate.replaceAll('-', '.').slice(0, 10)}
-            buttonName="Details"
-            iconName="Edit"
-            onEdit={handleCardEdit}
-            onDetails={handleCardDetails}
-        />
+      <Card
+        key={group.id}
+        id={group.id}
+        title={group.name}
+        date={group.startDate.replaceAll('-', '.').slice(0, 10)}
+        buttonName="Details"
+        iconName="Edit"
+        onEdit={handleCardEdit}
+        onDetails={handleCardDetails}
+      />
     ));
   };
 
   return (
-      <div className="container">
-        <div className="row">
-          <div className={classNames(styles['list-head'], 'col-12')}>
-            <input
-                className={classNames('form-control ', styles['calendar-input'], 'col-2')}
-                type="date"
-                name="group_date"
-                required
-                onChange={handleCalendarChange}
-                placeholder="year-month-day"
-            />
-            <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
-            <Button onClick={handleAddGroup} variant="warning">
-              <Icon icon="Plus" size={20} className="icon" />
-              Add Group
-            </Button>
-          </div>
-          <hr className="col-8" />
-          <div className={classNames(styles['group-list'], 'col-12')}>
-            <WithLoading isLoading={isLoading}>
-              {getGroupList()}
-            </WithLoading>
-          </div>
+    <div className="container">
+      <div className="row">
+        <div className={classNames(styles['list-head'], 'col-12')}>
+          <input
+            className={classNames('form-control ', styles['calendar-input'], 'col-2')}
+            type="date"
+            name="group_date"
+            required
+            onChange={handleCalendarChange}
+            placeholder="year-month-day"
+          />
+          <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
+          <Button onClick={handleAddGroup} variant="warning">
+            <Icon icon="Plus" size={20} className="icon" />
+            Add Group
+          </Button>
+        </div>
+        <hr className="col-8" />
+        <div className={classNames(styles['group-list'], 'col-12')}>
+          <WithLoading isLoading={isLoading}>
+            {getGroupList()}
+          </WithLoading>
         </div>
       </div>
+    </div>
   );
 };

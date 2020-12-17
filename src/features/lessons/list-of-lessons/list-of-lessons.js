@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { useActions } from '@/shared';
+import { paths, useActions } from '@/shared';
 import { fetchLessons, lessonsSelector } from '@/models/index.js';
 import {
   Card, Search, Button, WithLoading,
@@ -48,11 +48,11 @@ export const ListOfLessons = () => {
   };
 
   const addLesson = () => {
-    history.push('lessons/add-lesson');
+    history.push(paths.LESSON_ADD);
   };
 
   const editLesson = (id) => {
-    history.push(`lessons/edit-lesson/${id}`);
+    history.push(`${paths.LESSON_EDIT}/${id}`);
   };
 
   const transformDateTime = (dateTime) => {
