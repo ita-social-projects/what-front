@@ -3,16 +3,20 @@ import * as yup from 'yup';
 
 export const formValidate = Yup.object().shape({
   firstName: Yup.string()
-    .matches('[^А-Яа-я]+', 'Only Latin letters allowed')
     .min(2, 'Too Short!')
-    .matches('^[A-Za-z]+$', 'Invalid Name')
     .max(50, 'Too Long!')
+    .matches(
+      '^[A-Za-zа-яА-ЯёЁ]+$',
+      'Invalid first name',
+    )
     .required('This field is required'),
   lastName: Yup.string()
-    .matches('[^А-Яа-я]+', 'Only Latin letters allowed')
     .min(2, 'Too Short!')
-    .matches('^[A-Za-z]+$', 'Invalid Last Name')
     .max(50, 'Too Long!')
+    .matches(
+      '^[A-Za-zа-яА-ЯёЁ]+$',
+      'Invalid second name',
+    )
     .required('This field is required'),
   email: Yup.string()
     .email('Invalid Email')

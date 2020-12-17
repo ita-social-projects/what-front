@@ -41,7 +41,7 @@ export const ListOfStudents = () => {
   };
 
   const addStudent = () => {
-    history.push('/add-student');
+    history.push(`/add-role`);
   };
 
   const studentDetails = (id) => {
@@ -49,7 +49,7 @@ export const ListOfStudents = () => {
   };
 
   const studentEditing = (id) => {
-    history.push(`/students/edit-student/${id}`);
+    history.push(`/students/edit/${id}`);
   };
 
   const getStudents = () => {

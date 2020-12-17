@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useActions } from '@/shared';
 import { createCourse, createdCourseSelector } from '@/models';
 import { Formik, Form, Field } from 'formik';
-import { validateGroupName } from '@/validation/validation-helpers';
+import { validateGroupName } from '../../validation/validation-helpers.js';
 import classNames from 'classnames';
 import styles from './add-course.scss';
 
@@ -13,7 +13,7 @@ export const AddCourse = () => {
 
   const addCourse = useActions(createCourse);
 
-  const history = useHistory();
+  const history = useHistory(); 
 
   useEffect(() => {
     if (!error && loaded) {
