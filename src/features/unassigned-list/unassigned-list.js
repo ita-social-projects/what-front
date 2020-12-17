@@ -6,7 +6,7 @@ import { newUserSelector, currentUserSelector, addMentor, createSecretary, addSt
 import Icon from '../../icon.js';
 import { Search, Button, WithLoading } from '../../components/index.js';
 
-import {fetchUnAssignedUserList } from '../../models/index.js';
+import { fetchUnAssignedUserList } from '../../models/index.js';
 
 import styles from './unassigned-list.scss';
 

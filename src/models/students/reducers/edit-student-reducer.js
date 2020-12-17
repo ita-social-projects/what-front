@@ -32,7 +32,11 @@ export const editStudentReducer = (state = INITIAL_STATE, action) => {
         isLoaded: false,
         error: action.payload.error.message,
       };
-
+    case actionTypes.CLEAR_LOADED:
+      return {
+        ...state,
+        isLoaded: false,
+      }
     default:
       return state;
   }
