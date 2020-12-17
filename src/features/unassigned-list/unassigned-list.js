@@ -7,23 +7,21 @@ import className from 'classnames';
 import Icon from '../../icon.js';
 import { Search, Button, WithLoading } from '../../components/index.js';
 
-import { fetchUnAssignedUserList } from '../../models/index.js';
+import { registretion, login, fetchUnAssignedUserList } from '../../models/index.js';
 
 import styles from './unassigned-list.scss';
 
 export const UnAssignedList = () => {
-  const roles = ['student', 'mentor', 'secretary'];
+  const roles = ['Choose role', 'student', 'mentor', 'secretary'];
   const { currentUser } = useSelector(currentUserSelector);
   const currentUserRole = currentUser.role;
   const { loaded, notAssigned } = useSelector(newUserSelector);
 
-  const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
+  const [regist, logIn, getUnAssignedUserList] = useActions([registretion, login, fetchUnAssignedUserList]);
 
   const [addStudentRole,
     addSecreteryRole,
     addMentorRole] = useActions([addStudent, createSecretary, addMentor]);
-
-  const [usersRoles, setUsersRole] = useState(notAssigned[0]?.map((user) => ({ id: user.id, role: 1 })));
 
   const [search, setSearch] = useState('');
   const [searchPersonValue, setSearchPersonValue] = useState([]);
@@ -34,9 +32,9 @@ export const UnAssignedList = () => {
 
   useEffect(() => {
     if (loaded) {
-      setSearchPersonValue(notAssigned[0]);
+      setSearchPersonValue(notAssigned[0]?.map((user) => ({ id: user.id, role: 1 })));
     }
-  }, [notAssigned[0]]);
+  }, [loaded, notAssigned]);
 
   useEffect(() => {
     if (loaded) {
@@ -45,16 +43,18 @@ export const UnAssignedList = () => {
         .includes(search.toUpperCase()));
       setSearchPersonValue(results);
     }
-  }, [search]);
+  }, [loaded, notAssigned, search]);
 
   const changeRole = (id, value) => {
     const newState = searchPersonValue.map((user) => (user.id === id ? ({ ...user, role: Number(value) }) : user));
-    setUsersRole(newState);
+    setSearchPersonValue(newState);
   };
 
   const handleButtonClick = (id) => {
-    const { role } = usersRoles.find((user) => user.id === id);
+    const { role } = searchPersonValue.find((user) => user.id === id);
     if (role !== 0) {
+      const newState = searchPersonValue.filter((user) => user.id !== id);
+      setSearchPersonValue(newState);
       switch (role) {
         case 1:
           return addStudentRole(id);
@@ -74,16 +74,16 @@ export const UnAssignedList = () => {
   const options = () => {
     switch (currentUserRole) {
       case 2:
-        return <option value={1}>{roles[0]}</option>;
+        return <option value={1}>{roles[1]}</option>;
       case 3:
         return roles.slice(0, 2).map((role) => (
-          <option value={roles.indexOf(role) + 1}>
+          <option value={roles.indexOf(role)}>
             {role}
           </option>
         ));
       case 4:
         return roles.map((role) => (
-          <option value={roles.indexOf(role) + 1}>
+          <option value={roles.indexOf(role)}>
             {role}
           </option>
         ));
