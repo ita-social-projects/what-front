@@ -37,6 +37,11 @@ export function registReducer(state = initialState, action) {
         loaded: false,
         error: action.payload.error,
       };
+    case actionTypes.CLEAR_LOADED:
+      return {
+        ...state,
+        loaded: false,
+      }
     default: return state;
   }
 }

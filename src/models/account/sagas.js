@@ -13,7 +13,7 @@ export const login = (currentUser) => ({
   },
 });
 
-export const registretion = (newUser) => ({
+export const registration = (newUser) => ({
   type: actionTypes.REGIST_REQUSTING,
   payload: {
     newUser,
@@ -49,11 +49,12 @@ function* logOutWorker() {
   yield put({ type: actionTypes.CLEAR_USER });
 }
 
-function* registretionWorker(data) {
+function* registrationWorker(data) {
   try {
     yield put({ type: actionTypes.REGIST_STARTED});
     const regUser = yield call(ApiService.create, '/accounts/reg', data.payload.newUser);
     yield put({ type: actionTypes.REGIST_SUCCESS, payload: { regUser } });
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({ type: actionTypes.REGIST_ERROR, payload: { error: error.message } });
   }
@@ -87,8 +88,8 @@ function* logOutWatcher() {
   yield takeEvery(actionTypes.LOGOUT, logOutWorker);
 }
 
-function* registretionWather() {
-  yield takeLatest(actionTypes.REGIST_REQUSTING, registretionWorker);
+function* registrationWather() {
+  yield takeLatest(actionTypes.REGIST_REQUSTING, registrationWorker);
 }
 
 function* fetchAssignedUserListWatcher() {
@@ -102,7 +103,7 @@ export function* authWatcher() {
   yield all([
     fork(loginWtacher),
     fork(logOutWatcher),
-    fork(registretionWather),
+    fork(registrationWather),
     fork(fetchAssignedUserListWatcher),
     fork(fetchUnAssignedUserListWatcher),
   ]);

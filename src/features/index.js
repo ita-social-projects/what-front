@@ -9,7 +9,7 @@ export * from './schedule-student';
 export * from './auth';
 export * from './routes';
 export * from './header';
-export * from './validation';
+export * from './registration';
 export * from './list-of-groups';
 export * from './list-of-students';
 export * from './list-of-lessons';
