@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useActions } from '@/shared';
+import { useActions, paths } from '@/shared';
 import { fetchCourses } from '@/models';
 import { Tab, Tabs } from '@/components';
 import { CourseDetails, EditCourse } from '@/features';
 
-export const CoursesTabs = ({index}) => {
+export const CoursesTabs = ({ index }) => {
   const { id } = useParams();
 
   const [loadCourses] = useActions([fetchCourses]);
@@ -15,13 +15,13 @@ export const CoursesTabs = ({index}) => {
   }, [loadCourses]);
 
   return (
-    <Tabs defaultIndex={index} className='container w-50' linkBack='/courses'>
-      <Tab title='Course details'>
-        <CourseDetails id={id}/>
+    <Tabs defaultIndex={index} className="container w-50" linkBack={paths.COURSES}>
+      <Tab title="Course details">
+        <CourseDetails id={id} />
       </Tab>
-      <Tab title='Edit course details'>
-        <EditCourse id={id}/>
+      <Tab title="Edit course details">
+        <EditCourse id={id} />
       </Tab>
     </Tabs>
   );
-}
+};

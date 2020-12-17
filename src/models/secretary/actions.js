@@ -19,6 +19,10 @@ function* fetchSecretaryWorker() {
   }
 }
 
+function* fetchSecretariesWatcher() {
+  yield takeLatest(FETCH_SECRETARIES, fetchSecretaryWorker);
+}
+
 export const createSecretary = (id) => ({
   type: actions.CREATE_SECRETARY,
   payload: { id },
@@ -29,9 +33,14 @@ function* createSecretaryWorker({ payload }) {
     yield put({ type: actions.SECRETARY_CREATING_STARTED });
     const newSecretary = yield call(ApiService.create, `/secretaries/${payload.id}`);
     yield put({ type: actions.SECRETARY_CREATING_SUCCESS, payload: { newSecretary } });
+    yield put({ type: actions.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actions.SECRETARY_CREATING_FAILED, payload: { error } });
   }
+}
+
+function* createSecretaryWatcher() {
+  yield takeEvery(CREATE_SECRETARY, createSecretaryWorker);
 }
 
 export const updateSecretary = (id, newData) => ({
@@ -45,9 +54,14 @@ function* updateSecretaryWorker({ payload }) {
     const updatedData = yield call(ApiService.update, `/secretaries/${payload.id}`, payload.newData);
     updatedData.id = payload.id;
     yield put({ type: actions.SECRETARY_UPDATING_SUCCESS, payload: { updatedData } });
+    yield put({ type: actions.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actions.SECRETARY_UPDATING_FAILED, payload: { error } });
   }
+}
+
+function* updateSecretaryWatcher() {
+  yield takeEvery(UPDATE_SECRETARY, updateSecretaryWorker);
 }
 
 export const deleteSecretary = (id) => ({
@@ -61,21 +75,10 @@ function* deleteSecretaryWorker({ payload }) {
     yield call(ApiService.remove, `/secretaries/${payload.id}`);
     const secretaryId = payload.id;
     yield put({ type: actions.SECRETARY_DELETING_SUCCESS, payload: { secretaryId } });
+    yield put({ type: actions.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actions.SECRETARY_UPDATING_FAILED, payload: { error } });
   }
-}
-
-function* fetchSecretariesWatcher() {
-  yield takeLatest(FETCH_SECRETARIES, fetchSecretaryWorker);
-}
-
-function* createSecretaryWatcher() {
-  yield takeEvery(CREATE_SECRETARY, createSecretaryWorker);
-}
-
-function* updateSecretaryWatcher() {
-  yield takeEvery(UPDATE_SECRETARY, updateSecretaryWorker);
 }
 
 function* deleteSecretaryWatcher() {

@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
 
-import { Button, WithLoading } from '../../components/index.js';
-import { useActions } from '../../shared/index.js';
-import { login, currentUserSelector } from '../../models/index.js';
+import { Cookie } from '@/utils';
+import { useActions, paths, homepages } from '@/shared/index.js';
+import { login, currentUserSelector } from '@/models/index.js';
+import { Button, WithLoading } from '@/components/index.js';
 import { authValidationSchema } from '../validation/validation-helpers.js';
 import styles from './auth.scss';
 
@@ -15,17 +16,27 @@ export const Auth = () => {
     isLoading,
     error: requestError,
     loaded,
+    currentUser,
   } = useSelector(currentUserSelector, shallowEqual);
   const dispatchLogIn = useActions(login);
   const history = useHistory();
+  const jwt = Cookie.get('jwt');
+
+  useEffect(() => {
+    if (jwt) {
+      history.push(paths.NOT_FOUND);
+    }
+  }, [history, jwt]);
 
   const submitHandler = (values) => {
     dispatchLogIn(values);
   };
 
-  if (loaded && !requestError) {
-    history.push('/home');
-  }
+  useEffect(() => {
+    if (loaded && !requestError) {
+      history.push(homepages[currentUser.role]);
+    }
+  }, [currentUser, history, loaded, requestError]);
 
   return (
     <div className={styles.wrapper}>
@@ -39,8 +50,6 @@ export const Auth = () => {
                   password: '',
                 }}
                 onSubmit={submitHandler}
-                validateOnChange={false}
-                validateOnMount={false}
                 validationSchema={authValidationSchema}
               >
                 {({
