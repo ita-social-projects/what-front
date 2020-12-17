@@ -21,6 +21,7 @@ export const EditStudentsDetails = ({id}) => {
     data: student,
     isLoading: isStudentLoading, 
     isLoaded: isStudentLoaded,
+    error: studentError,
   } = useSelector(currentStudentSelector, shallowEqual);
 
   const { 
@@ -33,8 +34,9 @@ export const EditStudentsDetails = ({id}) => {
     data: studentGroups,
     isLoading: areStudentGroupsLoading,
     isLoaded: areStudentGroupsLoaded,
+    error: studentGroupsError,
   } = useSelector(currentStudentGroupsSelector, shallowEqual);
-console.log(studentGroups);
+
   const {
     isLoading: isEditedLoading,
     isLoaded: isEditedLoaded,
@@ -54,10 +56,10 @@ console.log(studentGroups);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!student && isStudentLoaded && areGroupsLoaded) {
+    if (studentError && studentGroupsError) {
       history.push('/404');
     }
-  }, [student, isStudentLoaded, areGroupsLoaded]);
+  }, [studentError, studentGroupsError]);
 
   useEffect(() => {
     if (!isEditedError && isEditedLoaded || !isRemovedError && isRemovedLoaded) {

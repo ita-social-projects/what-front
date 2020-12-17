@@ -41,7 +41,7 @@ export const ListOfStudents = () => {
   };
 
   const addStudent = () => {
-    history.push(`/add-role`);
+    history.push(`/unassigned`);
   };
 
   const studentDetails = (id) => {
