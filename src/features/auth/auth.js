@@ -75,7 +75,7 @@ export const Auth = () => {
                     </div>
                     <p className="text-danger text-center mt-2">{requestError}</p>
                     <div className="text-center mt-3">
-                      <p>Don&apos;t have an account? <Link to="/registration" className={styles.link}>Registration</Link></p>
+                      <p>Don&apos;t have an account? <Link to="/registration">Registration</Link></p>
                     </div>
                   </Form>
                 )}

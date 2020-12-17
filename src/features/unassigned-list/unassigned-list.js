@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useActions } from '@/shared/index.js';
 import { newUserSelector, currentUserSelector, addMentor, createSecretary, addStudent } from '@/models/index.js';
-import className from 'classnames';
 
 import Icon from '../../icon.js';
 import { Search, Button, WithLoading } from '../../components/index.js';
@@ -15,7 +14,7 @@ export const UnAssignedList = () => {
   const roles = ['student', 'mentor', 'secretary'];
   const { currentUser } = useSelector(currentUserSelector);
   const currentUserRole = currentUser.role;
-  const { loaded, notAssigned } = useSelector(newUserSelector);
+  const { isLoaded, data } = useSelector(newUserSelector);
 
   const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
@@ -23,7 +22,7 @@ export const UnAssignedList = () => {
     addSecreteryRole,
     addMentorRole] = useActions([addStudent, createSecretary, addMentor]);
 
-  const [usersRoles, setUsersRole] = useState(notAssigned[0]?.map((user) => ({ id: user.id, role: 1 })));
+  const [usersRoles, setUsersRole] = useState(data[0]?.map((user) => ({ id: user.id, role: 1 })));
 
   const [search, setSearch] = useState('');
   const [searchPersonValue, setSearchPersonValue] = useState([]);
@@ -33,14 +32,14 @@ export const UnAssignedList = () => {
   }, [getUnAssignedUserList]);
 
   useEffect(() => {
-    if (loaded) {
-      setSearchPersonValue(notAssigned[0]);
+    if (isLoaded) {
+      setSearchPersonValue(data[0]);
     }
-  }, [notAssigned[0]]);
+  }, [data[0]]);
 
   useEffect(() => {
-    if (loaded) {
-      const results = notAssigned[0]?.filter((user) => (
+    if (isLoaded) {
+      const results = data[0]?.filter((user) => (
         (user.firstName.concat(user.lastName)).toUpperCase())
         .includes(search.toUpperCase()));
       setSearchPersonValue(results);
@@ -92,7 +91,7 @@ export const UnAssignedList = () => {
   };
 
   const list = () => {
-    if (loaded) {
+    if (isLoaded) {
       if (searchPersonValue.length !== 0) {
         return (searchPersonValue.map((user) => (
           <div className={styles.card}>
@@ -119,7 +118,7 @@ export const UnAssignedList = () => {
       }
       return (<span className={styles.massage}>Nobody was found</span>);
     }
-    return (<WithLoading isLoading={!loaded} className={styles.warning} />);
+    return (<WithLoading isLoading={!isLoaded} className={styles.warning} />);
   };
 
   return (

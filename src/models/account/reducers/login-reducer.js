@@ -10,13 +10,6 @@ const initialState = {
 
 export function loginReducer(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.LOGIN_REQUESTING:
-      return {
-        ...state,
-        isLoading: true,
-        loaded: false,
-        error: '',
-      };
     case actionTypes.LOGIN_STARTED:
       return {
         ...state,
