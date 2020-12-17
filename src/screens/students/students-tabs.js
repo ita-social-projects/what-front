@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useActions } from '@/shared';
-import { globalLoadStudentGroups, loadActiveStudents, fetchCourses } from '@/models';
+import { globalLoadStudentGroups, loadStudentById, loadStudentGroups } from '@/models';
 import { Tab, Tabs } from '@/components';
 import { EditStudentsDetails, StudentDetails } from '@/features';
 
@@ -9,17 +9,16 @@ export const StudentsTabs = ({index}) => {
   const { id } = useParams();
 
   const [
-    fetchStudents, 
+    fetchStudentById, 
     fetchGroups, 
-    loadCourses] = useActions([loadActiveStudents, globalLoadStudentGroups, fetchCourses]);
+    fetchStudentGroups,
+  ] = useActions([loadStudentById, globalLoadStudentGroups, loadStudentGroups]);
 
   useEffect(() => {
-    fetchStudents();
-  }, [fetchStudents]);
-
-  useEffect(() => {
+    fetchStudentById(id);
     fetchGroups();
-  }, [fetchGroups]);
+    fetchStudentGroups(id);
+  }, [fetchStudentById, fetchStudentGroups, fetchGroups]);
 
   useEffect(() => {
     loadCourses();
