@@ -127,7 +127,6 @@ export const EditGroup = ({
                 student: '',
               }}
               onSubmit={handleSubmit}
-              validateOnChange={false}
               validateOnMount={false}
             >
               {({ values, errors, setFieldValue }) => (
