@@ -1,3 +1,5 @@
+@import '../../styles/main';
+
 .wrapper {
   position: absolute;
   width: 100%;
@@ -9,4 +11,13 @@
   background-color: #fff;
   margin-top: 5vh;
   border-radius: 3px;
+}
+
+.modal-body {
+  @include franklin-regular();
+  font-size: 22px;
+}
+
+.modal-btn {
+  @include button();
 }

@@ -1,38 +1,37 @@
-import React, { useState } from 'react';
-import { useActions } from '@/shared/index.js';
+import React, { useState, useEffect } from 'react';
+import { useActions, paths } from '@/shared/index.js';
+import { useSelector, shallowEqual } from 'react-redux';
 import { clearRegistration, registration, registrationSelector } from '../../models/index.js';
 import { Link, useHistory } from 'react-router-dom';
 
 import { Formik, Form, Field } from 'formik';
 import {  validatePassword, validateConfirmPassword, formValidate } from '../validation/validation-helpers.js';
 import { Button, WithLoading } from '../../components/index.js';
+import { SuccessfulRegistrationAlert } from './successful-registration-alert.js';
 
 import classNames from 'classnames';
 import styles from './registration.scss';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { ModalWindow } from '../modal-window/index.js';
 
 export const Registration = () => {
+  const history = useHistory();
   const [toShowModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+
+  const {isLoading, isLoaded, error} = useSelector(registrationSelector, shallowEqual);
+
+  const signUp = useActions(registration);
+  const clearLoaded = useActions(clearRegistration);
+
   const handleSubmitModal = () => {
     handleCloseModal();
-    clear()
-    history.push('/auth');
+    clearLoaded();
+    history.push(paths.AUTH);
   };
 
-  const history = useHistory();
-  const {data: user, isLoading, isLoaded, error} = useSelector(registrationSelector);
-  const signUp = useActions(registration);
-  const clear = useActions(clearRegistration);
-  const onSubmit = (values, actions) => {
-    // actions.resetForm();
+  const onSubmit = (values) => {
     signUp(values);
-    console.log(values)
-    
   };
 
   useEffect(() => {
@@ -60,7 +59,7 @@ export const Registration = () => {
             >
               {({ values, errors, touched }) => (
                 <Form className="p-3">
-                  <h3>Registration</h3>
+                  <h3 className="text-center">Sign up to WHAT</h3>
                   <hr />
                   <div className="form-group">
                     <label htmlFor="firstName">First Name</label>
@@ -68,7 +67,7 @@ export const Registration = () => {
                       name="firstName"
                       className={classNames('form-control', {'border-danger': errors.firstName && touched.firstName})}
                       id="firstName"
-                      placeholder="Enter first name"
+                      placeholder="First name"
                     />
                     <p className="text-danger mb-0">{touched.firstName && errors.firstName}</p>
                   </div>
@@ -78,7 +77,7 @@ export const Registration = () => {
                       name="lastName"
                       className={classNames('form-control', {'border-danger': errors.lastName && touched.lastName})}
                       id="lastName"
-                      placeholder="Enter last name"
+                      placeholder="Last name"
                     />
                     <p className="text-danger mb-0">{touched.lastName && errors.lastName}</p>
                   </div>
@@ -89,7 +88,7 @@ export const Registration = () => {
                       name="email"
                       className={classNames('form-control', {'border-danger': errors.email && touched.email})}
                       id="email"
-                      placeholder="Enter email"
+                      placeholder="Email"
                     />
                     <p className="text-danger">{touched.email && errors.email}</p>
                   </div>
@@ -125,15 +124,13 @@ export const Registration = () => {
                       </WithLoading>
                     </div>
                   <div className="text-center mt-3">
-                    <p>Already have an account? <Link to="/auth">Log in</Link></p>
-                    <ModalWindow
-                      toShow={toShowModal}
-                      onSubmit={handleSubmitModal}
-                      onClose={handleCloseModal}
-                    >
-                    Поздравлю, вы успешной зарегестрировались
-                    </ModalWindow>
+                    <p>Already have an account? <Link to={paths.AUTH}>Log in</Link></p>
                   </div>
+                  <SuccessfulRegistrationAlert 
+                    toShow={toShowModal}
+                    onClose={handleCloseModal}
+                    onSubmit={handleSubmitModal}
+                  />
                 </Form>
               )}
             </Formik>

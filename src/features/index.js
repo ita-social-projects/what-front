@@ -3,7 +3,6 @@ export * from './support';
 export * from './schedule-student';
 export * from './auth';
 export * from './header';
-// export * from './validation';
 export * from './not-found';
 export * from './modal-window';
 export * from './unassigned-list';
