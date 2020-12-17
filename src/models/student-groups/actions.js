@@ -57,6 +57,7 @@ function* editStudentGroupsAsync({ payload }) {
     const group = yield call(ApiService.update, `/student_groups/${payload.id}`, payload);
 
     yield put({ type: actionTypes.EDITING_STUDENT_GROUP_SUCCEED, payload: group });
+    yield put({ type: actionTypes.EDIT_CLEAR_LOADED });
   } catch (e) {
     yield put({ type: actionTypes.EDITING_STUDENT_GROUP_FAILED });
   }

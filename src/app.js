@@ -1,6 +1,5 @@
 import React from 'react';
-import { Routes, Layout } from '@features/index.js';
-import Icon from './icon.js';
+import { Routes } from '@/shared';
 
 export const App = () => (
   <Routes />
