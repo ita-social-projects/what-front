@@ -4,20 +4,20 @@ import { Badge, Table } from 'react-bootstrap';
 
 import { WithLoading } from '@/components/index.js';
 import {
-  studentGroupsStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
-} from '@/features/shared/constants';
+  studentGroupByIdStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
+} from '@/features/shared/index.js';
 import styles from './group-details.scss';
 
 export const GroupDetails = ({
   studentGroupData, studentsData, mentorsData, coursesData,
 }) => {
   const {
-    studentGroupById: group,
+    data: group,
     isLoading: isGroupLoading,
     isLoaded: isGroupLoaded,
   } = studentGroupData;
   const { data: students, isLoading: areStudentsLoading } = studentsData;
-  const { mentors, isLoading: areMentorsLoading } = mentorsData;
+  const { data: mentors, isLoading: areMentorsLoading } = mentorsData;
   const { data: courses, isLoading: areCoursesLoading } = coursesData;
 
   return (
@@ -97,7 +97,7 @@ export const GroupDetails = ({
 };
 
 GroupDetails.propTypes = {
-  studentGroupData: shape(studentGroupsStateShape).isRequired,
+  studentGroupData: shape(studentGroupByIdStateShape).isRequired,
   studentsData: shape(studentsStateShape).isRequired,
   mentorsData: shape(mentorsStateShape).isRequired,
   coursesData: shape(coursesStateShape).isRequired,
