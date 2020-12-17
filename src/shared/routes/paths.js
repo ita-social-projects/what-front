@@ -12,7 +12,7 @@ export const paths = {
 
   COURSES: '/courses',
   COURSE_DETAILS: '/courses',
-  COURSE_EDIT: '/courses/edit-course',
+  COURSE_EDIT: '/courses/edit',
   COURSE_ADD: '/courses/add',
 
   GROUPS: '/groups',
