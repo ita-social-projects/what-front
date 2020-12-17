@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useActions } from '@/shared/index.js';
-import { registration, registrationSelector } from '../../models/index.js';
+import { clearRegistration, registration, registrationSelector } from '../../models/index.js';
 import { Link, useHistory } from 'react-router-dom';
 
 import { Formik, Form, Field } from 'formik';
@@ -11,21 +11,35 @@ import classNames from 'classnames';
 import styles from './registration.scss';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { ModalWindow } from '../modal-window/index.js';
 
 export const Registration = () => {
+  const [toShowModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+  const handleSubmitModal = () => {
+    handleCloseModal();
+    clear()
+    history.push('/auth');
+  };
+
   const history = useHistory();
-  const {notAssigned: user, isLoading, loaded, error} = useSelector(registrationSelector);
-  const signUp = useActions(registration)
+  const {data: user, isLoading, isLoaded, error} = useSelector(registrationSelector);
+  const signUp = useActions(registration);
+  const clear = useActions(clearRegistration);
   const onSubmit = (values, actions) => {
     // actions.resetForm();
     signUp(values);
+    console.log(values)
+    
   };
 
   useEffect(() => {
-    if (loaded && !error) {
-      history.push('/auth');
+    if (isLoaded && !error) {
+      handleShowModal()
     }
-  }, [loaded, error]);
+  }, [isLoaded, error]);
 
   return (
     <div className={styles.wrapper}>
@@ -112,6 +126,13 @@ export const Registration = () => {
                     </div>
                   <div className="text-center mt-3">
                     <p>Already have an account? <Link to="/auth">Log in</Link></p>
+                    <ModalWindow
+                      toShow={toShowModal}
+                      onSubmit={handleSubmitModal}
+                      onClose={handleCloseModal}
+                    >
+                    Поздравлю, вы успешной зарегестрировались
+                    </ModalWindow>
                   </div>
                 </Form>
               )}

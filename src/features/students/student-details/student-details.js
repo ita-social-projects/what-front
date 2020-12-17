@@ -55,7 +55,7 @@ export const StudentDetails = () => {
               <hr />
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Group('s): </span></div>
-                <WithLoading isLoading={areStudentGroupsLoading || !areStudentGroupsLoaded}
+                <WithLoading isLoading={areStudentGroupsLoading}
                   className={styles["loader-centered"]}
                 >
                   <div className="col-12 col-md-6">

@@ -6,7 +6,7 @@ import { ProtectedRoute } from '@/components/index.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
-  Auth, ListOfSecretaries, UnAssignedList,
+  Auth, ListOfSecretaries, UnAssignedList, Registration,
 } from '../../features/index.js';
 import { paths } from './index.js';
 
@@ -30,6 +30,7 @@ export const Routes = () => (
       <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.GROUP_EDIT}/:id`} render={() => <GroupsTabs index={1} />} />
       <ProtectedRoute roles={[2, 3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
       <ProtectedRoute roles={[0, 1, 2, 3, 4]} exact path={paths.NOT_FOUND} component={NotFound} />
+      <Route exact path={paths.REGISTRATION} component={Registration} />
       <Route exact path={paths.AUTH} component={Auth} />
       <Redirect to={paths.NOT_FOUND} />
     </Switch>

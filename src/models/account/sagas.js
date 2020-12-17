@@ -20,6 +20,10 @@ export const registration = (newUser) => ({
   },
 });
 
+export const clearRegistration = () => ({
+  type: actionTypes.CLEAR_LOADED,
+});
+
 export const fetchUsersList = () => ({
   type: actionTypes.FETCH_ASSIGNED,
 });
@@ -54,7 +58,7 @@ function* registrationWorker(data) {
     yield put({ type: actionTypes.REGIST_STARTED});
     const regUser = yield call(ApiService.create, '/accounts/reg', data.payload.newUser);
     yield put({ type: actionTypes.REGIST_SUCCESS, payload: { regUser } });
-    yield put({type: actionTypes.CLEAR_LOADED});
+    // yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({ type: actionTypes.REGIST_ERROR, payload: { error: error.message } });
   }

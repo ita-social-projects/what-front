@@ -229,7 +229,7 @@ export const EditStudentsDetails = ({id}) => {
                         { error ? <div className={styles.error}>{error}</div> : null}
                       </div>
                     </div>
-                    <WithLoading isLoading={!areStudentGroupsLoaded || areStudentGroupsLoading } 
+                    <WithLoading isLoading={ areStudentGroupsLoading } 
                       className={styles["loader-centered"]}
                     >
                     <div className="row m-0 pt-3">
