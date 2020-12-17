@@ -4,12 +4,14 @@ import { arrayOf, number } from 'prop-types';
 import { useSelector, shallowEqual } from 'react-redux';
 
 import { paths } from '@/shared/index.js';
-import { currentUserSelector } from '../../models/index.js';
+import { currentUserSelector } from '@/models/index.js';
+import { Cookie } from '@/utils';
 
 export const ProtectedRoute = ({ roles, ...otherProps }) => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+  const jwt = Cookie.get('jwt');
 
-  if (!currentUser) {
+  if (!jwt) {
     return <Redirect to={paths.AUTH} />;
   }
 
