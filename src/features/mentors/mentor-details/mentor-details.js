@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions } from '../../shared/index.js';
-import { WithLoading } from '../../components/index.js';
+import { useActions } from '@/shared/index.js';
+import { WithLoading } from '@/components/index.js';
 import {
   mentorIdSelector, fetchMentorById, fetchActiveMentors,
-} from '../../models/index.js';
+} from '@/models/index.js';
 
 export const MentorDetails = ({ id }) => {
   const {
