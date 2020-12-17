@@ -41,7 +41,7 @@ export const ListOfStudents = () => {
   };
 
   const addStudent = () => {
-    history.push(paths.NOT_FOUND);
+    history.push(paths.UNASSIGNED_USERS);
   };
 
   const studentDetails = (id) => {

@@ -1,0 +1,1 @@
+export { StudentDetails } from './student-details';
