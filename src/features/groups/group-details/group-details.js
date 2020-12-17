@@ -5,7 +5,7 @@ import { Badge, Table } from 'react-bootstrap';
 import { WithLoading } from '@/components/index.js';
 import {
   studentGroupsStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
-} from '../../../shared/index.js';
+} from '@/features/shared/constants';
 import styles from './group-details.scss';
 
 export const GroupDetails = ({

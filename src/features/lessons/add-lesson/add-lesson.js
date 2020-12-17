@@ -4,11 +4,11 @@ import {
   Formik, Field, Form, FieldArray,
 } from 'formik';
 import classNames from 'classnames';
-
 import { useSelector, shallowEqual } from 'react-redux';
 import * as Yup from 'yup';
+
 import { Button } from '@/components';
-import { useActions } from '@/shared/hooks/index.js';
+import { useActions, paths } from '@/shared';
 
 import {
   mentorsSelector,
@@ -87,9 +87,9 @@ export const AddLesson = () => {
 
   useEffect(() => {
     if (!addError && addIsLoaded) {
-      history.push('/lessons');
+      history.push(paths.LESSONS);
     }
-  }, [addError, addIsLoaded]);
+  }, [addError, addIsLoaded, history]);
 
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)
@@ -106,11 +106,11 @@ export const AddLesson = () => {
   });
 
   const openStudentDetails = useCallback((id) => {
-    history.push(`/students/${id}`);
+    history.push(`${paths.STUDENTS}/${id}`);
   }, [history]);
 
   const handleCancel = useCallback(() => {
-    history.push('/lessons');
+    history.push(paths.LESSONS);
   }, [history]);
 
   const onSubmit = (values) => {

@@ -14,6 +14,7 @@ import Icon from '@/icon.js';
 
 import styles from './edit-students-details.scss';
 import classNames from 'classnames';
+import { paths } from '@/shared/routes/paths.js';
 
 export const EditStudentsDetails = ({id}) => {
   const history = useHistory();
@@ -23,6 +24,7 @@ export const EditStudentsDetails = ({id}) => {
     isLoaded: isStudentLoaded,
     error: studentError,
   } = useSelector(currentStudentSelector, shallowEqual);
+  console.log(student)
 
   const { 
     data: allGroups,
@@ -57,13 +59,13 @@ export const EditStudentsDetails = ({id}) => {
 
   useEffect(() => {
     if (studentError && studentGroupsError) {
-      history.push('/404');
+      history.push(paths.NOT_FOUND);
     }
   }, [studentError, studentGroupsError]);
 
   useEffect(() => {
     if (!isEditedError && isEditedLoaded || !isRemovedError && isRemovedLoaded) {
-      history.push('/students');
+      history.push(paths.STUDENTS);
     }
   }, [isEditedError, isEditedLoaded, isRemovedError, isRemovedLoaded]);
 

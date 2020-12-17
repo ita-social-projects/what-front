@@ -2,7 +2,6 @@ export * from './counter';
 export * from './support';
 export * from './schedule-student';
 export * from './auth';
-export * from './routes';
 export * from './header';
 export * from './validation';
 export * from './not-found';
