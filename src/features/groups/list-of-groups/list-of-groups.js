@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
-import { useActions } from '@/shared/hooks/index.js';
-import { Button, Search, WithLoading } from '@/components/index.js';
-import { Card } from '@/components/card/index.js';
-import Icon from '@/icon.js';
 import classNames from 'classnames';
+
+import { useActions } from '@shared/hooks/index.js';
+import { Button, Search, WithLoading } from '@components/index.js';
+import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
+import { Card } from '@components/card/index.js';
+import Icon from '@/icon.js';
 import { paths } from '@/shared';
 import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
@@ -15,7 +16,7 @@ export const ListOfGroups = () => {
   const history = useHistory();
 
   const studentGroupsState = useSelector(loadStudentGroupsSelector, shallowEqual);
-  const { data, isLoading, isLoaded, error } = studentGroupsState;
+  const { data: groups, isLoading, isLoaded, error } = studentGroupsState;
 
   const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
   const searchGroupName = useSelector(searchGroup, shallowEqual);
@@ -24,15 +25,12 @@ export const ListOfGroups = () => {
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
 
   useEffect(() => {
-    if (!isLoaded && !error) {
-      fetchListOfGroups();
-    }
-  }, [error, isLoaded, fetchListOfGroups]);
+    fetchListOfGroups();
+  }, [fetchListOfGroups]);
 
   const handleAddGroup = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('Redirect to add group form');
-  }, []);
+    history.push(paths.GROUP_ADD);
+  }, [history]);
 
   const handleSearch = useCallback((inputValue) => {
     setSearchGroupValue(inputValue);
@@ -56,11 +54,11 @@ export const ListOfGroups = () => {
       return <h4>{error}</h4>;
     }
 
-    if (isLoaded && !data.length) {
+    if (isLoaded && !groups.length) {
       return <h4>List of groups is empty</h4>;
     }
 
-    const listByName = data.filter((group) => {
+    const listByName = groups.filter((group) => {
       const normalizedName = group.name.toUpperCase();
       return normalizedName.includes(searchGroupName.toUpperCase());
     });
@@ -74,8 +72,8 @@ export const ListOfGroups = () => {
         date={group.startDate.replaceAll('-', '.').slice(0, 10)}
         buttonName="Details"
         iconName="Edit"
-        onEdit={handleCardEdit}
-        onDetails={handleCardDetails}
+        onEdit={() => handleCardEdit(group.id)}
+        onDetails={() => handleCardDetails(group.id)}
       />
     ));
   };

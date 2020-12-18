@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useActions } from '@/shared';
 import { globalLoadStudentGroups, loadStudentById, loadStudentGroups } from '@/models';
 import { Tab, Tabs } from '@/components';
-import { EditStudentsDetails } from '@/features';
+import { EditStudentsDetails, StudentDetails } from '@/features/students';
 
 export const StudentsTabs = ({index}) => {
   const { id } = useParams();
@@ -18,16 +18,16 @@ export const StudentsTabs = ({index}) => {
     fetchStudentById(id);
     fetchGroups();
     fetchStudentGroups(id);
-  }, [fetchStudentById, fetchStudentGroups, fetchGroups]);
+  }, [loadStudentById, globalLoadStudentGroups, loadStudentGroups]);
 
   return (
     <Tabs defaultIndex={index} className='container w-50' linkBack='/students'>
       <Tab title='Student details'>
-        <h1>Student details</h1>
+        <StudentDetails/>
       </Tab>
       <Tab title='Edit student details'>
         <EditStudentsDetails id={id} />
       </Tab>
     </Tabs>
   );
-}
+};
