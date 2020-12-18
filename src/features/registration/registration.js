@@ -3,6 +3,7 @@ import { useActions, paths } from '@/shared/index.js';
 import { useSelector, shallowEqual } from 'react-redux';
 import { clearRegistration, registration, registrationSelector } from '../../models/index.js';
 import { Link, useHistory } from 'react-router-dom';
+import { Cookie } from '@/utils';
 
 import { Formik, Form, Field } from 'formik';
 import {  validatePassword, validateConfirmPassword, formValidate } from '../validation/validation-helpers.js';
@@ -14,6 +15,8 @@ import styles from './registration.scss';
 
 export const Registration = () => {
   const history = useHistory();
+  const jwt = Cookie.get('jwt');
+
   const [toShowModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
@@ -39,6 +42,12 @@ export const Registration = () => {
       handleShowModal()
     }
   }, [isLoaded, error]);
+
+  useEffect(() => {
+    if (jwt) {
+      history.push(paths.NOT_FOUND);
+    }
+  }, [history, jwt]);
 
   return (
     <div className={styles.wrapper}>
