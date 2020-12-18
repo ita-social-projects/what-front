@@ -77,7 +77,7 @@ export const EditStudentsDetails = ({id}) => {
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
   
-  const handleSubmitModal = () => {
+  const handleExclude = () => {
     handleCloseModal();
     deleteStudent(id);
   };
@@ -129,10 +129,6 @@ export const EditStudentsDetails = ({id}) => {
 
   const onSubmit = (values) => {
     validateStudentData(values);
-  };
-
-  const handleExclude = () => {
-    handleShowModal();
   };
 
   const resetInput = () => {
@@ -265,7 +261,7 @@ export const EditStudentsDetails = ({id}) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button className="w-100" variant="danger" 
-                          onClick={handleExclude}
+                          onClick={handleShowModal}
                           disabled={isEditedLoading || isRemovedLoading}
                         >Exclude</Button>
                       </div>
@@ -291,7 +287,7 @@ export const EditStudentsDetails = ({id}) => {
               </Formik>
               <ModalWindow 
                 toShow={toShowModal}
-                onSubmit={handleSubmitModal}
+                onSubmit={handleExclude}
                 onClose={handleCloseModal}
               >Are you sure you want to exclude this student?
               </ModalWindow>
