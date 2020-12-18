@@ -36,6 +36,7 @@ export const paths = {
   LESSON_EDIT: '/lessons/edit',
 
   UNASSIGNED_USERS: '/unassigned',
+  MY_PROFILE: '/my-profile',
 };
 
 export const homepages = {
