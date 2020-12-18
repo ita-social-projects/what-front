@@ -3,7 +3,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { useActions } from '@/shared/index.js';
+import { paths, useActions } from '@/shared/index.js';
 import {
   Card, Search, Button, WithLoading,
 } from '@/components/index.js';
@@ -41,15 +41,15 @@ export const ListOfStudents = () => {
   };
 
   const addStudent = () => {
-    history.push('/add-student');
+    history.push(paths.UNASSIGNED_USERS);
   };
 
   const studentDetails = (id) => {
-    history.push(`/students/${id}`);
+    history.push(`${paths.STUDENTS_DETAILS}/${id}`);
   };
 
   const studentEditing = (id) => {
-    history.push(`/students/edit-student/${id}`);
+    history.push(`${paths.STUDENT_EDIT}/${id}`);
   };
 
   const getStudents = () => {

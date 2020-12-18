@@ -1,11 +1,11 @@
 import { all, fork } from 'redux-saga/effects';
-import { watchFetchCounter } from './features/counter/redux/index.js';
+
+import { watchFetchCounter, watchAddAlert } from '@/features';
 import {
   mentorsWatcher, themesWatcher, coursesWatcher,
   schedulesWatcher, studentsWatcher, lessonsWatcher,
   authWatcher, secretariesWatcher, studentGroupsWatcher,
 } from './models/index.js';
-
 
 export function* rootSaga() {
   yield all([
@@ -19,5 +19,6 @@ export function* rootSaga() {
     fork(lessonsWatcher),
     fork(secretariesWatcher),
     fork(studentGroupsWatcher),
+    fork(watchAddAlert),
   ]);
 }

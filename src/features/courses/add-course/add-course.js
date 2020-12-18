@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions } from '@/shared';
+import { useActions, paths } from '@/shared';
 import { createCourse, createdCourseSelector } from '@/models';
 import { Formik, Form, Field } from 'formik';
-import { validateGroupName } from '@/validation/validation-helpers';
 import classNames from 'classnames';
+import { validateGroupName } from '../../validation/validation-helpers.js';
 import styles from './add-course.scss';
 
 export const AddCourse = () => {
@@ -17,7 +17,7 @@ export const AddCourse = () => {
 
   useEffect(() => {
     if (!error && loaded) {
-      history.push('/courses');
+      history.push(paths.COURSES);
     }
   }, [error, loaded]);
 

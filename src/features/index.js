@@ -2,7 +2,6 @@ export * from './counter';
 export * from './support';
 export * from './schedule-student';
 export * from './auth';
-export * from './routes';
 export * from './header';
 export * from './validation';
 export * from './not-found';
@@ -13,4 +12,5 @@ export * from './courses';
 export * from './groups';
 export * from './lessons';
 export * from './secretaries';
-export * from './students'
+export * from './students';
+export * from './layout';

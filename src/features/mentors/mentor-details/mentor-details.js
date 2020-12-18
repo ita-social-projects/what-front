@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions } from '@/shared/index.js';
+import { paths, useActions } from '@/shared/index.js';
 import { WithLoading } from '@/components/index.js';
 import {
   mentorIdSelector, fetchMentorById, fetchActiveMentors,
@@ -25,13 +25,13 @@ export const MentorDetails = ({ id }) => {
   useEffect(() => {
     dispatchLoadMentors(id);
   }, [dispatchLoadMentors, id]);
-  
+
   useEffect(() => {
     if (error) {
-      history.push('/404')
+      history.push(paths.NOT_FOUND);
     }
-  }, [error])
-  
+  }, [error, history]);
+
   return (
     <div className="w-100 card shadow p-4">
       <h3>Mentor Details</h3>

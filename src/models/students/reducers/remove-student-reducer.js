@@ -30,7 +30,11 @@ export const removeStudentReducer = (state = INITIAL_STATE, action) => {
         isLoaded: false,
         error: '',
       };
-
+    case actionTypes.CLEAR_LOADED:
+      return {
+        ...state,
+        isLoaded: false,
+      }
     default:
       return state;
   }

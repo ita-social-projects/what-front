@@ -3,7 +3,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import className from 'classnames';
 import { fetchSecretaries, secretariesSelector } from '@/models/index.js';
-import { useActions } from '@/shared/index.js';
+import { paths, useActions } from '@/shared/index.js';
 import {
   Button, Search, Card, WithLoading,
 } from '@/components/index.js';
@@ -28,24 +28,24 @@ export const ListOfSecretaries = () => {
     setSearchResults(data);
   }, [data]);
 
-  const handleSearch = (val) => {
-    setSearch(val);
+  const handleSearch = (value) => {
+    setSearch(value);
     setSearchResults(data.filter(({ firstName, lastName }) => {
       const fullName = `${firstName} ${lastName}`;
-      return fullName.toUpperCase().includes(val.toUpperCase());
+      return fullName.toUpperCase().includes(value.toUpperCase());
     }));
   };
 
   const handleAddSecretary = () => {
-    history.push('/add-role');
+    history.push(paths.UNASSIGNED_USERS);
   };
 
   const handleEditSecretary = (id) => {
-    history.push(`/secretaries/edit/${id}`);
+    history.push(`${paths.SECRETARY_EDIT}/${id}`);
   };
 
   const hadndleSecretarysDetails = (id) => {
-    history.push(`/secretaries/${id}`);
+    history.push(`${paths.SECRETARIES_DETAILS}/${id}`);
   };
 
   const getSecretaries = () => {
