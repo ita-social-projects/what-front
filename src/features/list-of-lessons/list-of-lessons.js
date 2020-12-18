@@ -53,7 +53,7 @@ export const ListOfLessons = () => {
   };
 
   const editLesson = (id) => {
-    history.push(`lessons/edit-lesson/${id}`);
+    history.push(`lessons/edit/${id}`);
   };
 
   const transformDateTime = (dateTime) => {

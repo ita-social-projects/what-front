@@ -19,7 +19,7 @@ export const allLessonsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLoading: false,
-        loaded: true,
+        isLoaded: true,
         data: action.payload.data,
         error: '',
       };
@@ -27,7 +27,7 @@ export const allLessonsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLoading: false,
-        loaded: false,
+        isLoaded: false,
         error: action.payload.error,
       };
     default:

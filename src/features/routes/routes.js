@@ -5,7 +5,7 @@ import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
   Auth, UnAssignedList, ListOfSecretaries,
-  ListOfMentors, ListOfLessons
+  ListOfMentors, ListOfLessons, EditLesson, AddLesson
 } from '../index.js';
 
 export const Routes = () => (
@@ -26,6 +26,8 @@ export const Routes = () => (
       <Route exact path="/groups/edit/:id" render={() => <GroupsTabs index={1} />} />
       <Route exact path="/unassigned" component={UnAssignedList} />
       <Route exact path="/lessons" component={ListOfLessons} />
+      <Route exact path="/lessons/add-lesson" component={AddLesson} />
+      <Route exact path="/lessons/edit/:id" component={EditLesson} />
       <Route exact path="/auth" component={Auth} />
       <Route exact path="/404" component={NotFound} />
       <Redirect to="/404" />
