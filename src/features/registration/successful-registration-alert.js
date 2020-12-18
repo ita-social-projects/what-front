@@ -17,7 +17,7 @@ export const SuccessfulRegistrationAlert = ({toShow, onClose, onSubmit}) => {
       </Modal.Header>
       <Modal.Body className={styles["modal-body"]}>
         You have successfully registered.<br/>
-        Please, wait until Admin assigns you a role and approve your account.
+        Please, wait until your account is approved and your role is assigned.
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center">
         <button 
