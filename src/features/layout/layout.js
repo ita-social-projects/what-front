@@ -10,7 +10,7 @@ import {
   removeAlert,
   ListOfCourses, ListOfGroups,
   ListOfSecretaries,
-  ListOfStudents, UnAssignedList, NotFound,
+  ListOfStudents, UnAssignedList, MyProfile,
 } from '@/features';
 import { Header } from '@/features/index.js';
 import { paths, useActions } from '@/shared';
@@ -43,7 +43,7 @@ export const Layout = () => {
           </div>
         ) : null
       }
-      <div className="p-5 position-relative">
+      <div className="pt-5 position-relative">
         <Switch>
           <ProtectedRoute roles={[0, 4]} exact path={paths.COUNTER} component={Counter} />
           <ProtectedRoute roles={[4]} exact path={paths.SECRETARIES} component={ListOfSecretaries} />
