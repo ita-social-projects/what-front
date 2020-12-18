@@ -20,7 +20,7 @@ export function usersListreducer(state = initialState, action) {
         ...state,
         isLoading: false,
         loaded: true,
-        users: state.users.concat([action.payload.usersList]),
+        users: action.payload.usersList,
       };
     case actionTypes.FETCH_ASSIGNED_ERROR:
       return {
