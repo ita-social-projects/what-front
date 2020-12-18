@@ -15,6 +15,7 @@ import Icon from '@/icon.js';
 import styles from './edit-students-details.scss';
 import classNames from 'classnames';
 import { paths } from '@/shared/routes/paths.js';
+import { ModalWindow } from '@/features/modal-window/index.js';
 
 export const EditStudentsDetails = ({id}) => {
   const history = useHistory();
@@ -55,6 +56,7 @@ export const EditStudentsDetails = ({id}) => {
   const [groups, setGroups] = useState(studentGroups || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
   const [error, setError] = useState(null);
+  const [toShowModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (studentError && studentGroupsError) {
@@ -71,6 +73,14 @@ export const EditStudentsDetails = ({id}) => {
   useEffect(() => {
     setGroups(studentGroups)
   }, [studentGroups]);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+  
+  const handleSubmitModal = () => {
+    handleCloseModal();
+    deleteStudent(id);
+  };
 
   const handleInputChange = (event) => {
     setError('');
@@ -122,7 +132,7 @@ export const EditStudentsDetails = ({id}) => {
   };
 
   const handleExclude = () => {
-    deleteStudent(id);
+    handleShowModal();
   };
 
   const resetInput = () => {
@@ -279,6 +289,12 @@ export const EditStudentsDetails = ({id}) => {
                   </Form>
                 )}
               </Formik>
+              <ModalWindow 
+                toShow={toShowModal}
+                onSubmit={handleSubmitModal}
+                onClose={handleCloseModal}
+              >Are you sure you want to exclude this student?
+              </ModalWindow>
             </WithLoading>
           </div>
         </div>
