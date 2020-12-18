@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import className from 'classnames';
 import { Formik, Form, Field } from 'formik';
 import { Button, WithLoading } from '@/components/index.js';
@@ -11,6 +11,7 @@ import {
 import { formValidate } from '@features/validation/validation-helpers.js';
 import { useHistory } from 'react-router-dom';
 import { useActions } from '@/shared';
+import { ModalWindow } from '@features/modal-window/index.js';
 
 import styles from './edit-secretarys-details.scss';
 
@@ -39,6 +40,11 @@ export const EditSecretarysDetails = ({ id }) => {
   const secretary = data.find((user) => user.id === id);
   const history = useHistory();
 
+  const [toShowModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
   useEffect(() => {
     if (!secretary && isSecretariesLoaded) {
       history.push('/404');
@@ -62,13 +68,14 @@ export const EditSecretarysDetails = ({ id }) => {
   };
 
   const handleDelete = () => {
+    handleCloseModal();
     fireSecretary(id);
   };
 
   return (
     <div className={styles.wrapper}>
-      <div className="container-fluid shadow">
-        <div className="container pb-2">
+      <div className="container-fluid card shadow">
+        <div className="container pb-2 px-0">
           <h3 className="pt-3">Edit Secretary&apos;s details</h3>
           <hr />
           <WithLoading isLoading={isSecretariesLoading && !isSecretariesLoaded} className="d-block mx-auto">
@@ -135,17 +142,17 @@ export const EditSecretarysDetails = ({ id }) => {
                       </div>
                     </div>
                     <div className="row m-0 pt-3">
-                      <div className="col-md-3 col-4">
+                      <div className="col-md-3 col-4 px-1">
                         <Button
                           disabled={!isValid || isDeleteLoading}
                           className="w-100"
                           variant="danger"
-                          onClick={handleDelete}
+                          onClick={handleShowModal}
                         >
                           Fire
                         </Button>
                       </div>
-                      <div className="col-md-3 offset-md-3 col-4">
+                      <div className="col-md-3 offset-md-3 col-4 px-1">
                         <Button
                           disabled={!dirty}
                           type="button"
@@ -155,7 +162,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           Clear
                         </Button>
                       </div>
-                      <div className="col-md-3 col-4">
+                      <div className="col-md-3 col-4 px-1">
                         <Button
                           disabled={!isValid || !dirty || isUpdateLoading}
                           className={className(styles.button, 'btn btn-success w-100')}
@@ -170,6 +177,13 @@ export const EditSecretarysDetails = ({ id }) => {
                 </Form>
               )}
             </Formik>
+            <ModalWindow
+              toShow={toShowModal}
+              onSubmit={handleDelete}
+              onClose={handleCloseModal}
+            >
+              Are you sure you want to fire this secretary?
+            </ModalWindow>
           </WithLoading>
         </div>
       </div>
