@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { currentUserSelector, fetchAssignedUsersSelector, fetchUsersList } from '@/models';
-import { WithLoading } from '@/components';
+import { Button, WithLoading } from '@/components';
 import { useActions } from '@/shared';
 import styles from './my-profile.scss';
 
@@ -16,6 +16,10 @@ export const MyProfile = () => {
   }, [loadUsers]);
 
   const currentUser = users.find((user) => user.id === data.id);
+
+  const handleChangePassword = () => {
+    console.log('click');
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -39,6 +43,13 @@ export const MyProfile = () => {
               <div className="col-sm-8">{currentUser?.email}</div>
             </div>
             <hr />
+            <div className="row mb-2">
+              <div className="col-sm-6 offset-sm-6">
+                <Button className="float-right" onClick={handleChangePassword} variant="secondary">
+                  <span>Change password</span>
+                </Button>
+              </div>
+            </div>
           </WithLoading>
         </div>
       </div>
