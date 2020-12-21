@@ -18,6 +18,7 @@ export const ProtectedRoute = ({ roles, ...otherProps }) => {
   if (!roles.includes(currentUser.role)) {
     return <Redirect to={paths.NOT_FOUND} />;
   }
+  // console.log(roles)
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <Route {...otherProps} />;
 };
