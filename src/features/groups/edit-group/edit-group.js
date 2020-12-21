@@ -205,6 +205,7 @@ export const EditGroup = ({
                         type="date"
                         name="finishDate"
                         id="finish-date"
+                        validate={(value) => validateDate(values.startDate, value)}
                       />
                       {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
                     </div>
@@ -221,7 +222,6 @@ export const EditGroup = ({
                             type="text"
                             name="mentor"
                             list="mentors-list"
-                            validate={(value) => validateDate(values.startDate, value)}
                           />
                           <datalist id="mentors-list">
                             {
