@@ -30,6 +30,11 @@ export const addLessonReducer = (state = INITIAL_STATE, action) => {
         isLoaded: false,
         error: action.payload.error,
       };
+    case actionsTypes.CLEAR_LOADED:
+      return {
+        ...state,
+        isLoaded: false,
+      };
     default:
       return state;
   }

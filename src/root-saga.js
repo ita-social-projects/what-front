@@ -1,6 +1,6 @@
 import { all, fork } from 'redux-saga/effects';
 
-import { watchFetchCounter } from './features/counter/redux/index.js';
+import { watchFetchCounter, watchAddAlert } from '@/features';
 import {
   mentorsWatcher, themesWatcher, coursesWatcher,
   schedulesWatcher, studentsWatcher, lessonsWatcher,
@@ -19,5 +19,6 @@ export function* rootSaga() {
     fork(lessonsWatcher),
     fork(secretariesWatcher),
     fork(studentGroupsWatcher),
+    fork(watchAddAlert),
   ]);
 }

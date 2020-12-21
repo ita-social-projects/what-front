@@ -1,0 +1,30 @@
+@import '@/styles/main';
+
+.heading {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.calendar-input {
+  border-color: map-get($colors, textAccentN1-color) !important;
+  width: 18%;
+}
+
+.calendar-input:focus {
+  outline: none;
+  box-shadow: 0 0 10px map-get($colors, textAccentN1-color) !important;
+  border-color: map-get($colors, textAccentN1-color) !important;
+}
+
+.list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.timeDate{
+  font-size: 15px;
+  margin-bottom: 0px;
+}
