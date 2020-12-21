@@ -12,6 +12,8 @@ import { formValidate } from '../validation/validation-helpers.js';
 import classNames from 'classnames';
 import styles from './edit-mentor.scss';
 import Icon from "@/icon";
+import { ModalWindow } from '@/features/modal-window/index.js';
+
 
 export const EditMentor = ({id}) => {
   const {
@@ -61,6 +63,10 @@ export const EditMentor = ({id}) => {
   const [groupInput, setGroupInputValue] = useState('Type name of a group');
   const [courseInput, setCourseInputValue] = useState('Type name of a course');
   const [error, setError] = useState(null);
+  
+  const [toShowModal, setShowModal] = useState(false);
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
   
   useEffect(() => {
     setGroups(mentorGroups),
@@ -153,7 +159,8 @@ export const EditMentor = ({id}) => {
   };
   
   const onFire = () => {
-    removeMentor(id)
+    handleCloseModal();
+    removeMentor(id);
   };
   
   const resetInput = () => {
@@ -162,6 +169,8 @@ export const EditMentor = ({id}) => {
   };
   
   
+ 
+
   return (
     <div className="w-100">
       <div className="row justify-content-center">
@@ -344,7 +353,7 @@ export const EditMentor = ({id}) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button className="w-100" variant="danger"
-                                onClick={onFire}
+                                onClick={handleShowModal}
                                 disabled={editedIsLoading || deletedIsLoading}
                         >Fire</Button>
                       </div>
@@ -368,6 +377,12 @@ export const EditMentor = ({id}) => {
                   </Form>
                 )}
               </Formik>
+              <ModalWindow
+                toShow={toShowModal}
+                onSubmit={onFire}
+                onClose={handleCloseModal}
+              >Are you sure you want to fire this mentor?
+              </ModalWindow>
             </WithLoading>
           </div>
         </div>
