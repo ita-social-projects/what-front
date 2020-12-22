@@ -123,11 +123,11 @@ export const Header = ({ roles }) => {
         <div className={classNames(styles['header__sidebar'], {[styles['sidebar--active']]: sidebar.active})}>
           <div className={styles['header__sidebar-links']}>
             {tabs.map(({ id, title, link }) => (
-              <a className='nav-item nav-link'
-                 href={`/${link}`}
+              <Link className='nav-item nav-link'
+                 to={`${link}`}
                  key={id}
                  onClick={toggleSidebar}
-              >{title}</a>
+              >{title}</Link>
             ))}
           </div>
         </div>
@@ -135,7 +135,7 @@ export const Header = ({ roles }) => {
         <div className={classNames('navbar-nav nav-tabs', styles['header__navbar-links'])}>
           {tabs.map(({id, title, link, active}) => (
             <Link className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
-                  to={`/${link}`}
+                  to={`${link}`}
                   key={id}
                   data-id={id}
                   onClick={toggleActiveTab}
