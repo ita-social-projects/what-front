@@ -3,14 +3,9 @@ import classNames from 'classnames';
 import styles from './header.scss';
 import {Link, Redirect} from 'react-router-dom';
 import {useActions} from "@/shared";
-import Icon from '@/icon';
 import {currentUserSelector, fetchUsersList, fetchAssignedUsersSelector, logOut} from "@/models";
 import {shallowEqual, useSelector} from "react-redux";
-import {number} from "prop-types";
-import {Cookie} from "@/utils";
 import {paths} from "@/shared";
-import className from "classnames";
-import {Button} from "@/components";
 
 const logout = (
   <svg width="1.5em" height="2em" viewBox="0 0 16 16" className="bi bi-door-closed-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -35,33 +30,33 @@ export const Header = ({ roles }) => {
   
   const rolesObject = {
     4: [
-      {id: 0, title: 'Students', link: 'students', active: true},
-      {id: 1, title: 'Mentors', link: 'mentors', active: false},
-      {id: 2, title: 'Secretaries', link: 'secretaries', active: false},
-      {id: 3, title: 'Lessons', link: 'lessons', active: false},
-      {id: 4, title: 'Groups', link: 'groups', active: false},
-      {id: 5, title: 'Courses', link: 'courses', active: false},
-      {id: 6, title: 'Schedule', link: 'schedule', active: false},
-      {id: 7, title: 'Add Role', link: 'unassigned', active: false},
+      {id: 0, title: 'Students', link: paths.STUDENTS, active: true},
+      {id: 1, title: 'Mentors', link: paths.MENTORS, active: false},
+      {id: 2, title: 'Secretaries', link: paths.SECRETARIES, active: false},
+      {id: 3, title: 'Lessons', link: paths.LESSONS, active: false},
+      {id: 4, title: 'Groups', link: paths.GROUPS, active: false},
+      {id: 5, title: 'Courses', link: paths.COURSES, active: false},
+      {id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false},
+      {id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false},
     ],
     3: [
-      {id: 0, title: 'Students', link: 'students', active: false},
-      {id: 1, title: 'Mentors', link: 'mentors', active: true},
-      {id: 4, title: 'Groups', link: 'groups', active: false},
-      {id: 5, title: 'Courses', link: 'courses', active: false},
-      {id: 6, title: 'Schedule', link: 'schedule', active: false},
-      {id: 7, title: 'Add Role', link: 'unassigned', active: false},
+      {id: 0, title: 'Students', link: paths.STUDENTS, active: false},
+      {id: 1, title: 'Mentors', link: paths.MENTORS, active: true},
+      {id: 4, title: 'Groups', link: paths.GROUPS, active: false},
+      {id: 5, title: 'Courses', link: paths.COURSES, active: false},
+      {id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false},
+      {id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false},
     ],
     2: [
-      {id: 3, title: 'Lessons', link: 'lessons', active: true},
-      {id: 4, title: 'Groups', link: 'groups', active: false},
-      {id: 5, title: 'Courses', link: 'courses', active: false},
-      {id: 6, title: 'Schedule', link: 'schedule', active: false},
-      {id: 7, title: 'Add Role', link: 'unassigned', active: false},
+      {id: 3, title: 'Lessons', link: paths.LESSONS, active: true},
+      {id: 4, title: 'Groups', link: paths.GROUPS, active: false},
+      {id: 5, title: 'Courses', link: paths.COURSES, active: false},
+      {id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false},
+      {id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false},
     ],
     1: [
-      {id: 6, title: 'Schedule', link: 'schedule', active: true},
-      {id: 8, title: 'Support', link: 'support', active: false},
+      {id: 6, title: 'Schedule', link: paths.SCHEDULE, active: true},
+      {id: 8, title: 'Support', link: paths.SUPPORT, active: false},
     ]
   }
   
@@ -79,12 +74,11 @@ export const Header = ({ roles }) => {
   const [sidebar, setSidebar] = useState({
     active: false,
   });
-  const definedRole = Object.keys(rolesObject).find(el =>  Number(el) === currentUser.role)
-  useEffect(() => {
-    const headerArray = rolesObject[definedRole]
-    setTabs(headerArray)
   
-  }, [definedRole])
+  useEffect(() => {
+    const headerArray = rolesObject[currentUser.role]
+    setTabs(headerArray)
+  }, [currentUser])
   
   const toggleActiveTab = (event) => {
     setTabs((prevstate) => {
