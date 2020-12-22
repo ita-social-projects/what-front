@@ -43,7 +43,7 @@ export const AddLesson = () => {
   } = useSelector(mentorsSelector, shallowEqual);
 
   const {
-    studentGroups: data,
+    data: groups,
     isLoading: groupsLoading,
     isLoaded: groupsIsLoaded,
     error: groupsError,
