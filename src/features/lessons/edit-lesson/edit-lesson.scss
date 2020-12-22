@@ -44,3 +44,8 @@ a {
   display: block !important;
   margin: 0 auto;
 }
+
+.link:hover{
+  cursor:pointer;
+  text-decoration: underline;
+}

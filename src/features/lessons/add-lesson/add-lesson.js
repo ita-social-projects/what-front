@@ -108,7 +108,7 @@ export const AddLesson = () => {
   });
 
   const openStudentDetails = useCallback((id) => {
-    history.push(`${paths.STUDENTS}/${id}`);
+    history.push(`${paths.STUDENTS_DETAILS}/${id}`);
   }, [history]);
 
   const handleCancel = useCallback(() => {
@@ -370,9 +370,12 @@ export const AddLesson = () => {
                                     <tr key={lessonVisit.studentId}>
                                       <th scope="row">{ index + 1 }</th>
                                       <td>
-                                        <a href="#" onClick={() => openStudentDetails(lessonVisit.studentId)}>
+                                        <p
+                                          className={classNames(styles.link)}
+                                          onClick={() => openStudentDetails(lessonVisit.studentId)}
+                                        >
                                           { lessonVisit.studentName }
-                                        </a>
+                                        </p>
                                       </td>
                                       <td>
                                         <Field

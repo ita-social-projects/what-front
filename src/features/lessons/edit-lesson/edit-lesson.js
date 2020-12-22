@@ -87,6 +87,7 @@ export const EditLesson = () => {
 
     const activeStudents = studentD.filter((student) => student !== undefined);
 
+
     const studentsData = activeStudents.map((student) => (
       {
         studentId: student.id,
@@ -95,8 +96,8 @@ export const EditLesson = () => {
     ));
 
     const resultLessonVisits = studentsData.map((student, index) => ({
-      ...student,
       ...lessonOnEdit.lessonVisits[index],
+      ...student,
     }));
 
     setFormData(resultLessonVisits);
@@ -148,7 +149,7 @@ export const EditLesson = () => {
   });
 
   const openStudentDetails = useCallback((studentId) => {
-    history.push(`${paths.STUDENTS}/${studentId}`);
+    history.push(`${paths.STUDENTS_DETAILS}/${studentId}`);
   }, [history]);
 
   const handleCancel = useCallback(() => {
@@ -296,16 +297,19 @@ export const EditLesson = () => {
                                     <tr key={lessonVisit.studentId}>
                                       <th scope="row">{ index + 1 }</th>
                                       <td>
-                                        <a href="#" onClick={() => openStudentDetails(lessonVisit.studentId)}>
+                                        <p
+                                          className={classNames(styles.link)}
+                                          onClick={() => openStudentDetails(lessonVisit.studentId)}
+                                        >
                                           { lessonVisit.studentName }
-                                        </a>
+                                        </p>
                                       </td>
                                       <td>
                                         <Field
                                           name={`formData[${index}].studentMark`}
                                           type="number"
                                           max="12"
-                                          min="1"
+                                          min="0"
                                           data-id={index}
                                           disabled={!formData[index].presence}
                                           onBlur={handleMarkChange}
