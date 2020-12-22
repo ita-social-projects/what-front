@@ -14,7 +14,9 @@ export const editStudentGroupReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: true,
         isLoaded: false,
+        error: '',
       };
+
     case actionTypes.EDITING_STUDENT_GROUP_SUCCEED:
       return {
         ...state,
@@ -22,12 +24,19 @@ export const editStudentGroupReducer = (state = INITIAL_STATE, action) => {
         isLoaded: true,
         data: action.payload,
       };
+
     case actionTypes.EDITING_STUDENT_GROUP_FAILED:
       return {
         ...state,
         isLoading: false,
         isLoaded: false,
         error: 'Student Groups editing was failed',
+      };
+
+    case actionTypes.EDIT_CLEAR_LOADED:
+      return {
+        ...state,
+        isLoaded: false,
       };
     default:
       return state;

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import {
-  allStudentsReducer, activeStudentsReducer, currentStudentReducer, currentStudentGroupReducer,
+  allStudentsReducer, activeStudentsReducer, currentStudentReducer,
+  currentStudentGroupReducer, editStudentReducer, addStudentReducer,
+  removeStudentReducer,
 } from './reducers/index.js';
 
 export const studentsReducer = combineReducers({
@@ -8,4 +10,7 @@ export const studentsReducer = combineReducers({
   activeStudents: activeStudentsReducer,
   studentById: currentStudentReducer,
   studentByIdGroups: currentStudentGroupReducer,
+  editStudent: editStudentReducer,
+  addStudent: addStudentReducer,
+  removeStudent: removeStudentReducer,
 });
