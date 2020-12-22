@@ -266,7 +266,7 @@ export const AddLesson = () => {
                 {({ errors }) => (
                   <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
                     <div className="col-12">
-                      <div className="mt-5 form-group row">
+                      <div className="mt-3 form-group row">
                         <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
                         <div className="col-sm-8">
                           <Field
@@ -354,7 +354,7 @@ export const AddLesson = () => {
                     <div className="col-lg-12">
                       <FieldArray name="formData">
                         {(arrayHelpers) => (
-                          <div className="col-lg-12">
+                          <div className="col-lg-12 pt-2">
                             <table className="table table-bordered table-hover">
                               <thead>
                                 <tr>

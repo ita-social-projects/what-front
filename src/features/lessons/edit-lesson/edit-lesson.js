@@ -72,7 +72,11 @@ export const EditLesson = () => {
   useEffect(() => {
     if (lessonsIsLoaded) {
       const lessonRes = lessons.find((lesson) => lesson.id === Number(id));
-      setLessonOEdit(lessonRes);
+      if (!lessonRes) {
+        history.push(paths.NOT_FOUND);
+      } else {
+        setLessonOEdit(lessonRes);
+      }
     }
   }, [lessonsIsLoaded, lessonOnEdit, studentsGroup]);
 
@@ -231,7 +235,7 @@ export const EditLesson = () => {
                 {({ errors }) => (
                   <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
                     <div className="col-12">
-                      <div className="mt-5 form-group row">
+                      <div className="mt-3 form-group row">
                         <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
                         <div className="col-sm-8">
                           <Field
@@ -273,10 +277,10 @@ export const EditLesson = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-12">
+                    <div className="col-lg-12 mt-2">
                       <FieldArray name="formData">
                         {(arrayHelpers) => (
-                          <div className="col-lg-12 pt-5">
+                          <div className="col-lg-12">
                             <table className="table table-bordered table-hover">
                               <thead>
                                 <tr>
