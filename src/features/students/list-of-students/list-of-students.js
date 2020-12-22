@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import { paths, useActions } from '@/shared/index.js';
 import {
-  Card, Search, Button, WithLoading,
+  Card, Search, Button, WithLoading, Pagination,
 } from '@/components/index.js';
 import Icon from '@/icon.js';
 import {
@@ -38,6 +38,7 @@ export const ListOfStudents = () => {
 
       return name.toLowerCase().includes(inputValue.toLowerCase());
     }));
+    setCurrentPage(1);
   };
 
   const addStudent = () => {
@@ -52,25 +53,35 @@ export const ListOfStudents = () => {
     history.push(`${paths.STUDENT_EDIT}/${id}`);
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [studentsPerPage] = useState(9);
+
   const getStudents = () => {
-    const students = filteredStudentsList.map(({ id, firstName, lastName }) => (
-      <Card
-        key={id}
-        id={id}
-        buttonName="Details"
-        iconName="Edit"
-        onEdit={() => studentEditing(id)}
-        onDetails={() => studentDetails(id)}
-      >
-        <p className="mb-2">{firstName} {lastName}</p>
-      </Card>
-    ));
+    const indexOfLastStudent = currentPage *  studentsPerPage;
+    const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+
+    const students = filteredStudentsList.slice(indexOfFirstStudent, indexOfLastStudent)
+      .map(({ id, firstName, lastName }) => (
+        <Card
+          key={id}
+          id={id}
+          buttonName="Details"
+          iconName="Edit"
+          onEdit={() => studentEditing(id)}
+          onDetails={() => studentDetails(id)}
+        >
+          <p className="mb-2">{firstName} {lastName}</p>
+        </Card>
+      ));
 
     if (!students.length && searchValue) {
       return <h4>Student not found</h4>;
     }
-
     return students;
+  };
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -95,6 +106,7 @@ export const ListOfStudents = () => {
             }
           </WithLoading>
         </div>
+          <Pagination studentsPerPage={studentsPerPage} totalStudents={filteredStudentsList.length} paginate={paginate}/>
       </div>
     </div>
   );
