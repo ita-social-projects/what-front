@@ -4,6 +4,7 @@ import {
 
 import * as types from '@models/mentors/types';
 import { ApiService } from '../../shared/api-service/index.js';
+import * as actionTypes from "@models/courses/types";
 
 
 export const fetchMentors = () => ({
@@ -103,6 +104,7 @@ function* addAsyncMentor({ payload }) {
     const mentorId = payload.id;
     const data = yield call(ApiService.create, `/mentors/${mentorId}`);
     yield put({ type: types.ADDING_MENTOR_SUCCEED, payload: { data } });
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({ type: types.ADDING_MENTOR_FAILED, payload: { error } });
   }
@@ -115,6 +117,7 @@ function* editAsyncMentor({ payload }) {
     const newMentor = payload.data;
     const data = yield call(ApiService.update, `/mentors/${mentorId}`, newMentor);
     yield put({ type: types.EDITING_MENTOR_SUCCEED, payload: { data } });
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({ type: types.EDITING_MENTOR_FAILED, payload: { error } });
   }
@@ -126,6 +129,7 @@ function* deleteAsyncMentor({ payload }) {
     const mentorId = payload.id;
     yield call(ApiService.remove, `/mentors/${mentorId}`);
     yield put({ type: types.DELETING_MENTOR_SUCCEED, payload: { id: mentorId } });
+    yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({ type: types.DELETING_MENTOR_FAILED, payload: { error } });
   }

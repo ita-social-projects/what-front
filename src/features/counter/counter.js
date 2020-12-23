@@ -7,7 +7,7 @@ import { useActions, ApiService } from '../../shared/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
 import {
-  login, logOut, registretion, loadStudents,
+  login, logOut, registration, loadStudents,
 } from '../../models/index.js';
 
 export const Counter = () => {
@@ -20,7 +20,7 @@ export const Counter = () => {
     logout,
     regist,
     dispatchShowAlert,
-  ] = useActions([login, logOut, registretion, addAlert]);
+  ] = useActions([login, logOut, registration, addAlert]);
   const fetchStudents = useActions(loadStudents);
   const [toShowModal, setShowModal] = useState(false);
 

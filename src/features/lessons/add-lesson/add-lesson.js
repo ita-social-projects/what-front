@@ -6,16 +6,16 @@ import {
 import classNames from 'classnames';
 import { useSelector, shallowEqual } from 'react-redux';
 import * as Yup from 'yup';
-
-import { Button } from '@/components';
+import { Button, WithLoading } from '@/components';
 import { useActions, paths } from '@/shared';
 
+
 import {
-  mentorsSelector,
+  mentorsActiveSelector,
   activeStudentsSelector,
   loadStudentGroupsSelector,
   addLessonSelector,
-  fetchMentors,
+  fetchActiveMentors,
   globalLoadStudentGroups,
   loadActiveStudents,
   addLesson,
@@ -37,26 +37,28 @@ export const AddLesson = () => {
 
   const {
     data: mentors,
-    isLoading: mentorsLoading,
+    isLoading: mentorsIsLoading,
     isLoaded: mentorsIsLoaded,
     error: mentorsError,
-  } = useSelector(mentorsSelector, shallowEqual);
+  } = useSelector(mentorsActiveSelector, shallowEqual);
 
   const {
-    studentGroups: data,
-    isLoading: groupsLoading,
+    data: groups,
+    isLoading: groupsIsLoading,
     isLoaded: groupsIsLoaded,
     error: groupsError,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
     data: students,
+    isLoading: studentsIsLoading,
     isLoaded: studentsIsLoaded,
     error: studentsError,
   } = useSelector(activeStudentsSelector, shallowEqual);
 
   const {
     isLoaded: addIsLoaded,
+    isLoading: lessonsIsLoading,
     error: addError,
   } = useSelector(addLessonSelector, shallowEqual);
 
@@ -65,7 +67,7 @@ export const AddLesson = () => {
     getGroups,
     getStudents,
     createLesson,
-  ] = useActions([fetchMentors, globalLoadStudentGroups, loadActiveStudents, addLesson]);
+  ] = useActions([fetchActiveMentors, globalLoadStudentGroups, loadActiveStudents, addLesson]);
 
   useEffect(() => {
     if (!mentorsIsLoaded && !mentorError) {
@@ -106,7 +108,7 @@ export const AddLesson = () => {
   });
 
   const openStudentDetails = useCallback((id) => {
-    history.push(`${paths.STUDENTS}/${id}`);
+    history.push(`${paths.STUDENTS_DETAILS}/${id}`);
   }, [history]);
 
   const handleCancel = useCallback(() => {
@@ -151,10 +153,14 @@ export const AddLesson = () => {
       (id) => students.find((student) => student.id === id),
     );
 
-    const studentsData = studentD.map((student) => ({
-      studentId: student.id,
-      studentName: `${student.firstName} ${student.lastName}`,
-    }));
+    const activeStudents = studentD.filter((student) => student !== undefined);
+
+    const studentsData = activeStudents.map((student) => (
+      {
+        studentId: student.id,
+        studentName: `${student.firstName} ${student.lastName}`,
+      }
+    ));
 
     const resultLessonVisits = studentsData.map((student) => ({
       ...student,
@@ -207,6 +213,12 @@ export const AddLesson = () => {
     }
   };
 
+  const handlePresenceChange = (ev) => {
+    const arrIndex = ev.target.dataset.id;
+    formData[arrIndex].presence = !formData[arrIndex].presence;
+    formData[arrIndex].studentMark = 0;
+  };
+
   const handleMarkChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
     const mark = Number(ev.target.value);
@@ -219,12 +231,6 @@ export const AddLesson = () => {
     }
   };
 
-  const handlePresenceChange = (ev) => {
-    const arrIndex = ev.target.dataset.id;
-    formData[arrIndex].presence = !formData[arrIndex].presence;
-    formData[arrIndex].studentMark = 0;
-  };
-
   return (
     <div className="container">
       <div className={classNames(styles.page, 'mx-auto', `${classRegister ? 'col-12' : 'col-8'}`)}>
@@ -235,171 +241,183 @@ export const AddLesson = () => {
             </div>
           )}
           <div className={`${classRegister ? 'col-6' : 'col-12'}`}>
-            <Formik
-              initialValues={{
-                themeName: '',
-                groupName: '',
-                lessonDate: '',
-                mentorEmail: '',
-                formData,
-              }}
-              onSubmit={onSubmit}
-              validationSchema={validateForm}
+            <h3>Add a Lesson</h3>
+            <hr />
+            <WithLoading
+              isLoading={
+                  lessonsIsLoading
+                  || mentorsIsLoading
+                  || studentsIsLoading
+                  || groupsIsLoading
+                }
+              className={classNames(styles['loader-centered'])}
             >
-              {({ errors }) => (
-                <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
-                  <div className="col-12">
-                    <h3>Add a Lesson</h3>
-                    <hr />
-                    <div className="mt-5 form-group row">
-                      <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
-                      <div className="col-sm-8">
-                        <Field
-                          type="text"
-                          className={classNames('form-control', { 'border-danger': errors.themeName })}
-                          name="themeName"
-                          id="inputLessonTheme"
-                          placeholder="Lesson Theme"
-                          required
-                        />
-                        {
+              <Formik
+                initialValues={{
+                  themeName: '',
+                  groupName: '',
+                  lessonDate: '',
+                  mentorEmail: '',
+                  formData,
+                }}
+                onSubmit={onSubmit}
+                validationSchema={validateForm}
+              >
+                {({ errors }) => (
+                  <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
+                    <div className="col-12">
+                      <div className="mt-3 form-group row">
+                        <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
+                        <div className="col-sm-8">
+                          <Field
+                            type="text"
+                            className={classNames('form-control', { 'border-danger': errors.themeName })}
+                            name="themeName"
+                            id="inputLessonTheme"
+                            placeholder="Lesson Theme"
+                            required
+                          />
+                          {
                           errors.themeName
                             ? <div className={styles.error}>{errors.themeName}</div>
                             : null
                         }
+                        </div>
                       </div>
-                    </div>
-                    <div className="form-group row">
-                      <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name:</label>
-                      <div className="col-sm-8 input-group">
-                        <input
-                          name="groupName"
-                          id="inputGroupName"
-                          type="text"
-                          className={classNames('form-control group-input', { 'border-danger': groupError })}
-                          placeholder="Group Name"
-                          onChange={handleGroupChange}
-                          onFocus={hideClassRegister}
-                          list="group-list"
-                          disabled={groupsLoading}
-                          required
-                        />
-                        <datalist id="group-list">
-                          {groups.map(({ id, name }) => (
-                            <option key={id}>{name}</option>
-                          ))}
-                        </datalist>
-                      </div>
-                      {
+                      <div className="form-group row">
+                        <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name:</label>
+                        <div className="col-sm-8 input-group">
+                          <input
+                            name="groupName"
+                            id="inputGroupName"
+                            type="text"
+                            className={classNames('form-control group-input', { 'border-danger': groupError })}
+                            placeholder="Group Name"
+                            onChange={handleGroupChange}
+                            onFocus={hideClassRegister}
+                            list="group-list"
+                            disabled={groupsIsLoading}
+                            required
+                          />
+                          <datalist id="group-list">
+                            {groups.map(({ id, name }) => (
+                              <option key={id}>{name}</option>
+                            ))}
+                          </datalist>
+                        </div>
+                        {
                             groupError
                               ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid group name</div>
                               : null
                           }
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-sm-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
-                      <div className="col-md-8">
-                        <Field
-                          className="form-control"
-                          type="datetime-local"
-                          name="lessonDate"
-                          id="choose-date/time"
-                          required
-                        />
                       </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-sm-4 col-form-label" htmlFor="mentorEmail">Mentor Email:</label>
-                      <div className="col-md-8 input-group">
-                        <input
-                          className={classNames('form-control group-input', { 'border-danger': mentorError })}
-                          type="text"
-                          name="mentorEmail"
-                          id="mentorEmail"
-                          list="mentor-list"
-                          placeholder="Mentor Email"
-                          onChange={handleMentorChange}
-                          disabled={mentorsLoading}
-                          required
-                        />
-                        <datalist id="mentor-list">
-                          {mentors.map(({ id, email }) => (
-                            <option key={id} value={email} />
-                          ))}
-                        </datalist>
+                      <div className="form-group row">
+                        <label className="col-sm-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
+                        <div className="col-md-8">
+                          <Field
+                            className="form-control"
+                            type="datetime-local"
+                            name="lessonDate"
+                            id="choose-date/time"
+                            required
+                          />
+                        </div>
                       </div>
-                      {
+                      <div className="form-group row">
+                        <label className="col-sm-4 col-form-label" htmlFor="mentorEmail">Mentor Email:</label>
+                        <div className="col-md-8 input-group">
+                          <input
+                            className={classNames('form-control group-input', { 'border-danger': mentorError })}
+                            type="text"
+                            name="mentorEmail"
+                            id="mentorEmail"
+                            list="mentor-list"
+                            placeholder="Mentor Email"
+                            onChange={handleMentorChange}
+                            disabled={mentorsIsLoading}
+                            required
+                          />
+                          <datalist id="mentor-list">
+                            {mentors.map(({ id, email }) => (
+                              <option key={id} value={email} />
+                            ))}
+                          </datalist>
+                        </div>
+                        {
                             mentorError
                               ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid mentor email</div>
                               : null
                           }
+                      </div>
                     </div>
-                  </div>
-                  { classRegister && formData && (
-                  <div className="col-lg-12">
-                    <FieldArray name="formData">
-                      {(arrayHelpers) => (
-                        <div className="col-lg-12">
-                          <table className="table table-bordered table-hover">
-                            <thead>
-                              <tr>
-                                <th scope="col" aria-label="first_col" />
-                                <th scope="col">Full Student`s Name</th>
-                                <th scope="col" className="text-center">Mark</th>
-                                <th scope="col" className="text-center">Presence</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              { formData && formData.length > 0 && (
-                                formData.map((lessonVisit, index) => (
-                                  <tr key={lessonVisit.studentId}>
-                                    <th scope="row">{ index + 1 }</th>
-                                    <td>
-                                      <a href="#" onClick={() => openStudentDetails(lessonVisit.studentId)}>
-                                        { lessonVisit.studentName }
-                                      </a>
-                                    </td>
-                                    <td>
-                                      <Field
-                                        name={`formData[${index}].studentMark`}
-                                        className={classNames(
-                                          'form-control',
-                                          { 'border-danger': markError },
-                                          styles.mode,
-                                        )}
-                                        type="number"
-                                        max="12"
-                                        min="2"
-                                        placeholder=""
-                                        onChange={handleMarkChange}
-                                        data-id={index}
-                                        disabled={!formData[index].presence}
-                                        required
-                                      />
-                                    </td>
-                                    <td>
-                                      <Field
-                                        name={`formData[${index}].presence`}
-                                        className={styles.mode}
-                                        type="checkbox"
-                                        onClick={handlePresenceChange}
-                                        data-id={index}
-                                        checked={formData[index].presence}
-                                      />
-                                    </td>
-                                  </tr>
-                                ))
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-                      )}
-                    </FieldArray>
-                  </div>
-                  )}
-                </Form>
-              )}
-            </Formik>
+                    { classRegister && formData && (
+                    <div className="col-lg-12">
+                      <FieldArray name="formData">
+                        {(arrayHelpers) => (
+                          <div className="col-lg-12 pt-2">
+                            <table className="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th scope="col" aria-label="first_col" />
+                                  <th scope="col">Full Student`s Name</th>
+                                  <th scope="col" className="text-center">Mark</th>
+                                  <th scope="col" className="text-center">Presence</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                { formData && formData.length > 0 && (
+                                  formData.map((lessonVisit, index) => (
+                                    <tr key={lessonVisit.studentId}>
+                                      <th scope="row">{ index + 1 }</th>
+                                      <td>
+                                        <p
+                                          className={classNames(styles.link)}
+                                          onClick={() => openStudentDetails(lessonVisit.studentId)}
+                                        >
+                                          { lessonVisit.studentName }
+                                        </p>
+                                      </td>
+                                      <td>
+                                        <Field
+                                          name={`formData[${index}].studentMark`}
+                                          className={classNames(
+                                            'form-control',
+                                            { 'border-danger': markError },
+                                            styles.mode,
+                                          )}
+                                          type="number"
+                                          max="12"
+                                          min="0"
+                                          placeholder=""
+                                          onChange={handleMarkChange}
+                                          data-id={index}
+                                          disabled={!formData[index].presence}
+                                        />
+                                      </td>
+                                      <td>
+                                        <Field
+                                          name={`formData[${index}].presence`}
+                                          className={styles.mode}
+                                          type="checkbox"
+                                          onClick={handlePresenceChange}
+                                          data-id={index}
+                                          checked={formData[index].presence}
+                                        />
+                                      </td>
+                                    </tr>
+                                  ))
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </FieldArray>
+                    </div>
+                    )}
+                  </Form>
+                )}
+              </Formik>
+            </WithLoading>
           </div>
         </div>
         <div className={classNames(styles.placement, 'col-12')}>

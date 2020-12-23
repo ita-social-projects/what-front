@@ -14,7 +14,7 @@ export const UnAssignedList = () => {
   const roles = ['Choose role', 'student', 'mentor', 'secretary'];
   const { currentUser } = useSelector(currentUserSelector);
   const currentUserRole = currentUser.role;
-  const { isLoaded, notAssigned } = useSelector(newUserSelector);
+  const { isLoaded, data } = useSelector(newUserSelector);
 
   const [ getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
@@ -31,18 +31,18 @@ export const UnAssignedList = () => {
 
   useEffect(() => {
     if (isLoaded) {
-      setSearchPersonValue(notAssigned?.map((user) => ({ id: user.id, role: 1 })));
+      setSearchPersonValue(data?.map((user) => ({ id: user.id, role: 1 })));
     }
-  }, [isLoaded, notAssigned]);
+  }, [isLoaded, data]);
 
   useEffect(() => {
     if (isLoaded) {
-      const results = notAssigned?.filter((user) => (
+      const results = data?.filter((user) => (
         (user.firstName.concat(user.lastName)).toUpperCase())
         .includes(search.toUpperCase()));
       setSearchPersonValue(results);
     }
-  }, [isLoaded, notAssigned, search]);
+  }, [isLoaded, data, search]);
 
   const changeRole = (id, value) => {
     const newState = searchPersonValue.map((user) => (user.id === id ? ({ ...user, role: Number(value) }) : user));

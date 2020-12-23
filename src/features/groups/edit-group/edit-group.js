@@ -13,7 +13,7 @@ import {
 } from '@/features/shared';
 import { useActions } from '@/shared';
 import { WithLoading, Button } from '@/components/index.js';
-import { editStudentGroup, editStudentGroupsSelector } from '@/models';
+import { editStudentGroup, editStudentGroupSelector } from '@/models';
 import Icon from '@/icon.js';
 import { validateGroupName, validateDate } from '../../validation/validation-helpers.js';
 import styles from './edit-groups.scss';
@@ -25,7 +25,7 @@ export const EditGroup = ({
     isLoading: isEditing,
     isLoaded: isEdited,
     error: editingError,
-  } = useSelector(editStudentGroupsSelector, shallowEqual);
+  } = useSelector(editStudentGroupSelector, shallowEqual);
 
   const dispatchEditGroup = useActions(editStudentGroup);
 
