@@ -1,7 +1,7 @@
 import * as actionTypes from '../action-types.js';
 
 const INITIAL_STATE = {
-  group: {},
+  data: {},
   isLoading: false,
   isLoaded: false,
   error: '',
@@ -22,7 +22,7 @@ export const editStudentGroupReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        group: action.payload.group,
+        data: action.payload,
       };
 
     case actionTypes.EDITING_STUDENT_GROUP_FAILED:

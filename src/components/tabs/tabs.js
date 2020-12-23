@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
 
 const arrow = (
@@ -38,11 +39,11 @@ export const Tabs = ({
   return (
     <div className={className}>
       <div className="nav nav-tabs">
-        <a
+        <Link
           className="nav-item nav-link d-flex align-items-center"
-          href={linkBack}
+          to={linkBack}
         >{arrow}
-        </a>
+        </Link>
         {renderTabs()}
       </div>
       <div>

@@ -7,14 +7,14 @@ import { useActions } from '../../shared/index.js';
 import { Tabs, Tab } from '../../components/index.js';
 import { EditGroup, GroupDetails } from '../../features/index.js';
 import {
-  loadStudentGroupsByIdSelector, loadStudentGroupsById, activeStudentsSelector,
+  loadStudentGroupByIdSelector, loadStudentGroupById, activeStudentsSelector,
   loadActiveStudents, fetchMentors, mentorsSelector,
   coursesSelector, fetchCourses,
 } from '../../models/index.js';
 
 export const GroupsTabs = ({ index }) => {
   const { id } = useParams();
-  const group = useSelector(loadStudentGroupsByIdSelector, shallowEqual);
+  const group = useSelector(loadStudentGroupByIdSelector, shallowEqual);
   const mentors = useSelector(mentorsSelector, shallowEqual);
   const courses = useSelector(coursesSelector, shallowEqual);
   const students = useSelector(activeStudentsSelector, shallowEqual);
@@ -24,7 +24,7 @@ export const GroupsTabs = ({ index }) => {
     dispatchLoadStudents,
     dispatchLoadMentors,
     dispatchLoadCourses,
-  ] = useActions([loadStudentGroupsById, loadActiveStudents, fetchMentors, fetchCourses]);
+  ] = useActions([loadStudentGroupById, loadActiveStudents, fetchMentors, fetchCourses]);
 
   useEffect(() => {
     dispatchLoadGroup(id);

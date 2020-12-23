@@ -9,18 +9,12 @@ const initialState = {
 
 export function usersListreducer(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.FETCH_ASSIGNED:
-      return {
-        ...state,
-        isLoading: true,
-        error: '',
-      };
     case actionTypes.FETCH_ASSIGNED_SUCCESS:
       return {
         ...state,
         isLoading: false,
         loaded: true,
-        users: state.users.concat([action.payload.usersList]),
+        users: action.payload.usersList,
       };
     case actionTypes.FETCH_ASSIGNED_ERROR:
       return {

@@ -89,7 +89,7 @@
         background-color: orange;
         color: #212529;
       }
-  } 
+  }
 
   &__account {
     width: 18%;
@@ -99,7 +99,7 @@
     align-items: center;
 
     font-size: 18px;
-    
+
     cursor: default;
 
     &-user {
@@ -110,11 +110,11 @@
 
       &--icon {
         padding-right: 1rem;
-
         color: white;
         cursor: pointer;
 
         &:hover {
+          color: #fff;
           opacity: 0.5;
         }
       }
@@ -136,7 +136,7 @@
     padding: 0 1.5rem !important;
 
     &__navbar-links  {
-      display: none;
+      display: none !important;
     }
 
     &__account-user--fullname {

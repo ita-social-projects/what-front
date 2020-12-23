@@ -1,14 +1,14 @@
 export {
   globalLoadStudentGroups,
-  loadStudentGroupsById,
+  loadStudentGroupById,
   editStudentGroup,
   addStudentGroup,
   studentGroupsWatcher,
 } from './actions.js';
 export {
-  addStudentGroupsSelector,
-  editStudentGroupsSelector,
+  addStudentGroupSelector,
+  editStudentGroupSelector,
   loadStudentGroupsSelector,
-  loadStudentGroupsByIdSelector,
+  loadStudentGroupByIdSelector,
 } from './selector.js';
 export { studentGroupsReducer } from './reducer.js';
