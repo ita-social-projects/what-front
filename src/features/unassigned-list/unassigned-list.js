@@ -95,8 +95,15 @@ export const UnAssignedList = () => {
       if (searchPersonValue.length !== 0) {
         return (searchPersonValue.map((user) => (
           <div className={styles.card}>
-            <p>{user.firstName} {user.lastName}<br />{user.email}</p>
+            <p><span className='font-weight-bolder'>{user.firstName} {user.lastName}</span><br /><span className='font-italic'>{user.email}</span></p>
             <div className={styles['add-role']}>
+              
+              <select
+                className={styles.select}
+                onChange={(event) => { changeRole(user.id, event.target.value); }}
+              >
+                {options()}
+              </select>
               <Button
                 className={styles.btn}
                 onClick={() => handleButtonClick(user.id)}
@@ -105,12 +112,6 @@ export const UnAssignedList = () => {
                 <Icon icon="Plus" size={20} className="icon" />
                 Add role
               </Button>
-              <select
-                className={styles.select}
-                onChange={(event) => { changeRole(user.id, event.target.value); }}
-              >
-                {options()}
-              </select>
             </div>
           </div>
         ))
