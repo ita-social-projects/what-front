@@ -10,7 +10,15 @@ import {
   removeAlert,
   ListOfCourses, ListOfGroups,
   ListOfSecretaries,
-  ListOfStudents, UnAssignedList, NotFound, ListOfMentors, Support, ListOfLessons, StudentScheduale
+  ListOfStudents,
+  UnAssignedList, 
+  NotFound,
+  ListOfMentors,
+  Support,
+  StudentScheduale,
+  ListOfLessons, 
+  AddLesson, 
+  EditLesson,
 } from '@/features';
 import { Header } from '@/features/index.js';
 import { paths, useActions } from '@/shared';
@@ -62,6 +70,9 @@ export const Layout = () => {
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.GROUPS_DETAILS}/:id`} render={() => <GroupsTabs index={0} />} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.GROUP_EDIT}/:id`} render={() => <GroupsTabs index={1} />} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
+          <ProtectedRoute roles={[2, 3, 4]} exact path={paths.LESSONS} component={ListOfLessons} />
+          <ProtectedRoute roles={[2, 4]} exact path={paths.LESSON_ADD} component={AddLesson} />
+          <ProtectedRoute roles={[2, 4]} exact path={`${paths.LESSON_EDIT}/:id`} component={EditLesson} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.MENTORS} component={ListOfMentors} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.MENTORS_DETAILS}/:id`} render={() => <MentorTabs index={0} />} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.MENTOR_EDIT}/:id`} render={() => <MentorTabs index={1} />} />
