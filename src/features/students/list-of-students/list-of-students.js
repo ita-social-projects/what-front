@@ -54,10 +54,10 @@ export const ListOfStudents = () => {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [studentsPerPage] = useState(9);
+  const [studentsPerPage] = useState(12);
 
   const getStudents = () => {
-    const indexOfLastStudent = currentPage *  studentsPerPage;
+    const indexOfLastStudent = currentPage * studentsPerPage;
     const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
     const students = filteredStudentsList.slice(indexOfFirstStudent, indexOfLastStudent)
@@ -85,7 +85,7 @@ export const ListOfStudents = () => {
   };
 
   return (
-    <div className="container">
+    <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
         <div className={classNames(styles.heading, 'col-12 mb-2')}>
           <div className={styles['search-container']}>
@@ -106,8 +106,8 @@ export const ListOfStudents = () => {
             }
           </WithLoading>
         </div>
-          <Pagination studentsPerPage={studentsPerPage} totalStudents={filteredStudentsList.length} paginate={paginate}/>
       </div>
+      <Pagination itemsPerPage={studentsPerPage} totalItems={filteredStudentsList.length} paginate={paginate}/>
     </div>
   );
 };
