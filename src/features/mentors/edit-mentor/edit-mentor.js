@@ -11,6 +11,8 @@ import {
   mentorCoursesSelector,
   editMentor,
   deleteMentor,
+  loadStudentGroupsSelector,
+  coursesSelector,
 } from '@/models/index.js';
 import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
@@ -30,17 +32,30 @@ export const EditMentor = ({ id }) => {
 
   const {
     data: mentorGroups,
-    isLoading: groupsAreLoading,
-    isLoaded: groupsAreLoaded,
+    isLoading: mentorGroupsAreLoading,
     error: mentorGroupsError,
   } = useSelector(mentorGroupsSelector, shallowEqual);
 
   const {
     data: mentorCourses,
-    isLoading: coursesAreLoading,
-    isLoaded: coursesAreLoaded,
+    isLoading: mentorCoursesAreLoading,
     error: mentorCoursesError,
   } = useSelector(mentorCoursesSelector, shallowEqual);
+
+  const {
+    data: allGroups,
+    isLoading: allGroupsAreLoading,
+    isLoaded: allGroupsAreLoaded,
+  } = useSelector(loadStudentGroupsSelector, shallowEqual);
+
+  const {
+    data: allCourses,
+    isLoading: allCoursesAreLoading,
+    isLoaded: allCoursesAreLoaded,
+  } = useSelector(coursesSelector, shallowEqual);
+
+  console.log(allCourses);
+  console.log(allGroups);
 
   const {
     isLoading: editedIsLoading,
@@ -56,10 +71,11 @@ export const EditMentor = ({ id }) => {
 
   const [updateMentor, removeMentor] = useActions([editMentor, deleteMentor]);
   const [groups, setGroups] = useState(mentorGroups || 0);
-  const [courses, setCourses] = useState(mentorGroups || 0);
+  const [courses, setCourses] = useState(mentorCourses || 0);
   const [groupInput, setGroupInputValue] = useState('Type name of a group');
   const [courseInput, setCourseInputValue] = useState('Type name of a course');
-  const [error, setError] = useState(null);
+  const [errorGroup, setErrorGroup] = useState(null);
+  const [errorCourse, setErrorCourse] = useState(null);
 
   const [toShowModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
@@ -83,13 +99,13 @@ export const EditMentor = ({ id }) => {
   }, [editedIsError, editedIsLoaded, deletedIsError, deletedIsLoaded]);
 
   const handleGroupInputChange = (e) => {
-    setError('');
+    setErrorGroup('');
     const { value } = e.target;
     setGroupInputValue(value);
   };
 
   const handleCourseInputChange = (e) => {
-    setError('');
+    setErrorCourse('');
     const { value } = e.target;
     setCourseInputValue(value);
   };
@@ -97,9 +113,9 @@ export const EditMentor = ({ id }) => {
   const handleGroupAdd = () => {
     const checkName = groups.find((el) => el.name === groupInput);
     if (checkName) {
-      setError('This group was already added to the list');
+      setErrorGroup('This group was already added to the list');
     } else {
-      const groupObject = mentorGroups.find((el) => el.name === groupInput);
+      const groupObject = allGroups.find((el) => el.name === groupInput);
       if (groupObject) {
         const res = [
           ...groups,
@@ -107,7 +123,7 @@ export const EditMentor = ({ id }) => {
         ];
         setGroups(res);
       } else {
-        setError('Invalid group name');
+        setErrorGroup('Invalid group name');
       }
     }
   };
@@ -115,9 +131,9 @@ export const EditMentor = ({ id }) => {
   const handleCourseAdd = () => {
     const checkName = courses.find((el) => el.name === courseInput);
     if (checkName) {
-      setError('This course was already added to the list');
+      setErrorCourse('This course was already added to the list');
     } else {
-      const courseObject = mentorCourses.find((el) => el.name === courseInput);
+      const courseObject = allCourses.find((el) => el.name === courseInput);
       if (courseObject) {
         const res = [
           ...courses,
@@ -125,23 +141,23 @@ export const EditMentor = ({ id }) => {
         ];
         setCourses(res);
       } else {
-        setError('Invalid course name');
+        setErrorCourse('Invalid course name');
       }
     }
   };
 
   const handleGroupDelete = (e) => {
-    setError('');
+    setErrorGroup('');
     const element = e.target.closest('li');
     const groupsList = groups.filter((el) => el.name !== element.dataset.groupname);
     setGroups(groupsList);
   };
 
   const handleCourseDelete = (e) => {
-    setError('');
+    setErrorCourse('');
     const element = e.target.closest('li');
     const coursesList = courses.filter((el) => el.name !== element.dataset.coursename);
-    setGroups(coursesList);
+    setCourses(coursesList);
   };
 
   const validateEditMentor = (values) => {
@@ -179,10 +195,10 @@ export const EditMentor = ({ id }) => {
       <div className="row justify-content-center">
         <div className="col-md-12 col-sm-8 card shadow">
           <div className="px-2 py-4">
-            <h3>Student Editing</h3>
+            <h3>Mentor Editing</h3>
             <hr />
             <WithLoading
-              isLoading={mentorIsLoading || !mentorIsLoaded && groupsAreLoading || !groupsAreLoaded && coursesAreLoading || !coursesAreLoaded}
+              isLoading={(mentorIsLoading || !mentorIsLoaded) && (allCoursesAreLoading || !allCoursesAreLoaded) && (allGroupsAreLoading || !allGroupsAreLoaded)}
               className={styles['loader-centered']}
             >
               <Formik
@@ -190,8 +206,8 @@ export const EditMentor = ({ id }) => {
                   firstName: mentor?.firstName,
                   lastName: mentor?.lastName,
                   email: mentor?.email,
-                  groups: mentor?.studentGroupIds,
-                  courses: mentor?.courseIds,
+                  groups: '',
+                  courses: '',
                 }}
                 validationSchema={formValidate}
                 onSubmit={onSubmit}
@@ -257,15 +273,15 @@ export const EditMentor = ({ id }) => {
                             id="groupsInput"
                             className={classNames(
                               'form-control col-md-11',
-                              styles.input,
-                              { 'border-danger': error },
+                              styles['group-input'],
+                              { 'border-danger': errorGroup },
                             )}
                             list="group-list"
                             placeholder={groupInput}
                             onChange={handleGroupInputChange}
                           />
                           <datalist id="group-list">
-                            {mentorGroups.map(({ id, name }) => (
+                            {allGroups.map(({ id, name }) => (
                               <option key={id}>{name}</option>
                             ))}
                           </datalist>
@@ -273,11 +289,11 @@ export const EditMentor = ({ id }) => {
                             <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
                           </div>
                         </div>
-                        { error ? <div className={styles.error}>{error}</div> : null}
+                        { errorGroup ? <div className={styles.error}>{errorGroup}</div> : null}
                       </div>
                     </div>
                     <WithLoading
-                      isLoading={groupsAreLoading}
+                      isLoading={mentorGroupsAreLoading}
                       className={styles['loader-centered']}
                     >
                       <div className="row m-0 pt-3">
@@ -295,7 +311,7 @@ export const EditMentor = ({ id }) => {
                                   className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
                                   type="button"
                                   onClick={handleGroupDelete}
-                                >X
+                                >&#10005;
                                 </button>
                               </li>
                             ))}
@@ -316,14 +332,14 @@ export const EditMentor = ({ id }) => {
                             className={classNames(
                               'form-control col-md-11',
                               styles.input,
-                              { 'border-danger': error },
+                              { 'border-danger': errorCourse },
                             )}
                             list="course-list"
                             placeholder={courseInput}
                             onChange={handleCourseInputChange}
                           />
                           <datalist id="course-list">
-                            {mentorCourses.map(({ id, name }) => (
+                            {allCourses.map(({ id, name }) => (
                               <option key={id}>{name}</option>
                             ))}
                           </datalist>
@@ -331,11 +347,11 @@ export const EditMentor = ({ id }) => {
                             <Button variant="warning" onClick={handleCourseAdd}><Icon icon="Plus" /></Button>
                           </div>
                         </div>
-                        { error ? <div className={styles.error}>{error}</div> : null}
+                        { errorCourse ? <div className={styles.error}>{errorCourse}</div> : null}
                       </div>
                     </div>
                     <WithLoading
-                      isLoading={coursesAreLoading}
+                      isLoading={mentorCoursesAreLoading}
                       className={styles['loader-centered']}
                     >
                       <div className="row m-0 pt-3">
@@ -347,13 +363,13 @@ export const EditMentor = ({ id }) => {
                                   'd-flex bg-light border border-outline-secondary rounded')}
                                 key={id}
                                 data-courseid={id}
-                                data-gcoursename={name}
+                                data-coursename={name}
                               >{name}
                                 <button
                                   className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
                                   type="button"
-                                  onClick={handleGroupDelete}
-                                >X
+                                  onClick={handleCourseDelete}
+                                >&#10005;
                                 </button>
                               </li>
                             ))}
@@ -361,6 +377,7 @@ export const EditMentor = ({ id }) => {
                         </div>
                       </div>
                     </WithLoading>
+
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button
@@ -396,7 +413,7 @@ export const EditMentor = ({ id }) => {
                 toShow={toShowModal}
                 onSubmit={onFire}
                 onClose={handleCloseModal}
-              >Are you sure you want to exclude this student?
+              >Are you sure you want to fire this mentor?
               </ModalWindow>
             </WithLoading>
           </div>
