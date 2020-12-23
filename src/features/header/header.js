@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
 import styles from './header.scss';
-import { Link } from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+import {useActions} from "@/shared";
+import {currentUserSelector, fetchUsersList, fetchAssignedUsersSelector, logOut} from "@/models";
+import {shallowEqual, useSelector} from "react-redux";
+import {paths} from "@/shared";
 
 const logout = (
   <svg width="1.5em" height="2em" viewBox="0 0 16 16" className="bi bi-door-closed-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -21,24 +25,67 @@ const sidebarToggler = (
   </svg>
 );
 
-export const Header = () => {
+export const Header = ({ roles }) => {
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   
-  const [tabs, setTabs] = useState([
-    {id: 0, title: 'Progress', link: 'progress', active: false},
-    {id: 1, title: 'Schedule', link: 'schedule', active: false},
-    {id: 2, title: 'Support', link: 'support', active: false},
-  ]);
-
+  const rolesObject = {
+    4: [
+      {id: 0, title: 'Students', link: paths.STUDENTS, active: true},
+      {id: 1, title: 'Mentors', link: paths.MENTORS, active: false},
+      {id: 2, title: 'Secretaries', link: paths.SECRETARIES, active: false},
+      {id: 3, title: 'Lessons', link: paths.LESSONS, active: false},
+      {id: 4, title: 'Groups', link: paths.GROUPS, active: false},
+      {id: 5, title: 'Courses', link: paths.COURSES, active: false},
+      {id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false},
+      {id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false},
+    ],
+    3: [
+      {id: 0, title: 'Students', link: paths.STUDENTS, active: false},
+      {id: 1, title: 'Mentors', link: paths.MENTORS, active: true},
+      {id: 4, title: 'Groups', link: paths.GROUPS, active: false},
+      {id: 5, title: 'Courses', link: paths.COURSES, active: false},
+      {id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false},
+      {id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false},
+    ],
+    2: [
+      {id: 3, title: 'Lessons', link: paths.LESSONS, active: true},
+      {id: 4, title: 'Groups', link: paths.GROUPS, active: false},
+      {id: 5, title: 'Courses', link: paths.COURSES, active: false},
+      {id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false},
+      {id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false},
+    ],
+    1: [
+      {id: 6, title: 'Schedule', link: paths.SCHEDULE, active: true},
+      {id: 8, title: 'Support', link: paths.SUPPORT, active: false},
+    ]
+  }
+  
+  const [loadUsers] = useActions([fetchUsersList]);
+  const { users, isLoading, loaded } = useSelector(fetchAssignedUsersSelector, shallowEqual);
+  
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+  
+  const currentUserDefined = users.find((user) => user.id === currentUser.id);
+  
+  
+  const [tabs, setTabs] = useState([]);
   const [sidebar, setSidebar] = useState({
     active: false,
   });
-
+  
+  useEffect(() => {
+    const headerArray = rolesObject[currentUser.role]
+    setTabs(headerArray)
+  }, [currentUser])
+  
   const toggleActiveTab = (event) => {
     setTabs((prevstate) => {
       prevstate.find((tab) => {
         if(tab.active) {
           tab.active = false;
-        } 
+        }
       });
       
       return prevstate.map((tab, index) => {
@@ -53,7 +100,6 @@ export const Header = () => {
       });
     });
   };
-
   function toggleSidebar() {
     setSidebar((prevState) => {
       return {
@@ -62,51 +108,55 @@ export const Header = () => {
       };
     });
   }
-
+  const [logoutDefined] = useActions([logOut]);
+  
+  const loggingOut = () => {
+    logoutDefined();
+  };
+  
   return (
     <nav className={classNames('navbar navbar-expand-md', styles.header)}>
       <div className='collapse navbar-collapse d-flex justify-content-between h-100'>
-
+      
         <div className={styles['header__sidebar-toggler']} onClick={toggleSidebar}>{sidebarToggler}</div>
-
+      
         <div className={classNames(styles['header__sidebar'], {[styles['sidebar--active']]: sidebar.active})}>
           <div className={styles['header__sidebar-links']}>
             {tabs.map(({ id, title, link }) => (
-              <a className='nav-item nav-link' 
-                href={`#${link}`} 
-                key={id} 
-                onClick={toggleSidebar}
-              >{title}</a>
+              <Link className='nav-item nav-link'
+                 to={`${link}`}
+                 key={id}
+                 onClick={toggleSidebar}
+              >{title}</Link>
             ))}
           </div>
         </div>
-
+      
         <div className={classNames('navbar-nav nav-tabs', styles['header__navbar-links'])}>
           {tabs.map(({id, title, link, active}) => (
             <Link className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
-              to={`/${link}`} 
-              key={id}
-              data-id={id}
-              onClick={toggleActiveTab}
+                  to={`${link}`}
+                  key={id}
+                  data-id={id}
+                  onClick={toggleActiveTab}
             >{title}</Link>
           ))}
         </div>
-            
+      
         <div className={styles['header__account']}>
           <div className={styles['header__account-user']}>
             <a className={styles['header__account-user--icon']}
-              onClick={toggleActiveTab}
-              href='#studentProfile'
-            >{user}</a> 
-            <span className={styles['header__account-user--fullname']}>Name<br />Surname</span>
+               onClick={toggleActiveTab}
+               href={paths.MY_PROFILE}
+            >{user}</a>
+            <span className={styles['header__account-user--fullname']}>{`${currentUserDefined?.email}`}<br />{`${currentUserDefined?.lastName}`} </span>
           </div>
           <div className={styles['header__account-logout']}>
-            <div>{logout}</div>
+            <a onClick={()=>{loggingOut()}}>{logout}</a>
           </div>
         </div>
-
+    
       </div>
     </nav>
   );
 };
-

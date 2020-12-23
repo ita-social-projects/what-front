@@ -6,9 +6,9 @@ import {
 import classNames from 'classnames';
 import { useSelector, shallowEqual } from 'react-redux';
 import * as Yup from 'yup';
-
 import { Button, WithLoading } from '@/components';
 import { useActions, paths } from '@/shared';
+
 
 import {
   mentorsActiveSelector,
@@ -387,7 +387,7 @@ export const AddLesson = () => {
                                           )}
                                           type="number"
                                           max="12"
-                                          min="2"
+                                          min="0"
                                           placeholder=""
                                           onChange={handleMarkChange}
                                           data-id={index}
