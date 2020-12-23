@@ -7,10 +7,13 @@ import classNames from 'classnames';
 import { Card, Search, Button, WithLoading } from '../../../components/index.js';
 import Icon from '../../../icon.js';
 import styles from './list-of-courses.scss';
+import { Pagination } from '@/components/pagination/index.js';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [coursesPerPage] = useState(12);
 
   const { data, isLoading } = useSelector(coursesSelector, shallowEqual);
 
@@ -44,17 +47,21 @@ export const ListOfCourses = () => {
   };
 
   const coursesList = () => {
-    const courses = filteredCourses.map((course) => (
-      <Card
-        key={course.id}
-        id={course.id}
-        buttonName="Details"
-        iconName="Edit"
-        onEdit={() => courseEdit(course.id)}
-        onDetails={() => courseDetails(course.id)}
-      >{course.name}
-      </Card>
-    ));
+    const indexOfLastCourse = currentPage * coursesPerPage;
+    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+
+    const courses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
+      .map((course) => (
+        <Card
+          key={course.id}
+          id={course.id}
+          buttonName="Details"
+          iconName="Edit"
+          onEdit={() => courseEdit(course.id)}
+          onDetails={() => courseDetails(course.id)}
+        >{course.name}
+        </Card>
+      ));
 
     if (!courses.length && searchValue) {
       return <h4>Courses not found</h4>;
@@ -62,8 +69,12 @@ export const ListOfCourses = () => {
     return courses;
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="container">
+    <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
         <div className={classNames(styles['list-head'], 'col-12 mb-2')}>
           <div className={styles['search-container']}>
@@ -83,6 +94,7 @@ export const ListOfCourses = () => {
           </WithLoading>
         </div>
       </div>
+      <Pagination itemsPerPage={coursesPerPage} totalItems={filteredCourses.length} paginate={paginate}/>
     </div>
   );
 };

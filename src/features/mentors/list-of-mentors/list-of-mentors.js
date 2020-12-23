@@ -7,11 +7,14 @@ import Icon from '@/icon.js';
 import { paths, useActions } from '@/shared/index.js';
 import { fetchActiveMentors, mentorsActiveSelector } from '@/models/index.js';
 import styles from './list-of-mentors.scss';
+import { Pagination } from '@/components/pagination';
 
 export const ListOfMentors = () => {
   const [loadActiveMentors] = useActions([fetchActiveMentors]);
   const [searchMentorValue, setSearchMentorValue] = useState('');
   const [filteredMentorList, setFilteredMentorList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [mentorsPerPage] = useState(12);
   const { data, isLoading } = useSelector(mentorsActiveSelector, shallowEqual);
 
   useEffect(() => {
@@ -43,20 +46,24 @@ export const ListOfMentors = () => {
   };
 
   const mentorsList = () => {
-    const mentors = filteredMentorList.map((mentor) => (
-      <Card
-        key={mentor.id}
-        id={mentor.id}
-        buttonName="Details"
-        iconName="Edit"
-        onEdit={() => mentorEditing(mentor.id)}
-        onDetails={() => mentorDetails(mentor.id)}
-      >
-        <span className="mb-2 font-weight-bolder">{mentor.firstName}</span>
-        <span className="pl-2 font-weight-bolder">{mentor.lastName}</span>
-        <p className="font-weight-lighter font-italic small mt-2"><u>{mentor.email}</u></p>
-      </Card>
-    ));
+    const indexOfLastMentor = currentPage * mentorsPerPage;
+    const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
+
+    const mentors = filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor)
+      .map((mentor) => (
+        <Card
+          key={mentor.id}
+          id={mentor.id}
+          buttonName="Details"
+          iconName="Edit"
+          onEdit={() => mentorEditing(mentor.id)}
+          onDetails={() => mentorDetails(mentor.id)}
+        >
+          <span className="mb-2 font-weight-bolder">{mentor.firstName}</span>
+          <span className="pl-2 font-weight-bolder">{mentor.lastName}</span>
+          <p className="font-weight-lighter font-italic small mt-2"><u>{mentor.email}</u></p>
+        </Card>
+      ));
 
     if (!mentors.length && searchMentorValue) {
       return <h4>Mentor is not found</h4>;
@@ -64,8 +71,12 @@ export const ListOfMentors = () => {
     return mentors;
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="container">
+    <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
         <div className={classNames(styles.heading, 'col-12 mb-2')}>
           <div className={styles.search__container}>
@@ -85,6 +96,7 @@ export const ListOfMentors = () => {
           </WithLoading>
         </div>
       </div>
+      <Pagination itemsPerPage={mentorsPerPage} totalItems={filteredMentorList.length} paginate={paginate}/>
     </div>
   );
 };

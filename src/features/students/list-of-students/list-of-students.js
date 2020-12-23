@@ -18,6 +18,8 @@ export const ListOfStudents = () => {
 
   const [filteredStudentsList, setFilteredStudentsList] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [studentsPerPage] = useState(12);
 
   const { data, isLoading } = useSelector(activeStudentsSelector, shallowEqual);
 
@@ -52,9 +54,6 @@ export const ListOfStudents = () => {
   const studentEditing = (id) => {
     history.push(`${paths.STUDENT_EDIT}/${id}`);
   };
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [studentsPerPage] = useState(12);
 
   const getStudents = () => {
     const indexOfLastStudent = currentPage * studentsPerPage;

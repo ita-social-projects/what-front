@@ -9,12 +9,15 @@ import {
 } from '@/components/index.js';
 import Icon from '@/icon.js';
 import styles from './list-of-secretaries.scss';
+import { Pagination } from '@/components/pagination';
 
 export const ListOfSecretaries = () => {
   const [loadSecretaries] = useActions([fetchSecretaries]);
 
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [secretariesPerPage] = useState(12);
 
   const { data, isLoading } = useSelector(secretariesSelector, shallowEqual);
 
@@ -49,21 +52,25 @@ export const ListOfSecretaries = () => {
   };
 
   const getSecretaries = () => {
-    const secretarise = searchResults.map(({
-      id, firstName, lastName, email,
-    }) => (
-      <Card
-        key={id}
-        id={id}
-        iconName="Edit"
-        buttonName="Details"
-        onEdit={() => handleEditSecretary(id)}
-        onDetails={() => hadndleSecretarysDetails(id)}
-      >
-        <span className={className(styles['card-name'], 'd-flex font-weight-bold')}>{firstName} {lastName}</span>
-        <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{email}</span>
-      </Card>
-    ));
+    const indexOfLastSecretary = currentPage * secretariesPerPage;
+    const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
+
+    const secretarise = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
+      .map(({
+        id, firstName, lastName, email,
+      }) => (
+        <Card
+          key={id}
+          id={id}
+          iconName="Edit"
+          buttonName="Details"
+          onEdit={() => handleEditSecretary(id)}
+          onDetails={() => hadndleSecretarysDetails(id)}
+        >
+          <span className={className(styles['card-name'], 'd-flex font-weight-bold')}>{firstName} {lastName}</span>
+          <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{email}</span>
+        </Card>
+      ));
 
     if (!secretarise.length && search) {
       return <h4>Secretaries not found</h4>;
@@ -71,8 +78,12 @@ export const ListOfSecretaries = () => {
     return secretarise;
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="container mb-2">
+    <div className={className("container", styles['list-wrapper'])}>
       <div className="row mb-4">
         <div className="col-lg-4 col-md-6 offset-lg-4 col-12 text-center mt-2">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
@@ -90,6 +101,7 @@ export const ListOfSecretaries = () => {
           {getSecretaries()}
         </WithLoading>
       </div>
+      <Pagination itemsPerPage={secretariesPerPage} totalItems={searchResults.length} paginate={paginate}/>
     </div>
   );
 };

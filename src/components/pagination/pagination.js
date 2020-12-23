@@ -36,15 +36,17 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
 
   return ( 
     <div className={styles.wrapper}>
-      <nav className={classNames("d-flex flex-row flex-wrap justify-content-center")}>
+      <nav className="col-12 d-flex flex-row flex-wrap justify-content-center">
         <ul className="pagination">
           {pageNumbers.map(({index, active}) => (
             <li key={index} 
-              className={classNames("page-item", {"active": active})}
+              className="page-item"
               onClick={() => toggleActivePage(index)}
               data-id={index}
             >
-              <button className="page-link" onClick={() => paginate(index)}>
+              <button className={classNames("page-link", styles.link, {[styles["active"]]: active})} 
+                onClick={() => paginate(index)}
+              >
                 {index}
               </button>
             </li>
