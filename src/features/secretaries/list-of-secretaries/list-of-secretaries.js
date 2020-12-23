@@ -62,7 +62,8 @@ export const ListOfSecretaries = () => {
         onDetails={() => hadndleSecretarysDetails(id)}
       >
         <span className="mb-2 font-weight-bolder">{firstName}</span>
-        <span className="pl-2 font-weight-bolder">{lastName}</span>
+        <br />
+        <span className="font-weight-bolder">{lastName}</span>
         <p className="font-weight-lighter font-italic small mt-2"><u>{email}</u></p>
       </Card>
     ));

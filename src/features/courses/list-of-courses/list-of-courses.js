@@ -49,11 +49,11 @@ export const ListOfCourses = () => {
         key={course.id}
         id={course.id}
         buttonName="Details"
+        title={course.name}
         iconName="Edit"
         onEdit={() => courseEdit(course.id)}
         onDetails={() => courseDetails(course.id)}
-      >{course.name}
-      </Card>
+      />
     ));
 
     if (!courses.length && searchValue) {

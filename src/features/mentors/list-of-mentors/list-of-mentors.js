@@ -53,7 +53,8 @@ export const ListOfMentors = () => {
         onDetails={() => mentorDetails(mentor.id)}
       >
         <span className="mb-2 font-weight-bolder">{mentor.firstName}</span>
-        <span className="pl-2 font-weight-bolder">{mentor.lastName}</span>
+        <br />
+        <span className="font-weight-bolder">{mentor.lastName}</span>
         <p className="font-weight-lighter font-italic small mt-2"><u>{mentor.email}</u></p>
       </Card>
     ));
