@@ -149,7 +149,7 @@ export const Header = ({ roles }) => {
                onClick={toggleActiveTab}
                href={paths.MY_PROFILE}
             >{user}</a>
-            <span className={styles['header__account-user--fullname']}>{`${currentUserDefined?.email}`}<br />{`${currentUserDefined?.lastName}`} </span>
+            <span className={styles['header__account-user--fullname']}>{`${currentUser?.first_name}`}<br />{`${currentUser?.last_name}`} </span>
           </div>
           <div className={styles['header__account-logout']}>
             <a onClick={()=>{loggingOut()}}>{logout}</a>

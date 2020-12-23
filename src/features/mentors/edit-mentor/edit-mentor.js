@@ -8,7 +8,7 @@ import {
   editMentor, deleteMentor,
 } from '@/models/index.js';
 import { Formik, Field, Form } from 'formik';
-import { formValidate } from '../validation/validation-helpers.js';
+import { formValidate } from '../../validation/validation-helpers.js';
 import classNames from 'classnames';
 import styles from './edit-mentor.scss';
 import Icon from "@/icon";
