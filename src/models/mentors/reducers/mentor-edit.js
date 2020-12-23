@@ -1,4 +1,5 @@
 import * as types from '../types.js';
+import * as actionTypes from "@models/courses/types";
 
 const initialState = {
   data: [],
@@ -7,32 +8,38 @@ const initialState = {
   error: '',
 };
 
-export const mentorGroupsReducer = (state = initialState, action) => {
+export const mentorEditingReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.FETCHING_MENTOR_GROUPS_STARTED:
+    case types.EDITING_MENTOR_STARTED:
       return {
         ...state,
         isLoading: true,
         isLoaded: false,
         error: '',
       };
-
-    case types.FETCHING_MENTOR_GROUPS_SUCCEED:
+    
+    case types.EDITING_MENTOR_SUCCEED:
       return {
         ...state,
         data: action.payload.data,
         isLoading: false,
         isLoaded: true,
       };
-
-    case types.FETCHING_MENTOR_GROUPS_FAILED:
+    
+    case types.EDITING_MENTOR_FAILED:
       return {
         ...state,
         isLoading: false,
         isLoaded: false,
         error: action.payload.error.message,
       };
-
+      
+    case types.CLEAR_LOADED:
+      return {
+        ...state,
+        loaded: false
+      }
+      
     default:
       return state;
   }
