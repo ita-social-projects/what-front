@@ -1,14 +1,13 @@
 import React from 'react';
-import { RoleList, Role } from './helpers.js';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { CoursesTabs, GroupsTabs, SecretariesTabs, MentorTabs } from '@/screens/index.js';
+import { RoleList, Role } from './helpers.js';
 import {
   Counter, ListOfStudents, NotFound,
   ListOfCourses, AddCourse, ListOfGroups,
   Auth, UnAssignedList, ListOfSecretaries,
-  ListOfMentors
+  ListOfMentors,
 } from '../index.js';
-
 
 export const Routes = () => (
   <>
