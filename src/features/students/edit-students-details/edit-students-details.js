@@ -15,6 +15,7 @@ import Icon from '@/icon.js';
 import styles from './edit-students-details.scss';
 import classNames from 'classnames';
 import { paths } from '@/shared/routes/paths.js';
+import { ModalWindow } from '@/features/modal-window/index.js';
 
 export const EditStudentsDetails = ({id}) => {
   const history = useHistory();
@@ -55,6 +56,7 @@ export const EditStudentsDetails = ({id}) => {
   const [groups, setGroups] = useState(studentGroups || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
   const [error, setError] = useState(null);
+  const [toShowModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (studentError && studentGroupsError) {
@@ -71,6 +73,14 @@ export const EditStudentsDetails = ({id}) => {
   useEffect(() => {
     setGroups(studentGroups)
   }, [studentGroups]);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+  
+  const handleExclude = () => {
+    handleCloseModal();
+    deleteStudent(id);
+  };
 
   const handleInputChange = (event) => {
     setError('');
@@ -119,10 +129,6 @@ export const EditStudentsDetails = ({id}) => {
 
   const onSubmit = (values) => {
     validateStudentData(values);
-  };
-
-  const handleExclude = () => {
-    deleteStudent(id);
   };
 
   const resetInput = () => {
@@ -255,7 +261,7 @@ export const EditStudentsDetails = ({id}) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button className="w-100" variant="danger" 
-                          onClick={handleExclude}
+                          onClick={handleShowModal}
                           disabled={isEditedLoading || isRemovedLoading}
                         >Exclude</Button>
                       </div>
@@ -279,6 +285,12 @@ export const EditStudentsDetails = ({id}) => {
                   </Form>
                 )}
               </Formik>
+              <ModalWindow 
+                toShow={toShowModal}
+                onSubmit={handleExclude}
+                onClose={handleCloseModal}
+              >Are you sure you want to exclude this student?
+              </ModalWindow>
             </WithLoading>
           </div>
         </div>
