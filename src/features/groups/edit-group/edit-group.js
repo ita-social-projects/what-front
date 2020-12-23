@@ -13,7 +13,7 @@ import {
 } from '@/features/shared';
 import { useActions } from '@/shared';
 import { WithLoading, Button } from '@/components/index.js';
-import { editStudentGroup, editStudentGroupsSelector } from '@/models';
+import { editStudentGroup, editStudentGroupSelector } from '@/models';
 import Icon from '@/icon.js';
 import { validateGroupName, validateDate } from '../../validation/validation-helpers.js';
 import styles from './edit-groups.scss';
@@ -25,7 +25,7 @@ export const EditGroup = ({
     isLoading: isEditing,
     isLoaded: isEdited,
     error: editingError,
-  } = useSelector(editStudentGroupsSelector, shallowEqual);
+  } = useSelector(editStudentGroupSelector, shallowEqual);
 
   const dispatchEditGroup = useActions(editStudentGroup);
 
@@ -107,6 +107,13 @@ export const EditGroup = ({
     };
 
     dispatchEditGroup(newGroupData);
+  };
+
+  const handleReset = () => {
+    setGroupStudents(students.filter(({ id }) => group.studentIds.includes(id)));
+    setGroupMentors(mentors.filter(({ id }) => group.mentorIds.includes(id)));
+    setStudentInputError('');
+    setMentorInputError('');
   };
 
   const formatDate = (dateString) => new Date(dateString).toLocaleDateString().split('.').reverse()
@@ -198,6 +205,7 @@ export const EditGroup = ({
                         type="date"
                         name="finishDate"
                         id="finish-date"
+                        validate={(value) => validateDate(values.startDate, value)}
                       />
                       {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
                     </div>
@@ -214,7 +222,6 @@ export const EditGroup = ({
                             type="text"
                             name="mentor"
                             list="mentors-list"
-                            validate={(value) => validateDate(values.startDate, value)}
                           />
                           <datalist id="mentors-list">
                             {
@@ -232,33 +239,33 @@ export const EditGroup = ({
                             <Icon icon="Plus" />
                           </Button>
                         </div>
+                        {mentorInputError && <p className="text-danger mb-0">{mentorInputError}</p>}
+                        <div className="w-100">
+                          <ul className="col-md-12 d-flex flex-wrap justify-content-between p-0">
+                            {
+                              groupMentors.map(({ id, firstName, lastName }) => (
+                                <li
+                                  key={id}
+                                  className={classNames(
+                                    'd-flex bg-light border border-outline-secondary rounded',
+                                    styles['datalist-item'],
+                                  )}
+                                >
+                                  {firstName} {lastName}
+                                  <button
+                                    type="button"
+                                    className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                    onClick={() => removeMentor(id)}
+                                  >
+                                    X
+                                  </button>
+                                </li>
+                              ))
+                            }
+                          </ul>
+                        </div>
                       </WithLoading>
-                      {mentorInputError && <p className="text-danger mb-0">{mentorInputError}</p>}
                     </div>
-                  </div>
-                  <div className="mb-3">
-                    <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
-                      {
-                        groupMentors.map(({ id, firstName, lastName }) => (
-                          <li
-                            key={id}
-                            className={classNames(
-                              'd-flex bg-light border border-outline-secondary rounded',
-                              styles['datalist-item'],
-                            )}
-                          >
-                            {firstName} {lastName}
-                            <button
-                              type="button"
-                              className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                              onClick={() => removeMentor(id)}
-                            >
-                              X
-                            </button>
-                          </li>
-                        ))
-                      }
-                    </ul>
                   </div>
                   <div className="row mb-3">
                     <div className="col d-flex align-items-start">
@@ -289,36 +296,36 @@ export const EditGroup = ({
                             <Icon icon="Plus" />
                           </Button>
                         </div>
+                        {studentInputError && <p className="text-danger mb-0">{studentInputError}</p>}
+                        <div className="w-100">
+                          <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
+                            {
+                              groupStudents.map(({ id, firstName, lastName }) => (
+                                <li
+                                  key={id}
+                                  className={classNames(
+                                    'd-flex bg-light border border-outline-secondary rounded',
+                                    styles['datalist-item'],
+                                  )}
+                                >
+                                  {firstName} {lastName}
+                                  <button
+                                    type="button"
+                                    className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                    onClick={() => removeStudent(id)}
+                                  >
+                                    X
+                                  </button>
+                                </li>
+                              ))
+                            }
+                          </ul>
+                        </div>
                       </WithLoading>
-                      {studentInputError && <p className="text-danger mb-0">{studentInputError}</p>}
                     </div>
                   </div>
-                  <div className="mb-3">
-                    <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
-                      {
-                        groupStudents.map(({ id, firstName, lastName }) => (
-                          <li
-                            key={id}
-                            className={classNames(
-                              'd-flex bg-light border border-outline-secondary rounded',
-                              styles['datalist-item'],
-                            )}
-                          >
-                            {firstName} {lastName}
-                            <button
-                              type="button"
-                              className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                              onClick={() => removeStudent(id)}
-                            >
-                              X
-                            </button>
-                          </li>
-                        ))
-                      }
-                    </ul>
-                  </div>
                   <div className="row justify-content-around mt-4">
-                    <Button type="reset" className="btn btn-secondary w-25" disabled={isEditing}>
+                    <Button type="reset" className="btn btn-secondary w-25" disabled={isEditing} onClick={handleReset}>
                       Clear
                     </Button>
                     <Button type="submit" variant="success" className="btn btn-secondary w-25" disabled={isEditing}>

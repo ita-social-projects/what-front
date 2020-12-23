@@ -7,7 +7,7 @@ import { useActions, ApiService } from '../../shared/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
 import {
-  login, logOut, registretion, loadStudents,
+  login, logOut, registration, loadStudents,
 } from '../../models/index.js';
 
 export const Counter = () => {
@@ -20,7 +20,7 @@ export const Counter = () => {
     logout,
     regist,
     dispatchShowAlert,
-  ] = useActions([login, logOut, registretion, addAlert]);
+  ] = useActions([login, logOut, registration, addAlert]);
   const fetchStudents = useActions(loadStudents);
   const [toShowModal, setShowModal] = useState(false);
 
@@ -58,7 +58,7 @@ export const Counter = () => {
           <Button onClick={fetchCounter} variant="primary">Fetch counter</Button>
           <Button onClick={fetchMentors} variant="primary">Fetch mentors</Button>
           <Button onClick={() => dispatchShowAlert('Hello from counter')}>Show alert</Button>
-          <Button onClick={() => dispatchShowAlert('Hello blablabla', 'success', 5000)} variant="dark">Show alert</Button>
+          <Button onClick={() => dispatchShowAlert('Success', 'success', 5000)} variant="dark">Show alert</Button>
           <Button onClick={() => logIn({ email: 'admin.@gmail.com', password: 'admin' })} variant="primary">LogIn</Button>
           <Button onClick={() => logout()} variant="primary">LogOut</Button>
           <Button

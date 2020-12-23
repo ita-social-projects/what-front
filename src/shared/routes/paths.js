@@ -37,12 +37,13 @@ export const paths = {
 
   UNASSIGNED_USERS: '/unassigned',
   MY_PROFILE: '/my-profile',
+  SUPPORT: '/support',
+  SCHEDULE: '/schedule',
 };
 
 export const homepages = {
-  0: paths.HOME, // unassigned user
-  1: paths.HOME, // student homepage
-  2: paths.STUDENTS, // mentor homepage
+  1: paths.SCHEDULE, // student homepage
+  2: paths.LESSONS, // mentor homepage
   3: paths.MENTORS, // secretary
   4: paths.STUDENTS, // admin homepage
 };
