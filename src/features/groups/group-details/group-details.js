@@ -1,23 +1,25 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import { WithLoading } from '@/components/index.js';
 import {
-  studentGroupsStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
-} from '@/features/shared/constants';
+  studentGroupByIdStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
+} from '@/features/shared/index.js';
+import { paths } from '@/shared';
 import styles from './group-details.scss';
 
 export const GroupDetails = ({
   studentGroupData, studentsData, mentorsData, coursesData,
 }) => {
   const {
-    studentGroupById: group,
+    data: group,
     isLoading: isGroupLoading,
     isLoaded: isGroupLoaded,
   } = studentGroupData;
   const { data: students, isLoading: areStudentsLoading } = studentsData;
-  const { mentors, isLoading: areMentorsLoading } = mentorsData;
+  const { data: mentors, isLoading: areMentorsLoading } = mentorsData;
   const { data: courses, isLoading: areCoursesLoading } = coursesData;
 
   return (
@@ -72,8 +74,8 @@ export const GroupDetails = ({
                 <thead>
                   <tr>
                     <th>№</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Name</th>
+                    <th>Email</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -82,8 +84,12 @@ export const GroupDetails = ({
                     .map((student, index) => (
                       <tr key={student.id}>
                         <td>{index + 1}</td>
-                        <td>{student.firstName}</td>
-                        <td>{student.lastName}</td>
+                        <td>
+                          <Link to={`${paths.STUDENTS_DETAILS}/${student.id}`}>
+                            {student.firstName} {student.lastName}
+                          </Link>
+                        </td>
+                        <td>{student.email}</td>
                       </tr>
                     )) }
                 </tbody>
@@ -97,7 +103,7 @@ export const GroupDetails = ({
 };
 
 GroupDetails.propTypes = {
-  studentGroupData: shape(studentGroupsStateShape).isRequired,
+  studentGroupData: shape(studentGroupByIdStateShape).isRequired,
   studentsData: shape(studentsStateShape).isRequired,
   mentorsData: shape(mentorsStateShape).isRequired,
   coursesData: shape(coursesStateShape).isRequired,

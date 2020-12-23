@@ -44,5 +44,5 @@ Button.defaultProps = {
   className: '',
   disabled: false,
   variant: 'secondary',
-  onClick: undefined,
+  onClick: () => false,
 };

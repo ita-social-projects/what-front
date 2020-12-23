@@ -6,9 +6,9 @@ import {
 import classNames from 'classnames';
 import { useSelector, shallowEqual } from 'react-redux';
 import * as Yup from 'yup';
-
 import { Button } from '@/components';
 import { useActions, paths } from '@/shared';
+
 
 import {
   mentorsSelector,
@@ -43,7 +43,7 @@ export const AddLesson = () => {
   } = useSelector(mentorsSelector, shallowEqual);
 
   const {
-    studentGroups: data,
+    data: groups,
     isLoading: groupsLoading,
     isLoaded: groupsIsLoaded,
     error: groupsError,

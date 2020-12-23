@@ -9,12 +9,6 @@ const initialState = {
 
 export function usersListreducer(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.FETCH_ASSIGNED:
-      return {
-        ...state,
-        isLoading: true,
-        error: '',
-      };
     case actionTypes.FETCH_ASSIGNED_SUCCESS:
       return {
         ...state,
