@@ -8,6 +8,7 @@ import {
   Button, Search, Card, WithLoading,
 } from '@/components/index.js';
 import Icon from '@/icon.js';
+import classNames from 'classnames';
 import styles from './list-of-secretaries.scss';
 
 export const ListOfSecretaries = () => {
@@ -60,9 +61,9 @@ export const ListOfSecretaries = () => {
         onEdit={() => handleEditSecretary(id)}
         onDetails={() => hadndleSecretarysDetails(id)}
       >
-        <span className={className(styles['card-name'], 'd-flex')}>{firstName}</span>
-        <span className={className(styles['card-name'], 'd-flex')}>{lastName}</span>
-        <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{email}</span>
+        <span className="mb-2 font-weight-bolder">{firstName}</span>
+        <span className="pl-2 font-weight-bolder">{lastName}</span>
+        <p className="font-weight-lighter font-italic small mt-2"><u>{email}</u></p>
       </Card>
     ));
 
@@ -74,22 +75,26 @@ export const ListOfSecretaries = () => {
 
   return (
     <div className="container mb-2">
-      <div className="row mb-4">
-        <div className="col-lg-4 col-md-6 offset-lg-4 col-12 text-center mt-2">
-          <Search onSearch={handleSearch} placeholder="Secretary's name" />
+      <div className="row">
+        <div className={classNames(styles.heading, 'col-12 mb-2')}>
+          <div className={styles['search-container']}>
+            <Search onSearch={handleSearch} placeholder="Enter a secretary's name" />
+          </div>
+          <div className={styles['button-container']}>
+            <Button onClick={handleAddSecretary} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              Add a Secretary
+            </Button>
+          </div>
         </div>
-        <div className="col-lg-4 col-md-6 col-12 text-center mt-2">
-          <Button onClick={handleAddSecretary} variant="warning">
-            <Icon icon="Plus" className="icon" size={20} />
-            <span>Add a secretary</span>
-          </Button>
+        <hr className="col-8" />
+        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
+          <WithLoading isLoading={isLoading}>
+            {
+              getSecretaries()
+            }
+          </WithLoading>
         </div>
-      </div>
-      <hr className="col-8" />
-      <div className="col-12 d-flex flex-wrap justify-content-center">
-        <WithLoading isLoading={isLoading}>
-          {getSecretaries()}
-        </WithLoading>
       </div>
     </div>
   );
