@@ -1,0 +1,1 @@
+export { MyProfile } from './my-profile.js';
