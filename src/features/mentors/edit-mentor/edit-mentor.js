@@ -160,10 +160,7 @@ export const EditMentor = ({ id }) => {
     updateMentor(id, editedMentor);
   };
 
-  const onSubmit = (values, actions) => {
-    actions.resetForm();
-    // setGroups(mentor.groups);
-    // setCourses(mentor.courses);
+  const onSubmit = (values) => {
     validateEditMentor(values);
   };
 
