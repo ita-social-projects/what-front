@@ -84,25 +84,15 @@ export const ListOfSecretaries = () => {
 
   return (
     <div className={className("container", styles['list-wrapper'])}>
-      <div className="row">
-        <div className={className(styles.heading, 'col-12 mb-2')}>
-          <div className={styles['search-container']}>
-            <Search onSearch={handleSearch} placeholder="Enter a secretary's name" />
-          </div>
-          <div className={styles['button-container']}>
-            <Button onClick={handleAddSecretary} variant="warning">
-              <Icon icon="Plus" className="icon" />
-              Add a Secretary
-            </Button>
-          </div>
+      <div className="row mb-4">
+        <div className="col-lg-4 col-md-6 offset-lg-4 col-12 text-center mt-2">
+          <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
-        <hr className="col-8" />
-        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
-          <WithLoading isLoading={isLoading}>
-            {
-              getSecretaries()
-            }
-          </WithLoading>
+        <div className="col-lg-4 col-md-6 col-12 text-center mt-2">
+          <Button onClick={handleAddSecretary} variant="warning">
+            <Icon icon="Plus" className="icon" size={20} />
+            <span>Add a secretary</span>
+          </Button>
         </div>
       </div>
       <hr className="col-8" />
