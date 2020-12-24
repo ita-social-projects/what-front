@@ -3,7 +3,6 @@ export * from './support';
 export * from './schedule-student';
 export * from './auth';
 export * from './header';
-export * from './validation';
 export * from './not-found';
 export * from './modal-window';
 export * from './unassigned-list';
@@ -12,4 +11,7 @@ export * from './courses';
 export * from './groups';
 export * from './lessons';
 export * from './secretaries';
-export * from './students'
+export * from './students';
+export * from './my-profile';
+export * from './registration';
+export * from './layout';

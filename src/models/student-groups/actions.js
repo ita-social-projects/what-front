@@ -1,7 +1,7 @@
 import {
   call, put, takeLatest, all, fork, takeEvery,
 } from 'redux-saga/effects';
-import { ApiService } from '../../shared/api-service/index.js';
+import { ApiService } from '@shared/api-service/index.js';
 import * as actionTypes from './action-types.js';
 
 export const globalLoadStudentGroups = () => ({
@@ -24,12 +24,12 @@ function* watchLoadingStudentGroups() {
   yield takeLatest(actionTypes.LOAD_STUDENT_GROUPS, loadStudentGroupsAsync);
 }
 
-export const loadStudentGroupsById = (id) => ({
+export const loadStudentGroupById = (id) => ({
   type: actionTypes.LOAD_STUDENT_GROUP_BY_ID,
-  payload: id,
+  payload: { id },
 });
 
-function* loadStudentGroupsByIdAsync({ payload }) {
+function* loadStudentGroupByIdAsync({ payload }) {
   try {
     yield put({ type: actionTypes.LOADING_BY_ID_STUDENT_GROUP_STARTED });
 
@@ -41,8 +41,8 @@ function* loadStudentGroupsByIdAsync({ payload }) {
   }
 }
 
-function* watchLoadingStudentGroupsById() {
-  yield takeLatest(actionTypes.LOAD_STUDENT_GROUP_BY_ID, loadStudentGroupsByIdAsync);
+function* watchLoadingStudentGroupById() {
+  yield takeLatest(actionTypes.LOAD_STUDENT_GROUP_BY_ID, loadStudentGroupByIdAsync);
 }
 
 export const editStudentGroup = (group) => ({
@@ -57,6 +57,7 @@ function* editStudentGroupsAsync({ payload }) {
     const group = yield call(ApiService.update, `/student_groups/${payload.id}`, payload);
 
     yield put({ type: actionTypes.EDITING_STUDENT_GROUP_SUCCEED, payload: group });
+    yield put({ type: actionTypes.EDIT_CLEAR_LOADED });
   } catch (e) {
     yield put({ type: actionTypes.EDITING_STUDENT_GROUP_FAILED });
   }
@@ -90,7 +91,7 @@ function* watchAddingStudentGroup() {
 export function* studentGroupsWatcher() {
   yield all([
     fork(watchLoadingStudentGroups),
-    fork(watchLoadingStudentGroupsById),
+    fork(watchLoadingStudentGroupById),
     fork(watchEditingStudentGroups),
     fork(watchAddingStudentGroup),
   ]);
