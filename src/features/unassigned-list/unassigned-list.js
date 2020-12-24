@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux';
 import { useActions } from '@/shared/index.js';
 import { newUserSelector, currentUserSelector, addMentor, createSecretary, addStudent } from '@/models/index.js';
 
+import { fetchUnAssignedUserList } from '@/models';
 import Icon from '../../icon.js';
 import { Search, Button, WithLoading } from '../../components/index.js';
-
-import { fetchUnAssignedUserList } from '../../models/index.js';
 
 import styles from './unassigned-list.scss';
 
@@ -16,10 +15,10 @@ export const UnAssignedList = () => {
   const currentUserRole = currentUser.role;
   const { isLoaded, data, isLoading } = useSelector(newUserSelector);
 
-  const [ getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
+  const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
   const [addStudentRole,
-    addSecreteryRole,
+    addSecretaryRole,
     addMentorRole] = useActions([addStudent, createSecretary, addMentor]);
 
   const [search, setSearch] = useState('');
@@ -60,7 +59,7 @@ export const UnAssignedList = () => {
         case 2:
           return addMentorRole(id);
         case 3:
-          return addSecreteryRole(id);
+          return addSecretaryRole(id);
         default: return {};
       }
     }
@@ -89,15 +88,13 @@ export const UnAssignedList = () => {
       default: return {};
     }
   };
-
   const list = () => {
     if (isLoading || isLoaded) {
       if (searchPersonValue.length !== 0) {
         return (searchPersonValue.map((user) => (
           <div className={styles.card}>
-            <p><span className={styles.name}>{user.firstName} {user.lastName}</span><br /><span className='font-italic'>{user.email}</span></p>
+            <p><span className={styles.name}>{user.firstName} {user.lastName}</span><br /><span className="font-italic">{user.email}</span></p>
             <div className={styles['add-role']}>
-              
               <select
                 className={styles.select}
                 onChange={(event) => { changeRole(user.id, event.target.value); }}
@@ -117,13 +114,12 @@ export const UnAssignedList = () => {
         ))
         );
       }
-      return (<WithLoading isLoading={!isLoaded} className={styles.warning} ><span className={styles.massage}>Nobody was found</span></WithLoading>);
     }
-    return (<WithLoading isLoading={!isLoaded} className={styles.warning} />);
+    return (<WithLoading isLoading={!isLoaded} className={styles.warning}><span className={styles.massage}>Nobody was found</span></WithLoading>);
   };
 
   return (
-    <div className={styles['conteiner-list']}>
+    <div className={styles['container-list']}>
       <div className={styles.panel}>
         <Search onSearch={handleSearch} placeholder="Enter a person`s name" />
       </div>
