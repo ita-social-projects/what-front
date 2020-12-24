@@ -68,13 +68,15 @@ export const ListOfMentors = () => {
     <div className="container">
       <div className="row">
         <div className={classNames(styles.heading, 'col-12 mb-2')}>
-          <div className={styles.search__container}>
+          <div className={styles['search-container']}>
             <Search onSearch={handleSearch} placeholder="Enter a mentor's name" />
           </div>
-          <Button onClick={addMentor} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            Add a Mentor
-          </Button>
+          <div className={styles['button-container']}>
+            <Button onClick={addMentor} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              Add a Mentor
+            </Button>
+          </div>
         </div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">

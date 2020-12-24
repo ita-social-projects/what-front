@@ -8,6 +8,7 @@ import {
   Button, Search, Card, WithLoading,
 } from '@/components/index.js';
 import Icon from '@/icon.js';
+import classNames from 'classnames';
 import styles from './list-of-secretaries.scss';
 
 export const ListOfSecretaries = () => {
@@ -73,22 +74,26 @@ export const ListOfSecretaries = () => {
 
   return (
     <div className="container mb-2">
-      <div className="row mb-4">
-        <div className="col-lg-4 col-md-6 offset-lg-4 col-12 text-center mt-2">
-          <Search onSearch={handleSearch} placeholder="Secretary's name" />
+      <div className="row">
+        <div className={classNames(styles.heading, 'col-12 mb-2')}>
+          <div className={styles['search-container']}>
+            <Search onSearch={handleSearch} placeholder="Enter a secretary's name" />
+          </div>
+          <div className={styles['button-container']}>
+            <Button onClick={handleAddSecretary} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              Add a Secretary
+            </Button>
+          </div>
         </div>
-        <div className="col-lg-4 col-md-6 col-12 text-center mt-2">
-          <Button onClick={handleAddSecretary} variant="warning">
-            <Icon icon="Plus" className="icon" size={20} />
-            <span>Add a secretary</span>
-          </Button>
+        <hr className="col-8" />
+        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
+          <WithLoading isLoading={isLoading}>
+            {
+              getSecretaries()
+            }
+          </WithLoading>
         </div>
-      </div>
-      <hr className="col-8" />
-      <div className="col-12 d-flex flex-wrap justify-content-center">
-        <WithLoading isLoading={isLoading}>
-          {getSecretaries()}
-        </WithLoading>
       </div>
     </div>
   );

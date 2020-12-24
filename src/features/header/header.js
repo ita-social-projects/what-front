@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useActions, paths } from '@/shared';
-import { currentUserSelector, logOut } from '@/models';
+import { currentUserSelector, fetchUsersList, fetchAssignedUsersSelector, logOut } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import styles from './header.scss';
@@ -37,7 +37,7 @@ export const Header = ({ roles }) => {
       { id: 4, title: 'Groups', link: paths.GROUPS, active: false },
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
-      { id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false },
+      { id: 7, title: 'Role', link: paths.UNASSIGNED_USERS, active: false },
     ],
     3: [
       { id: 0, title: 'Students', link: paths.STUDENTS, active: false },
@@ -45,14 +45,15 @@ export const Header = ({ roles }) => {
       { id: 4, title: 'Groups', link: paths.GROUPS, active: false },
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
-      { id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false },
+      { id: 7, title: 'Role', link: paths.UNASSIGNED_USERS, active: false },
+
     ],
     2: [
       { id: 3, title: 'Lessons', link: paths.LESSONS, active: true },
       { id: 4, title: 'Groups', link: paths.GROUPS, active: false },
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
-      { id: 7, title: 'Add Role', link: paths.UNASSIGNED_USERS, active: false },
+      { id: 7, title: 'Role', link: paths.UNASSIGNED_USERS, active: false },
     ],
     1: [
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: true },
