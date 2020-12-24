@@ -76,14 +76,16 @@ export const ListOfCourses = () => {
   return (
     <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
-        <div className={classNames(styles['list-head'], 'col-12 mb-2')}>
+        <div className={classNames(styles.heading, 'col-12 mb-2')}>
           <div className={styles['search-container']}>
-            <Search onSearch={handleSearch} placeholder="Enter a course's name" />
+            <Search onSearch={handleSearch} placeholder="Enter a course name" />
           </div>
-          <Button onClick={addCourse} variant="warning" className={styles.button}>
-            <Icon icon="Plus" className="icon" />
-            Add a Course
-          </Button>
+          <div className={styles['button-container']}>
+            <Button onClick={addCourse} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              Add a Course
+            </Button>
+          </div>
         </div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">

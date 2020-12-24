@@ -1,22 +1,18 @@
-@import '../../../styles/main';
-
-.list-head {
-  display:flex;
-  flex-flow: row wrap;
+.heading {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  position: relative;
 }
 
 .search-container {
   display: block;
-  margin: 0 auto;
+  margin: auto;
 }
 
-.button {
+.button-container {
   position: absolute;
-  top: 0;
-  right: 10%;
-
-  width: 18%;
+  right: 0;
 }
 
 .list-wrapper {

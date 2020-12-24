@@ -105,7 +105,7 @@ export const ListOfGroups = () => {
           />
           <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
           <Button onClick={handleAddGroup} variant="warning">
-            <Icon icon="Plus" size={20} className="icon" />
+            <Icon icon="Plus" className="icon" />
             Add Group
           </Button>
         </div>
