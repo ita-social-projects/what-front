@@ -1,6 +1,6 @@
 @import '../../styles/main';
 
-.container-list{
+.conteiner-list{
     @include franklin-regular();
     width: 70%;
     height: 800px;
@@ -41,6 +41,10 @@
     border: 1px solid rgba(0,0,0,.125);
     border-radius: .25rem;
 }
+.name {
+  font-size: larger;
+  font-weight: bolder;
+}
 
 .warning{
     margin: auto;
@@ -50,6 +54,8 @@
 
 .btn{
     height: fit-content;
+    width: max-content;
+    height: min-content;
     margin:10px;
 }
 
@@ -68,6 +74,7 @@
 }
 
 .panel{
+    padding-top: 10px;
     margin: auto;
     width: fit-content;
 }

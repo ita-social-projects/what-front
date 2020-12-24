@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import className from 'classnames';
 import { fetchSecretaries, secretariesSelector } from '@/models/index.js';
 import { paths, useActions } from '@/shared/index.js';
 import {

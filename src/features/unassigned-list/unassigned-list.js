@@ -89,10 +89,10 @@ export const UnAssignedList = () => {
     }
   };
   const list = () => {
-    if (!isLoading || isLoaded) {
+    if (isLoading || isLoaded) {
       if (searchPersonValue.length !== 0) {
         return (searchPersonValue.map((user) => (
-          <div className={styles.card} key={Math.random()}>
+          <div className={styles.card}>
             <p><span className={styles.name}>{user.firstName} {user.lastName}</span><br /><span className="font-italic">{user.email}</span></p>
             <div className={styles['add-role']}>
               <select
