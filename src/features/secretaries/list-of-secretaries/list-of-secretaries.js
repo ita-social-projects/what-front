@@ -59,8 +59,8 @@ export const ListOfSecretaries = () => {
         onDetails={() => handleSecretariesDetails(id)}
       >
         <div className=" w-75">
-          <span className="mb-2 font-weight-bolder pr-2">{firstName}</span>
-          <span className="font-weight-bolder">{lastName}</span>
+          <p className="mb-2 font-weight-bolder pr-2">{firstName}</p>
+          <p className="font-weight-bolder">{lastName}</p>
         </div>
         <p className="font-weight-lighter font-italic small mt-2"><u>{email}</u></p>
       </Card>
