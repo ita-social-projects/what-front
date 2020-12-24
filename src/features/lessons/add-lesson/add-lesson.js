@@ -342,7 +342,9 @@ export const AddLesson = () => {
                           />
                           <datalist id="mentor-list">
                             {mentors.map(({ id, firstName, lastName, email }) => (
-                              <option key={id} value={`${firstName} ${lastName}: ${email}`} />
+                              <option key={id} value={email}>
+                                {`${firstName} ${lastName}`}
+                              </option>
                             ))}
                           </datalist>
                         </div>
