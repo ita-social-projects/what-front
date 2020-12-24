@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux';
 import { useActions } from '@/shared/index.js';
 import { newUserSelector, currentUserSelector, addMentor, createSecretary, addStudent } from '@/models/index.js';
 
+import { fetchUnAssignedUserList } from '@/models';
 import Icon from '../../icon.js';
 import { Search, Button, WithLoading } from '../../components/index.js';
-
-import { fetchUnAssignedUserList } from '../../models/index.js';
 
 import styles from './unassigned-list.scss';
 
@@ -14,12 +13,12 @@ export const UnAssignedList = () => {
   const roles = ['Choose role', 'student', 'mentor', 'secretary'];
   const { currentUser } = useSelector(currentUserSelector);
   const currentUserRole = currentUser.role;
-  const { isLoaded, data } = useSelector(newUserSelector);
+  const { isLoaded, data, isLoading } = useSelector(newUserSelector);
 
-  const [ getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
+  const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
   const [addStudentRole,
-    addSecreteryRole,
+    addSecretaryRole,
     addMentorRole] = useActions([addStudent, createSecretary, addMentor]);
 
   const [search, setSearch] = useState('');
@@ -30,19 +29,19 @@ export const UnAssignedList = () => {
   }, [getUnAssignedUserList]);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoading || isLoaded) {
       setSearchPersonValue(data?.map((user) => ({ id: user.id, role: 1 })));
     }
-  }, [isLoaded, data]);
+  }, [isLoaded, data, isLoading]);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded || !isLoading) {
       const results = data?.filter((user) => (
         (user.firstName.concat(user.lastName)).toUpperCase())
         .includes(search.toUpperCase()));
       setSearchPersonValue(results);
     }
-  }, [isLoaded, data, search]);
+  }, [isLoaded, data, search, isLoading]);
 
   const changeRole = (id, value) => {
     const newState = searchPersonValue.map((user) => (user.id === id ? ({ ...user, role: Number(value) }) : user));
@@ -60,7 +59,7 @@ export const UnAssignedList = () => {
         case 2:
           return addMentorRole(id);
         case 3:
-          return addSecreteryRole(id);
+          return addSecretaryRole(id);
         default: return {};
       }
     }
@@ -89,14 +88,19 @@ export const UnAssignedList = () => {
       default: return {};
     }
   };
-
   const list = () => {
-    if (isLoaded) {
+    if (!isLoading || isLoaded) {
       if (searchPersonValue.length !== 0) {
         return (searchPersonValue.map((user) => (
-          <div className={styles.card}>
-            <p>{user.firstName} {user.lastName}<br />{user.email}</p>
+          <div className={styles.card} key={Math.random()}>
+            <p><span className={styles.name}>{user.firstName} {user.lastName}</span><br /><span className="font-italic">{user.email}</span></p>
             <div className={styles['add-role']}>
+              <select
+                className={styles.select}
+                onChange={(event) => { changeRole(user.id, event.target.value); }}
+              >
+                {options()}
+              </select>
               <Button
                 className={styles.btn}
                 onClick={() => handleButtonClick(user.id)}
@@ -105,24 +109,17 @@ export const UnAssignedList = () => {
                 <Icon icon="Plus" size={20} className="icon" />
                 Add role
               </Button>
-              <select
-                className={styles.select}
-                onChange={(event) => { changeRole(user.id, event.target.value); }}
-              >
-                {options()}
-              </select>
             </div>
           </div>
         ))
         );
       }
-      return (<span className={styles.massage}>Nobody was found</span>);
     }
-    return (<WithLoading isLoading={!isLoaded} className={styles.warning} />);
+    return (<WithLoading isLoading={!isLoaded} className={styles.warning}><span className={styles.massage}>Nobody was found</span></WithLoading>);
   };
 
   return (
-    <div className={styles['conteiner-list']}>
+    <div className={styles['container-list']}>
       <div className={styles.panel}>
         <Search onSearch={handleSearch} placeholder="Enter a person`s name" />
       </div>
