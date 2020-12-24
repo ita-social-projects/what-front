@@ -61,9 +61,8 @@ export const ListOfSecretaries = () => {
         onEdit={() => handleEditSecretary(id)}
         onDetails={() => hadndleSecretarysDetails(id)}
       >
-        <span className="mb-2 font-weight-bolder">{firstName}</span>
-        <span className="pl-2 font-weight-bolder">{lastName}</span>
-        <p className="font-weight-lighter font-italic small mt-2"><u>{email}</u></p>
+        <span className={className(styles['card-name'], 'd-flex font-weight-bold')}>{firstName} {lastName}</span>
+        <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{email}</span>
       </Card>
     ));
 

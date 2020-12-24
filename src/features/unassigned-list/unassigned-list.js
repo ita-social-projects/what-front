@@ -14,7 +14,7 @@ export const UnAssignedList = () => {
   const roles = ['Choose role', 'student', 'mentor', 'secretary'];
   const { currentUser } = useSelector(currentUserSelector);
   const currentUserRole = currentUser.role;
-  const { isLoaded, data } = useSelector(newUserSelector);
+  const { isLoaded, data, isLoading } = useSelector(newUserSelector);
 
   const [ getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
@@ -30,19 +30,19 @@ export const UnAssignedList = () => {
   }, [getUnAssignedUserList]);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoading || isLoaded) {
       setSearchPersonValue(data?.map((user) => ({ id: user.id, role: 1 })));
     }
-  }, [isLoaded, data]);
+  }, [isLoaded, data, isLoading]);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded || !isLoading) {
       const results = data?.filter((user) => (
         (user.firstName.concat(user.lastName)).toUpperCase())
         .includes(search.toUpperCase()));
       setSearchPersonValue(results);
     }
-  }, [isLoaded, data, search]);
+  }, [isLoaded, data, search, isLoading]);
 
   const changeRole = (id, value) => {
     const newState = searchPersonValue.map((user) => (user.id === id ? ({ ...user, role: Number(value) }) : user));
@@ -91,12 +91,19 @@ export const UnAssignedList = () => {
   };
 
   const list = () => {
-    if (isLoaded) {
+    if (isLoading || isLoaded) {
       if (searchPersonValue.length !== 0) {
         return (searchPersonValue.map((user) => (
           <div className={styles.card}>
-            <p>{user.firstName} {user.lastName}<br />{user.email}</p>
+            <p><span className={styles.name}>{user.firstName} {user.lastName}</span><br /><span className='font-italic'>{user.email}</span></p>
             <div className={styles['add-role']}>
+              
+              <select
+                className={styles.select}
+                onChange={(event) => { changeRole(user.id, event.target.value); }}
+              >
+                {options()}
+              </select>
               <Button
                 className={styles.btn}
                 onClick={() => handleButtonClick(user.id)}
@@ -105,18 +112,12 @@ export const UnAssignedList = () => {
                 <Icon icon="Plus" size={20} className="icon" />
                 Add role
               </Button>
-              <select
-                className={styles.select}
-                onChange={(event) => { changeRole(user.id, event.target.value); }}
-              >
-                {options()}
-              </select>
             </div>
           </div>
         ))
         );
       }
-      return (<span className={styles.massage}>Nobody was found</span>);
+      return (<WithLoading isLoading={!isLoaded} className={styles.warning} ><span className={styles.massage}>Nobody was found</span></WithLoading>);
     }
     return (<WithLoading isLoading={!isLoaded} className={styles.warning} />);
   };

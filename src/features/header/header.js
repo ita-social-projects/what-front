@@ -46,6 +46,7 @@ export const Header = ({ roles }) => {
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
       { id: 7, title: 'Role', link: paths.UNASSIGNED_USERS, active: false },
+
     ],
     2: [
       { id: 3, title: 'Lessons', link: paths.LESSONS, active: true },
