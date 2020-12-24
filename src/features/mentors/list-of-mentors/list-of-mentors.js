@@ -54,7 +54,6 @@ export const ListOfMentors = () => {
           <p className="mb-2 font-weight-bolder pr-2">{mentor.firstName}</p>
           <p className="font-weight-bolder">{mentor.lastName}</p>
         </div>
-        <p className="font-weight-lighter font-italic small mt-2"><u>{mentor.email}</u></p>
       </Card>
     ));
 

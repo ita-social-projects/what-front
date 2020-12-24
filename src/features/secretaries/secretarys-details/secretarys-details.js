@@ -26,18 +26,18 @@ export const SecretarysDetails = ({ id }) => {
           <hr />
           <WithLoading isLoading={isLoading && !loaded} className="d-block mx-auto">
             <div className="row mt-3">
-              <div className="col-sm-4 font-weight-bold pb-1">First Name:</div>
-              <div className="col-sm-8">{secretary?.firstName}</div>
+              <div className="col-6">First Name:</div>
+              <div className="col-6">{secretary?.firstName}</div>
             </div>
             <hr />
             <div className="row mt-3">
-              <div className="col-sm-4 font-weight-bold pb-1">Last Name:</div>
-              <div className="col-sm-8">{secretary?.lastName}</div>
+              <div className="col-6 pb-1">Last Name:</div>
+              <div className="col-6">{secretary?.lastName}</div>
             </div>
             <hr />
             <div className="row mt-3">
-              <div className="col-sm-4 font-weight-bold pb-1">Email address:</div>
-              <div className="col-sm-8">{secretary?.email}</div>
+              <div className="col-6 pb-1">Email address:</div>
+              <div className="col-6">{secretary?.email}</div>
             </div>
             <hr />
           </WithLoading>
