@@ -1,7 +1,7 @@
 @import '../../styles/main';
 
 .conteiner-list{
-    @include franklin-regular(); 
+    @include franklin-regular();
     width: 70%;
     height: 800px;
     margin: auto;
@@ -40,6 +40,10 @@
     border: 1px solid rgba(0,0,0,.125);
     border-radius: .25rem;
 }
+.name {
+  font-size: larger;
+  font-weight: bolder;
+}
 
 .warning{
     margin: auto;
@@ -47,12 +51,13 @@
     left: 50%;
 }
 
-.btn{ 
-    height: fit-content;
+.btn{
+  width: max-content;
+  height: min-content;
     margin:10px;
 }
 
-.select{ 
+.select{
     height: fit-content;
     margin:10px;
     padding: 7px;
@@ -67,6 +72,7 @@
 }
 
 .panel{
+    padding-top: 10px;
     margin: auto;
     width: fit-content;
 }
