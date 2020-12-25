@@ -62,7 +62,7 @@ export const StudentDetails = () => {
                 >
                   <div className="col-12 col-md-6 d-flex flex-wrap">
                     {studentGroups
-                      .map(({id, name}) => <div className='pb-2' key={id}>
+                      .map(({id, name}) => <div className='pr-2' key={id}>
                         <Badge pill variant="primary">
                           <Link to={`${paths.GROUPS_DETAILS}/${id}`} 
                             className="text-decoration-none text-white"
