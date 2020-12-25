@@ -51,7 +51,7 @@ export const GroupDetails = ({
                       <div className="pr-2" key={mentor.id}>
                         <Badge pill variant="warning">
                           <Link to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
-                            className="text-decoration-none text-white"
+                            className="text-decoration-none text-dark"
                           >{mentor.firstName} {mentor.lastName}</Link>
                         </Badge>
                       </div>
