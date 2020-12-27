@@ -6,7 +6,7 @@ import { paths, useActions } from '@/shared';
 import { coursesSelector, editCourse, editedCourseSelector } from '@/models';
 import { WithLoading } from '@/components';
 import classNames from 'classnames';
-import { validateGroupName } from '../../validation/validation-helpers.js';
+import { editCourseValidation } from '@features/validation/validation-helpers.js';
 
 import styles from './edit-course.scss';
 
@@ -61,6 +61,7 @@ export const EditCourse = ({ id }) => {
                   name: course?.name,
                 }}
                 onSubmit={onSubmit}
+                validationSchema={editCourseValidation}
               >
                 {({ values, errors }) => (
                   <Form name="start-group">
@@ -75,7 +76,6 @@ export const EditCourse = ({ id }) => {
                           name="name"
                           id="name"
                           placeholder="Course name"
-                          validate={validateGroupName}
                         />
                       </div>
                       {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
