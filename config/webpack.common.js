@@ -12,7 +12,11 @@ const isDev = mode === 'development';
 console.log(chalk.black.bgGreen.bold(`Environment set to ${mode} mode`));
 
 module.exports = {
-  entry: [`${paths.src._}/index.js`],
+  entry: [
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
+    `${paths.src._}/index.js`,
+  ],
   output: {
     path: paths.dist,
     filename: '[name].bundle.js',
@@ -54,7 +58,14 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: {
+          loader: require.resolve('babel-loader'),
+          options: {
+            plugins: [
+              isDev && require.resolve('react-refresh/babel'),
+            ],
+          },
+        },
       },
 
       {
