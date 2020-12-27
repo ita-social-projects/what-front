@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-
 import { useActions } from '@shared/hooks/index.js';
 import { Button, Search, WithLoading } from '@components/index.js';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
@@ -92,7 +91,7 @@ export const ListOfGroups = () => {
           />
           <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
           <Button onClick={handleAddGroup} variant="warning">
-            <Icon icon="Plus" size={20} className="icon" />
+            <Icon icon="Plus" className="icon" />
             Add Group
           </Button>
         </div>
