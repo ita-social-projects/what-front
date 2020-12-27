@@ -36,7 +36,7 @@ export const AddCourse = () => {
             onSubmit={onSubmit}
             validationSchema={addCourseValidation}
           >
-            {({ values, errors }) => (
+            {({ values, errors, isValid, dirty }) => (
               <Form className="px-2 py-4" name="start-group">
                 <h3>Add a course</h3>
                 <hr />
@@ -64,7 +64,7 @@ export const AddCourse = () => {
                   <input
                     type="submit"
                     name="submit-btn"
-                    disabled={isLoading || errors.name}
+                    disabled={!isValid || !dirty || isLoading || errors.name}
                     className={classNames('btn btn-success w-25', styles.button)}
                     value="Save"
                   />

@@ -212,7 +212,7 @@ export const EditMentor = ({ id }) => {
                 validationSchema={editMentorValidation}
                 onSubmit={onSubmit}
               >
-                {({ values, errors }) => (
+                {({ values, errors, isValid, dirty }) => (
                   <Form>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
@@ -384,12 +384,13 @@ export const EditMentor = ({ id }) => {
                           className="w-100"
                           variant="danger"
                           onClick={handleShowModal}
-                          disabled={editedIsLoading || deletedIsLoading}
+                          disabled={!isValid || dirty || editedIsLoading || deletedIsLoading}
                         >Fire
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
                         <button
+                          disabled={!dirty}
                           className={classNames('w-100 btn btn-secondary', styles.button)}
                           type="reset"
                           onClick={resetInput}
@@ -400,7 +401,7 @@ export const EditMentor = ({ id }) => {
                         <button
                           className={classNames('w-100 btn btn-success', styles.button)}
                           type="submit"
-                          disabled={editedIsLoading || deletedIsLoading
+                          disabled={!isValid || !dirty || editedIsLoading || deletedIsLoading
                                 || errors.firstName || errors.lastName || errors.email}
                         >Save
                         </button>

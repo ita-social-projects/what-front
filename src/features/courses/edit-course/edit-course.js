@@ -63,7 +63,7 @@ export const EditCourse = ({ id }) => {
                 onSubmit={onSubmit}
                 validationSchema={editCourseValidation}
               >
-                {({ values, errors }) => (
+                {({ values, errors, isValid, dirty }) => (
                   <Form name="start-group">
                     <div className="row mb-3">
                       <div className="col d-flex align-items-center">
@@ -90,7 +90,7 @@ export const EditCourse = ({ id }) => {
                       <input
                         type="submit"
                         name="submit-btn"
-                        disabled={isEditedLoading || errors.name}
+                        disabled={!isValid || !dirty || isEditedLoading || errors.name}
                         className={classNames('btn btn-success w-25', styles.button)}
                         value="Save"
                       />

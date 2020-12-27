@@ -137,7 +137,7 @@ export const EditGroup = ({
               validationSchema={editGroupValidation}
               validateOnMount={false}
             >
-              {({ values, errors, setFieldValue }) => (
+              {({ values, errors, setFieldValue, isValid, dirty }) => (
                 <Form className="px-2 py-4" name="start-group">
                   <h3>Group Editing</h3>
                   <hr />
@@ -325,10 +325,10 @@ export const EditGroup = ({
                     </div>
                   </div>
                   <div className="row justify-content-around mt-4">
-                    <Button type="reset" className="btn btn-secondary w-25" disabled={isEditing} onClick={handleReset}>
+                    <Button type="reset" className="btn btn-secondary w-25" disabled={!dirty || isEditing} onClick={handleReset}>
                       Clear
                     </Button>
-                    <Button type="submit" variant="success" className="btn btn-secondary w-25" disabled={isEditing}>
+                    <Button type="submit" variant="success" className="btn btn-secondary w-25" disabled={!isValid || !dirty || isEditing}>
                       Confirm
                     </Button>
                   </div>

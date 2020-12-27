@@ -156,7 +156,7 @@ export const EditStudentsDetails = ({ id }) => {
                 validationSchema={editStudentValidation}
                 onSubmit={onSubmit}
               >
-                {({ values, errors }) => (
+                {({ values, errors, isValid, dirty }) => (
                   <Form>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
@@ -269,12 +269,13 @@ export const EditStudentsDetails = ({ id }) => {
                           className="w-100"
                           variant="danger"
                           onClick={handleShowModal}
-                          disabled={isEditedLoading || isRemovedLoading}
+                          disabled={!isValid || dirty || isEditedLoading || isRemovedLoading}
                         >Exclude
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
                         <button
+                          disabled={!dirty}
                           className={classNames('w-100 btn btn-secondary', styles.button)}
                           type="reset"
                           onClick={resetInput}
@@ -285,7 +286,7 @@ export const EditStudentsDetails = ({ id }) => {
                         <button
                           className={classNames('w-100 btn btn-success', styles.button)}
                           type="submit"
-                          disabled={isEditedLoading || isRemovedLoading
+                          disabled={!isValid || !dirty || isEditedLoading || isRemovedLoading
                             || errors.firstName || errors.lastName || errors.email}
                         >Save
                         </button>
