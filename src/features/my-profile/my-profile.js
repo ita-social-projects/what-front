@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { currentUserSelector, fetchAssignedUsersSelector, fetchUsersList } from '@/models';
 import { Button, WithLoading } from '@/components';
-import { useActions } from '@/shared';
+import { paths, useActions } from '@/shared';
+import { useHistory } from 'react-router-dom';
 import styles from './my-profile.scss';
 
 export const MyProfile = () => {
@@ -17,9 +18,7 @@ export const MyProfile = () => {
 
   const currentUser = users.find((user) => user.id === data.id);
 
-  const handleChangePassword = () => {
-    console.log('click');
-  };
+  const history = useHistory();
 
   return (
     <div className={styles.wrapper}>
@@ -27,7 +26,7 @@ export const MyProfile = () => {
         <div className="container pb-2">
           <h3 className="pt-3">My Profile</h3>
           <hr />
-          <WithLoading isLoading={isLoading && !loaded} className="d-block mx-auto">
+          <WithLoading isLoading={isLoading || !loaded} className="d-block mx-auto">
             <div className="row mt-3">
               <div className="col-sm-4 font-weight-bold pb-1">First Name:</div>
               <div className="col-sm-8">{currentUser?.firstName}</div>
@@ -45,7 +44,7 @@ export const MyProfile = () => {
             <hr />
             <div className="row mb-2">
               <div className="col-sm-6 offset-sm-6">
-                <Button className="float-right" onClick={handleChangePassword} variant="secondary">
+                <Button className="float-right" onClick={() => (history.push(paths.CHANGE_PASSWORD))} variant="secondary">
                   <span>Change password</span>
                 </Button>
               </div>
