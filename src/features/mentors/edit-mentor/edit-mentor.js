@@ -54,9 +54,6 @@ export const EditMentor = ({ id }) => {
     isLoaded: allCoursesAreLoaded,
   } = useSelector(coursesSelector, shallowEqual);
 
-  console.log(allCourses);
-  console.log(allGroups);
-
   const {
     isLoading: editedIsLoading,
     isLoaded: editedIsLoaded,

@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { paths } from '@/shared';
 import { WithLoading } from '@/components';
+import { Badge } from 'react-bootstrap';
 import { currentStudentGroupsSelector, currentStudentSelector } from '@/models';
 import styles from './student-details.scss';
 
@@ -17,7 +20,6 @@ export const StudentDetails = () => {
   const {
     data: studentGroups,
     isLoading: areStudentGroupsLoading,
-    isLoaded: areStudentGroupsLoaded,
     error: studentGroupsError,
   } = useSelector(currentStudentGroupsSelector, shallowEqual);
 
@@ -59,9 +61,16 @@ export const StudentDetails = () => {
                   isLoading={areStudentGroupsLoading}
                   className={styles['loader-centered']}
                 >
-                  <div className="col-12 col-md-6">
+                  <div className="col-12 col-md-6 d-flex flex-wrap">
                     {studentGroups
-                      .map(({ id, name }) => <div className="pb-2" key={id}>{name}</div>)}
+                      .map(({id, name}) => <div className='pr-2' key={id}>
+                        <Badge pill variant="primary">
+                          <Link to={`${paths.GROUPS_DETAILS}/${id}`} 
+                            className="text-decoration-none text-white"
+                          >{name}</Link>
+                        </Badge>
+                      </div>)
+                    }
                   </div>
                 </WithLoading>
               </div>
