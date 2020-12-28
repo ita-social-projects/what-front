@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import className from 'classnames';
 import { fetchSecretaries, secretariesSelector } from '@/models/index.js';
 import { paths, useActions } from '@/shared/index.js';
-import {
-  Button, Search, Card, WithLoading,
-} from '@/components/index.js';
+import { Button, Search, Card, WithLoading } from '@/components/index.js';
+import { Pagination } from '@/components/pagination';
 import Icon from '@/icon.js';
 import styles from './list-of-secretaries.scss';
-import { Pagination } from '@/components/pagination';
 
 export const ListOfSecretaries = () => {
   const [loadSecretaries] = useActions([fetchSecretaries]);
@@ -47,7 +44,7 @@ export const ListOfSecretaries = () => {
     history.push(`${paths.SECRETARY_EDIT}/${id}`);
   };
 
-  const hadndleSecretarysDetails = (id) => {
+  const handleSecretariesDetails = (id) => {
     history.push(`${paths.SECRETARIES_DETAILS}/${id}`);
   };
 
@@ -55,7 +52,7 @@ export const ListOfSecretaries = () => {
     const indexOfLastSecretary = currentPage * secretariesPerPage;
     const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
 
-    const secretarise = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
+    const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
       .map(({
         id, firstName, lastName, email,
       }) => (
@@ -65,17 +62,20 @@ export const ListOfSecretaries = () => {
           iconName="Edit"
           buttonName="Details"
           onEdit={() => handleEditSecretary(id)}
-          onDetails={() => hadndleSecretarysDetails(id)}
+          onDetails={() => handleSecretariesDetails(id)}
         >
-          <span className={className(styles['card-name'], 'd-flex font-weight-bold')}>{firstName} {lastName}</span>
-          <span className={className(styles['card-email'], 'd-flex mt-2 mb-2 text-truncate')}>{email}</span>
+          <div className=" w-75">
+            <span className="mb-2 font-weight-bolder pr-2">{firstName}</span>
+            <span className="font-weight-bolder">{lastName}</span>
+          </div>
+          <p className="font-weight-lighter font-italic small mt-2"><u>{email}</u></p>
         </Card>
       ));
 
-    if (!secretarise.length && search) {
-      return <h4>Secretaries not found</h4>;
+    if (!secretaries.length && search) {
+      return <h4>Secretary is not found</h4>;
     }
-    return secretarise;
+    return secretaries;
   };
 
   const paginate = (pageNumber) => {
@@ -84,15 +84,25 @@ export const ListOfSecretaries = () => {
 
   return (
     <div className={className("container", styles['list-wrapper'])}>
-      <div className="row mb-4">
-        <div className="col-lg-4 col-md-6 offset-lg-4 col-12 text-center mt-2">
+      <div className="row">
+        <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
-        <div className="col-lg-4 col-md-6 col-12 text-center mt-2">
+        <div className="col-md-4 col-12 text-right">
           <Button onClick={handleAddSecretary} variant="warning">
-            <Icon icon="Plus" className="icon" size={20} />
+            <Icon icon="Plus" className="icon" />
             <span>Add a secretary</span>
           </Button>
+        </div>
+      </div>
+      <div>
+        <hr className="col-8" />
+        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
+          <WithLoading isLoading={isLoading}>
+            {
+              getSecretaries()
+            }
+          </WithLoading>
         </div>
       </div>
       <hr className="col-8" />

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import classNames from 'classnames';
-import { Card, Search, Button, WithLoading } from '@/components/index.js';
-import Icon from '@/icon.js';
 import { paths, useActions } from '@/shared/index.js';
 import { fetchActiveMentors, mentorsActiveSelector } from '@/models/index.js';
-import styles from './list-of-mentors.scss';
+import { Card, Search, Button, WithLoading } from '@/components/index.js';
 import { Pagination } from '@/components/pagination';
+import Icon from '@/icon.js';
+import styles from './list-of-mentors.scss';
 
 export const ListOfMentors = () => {
   const [loadActiveMentors] = useActions([fetchActiveMentors]);
@@ -59,8 +58,10 @@ export const ListOfMentors = () => {
           onEdit={() => mentorEditing(mentor.id)}
           onDetails={() => mentorDetails(mentor.id)}
         >
-          <span className="mb-2 font-weight-bolder">{mentor.firstName}</span>
-          <span className="pl-2 font-weight-bolder">{mentor.lastName}</span>
+          <div className="w-75">
+            <span className="mb-2 font-weight-bolder pr-2">{mentor.firstName}</span>
+            <span className="font-weight-bolder">{mentor.lastName}</span>
+          </div>
           <p className="font-weight-lighter font-italic small mt-2"><u>{mentor.email}</u></p>
         </Card>
       ));
@@ -78,23 +79,23 @@ export const ListOfMentors = () => {
   return (
     <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
-        <div className={classNames(styles.heading, 'col-12 mb-2')}>
-          <div className={styles['search-container']}>
-            <Search onSearch={handleSearch} placeholder="Enter a mentor's name" />
-          </div>
-          <div className={styles['button-container']}>
-            <Button onClick={addMentor} variant="warning">
-              <Icon icon="Plus" className="icon" />
-              Add a Mentor
-            </Button>
-          </div>
+        <div className="col-md-4 offset-md-4 col-12 text-center">
+          <Search onSearch={handleSearch} placeholder="Mentor's name" />
         </div>
+        <div className="col-md-4 col-12 text-right">
+          <Button onClick={addMentor} variant="warning">
+            <Icon icon="Plus" className="icon" />
+            <span>Add a mentor</span>
+          </Button>
+        </div>
+      </div>
+      <div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
           <WithLoading isLoading={isLoading}>
             {
-            mentorsList()
-          }
+              mentorsList()
+            }
           </WithLoading>
         </div>
       </div>

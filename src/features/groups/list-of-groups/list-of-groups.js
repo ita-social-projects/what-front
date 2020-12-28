@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-
 import { useActions } from '@shared/hooks/index.js';
 import { Button, Search, WithLoading } from '@components/index.js';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
