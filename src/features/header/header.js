@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Link, Redirect, useHistory, useParams } from 'react-router-dom';
 import classNames from 'classnames';
-import { Link, Redirect } from 'react-router-dom';
 import { useActions, paths } from '@/shared';
 import { currentUserSelector, fetchUsersList, fetchAssignedUsersSelector, logOut } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
@@ -27,6 +27,10 @@ const sidebarToggler = (
 
 export const Header = ({ roles }) => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+
+  const history = useHistory();
+
+  const currentURL = history.location.pathname;
 
   const rolesObject = {
     4: [
@@ -68,7 +72,11 @@ export const Header = ({ roles }) => {
 
   useEffect(() => {
     const headerArray = rolesObject[currentUser.role];
-    setTabs(headerArray);
+    const resultArr = headerArray.map((tab) => ({
+      ...tab,
+      active: currentURL.includes(tab.title.toLowerCase()),
+    }));
+    setTabs(resultArr);
   }, [currentUser]);
 
   const toggleActiveTab = (event) => {
