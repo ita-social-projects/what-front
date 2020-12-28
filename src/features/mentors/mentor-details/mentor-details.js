@@ -37,19 +37,19 @@ export const MentorDetails = ({ id }) => {
       <h3>Mentor Details</h3>
       <hr />
       <WithLoading isLoading={isLoading || !isLoaded} className="d-block mx-auto m-0">
-        <div className="d-flex flex-column">
-          <div className="row">
-            <p className="col-6">First Name:</p>
-            <p className="col-6">{mentor?.firstName}</p>
-          </div>
-          <div className="row">
-            <p className="col-6">Last Name:</p>
-            <p className="col-6">{mentor?.lastName}</p>
-          </div>
-          <div className="row">
-            <p className="col-6">Email:</p>
-            <p className="col-6">{mentor?.email}</p>
-          </div>
+        <div className="row">
+          <p className="col-12 col-md-6 font-weight-bolder">First Name:</p>
+          <p className="col-12 col-md-6">{mentor?.firstName}</p>
+        </div>
+        <hr />
+        <div className="row">
+          <p className="col-12 col-md-6 font-weight-bolder">Last Name:</p>
+          <p className="col-12 col-md-6 ">{mentor?.lastName}</p>
+        </div>
+        <hr />
+        <div className="row">
+          <p className="col-12 col-md-6 font-weight-bolder">Email:</p>
+          <p className="col-12 col-md-6">{mentor?.email}</p>
         </div>
       </WithLoading>
     </div>

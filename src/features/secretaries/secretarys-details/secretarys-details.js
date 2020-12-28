@@ -25,21 +25,20 @@ export const SecretarysDetails = ({ id }) => {
           <h3 className="pt-3">Secretary&apos;s details</h3>
           <hr />
           <WithLoading isLoading={isLoading && !loaded} className="d-block mx-auto">
-            <div className="row mt-3">
-              <div className="col-6">First Name:</div>
-              <div className="col-6">{secretary?.firstName}</div>
+            <div className="row">
+              <div className="col-12 col-md-6 font-weight-bolder">First Name:</div>
+              <div className="col-12 col-md-6">{secretary?.firstName}</div>
             </div>
             <hr />
-            <div className="row mt-3">
-              <div className="col-6 pb-1">Last Name:</div>
-              <div className="col-6">{secretary?.lastName}</div>
+            <div className="row">
+              <div className="col-12 col-md-6 font-weight-bolder">Last Name:</div>
+              <div className="col-12 col-md-6">{secretary?.lastName}</div>
             </div>
             <hr />
-            <div className="row mt-3">
-              <div className="col-6 pb-1">Email address:</div>
-              <div className="col-6">{secretary?.email}</div>
+            <div className="row mb-3">
+              <div className="col-12 col-md-6 font-weight-bolder">Email address:</div>
+              <div className="col-12 col-md-6">{secretary?.email}</div>
             </div>
-            <hr />
           </WithLoading>
         </div>
       </div>
