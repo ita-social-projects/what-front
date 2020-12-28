@@ -2,13 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@/shared/index.js';
-import {
-  Card, Search, Button, WithLoading, Pagination,
-} from '@/components/index.js';
+import { loadActiveStudents, activeStudentsSelector } from '@/models/index.js';
+import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
-import {
-  loadActiveStudents, activeStudentsSelector,
-} from '@/models/index.js';
 
 export const ListOfStudents = () => {
   const [fetchStudents] = useActions([loadActiveStudents]);
@@ -84,7 +80,7 @@ export const ListOfStudents = () => {
   };
 
   return (
-    <div className={classNames("container", styles['list-wrapper'])}>
+    <div className="container" style={{minHeight: 775}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Student's name" />

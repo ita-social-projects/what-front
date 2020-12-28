@@ -3,10 +3,8 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { fetchSecretaries, secretariesSelector } from '@/models/index.js';
 import { paths, useActions } from '@/shared/index.js';
-import { Button, Search, Card, WithLoading } from '@/components/index.js';
-import { Pagination } from '@/components/pagination';
+import { Button, Search, Card, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
-import styles from './list-of-secretaries.scss';
 
 export const ListOfSecretaries = () => {
   const [loadSecretaries] = useActions([fetchSecretaries]);
@@ -83,7 +81,7 @@ export const ListOfSecretaries = () => {
   };
 
   return (
-    <div className={className("container", styles['list-wrapper'])}>
+    <div className="container" style={{minHeight: 775}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
@@ -104,12 +102,6 @@ export const ListOfSecretaries = () => {
             }
           </WithLoading>
         </div>
-      </div>
-      <hr className="col-8" />
-      <div className="col-12 d-flex flex-wrap justify-content-center">
-        <WithLoading isLoading={isLoading}>
-          {getSecretaries()}
-        </WithLoading>
       </div>
       <Pagination itemsPerPage={secretariesPerPage} totalItems={searchResults.length} paginate={paginate}/>
     </div>

@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import { paths, useActions } from '@/shared';
 import { fetchLessons, lessonsSelector } from '@/models/index.js';
-import {
-  Card, Search, Button, WithLoading,
-} from '@/components/index.js';
-import Icon from '@/icon.js';
+import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
+import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
-import { Pagination } from '@/components/pagination';
+import Icon from '@/icon.js';
 
 export const ListOfLessons = () => {
   const history = useHistory();

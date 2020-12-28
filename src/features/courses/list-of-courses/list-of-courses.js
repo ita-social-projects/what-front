@@ -3,10 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
 import { fetchCourses, coursesSelector } from '@/models/index.js';
-import { Card, Search, Button, WithLoading } from '../../../components/index.js';
-import { Pagination } from '@/components/pagination/index.js';
+import { Card, Search, Button, WithLoading, Pagination } from '../../../components/index.js';
 import Icon from '../../../icon.js';
 import styles from './list-of-courses.scss';
+import classNames from 'classnames';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');

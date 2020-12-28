@@ -3,10 +3,8 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@/shared/index.js';
 import { fetchActiveMentors, mentorsActiveSelector } from '@/models/index.js';
-import { Card, Search, Button, WithLoading } from '@/components/index.js';
-import { Pagination } from '@/components/pagination';
+import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
-import styles from './list-of-mentors.scss';
 
 export const ListOfMentors = () => {
   const [loadActiveMentors] = useActions([fetchActiveMentors]);
@@ -77,7 +75,7 @@ export const ListOfMentors = () => {
   };
 
   return (
-    <div className={classNames("container", styles['list-wrapper'])}>
+    <div className="container" style={{minHeight: 775}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Mentor's name" />
