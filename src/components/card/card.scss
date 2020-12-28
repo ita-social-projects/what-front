@@ -22,11 +22,13 @@
 
 .card-title {
   @include baskerville-regular();
+  width:95%;
   font-size: 20px;
 }
 
 .card-content {
   @include franklin-regular();
+  width:95%;
   font-size: 18px;
   padding-top: 10px;
   margin: 0;
