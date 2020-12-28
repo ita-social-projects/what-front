@@ -12,7 +12,7 @@ export const ListOfStudents = () => {
   const [filteredStudentsList, setFilteredStudentsList] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [studentsPerPage] = useState(12);
+  const [studentsPerPage] = useState(9);
 
   const { data, isLoading } = useSelector(activeStudentsSelector, shallowEqual);
 
@@ -80,7 +80,7 @@ export const ListOfStudents = () => {
   };
 
   return (
-    <div className="container" style={{minHeight: 775}}>
+    <div className="container" style={{minHeight: 750}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Student's name" />
@@ -102,7 +102,13 @@ export const ListOfStudents = () => {
           </WithLoading>
         </div>
       </div>
-      <Pagination itemsPerPage={studentsPerPage} totalItems={filteredStudentsList.length} paginate={paginate}/>
+        {filteredStudentsList.length > 9 && 
+          <Pagination 
+            itemsPerPage={studentsPerPage} 
+            totalItems={filteredStudentsList.length} 
+            paginate={paginate}
+          />
+        }
     </div>
   );
 };

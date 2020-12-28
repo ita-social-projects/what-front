@@ -95,7 +95,13 @@ export const ListOfCourses = () => {
           </WithLoading>
         </div>
       </div>
-      <Pagination itemsPerPage={coursesPerPage} totalItems={filteredCourses.length} paginate={paginate}/>
+      {filteredCourses.length > 12 && 
+        <Pagination 
+          itemsPerPage={coursesPerPage} 
+          totalItems={filteredCourses.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };

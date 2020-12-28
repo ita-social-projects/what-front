@@ -125,7 +125,13 @@ export const ListOfLessons = () => {
           </WithLoading>
         </div>
       </div>
-      <Pagination itemsPerPage={lessonsPerPage} totalItems={filteredLessonsList.length} paginate={paginate}/>
+      {filteredLessonsList.length > 12 && 
+        <Pagination 
+          itemsPerPage={lessonsPerPage} 
+          totalItems={filteredLessonsList.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };

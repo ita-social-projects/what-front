@@ -11,7 +11,7 @@ export const ListOfMentors = () => {
   const [searchMentorValue, setSearchMentorValue] = useState('');
   const [filteredMentorList, setFilteredMentorList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [mentorsPerPage] = useState(12);
+  const [mentorsPerPage] = useState(9);
   const { data, isLoading } = useSelector(mentorsActiveSelector, shallowEqual);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export const ListOfMentors = () => {
   };
 
   return (
-    <div className="container" style={{minHeight: 775}}>
+    <div className="container" style={{minHeight: 750}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Mentor's name" />
@@ -96,7 +96,13 @@ export const ListOfMentors = () => {
           </WithLoading>
         </div>
       </div>
-      <Pagination itemsPerPage={mentorsPerPage} totalItems={filteredMentorList.length} paginate={paginate}/>
+      {filteredMentorList.length > 9 && 
+        <Pagination 
+          itemsPerPage={mentorsPerPage} 
+          totalItems={filteredMentorList.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };

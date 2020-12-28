@@ -12,7 +12,7 @@ export const ListOfSecretaries = () => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage] = useState(12);
+  const [secretariesPerPage] = useState(9);
 
   const { data, isLoading } = useSelector(secretariesSelector, shallowEqual);
 
@@ -80,7 +80,7 @@ export const ListOfSecretaries = () => {
   };
 
   return (
-    <div className="container" style={{minHeight: 775}}>
+    <div className="container" style={{minHeight: 750}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
@@ -102,7 +102,13 @@ export const ListOfSecretaries = () => {
           </WithLoading>
         </div>
       </div>
-      <Pagination itemsPerPage={secretariesPerPage} totalItems={searchResults.length} paginate={paginate}/>
+      {searchResults.length > 9 &&  
+        <Pagination 
+          itemsPerPage={secretariesPerPage} 
+          totalItems={searchResults.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };

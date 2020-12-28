@@ -113,7 +113,13 @@ export const ListOfGroups = () => {
           </WithLoading>
         </div>
       </div>
-      <Pagination itemsPerPage={groupsPerPage} totalItems={listByDate.length} paginate={paginate}/>
+      {listByDate.length > 12 && 
+        <Pagination 
+          itemsPerPage={groupsPerPage} 
+          totalItems={listByDate.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };
