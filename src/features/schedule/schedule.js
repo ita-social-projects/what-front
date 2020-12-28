@@ -5,7 +5,10 @@ import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { paths, useActions } from '@/shared';
-import { schedulesSelector, fetchSchedules, globalLoadStudentGroups, loadStudentGroupsSelector, currentUserSelector } from '@/models';
+import {
+  schedulesSelector, fetchSchedules, globalLoadStudentGroups,
+  loadStudentGroupsSelector, currentUserSelector,
+} from '@/models';
 import { Button, WithLoading } from '@/components';
 import Icon from '@/icon';
 import styles from './schedule.scss';

@@ -8,9 +8,9 @@ import { login, currentUserSelector } from '@/models/index.js';
 import { Button, WithLoading } from '@/components/index.js';
 
 import { Formik, Field, Form } from 'formik';
+import classNames from 'classnames';
 import { authValidationSchema } from '../validation/validation-helpers.js';
 
-import classNames from 'classnames';
 import styles from './auth.scss';
 
 export const Auth = () => {
@@ -35,7 +35,7 @@ export const Auth = () => {
   };
 
   useEffect(() => {
-    if (loaded && !requestError) {
+    if (loaded && !requestError && currentUser) {
       history.push(homepages[currentUser.role]);
     }
   }, [currentUser, history, loaded, requestError]);
