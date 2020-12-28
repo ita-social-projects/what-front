@@ -27,7 +27,7 @@ const sidebarToggler = (
 
 export const Header = ({ roles }) => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-  
+
   const rolesObject = {
     4: [
       {id: 0, title: 'Students', link: paths.STUDENTS, active: true},
@@ -59,27 +59,27 @@ export const Header = ({ roles }) => {
       {id: 8, title: 'Support', link: paths.SUPPORT, active: false},
     ]
   }
-  
+
   const [loadUsers] = useActions([fetchUsersList]);
   const { users, isLoading, loaded } = useSelector(fetchAssignedUsersSelector, shallowEqual);
-  
+
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
-  
+
   const currentUserDefined = users.find((user) => user.id === currentUser.id);
-  
-  
+
+
   const [tabs, setTabs] = useState([]);
   const [sidebar, setSidebar] = useState({
     active: false,
   });
-  
+
   useEffect(() => {
     const headerArray = rolesObject[currentUser.role]
     setTabs(headerArray)
   }, [currentUser])
-  
+
   const toggleActiveTab = (event) => {
     setTabs((prevstate) => {
       prevstate.find((tab) => {
@@ -87,7 +87,7 @@ export const Header = ({ roles }) => {
           tab.active = false;
         }
       });
-      
+
       return prevstate.map((tab, index) => {
         if(index == event.target.dataset.id) {
           return {
@@ -109,17 +109,17 @@ export const Header = ({ roles }) => {
     });
   }
   const [logoutDefined] = useActions([logOut]);
-  
+
   const loggingOut = () => {
     logoutDefined();
   };
-  
+
   return (
     <nav className={classNames('navbar navbar-expand-md', styles.header)}>
       <div className='collapse navbar-collapse d-flex justify-content-between h-100'>
-      
+
         <div className={styles['header__sidebar-toggler']} onClick={toggleSidebar}>{sidebarToggler}</div>
-      
+
         <div className={classNames(styles['header__sidebar'], {[styles['sidebar--active']]: sidebar.active})}>
           <div className={styles['header__sidebar-links']}>
             {tabs.map(({ id, title, link }) => (
@@ -131,7 +131,7 @@ export const Header = ({ roles }) => {
             ))}
           </div>
         </div>
-      
+
         <div className={classNames('navbar-nav nav-tabs', styles['header__navbar-links'])}>
           {tabs.map(({id, title, link, active}) => (
             <Link className={classNames('nav-item nav-link', {[`${styles.active}`]: active})}
@@ -142,7 +142,7 @@ export const Header = ({ roles }) => {
             >{title}</Link>
           ))}
         </div>
-      
+
         <div className={styles['header__account']}>
           <div className={styles['header__account-user']}>
             <a className={styles['header__account-user--icon']}
@@ -155,7 +155,7 @@ export const Header = ({ roles }) => {
             <a onClick={()=>{loggingOut()}}>{logout}</a>
           </div>
         </div>
-    
+
       </div>
     </nav>
   );

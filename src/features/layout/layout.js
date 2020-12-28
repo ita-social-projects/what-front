@@ -13,11 +13,11 @@ import {
   UnAssignedList,
   ListOfMentors,
   Support,
-  StudentScheduale,
   ListOfLessons,
   AddLesson,
   EditLesson,
   MyProfile,
+  Schedule,
 } from '@/features';
 import { Header } from '@/features/index.js';
 import { paths, useActions } from '@/shared';
@@ -60,7 +60,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.STUDENTS_DETAILS}/:id`} component={() => <StudentsTabs index={0} />} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.STUDENT_EDIT}/:id`} component={() => <StudentsTabs index={1} />} />
-          <ProtectedRoute roles={[2, 3, 4]} exact path={paths.SCHEDULE} component={StudentScheduale} />
+          <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.SCHEDULE} component={Schedule} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.COURSES} component={ListOfCourses} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.COURSE_ADD} component={AddCourse} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.COURSE_DETAILS}/:id`} component={() => <CoursesTabs index={0} />} />
