@@ -70,6 +70,9 @@ export const ListOfLessons = () => {
     const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
 
     const lessonsList = filteredLessonsList.slice(indexOfFirstLesson, indexOfLastLesson)
+      .sort((a, b) => {
+        return a.lessonDate < b.lessonDate ? -1 : a.lessonDate > b.lessonDate ? 1 : 0;
+      })
       .map((lesson) => {
         const { date, time } = transformDateTime(lesson.lessonDate);
         return (
@@ -110,7 +113,7 @@ export const ListOfLessons = () => {
               onChange={handleSearchDate}
             />
           </div>
-          <Search onSearch={handleSearchTheme} placeholder="Search lesson`s theme" />
+          <Search onSearch={handleSearchTheme} placeholder="Search lesson" />
           <Button onClick={addLesson} variant="warning">
             <Icon icon="Plus" className="icon" />
             Add a Lesson
