@@ -5,3 +5,4 @@ export { Card } from './card/index.js';
 export { Search } from './search/index.js';
 export { WithLoading } from './with-loading/index.js';
 export { ProtectedRoute } from './protected-route/index.js';
+export { Pagination } from './pagination/index.js';
