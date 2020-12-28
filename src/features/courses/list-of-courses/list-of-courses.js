@@ -3,14 +3,16 @@ import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
 import { fetchCourses, coursesSelector } from '@/models/index.js';
-import classNames from 'classnames';
-import { Card, Search, Button, WithLoading } from '../../../components/index.js';
+import { Card, Search, Button, WithLoading, Pagination } from '../../../components/index.js';
 import Icon from '../../../icon.js';
 import styles from './list-of-courses.scss';
+import classNames from 'classnames';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [coursesPerPage] = useState(12);
 
   const { data, isLoading } = useSelector(coursesSelector, shallowEqual);
 
@@ -44,36 +46,46 @@ export const ListOfCourses = () => {
   };
 
   const coursesList = () => {
-    const courses = filteredCourses.map((course) => (
-      <Card
-        key={course.id}
-        id={course.id}
-        buttonName="Details"
-        iconName="Edit"
-        onEdit={() => courseEdit(course.id)}
-        onDetails={() => courseDetails(course.id)}
-      >{course.name}
-      </Card>
-    ));
+    const indexOfLastCourse = currentPage * coursesPerPage;
+    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+
+    const courses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
+      .map((course) => (
+        <Card
+          key={course.id}
+          id={course.id}
+          buttonName="Details"
+          title={course.name}
+          iconName="Edit"
+          onEdit={() => courseEdit(course.id)}
+          onDetails={() => courseDetails(course.id)}
+        />
+      ));
 
     if (!courses.length && searchValue) {
-      return <h4>Courses not found</h4>;
+      return <h4>Course is not found</h4>;
     }
     return courses;
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="container">
+    <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
-        <div className={classNames(styles['list-head'], 'col-12 mb-2')}>
-          <div className={styles['search-container']}>
-            <Search onSearch={handleSearch} placeholder="Enter a course's name" />
-          </div>
-          <Button onClick={addCourse} variant="warning" className={styles.button}>
+        <div className="col-md-4 offset-md-4 col-12 text-center">
+          <Search onSearch={handleSearch} placeholder="Course's name" />
+        </div>
+        <div className="col-md-4 col-12 text-right">
+          <Button onClick={addCourse} variant="warning">
             <Icon icon="Plus" className="icon" />
-            Add a Course
+            <span>Add a course</span>
           </Button>
         </div>
+      </div>
+      <div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
           <WithLoading isLoading={isLoading}>
@@ -83,6 +95,13 @@ export const ListOfCourses = () => {
           </WithLoading>
         </div>
       </div>
+      {filteredCourses.length > 12 && 
+        <Pagination 
+          itemsPerPage={coursesPerPage} 
+          totalItems={filteredCourses.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };

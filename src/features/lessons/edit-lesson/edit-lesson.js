@@ -81,12 +81,13 @@ export const EditLesson = () => {
   }, [lessonsIsLoaded, lessonOnEdit, studentsGroup]);
 
   const getFormData = () => {
-    const studentD = studentsGroup.studentIds.map(
+    const uniqueIds = [...new Set(studentsGroup.studentIds)];
+
+    const studentD = uniqueIds.map(
       (id) => students.find((student) => student.id === id),
     );
 
     const activeStudents = studentD.filter((student) => student !== undefined);
-
 
     const studentsData = activeStudents.map((student) => (
       {

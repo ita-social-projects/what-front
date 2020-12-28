@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import classNames from 'classnames';
-
 import { paths, useActions } from '@/shared/index.js';
-import {
-  Card, Search, Button, WithLoading,
-} from '@/components/index.js';
+import { loadActiveStudents, activeStudentsSelector } from '@/models/index.js';
+import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
-import {
-  loadActiveStudents, activeStudentsSelector,
-} from '@/models/index.js';
-import styles from './list-of-students.scss';
 
 export const ListOfStudents = () => {
   const [fetchStudents] = useActions([loadActiveStudents]);
 
   const [filteredStudentsList, setFilteredStudentsList] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [studentsPerPage] = useState(9);
 
   const { data, isLoading } = useSelector(activeStudentsSelector, shallowEqual);
 
@@ -38,6 +33,7 @@ export const ListOfStudents = () => {
 
       return name.toLowerCase().includes(inputValue.toLowerCase());
     }));
+    setCurrentPage(1);
   };
 
   const addStudent = () => {
@@ -53,40 +49,50 @@ export const ListOfStudents = () => {
   };
 
   const getStudents = () => {
-    const students = filteredStudentsList.map(({ id, firstName, lastName }) => (
-      <Card
-        key={id}
-        id={id}
-        buttonName="Details"
-        iconName="Edit"
-        onEdit={() => studentEditing(id)}
-        onDetails={() => studentDetails(id)}
-      >
-        <p className="mb-2">{firstName} {lastName}</p>
-      </Card>
-    ));
+    const indexOfLastStudent = currentPage * studentsPerPage;
+    const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+
+    const students = filteredStudentsList.slice(indexOfFirstStudent, indexOfLastStudent)
+      .map(({ id, firstName, lastName }) => (
+        <Card
+          key={id}
+          id={id}
+          buttonName="Details"
+          iconName="Edit"
+          onEdit={() => studentEditing(id)}
+          onDetails={() => studentDetails(id)}
+        >
+          <div className="w-75">
+            <p className="mb-2  pr-2 font-weight-bolder">{firstName}</p>
+            <p className="font-weight-bolder">{lastName}</p>
+          </div>
+        </Card>
+      ));
 
     if (!students.length && searchValue) {
-      return <h4>Student not found</h4>;
+      return <h4>Student is not found</h4>;
     }
-
     return students;
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="container">
+    <div className="container" style={{minHeight: 750}}>
       <div className="row">
-        <div className={classNames(styles.heading, 'col-12 mb-2')}>
-          <div className={styles['search-container']}>
-            <Search onSearch={handleSearch} placeholder="Enter a student's name" />
-          </div>
-          <div className={styles['button-container']}>
-            <Button onClick={addStudent} variant="warning">
-              <Icon icon="Plus" className="icon" />
-              Add a Student
-            </Button>
-          </div>
+        <div className="col-md-4 offset-md-4 col-12 text-center">
+          <Search onSearch={handleSearch} placeholder="Student's name" />
         </div>
+        <div className="col-md-4 col-12 text-right">
+          <Button onClick={addStudent} variant="warning">
+            <Icon icon="Plus" className="icon" />
+            <span>Add a student</span>
+          </Button>
+        </div>
+      </div>
+      <div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
           <WithLoading isLoading={isLoading}>
@@ -96,6 +102,13 @@ export const ListOfStudents = () => {
           </WithLoading>
         </div>
       </div>
+        {filteredStudentsList.length > 9 && 
+          <Pagination 
+            itemsPerPage={studentsPerPage} 
+            totalItems={filteredStudentsList.length} 
+            paginate={paginate}
+          />
+        }
     </div>
   );
 };

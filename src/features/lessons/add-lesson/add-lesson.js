@@ -9,7 +9,6 @@ import * as Yup from 'yup';
 import { Button, WithLoading } from '@/components';
 import { useActions, paths } from '@/shared';
 
-
 import {
   mentorsActiveSelector,
   activeStudentsSelector,
@@ -149,7 +148,9 @@ export const AddLesson = () => {
   };
 
   const getFormData = () => {
-    const studentD = studentsGroup.studentIds.map(
+    const uniqueIds = [...new Set(studentsGroup.studentIds)];
+
+    const studentD = uniqueIds.map(
       (id) => students.find((student) => student.id === id),
     );
 

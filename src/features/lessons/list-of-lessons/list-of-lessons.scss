@@ -1,4 +1,4 @@
-@import '@/styles/main';
+@import '../../../styles/main';
 
 .heading {
   display: flex;
@@ -17,14 +17,11 @@
   border-color: map-get($colors, textAccentN1-color) !important;
 }
 
-.list {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-}
-
 .timeDate{
   font-size: 15px;
   margin-bottom: 0px;
+}
+
+.list-wrapper {
+  min-height: 835px;
 }
