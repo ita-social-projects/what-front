@@ -7,9 +7,9 @@ import styles from './student-details.scss';
 
 export const StudentDetails = () => {
   const history = useHistory();
-  const { 
+  const {
     data: student,
-    isLoading: isStudentLoading, 
+    isLoading: isStudentLoading,
     isLoaded: isStudentLoaded,
     error: studentError,
   } = useSelector(currentStudentSelector, shallowEqual);
@@ -34,9 +34,9 @@ export const StudentDetails = () => {
           <div className="px-2 py-4">
             <h3>Student Details</h3>
             <hr />
-            <WithLoading 
-              isLoading={isStudentLoading || !isStudentLoaded} 
-              className={styles["loader-centered"]}
+            <WithLoading
+              isLoading={isStudentLoading || !isStudentLoaded}
+              className={styles['loader-centered']}
             >
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>First name: </span></div>
@@ -45,23 +45,23 @@ export const StudentDetails = () => {
               <hr />
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Last name: </span></div>
-                <div className="col-12 col-md-6"><span>{student?.lastName}</span></div>
+                <div className="col-12 col-md-6 "><span>{student?.lastName}</span></div>
               </div>
               <hr />
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Email: </span></div>
-                <div className="col-12 col-md-6"><span>{student?.email}</span></div>
+                <div className="col-12 col-md-6 "><span>{student?.email}</span></div>
               </div>
               <hr />
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Group('s): </span></div>
-                <WithLoading isLoading={areStudentGroupsLoading}
-                  className={styles["loader-centered"]}
+                <WithLoading
+                  isLoading={areStudentGroupsLoading}
+                  className={styles['loader-centered']}
                 >
                   <div className="col-12 col-md-6">
                     {studentGroups
-                      .map(({id, name}) => <div className='pb-2' key={id}>{name}</div>)
-                    }
+                      .map(({ id, name }) => <div className="pb-2" key={id}>{name}</div>)}
                   </div>
                 </WithLoading>
               </div>

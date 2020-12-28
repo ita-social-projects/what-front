@@ -63,8 +63,8 @@ export const ListOfStudents = () => {
           onDetails={() => studentDetails(id)}
         >
           <div className="w-75">
-            <span className="mb-2  pr-2">{firstName}</span>
-            <span>{lastName}</span>
+            <p className="mb-2  pr-2 font-weight-bolder">{firstName}</p>
+            <p className="font-weight-bolder">{lastName}</p>
           </div>
         </Card>
       ));
