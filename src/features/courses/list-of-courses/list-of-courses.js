@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
-import { fetchCourses, coursesSelector } from '@/models/index.js';
+import { fetchCourses, coursesSelector, currentUserSelector } from '@/models/index.js';
 import { Card, Search, Button, WithLoading, Pagination } from '../../../components/index.js';
 import Icon from '../../../icon.js';
-import styles from './list-of-courses.scss';
-import classNames from 'classnames';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -15,6 +13,7 @@ export const ListOfCourses = () => {
   const [coursesPerPage] = useState(12);
 
   const { data, isLoading } = useSelector(coursesSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const [loadCourses] = useActions([fetchCourses]);
 
@@ -50,17 +49,19 @@ export const ListOfCourses = () => {
     const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
 
     const courses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
-      .map((course) => (
-        <Card
-          key={course.id}
-          id={course.id}
-          buttonName="Details"
-          title={course.name}
-          iconName="Edit"
-          onEdit={() => courseEdit(course.id)}
-          onDetails={() => courseDetails(course.id)}
-        />
-      ));
+      .map((course) => {
+        return (
+          <Card
+            key={course.id}
+            id={course.id}
+            buttonName="Details"
+            title={course.name}
+            iconName={currentUser.role === 3 || currentUser.role === 4 ? "Edit" : null}
+            onEdit={currentUser.role === 3 || currentUser.role === 4 ? () => courseEdit(course.id) : null}
+            onDetails={() => courseDetails(course.id)}
+          />
+        );
+      });
 
     if (!courses.length && searchValue) {
       return <h4>Course is not found</h4>;
@@ -73,17 +74,19 @@ export const ListOfCourses = () => {
   };
 
   return (
-    <div className={classNames("container", styles['list-wrapper'])}>
+    <div className="container" style={{minHeight: 750}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Course's name" />
         </div>
-        <div className="col-md-4 col-12 text-right">
-          <Button onClick={addCourse} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            <span>Add a course</span>
-          </Button>
-        </div>
+        {currentUser.role === 3 || currentUser.role === 4 &&
+          <div className="col-md-4 col-12 text-right">
+            <Button onClick={addCourse} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              <span>Add a course</span>
+            </Button>
+          </div>
+        }
       </div>
       <div>
         <hr className="col-8" />
