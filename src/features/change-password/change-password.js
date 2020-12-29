@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import { currentUserSelector, fetchAssignedUsersSelector, fetchUsersList } from '@/models';
+import { currentUserSelector, fetchAssignedUsersSelector, fetchUsersList, newPassword } from '@/models';
 import { Button, WithLoading } from '@/components';
 import { paths, useActions } from '@/shared';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import className from 'classnames';
+import { changePasswordValidation } from '@features/validation/validation-helpers.js';
 import styles from './change-password.scss';
 
 export const ChangePassword = () => {
   const [loadUsers] = useActions([fetchUsersList]);
+  const [setNewPassword] = useActions([newPassword]);
 
   const { currentUser: data } = useSelector(currentUserSelector, shallowEqual);
   const { users, isLoading, loaded } = useSelector(fetchAssignedUsersSelector, shallowEqual);
@@ -24,6 +26,7 @@ export const ChangePassword = () => {
 
   const onSubmit = (value) => {
     console.log(value);
+    setNewPassword(value);
   };
 
   return (
@@ -35,12 +38,13 @@ export const ChangePassword = () => {
           <WithLoading isLoading={isLoading || !loaded} className="d-block mx-auto">
             <Formik
               initialValues={{
-                email: currentUser?.email,
+                // email: currentUser?.email,
+                email: 'vitocorleone@vito.cor',
                 currentPassword: '',
                 newPassword: '',
                 confirmNewPassword: '',
               }}
-              // validationSchema={changePasswordValidation}
+              validationSchema={changePasswordValidation}
               onSubmit={onSubmit}
             >
               {({ values, errors, touched, isValid, dirty }) => (
