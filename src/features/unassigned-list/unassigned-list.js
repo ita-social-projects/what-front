@@ -82,7 +82,7 @@ export const UnAssignedList = () => {
       case 2:
         return <option value={1}>{roles[1]}</option>;
       case 3:
-        return roles.slice(0, 2).map((role) => (
+        return roles.slice(0, 3).map((role) => (
           <option key={role.id} value={roles.indexOf(role)}>
             {role.name}
           </option>
