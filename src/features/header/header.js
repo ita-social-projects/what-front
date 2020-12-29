@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Redirect, useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import { useActions, paths } from '@/shared';
-import { currentUserSelector, fetchUsersList, fetchAssignedUsersSelector, logOut } from '@/models';
+import { currentUserSelector, logOut } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import styles from './header.scss';
@@ -145,12 +145,12 @@ export const Header = ({ roles }) => {
 
         <div className={styles.header__account}>
           <div className={styles['header__account-user']}>
-            <a
+            <Link
               className={styles['header__account-user--icon']}
               onClick={toggleActiveTab}
-              href={paths.MY_PROFILE}
+              to={paths.MY_PROFILE}
             >{user}
-            </a>
+            </Link>
             <span className={styles['header__account-user--fullname']}>{`${currentUser?.first_name}`}<br />{`${currentUser?.last_name}`} </span>
           </div>
           <div className={styles['header__account-logout']}>
