@@ -36,6 +36,11 @@ export const logOut = () => ({
   type: actionTypes.LOGOUT,
 });
 
+export const changePassword = (newData) => ({
+  type: actionTypes.CHANGE_PASSWORD,
+  payload: { newData },
+});
+
 function* logingWorker(data) {
   try {
     yield put({ type: actionTypes.LOGIN_STARTED });
@@ -55,7 +60,7 @@ function* logOutWorker() {
 
 function* registrationWorker(data) {
   try {
-    yield put({ type: actionTypes.REGIST_STARTED});
+    yield put({ type: actionTypes.REGIST_STARTED });
     const regUser = yield call(ApiService.create, '/accounts/reg', data.payload.newUser);
     yield put({ type: actionTypes.REGIST_SUCCESS, payload: { regUser } });
     // yield put({type: actionTypes.CLEAR_LOADED});
@@ -84,6 +89,16 @@ function* getUnAssigenUsersWorker() {
   }
 }
 
+function* changePasswordWorker({ payload }) {
+  try {
+    yield put({ type: actionTypes.CHANGE_PASSWORD_STARTED });
+    yield call(ApiService.update, '/accounts/ChangePassword', payload.newData);
+    yield put({ type: actionTypes.CLEAR_LOADED });
+  } catch (error) {
+    yield put({ type: actionTypes.CHANGE_PASSWORD_FAILED, payload: { error } });
+  }
+}
+
 function* loginWtacher() {
   yield takeLatest(actionTypes.LOGIN_REQUESTING, logingWorker);
 }
@@ -99,8 +114,13 @@ function* registrationWather() {
 function* fetchAssignedUserListWatcher() {
   yield takeLatest(actionTypes.FETCH_ASSIGNED, getAssigenUsersWorker);
 }
+
 function* fetchUnAssignedUserListWatcher() {
   yield takeLatest(actionTypes.FETCH_UNASSIGNED, getUnAssigenUsersWorker);
+}
+
+function* changePasswordWatcher() {
+  yield takeEvery(actionTypes.CHANGE_PASSWORD, changePasswordWorker);
 }
 
 export function* authWatcher() {
@@ -110,5 +130,6 @@ export function* authWatcher() {
     fork(registrationWather),
     fork(fetchAssignedUserListWatcher),
     fork(fetchUnAssignedUserListWatcher),
+    fork(changePasswordWatcher),
   ]);
 }
