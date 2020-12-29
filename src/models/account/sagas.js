@@ -36,8 +36,8 @@ export const logOut = () => ({
   type: actionTypes.LOGOUT,
 });
 
-export const changePassword = (newData) => ({
-  type: actionTypes.CHANGE_PASSWORD,
+export const updatePassword = (newData) => ({
+  type: actionTypes.UPDATE_PASSWORD,
   payload: { newData },
 });
 
@@ -91,11 +91,12 @@ function* getUnAssigenUsersWorker() {
 
 function* changePasswordWorker({ payload }) {
   try {
-    yield put({ type: actionTypes.CHANGE_PASSWORD_STARTED });
+    yield put({ type: actionTypes.PASSWORD_UPDATING_STARTED });
     yield call(ApiService.update, '/accounts/ChangePassword', payload.newData);
+    yield put({ type: actionTypes.PASSWORD_UPDATING_SUCCESS });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
-    yield put({ type: actionTypes.CHANGE_PASSWORD_FAILED, payload: { error } });
+    yield put({ type: actionTypes.PASSWORD_UPDATING_FAILED, payload: { error } });
   }
 }
 
@@ -120,7 +121,7 @@ function* fetchUnAssignedUserListWatcher() {
 }
 
 function* changePasswordWatcher() {
-  yield takeEvery(actionTypes.CHANGE_PASSWORD, changePasswordWorker);
+  yield takeEvery(actionTypes.UPDATE_PASSWORD, changePasswordWorker);
 }
 
 export function* authWatcher() {

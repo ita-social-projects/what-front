@@ -8,20 +8,20 @@ const initialState = {
 
 export const changePasswordReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actions.CHANGE_PASSWORD_STARTED:
+    case actions.PASSWORD_UPDATING_STARTED:
       return {
         ...state,
         isLoading: true,
         error: '',
       };
-    case actions.CHANGE_PASSWORD_SUCCESS:
+    case actions.PASSWORD_UPDATING_SUCCESS:
       return {
         ...state,
         isLoading: false,
         loaded: true,
         error: '',
       };
-    case actions.CHANGE_PASSWORD_FAILED:
+    case actions.PASSWORD_UPDATING_FAILED:
       return {
         ...state,
         isLoading: false,
