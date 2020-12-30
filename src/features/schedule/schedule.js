@@ -101,6 +101,8 @@ export const Schedule = () => {
           <div className="col-3 d-flex justify-content-start pl-0">
             <input
               type="date"
+              min={`${new Date().getFullYear() - 1}-${new Date().getMonth() + 1}-${new Date().getDate()}`}
+              max={`${new Date().getFullYear() + 1}-${new Date().getMonth() + 1}-${new Date().getDate()}`}
               onChange={handleInputDate}
               className={styles['date-input']}
             />
