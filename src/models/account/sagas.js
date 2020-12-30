@@ -41,10 +41,11 @@ export const newPassword = (newData) => ({
   payload: { newData },
 });
 
-function* logingWorker(data) {
+function* logingWorker({ payload }) {
   try {
     yield put({ type: actionTypes.LOGIN_STARTED });
-    const logUser = yield call(ApiService.create, '/accounts/auth', data.payload.currentUser);
+    const logUser = yield call(ApiService.create, '/accounts/auth', payload.currentUser);
+    logUser.email = payload.currentUser.email;
     yield call(Cookie.set, 'user', JSON.stringify(logUser), 1);
     yield put({ type: actionTypes.LOGIN_SUCCESS, payload: { logUser } });
   } catch (error) {

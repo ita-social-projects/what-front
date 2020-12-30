@@ -1,7 +1,7 @@
 export { accountReducer } from './reducer.js';
 export {
   authWatcher, login, registration, logOut, fetchUsersList, fetchUnAssignedUserList,
-  clearRegistration, updatePassword,
+  clearRegistration, newPassword,
 } from './sagas.js';
 export {
   currentUserSelector, newUserSelector, fetchAssignedUsersSelector, registrationSelector,
