@@ -1,1 +1,1 @@
-export { StudentScheduale } from './scheduale.js';
+export { StudentSchedule } from './schedule.js';

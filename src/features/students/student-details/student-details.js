@@ -61,7 +61,7 @@ export const StudentDetails = () => {
                   isLoading={areStudentGroupsLoading}
                   className={styles['loader-centered']}
                 >
-                  <div className="col-12 col-md-6 d-flex flex-wrap">
+                  <div className="col-12 col-md-6 d-flex flex-wrap lead">
                     {studentGroups
                       .map(({id, name}) => <div className='pr-2' key={id}>
                         <Badge pill variant="primary">

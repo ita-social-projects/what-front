@@ -51,6 +51,10 @@ export const ListOfLessons = () => {
     history.push(paths.LESSON_ADD);
   };
 
+  const lessonDetails = (id) => {
+    history.push(`${paths.LESSON_DETAILS}/${id}`);
+  };
+
   const editLesson = (id) => {
     history.push(`${paths.LESSON_EDIT}/${id}`);
   };
@@ -77,8 +81,10 @@ export const ListOfLessons = () => {
             key={lesson.id}
             id={lesson.id}
             title={lesson.themeName}
+            buttonName="Details"
             iconName="Edit"
             onEdit={editLesson}
+            onDetails={() => lessonDetails(lesson.id)}
           >
             <p className={styles.timeDate}>Date: {date}</p>
             <p className={styles.timeDate}>Time: {time}</p>
