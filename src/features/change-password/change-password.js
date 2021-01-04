@@ -1,12 +1,14 @@
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import { currentUserSelector, newPassword } from '@/models';
-import { Button } from '@/components';
-import { paths, useActions } from '@/shared';
 import { useHistory } from 'react-router-dom';
+import { paths, useActions } from '@/shared';
+import { currentUserSelector, newPassword } from '@/models';
+
 import { Formik, Form, Field } from 'formik';
-import className from 'classnames';
 import { changePasswordValidation } from '@features/validation/validation-helpers.js';
+import { Button } from '@/components';
+
+import className from 'classnames';
 import styles from './change-password.scss';
 
 export const ChangePassword = () => {
