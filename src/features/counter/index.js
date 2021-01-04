@@ -1,2 +1,2 @@
 export { Counter } from './counter.js';
-export * from './redux';
+export * from './redux/index.js';

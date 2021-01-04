@@ -1,0 +1,24 @@
+.wrapper {
+  position: absolute;
+  width: 100%;
+  min-height: 100%;  
+  background-color: #020520;  
+}
+
+.form {
+  background-color: #fff;
+  margin-top: 30vh;
+  border-radius: 3px;
+  transition: all ease .5s;
+
+  @media (max-width: 768px) {
+    margin-top: 20vh;
+    transition: all ease .5s;
+  }
+
+  @media (max-width: 576px) {
+    margin-top: 10vh;
+    transition: all ease .5s;
+  }
+}
+

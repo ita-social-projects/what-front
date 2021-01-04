@@ -1,0 +1,10 @@
+@import '../../styles/main';
+
+.modal-body {
+  @include franklin-regular();
+  font-size: 18px;
+}
+
+.modal-btn {
+  @include button();
+}

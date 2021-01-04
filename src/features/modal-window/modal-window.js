@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import styles from './modal-window.module.scss';
+import styles from './modal-window.scss';
 
 export const ModalWindow = ({
   children,
@@ -32,9 +32,8 @@ export const ModalWindow = ({
 ModalWindow.propTypes = {
   toShow: PropTypes.bool.isRequired,
   children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
   ]).isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

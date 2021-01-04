@@ -1,9 +1,10 @@
-/* eslint-disable */
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import PropTypes from 'prop-types';
 
 const Icon = ({
-  size, icon, className, viewBox,
+  size, icon, color, className, viewBox,
 }) => (
   <svg
     className={className}
@@ -11,12 +12,13 @@ const Icon = ({
     width={`${size}px`}
     height={`${size}px`}
   >
-    <use xlinkHref={`src/svg/${icon}.svg#${icon}`} />
+    <use href={`/assets/svg/${icon}.svg#${icon}`} fill={color} />
   </svg>
 );
+
 Icon.defaultProps = {
   size: 16,
-  color: '#000000',
+  color: '',
   viewBox: '0 0 24 24',
   style: {},
   className: '',
