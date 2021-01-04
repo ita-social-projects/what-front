@@ -1,9 +1,21 @@
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const { merge } = require('webpack-merge');
+const os = require('os');
 const common = require('./webpack.common.js');
-const paths = require('./paths');
+const paths = require('./paths.js');
 
 const PORT = 8080;
+const PlatformCores = os.cpus().length;
+const JSCompilationThreads = os.cpus().length / 2 - 1;
+const SCSSCompilationThreads = os.cpus().length / 2;
+
+// eslint-disable-next-line no-console
+console.table({
+  'Environment mode': process.env.NODE_ENV,
+  'Platform cores': PlatformCores,
+  'JS|X Compilation Threads': JSCompilationThreads,
+  'SCSS Compilation Threads': SCSSCompilationThreads,
+});
 
 module.exports = merge(common, {
   mode: 'development',
@@ -31,4 +43,108 @@ module.exports = merge(common, {
   plugins: [
     new ReactRefreshWebpackPlugin(),
   ],
+  module: {
+    rules: [
+
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'thread-loader',
+            options: {
+              workers: os.cpus().length / 2 - 1,
+              poolTimeout: Infinity,
+            },
+          },
+          {
+            loader: require.resolve('babel-loader'),
+            options: {
+              plugins: [
+                require.resolve('react-refresh/babel'),
+              ],
+            },
+          },
+        ],
+      },
+
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'thread-loader',
+            options: {
+              workers: os.cpus().length / 2,
+              poolTimeout: Infinity,
+            },
+          },
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2,
+              sourceMap: true,
+              modules: {
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+              },
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    'autoprefixer',
+                  ],
+                ],
+                sourceMap: true,
+              },
+            },
+          },
+          {
+            loader: 'sass-loader',
+          },
+        ],
+      },
+
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    'autoprefixer',
+                  ],
+                ],
+                sourceMap: true,
+              },
+            },
+          },
+        ],
+      },
+
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        type: 'asset/resource',
+      },
+
+      {
+        test: /\.ttf$/,
+        type: 'asset/inline',
+      },
+
+    ],
+  },
 });
