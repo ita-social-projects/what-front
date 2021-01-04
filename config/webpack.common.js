@@ -1,7 +1,7 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const chalk = require('chalk');
 const paths = require('./paths');
 
@@ -12,16 +12,6 @@ const isDev = mode === 'development';
 console.log(chalk.black.bgGreen.bold(`Environment set to ${mode} mode`));
 
 module.exports = {
-  entry: [
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    `${paths.src._}/index.js`,
-  ],
-  output: {
-    path: paths.dist,
-    filename: '[name].bundle.js',
-    publicPath: '/',
-  },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
@@ -35,6 +25,10 @@ module.exports = {
           globOptions: {
             ignore: ['*.DS_Store'],
           },
+        },
+        {
+          from: paths.public,
+          to: '.',
         },
       ],
     }),
@@ -58,14 +52,14 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
+        use: isDev ? {
           loader: require.resolve('babel-loader'),
           options: {
             plugins: [
               isDev && require.resolve('react-refresh/babel'),
             ],
           },
-        },
+        } : 'babel-loader',
       },
 
       {
