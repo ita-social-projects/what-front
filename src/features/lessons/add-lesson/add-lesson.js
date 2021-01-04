@@ -5,9 +5,9 @@ import {
 } from 'formik';
 import classNames from 'classnames';
 import { useSelector, shallowEqual } from 'react-redux';
-import * as Yup from 'yup';
 import { Button, WithLoading } from '@/components';
 import { useActions, paths } from '@/shared';
+import { addLessonValidation } from '@features/validation/validation-helpers.js';
 
 import {
   mentorsActiveSelector,
@@ -95,16 +95,6 @@ export const AddLesson = () => {
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)
     .map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
-
-  const validateForm = Yup.object().shape({
-    themeName: Yup.string()
-      .min(2, 'Invalid lesson theme: too short')
-      .max(50, 'Invalid lesson theme: too long')
-      .matches(
-        '^[A-Za-zа-яА-ЯёЁ ]+$',
-        'Invalid lesson theme',
-      ),
-  });
 
   const openStudentDetails = useCallback((id) => {
     history.push(`${paths.STUDENTS_DETAILS}/${id}`);
@@ -262,7 +252,7 @@ export const AddLesson = () => {
                   formData,
                 }}
                 onSubmit={onSubmit}
-                validationSchema={validateForm}
+                validationSchema={addLessonValidation}
               >
                 {({ errors }) => (
                   <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
