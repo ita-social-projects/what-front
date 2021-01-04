@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import { paths, useActions } from '@/shared';
 import { fetchLessons, lessonsSelector } from '@/models/index.js';
-import {
-  Card, Search, Button, WithLoading,
-} from '@/components/index.js';
-import Icon from '@/icon.js';
+import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
+import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
+import Icon from '@/icon.js';
 
 export const ListOfLessons = () => {
   const history = useHistory();
@@ -16,6 +14,8 @@ export const ListOfLessons = () => {
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lessonsPerPage] = useState(12);
 
   const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
 
@@ -66,21 +66,25 @@ export const ListOfLessons = () => {
   };
 
   const getLessonsList = () => {
-    const lessonsList = filteredLessonsList.map((lesson) => {
-      const { date, time } = transformDateTime(lesson.lessonDate);
-      return (
-        <Card
-          key={lesson.id}
-          id={lesson.id}
-          title={lesson.themeName}
-          iconName="Edit"
-          onEdit={editLesson}
-        >
-          <p className={styles.timeDate}>Date: {date}</p>
-          <p className={styles.timeDate}>Time: {time}</p>
-        </Card>
-      );
-    });
+    const indexOfLastLesson = currentPage * lessonsPerPage;
+    const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
+
+    const lessonsList = filteredLessonsList.slice(indexOfFirstLesson, indexOfLastLesson)
+      .map((lesson) => {
+        const { date, time } = transformDateTime(lesson.lessonDate);
+        return (
+          <Card
+            key={lesson.id}
+            id={lesson.id}
+            title={lesson.themeName}
+            iconName="Edit"
+            onEdit={editLesson}
+          >
+            <p className={styles.timeDate}>Date: {date}</p>
+            <p className={styles.timeDate}>Time: {time}</p>
+          </Card>
+        );
+      });
     if (!lessonsList.length && searchLessonsDateValue) {
       return <h4>Lesson not found</h4>;
     } if (!lessonsList.length && searchLessonsThemeValue) {
@@ -89,8 +93,12 @@ export const ListOfLessons = () => {
     return lessonsList;
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="container">
+    <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
         <div className={classNames(styles.heading, 'col-12 mb-2')}>
           <div>
@@ -117,6 +125,13 @@ export const ListOfLessons = () => {
           </WithLoading>
         </div>
       </div>
+      {filteredLessonsList.length > 12 && 
+        <Pagination 
+          itemsPerPage={lessonsPerPage} 
+          totalItems={filteredLessonsList.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };

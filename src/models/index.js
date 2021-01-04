@@ -7,3 +7,4 @@ export * from './students/index.js';
 export * from './lessons/index.js';
 export * from './secretary/index.js';
 export * from './student-groups/index.js';
+export * from './dashboard/index.js';

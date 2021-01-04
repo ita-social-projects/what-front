@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
-
 import { addAlert } from '@/features';
 import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
 import { useActions, ApiService } from '../../shared/index.js';
@@ -14,6 +13,7 @@ export const Counter = () => {
   const counter = useSelector(counterSelector, shallowEqual);
   const isLoading = useSelector(counterIsLoadingSelector, shallowEqual);
   const { incrementCounter, decrementCounter, fetchCounter } = useActions(counterActions);
+
   const [fetchMentors] = useActions([loadStudents]);
   const [
     logIn,

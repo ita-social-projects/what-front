@@ -138,7 +138,9 @@ export const AddLesson = () => {
   };
 
   const getFormData = () => {
-    const studentD = studentsGroup.studentIds.map(
+    const uniqueIds = [...new Set(studentsGroup.studentIds)];
+
+    const studentD = uniqueIds.map(
       (id) => students.find((student) => student.id === id),
     );
 
