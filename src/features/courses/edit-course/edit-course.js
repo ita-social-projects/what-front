@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
 import { paths, useActions } from '@/shared';
+import { addAlert } from '@/features';
 import { coursesSelector, editCourse, editedCourseSelector } from '@/models';
 import { WithLoading } from '@/components';
 import classNames from 'classnames';
@@ -23,7 +24,7 @@ export const EditCourse = ({ id }) => {
     error: isEditedError,
   } = useSelector(editedCourseSelector, shallowEqual);
 
-  const updateCourse = useActions(editCourse);
+  const [updateCourse, dispatchAddAlert] = useActions([editCourse, addAlert]);
 
   const course = data.find((course) => course.id == id);
 
@@ -33,13 +34,17 @@ export const EditCourse = ({ id }) => {
     if (!course && isCourseLoaded) {
       history.push(paths.NOT_FOUND);
     }
-  }, [course, isCourseLoaded]);
+  }, [course, history, isCourseLoaded]);
 
   useEffect(() => {
-    if (!isEditedError && isEditedLoaded) {
+    if (!isEditedError && isEditedLoaded && !isEditedLoading) {
       history.push(paths.COURSES);
+      dispatchAddAlert('The course was successfully edited', 'success');
     }
-  }, [isEditedError, isEditedLoaded]);
+    if (isEditedError && !isEditedLoaded && !isEditedLoading) {
+      dispatchAddAlert(isEditedError);
+    }
+  }, [dispatchAddAlert, history, isEditedError, isEditedLoaded]);
 
   const onSubmit = (values) => {
     updateCourse(values, id);
@@ -62,7 +67,7 @@ export const EditCourse = ({ id }) => {
                 }}
                 onSubmit={onSubmit}
               >
-                {({ values, errors }) => (
+                {({ errors }) => (
                   <Form name="start-group">
                     <div className="row mb-3">
                       <div className="col d-flex align-items-center">

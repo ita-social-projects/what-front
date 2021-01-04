@@ -37,6 +37,7 @@ export const editStudentGroupReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLoaded: false,
+        error: '',
       };
     default:
       return state;
