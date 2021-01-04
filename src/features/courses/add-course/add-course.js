@@ -1,25 +1,28 @@
 import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions, paths } from '@/shared';
-import { createCourse, createdCourseSelector } from '@/models';
 import { Formik, Form, Field } from 'formik';
 import classNames from 'classnames';
+
+import { useActions, paths } from '@/shared';
+import { createCourse, createdCourseSelector } from '@/models';
+import { addAlert } from '@/features';
 import { validateGroupName } from '../../validation/validation-helpers.js';
 import styles from './add-course.scss';
 
 export const AddCourse = () => {
   const { isLoading, loaded, error } = useSelector(createdCourseSelector, shallowEqual);
 
-  const addCourse = useActions(createCourse);
+  const [addCourse, dispatchAddAlert] = useActions([createCourse, addAlert]);
 
   const history = useHistory();
 
   useEffect(() => {
     if (!error && loaded) {
       history.push(paths.COURSES);
+      dispatchAddAlert('The course has been successfully added', 'success');
     }
-  }, [error, loaded]);
+  }, [dispatchAddAlert, error, history, loaded]);
 
   const onSubmit = (values) => {
     addCourse(values);
@@ -35,7 +38,7 @@ export const AddCourse = () => {
             }}
             onSubmit={onSubmit}
           >
-            {({ values, errors }) => (
+            {({ errors }) => (
               <Form className="px-2 py-4" name="start-group">
                 <h3>Add a course</h3>
                 <hr />

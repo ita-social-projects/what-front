@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import className from 'classnames';
 import { Formik, Form, Field } from 'formik';
-import { Button, WithLoading } from '@/components/index.js';
 import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import {
   secretariesSelector, updatedSecretarySelector, deletedSecretarySelector,
   updateSecretary, deleteSecretary,
 } from '@models/index.js';
+import { Button, WithLoading } from '@/components/index.js';
+import { addAlert } from '@/features';
 import { formValidate } from '@features/validation/validation-helpers.js';
-import { useHistory } from 'react-router-dom';
-import { useActions } from '@/shared';
+import { paths, useActions } from '@/shared';
 import { ModalWindow } from '@features/modal-window/index.js';
 
 import styles from './edit-secretarys-details.scss';
@@ -34,7 +36,7 @@ export const EditSecretarysDetails = ({ id }) => {
     error: secretaryDeleteError,
   } = useSelector(deletedSecretarySelector, shallowEqual);
 
-  const [editeSecretary] = useActions([updateSecretary]);
+  const [editeSecretary, dispatchAddAlert] = useActions([updateSecretary, addAlert]);
   const [fireSecretary] = useActions([deleteSecretary]);
 
   const secretary = data.find((user) => user.id === id);
@@ -47,21 +49,23 @@ export const EditSecretarysDetails = ({ id }) => {
 
   useEffect(() => {
     if (!secretary && isSecretariesLoaded) {
-      history.push('/404');
+      history.push(paths.NOT_FOUND);
     }
   }, [secretary, isSecretariesLoaded, history]);
 
   useEffect(() => {
     if (!secretaryUpdateError && isUpdateLoaded) {
-      history.push('/secretaries');
+      history.push(paths.SECRETARIES);
+      dispatchAddAlert('The secretary has been successfully edited', 'success');
     }
-  }, [secretaryUpdateError, isUpdateLoaded, history]);
+  }, [secretaryUpdateError, isUpdateLoaded, history, dispatchAddAlert]);
 
   useEffect(() => {
     if (!secretaryDeleteError && isDeleteLoaded) {
-      history.push('/secretaries');
+      history.push(paths.SECRETARIES);
+      dispatchAddAlert('The secretary has been fired', 'success');
     }
-  }, [secretaryDeleteError, isDeleteLoaded, history]);
+  }, [secretaryDeleteError, isDeleteLoaded, history, dispatchAddAlert]);
 
   const onSubmit = (value) => {
     editeSecretary(id, value);

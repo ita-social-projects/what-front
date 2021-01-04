@@ -39,12 +39,9 @@ export const EditCourse = ({ id }) => {
   useEffect(() => {
     if (!isEditedError && isEditedLoaded && !isEditedLoading) {
       history.push(paths.COURSES);
-      dispatchAddAlert('The course was successfully edited', 'success');
+      dispatchAddAlert('The course has been successfully edited', 'success');
     }
-    if (isEditedError && !isEditedLoaded && !isEditedLoading) {
-      dispatchAddAlert(isEditedError);
-    }
-  }, [dispatchAddAlert, history, isEditedError, isEditedLoaded]);
+  }, [dispatchAddAlert, history, isEditedError, isEditedLoaded, isEditedLoading]);
 
   const onSubmit = (values) => {
     updateCourse(values, id);

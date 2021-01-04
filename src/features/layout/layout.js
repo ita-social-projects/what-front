@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Switch } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Alert } from 'react-bootstrap';
 
@@ -31,7 +31,7 @@ export const Layout = () => {
 
   return (
     <>
-      <Header roles={[1, 2, 3, 4]} />
+      <Header />
       {
         messages.length ? (
           <div className={styles['alert-container']}>

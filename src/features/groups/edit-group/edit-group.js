@@ -45,7 +45,7 @@ export const EditGroup = ({
   useEffect(() => {
     if (!isEditing && isEdited && !editingError) {
       history.push(paths.GROUPS);
-      dispatchAddAlert('The group was successfully edited!', 'success');
+      dispatchAddAlert('The group has been successfully edited!', 'success');
     }
     if (!isEditing && !isEdited && editingError) {
       dispatchAddAlert(editingError);
@@ -337,7 +337,6 @@ export const EditGroup = ({
                       Confirm
                     </Button>
                   </div>
-                  {/* {editingError && <p className="text-danger mt-3 mb-0 text-center">{editingError}</p>} */}
                 </Form>
               )}
             </Formik>
