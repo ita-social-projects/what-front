@@ -1,1 +1,0 @@
-export { StudentSchedule } from './schedule.js';
