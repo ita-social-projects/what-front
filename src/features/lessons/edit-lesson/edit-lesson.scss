@@ -6,11 +6,6 @@
   padding: 30px;
   font-size: 16px;
 }
-h3{
-  @include franklin-semibold();
-  font-weight: $bold !important;
-  font-size: 22px !important;
-}
 
 table{
   border: 1px !important;

@@ -31,8 +31,8 @@ export const paths = {
   SECRETARY_ADD: '/secretaries/add',
 
   LESSONS: '/lessons',
-  LESSON: '/lessons',
   LESSON_ADD: '/lessons/add',
+  LESSON_DETAILS: '/lessons',
   LESSON_EDIT: '/lessons/edit',
 
   SCHEDULE: '/schedule',
