@@ -40,6 +40,7 @@ function* logingWorker(data) {
   try {
     yield put({ type: actionTypes.LOGIN_STARTED });
     const logUser = yield call(ApiService.create, '/accounts/auth', data.payload.currentUser);
+    logUser.email = data.payload.currentUser.email;
     yield call(Cookie.set, 'user', JSON.stringify(logUser), 1);
     yield put({ type: actionTypes.LOGIN_SUCCESS, payload: { logUser } });
   } catch (error) {
@@ -55,7 +56,7 @@ function* logOutWorker() {
 
 function* registrationWorker(data) {
   try {
-    yield put({ type: actionTypes.REGIST_STARTED});
+    yield put({ type: actionTypes.REGIST_STARTED });
     const regUser = yield call(ApiService.create, '/accounts/reg', data.payload.newUser);
     yield put({ type: actionTypes.REGIST_SUCCESS, payload: { regUser } });
     // yield put({type: actionTypes.CLEAR_LOADED});
