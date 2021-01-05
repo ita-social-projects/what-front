@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+
 import { paths } from '@/shared';
 import { WithLoading } from '@/components';
 import { Badge } from 'react-bootstrap';
-import { currentStudentGroupsSelector, currentStudentSelector } from '@/models';
+import { currentStudentGroupsSelector, currentStudentSelector, studentLessonsSelector } from '@/models';
 import styles from './student-details.scss';
 
 export const StudentDetails = () => {
@@ -23,11 +23,17 @@ export const StudentDetails = () => {
     error: studentGroupsError,
   } = useSelector(currentStudentGroupsSelector, shallowEqual);
 
+  const {
+    data: studentLessons,
+    isLoading: studentLessonsIsLoading,
+    error: studentLessonsError,
+  } = useSelector(studentLessonsSelector, shallowEqual);
+
   useEffect(() => {
-    if (studentError && studentGroupsError) {
+    if (studentError && studentGroupsError && studentLessonsError) {
       history.push(paths.NOT_FOUND);
     }
-  }, [studentError, studentGroupsError]);
+  }, [studentError, studentGroupsError, studentLessonsError]);
 
   return (
     <div className="container">
@@ -56,21 +62,43 @@ export const StudentDetails = () => {
               </div>
               <hr />
               <div className="row">
-                <div className="col-12 col-md-6 font-weight-bolder"><span>Group('s): </span></div>
+                <div className="col-12 col-md-6 font-weight-bolder"><span>Group(s): </span></div>
                 <WithLoading
                   isLoading={areStudentGroupsLoading}
                   className={styles['loader-centered']}
                 >
                   <div className="col-12 col-md-6 d-flex flex-wrap lead">
                     {studentGroups
-                      .map(({id, name}) => <div className='pr-2' key={id}>
-                        <Badge pill variant="primary">
-                          <Link to={`${paths.GROUPS_DETAILS}/${id}`} 
-                            className="text-decoration-none text-white"
-                          >{name}</Link>
-                        </Badge>
-                      </div>)
-                    }
+                      .map(({ id, name }) => (
+                        <div className="pr-2" key={id}>
+                          <Badge pill variant="primary">
+                            <Link
+                              to={`${paths.GROUPS_DETAILS}/${id}`}
+                              className="text-decoration-none text-white"
+                            >{name}
+                            </Link>
+                          </Badge>
+                        </div>
+                      ))}
+                  </div>
+                </WithLoading>
+              </div>
+              <hr />
+              <div className="row">
+                <div className="col-12 col-md-6 font-weight-bolder"><span>Lesson(s): </span></div>
+                <WithLoading
+                  isLoading={studentLessonsIsLoading}
+                  className={styles['loader-centered']}
+                >
+                  <div className="col-12 col-md-6 d-flex flex-wrap">
+                    {studentLessons
+                      .map(({ id, themeName }) => (
+                        <div className="pr-2" key={id}>
+                          <Badge pill variant="primary">
+                            {themeName}
+                          </Badge>
+                        </div>
+                      ))}
                   </div>
                 </WithLoading>
               </div>

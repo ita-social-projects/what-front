@@ -2,7 +2,8 @@ import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Alert } from 'react-bootstrap';
-import { paths, useActions } from '@/shared';
+import { paths, homepages, useActions } from '@/shared';
+import { currentUserSelector } from '@/models';
 
 import {
   ListOfStudents, ListOfMentors, ListOfSecretaries,
@@ -18,6 +19,7 @@ import styles from './layout.scss';
 
 export const Layout = () => {
   const { messages } = useSelector(alertSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const dispatchRemoveAlert = useActions(removeAlert);
 
   return (
@@ -67,6 +69,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.MY_PROFILE} component={MyProfile} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
+          <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
           <Redirect to={paths.NOT_FOUND} />
         </Switch>
       </div>
