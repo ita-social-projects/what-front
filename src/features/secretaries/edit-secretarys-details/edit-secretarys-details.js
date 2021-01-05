@@ -8,7 +8,7 @@ import {
   secretariesSelector, updatedSecretarySelector, deletedSecretarySelector,
   updateSecretary, deleteSecretary,
 } from '@models/index.js';
-import { formValidate } from '@features/validation/validation-helpers.js';
+import { editSecretaryValidation } from '@features/validation/validation-helpers.js';
 import { useHistory } from 'react-router-dom';
 import { useActions } from '@/shared';
 import { ModalWindow } from '@features/modal-window/index.js';
@@ -84,7 +84,7 @@ export const EditSecretarysDetails = ({ id }) => {
                 lastName: secretary?.lastName,
                 email: secretary?.email,
               }}
-              validationSchema={formValidate}
+              validationSchema={editSecretaryValidation}
               onSubmit={onSubmit}
             >
               {({
@@ -143,7 +143,7 @@ export const EditSecretarysDetails = ({ id }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4 px-1">
                         <Button
-                          disabled={!isValid || isDeleteLoading}
+                          disabled={!isValid || dirty || isDeleteLoading}
                           className="w-100"
                           variant="danger"
                           onClick={handleShowModal}

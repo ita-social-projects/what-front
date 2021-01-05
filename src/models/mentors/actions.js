@@ -3,7 +3,6 @@ import {
 } from 'redux-saga/effects';
 
 import * as types from '@models/mentors/types';
-import * as actionTypes from '@models/courses/types';
 import { ApiService } from '../../shared/api-service/index.js';
 
 export const fetchMentors = () => ({

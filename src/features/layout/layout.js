@@ -20,13 +20,15 @@ import {
   MyProfile,
 } from '@/features';
 import { Header } from '@/features/index.js';
-import { paths, useActions } from '@/shared';
+import { paths, homepages, useActions } from '@/shared';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
 import { ProtectedRoute } from '@/components';
+import { currentUserSelector } from '@/models';
 import styles from './layout.scss';
 
 export const Layout = () => {
   const { messages } = useSelector(alertSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const dispatchRemoveAlert = useActions(removeAlert);
 
   return (
@@ -77,6 +79,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.MENTORS_DETAILS}/:id`} render={() => <MentorTabs index={0} />} />
           <ProtectedRoute roles={[3, 4]} exact path={`${paths.MENTOR_EDIT}/:id`} render={() => <MentorTabs index={1} />} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
+          <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
           <Redirect to={paths.NOT_FOUND} />
         </Switch>
       </div>
