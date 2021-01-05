@@ -46,6 +46,8 @@ export const Header = ({ roles }) => {
     3: [
       { id: 0, title: 'Students', link: paths.STUDENTS, active: false },
       { id: 1, title: 'Mentors', link: paths.MENTORS, active: true },
+      { id: 2, title: 'Secretaries', link: paths.SECRETARIES, active: false },
+      { id: 3, title: 'Lessons', link: paths.LESSONS, active: false },
       { id: 4, title: 'Groups', link: paths.GROUPS, active: false },
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
@@ -53,13 +55,15 @@ export const Header = ({ roles }) => {
 
     ],
     2: [
+      { id: 0, title: 'Students', link: paths.STUDENTS, active: false },
+      { id: 1, title: 'Mentors', link: paths.MENTORS, active: true },
       { id: 3, title: 'Lessons', link: paths.LESSONS, active: true },
       { id: 4, title: 'Groups', link: paths.GROUPS, active: false },
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
-      { id: 7, title: 'Role', link: paths.UNASSIGNED_USERS, active: false },
     ],
     1: [
+      { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: true },
       { id: 8, title: 'Support', link: paths.SUPPORT, active: false },
     ],
