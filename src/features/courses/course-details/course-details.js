@@ -6,8 +6,8 @@ import { WithLoading } from '@/components';
 import { paths } from '@/shared';
 import styles from './course-details.scss';
 
-export const CourseDetails = ({ id }) => {
-  const { data, isLoading, loaded } = useSelector(coursesSelector, shallowEqual);
+export const CourseDetails = ({ id, coursesData }) => {
+  const { data, isLoading, loaded } = coursesData;
 
   const course = data.find((course) => course.id == id);
 

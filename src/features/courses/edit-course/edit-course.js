@@ -11,17 +11,17 @@ import { validateGroupName } from '../../validation/validation-helpers.js';
 
 import styles from './edit-course.scss';
 
-export const EditCourse = ({ id }) => {
+export const EditCourse = ({ id, coursesData }) => {
   const {
     data,
     isLoading: isCourseLoading,
     loaded: isCourseLoaded,
-  } = useSelector(coursesSelector, shallowEqual);
+  } = coursesData;
 
   const {
     isLoading: isEditedLoading,
     loaded: isEditedLoaded,
-    error: isEditedError,
+    error: editingError,
   } = useSelector(editedCourseSelector, shallowEqual);
 
   const [updateCourse, dispatchAddAlert] = useActions([editCourse, addAlert]);
@@ -37,11 +37,14 @@ export const EditCourse = ({ id }) => {
   }, [course, history, isCourseLoaded]);
 
   useEffect(() => {
-    if (!isEditedError && isEditedLoaded && !isEditedLoading) {
+    if (!editingError && isEditedLoaded && !isEditedLoading) {
       history.push(paths.COURSES);
       dispatchAddAlert('The course has been successfully edited', 'success');
     }
-  }, [dispatchAddAlert, history, isEditedError, isEditedLoaded, isEditedLoading]);
+    if (editingError && !isEditedLoaded && !isEditedLoading) {
+      dispatchAddAlert(editingError);
+    }
+  }, [dispatchAddAlert, history, editingError, isEditedLoaded, isEditedLoading]);
 
   const onSubmit = (values) => {
     updateCourse(values, id);
