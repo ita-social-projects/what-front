@@ -25,7 +25,7 @@ const sidebarToggler = (
   </svg>
 );
 
-export const Header = ({ roles }) => {
+export const Header = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const history = useHistory();

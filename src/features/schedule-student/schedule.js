@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './scheduale.scss';
+import styles from './schedule.scss';
 
 const SliderWeeks = () => (
   <div className={styles['slider-weeks']}>
@@ -83,7 +83,7 @@ const CustomCalendar = () => (
   </div>
 );
 
-export const StudentScheduale = () => (
+export const StudentSchedule = () => (
   <div className={styles['conteiner-calendar']}>
     <SliderWeeks />
     <ClenadarFilter />
