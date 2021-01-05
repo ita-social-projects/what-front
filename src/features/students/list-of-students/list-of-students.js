@@ -80,7 +80,7 @@ export const ListOfStudents = () => {
   };
 
   return (
-    <div className="container" style={{minHeight: 750}}>
+    <div className="container" style={{ minHeight: 750 }}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Student's name" />
@@ -102,13 +102,14 @@ export const ListOfStudents = () => {
           </WithLoading>
         </div>
       </div>
-        {filteredStudentsList.length > 9 && 
-          <Pagination 
-            itemsPerPage={studentsPerPage} 
-            totalItems={filteredStudentsList.length} 
+      {filteredStudentsList.length > 9
+          && (
+          <Pagination
+            itemsPerPage={studentsPerPage}
+            totalItems={filteredStudentsList.length}
             paginate={paginate}
           />
-        }
+          )}
     </div>
   );
 };
