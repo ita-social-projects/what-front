@@ -35,7 +35,7 @@ export const Auth = () => {
   };
 
   useEffect(() => {
-    if (loaded && !requestError) {
+    if (loaded && !requestError && currentUser) {
       history.push(homepages[currentUser.role]);
     }
   }, [currentUser, history, loaded, requestError]);
