@@ -1,5 +1,5 @@
 export { lessonsReducer } from './reducer.js';
 export {
-  fetchLessons, editLesson, addLesson, lessonsWatcher,
+  fetchLessons, fetchLessonsByStudentId, editLesson, addLesson, lessonsWatcher,
 } from './actions.js';
-export { lessonsSelector, addLessonSelector, editLessonSelector } from './selectors.js';
+export { lessonsSelector, studentLessonsSelector, addLessonSelector, editLessonSelector } from './selectors.js';

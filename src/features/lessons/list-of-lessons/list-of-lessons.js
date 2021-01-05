@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
-import { fetchLessons, lessonsSelector } from '@/models/index.js';
+import { currentUserSelector, fetchLessons, lessonsSelector } from '@/models/index.js';
 import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
@@ -18,6 +18,7 @@ export const ListOfLessons = () => {
   const [lessonsPerPage] = useState(12);
 
   const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const getLessons = useActions(fetchLessons);
 
@@ -70,21 +71,25 @@ export const ListOfLessons = () => {
     const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
 
     const lessonsList = filteredLessonsList.slice(indexOfFirstLesson, indexOfLastLesson)
+      .sort((a, b) => {
+        return a.lessonDate < b.lessonDate ? -1 : a.lessonDate > b.lessonDate ? 1 : 0;
+      })
       .map((lesson) => {
         const { date, time } = transformDateTime(lesson.lessonDate);
-        return (
-          <Card
-            key={lesson.id}
-            id={lesson.id}
-            title={lesson.themeName}
-            iconName="Edit"
-            onEdit={editLesson}
-          >
-            <p className={styles.timeDate}>Date: {date}</p>
-            <p className={styles.timeDate}>Time: {time}</p>
-          </Card>
-        );
-      });
+          return (
+            <Card
+              key={lesson.id}
+              id={lesson.id}
+              title={lesson.themeName}
+              iconName={currentUser.role !== 3 ? "Edit" : null}
+              onEdit={currentUser.role !== 3 ? editLesson : null}
+            >
+              <p className={styles.timeDate}>Date: {date}</p>
+              <p className={styles.timeDate}>Time: {time}</p>
+            </Card>
+          );
+        });
+
     if (!lessonsList.length && searchLessonsDateValue) {
       return <h4>Lesson not found</h4>;
     } if (!lessonsList.length && searchLessonsThemeValue) {
@@ -100,7 +105,6 @@ export const ListOfLessons = () => {
   return (
     <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
-        <div className={classNames(styles.heading, 'col-12 mb-2')}>
           <div>
             <input
               className={classNames('form-control ', styles['calendar-input'])}
@@ -110,12 +114,17 @@ export const ListOfLessons = () => {
               onChange={handleSearchDate}
             />
           </div>
-          <Search onSearch={handleSearchTheme} placeholder="Search lesson`s theme" />
-          <Button onClick={addLesson} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            Add a Lesson
-          </Button>
-        </div>
+          <div className="col-md-6 offset-md-1 text-center pl-4">
+            <Search onSearch={handleSearchTheme} placeholder="Search lesson" />
+          </div>
+          {currentUser.role !== 3 && 
+            <div className="col-md-2 offset-md-1 text-right">
+              <Button onClick={addLesson} variant="warning">
+                <Icon icon="Plus" className="icon" />
+                  Add a Lesson
+              </Button>
+            </div>
+          }
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
           <WithLoading isLoading={isLoading}>

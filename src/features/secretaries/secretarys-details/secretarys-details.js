@@ -3,12 +3,12 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { number } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { WithLoading } from '@components/index.js';
-import { secretariesSelector } from '@models/index.js';
-
-import styles from './secretarys-details.scss';
+import { currentUserSelector, secretariesSelector } from '@models/index.js';
+import classNames from 'classnames';
 
 export const SecretarysDetails = ({ id }) => {
   const { data, isLoading, loaded } = useSelector(secretariesSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const history = useHistory();
   const secretary = data.find((user) => user.id === id);
 
@@ -19,10 +19,13 @@ export const SecretarysDetails = ({ id }) => {
   }, [secretary, loaded, history]);
 
   return (
-    <div className={styles.wrapper}>
-      <div className="container-fluid card shadow">
-        <div className="container pb-2">
-          <h3 className="pt-3">Secretary&apos;s details</h3>
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className={classNames("col-sm-12 card shadow", 
+          { "col-md-12": currentUser.role === 4, "col-md-6": currentUser.role === 3})}
+        >
+          <div className="px-2 py-4">
+          <h3>Secretary&apos;s details</h3>
           <hr />
           <WithLoading isLoading={isLoading && !loaded} className="d-block mx-auto">
             <div className="row">
@@ -40,6 +43,7 @@ export const SecretarysDetails = ({ id }) => {
               <div className="col-12 col-md-6">{secretary?.email}</div>
             </div>
           </WithLoading>
+          </div>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import { Button, WithLoading } from '@/components/index.js';
 
 import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
-import { authValidationSchema } from '../validation/validation-helpers.js';
+import { authValidation } from '@features/validation/validation-helpers.js';
 
 import styles from './auth.scss';
 
@@ -52,7 +52,7 @@ export const Auth = () => {
                   password: '',
                 }}
                 onSubmit={submitHandler}
-                validationSchema={authValidationSchema}
+                validationSchema={authValidation}
               >
                 {({
                   errors,
