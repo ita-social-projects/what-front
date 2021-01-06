@@ -95,7 +95,10 @@ export const StudentDetails = () => {
                       .map(({ id, themeName }) => (
                         <div className="pr-2" key={id}>
                           <Badge pill variant="primary">
-                            {themeName}
+                            <Link
+                              to={`${paths.LESSON_DETAILS}/${id}`}
+                              className="text-decoration-none text-white"
+                            >{themeName}</Link>
                           </Badge>
                         </div>
                       ))}
