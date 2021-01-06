@@ -13,18 +13,15 @@
 
 .calendar-input:focus {
   outline: none;
-  box-shadow: 0 0 10px map-get($colors, textAccentN1-color) !important;
-  border-color: map-get($colors, textAccentN1-color) !important;
-}
-
-.list {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
+  box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
+  border-color: map-get($colors, textAccentN1-color);
 }
 
 .timeDate{
   font-size: 15px;
   margin-bottom: 0px;
+}
+
+.list-wrapper {
+  min-height: 950px;
 }

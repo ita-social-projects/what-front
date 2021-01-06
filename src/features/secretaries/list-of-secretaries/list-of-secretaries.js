@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { fetchSecretaries, secretariesSelector } from '@/models/index.js';
+import { currentUserSelector, fetchSecretaries, secretariesSelector } from '@/models/index.js';
 import { paths, useActions } from '@/shared/index.js';
-import {
-  Button, Search, Card, WithLoading,
-} from '@/components/index.js';
+import { Button, Search, Card, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
 
 export const ListOfSecretaries = () => {
@@ -13,8 +11,11 @@ export const ListOfSecretaries = () => {
 
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [secretariesPerPage] = useState(9);
 
   const { data, isLoading } = useSelector(secretariesSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const history = useHistory();
 
@@ -47,24 +48,29 @@ export const ListOfSecretaries = () => {
   };
 
   const getSecretaries = () => {
-    const secretaries = searchResults.map(({
-      id, firstName, lastName, email,
-    }) => (
-      <Card
-        key={id}
-        id={id}
-        iconName="Edit"
-        buttonName="Details"
-        onEdit={() => handleEditSecretary(id)}
-        onDetails={() => handleSecretariesDetails(id)}
-      >
-        <div className=" w-75">
-          <span className="mb-2 font-weight-bolder pr-2">{firstName}</span>
-          <span className="font-weight-bolder">{lastName}</span>
-        </div>
-        <p className="font-weight-lighter font-italic small mt-2"><u>{email}</u></p>
-      </Card>
-    ));
+    const indexOfLastSecretary = currentPage * secretariesPerPage;
+    const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
+
+    const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
+      .map(({
+        id, firstName, lastName
+      }) => {
+        return (
+          <Card
+            key={id}
+            id={id}
+            iconName={currentUser.role === 4 ? "Edit" : null}
+            buttonName="Details"
+            onEdit={currentUser.role === 4 ? () => handleEditSecretary(id) : null}
+            onDetails={() => handleSecretariesDetails(id)}
+          >
+            <div className=" w-75">
+              <p className="mb-2 font-weight-bolder pr-2">{firstName}</p>
+              <p className="font-weight-bolder">{lastName}</p>
+            </div>
+          </Card>
+        );
+      }); 
 
     if (!secretaries.length && search) {
       return <h4>Secretary is not found</h4>;
@@ -72,18 +78,24 @@ export const ListOfSecretaries = () => {
     return secretaries;
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="container mb-2">
+    <div className="container" style={{minHeight: 750}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
-        <div className="col-md-4 col-12 text-right">
-          <Button onClick={handleAddSecretary} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            <span>Add a secretary</span>
-          </Button>
-        </div>
+        {currentUser.role === 4 && 
+          <div className="col-md-4 col-12 text-right">
+            <Button onClick={handleAddSecretary} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              <span>Add a secretary</span>
+            </Button>
+          </div>
+        }
       </div>
       <div>
         <hr className="col-8" />
@@ -95,6 +107,13 @@ export const ListOfSecretaries = () => {
           </WithLoading>
         </div>
       </div>
+      {searchResults.length > 9 &&  
+        <Pagination 
+          itemsPerPage={secretariesPerPage} 
+          totalItems={searchResults.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };

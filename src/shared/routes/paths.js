@@ -31,15 +31,18 @@ export const paths = {
   SECRETARY_ADD: '/secretaries/add',
 
   LESSONS: '/lessons',
-  LESSON: '/lessons',
   LESSON_ADD: '/lessons/add',
+  LESSON_DETAILS: '/lessons',
   LESSON_EDIT: '/lessons/edit',
+
+  SCHEDULE: '/schedule',
+  SCHEDULE_EDIT: '/schedule/edit',
+  SCHEDULE_ADD: '/schedule/add',
 
   UNASSIGNED_USERS: '/unassigned',
   MY_PROFILE: '/my-profile',
   CHANGE_PASSWORD: '/change-password',
   SUPPORT: '/support',
-  SCHEDULE: '/schedule',
 };
 
 export const homepages = {

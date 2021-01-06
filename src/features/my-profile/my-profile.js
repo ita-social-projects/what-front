@@ -1,9 +1,11 @@
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import { currentUserSelector } from '@/models';
-import { Button } from '@/components';
-import { paths } from '@/shared';
 import { useHistory } from 'react-router-dom';
+import { currentUserSelector } from '@/models';
+import { paths } from '@/shared';
+
+import { Button } from '@/components';
+
 import styles from './my-profile.scss';
 
 export const MyProfile = () => {

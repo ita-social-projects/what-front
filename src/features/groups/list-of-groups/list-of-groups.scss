@@ -8,7 +8,6 @@
 }
 
 .calendar-input{
-  @include input;
   border-color: map-get($colors, textAccentN1-color) !important;
   width: 18%;
 }
@@ -27,4 +26,8 @@
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
+}
+
+.list-wrapper {
+  min-height: 750px;
 }

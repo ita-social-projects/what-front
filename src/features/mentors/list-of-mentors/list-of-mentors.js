@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Card, Search, Button, WithLoading } from '@/components/index.js';
-import Icon from '@/icon.js';
 import { paths, useActions } from '@/shared/index.js';
-import { fetchActiveMentors, mentorsActiveSelector } from '@/models/index.js';
+import { currentUserSelector, fetchActiveMentors, mentorsActiveSelector } from '@/models/index.js';
+import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
+import Icon from '@/icon.js';
 
 export const ListOfMentors = () => {
-  const [loadActiveMentors] = useActions([fetchActiveMentors]);
   const [searchMentorValue, setSearchMentorValue] = useState('');
   const [filteredMentorList, setFilteredMentorList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [mentorsPerPage] = useState(9);
+
   const { data, isLoading } = useSelector(mentorsActiveSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+
+  const [loadActiveMentors] = useActions([fetchActiveMentors]);
 
   useEffect(() => {
     loadActiveMentors();
@@ -41,22 +46,27 @@ export const ListOfMentors = () => {
   };
 
   const mentorsList = () => {
-    const mentors = filteredMentorList.map((mentor) => (
-      <Card
-        key={mentor.id}
-        id={mentor.id}
-        buttonName="Details"
-        iconName="Edit"
-        onEdit={() => mentorEditing(mentor.id)}
-        onDetails={() => mentorDetails(mentor.id)}
-      >
-        <div className="w-75">
-          <span className="mb-2 font-weight-bolder pr-2">{mentor.firstName}</span>
-          <span className="font-weight-bolder">{mentor.lastName}</span>
-        </div>
-        <p className="font-weight-lighter font-italic small mt-2"><u>{mentor.email}</u></p>
-      </Card>
-    ));
+    const indexOfLastMentor = currentPage * mentorsPerPage;
+    const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
+
+    const mentors = filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor)
+      .map((mentor) => {
+        return (
+          <Card
+            key={mentor.id}
+            id={mentor.id}
+            buttonName="Details"
+            iconName={currentUser.role !== 2 ? "Edit" : null}
+            onEdit={currentUser.role !== 2 ? () => mentorEditing(mentor.id) : null}
+            onDetails={() => mentorDetails(mentor.id)}
+          >
+            <div className="w-75">
+              <p className="mb-2 font-weight-bolder pr-2">{mentor.firstName}</p>
+              <p className="font-weight-bolder">{mentor.lastName}</p>
+            </div>
+          </Card>
+        );
+      });
 
     if (!mentors.length && searchMentorValue) {
       return <h4>Mentor is not found</h4>;
@@ -64,18 +74,24 @@ export const ListOfMentors = () => {
     return mentors;
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="container mb-2">
+    <div className="container" style={{minHeight: 750}}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Mentor's name" />
         </div>
-        <div className="col-md-4 col-12 text-right">
-          <Button onClick={addMentor} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            <span>Add a mentor</span>
-          </Button>
-        </div>
+        {currentUser.role !== 2 && 
+          <div className="col-md-4 col-12 text-right">
+            <Button onClick={addMentor} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              <span>Add a mentor</span>
+            </Button>
+          </div>
+        } 
       </div>
       <div>
         <hr className="col-8" />
@@ -87,6 +103,13 @@ export const ListOfMentors = () => {
           </WithLoading>
         </div>
       </div>
+      {filteredMentorList.length > 9 && 
+        <Pagination 
+          itemsPerPage={mentorsPerPage} 
+          totalItems={filteredMentorList.length} 
+          paginate={paginate}
+        />
+      }
     </div>
   );
 };

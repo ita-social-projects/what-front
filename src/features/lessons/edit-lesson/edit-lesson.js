@@ -25,6 +25,8 @@ export const EditLesson = () => {
 
   const { id } = useParams();
 
+  const today = new Date().toISOString().split(".")[0];
+
   const [studentsGroup, setStudentsGroup] = useState(null);
   const [studentsGroupInput, setStudentsGroupInput] = useState('');
   const [lessonOnEdit, setLessonOEdit] = useState(false);
@@ -81,12 +83,13 @@ export const EditLesson = () => {
   }, [lessonsIsLoaded, lessonOnEdit, studentsGroup]);
 
   const getFormData = () => {
-    const studentD = studentsGroup.studentIds.map(
+    const uniqueIds = [...new Set(studentsGroup.studentIds)];
+
+    const studentD = uniqueIds.map(
       (id) => students.find((student) => student.id === id),
     );
-
+    
     const activeStudents = studentD.filter((student) => student !== undefined);
-
 
     const studentsData = activeStudents.map((student) => (
       {
@@ -94,12 +97,12 @@ export const EditLesson = () => {
         studentName: `${student.firstName} ${student.lastName}`,
       }
     ));
-
+      
     const resultLessonVisits = studentsData.map((student, index) => ({
       ...lessonOnEdit.lessonVisits[index],
       ...student,
     }));
-
+    
     setFormData(resultLessonVisits);
   };
 
@@ -273,6 +276,7 @@ export const EditLesson = () => {
                             type="datetime-local"
                             name="lessonD"
                             id="choose-date/time"
+                            max={today}
                             required
                           />
                         </div>
@@ -280,8 +284,8 @@ export const EditLesson = () => {
                     </div>
                     <div className="col-lg-12 mt-2">
                       <FieldArray name="formData">
-                        {(arrayHelpers) => (
-                          <div className="col-lg-12">
+                        {() => (
+                          <div className={classNames(styles.list, 'col-lg-12')}>
                             <table className="table table-bordered table-hover">
                               <thead>
                                 <tr>

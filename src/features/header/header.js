@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-import { Link, Redirect } from 'react-router-dom';
 import { useActions, paths } from '@/shared';
-import { currentUserSelector, fetchUsersList, fetchAssignedUsersSelector, logOut } from '@/models';
+import { currentUserSelector, logOut } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import styles from './header.scss';
@@ -25,8 +25,12 @@ const sidebarToggler = (
   </svg>
 );
 
-export const Header = ({ roles }) => {
+export const Header = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+
+  const history = useHistory();
+
+  const currentURL = history.location.pathname;
 
   const rolesObject = {
     4: [
@@ -42,6 +46,8 @@ export const Header = ({ roles }) => {
     3: [
       { id: 0, title: 'Students', link: paths.STUDENTS, active: false },
       { id: 1, title: 'Mentors', link: paths.MENTORS, active: true },
+      { id: 2, title: 'Secretaries', link: paths.SECRETARIES, active: false },
+      { id: 3, title: 'Lessons', link: paths.LESSONS, active: false },
       { id: 4, title: 'Groups', link: paths.GROUPS, active: false },
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
@@ -49,13 +55,15 @@ export const Header = ({ roles }) => {
 
     ],
     2: [
+      { id: 0, title: 'Students', link: paths.STUDENTS, active: false },
+      { id: 1, title: 'Mentors', link: paths.MENTORS, active: true },
       { id: 3, title: 'Lessons', link: paths.LESSONS, active: true },
       { id: 4, title: 'Groups', link: paths.GROUPS, active: false },
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
-      { id: 7, title: 'Role', link: paths.UNASSIGNED_USERS, active: false },
     ],
     1: [
+      { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: true },
       { id: 8, title: 'Support', link: paths.SUPPORT, active: false },
     ],
@@ -68,7 +76,11 @@ export const Header = ({ roles }) => {
 
   useEffect(() => {
     const headerArray = rolesObject[currentUser.role];
-    setTabs(headerArray);
+    const resultArr = headerArray.map((tab) => ({
+      ...tab,
+      active: currentURL.includes(tab.title.toLowerCase()),
+    }));
+    setTabs(resultArr);
   }, [currentUser]);
 
   const toggleActiveTab = (event) => {
@@ -137,12 +149,12 @@ export const Header = ({ roles }) => {
 
         <div className={styles.header__account}>
           <div className={styles['header__account-user']}>
-            <a
+            <Link
               className={styles['header__account-user--icon']}
               onClick={toggleActiveTab}
-              href={paths.MY_PROFILE}
+              to={paths.MY_PROFILE}
             >{user}
-            </a>
+            </Link>
             <span className={styles['header__account-user--fullname']}>{`${currentUser?.first_name}`}<br />{`${currentUser?.last_name}`} </span>
           </div>
           <div className={styles['header__account-logout']}>

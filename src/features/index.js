@@ -1,6 +1,6 @@
 export * from './counter';
 export * from './support';
-export * from './schedule-student';
+export * from './schedule';
 export * from './auth';
 export * from './header';
 export * from './not-found';

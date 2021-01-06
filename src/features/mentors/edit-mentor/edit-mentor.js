@@ -18,8 +18,8 @@ import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
 import Icon from '@/icon';
 import { ModalWindow } from '@/features/modal-window/index.js';
+import { editMentorValidation } from '@features/validation/validation-helpers.js';
 import styles from './edit-mentor.scss';
-import { formValidate } from '../../validation/validation-helpers.js';
 
 export const EditMentor = ({ id }) => {
   const history = useHistory();
@@ -53,9 +53,6 @@ export const EditMentor = ({ id }) => {
     isLoading: allCoursesAreLoading,
     isLoaded: allCoursesAreLoaded,
   } = useSelector(coursesSelector, shallowEqual);
-
-  console.log(allCourses);
-  console.log(allGroups);
 
   const {
     isLoading: editedIsLoading,
@@ -209,10 +206,10 @@ export const EditMentor = ({ id }) => {
                   groups: '',
                   courses: '',
                 }}
-                validationSchema={formValidate}
+                validationSchema={editMentorValidation}
                 onSubmit={onSubmit}
               >
-                {({ values, errors }) => (
+                {({ values, errors, isValid, dirty }) => (
                   <Form>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
@@ -384,12 +381,13 @@ export const EditMentor = ({ id }) => {
                           className="w-100"
                           variant="danger"
                           onClick={handleShowModal}
-                          disabled={editedIsLoading || deletedIsLoading}
+                          disabled={!isValid || dirty || editedIsLoading || deletedIsLoading}
                         >Fire
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
                         <button
+                          disabled={!dirty}
                           className={classNames('w-100 btn btn-secondary', styles.button)}
                           type="reset"
                           onClick={resetInput}
@@ -400,7 +398,7 @@ export const EditMentor = ({ id }) => {
                         <button
                           className={classNames('w-100 btn btn-success', styles.button)}
                           type="submit"
-                          disabled={editedIsLoading || deletedIsLoading
+                          disabled={!isValid || !dirty || editedIsLoading || deletedIsLoading
                                 || errors.firstName || errors.lastName || errors.email}
                         >Save
                         </button>
