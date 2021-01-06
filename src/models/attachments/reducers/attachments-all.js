@@ -32,12 +32,7 @@ export const attachmentsAllReducer = (state = initialState, action) => {
         isLoaded: false,
         error: action.payload.error.message,
       };
-
-    case types.CLEAR_LOADED:
-      return {
-        ...state,
-        loaded: false,
-      };
+      
     default:
       return state;
   }
