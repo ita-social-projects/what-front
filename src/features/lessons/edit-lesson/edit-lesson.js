@@ -98,7 +98,15 @@ export const EditLesson = () => {
       }
     ));
       
-    const resultLessonVisits = studentsData.map((student, index) => ({
+    const resultLessonVisits = studentsData.sort((a, b) => {
+      if(a.studentName < b.studentName) {
+        return -1;
+      }
+      if(a.studentName > b.studentName) {
+        return 1;
+      }
+    })
+    .map((student, index) => ({
       ...lessonOnEdit.lessonVisits[index],
       ...student,
     }));
