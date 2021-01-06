@@ -1,6 +1,8 @@
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { currentUserSelector } from '@/models';
+import { paths } from '@/shared';
 
 import { Button } from '@/components';
 
@@ -9,9 +11,7 @@ import styles from './my-profile.scss';
 export const MyProfile = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  const handleChangePassword = () => {
-    console.log('click');
-  };
+  const history = useHistory();
 
   return (
     <div className={styles.wrapper}>
@@ -36,7 +36,7 @@ export const MyProfile = () => {
           <hr />
           <div className="row mb-2">
             <div className="col-sm-6 offset-sm-6">
-              <Button className="float-right" onClick={(handleChangePassword)} variant="secondary">
+              <Button className="float-right" onClick={() => (history.push(paths.CHANGE_PASSWORD))}>
                 <span>Change password</span>
               </Button>
             </div>
