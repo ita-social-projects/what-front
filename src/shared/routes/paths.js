@@ -41,6 +41,7 @@ export const paths = {
 
   UNASSIGNED_USERS: '/unassigned',
   MY_PROFILE: '/my-profile',
+  CHANGE_PASSWORD: '/change-password',
   SUPPORT: '/support',
 };
 

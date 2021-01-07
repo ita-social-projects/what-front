@@ -124,3 +124,16 @@ export const editStudentValidation = Yup.object().shape({
     .email('Invalid email address')
     .required('This field is required'),
 });
+
+export const changePasswordValidation = Yup.object().shape({
+  currentPassword: Yup.string()
+    .min(6, 'Password has to be longer than 6 characters')
+    .required('This field is required'),
+  newPassword: Yup.string()
+    .min(6, 'Password has to be longer than 6 characters')
+    .notOneOf([Yup.ref('currentPassword'), null], 'You should provide a new password')
+    .required('This field is required'),
+  confirmNewPassword: Yup.string()
+    .oneOf([Yup.ref('newPassword'), null], 'You should confirm your password')
+    .required('This field is required'),
+});
