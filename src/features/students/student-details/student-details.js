@@ -90,12 +90,15 @@ export const StudentDetails = () => {
                   isLoading={studentLessonsIsLoading}
                   className={styles['loader-centered']}
                 >
-                  <div className="col-12 col-md-6 d-flex flex-wrap">
+                  <div className="col-12 col-md-6 d-flex flex-wrap lead">
                     {studentLessons
                       .map(({ id, themeName }) => (
                         <div className="pr-2" key={id}>
                           <Badge pill variant="primary">
-                            {themeName}
+                            <Link
+                              to={`${paths.LESSON_DETAILS}/${id}`}
+                              className="text-decoration-none text-white"
+                            >{themeName}</Link>
                           </Badge>
                         </div>
                       ))}

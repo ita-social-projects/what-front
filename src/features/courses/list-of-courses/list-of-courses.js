@@ -79,7 +79,13 @@ export const ListOfCourses = () => {
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Course's name" />
         </div>
-        {currentUser.role === 3 || currentUser.role === 4 &&
+        {currentUser.role === 4 && 
+          <div className="col-md-4 col-12 text-right">
+            <Button onClick={addCourse} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              <span>Add a course</span>
+            </Button>
+          </div> || currentUser.role === 3 &&
           <div className="col-md-4 col-12 text-right">
             <Button onClick={addCourse} variant="warning">
               <Icon icon="Plus" className="icon" />
