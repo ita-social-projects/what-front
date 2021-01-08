@@ -19,7 +19,7 @@ import {
   loadActiveStudents,
   addLesson,
 } from '@/models/index.js';
-
+import { addAlert } from '@/features';
 import styles from './add-lesson.scss';
 
 export const AddLesson = () => {
@@ -66,7 +66,14 @@ export const AddLesson = () => {
     getGroups,
     getStudents,
     createLesson,
-  ] = useActions([fetchActiveMentors, globalLoadStudentGroups, loadActiveStudents, addLesson]);
+    dispatchAddAlert,
+  ] = useActions([
+    fetchActiveMentors,
+    globalLoadStudentGroups,
+    loadActiveStudents,
+    addLesson,
+    addAlert,
+  ]);
 
   useEffect(() => {
     if (!mentorsIsLoaded && !mentorError) {
@@ -89,8 +96,12 @@ export const AddLesson = () => {
   useEffect(() => {
     if (!addError && addIsLoaded) {
       history.push(paths.LESSONS);
+      dispatchAddAlert('The lesson has been added successfully!', 'success');
     }
-  }, [addError, addIsLoaded, history]);
+    if (addError && !addIsLoaded) {
+      dispatchAddAlert(addError);
+    }
+  }, [addError, addIsLoaded, dispatchAddAlert, history]);
 
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)

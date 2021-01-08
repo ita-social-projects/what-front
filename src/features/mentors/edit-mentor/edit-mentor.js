@@ -27,7 +27,6 @@ export const EditMentor = ({ id }) => {
   const {
     data: mentor,
     isLoading: mentorIsLoading,
-    isLoaded: mentorIsLoaded,
     error: mentorError,
   } = useSelector(mentorIdSelector, shallowEqual);
 
@@ -46,13 +45,11 @@ export const EditMentor = ({ id }) => {
   const {
     data: allGroups,
     isLoading: allGroupsAreLoading,
-    isLoaded: allGroupsAreLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
     data: allCourses,
     isLoading: allCoursesAreLoading,
-    isLoaded: allCoursesAreLoaded,
   } = useSelector(coursesSelector, shallowEqual);
 
   const {
@@ -94,6 +91,9 @@ export const EditMentor = ({ id }) => {
     if (!editedIsError && editedIsLoaded) {
       history.push(paths.MENTORS);
       dispatchAddAlert('Mentor has been successfully edited', 'success');
+    }
+    if (editedIsError && !editedIsLoaded) {
+      dispatchAddAlert(editedIsError);
     }
   }, [dispatchAddAlert, editedIsError, editedIsLoaded, history]);
 
@@ -204,7 +204,7 @@ export const EditMentor = ({ id }) => {
             <h3>Mentor Editing</h3>
             <hr />
             <WithLoading
-              isLoading={(mentorIsLoading || !mentorIsLoaded) && (allCoursesAreLoading || !allCoursesAreLoaded) && (allGroupsAreLoading || !allGroupsAreLoaded)}
+              isLoading={mentorIsLoading && allCoursesAreLoading && allGroupsAreLoading}
               className={styles['loader-centered']}
             >
               <Formik

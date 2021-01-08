@@ -110,9 +110,10 @@ function* editStudentAsync({ payload }) {
     const data = yield call(ApiService.update, `/students/${studentId}`, newStudentData);
 
     yield put({ type: actionTypes.EDITING_STUDENT_SUCCEED, payload: { data } });
-    yield put({type: actionTypes.CLEAR_LOADED});
+    yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.EDITING_STUDENT_FAILED, payload: { error } });
+    yield put({ type: actionTypes.CLEAR_ERROR });
   }
 }
 
@@ -125,7 +126,7 @@ function* removeStudentAsync({ payload }) {
     yield call(ApiService.remove, `/students/${studentId}`);
 
     yield put({ type: actionTypes.REMOVING_STUDENT_SUCCEED, payload: { id: studentId } });
-    yield put({type: actionTypes.CLEAR_LOADED});
+    yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.REMOVING_STUDENT_FAILED, payload: { error } });
   }

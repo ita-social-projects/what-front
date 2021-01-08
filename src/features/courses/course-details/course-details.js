@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { coursesSelector } from '@/models';
-import { shallowEqual, useSelector } from 'react-redux';
+import { number, shape } from 'prop-types';
+
 import { WithLoading } from '@/components';
 import { paths } from '@/shared';
+import { coursesStateShape } from '@features/shared';
 import styles from './course-details.scss';
 
 export const CourseDetails = ({ id, coursesData }) => {
@@ -37,4 +38,9 @@ export const CourseDetails = ({ id, coursesData }) => {
       </div>
     </div>
   );
+};
+
+CourseDetails.propTypes = {
+  id: number.isRequired,
+  coursesData: shape(coursesStateShape).isRequired,
 };

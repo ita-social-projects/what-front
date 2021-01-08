@@ -15,3 +15,4 @@ export * from './students';
 export * from './my-profile';
 export * from './registration';
 export * from './layout';
+export * from './alert-box';

@@ -18,6 +18,7 @@ import {
   loadActiveStudents,
   editLesson,
 } from '@/models';
+import { addAlert } from '@/features';
 import styles from './edit-lesson.scss';
 
 export const EditLesson = () => {
@@ -35,7 +36,8 @@ export const EditLesson = () => {
     getStudents,
     loadLessons,
     updateLesson,
-  ] = useActions([globalLoadStudentGroups, loadActiveStudents, fetchLessons, editLesson]);
+    dispatchAddAlert,
+  ] = useActions([globalLoadStudentGroups, loadActiveStudents, fetchLessons, editLesson, addAlert]);
 
   const {
     data: groups,
@@ -132,8 +134,12 @@ export const EditLesson = () => {
   useEffect(() => {
     if (!editError && editIsLoaded) {
       history.push(paths.LESSONS);
+      dispatchAddAlert('The lesson has been edited successfully', 'success');
     }
-  }, [editError, editIsLoaded]);
+    if (editError && !editIsLoaded) {
+      dispatchAddAlert(editError);
+    }
+  }, [dispatchAddAlert, editError, editIsLoaded, history]);
 
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)

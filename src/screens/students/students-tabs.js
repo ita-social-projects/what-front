@@ -5,12 +5,12 @@ import { globalLoadStudentGroups, loadStudentById, loadStudentGroups } from '@/m
 import { Tab, Tabs } from '@/components';
 import { EditStudentsDetails, StudentDetails } from '@/features/students';
 
-export const StudentsTabs = ({index}) => {
+export const StudentsTabs = ({ index }) => {
   const { id } = useParams();
 
   const [
-    fetchStudentById, 
-    fetchGroups, 
+    fetchStudentById,
+    fetchGroups,
     fetchStudentGroups,
   ] = useActions([loadStudentById, globalLoadStudentGroups, loadStudentGroups]);
 
@@ -18,14 +18,14 @@ export const StudentsTabs = ({index}) => {
     fetchStudentById(id);
     fetchGroups();
     fetchStudentGroups(id);
-  }, [loadStudentById, globalLoadStudentGroups, loadStudentGroups]);
+  }, [fetchGroups, fetchStudentById, fetchStudentGroups, id]);
 
   return (
-    <Tabs defaultIndex={index} className='container w-50' linkBack='/students'>
-      <Tab title='Student details'>
-        <StudentDetails/>
+    <Tabs defaultIndex={index} className="container w-50" linkBack="/students">
+      <Tab title="Student details">
+        <StudentDetails />
       </Tab>
-      <Tab title='Edit student details'>
+      <Tab title="Edit student details">
         <EditStudentsDetails id={id} />
       </Tab>
     </Tabs>

@@ -2,13 +2,15 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
+import classNames from 'classnames';
+import { shape, number } from 'prop-types';
+
 import { paths, useActions } from '@/shared';
 import { addAlert } from '@/features';
-import { coursesSelector, editCourse, editedCourseSelector } from '@/models';
+import { editCourse, editedCourseSelector } from '@/models';
 import { WithLoading } from '@/components';
-import classNames from 'classnames';
+import { coursesStateShape } from '@/features/shared';
 import { validateGroupName } from '../../validation/validation-helpers.js';
-
 import styles from './edit-course.scss';
 
 export const EditCourse = ({ id, coursesData }) => {
@@ -58,7 +60,7 @@ export const EditCourse = ({ id, coursesData }) => {
             <h3>Course Editing</h3>
             <hr />
             <WithLoading
-              isLoading={isCourseLoading || !isCourseLoaded}
+              isLoading={isCourseLoading}
               className={classNames(styles['loader-centered'])}
             >
               <Formik
@@ -109,4 +111,9 @@ export const EditCourse = ({ id, coursesData }) => {
       </div>
     </div>
   );
+};
+
+EditCourse.propTypes = {
+  id: number.isRequired,
+  coursesData: shape(coursesStateShape).isRequired,
 };

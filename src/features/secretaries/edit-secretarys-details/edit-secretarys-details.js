@@ -36,7 +36,7 @@ export const EditSecretarysDetails = ({ id }) => {
     error: secretaryDeleteError,
   } = useSelector(deletedSecretarySelector, shallowEqual);
 
-  const [editeSecretary, dispatchAddAlert] = useActions([updateSecretary, addAlert]);
+  const [editSecretary, dispatchAddAlert] = useActions([updateSecretary, addAlert]);
   const [fireSecretary] = useActions([deleteSecretary]);
 
   const secretary = data.find((user) => user.id === id);
@@ -58,6 +58,9 @@ export const EditSecretarysDetails = ({ id }) => {
       history.push(paths.SECRETARIES);
       dispatchAddAlert('The secretary has been successfully edited', 'success');
     }
+    if (secretaryUpdateError && !isUpdateLoaded) {
+      dispatchAddAlert(secretaryUpdateError);
+    }
   }, [secretaryUpdateError, isUpdateLoaded, history, dispatchAddAlert]);
 
   useEffect(() => {
@@ -67,8 +70,8 @@ export const EditSecretarysDetails = ({ id }) => {
     }
   }, [secretaryDeleteError, isDeleteLoaded, history, dispatchAddAlert]);
 
-  const onSubmit = (value) => {
-    editeSecretary(id, value);
+  const onSubmit = (values) => {
+    editSecretary(id, values);
   };
 
   const handleDelete = () => {
@@ -152,6 +155,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           className="w-100"
                           variant="danger"
                           onClick={handleShowModal}
+                          type="button"
                         >
                           Fire
                         </Button>
@@ -159,7 +163,7 @@ export const EditSecretarysDetails = ({ id }) => {
                       <div className="col-md-3 offset-md-3 col-4 px-1">
                         <Button
                           disabled={!dirty}
-                          type="button"
+                          type="reset"
                           className={className(styles.button, 'btn btn-secondary w-100')}
                           onClick={handleReset}
                         >
@@ -171,7 +175,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           disabled={!isValid || !dirty || isUpdateLoading}
                           className={className(styles.button, 'btn btn-success w-100')}
                           type="submit"
-                          onClick={onSubmit}
+                          onClick={() => onSubmit(values)}
                         >
                           Save
                         </Button>
