@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
-import { paths, useActions } from '@/shared/index.js';
+import { paths } from '@/shared/index.js';
 import { WithLoading } from '@/components/index.js';
-import { mentorIdSelector, fetchMentorById, fetchActiveMentors, currentUserSelector } from '@/models/index.js';
+import { mentorIdSelector, currentUserSelector } from '@/models/index.js';
 import classNames from 'classnames';
 
-export const MentorDetails = ({ id }) => {
+export const MentorDetails = () => {
   const {
     data: mentor,
     isLoading,
@@ -17,15 +17,7 @@ export const MentorDetails = ({ id }) => {
 
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  const [
-    dispatchLoadMentors,
-  ] = useActions([fetchMentorById, fetchActiveMentors]);
-
   const history = useHistory();
-
-  useEffect(() => {
-    dispatchLoadMentors(id);
-  }, [dispatchLoadMentors, id]);
 
   useEffect(() => {
     if (error) {
@@ -36,8 +28,8 @@ export const MentorDetails = ({ id }) => {
   return (
     <div className="container">
       <div className="row justify-content-center">
-        <div className={classNames("col-sm-12 card shadow", 
-          { "col-md-12": currentUser.role !== 2, "col-md-6": currentUser.role === 2})}
+        <div className={classNames('col-sm-12 card shadow',
+          { 'col-md-12': currentUser.role !== 2, 'col-md-6': currentUser.role === 2 })}
         >
           <div className="px-2 py-4">
             <h3>Mentor Details</h3>
@@ -63,8 +55,4 @@ export const MentorDetails = ({ id }) => {
       </div>
     </div>
   );
-};
-
-MentorDetails.propTypes = {
-  id: number.isRequired,
 };

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector,
-  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent } from '@models';
 import classNames from 'classnames';
 import { Formik, Form, Field } from 'formik';
 
-import { WithLoading } from '@components';
+import { WithLoading } from '@/components';
+import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector,
+  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent } from '@/models';
 import { Button } from '@components/index.js';
 import Icon from '@/icon.js';
-import { paths, useActions } from '@shared';
-import { ModalWindow } from '@features/modal-window/index.js';
-import { addAlert } from '@/features';
+import { paths, useActions } from '@/shared';
+import { addAlert, ModalWindow } from '@/features';
+import { editStudentValidation } from '@features/validation/validation-helpers';
 import styles from './edit-students-details.scss';
 
 export const EditStudentsDetails = ({ id }) => {
