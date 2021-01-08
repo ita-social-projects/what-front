@@ -1,7 +1,7 @@
 import {
   put, call, takeLatest, fork, all, takeEvery,
 } from 'redux-saga/effects';
-import * as actionTypes from '@models/courses/types';
+
 import { ApiService } from '../../shared/index.js';
 import * as actionsTypes from './action-types.js';
 
