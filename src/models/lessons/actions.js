@@ -67,6 +67,7 @@ function* addLessonAsync(lessonData) {
         error: error.message,
       },
     });
+    yield put({ type: actionsTypes.CLEAR_ERROR });
   }
 }
 
@@ -91,6 +92,7 @@ function* editLessonAsync(editData) {
         error: error.message,
       },
     });
+    yield put({ type: actionsTypes.CLEAR_ERROR });
   }
 }
 
