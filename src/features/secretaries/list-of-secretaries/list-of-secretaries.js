@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { fetchSecretaries, secretariesSelector } from '@/models/index.js';
+import { currentUserSelector, fetchSecretaries, secretariesSelector } from '@/models/index.js';
 import { paths, useActions } from '@/shared/index.js';
 import { Button, Search, Card, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
@@ -15,6 +15,7 @@ export const ListOfSecretaries = () => {
   const [secretariesPerPage] = useState(9);
 
   const { data, isLoading } = useSelector(secretariesSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const history = useHistory();
 
@@ -52,22 +53,24 @@ export const ListOfSecretaries = () => {
 
     const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
       .map(({
-        id, firstName, lastName, email,
-      }) => (
-        <Card
-          key={id}
-          id={id}
-          iconName="Edit"
-          buttonName="Details"
-          onEdit={() => handleEditSecretary(id)}
-          onDetails={() => handleSecretariesDetails(id)}
-        >
-          <div className=" w-75">
-            <p className="mb-2 font-weight-bolder pr-2">{firstName}</p>
-            <p className="font-weight-bolder">{lastName}</p>
-          </div>
-        </Card>
-      ));
+        id, firstName, lastName
+      }) => {
+        return (
+          <Card
+            key={id}
+            id={id}
+            iconName={currentUser.role === 4 ? "Edit" : null}
+            buttonName="Details"
+            onEdit={currentUser.role === 4 ? () => handleEditSecretary(id) : null}
+            onDetails={() => handleSecretariesDetails(id)}
+          >
+            <div className=" w-75">
+              <p className="mb-2 font-weight-bolder pr-2">{firstName}</p>
+              <p className="font-weight-bolder">{lastName}</p>
+            </div>
+          </Card>
+        );
+      }); 
 
     if (!secretaries.length && search) {
       return <h4>Secretary is not found</h4>;
@@ -85,12 +88,14 @@ export const ListOfSecretaries = () => {
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
-        <div className="col-md-4 col-12 text-right">
-          <Button onClick={handleAddSecretary} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            <span>Add a secretary</span>
-          </Button>
-        </div>
+        {currentUser.role === 4 && 
+          <div className="col-md-4 col-12 text-right">
+            <Button onClick={handleAddSecretary} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              <span>Add a secretary</span>
+            </Button>
+          </div>
+        }
       </div>
       <div>
         <hr className="col-8" />

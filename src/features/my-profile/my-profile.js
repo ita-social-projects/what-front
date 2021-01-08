@@ -1,25 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import { currentUserSelector, fetchAssignedUsersSelector, fetchUsersList } from '@/models';
-import { Button, WithLoading } from '@/components';
-import { useActions } from '@/shared';
+import { useHistory } from 'react-router-dom';
+import { currentUserSelector } from '@/models';
+import { paths } from '@/shared';
+
+import { Button } from '@/components';
+
 import styles from './my-profile.scss';
 
 export const MyProfile = () => {
-  const { currentUser: data } = useSelector(currentUserSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  const [loadUsers] = useActions([fetchUsersList]);
-  const { users, isLoading, loaded } = useSelector(fetchAssignedUsersSelector, shallowEqual);
-
-  useEffect(() => {
-    loadUsers();
-  }, [loadUsers]);
-
-  const currentUser = users.find((user) => user.id === data.id);
-
-  const handleChangePassword = () => {
-    console.log('click');
-  };
+  const history = useHistory();
 
   return (
     <div className={styles.wrapper}>
@@ -27,30 +19,28 @@ export const MyProfile = () => {
         <div className="container pb-2">
           <h3 className="pt-3">My Profile</h3>
           <hr />
-          <WithLoading isLoading={isLoading && !loaded} className="d-block mx-auto">
-            <div className="row mt-3">
-              <div className="col-sm-4 font-weight-bold pb-1">First Name:</div>
-              <div className="col-sm-8">{currentUser?.firstName}</div>
+          <div className="row mt-3">
+            <div className="col-sm-4 font-weight-bold pb-1">First Name:</div>
+            <div className="col-sm-8">{currentUser?.first_name}</div>
+          </div>
+          <hr />
+          <div className="row mt-3">
+            <div className="col-sm-4 font-weight-bold pb-1">Last Name:</div>
+            <div className="col-sm-8">{currentUser?.last_name}</div>
+          </div>
+          <hr />
+          <div className="row mt-3">
+            <div className="col-sm-4 font-weight-bold pb-1">Email address:</div>
+            <div className="col-sm-8">{currentUser?.email}</div>
+          </div>
+          <hr />
+          <div className="row mb-2">
+            <div className="col-sm-6 offset-sm-6">
+              <Button className="float-right" onClick={() => (history.push(paths.CHANGE_PASSWORD))}>
+                <span>Change password</span>
+              </Button>
             </div>
-            <hr />
-            <div className="row mt-3">
-              <div className="col-sm-4 font-weight-bold pb-1">Last Name:</div>
-              <div className="col-sm-8">{currentUser?.lastName}</div>
-            </div>
-            <hr />
-            <div className="row mt-3">
-              <div className="col-sm-4 font-weight-bold pb-1">Email address:</div>
-              <div className="col-sm-8">{currentUser?.email}</div>
-            </div>
-            <hr />
-            <div className="row mb-2">
-              <div className="col-sm-6 offset-sm-6">
-                <Button className="float-right" onClick={handleChangePassword} variant="secondary">
-                  <span>Change password</span>
-                </Button>
-              </div>
-            </div>
-          </WithLoading>
+          </div>
         </div>
       </div>
     </div>

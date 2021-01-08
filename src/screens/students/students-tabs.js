@@ -12,7 +12,7 @@ export const StudentsTabs = ({ index }) => {
     fetchStudentById,
     fetchGroups,
     fetchStudentGroups,
-  ] = useActions([loadStudentById, globalLoadStudentGroups, loadStudentGroups]);
+  ] = useActions([loadStudentById, globalLoadStudentGroups, loadStudentGroups],);
 
   useEffect(() => {
     fetchStudentById(id);

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useActions } from '@/shared/index.js';
-import { newUserSelector, currentUserSelector, addMentor, createSecretary, addStudent } from '@/models/index.js';
 
-import { fetchUnAssignedUserList } from '@/models';
+import { useActions } from '@/shared/index.js';
+import {
+  newUserSelector, currentUserSelector, addMentor,
+  createSecretary, addStudent, fetchUnAssignedUserList,
+} from '@/models/index.js';
+import { Search, Button, WithLoading } from '@/components';
 import { addAlert } from '@/features';
-import Icon from '../../icon.js';
-import { Search, Button, WithLoading } from '../../components/index.js';
+import Icon from '@/icon.js';
 import styles from './unassigned-list.scss';
 
 export const UnAssignedList = () => {
-  const roles = ['Choose role', 'student', 'mentor', 'secretary'];
   const { currentUser } = useSelector(currentUserSelector);
   const currentUserRole = currentUser.role;
   const { isLoaded, data, isLoading } = useSelector(newUserSelector);
@@ -26,6 +27,13 @@ export const UnAssignedList = () => {
 
   const [search, setSearch] = useState('');
   const [searchPersonValue, setSearchPersonValue] = useState([]);
+
+  const roles = [
+    { id: 0, name: 'Choose role' },
+    { id: 1, name: 'student' },
+    { id: 2, name: 'mentor' },
+    { id: 3, name: 'secretary' },
+  ];
 
   useEffect(() => {
     getUnAssignedUserList();
@@ -83,48 +91,48 @@ export const UnAssignedList = () => {
       case 2:
         return <option value={1}>{roles[1]}</option>;
       case 3:
-        return roles.slice(0, 2).map((role) => (
-          <option value={roles.indexOf(role)}>
-            {role}
+        return roles.slice(0, 3).map((role) => (
+          <option key={role.id} value={roles.indexOf(role)}>
+            {role.name}
           </option>
         ));
       case 4:
         return roles.map((role) => (
-          <option value={roles.indexOf(role)}>
-            {role}
+          <option key={role.id} value={roles.indexOf(role)}>
+            {role.name}
           </option>
         ));
       default: return {};
     }
   };
   const list = () => {
-    if (isLoading || isLoaded) {
-      if (searchPersonValue.length !== 0) {
-        return (searchPersonValue.map((user) => (
-          <div className={styles.card}>
-            <p><span className={styles.name}>{user.firstName} {user.lastName}</span><br /><span className="font-italic">{user.email}</span></p>
-            <div className={styles['add-role']}>
-              <select
-                className={styles.select}
-                onChange={(event) => { changeRole(user.id, event.target.value); }}
-              >
-                {options()}
-              </select>
-              <Button
-                className={styles.btn}
-                onClick={() => handleButtonClick(user.id)}
-                variant="warning"
-              >
-                <Icon icon="Plus" size={20} className="icon" />
-                Add role
-              </Button>
-            </div>
-          </div>
-        ))
-        );
-      }
+    const users = searchPersonValue.map((user) => (
+      <div className={styles.card} key={user.id}>
+        <p><span className={styles.name}>{user.firstName} {user.lastName}</span><br /><span className="font-italic">{user.email}</span></p>
+        <div className={styles['add-role']}>
+          <select
+            className={styles.select}
+            onChange={(event) => { changeRole(user.id, event.target.value); }}
+          >
+            {options()}
+          </select>
+          <Button
+            className={styles.btn}
+            onClick={() => handleButtonClick(user.id)}
+            variant="warning"
+          >
+            <Icon icon="Plus" size={20} className="icon" />
+            Add role
+          </Button>
+        </div>
+      </div>
+    ));
+
+    if (!searchPersonValue.length && search) {
+      return <span className={styles.massage}>Nobody was found</span>;
     }
-    return (<WithLoading isLoading={!isLoaded} className={styles.warning}><span className={styles.massage}>Nobody was found</span></WithLoading>);
+
+    return users;
   };
 
   return (
@@ -132,7 +140,9 @@ export const UnAssignedList = () => {
       <div className={styles.panel}>
         <Search onSearch={handleSearch} placeholder="Enter a person`s name" />
       </div>
-      <div className={styles.list}> {list()} </div>
+      <div className={styles.list}>
+        <WithLoading isLoading={!isLoaded} className="mt-3 d-block mx-auto">{list()}</WithLoading>
+      </div>
     </div>
   );
 };

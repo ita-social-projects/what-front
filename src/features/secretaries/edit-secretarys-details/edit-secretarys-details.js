@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import className from 'classnames';
 import { Formik, Form, Field } from 'formik';
 import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
@@ -9,13 +8,12 @@ import {
   secretariesSelector, updatedSecretarySelector, deletedSecretarySelector,
   updateSecretary, deleteSecretary,
 } from '@models/index.js';
+import { useActions } from '@/shared';
 import { Button, WithLoading } from '@/components/index.js';
 import { addAlert } from '@/features';
 import { formValidate } from '@features/validation/validation-helpers.js';
 import { paths, useActions } from '@/shared';
 import { ModalWindow } from '@features/modal-window/index.js';
-
-import styles from './edit-secretarys-details.scss';
 
 export const EditSecretarysDetails = ({ id }) => {
   const {
@@ -80,10 +78,11 @@ export const EditSecretarysDetails = ({ id }) => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className="container-fluid card shadow">
-        <div className="container pb-2 px-0">
-          <h3 className="pt-3">Edit Secretary&apos;s details</h3>
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-md-12 col-sm-8 card shadow">
+          <div className="px-2 py-4">
+          <h3>Edit Secretary&apos;s details</h3>
           <hr />
           <WithLoading isLoading={isSecretariesLoading && !isSecretariesLoaded} className="d-block mx-auto">
             <Formik
@@ -92,7 +91,7 @@ export const EditSecretarysDetails = ({ id }) => {
                 lastName: secretary?.lastName,
                 email: secretary?.email,
               }}
-              validationSchema={formValidate}
+              validationSchema={editSecretaryValidation}
               onSubmit={onSubmit}
             >
               {({
@@ -107,7 +106,7 @@ export const EditSecretarysDetails = ({ id }) => {
                       <div className="col-md-8">
                         <Field
                           type="text"
-                          className={className('form-control', { 'border-danger': errors.firstName })}
+                          className={classNames('form-control', { 'border-danger': errors.firstName })}
                           name="firstName"
                           id="firstName"
                           placeholder="Name"
@@ -123,7 +122,7 @@ export const EditSecretarysDetails = ({ id }) => {
                       <div className="col-md-8">
                         <Field
                           type="text"
-                          className={className('form-control', { 'border-danger': errors.lastName })}
+                          className={classNames('form-control', { 'border-danger': errors.lastName })}
                           name="lastName"
                           id="lastName"
                           placeholder="Lastname"
@@ -139,7 +138,7 @@ export const EditSecretarysDetails = ({ id }) => {
                       <div className="col-md-8">
                         <Field
                           type="email"
-                          className={className('form-control', { 'border-danger': errors.email })}
+                          className={classNames('form-control', { 'border-danger': errors.email })}
                           name="email"
                           id="email"
                           placeholder="Email"
@@ -151,7 +150,7 @@ export const EditSecretarysDetails = ({ id }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4 px-1">
                         <Button
-                          disabled={!isValid || isDeleteLoading}
+                          disabled={!isValid || dirty || isDeleteLoading}
                           className="w-100"
                           variant="danger"
                           onClick={handleShowModal}
@@ -164,7 +163,7 @@ export const EditSecretarysDetails = ({ id }) => {
                         <Button
                           disabled={!dirty}
                           type="reset"
-                          className={className(styles.button, 'btn btn-secondary w-100')}
+                          className="btn btn-secondary w-100"
                           onClick={handleReset}
                         >
                           Clear
@@ -173,7 +172,7 @@ export const EditSecretarysDetails = ({ id }) => {
                       <div className="col-md-3 col-4 px-1">
                         <Button
                           disabled={!isValid || !dirty || isUpdateLoading}
-                          className={className(styles.button, 'btn btn-success w-100')}
+                          className="btn btn-success w-100"
                           type="submit"
                           onClick={() => onSubmit(values)}
                         >
@@ -193,6 +192,7 @@ export const EditSecretarysDetails = ({ id }) => {
               Are you sure you want to fire this secretary?
             </ModalWindow>
           </WithLoading>
+          </div>
         </div>
       </div>
     </div>

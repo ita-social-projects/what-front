@@ -10,7 +10,7 @@ import { addAlert } from '@/features';
 import { editCourse, editedCourseSelector } from '@/models';
 import { WithLoading } from '@/components';
 import { coursesStateShape } from '@/features/shared';
-import { validateGroupName } from '../../validation/validation-helpers.js';
+import { editCourseValidation } from '@features/validation/validation-helpers.js';
 import styles from './edit-course.scss';
 
 export const EditCourse = ({ id, coursesData }) => {
@@ -68,8 +68,9 @@ export const EditCourse = ({ id, coursesData }) => {
                   name: course?.name,
                 }}
                 onSubmit={onSubmit}
+                validationSchema={editCourseValidation}
               >
-                {({ errors }) => (
+                {({ errors, isValid, dirty }) => (
                   <Form name="start-group">
                     <div className="row mb-3">
                       <div className="col d-flex align-items-center">
@@ -82,7 +83,6 @@ export const EditCourse = ({ id, coursesData }) => {
                           name="name"
                           id="name"
                           placeholder="Course name"
-                          validate={validateGroupName}
                         />
                       </div>
                       {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
@@ -97,7 +97,7 @@ export const EditCourse = ({ id, coursesData }) => {
                       <input
                         type="submit"
                         name="submit-btn"
-                        disabled={isEditedLoading || errors.name}
+                        disabled={!isValid || !dirty || isEditedLoading || errors.name}
                         className={classNames('btn btn-success w-25', styles.button)}
                         value="Save"
                       />

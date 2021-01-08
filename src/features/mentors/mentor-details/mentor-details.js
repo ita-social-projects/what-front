@@ -4,9 +4,8 @@ import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared/index.js';
 import { WithLoading } from '@/components/index.js';
-import {
-  mentorIdSelector, fetchMentorById, fetchActiveMentors,
-} from '@/models/index.js';
+import { mentorIdSelector, fetchMentorById, fetchActiveMentors, currentUserSelector } from '@/models/index.js';
+import classNames from 'classnames';
 
 export const MentorDetails = ({ id }) => {
   const {
@@ -15,6 +14,8 @@ export const MentorDetails = ({ id }) => {
     isLoaded,
     error,
   } = useSelector(mentorIdSelector, shallowEqual);
+
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const [
     dispatchLoadMentors,
@@ -33,25 +34,33 @@ export const MentorDetails = ({ id }) => {
   }, [error, history]);
 
   return (
-    <div className="w-100 card shadow p-4">
-      <h3>Mentor Details</h3>
-      <hr />
-      <WithLoading isLoading={isLoading || !isLoaded} className="d-block mx-auto m-0">
-        <div className="row">
-          <p className="col-12 col-md-6 font-weight-bolder">First Name:</p>
-          <p className="col-12 col-md-6">{mentor?.firstName}</p>
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className={classNames("col-sm-12 card shadow", 
+          { "col-md-12": currentUser.role !== 2, "col-md-6": currentUser.role === 2})}
+        >
+          <div className="px-2 py-4">
+            <h3>Mentor Details</h3>
+            <hr />
+            <WithLoading isLoading={isLoading || !isLoaded} className="d-block mx-auto m-0">
+              <div className="row">
+                <span className="col-12 col-md-6 font-weight-bolder">First Name:</span>
+                <span className="col-12 col-md-6">{mentor?.firstName}</span>
+              </div>
+              <hr />
+              <div className="row">
+                <span className="col-12 col-md-6 font-weight-bolder">Last Name:</span>
+                <span className="col-12 col-md-6 ">{mentor?.lastName}</span>
+              </div>
+              <hr />
+              <div className="row">
+                <span className="col-12 col-md-6 font-weight-bolder">Email:</span>
+                <span className="col-12 col-md-6">{mentor?.email}</span>
+              </div>
+            </WithLoading>
+          </div>
         </div>
-        <hr />
-        <div className="row">
-          <p className="col-12 col-md-6 font-weight-bolder">Last Name:</p>
-          <p className="col-12 col-md-6 ">{mentor?.lastName}</p>
-        </div>
-        <hr />
-        <div className="row">
-          <p className="col-12 col-md-6 font-weight-bolder">Email:</p>
-          <p className="col-12 col-md-6">{mentor?.email}</p>
-        </div>
-      </WithLoading>
+      </div>
     </div>
   );
 };

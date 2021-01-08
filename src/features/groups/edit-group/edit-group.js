@@ -16,7 +16,7 @@ import { paths, useActions } from '@/shared';
 import { WithLoading, Button } from '@/components/index.js';
 import { editStudentGroup, editStudentGroupSelector } from '@/models';
 import Icon from '@/icon.js';
-import { validateGroupName, validateDate } from '../../validation/validation-helpers.js';
+import { editGroupValidation } from '@features/validation/validation-helpers.js';
 import styles from './edit-groups.scss';
 
 export const EditGroup = ({
@@ -139,9 +139,10 @@ export const EditGroup = ({
                 student: '',
               }}
               onSubmit={handleSubmit}
+              validationSchema={editGroupValidation}
               validateOnMount={false}
             >
-              {({ values, errors, setFieldValue }) => (
+              {({ values, errors, setFieldValue, isValid, dirty }) => (
                 <Form className="px-2 py-4" name="start-group">
                   <h3>Group Editing</h3>
                   <hr />
@@ -156,7 +157,6 @@ export const EditGroup = ({
                         name="name"
                         id="name"
                         placeholder="group name"
-                        validate={validateGroupName}
                       />
                       {errors.name && <p className="w-100 text-danger mb-0">{errors.name}</p>}
                     </div>
@@ -193,11 +193,12 @@ export const EditGroup = ({
                     </div>
                     <div className="col-md-8">
                       <Field
-                        className={classNames('form-control', { 'border-danger': errors.finishDate })}
+                        className={classNames('form-control', { 'border-danger': errors.startDate })}
                         type="date"
                         name="startDate"
                         id="start-date"
                       />
+                      {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
                     </div>
                   </div>
                   <div className="row mb-3">
@@ -210,14 +211,13 @@ export const EditGroup = ({
                         type="date"
                         name="finishDate"
                         id="finish-date"
-                        validate={(value) => validateDate(values.startDate, value)}
                       />
                       {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
                     </div>
                   </div>
                   <div className="row mb-3">
                     <div className="col d-flex align-items-start">
-                      <label className="mt-2" htmlFor="finish-date">Mentors:</label>
+                      <label className="mt-2" htmlFor="mentor">Mentors:</label>
                     </div>
                     <div className="col-md-8">
                       <WithLoading isLoading={areMentorsLoading}>
@@ -330,10 +330,10 @@ export const EditGroup = ({
                     </div>
                   </div>
                   <div className="row justify-content-around mt-4">
-                    <Button type="reset" className="btn btn-secondary w-25" disabled={isEditing} onClick={handleReset}>
+                    <Button type="reset" className="btn btn-secondary w-25" disabled={!dirty || isEditing} onClick={handleReset}>
                       Clear
                     </Button>
-                    <Button type="submit" variant="success" className="btn btn-secondary w-25" disabled={isEditing}>
+                    <Button type="submit" variant="success" className="btn btn-secondary w-25" disabled={!isValid || !dirty || isEditing}>
                       Confirm
                     </Button>
                   </div>

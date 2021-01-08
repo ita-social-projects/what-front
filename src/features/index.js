@@ -1,6 +1,6 @@
 export * from './counter';
 export * from './support';
-export * from './schedule-student';
+export * from './schedule';
 export * from './auth';
 export * from './header';
 export * from './not-found';
@@ -13,6 +13,7 @@ export * from './lessons';
 export * from './secretaries';
 export * from './students';
 export * from './my-profile';
+export * from './change-password';
 export * from './registration';
 export * from './layout';
 export * from './alert-box';
