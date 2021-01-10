@@ -25,7 +25,7 @@ import styles from './add-lesson.scss';
 export const AddLesson = () => {
   const history = useHistory();
 
-  const today = new Date().toISOString().split(".")[0];
+  const today = new Date().toISOString().substring(0, 19);
 
   const [markError, setMarkError] = useState(false);
   const [mentorError, setMentorError] = useState(false);
@@ -360,63 +360,63 @@ export const AddLesson = () => {
                     { classRegister && formData && (
                     <div className="col-lg-12">
                       <FieldArray name="formData">
-                        {(arrayHelpers) => (
-                            <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
-                              <table className="table table-bordered table-hover">
-                                <thead>
-                                  <tr>
-                                    <th scope="col" aria-label="first_col" />
-                                    <th scope="col">Full Student`s Name</th>
-                                    <th scope="col" className="text-center">Mark</th>
-                                    <th scope="col" className="text-center">Presence</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  { formData && formData.length > 0 && (
-                                    formData.map((lessonVisit, index) => (
-                                      <tr key={lessonVisit.studentId}>
-                                        <th scope="row">{ index + 1 }</th>
-                                        <td>
-                                          <p
-                                            className={classNames(styles.link)}
-                                            onClick={() => openStudentDetails(lessonVisit.studentId)}
-                                          >
-                                            { lessonVisit.studentName }
-                                          </p>
-                                        </td>
-                                        <td>
-                                          <Field
-                                            name={`formData[${index}].studentMark`}
-                                            className={classNames(
-                                              'form-control',
-                                              { 'border-danger': markError },
-                                              styles.mode,
-                                            )}
-                                            type="number"
-                                            max="12"
-                                            min="0"
-                                            placeholder=""
-                                            onChange={handleMarkChange}
-                                            data-id={index}
-                                            disabled={!formData[index].presence}
-                                          />
-                                        </td>
-                                        <td>
-                                          <Field
-                                            name={`formData[${index}].presence`}
-                                            className={styles.mode}
-                                            type="checkbox"
-                                            onClick={handlePresenceChange}
-                                            data-id={index}
-                                            checked={formData[index].presence}
-                                          />
-                                        </td>
-                                      </tr>
-                                    ))
-                                  )}
-                                </tbody>
-                              </table>
-                            </div>
+                        {() => (
+                          <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
+                            <table className="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th scope="col" aria-label="first_col" />
+                                  <th scope="col">Full Student`s Name</th>
+                                  <th scope="col" className="text-center">Mark</th>
+                                  <th scope="col" className="text-center">Presence</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                { formData && formData.length > 0 && (
+                                  formData.map((lessonVisit, index) => (
+                                    <tr key={lessonVisit.studentId}>
+                                      <th scope="row">{ index + 1 }</th>
+                                      <td>
+                                        <p
+                                          className={classNames(styles.link)}
+                                          onClick={() => openStudentDetails(lessonVisit.studentId)}
+                                        >
+                                          { lessonVisit.studentName }
+                                        </p>
+                                      </td>
+                                      <td>
+                                        <Field
+                                          name={`formData[${index}].studentMark`}
+                                          className={classNames(
+                                            'form-control',
+                                            { 'border-danger': markError },
+                                            styles.mode,
+                                          )}
+                                          type="number"
+                                          max="12"
+                                          min="0"
+                                          placeholder=""
+                                          onChange={handleMarkChange}
+                                          data-id={index}
+                                          disabled={!formData[index].presence}
+                                        />
+                                      </td>
+                                      <td>
+                                        <Field
+                                          name={`formData[${index}].presence`}
+                                          className={styles.mode}
+                                          type="checkbox"
+                                          onClick={handlePresenceChange}
+                                          data-id={index}
+                                          checked={formData[index].presence}
+                                        />
+                                      </td>
+                                    </tr>
+                                  ))
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
                         )}
                       </FieldArray>
                     </div>
