@@ -41,7 +41,7 @@ export const newPassword = (newData) => ({
   payload: { newData },
 });
 
-function* logingWorker({ payload }) {
+function* loginWorker({ payload }) {
   try {
     yield put({ type: actionTypes.LOGIN_STARTED });
     const logUser = yield call(ApiService.create, '/accounts/auth', payload.currentUser);
@@ -49,7 +49,7 @@ function* logingWorker({ payload }) {
     yield call(Cookie.set, 'user', JSON.stringify(logUser), 1);
     yield put({ type: actionTypes.LOGIN_SUCCESS, payload: { logUser } });
   } catch (error) {
-    yield put({ type: actionTypes.LOGIN_ERROR, payload: { error: error.message } });
+    yield put({ type: actionTypes.LOGIN_ERROR, payload: { error } });
   }
 }
 
@@ -70,7 +70,7 @@ function* registrationWorker(data) {
   }
 }
 
-function* getAssigenUsersWorker() {
+function* getAssignedUsersWorker() {
   try {
     yield put({ type: actionTypes.FETCH_ASSIGNED_STARTED });
     const usersList = yield call(ApiService.load, '/accounts');
@@ -80,7 +80,7 @@ function* getAssigenUsersWorker() {
   }
 }
 
-function* getUnAssigenUsersWorker() {
+function* getUnAssignedUsersWorker() {
   try {
     yield put({ type: actionTypes.FETCH_UNASSIGNED_STARTED });
     const unAssigned = yield call(ApiService.load, '/accounts/NotAssigned');
@@ -101,24 +101,24 @@ function* changePasswordWorker({ payload }) {
   }
 }
 
-function* loginWtacher() {
-  yield takeLatest(actionTypes.LOGIN_REQUESTING, logingWorker);
+function* loginWatcher() {
+  yield takeLatest(actionTypes.LOGIN_REQUESTING, loginWorker);
 }
 
 function* logOutWatcher() {
   yield takeEvery(actionTypes.LOGOUT, logOutWorker);
 }
 
-function* registrationWather() {
+function* registrationWatcher() {
   yield takeLatest(actionTypes.REGIST_REQUSTING, registrationWorker);
 }
 
 function* fetchAssignedUserListWatcher() {
-  yield takeLatest(actionTypes.FETCH_ASSIGNED, getAssigenUsersWorker);
+  yield takeLatest(actionTypes.FETCH_ASSIGNED, getAssignedUsersWorker);
 }
 
 function* fetchUnAssignedUserListWatcher() {
-  yield takeLatest(actionTypes.FETCH_UNASSIGNED, getUnAssigenUsersWorker);
+  yield takeLatest(actionTypes.FETCH_UNASSIGNED, getUnAssignedUsersWorker);
 }
 
 function* changePasswordWatcher() {
@@ -127,9 +127,9 @@ function* changePasswordWatcher() {
 
 export function* authWatcher() {
   yield all([
-    fork(loginWtacher),
+    fork(loginWatcher),
     fork(logOutWatcher),
-    fork(registrationWather),
+    fork(registrationWatcher),
     fork(fetchAssignedUserListWatcher),
     fork(fetchUnAssignedUserListWatcher),
     fork(changePasswordWatcher),

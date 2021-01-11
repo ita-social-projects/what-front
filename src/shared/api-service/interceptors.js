@@ -1,3 +1,4 @@
+import { paths } from '@/shared';
 import { BASE_URL } from './config.js';
 import { Cookie } from '../../utils/index.js';
 
@@ -24,4 +25,17 @@ export const responseInterceptor = (response) => {
     Cookie.set('jwt', token, 1);
   }
   return response;
+};
+
+export const responseErrorInterceptor = (error) => {
+  const requestUrl = error.response.config.url.split('/api')[1];
+  console.log(requestUrl);
+  if (error.response.status === 401 && requestUrl !== '/accounts/auth') {
+    console.log('here');
+    Cookie.del('jwt');
+    Cookie.del('user');
+    window.location.reload();
+  }
+  console.log(error.response);
+  return Promise.reject(error.response.data.error ?? error.response.data);
 };
