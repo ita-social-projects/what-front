@@ -53,24 +53,22 @@ export const ListOfSecretaries = () => {
 
     const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
       .map(({
-        id, firstName, lastName
-      }) => {
-        return (
-          <Card
-            key={id}
-            id={id}
-            iconName={currentUser.role === 4 ? "Edit" : null}
-            buttonName="Details"
-            onEdit={currentUser.role === 4 ? () => handleEditSecretary(id) : null}
-            onDetails={() => handleSecretariesDetails(id)}
-          >
-            <div className=" w-75">
-              <p className="mb-2 font-weight-bolder pr-2">{firstName}</p>
-              <p className="font-weight-bolder">{lastName}</p>
-            </div>
-          </Card>
-        );
-      }); 
+        id, firstName, lastName,
+      }) => (
+        <Card
+          key={id}
+          id={id}
+          iconName={currentUser.role === 4 ? 'Edit' : null}
+          buttonName="Details"
+          onEdit={currentUser.role === 4 ? () => handleEditSecretary(id) : null}
+          onDetails={() => handleSecretariesDetails(id)}
+        >
+          <div className=" w-75">
+            <p className="mb-2 font-weight-bolder pr-2">{firstName}</p>
+            <p className="font-weight-bolder">{lastName}</p>
+          </div>
+        </Card>
+      ));
 
     if (!secretaries.length && search) {
       return <h4>Secretary is not found</h4>;
@@ -83,19 +81,20 @@ export const ListOfSecretaries = () => {
   };
 
   return (
-    <div className="container" style={{minHeight: 750}}>
+    <div className="container" style={{ minHeight: 750 }}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
-        {currentUser.role === 4 && 
+        {currentUser.role === 4
+          && (
           <div className="col-md-4 col-12 text-right">
             <Button onClick={handleAddSecretary} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a secretary</span>
             </Button>
           </div>
-        }
+          )}
       </div>
       <div>
         <hr className="col-8" />
@@ -107,13 +106,14 @@ export const ListOfSecretaries = () => {
           </WithLoading>
         </div>
       </div>
-      {searchResults.length > 9 &&  
-        <Pagination 
-          itemsPerPage={secretariesPerPage} 
-          totalItems={searchResults.length} 
+      {searchResults.length > 9
+        && (
+        <Pagination
+          itemsPerPage={secretariesPerPage}
+          totalItems={searchResults.length}
           paginate={paginate}
         />
-      }
+        )}
     </div>
   );
 };

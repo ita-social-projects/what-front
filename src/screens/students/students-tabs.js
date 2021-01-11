@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useActions } from '@/shared';
-import { globalLoadStudentGroups, loadStudentById, loadStudentGroups } from '@/models';
+import { globalLoadStudentGroups, loadStudentById, loadStudentGroups, fetchLessonsByStudentId } from '@/models';
 import { Tab, Tabs } from '@/components';
 import { EditStudentsDetails, StudentDetails } from '@/features/students';
 
@@ -12,13 +12,20 @@ export const StudentsTabs = ({ index }) => {
     fetchStudentById,
     fetchGroups,
     fetchStudentGroups,
-  ] = useActions([loadStudentById, globalLoadStudentGroups, loadStudentGroups],);
+    fetchStudentLessons,
+  ] = useActions([
+    loadStudentById,
+    globalLoadStudentGroups,
+    loadStudentGroups,
+    fetchLessonsByStudentId,
+  ]);
 
   useEffect(() => {
     fetchStudentById(id);
     fetchGroups();
     fetchStudentGroups(id);
-  }, [fetchGroups, fetchStudentById, fetchStudentGroups, id]);
+    fetchStudentLessons(id);
+  }, [fetchGroups, fetchStudentById, fetchStudentGroups, fetchStudentLessons, id]);
 
   return (
     <Tabs defaultIndex={index} className="container w-50" linkBack="/students">
