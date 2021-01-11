@@ -60,7 +60,6 @@ module.exports = merge(common, {
             loader: 'thread-loader',
             options: {
               workers: os.cpus().length - 1,
-              poolTimeout: Infinity,
             },
           },
           'babel-loader',
