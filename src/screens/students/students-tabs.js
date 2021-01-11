@@ -1,31 +1,38 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useActions } from '@/shared';
-import { globalLoadStudentGroups, loadStudentById, loadStudentGroups } from '@/models';
+import { fetchLessonsByStudentId, globalLoadStudentGroups, loadStudentById, loadStudentGroups } from '@/models';
 import { Tab, Tabs } from '@/components';
 import { EditStudentsDetails, StudentDetails } from '@/features/students';
 
-export const StudentsTabs = ({index}) => {
+export const StudentsTabs = ({ index }) => {
   const { id } = useParams();
 
   const [
-    fetchStudentById, 
-    fetchGroups, 
+    fetchStudentById,
+    fetchGroups,
     fetchStudentGroups,
-  ] = useActions([loadStudentById, globalLoadStudentGroups, loadStudentGroups]);
+    fetchStudentLessons,
+  ] = useActions(
+    [loadStudentById,
+      globalLoadStudentGroups,
+      loadStudentGroups,
+      fetchLessonsByStudentId],
+  );
 
   useEffect(() => {
     fetchStudentById(id);
     fetchGroups();
     fetchStudentGroups(id);
-  }, [loadStudentById, globalLoadStudentGroups, loadStudentGroups]);
+    fetchStudentLessons(id);
+  }, [loadStudentById, globalLoadStudentGroups, loadStudentGroups, fetchLessonsByStudentId]);
 
   return (
-    <Tabs defaultIndex={index} className='container w-50' linkBack='/students'>
-      <Tab title='Student details'>
-        <StudentDetails/>
+    <Tabs defaultIndex={index} className="container w-50" linkBack="/students">
+      <Tab title="Student details">
+        <StudentDetails />
       </Tab>
-      <Tab title='Edit student details'>
+      <Tab title="Edit student details">
         <EditStudentsDetails id={id} />
       </Tab>
     </Tabs>

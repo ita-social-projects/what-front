@@ -8,7 +8,6 @@
 }
 
 .calendar-input{
-  @include input;
   border-color: map-get($colors, textAccentN1-color) !important;
   width: 18%;
 }

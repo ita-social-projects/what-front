@@ -70,12 +70,15 @@ export const ListOfGroups = () => {
     }
 
     return listByDate.slice(indexOfFirstGroup, indexOfLastGroup)
+      .sort((a, b) => {
+        return a.startDate < b.startDate ? -1 : a.startDate > b.startDate ? 1 : 0;
+      })
       .map((group) => (
         <Card
           key={group.id}
           id={group.id}
           title={group.name}
-          date={group.startDate.replaceAll('-', '.').slice(0, 10)}
+          date={group.startDate.replaceAll('-', '.').slice(0, 10).split('.').reverse().join('.')}
           buttonName="Details"
           iconName="Edit"
           onEdit={() => handleCardEdit(group.id)}
@@ -92,14 +95,16 @@ export const ListOfGroups = () => {
     <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
         <div className={classNames(styles['list-head'], 'col-12')}>
-          <input
-            className={classNames('form-control ', styles['calendar-input'], 'col-2')}
-            type="date"
-            name="group_date"
-            required
-            onChange={handleCalendarChange}
-            placeholder="year-month-day"
-          />
+          <div>
+            <input
+              className={classNames('form-control ', styles['calendar-input'])}
+              type="date"
+              name="group_date"
+              required
+              onChange={handleCalendarChange}
+              placeholder="year-month-day"
+            />
+          </div>
           <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
           <Button onClick={handleAddGroup} variant="warning">
             <Icon icon="Plus" className="icon" />
