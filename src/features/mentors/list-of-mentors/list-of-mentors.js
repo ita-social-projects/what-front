@@ -81,11 +81,11 @@ export const ListOfMentors = () => {
   return (
     <div className="container" style={{minHeight: 750}}>
       <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
+        <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Mentor's name" />
         </div>
         {currentUser.role !== 2 && 
-          <div className="col-md-4 col-12 text-right">
+          <div className="col-md-4 text-right">
             <Button onClick={addMentor} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a mentor</span>
@@ -103,7 +103,7 @@ export const ListOfMentors = () => {
           </WithLoading>
         </div>
       </div>
-      {filteredMentorList.length > 9 && 
+      {filteredMentorList.length > 9 && !isLoading &&
         <Pagination 
           itemsPerPage={mentorsPerPage} 
           totalItems={filteredMentorList.length} 

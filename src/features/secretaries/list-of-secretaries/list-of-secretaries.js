@@ -85,11 +85,11 @@ export const ListOfSecretaries = () => {
   return (
     <div className="container" style={{minHeight: 750}}>
       <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
+        <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
         {currentUser.role === 4 && 
-          <div className="col-md-4 col-12 text-right">
+          <div className="col-md-4 text-right">
             <Button onClick={handleAddSecretary} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a secretary</span>
@@ -107,7 +107,7 @@ export const ListOfSecretaries = () => {
           </WithLoading>
         </div>
       </div>
-      {searchResults.length > 9 &&  
+      {searchResults.length > 9 && !isLoading &&
         <Pagination 
           itemsPerPage={secretariesPerPage} 
           totalItems={searchResults.length} 

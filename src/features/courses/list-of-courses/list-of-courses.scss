@@ -1,0 +1,9 @@
+.list-wrapper {
+  min-height: 772px;
+}
+  
+@media(max-width: 1199px) {
+  .list-wrapper {
+    min-height: 796px;
+  }
+}

@@ -94,31 +94,35 @@ export const ListOfGroups = () => {
   return (
     <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
-        <div className={classNames(styles['list-head'], 'col-12')}>
-          <div>
-            <input
-              className={classNames('form-control ', styles['calendar-input'])}
-              type="date"
-              name="group_date"
-              required
-              onChange={handleCalendarChange}
-              placeholder="year-month-day"
-            />
+        <div className="col-md-2 text-left">
+          <input
+            className={classNames('form-control ', styles['calendar-input'])}
+            type="date"
+            name="group_date"
+            required
+            onChange={handleCalendarChange}
+            placeholder="year-month-day"
+          />
+        </div>
+        <div className="col-md-4 offset-md-2 text-center pl-3">
+          <Search onSearch={handleSearch} placeholder="Group's name" />
+        </div>
+          <div className="col-md-4 col-12 text-right">
+            <Button onClick={handleAddGroup} variant="warning">
+              <Icon icon="Plus" className="icon" />
+                Add a group
+            </Button>
           </div>
-          <Search onSearch={handleSearch} placeholder="Search group" className={styles.search} />
-          <Button onClick={handleAddGroup} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            Add Group
-          </Button>
         </div>
-        <hr className="col-8" />
-        <div className={classNames(styles['group-list'], 'col-12')}>
-          <WithLoading isLoading={isLoading}>
-            {getGroupList()}
-          </WithLoading>
+        <div>
+          <hr className="col-8" />
+          <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
+            <WithLoading isLoading={isLoading}>
+              {getGroupList()}
+            </WithLoading>
+          </div>
         </div>
-      </div>
-      {listByDate.length > 12 && 
+      {listByDate.length > 12 && !isLoading &&
         <Pagination 
           itemsPerPage={groupsPerPage} 
           totalItems={listByDate.length} 

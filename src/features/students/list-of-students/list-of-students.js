@@ -83,11 +83,11 @@ export const ListOfStudents = () => {
   return (
     <div className="container" style={{minHeight: 750}}>
       <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
+        <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Student's name" />
         </div>
         {currentUser.role !== 2 && 
-          <div className="col-md-4 col-12 text-right">
+          <div className="col-md-4 text-right">
             <Button onClick={addStudent} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a student</span>
@@ -105,7 +105,7 @@ export const ListOfStudents = () => {
           </WithLoading>
         </div>
       </div>
-        {filteredStudentsList.length > 9 && 
+        {filteredStudentsList.length > 9 && !isLoading && 
           <Pagination 
             itemsPerPage={studentsPerPage} 
             totalItems={filteredStudentsList.length} 
