@@ -61,8 +61,8 @@ export const ListOfMentors = () => {
             onDetails={() => mentorDetails(mentor.id)}
           >
             <div className="w-75">
-              <p className="mb-2 font-weight-bolder pr-2">{mentor.firstName}</p>
-              <p className="font-weight-bolder">{mentor.lastName}</p>
+              <p className="mb-2 pr-2">{mentor.firstName}</p>
+              <p>{mentor.lastName}</p>
             </div>
           </Card>
         );
