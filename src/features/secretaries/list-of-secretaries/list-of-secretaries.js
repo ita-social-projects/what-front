@@ -15,7 +15,7 @@ export const ListOfSecretaries = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage] = useState(1);
+  const [secretariesPerPage] = useState(9);
 
   const { data, isLoading } = useSelector(secretariesSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -86,7 +86,7 @@ export const ListOfSecretaries = () => {
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(searchResults.length / 1);
+    const totalPages = Math.ceil(searchResults.length / 9);
     setCurrentPage((prev) => {
       if (prev === totalPages) {
         return prev;
