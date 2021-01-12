@@ -105,7 +105,30 @@ export const ListOfLessons = () => {
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(filteredLessonsList.length / 12);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage =(pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
   };
 
   return (
@@ -145,6 +168,8 @@ export const ListOfLessons = () => {
           itemsPerPage={lessonsPerPage} 
           totalItems={filteredLessonsList.length} 
           paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
         />
       }
     </div>
