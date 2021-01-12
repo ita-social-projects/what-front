@@ -66,7 +66,7 @@ function* registrationWorker(data) {
     yield put({ type: actionTypes.REGIST_SUCCESS, payload: { regUser } });
     // yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
-    yield put({ type: actionTypes.REGIST_ERROR, payload: { error: error.message } });
+    yield put({ type: actionTypes.REGIST_ERROR, payload: { error } });
   }
 }
 
@@ -76,7 +76,7 @@ function* getAssignedUsersWorker() {
     const usersList = yield call(ApiService.load, '/accounts');
     yield put({ type: actionTypes.FETCH_ASSIGNED_SUCCESS, payload: { usersList } });
   } catch (error) {
-    yield put({ type: actionTypes.FETCH_ASSIGNED_ERROR, payload: { error: error.message } });
+    yield put({ type: actionTypes.FETCH_ASSIGNED_ERROR, payload: { error } });
   }
 }
 
@@ -86,7 +86,7 @@ function* getUnAssignedUsersWorker() {
     const unAssigned = yield call(ApiService.load, '/accounts/NotAssigned');
     yield put({ type: actionTypes.FETCH_UNASSIGNED_SUCCESS, payload: { unAssigned } });
   } catch (error) {
-    yield put({ type: actionTypes.FETCH_UNASSIGNED_ERROR, payload: { error: error.message } });
+    yield put({ type: actionTypes.FETCH_UNASSIGNED_ERROR, payload: { error } });
   }
 }
 

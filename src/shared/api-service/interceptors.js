@@ -29,13 +29,16 @@ export const responseInterceptor = (response) => {
 
 export const responseErrorInterceptor = (error) => {
   const requestUrl = error.response.config.url.split('/api')[1];
-  console.log(requestUrl);
+
   if (error.response.status === 401 && requestUrl !== '/accounts/auth') {
-    console.log('here');
     Cookie.del('jwt');
     Cookie.del('user');
-    window.location.reload();
+    window.location.href = paths.AUTH;
   }
-  console.log(error.response);
-  return Promise.reject(error.response.data.error ?? error.response.data);
+
+  if (typeof error.response.data === 'string') {
+    return Promise.reject(error.response.data);
+  }
+
+  return Promise.reject(error.response.data.error.message);
 };
