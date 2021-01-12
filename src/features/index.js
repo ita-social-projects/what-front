@@ -16,3 +16,4 @@ export * from './my-profile';
 export * from './change-password';
 export * from './registration';
 export * from './layout';
+export * from './modal-window';
