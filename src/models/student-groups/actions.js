@@ -68,7 +68,7 @@ function* watchEditingStudentGroups() {
 }
 
 export const addStudentGroup = (group) => ({
-  type: actionTypes.EDIT_STUDENT_GROUP,
+  type: actionTypes.ADD_STUDENT_GROUP,
   payload: group,
 });
 

@@ -34,7 +34,7 @@ export const Header = () => {
 
   const rolesObject = {
     4: [
-      { id: 0, title: 'Students', link: paths.STUDENTS, active: true },
+      { id: 0, title: 'Students', link: paths.STUDENTS, active: false },
       { id: 1, title: 'Mentors', link: paths.MENTORS, active: false },
       { id: 2, title: 'Secretaries', link: paths.SECRETARIES, active: false },
       { id: 3, title: 'Lessons', link: paths.LESSONS, active: false },
@@ -42,6 +42,7 @@ export const Header = () => {
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
       { id: 7, title: 'Role', link: paths.UNASSIGNED_USERS, active: false },
+      { id: 8, title: 'Role', link: paths.GROUP_DOWNLOAD, active: true },
     ],
     3: [
       { id: 0, title: 'Students', link: paths.STUDENTS, active: false },

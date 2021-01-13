@@ -10,7 +10,7 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  alertSelector, removeAlert, Header, Schedule,
+  alertSelector, removeAlert, Header, Schedule, DownloadGroups,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
@@ -71,6 +71,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
+          <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUP_DOWNLOAD} component={DownloadGroups} />} />
           <Redirect to={paths.NOT_FOUND} />
         </Switch>
       </div>

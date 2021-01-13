@@ -137,3 +137,14 @@ export const changePasswordValidation = Yup.object().shape({
     .oneOf([Yup.ref('newPassword'), null], 'You should confirm your password')
     .required('This field is required'),
 });
+//
+// export const download = Yup.object().shape({
+//   file: Yup.mixed()
+//     .required('You need to provide a file')
+//     .test('fileSize', "Yje file is too large", (value) => {
+//       return value && value[0].size <= 2000000;
+//     })
+//     .test('fileFormat', ".xls or .csv extensions are supported only", (value) => {
+//       return value && value[0].type === 'file.csv' && value[0].type === 'file.xlsx';
+//     }),
+// })
