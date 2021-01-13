@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import propTypes from 'prop-types';
+
 import classNames from 'classnames';
 import styles from './pagination.scss';
 
 export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage }) => {
   const pagination = [];
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -72,8 +74,8 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
               )
             } else {
                 return (
-                  <li key={page.id}>
-                    <span className="pagination-ellipsis">&hellip;</span>
+                  <li key={page.id} >
+                    <span className={classNames("pagination-ellipsis px-1", styles.ellipsis)}>&hellip;</span>
                   </li>
                 );
             }
@@ -92,4 +94,12 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
       </nav>
     </div>
   );
+};
+
+Pagination.propTypes = {
+  itemsPerPage: propTypes.number.isRequired,
+  totalItems: propTypes.number.isRequired,
+  paginate: propTypes.func.isRequired,
+  prevPage: propTypes.func.isRequired,
+  nextPage: propTypes.func.isRequired
 };

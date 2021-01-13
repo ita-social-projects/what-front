@@ -121,7 +121,7 @@ export const ListOfLessons = () => {
     });
   };
 
-  const prevPage =(pageNumber) => {
+  const prevPage = (pageNumber) => {
     setCurrentPage((prev) => {
       if (prev - 1 === 0) {
         return prev;
