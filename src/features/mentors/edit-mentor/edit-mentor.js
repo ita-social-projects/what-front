@@ -330,7 +330,7 @@ export const EditMentor = ({ id }) => {
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
-                        <label htmlFor="coursesInput">Courses(`s):</label>
+                        <label htmlFor="coursesInput">Course(`s):</label>
                       </div>
                       <div className="d-flex flex-column col-md-8">
                         <div className="d-flex flex-row flex-nowrap input-group">
