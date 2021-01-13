@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import styles from './pagination.scss';
 
@@ -11,21 +11,22 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   let ellipsisLeft = false;
   let ellipsisRight = false;
 
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === currentPage) {
-      pagination.push({id: i, current: true, ellipsis: false});
-    } else {
-      if (i < 2 || i > totalPages - 1 || i === currentPage - 1 || i === currentPage + 1) {
-        pagination.push({id: i, current: false, ellipsis: false});
-      } else if (i > 1 && i < currentPage && !ellipsisLeft) {
-        pagination.push({id: i, current: false, ellipsis: true});
-        ellipsisLeft = true;
-      } else if(i < totalPages && i > currentPage && !ellipsisRight) {
-        pagination.push({id: i, current: false, ellipsis: true});
-        ellipsisRight = true;
+  [...new Array(totalPages).keys()].map((number) => number + 1)
+    .map((i) => {
+      if(i === currentPage) {
+        pagination.push({id: i, current: true, ellipsis: false});
+      } else {
+        if (i < 2 || i > totalPages - 1 || i === currentPage - 1 || i === currentPage + 1) {
+          pagination.push({id: i, current: false, ellipsis: false});
+        } else if (i > 1 && i < currentPage && !ellipsisLeft) {
+          pagination.push({id: i, current: false, ellipsis: true});
+          ellipsisLeft = true;
+        } else if (i < totalPages && i > currentPage && !ellipsisRight) {
+          pagination.push({id: i, current: false, ellipsis: true});
+          ellipsisRight = true;
+        }
       }
-    }
-  }
+    });
 
   const changePage = (page) => {
     if (page !== currentPage) {
