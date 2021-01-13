@@ -34,7 +34,9 @@ export const paths = {
   LESSON_ADD: '/lessons/add',
   LESSON_DETAILS: '/lessons',
   LESSON_EDIT: '/lessons/edit',
-
+  
+  THEMES_DOWNLOAD: '/imports/themes',
+  
   SCHEDULE: '/schedule',
   SCHEDULE_EDIT: '/schedule/edit',
   SCHEDULE_ADD: '/schedule/add',

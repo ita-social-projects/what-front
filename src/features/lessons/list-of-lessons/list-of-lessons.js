@@ -51,6 +51,10 @@ export const ListOfLessons = () => {
   const addLesson = () => {
     history.push(paths.LESSON_ADD);
   };
+  
+  const downloadThemes = () => {
+    history.push(paths.THEMES_DOWNLOAD);
+  };
 
   const lessonDetails = (id) => {
     history.push(`${paths.LESSON_DETAILS}/${id}`);
@@ -120,15 +124,23 @@ export const ListOfLessons = () => {
               onChange={handleSearchDate}
             />
           </div>
-          <div className="col-md-6 offset-md-1 text-center pl-4">
+          <div className="col-4 offset-md-1 text-center pl-4 mr-5">
             <Search onSearch={handleSearchTheme} placeholder="Search lesson" />
           </div>
-          {currentUser.role !== 3 && 
-            <div className="col-md-2 offset-md-1 text-right">
-              <Button onClick={addLesson} variant="warning">
-                <Icon icon="Plus" className="icon" />
-                  Add a Lesson
-              </Button>
+          {currentUser.role !== 3 &&
+            <div className="col-4 offset-md-1 text-right align-items-center ml-5 pl-5">
+              <div className="btn-group" >
+                <Button onClick={downloadThemes} type="button" className="btn btn-warning">
+                  <Icon icon="Plus" className="icon" />
+                  Add themes
+                </Button>
+                <Button onClick={addLesson} variant="warning">
+                  <Icon icon="Plus" className="icon" />
+                  Add a lesson
+                </Button>
+              </div>
+
+
             </div>
           }
         <hr className="col-8" />
@@ -140,10 +152,10 @@ export const ListOfLessons = () => {
           </WithLoading>
         </div>
       </div>
-      {filteredLessonsList.length > 12 && 
-        <Pagination 
-          itemsPerPage={lessonsPerPage} 
-          totalItems={filteredLessonsList.length} 
+      {filteredLessonsList.length > 12 &&
+        <Pagination
+          itemsPerPage={lessonsPerPage}
+          totalItems={filteredLessonsList.length}
           paginate={paginate}
         />
       }
