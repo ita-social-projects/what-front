@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import styles from './pagination.scss';
 
 export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage }) => {
-  const pagination = [];
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -13,22 +12,23 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   let ellipsisLeft = false;
   let ellipsisRight = false;
 
-  [...new Array(totalPages).keys()].map((number) => number + 1)
-    .map((i) => {
+  const pagination = [...new Array(totalPages).keys()].map((number) => number + 1)
+    .reduce((accum, i) => {
       if(i === currentPage) {
-        pagination.push({id: i, current: true, ellipsis: false});
+        accum.push({id: i, current: true, ellipsis: false});
       } else {
         if (i < 2 || i > totalPages - 1 || i === currentPage - 1 || i === currentPage + 1) {
-          pagination.push({id: i, current: false, ellipsis: false});
+          accum.push({id: i, current: false, ellipsis: false});
         } else if (i > 1 && i < currentPage && !ellipsisLeft) {
-          pagination.push({id: i, current: false, ellipsis: true});
           ellipsisLeft = true;
+          accum.push({id: i, current: false, ellipsis: true});
         } else if (i < totalPages && i > currentPage && !ellipsisRight) {
-          pagination.push({id: i, current: false, ellipsis: true});
           ellipsisRight = true;
+          accum.push({id: i, current: false, ellipsis: true});
         }
       }
-    });
+      return accum;
+    }, []);
 
   const changePage = (page) => {
     if (page !== currentPage) {
