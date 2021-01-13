@@ -69,7 +69,7 @@ export const ListOfGroups = () => {
       return <h4>List of groups is empty</h4>;
     }
 
-    return listByDate.slice(indexOfFirstGroup, indexOfLastGroup)
+    const groupList = listByDate.slice(indexOfFirstGroup, indexOfLastGroup)
       .sort((a, b) => {
         return a.startDate < b.startDate ? -1 : a.startDate > b.startDate ? 1 : 0;
       })
@@ -85,6 +85,14 @@ export const ListOfGroups = () => {
           onDetails={() => handleCardDetails(group.id)}
         />
       ));
+
+      if (!groupList.length && searchGroupName || searchStartDate) {
+        return <h4>Group is not found</h4>;
+      } if (!groupList.length && searchGroupName || searchStartDate) {
+        return <h4>Group is not found</h4>;
+      }
+
+      return groupList;
     };
 
   const paginate = (pageNumber) => {

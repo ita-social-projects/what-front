@@ -97,9 +97,9 @@ export const ListOfLessons = () => {
         });
 
     if (!lessonsList.length && searchLessonsDateValue) {
-      return <h4>Lesson not found</h4>;
+      return <h4>Lesson is not found</h4>;
     } if (!lessonsList.length && searchLessonsThemeValue) {
-      return <h4>Lesson not found</h4>;
+      return <h4>Lesson is not found</h4>;
     }
     return lessonsList;
   };
