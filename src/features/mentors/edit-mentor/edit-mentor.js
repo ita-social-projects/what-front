@@ -12,7 +12,7 @@ import {
   editMentor,
   deleteMentor,
   loadStudentGroupsSelector,
-  coursesSelector,
+  coursesSelector, fetchCourses, globalLoadStudentGroups,
 } from '@/models/index.js';
 import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
@@ -73,11 +73,22 @@ export const EditMentor = ({ id }) => {
   const [courseInput, setCourseInputValue] = useState('Type name of a course');
   const [errorGroup, setErrorGroup] = useState(null);
   const [errorCourse, setErrorCourse] = useState(null);
-
+  const [loadCourses] = useActions([fetchCourses]);
+  const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
   const [toShowModal, setShowModal] = useState(false);
+  
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-
+  
+  useEffect(() => {
+    fetchListOfGroups();
+  }, [fetchListOfGroups]);
+  
+  useEffect(() => {
+    loadCourses();
+  }, [loadCourses]);
+  
+  
   useEffect(() => {
     setGroups(mentorGroups);
     setCourses(mentorCourses);
