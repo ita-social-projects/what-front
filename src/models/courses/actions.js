@@ -48,6 +48,7 @@ function* createCourseWorker(data) {
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.CREATING_COURSE_FAILED, payload: { error: error.message } });
+    yield put({ type: actionTypes.CLEAR_ERROR });
   }
 }
 
@@ -59,7 +60,7 @@ function* editCourseWorker(data) {
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.EDITING_COURSE_FAILED, payload: { error: error.message } });
-    yield put({ type: actionTypes.EDITING_CLEAR_ERROR });
+    yield put({ type: actionTypes.CLEAR_ERROR });
   }
 }
 
@@ -71,6 +72,7 @@ function* deleteCourseWorker(data) {
     yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({type: actionTypes.DELETING_COURSE_FAILED, payload: {error: error.message}});
+    yield put({ type: actionTypes.CLEAR_ERROR });
   }
 }
 
