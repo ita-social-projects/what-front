@@ -30,7 +30,7 @@ export const editStudentGroupReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: 'Student Groups editing was failed',
+        error: action.payload.error,
       };
 
     case actionTypes.EDIT_CLEAR_LOADED:

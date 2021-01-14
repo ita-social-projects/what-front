@@ -89,7 +89,7 @@ export const Auth = () => {
                         <Button type="submit" className="btn btn-block btn-warning">Sign in</Button>
                       </WithLoading>
                     </div>
-                    {requestError && <p className="text-danger text-center mt-2">Invalid credentials</p>}
+                    {requestError && <p className="text-center text-danger mt-2">{requestError}</p>}
                     <div className="text-center mt-3">
                       <p>Don&apos;t have an account? <Link to={paths.REGISTRATION}>Registration</Link></p>
                     </div>
