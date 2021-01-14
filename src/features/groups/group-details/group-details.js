@@ -1,9 +1,10 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+
 import { paths } from '@/shared';
-import { WithLoading } from '@/components/index.js';
+import { WithLoading, Button } from '@/components/index.js';
 import {
   studentGroupByIdStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
 } from '@/features/shared/index.js';
@@ -21,6 +22,12 @@ export const GroupDetails = ({
   const { data: mentors, isLoading: areMentorsLoading } = mentorsData;
   const { data: courses, isLoading: areCoursesLoading } = coursesData;
 
+  const history = useHistory();
+
+  const handleShowSchedule = () => {
+    history.push(`${paths.SCHEDULE_BY_GROUP_ID}/${group.id}`);
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -37,6 +44,8 @@ export const GroupDetails = ({
                   {new Date(group.finishDate).toLocaleDateString()}
                 </p>
               </div>
+              {/* <Button variant="primary" onClick={handleShowSchedule}>View schedule</Button> */}
+              <Link to={`${paths.SCHEDULE_BY_GROUP_ID}/${group.id}`}>View schedule</Link>
             </div>
             <hr className="p-0" />
             <div className="d-flex mb-2">
@@ -50,9 +59,11 @@ export const GroupDetails = ({
                     .map((mentor) => (
                       <div className="pr-2 lead" key={mentor.id}>
                         <Badge pill variant="warning">
-                          <Link to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
+                          <Link
+                            to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
                             className="text-decoration-none text-dark"
-                          >{mentor.firstName} {mentor.lastName}</Link>
+                          >{mentor.firstName} {mentor.lastName}
+                          </Link>
                         </Badge>
                       </div>
                     )) }
@@ -63,7 +74,8 @@ export const GroupDetails = ({
               <h4 className="mb-2 pr-4">Course:</h4>
               <WithLoading isLoading={areCoursesLoading}>
                 <Badge pill variant="primary">
-                  <Link to={`${paths.COURSE_DETAILS}/${group.courseId}`}
+                  <Link
+                    to={`${paths.COURSE_DETAILS}/${group.courseId}`}
                     className="text-decoration-none text-white"
                   >
                     {courses.find((course) => course.id === group.courseId)?.name }

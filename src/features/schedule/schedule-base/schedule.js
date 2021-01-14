@@ -2,35 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Badge } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import { shape } from 'prop-types';
 import classNames from 'classnames';
 
-import { paths, useActions } from '@/shared';
-import {
-  schedulesSelector, fetchSchedules, globalLoadStudentGroups,
-  loadStudentGroupsSelector, currentUserSelector,
-} from '@/models';
+import { paths } from '@/shared';
+import { currentUserSelector } from '@/models';
 import { Button, WithLoading } from '@/components';
 import Icon from '@/icon';
+import { scheduleStateShape, studentGroupsStateShape } from '@features/shared';
 import styles from './schedule.scss';
 
-export const Schedule = () => {
-  const [
-    dispatchFetchSchedules,
-    dispatchFetchGroups,
-  ] = useActions([fetchSchedules, globalLoadStudentGroups]);
-
+export const Schedule = ({ groupsData, schedulesData }) => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const {
     data: schedules,
     isLoading: areSchedulesLoading,
     isLoaded: areSchedulesLoaded,
-  } = useSelector(schedulesSelector, shallowEqual);
+  } = schedulesData;
   const {
     data: groups,
     isLoading: areGroupsLoading,
     isLoaded: areGroupsLoaded,
-  } = useSelector(loadStudentGroupsSelector, shallowEqual);
+  } = groupsData;
 
   const [currentWeek, setCurrentWeek] = useState([]);
   const [chosenDate, setChosenDate] = useState(new Date());
@@ -39,11 +33,6 @@ export const Schedule = () => {
 
   const DAY_IN_MILLIS = 86400000;
   const WEEK_IN_MILLIS = DAY_IN_MILLIS * 7;
-
-  useEffect(() => {
-    dispatchFetchSchedules();
-    dispatchFetchGroups();
-  }, [dispatchFetchSchedules, dispatchFetchGroups]);
 
   useEffect(() => {
     const addZero = (num) => (num < 10 ? `0${num}` : num);
@@ -151,7 +140,9 @@ export const Schedule = () => {
                 { lessons.map(({ id: lessonId, studentGroupId, lessonEnd, lessonStart }) => (
                   <li key={lessonId} className={styles['lessons-list__item']}>
                     <p className={styles['lessons-list__group-name']}>
-                      {groups.find((group) => studentGroupId === group.id).name}
+                      { Array.isArray(groups)
+                        ? groups.find((group) => studentGroupId === group.id).name
+                        : groups.name }
                     </p>
                     <div className={styles['lessons-list__details']}>
                       <Badge
@@ -182,4 +173,9 @@ export const Schedule = () => {
       </WithLoading>
     </div>
   );
+};
+
+Schedule.propTypes = {
+  groupsData: shape(studentGroupsStateShape).isRequired,
+  schedulesData: shape(scheduleStateShape).isRequired,
 };

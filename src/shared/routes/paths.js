@@ -36,6 +36,7 @@ export const paths = {
   LESSON_EDIT: '/lessons/edit',
 
   SCHEDULE: '/schedule',
+  SCHEDULE_BY_GROUP_ID: '/schedule/group',
   SCHEDULE_EDIT: '/schedule/edit',
   SCHEDULE_ADD: '/schedule/add',
 
