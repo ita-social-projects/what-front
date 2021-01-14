@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Formik, Field, Form } from 'formik';
 import {Link, useHistory} from 'react-router-dom';
 import {paths, useActions} from '@/shared';
-import {Button, WithLoading} from '@/components/index.js';
+import {WithLoading} from '@/components/index.js';
 import {
   importGroupsSelector,
   coursesSelector, sendGroups, fetchCourses,
@@ -27,11 +27,6 @@ export const DownloadGroups = () => {
   
   const [fileName, setFileName] = useState('');
   
-  // const handleGroupsChange = (event) => {
-  //   let file = event.target.files[0];
-  //   setFileName(file.name);
-  // };
-  //
   const {
     data: groupsDownloading,
     isLoading: isDownloadingLoading,
@@ -52,13 +47,10 @@ export const DownloadGroups = () => {
       history.push(paths.GROUPS);
     }
   }, [downloadingError, isDownloadingLoaded]);
-  
 
 const onSubmit = (values) => {
-  console.log(JSON.stringify(values));
-  // sendGroups(JSON.stringify(values));
+  sendGroups(values);
 };
-
 
 return (
     <div className="container">
@@ -100,31 +92,32 @@ return (
                         </WithLoading>
                       </div>
                    </div>
-                  
                   <div className="row m-0 pt-3">
                     <div className="col-md-4 font-weight-bolder pt-3">
                       <label htmlFor="groupsInput">Group(`s):</label>
                     </div>
                     <div className='col-md-8'>
-                      <input type="file" id="actual-btn" name="groups" accept=".xlsx, .csv" onChange={(event) => {
+                      <input type="file" id="actual-btn" name="groups" accept=".xlsx" onChange={(event) => {
                         setFileName(event.target.files[0].name);
                         setFieldValue("groups", event.currentTarget.files[0]);
                       }} className="form-control" hidden/>
                       <label className={classNames(styles.label, "mr-2 col-md-4")} htmlFor="actual-btn">Choose File</label>
-                      <span>{fileName}</span>
+                      <span className='font-weight-bolder'>{fileName}</span>
                     </div>
                   </div>
-                  
-                  
-                  <div className="row m-0 pt-5 justify-content-end">
-                    <div className="col-md-3 col-4">
-                      <button
-                        className={classNames('w-100 btn btn-success', styles.button)}
-                        type="submit"
-                        disabled={!dirty || isDownloadingLoading|| coursesError || downloadingError}
-                      >Send
-                      </button>
-                    </div>
+                  <div className="row justify-content-between mt-4 px-4">
+                    <Link
+                      to="/lessons"
+                      className={classNames('btn btn-secondary w-25', styles.button)}
+                    >Back
+                    </Link>
+                    <input
+                      type="submit"
+                      name="submit-btn"
+                      className={classNames('w-25 btn btn-success', styles.button)}
+                      disabled={!dirty || isDownloadingLoading|| coursesError || downloadingError}
+                      value="Save"
+                    />
                   </div>
                 </Form>
               )}
