@@ -6,29 +6,11 @@ import { paths, homepages, useActions } from '@/shared';
 import { currentUserSelector } from '@/models';
 
 import {
-<<<<<<< HEAD
-  AddCourse,
-  alertSelector,
-  removeAlert,
-  ListOfCourses, ListOfGroups,
-  ListOfSecretaries,
-  ListOfStudents,
-  UnAssignedList,
-  ListOfMentors,
-  Support,
-  StudentScheduale,
-  ListOfLessons,
-  AddLesson,
-  EditLesson,
-  MyProfile,
-  StartGroup,
-=======
   ListOfStudents, ListOfMentors, ListOfSecretaries,
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
   alertSelector, removeAlert, Header, Schedule,
->>>>>>> dev
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
