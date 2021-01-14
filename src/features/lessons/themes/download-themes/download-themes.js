@@ -5,7 +5,7 @@ import { useActions, paths } from '@/shared';
 import { sendThemes, importThemesSelector } from '@/models';
 import { Formik, Form } from 'formik';
 import classNames from "classnames";
-import styles from "./f.scss"
+import styles from "./download-groups.scss"
 
 
 export const DownloadThemes = () => {
