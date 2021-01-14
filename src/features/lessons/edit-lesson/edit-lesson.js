@@ -18,6 +18,7 @@ import {
   loadActiveStudents,
   editLesson,
 } from '@/models';
+import { addAlert } from '@/features';
 import styles from './edit-lesson.scss';
 
 export const EditLesson = () => {
@@ -25,7 +26,7 @@ export const EditLesson = () => {
 
   const { id } = useParams();
 
-  const today = new Date().toISOString().split(".")[0];
+  const today = new Date().toISOString().substring(0, 19);
 
   const [studentsGroup, setStudentsGroup] = useState(null);
   const [studentsGroupInput, setStudentsGroupInput] = useState('');
@@ -37,7 +38,8 @@ export const EditLesson = () => {
     getStudents,
     loadLessons,
     updateLesson,
-  ] = useActions([globalLoadStudentGroups, loadActiveStudents, fetchLessons, editLesson]);
+    dispatchAddAlert,
+  ] = useActions([globalLoadStudentGroups, loadActiveStudents, fetchLessons, editLesson, addAlert]);
 
   const {
     data: groups,
@@ -88,7 +90,7 @@ export const EditLesson = () => {
     const studentD = uniqueIds.map(
       (id) => students.find((student) => student.id === id),
     );
-    
+
     const activeStudents = studentD.filter((student) => student !== undefined);
 
     const studentsData = activeStudents.map((student) => (
@@ -97,20 +99,20 @@ export const EditLesson = () => {
         studentName: `${student.firstName} ${student.lastName}`,
       }
     ));
-      
+
     const resultLessonVisits = studentsData.sort((a, b) => {
-      if(a.studentName < b.studentName) {
+      if (a.studentName < b.studentName) {
         return -1;
       }
-      if(a.studentName > b.studentName) {
+      if (a.studentName > b.studentName) {
         return 1;
       }
     })
-    .map((student, index) => ({
-      ...lessonOnEdit.lessonVisits[index],
-      ...student,
-    }));
-    
+      .map((student, index) => ({
+        ...lessonOnEdit.lessonVisits[index],
+        ...student,
+      }));
+
     setFormData(resultLessonVisits);
   };
 
@@ -142,8 +144,12 @@ export const EditLesson = () => {
   useEffect(() => {
     if (!editError && editIsLoaded) {
       history.push(paths.LESSONS);
+      dispatchAddAlert('The lesson has been edited successfully', 'success');
     }
-  }, [editError, editIsLoaded]);
+    if (editError && !editIsLoaded) {
+      dispatchAddAlert(editError);
+    }
+  }, [dispatchAddAlert, editError, editIsLoaded, history]);
 
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)

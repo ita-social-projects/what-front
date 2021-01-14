@@ -1,41 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { paths, useActions } from '@/shared';
-import { coursesSelector, editCourse, deleteCourse, editedCourseSelector, deletedCourseSelector } from '@/models';
-
 import { Formik, Form, Field } from 'formik';
-import { Button, WithLoading } from '@/components';
-import { editCourseValidation } from '@features/validation/validation-helpers.js';
-import { ModalWindow } from '@/features/modal-window';
-
 import classNames from 'classnames';
+import { shape, number } from 'prop-types';
+
+import { paths, useActions } from '@/shared';
+import { addAlert } from '@/features';
+import { editCourse, editedCourseSelector } from '@/models';
+import { WithLoading } from '@/components';
+import { coursesStateShape } from '@/features/shared';
+import { editCourseValidation } from '@features/validation/validation-helpers.js';
 import styles from './edit-course.scss';
 
-export const EditCourse = ({ id }) => {
-  const history = useHistory();
-  const [toShowModal, setShowModal] = useState(false);
-
+export const EditCourse = ({ id, coursesData }) => {
   const {
     data,
     isLoading: isCourseLoading,
     loaded: isCourseLoaded,
-  } = useSelector(coursesSelector, shallowEqual);
+  } = coursesData;
 
   const {
     isLoading: isEditedLoading,
     loaded: isEditedLoaded,
-    error: isEditedError,
+    error: editingError,
   } = useSelector(editedCourseSelector, shallowEqual);
 
-  const {
-    isLoading: isDeletedLoading,
-    isLoaded: isDeletedLoaded,
-    error: isDeletedError
-  } = useSelector(deletedCourseSelector, shallowEqual);
-
-  const updateCourse = useActions(editCourse);
-  const removeCourse = useActions(deleteCourse);
+  const [updateCourse, dispatchAddAlert] = useActions([editCourse, addAlert]);
 
   const course = data.find((course) => course.id == id);
 
@@ -43,13 +34,17 @@ export const EditCourse = ({ id }) => {
     if (!course && isCourseLoaded) {
       history.push(paths.NOT_FOUND);
     }
-  }, [course, isCourseLoaded]);
+  }, [course, history, isCourseLoaded]);
 
   useEffect(() => {
-    if (!isEditedError && isEditedLoaded) {
+    if (!editingError && isEditedLoaded && !isEditedLoading) {
       history.push(paths.COURSES);
+      dispatchAddAlert('The course has been successfully edited', 'success');
     }
-  }, [isEditedError, isEditedLoaded]);
+    if (editingError && !isEditedLoaded && !isEditedLoading) {
+      dispatchAddAlert(editingError);
+    }
+  }, [dispatchAddAlert, history, editingError, isEditedLoaded, isEditedLoading]);
 
   useEffect(() => {
     if (!isDeletedError && isDeletedLoaded) {
@@ -77,7 +72,7 @@ export const EditCourse = ({ id }) => {
             <h3>Course Editing</h3>
             <hr />
             <WithLoading
-              isLoading={isCourseLoading || !isCourseLoaded}
+              isLoading={isCourseLoading}
               className={classNames(styles['loader-centered'])}
             >
               <Formik
@@ -87,7 +82,7 @@ export const EditCourse = ({ id }) => {
                 onSubmit={onSubmit}
                 validationSchema={editCourseValidation}
               >
-                {({ errors, isValid, dirty, handleReset }) => (
+                {({ errors, isValid, dirty }) => (
                   <Form name="start-group">
                     <div className="row mb-3">
                       <div className="col d-flex align-items-center">
@@ -145,4 +140,9 @@ export const EditCourse = ({ id }) => {
       </div>
     </div>
   );
+};
+
+EditCourse.propTypes = {
+  id: number.isRequired,
+  coursesData: shape(coursesStateShape).isRequired,
 };

@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
 import { number } from 'prop-types';
 
-import { useActions } from '../../shared/index.js';
+import { paths, useActions } from '../../shared/index.js';
 import { Tabs, Tab } from '../../components/index.js';
 import { EditGroup, GroupDetails } from '../../features/index.js';
 import {
@@ -37,7 +37,7 @@ export const GroupsTabs = ({ index }) => {
 
   useEffect(() => {
     if (group.error) {
-      history.push('/404');
+      history.push(paths.NOT_FOUND);
     }
   }, [group, history]);
 

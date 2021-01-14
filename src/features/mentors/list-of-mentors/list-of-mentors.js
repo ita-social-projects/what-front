@@ -61,8 +61,8 @@ export const ListOfMentors = () => {
             onDetails={() => mentorDetails(mentor.id)}
           >
             <div className="w-75">
-              <p className="mb-2 font-weight-bolder pr-2">{mentor.firstName}</p>
-              <p className="font-weight-bolder">{mentor.lastName}</p>
+              <p className="mb-2 pr-2">{mentor.firstName}</p>
+              <p>{mentor.lastName}</p>
             </div>
           </Card>
         );
@@ -75,17 +75,40 @@ export const ListOfMentors = () => {
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(filteredMentorList.length / 9);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage =(pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
   };
 
   return (
     <div className="container" style={{minHeight: 750}}>
       <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
+        <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Mentor's name" />
         </div>
         {currentUser.role !== 2 && 
-          <div className="col-md-4 col-12 text-right">
+          <div className="col-md-4 text-right">
             <Button onClick={addMentor} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a mentor</span>
@@ -103,11 +126,13 @@ export const ListOfMentors = () => {
           </WithLoading>
         </div>
       </div>
-      {filteredMentorList.length > 9 && 
+      {filteredMentorList.length > 9 && !isLoading &&
         <Pagination 
           itemsPerPage={mentorsPerPage} 
           totalItems={filteredMentorList.length} 
           paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
         />
       }
     </div>
