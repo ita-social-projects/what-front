@@ -1,10 +1,10 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { paths } from '@/shared';
-import { WithLoading, Button } from '@/components/index.js';
+import { WithLoading } from '@/components/index.js';
 import {
   studentGroupByIdStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
 } from '@/features/shared/index.js';
@@ -22,12 +22,6 @@ export const GroupDetails = ({
   const { data: mentors, isLoading: areMentorsLoading } = mentorsData;
   const { data: courses, isLoading: areCoursesLoading } = coursesData;
 
-  const history = useHistory();
-
-  const handleShowSchedule = () => {
-    history.push(`${paths.SCHEDULE_BY_GROUP_ID}/${group.id}`);
-  };
-
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -44,8 +38,9 @@ export const GroupDetails = ({
                   {new Date(group.finishDate).toLocaleDateString()}
                 </p>
               </div>
-              {/* <Button variant="primary" onClick={handleShowSchedule}>View schedule</Button> */}
-              <Link to={`${paths.SCHEDULE_BY_GROUP_ID}/${group.id}`}>View schedule</Link>
+              <div className="pt-3">
+                <Link to={`${paths.SCHEDULE_BY_GROUP_ID}/${group.id}`}>View schedule</Link>
+              </div>
             </div>
             <hr className="p-0" />
             <div className="d-flex mb-2">
