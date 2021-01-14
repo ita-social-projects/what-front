@@ -4,20 +4,10 @@
 
 //colors map
 $colors: (
-        backgroung-color: $neutral-colorN1,
-        header-color: $theme-colorN2,
-        textMain-color: $neutral-colorN2,
-        textAdd-color: $neutral-colorN1,
-        textAccentN1-color: $theme-colorN1,
-        buttonSuccess-color: $success-color,
-        buttonReject-color: $danger-color,
-        buttonCustom-color: $theme-colorN1,
-        buttonDisabled-color: $disable-colorN1,
-        selectedTab-color: $theme-colorN1,
-        diselectedTab-color: $disable-colorN3,
-        checkboxSuccess-color: $success-color,
-        checkboxReject-color: $danger-color,
-        dropdownButton-color: $theme-colorN1,
+     medium-color: $theme-colorMedium,
+        dark-color: $theme-colorDark,
+        accent-color: $theme-colorAccent,
+        nonAccent-color: $theme-colorLight,
 );
 
 //borders map
