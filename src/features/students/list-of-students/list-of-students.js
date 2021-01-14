@@ -54,6 +54,9 @@ export const ListOfStudents = () => {
     const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
     const students = filteredStudentsList.slice(indexOfFirstStudent, indexOfLastStudent)
+      .sort((a, b) => {
+        return (a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0;
+      })
       .map(({ id, firstName, lastName }) => (
         <Card
           key={id}
@@ -109,7 +112,7 @@ export const ListOfStudents = () => {
         <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Student's name" />
         </div>
-        {currentUser.role !== 2 && 
+        {currentUser.role !== 2 &&
           <div className="col-md-4 text-right">
             <Button onClick={addStudent} variant="warning">
               <Icon icon="Plus" className="icon" />
@@ -128,10 +131,10 @@ export const ListOfStudents = () => {
           </WithLoading>
         </div>
       </div>
-        {filteredStudentsList.length > 9 && !isLoading && 
-          <Pagination 
-            itemsPerPage={studentsPerPage} 
-            totalItems={filteredStudentsList.length} 
+        {filteredStudentsList.length > 9 && !isLoading &&
+          <Pagination
+            itemsPerPage={studentsPerPage}
+            totalItems={filteredStudentsList.length}
             paginate={paginate}
             prevPage={prevPage}
             nextPage={nextPage}
