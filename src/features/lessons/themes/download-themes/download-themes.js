@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
 import { sendThemes, importThemesSelector } from '@/models';
 import { Formik, Form, Field } from 'formik';
-import classNames from 'classnames';
 
 
 export const DownloadThemes = () => {
@@ -18,14 +17,9 @@ export const DownloadThemes = () => {
     }
   }, [error, isLoaded]);
   
-  const parse = (value) => {
-  
-  }
-  
   const onSubmit = (values) => {
-    console.log(JSON.stringify(JSON.stringify(values.children)))
+    downloadThemes(values);
   };
- 
   
   return (
     <div className="container mt-5">
@@ -33,12 +27,11 @@ export const DownloadThemes = () => {
         <div className="col-md-6 col-sm-8 card shadow">
           <Formik
             initialValues={
-              {
-              }
+              {file: ""}
             }
             onSubmit={onSubmit}
           >
-            {({ values, errors, dirty, setFieldValue }) => (
+            {({ values, errors, dirty }) => (
               <Form className="px-2 py-4" name="start-group">
                 <h3>Download Themes</h3>
                 <hr />
@@ -48,15 +41,12 @@ export const DownloadThemes = () => {
                   </div>
                   <div className="col-md-8">
                     <Field
-                      className={classNames({ 'border-danger': errors.name })}
                       type="file"
                       name="file"
                       id="file"
                       accept=".xlsx"
-                      onChange={parse}
                     />
                   </div>
-                  {errors.name && <p className={classNames('w-100 text-danger mb-0')}>{errors.name}</p>}
                 </div>
                 <div className="row justify-content-around mt-4">
                   <Link
@@ -67,7 +57,7 @@ export const DownloadThemes = () => {
                   <input
                     type="submit"
                     name="submit-btn"
-                    disabled={!dirty || isLoading || errors.name}
+                    disabled={isLoading || !dirty ||errors.name}
                     className='btn btn-success w-25'
                     value="Send"
                   />

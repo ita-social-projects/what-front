@@ -70,7 +70,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.SCHEDULE} component={Schedule} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.CHANGE_PASSWORD} component={ChangePassword} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
-          <ProtectedRoute roles={[3, 4]} exact path={paths.THEMES_DOWNLOAD} component={DownloadThemes} />
+          <ProtectedRoute roles={[2, 3, 4]} exact path={paths.THEMES_DOWNLOAD} component={DownloadThemes} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
           <Redirect to={paths.NOT_FOUND} />
