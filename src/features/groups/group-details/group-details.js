@@ -48,7 +48,7 @@ export const GroupDetails = ({
                   { mentors
                     .filter((mentor) => group.mentorIds?.includes(mentor.id))
                     .map((mentor) => (
-                      <div className="pr-2" key={mentor.id}>
+                      <div className="pr-2 lead" key={mentor.id}>
                         <Badge pill variant="warning">
                           <Link to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
                             className="text-decoration-none text-dark"
@@ -59,7 +59,7 @@ export const GroupDetails = ({
                 </div>
               </WithLoading>
             </div>
-            <div className="d-flex align-items-center mb-2">
+            <div className="d-flex align-items-center mb-2 lead">
               <h4 className="mb-2 pr-4">Course:</h4>
               <WithLoading isLoading={areCoursesLoading}>
                 <Badge pill variant="primary">

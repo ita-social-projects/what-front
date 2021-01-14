@@ -3,7 +3,6 @@ import {
 } from 'redux-saga/effects';
 
 import * as types from '@models/mentors/types';
-import * as actionTypes from '@models/courses/types';
 import { ApiService } from '../../shared/api-service/index.js';
 
 export const fetchMentors = () => ({
@@ -59,7 +58,8 @@ function* fetchAsyncMentorById({ payload }) {
     yield put({ type: types.FETCHING_BY_ID_STARTED });
     const mentorId = payload.id;
     const data = yield call(ApiService.load, `/mentors/${mentorId}`);
-    yield put({ type: types.FETCHING_BY_ID_SUCCEED, payload: { data } });
+    // TODO Remove extra 'data' field when backend fix response
+    yield put({ type: types.FETCHING_BY_ID_SUCCEED, payload: { data: data.data } });
   } catch (error) {
     yield put({ type: types.FETCHING_BY_ID_FAILED, payload: { error } });
   }

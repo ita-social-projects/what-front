@@ -5,7 +5,7 @@ import { useActions, paths } from '@/shared';
 import { createCourse, createdCourseSelector } from '@/models';
 import { Formik, Form, Field } from 'formik';
 import classNames from 'classnames';
-import { validateGroupName } from '../../validation/validation-helpers.js';
+import { addCourseValidation } from '@features/validation/validation-helpers.js';
 import styles from './add-course.scss';
 
 export const AddCourse = () => {
@@ -34,8 +34,9 @@ export const AddCourse = () => {
               name: '',
             }}
             onSubmit={onSubmit}
+            validationSchema={addCourseValidation}
           >
-            {({ values, errors }) => (
+            {({ values, errors, isValid, dirty }) => (
               <Form className="px-2 py-4" name="start-group">
                 <h3>Add a course</h3>
                 <hr />
@@ -50,7 +51,6 @@ export const AddCourse = () => {
                       name="name"
                       id="name"
                       placeholder="Course name"
-                      validate={validateGroupName}
                     />
                   </div>
                   {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
@@ -64,7 +64,7 @@ export const AddCourse = () => {
                   <input
                     type="submit"
                     name="submit-btn"
-                    disabled={isLoading || errors.name}
+                    disabled={!isValid || !dirty || isLoading || errors.name}
                     className={classNames('btn btn-success w-25', styles.button)}
                     value="Save"
                   />

@@ -1,1 +1,0 @@
-export { GroupDetails } from './group-details.js';

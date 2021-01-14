@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-  loginReducer, unAssignedReducer, usersListreducer, registReducer
+  loginReducer, unAssignedReducer, usersListreducer, registReducer, changePasswordReducer,
 } from './reducers/index.js';
 
 export const accountReducer = combineReducers({
@@ -8,4 +8,5 @@ export const accountReducer = combineReducers({
   unAssignedlist: unAssignedReducer,
   usersList: usersListreducer,
   registration: registReducer,
+  changePassword: changePasswordReducer,
 });

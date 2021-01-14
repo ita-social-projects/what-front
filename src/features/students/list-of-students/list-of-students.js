@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@/shared/index.js';
-import { loadActiveStudents, activeStudentsSelector } from '@/models/index.js';
+import { loadActiveStudents, activeStudentsSelector, currentUserSelector } from '@/models/index.js';
 import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
 
@@ -15,6 +15,7 @@ export const ListOfStudents = () => {
   const [studentsPerPage] = useState(9);
 
   const { data, isLoading } = useSelector(activeStudentsSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const history = useHistory();
 
@@ -63,8 +64,8 @@ export const ListOfStudents = () => {
           onDetails={() => studentDetails(id)}
         >
           <div className="w-75">
-            <p className="mb-2  pr-2 font-weight-bolder">{firstName}</p>
-            <p className="font-weight-bolder">{lastName}</p>
+            <p className="mb-2 pr-2">{firstName}</p>
+            <p>{lastName}</p>
           </div>
         </Card>
       ));
@@ -76,21 +77,46 @@ export const ListOfStudents = () => {
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(filteredStudentsList.length / 9);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage =(pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
   };
 
   return (
     <div className="container" style={{minHeight: 750}}>
       <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
+        <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Student's name" />
         </div>
-        <div className="col-md-4 col-12 text-right">
-          <Button onClick={addStudent} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            <span>Add a student</span>
-          </Button>
-        </div>
+        {currentUser.role !== 2 && 
+          <div className="col-md-4 text-right">
+            <Button onClick={addStudent} variant="warning">
+              <Icon icon="Plus" className="icon" />
+              <span>Add a student</span>
+            </Button>
+          </div>
+        }
       </div>
       <div>
         <hr className="col-8" />
@@ -102,11 +128,13 @@ export const ListOfStudents = () => {
           </WithLoading>
         </div>
       </div>
-        {filteredStudentsList.length > 9 && 
+        {filteredStudentsList.length > 9 && !isLoading && 
           <Pagination 
             itemsPerPage={studentsPerPage} 
             totalItems={filteredStudentsList.length} 
             paginate={paginate}
+            prevPage={prevPage}
+            nextPage={nextPage}
           />
         }
     </div>

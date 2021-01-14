@@ -56,8 +56,8 @@ function* loadStudentByIdAsync({ payload }) {
 
     const studentId = payload.id;
     const data = yield call(ApiService.load, `/students/${studentId}`);
-
-    yield put({ type: actionTypes.LOADING_BY_ID_SUCCEED, payload: { data } });
+    // TODO Remove extra 'data' field when backend fix response
+    yield put({ type: actionTypes.LOADING_BY_ID_SUCCEED, payload: { data: data.data } });
   } catch (error) {
     yield put({ type: actionTypes.LOADING_BY_ID_FAILED, payload: { error } });
   }
@@ -68,8 +68,8 @@ function* loadActiveStudentsAsync() {
     yield put({ type: actionTypes.LOADING_ACTIVE_STARTED });
 
     const data = yield call(ApiService.load, '/students/active');
-
-    yield put({ type: actionTypes.LOADING_ACTIVE_SUCCEED, payload: { data } });
+    // TODO Remove extra 'data' field when backend fix response
+    yield put({ type: actionTypes.LOADING_ACTIVE_SUCCEED, payload: { data: data.data } });
   } catch (error) {
     yield put({ type: actionTypes.LOADING_ACTIVE_SUCCEED, payload: { error } });
   }
@@ -110,7 +110,7 @@ function* editStudentAsync({ payload }) {
     const data = yield call(ApiService.update, `/students/${studentId}`, newStudentData);
 
     yield put({ type: actionTypes.EDITING_STUDENT_SUCCEED, payload: { data } });
-    yield put({type: actionTypes.CLEAR_LOADED});
+    yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.EDITING_STUDENT_FAILED, payload: { error } });
   }
@@ -125,7 +125,7 @@ function* removeStudentAsync({ payload }) {
     yield call(ApiService.remove, `/students/${studentId}`);
 
     yield put({ type: actionTypes.REMOVING_STUDENT_SUCCEED, payload: { id: studentId } });
-    yield put({type: actionTypes.CLEAR_LOADED});
+    yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.REMOVING_STUDENT_FAILED, payload: { error } });
   }

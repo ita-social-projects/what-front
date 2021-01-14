@@ -1,11 +1,5 @@
 @import '../../../styles/main';
 
-.heading {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-}
-
 .calendar-input {
   border-color: map-get($colors, textAccentN1-color) !important;
   width: 18%;
@@ -13,8 +7,8 @@
 
 .calendar-input:focus {
   outline: none;
-  box-shadow: 0 0 10px map-get($colors, textAccentN1-color) !important;
-  border-color: map-get($colors, textAccentN1-color) !important;
+  box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
+  border-color: map-get($colors, textAccentN1-color);
 }
 
 .timeDate{
@@ -23,5 +17,11 @@
 }
 
 .list-wrapper {
-  min-height: 835px;
+  min-height: 940px;
+}
+
+@media(max-width: 1199px) {
+  .list-wrapper {
+    min-height: 988px;
+  }
 }
