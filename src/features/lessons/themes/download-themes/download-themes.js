@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
 import { sendThemes, importThemesSelector } from '@/models';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
+import classNames from "classnames";
+import styles from "./f.scss"
 
 
 export const DownloadThemes = () => {
@@ -16,6 +18,8 @@ export const DownloadThemes = () => {
       history.push(paths.LESSONS);
     }
   }, [error, isLoaded]);
+  
+  const [fileName, setFileName] = useState('');
   
   const onSubmit = (values) => {
     downloadThemes(values);
@@ -31,7 +35,7 @@ export const DownloadThemes = () => {
             }
             onSubmit={onSubmit}
           >
-            {({ values, errors, dirty }) => (
+            {({ values, errors, dirty, setFieldValue }) => (
               <Form className="px-2 py-4" name="start-group">
                 <h3>Download Themes</h3>
                 <hr />
@@ -39,16 +43,25 @@ export const DownloadThemes = () => {
                   <div className="col d-flex align-items-center">
                     <label className="mb-0 font-weight-bolder" htmlFor="file">Theme('s):</label>
                   </div>
-                  <div className="col-md-8">
-                    <Field
-                      type="file"
-                      name="file"
-                      id="file"
-                      accept=".xlsx"
-                    />
+                  {/*<div className="col-md-8">*/}
+                    {/*<Field*/}
+                    {/*  type="file"*/}
+                    {/*  name="file"*/}
+                    {/*  id="file"*/}
+                    {/*  accept=".xlsx"*/}
+                    {/*  className={classNames(styles.label)}*/}
+                    {/*/>*/}
+                  {/*</div>*/}
+                  <div className='col-md-8'>
+                    <input type="file" id="actual-btn" name="themes" accept=".xlsx" onChange={(event) => {
+                      setFileName(event.target.files[0].name);
+                      setFieldValue("themes", event.currentTarget.files[0]);
+                    }} className="form-control" hidden/>
+                    <label className={classNames(styles.label, "mr-2 col-md-6")} htmlFor="actual-btn">Choose File</label>
+                    <span className='font-weight-bolder'>{fileName}</span>
                   </div>
                 </div>
-                <div className="row justify-content-around mt-4">
+                <div className="row justify-content-between mt-4 px-4">
                   <Link
                     to="/lessons"
                     className='btn btn-secondary w-25'
