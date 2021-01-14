@@ -96,14 +96,6 @@ return (
                     <div className="col-md-4 font-weight-bolder pt-3">
                       <label htmlFor="groupsInput">Group(`s):</label>
                     </div>
-                    <div className='col-md-8'>
-                      <input type="file" id="actual-btn" name="groups" accept=".xlsx" onChange={(event) => {
-                        setFileName(event.target.files[0].name);
-                        setFieldValue("groups", event.currentTarget.files[0]);
-                      }} className="form-control" hidden/>
-                      <label className={classNames(styles.label, "mr-2 col-md-4")} htmlFor="actual-btn">Choose File</label>
-                      <span className='font-weight-bolder'>{fileName}</span>
-                    </div>
                   </div>
                   <div className="row justify-content-between mt-4 px-4">
                     <Link

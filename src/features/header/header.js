@@ -42,7 +42,6 @@ export const Header = () => {
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
       { id: 7, title: 'Role', link: paths.UNASSIGNED_USERS, active: false },
-      { id: 8, title: 'Role', link: paths.GROUP_DOWNLOAD, active: true },
     ],
     3: [
       { id: 0, title: 'Students', link: paths.STUDENTS, active: false },
