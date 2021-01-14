@@ -12,7 +12,7 @@ import {
   editMentor,
   deleteMentor,
   loadStudentGroupsSelector,
-  coursesSelector,
+  coursesSelector, fetchCourses, globalLoadStudentGroups,
 } from '@/models/index.js';
 import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
@@ -71,11 +71,22 @@ export const EditMentor = ({ id }) => {
   const [courseInput, setCourseInputValue] = useState('Type name of a course');
   const [errorGroup, setErrorGroup] = useState(null);
   const [errorCourse, setErrorCourse] = useState(null);
-
+  const [loadCourses] = useActions([fetchCourses]);
+  const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
   const [toShowModal, setShowModal] = useState(false);
+  
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-
+  
+  useEffect(() => {
+    fetchListOfGroups();
+  }, [fetchListOfGroups]);
+  
+  useEffect(() => {
+    loadCourses();
+  }, [loadCourses]);
+  
+  
   useEffect(() => {
     setGroups(mentorGroups);
     setCourses(mentorCourses);
@@ -328,7 +339,7 @@ export const EditMentor = ({ id }) => {
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
-                        <label htmlFor="coursesInput">Courses(`s):</label>
+                        <label htmlFor="coursesInput">Course(`s):</label>
                       </div>
                       <div className="d-flex flex-column col-md-8">
                         <div className="d-flex flex-row flex-nowrap input-group">

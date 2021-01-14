@@ -26,7 +26,7 @@ export const changePasswordReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isloaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
     case actions.CLEAR_LOADED:
       return {

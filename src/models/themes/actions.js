@@ -2,39 +2,31 @@ import { all, call, fork, put, takeLatest, takeEvery } from 'redux-saga/effects'
 import { ApiService } from '../../shared/api-service';
 import * as actionTypes from './types.js';
 
-export const fetchThemes = () => {
-  return {
-    type: actionTypes.FETCH_THEMES,
-  };
-};
+export const fetchThemes = () => ({
+  type: actionTypes.FETCH_THEMES,
+});
 
-export const createTheme = (theme) => {
-  return {
-    type: actionTypes.CREATE_THEME,
-    payload: {
-      theme,
-    },
-  };
-};
+export const createTheme = (theme) => ({
+  type: actionTypes.CREATE_THEME,
+  payload: {
+    theme,
+  },
+});
 
-export const editTheme = (theme, id) => {
-  return {
-    type: actionTypes.EDIT_THEME,
-    payload: {
-      theme,
-      id,
-    },
-  };
-};
+export const editTheme = (theme, id) => ({
+  type: actionTypes.EDIT_THEME,
+  payload: {
+    theme,
+    id,
+  },
+});
 
-export const deleteTheme = (id) => {
-  return {
-    type: actionTypes.DELETE_THEME,
-    payload: {
-      id,
-    },
-  };
-};
+export const deleteTheme = (id) => ({
+  type: actionTypes.DELETE_THEME,
+  payload: {
+    id,
+  },
+});
 
 function* loadThemesWatcher() {
   yield takeLatest(actionTypes.FETCH_THEMES, loadThemesWorker);
@@ -54,45 +46,45 @@ function* deleteThemeWatcher() {
 
 function* loadThemesWorker() {
   try {
-    yield put({type: actionTypes.LOADING_THEMES_STARTED});
+    yield put({ type: actionTypes.LOADING_THEMES_STARTED });
     const themes = yield call(ApiService.load, '/themes');
-    yield put({type: actionTypes.LOADING_THEMES_SUCCESS, payload: {themes}});
+    yield put({ type: actionTypes.LOADING_THEMES_SUCCESS, payload: { themes } });
   } catch (error) {
-    yield put({type: actionTypes.LOADING_THEMES_FAILED, payload: {error: error.message}});
+    yield put({ type: actionTypes.LOADING_THEMES_FAILED, payload: { error } });
   }
 }
 
 function* createThemeWorker(data) {
   try {
-    yield put({type: actionTypes.CREATING_THEME_STARTED});
+    yield put({ type: actionTypes.CREATING_THEME_STARTED });
     const theme = yield call(ApiService.create, '/themes', data.payload.theme);
-    yield put({type: actionTypes.CREATING_THEME_SUCCESS, payload: {theme}});
-    yield put({type: actionTypes.CLEAR_LOADED});
+    yield put({ type: actionTypes.CREATING_THEME_SUCCESS, payload: { theme } });
+    yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
-    yield put({type: actionTypes.CREATING_THEME_FAILED, payload: {error: error.message}});
+    yield put({ type: actionTypes.CREATING_THEME_FAILED, payload: { error } });
   }
 }
 
 function* editThemeWorker(data) {
   try {
-    yield put({type: actionTypes.EDITING_THEME_STARTED});
+    yield put({ type: actionTypes.EDITING_THEME_STARTED });
     const theme = yield call(ApiService.update, `/themes/${data.payload.id}`, data.payload.theme);
-    yield put({type: actionTypes.EDITING_THEME_SUCCESS, payload: {theme}});
-    yield put({type: actionTypes.CLEAR_LOADED});
+    yield put({ type: actionTypes.EDITING_THEME_SUCCESS, payload: { theme } });
+    yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
-    yield put({type: actionTypes.EDITING_THEME_FAILED, payload: {error: error.message}});
+    yield put({ type: actionTypes.EDITING_THEME_FAILED, payload: { error } });
   }
 }
 
 function* deleteThemeWorker(data) {
   try {
-    yield put({type: actionTypes.DELETING_THEME_STARTED});
+    yield put({ type: actionTypes.DELETING_THEME_STARTED });
     const theme = yield call(ApiService.remove, `/themes/${data.payload.id}`);
-    yield put({type: actionTypes.DELETING_THEME_SUCCESS, payload: {theme}});
-    yield put({type: actionTypes.CLEAR_LOADED});
-  } catch(error) {
-    yield put({type: actionTypes.DELETING_THEME_FAILED, payload: {error: error.message}});
-  } 
+    yield put({ type: actionTypes.DELETING_THEME_SUCCESS, payload: { theme } });
+    yield put({ type: actionTypes.CLEAR_LOADED });
+  } catch (error) {
+    yield put({ type: actionTypes.DELETING_THEME_FAILED, payload: { error } });
+  }
 }
 
 export function* themesWatcher() {
@@ -103,4 +95,3 @@ export function* themesWatcher() {
     fork(deleteThemeWatcher),
   ]);
 }
-

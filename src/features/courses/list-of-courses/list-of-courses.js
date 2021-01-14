@@ -5,6 +5,8 @@ import { useActions, paths } from '@/shared';
 import { fetchCourses, coursesSelector, currentUserSelector } from '@/models/index.js';
 import { Card, Search, Button, WithLoading, Pagination } from '../../../components/index.js';
 import Icon from '../../../icon.js';
+import classNames from 'classnames';
+import styles from './list-of-courses.scss';
 
 export const ListOfCourses = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -70,23 +72,46 @@ export const ListOfCourses = () => {
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber)
+    } 
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(filteredCourses.length / 12);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage =(pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
   };
 
   return (
-    <div className="container" style={{minHeight: 750}}>
+    <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
         <div className="col-md-4 offset-md-4 col-12 text-center">
           <Search onSearch={handleSearch} placeholder="Course's name" />
         </div>
         {currentUser.role === 4 && 
-          <div className="col-md-4 col-12 text-right">
+          <div className="col-md-4 text-right">
             <Button onClick={addCourse} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a course</span>
             </Button>
           </div> || currentUser.role === 3 &&
-          <div className="col-md-4 col-12 text-right">
+          <div className="col-md-4 text-right">
             <Button onClick={addCourse} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a course</span>
@@ -104,11 +129,13 @@ export const ListOfCourses = () => {
           </WithLoading>
         </div>
       </div>
-      {filteredCourses.length > 12 && 
+      {filteredCourses.length > 12 && !isLoading &&
         <Pagination 
           itemsPerPage={coursesPerPage} 
           totalItems={filteredCourses.length} 
           paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
         />
       }
     </div>

@@ -1,15 +1,15 @@
-import * as actionTypes from '../action-types.js';
+import * as types from '../types.js';
 
-const INITIAL_STATE = {
-  data: {},
+const initialState = {
+  data: [],
   isLoading: false,
   isLoaded: false,
   error: '',
 };
 
-export const currentStudentReducer = (state = INITIAL_STATE, action) => {
+export const attachmentsAllCreateReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.LOADING_BY_ID_STARTED:
+    case types.CREATING_ATTACHMENTS_STARTED:
       return {
         ...state,
         isLoading: true,
@@ -17,7 +17,7 @@ export const currentStudentReducer = (state = INITIAL_STATE, action) => {
         error: '',
       };
 
-    case actionTypes.LOADING_BY_ID_SUCCEED:
+    case types.CREATING_ATTACHMENTS_SUCCEED:
       return {
         ...state,
         data: action.payload.data,
@@ -25,14 +25,19 @@ export const currentStudentReducer = (state = INITIAL_STATE, action) => {
         isLoaded: true,
       };
 
-    case actionTypes.LOADING_BY_ID_FAILED:
+    case types.CREATING_ATTACHMENTS_FAILED:
       return {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: action.payload.error,
+        error: action.payload.error.message,
       };
 
+    case types.CLEAR_LOADED:
+      return {
+        ...state,
+        isLoaded: false,
+      };
     default:
       return state;
   }

@@ -7,17 +7,18 @@ import { Button, Search, Card, WithLoading, Pagination } from '@/components/inde
 import Icon from '@/icon.js';
 
 export const ListOfSecretaries = () => {
+  const history = useHistory();
+
   const [loadSecretaries] = useActions([fetchSecretaries]);
 
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [secretariesPerPage] = useState(9);
 
   const { data, isLoading } = useSelector(secretariesSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-
-  const history = useHistory();
 
   useEffect(() => {
     loadSecretaries();
@@ -53,22 +54,24 @@ export const ListOfSecretaries = () => {
 
     const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
       .map(({
-        id, firstName, lastName,
-      }) => (
-        <Card
-          key={id}
-          id={id}
-          iconName={currentUser.role === 4 ? 'Edit' : null}
-          buttonName="Details"
-          onEdit={currentUser.role === 4 ? () => handleEditSecretary(id) : null}
-          onDetails={() => handleSecretariesDetails(id)}
-        >
-          <div className=" w-75">
-            <p className="mb-2 font-weight-bolder pr-2">{firstName}</p>
-            <p className="font-weight-bolder">{lastName}</p>
-          </div>
-        </Card>
-      ));
+        id, firstName, lastName
+      }) => {
+        return (
+          <Card
+            key={id}
+            id={id}
+            iconName={currentUser.role === 4 ? "Edit" : null}
+            buttonName="Details"
+            onEdit={currentUser.role === 4 ? () => handleEditSecretary(id) : null}
+            onDetails={() => handleSecretariesDetails(id)}
+          >
+            <div className=" w-75">
+              <p className="mb-2 pr-2">{firstName}</p>
+              <p>{lastName}</p>
+            </div>
+          </Card>
+        );
+      }); 
 
     if (!secretaries.length && search) {
       return <h4>Secretary is not found</h4>;
@@ -77,24 +80,46 @@ export const ListOfSecretaries = () => {
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
   };
 
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(searchResults.length / 9);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage =(pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+  
   return (
-    <div className="container" style={{ minHeight: 750 }}>
+    <div className="container" style={{minHeight: 750}}>
       <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
+        <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
-        {currentUser.role === 4
-          && (
-          <div className="col-md-4 col-12 text-right">
+        {currentUser.role === 4 && 
+          <div className="col-md-4 text-right">
             <Button onClick={handleAddSecretary} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a secretary</span>
             </Button>
           </div>
-          )}
+        }
       </div>
       <div>
         <hr className="col-8" />
@@ -106,14 +131,15 @@ export const ListOfSecretaries = () => {
           </WithLoading>
         </div>
       </div>
-      {searchResults.length > 9
-        && (
-        <Pagination
-          itemsPerPage={secretariesPerPage}
-          totalItems={searchResults.length}
+      {searchResults.length > 9 && !isLoading &&
+        <Pagination 
+          itemsPerPage={secretariesPerPage} 
+          totalItems={searchResults.length} 
           paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
         />
-        )}
+      }
     </div>
   );
 };

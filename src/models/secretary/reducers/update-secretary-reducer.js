@@ -28,7 +28,7 @@ export const updateSecretaryReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
     case actions.CLEAR_LOADED:
       return {

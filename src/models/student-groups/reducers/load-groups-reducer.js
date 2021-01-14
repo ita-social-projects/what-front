@@ -27,7 +27,7 @@ export const loadStudentGroupsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: 'Student Groups loading was failed',
+        error: action.payload.error,
       };
     default: return state;
   }

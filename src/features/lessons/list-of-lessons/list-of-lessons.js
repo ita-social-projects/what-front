@@ -97,40 +97,65 @@ export const ListOfLessons = () => {
         });
 
     if (!lessonsList.length && searchLessonsDateValue) {
-      return <h4>Lesson not found</h4>;
+      return <h4>Lesson is not found</h4>;
     } if (!lessonsList.length && searchLessonsThemeValue) {
-      return <h4>Lesson not found</h4>;
+      return <h4>Lesson is not found</h4>;
     }
     return lessonsList;
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(filteredLessonsList.length / 12);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage = (pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
   };
 
   return (
     <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
-          <div>
-            <input
-              className={classNames('form-control ', styles['calendar-input'])}
-              type="date"
-              name="lesson_date"
-              required
-              onChange={handleSearchDate}
-            />
+        <div className="col-md-2 text-left">
+          <input
+            className={classNames('form-control ', styles['calendar-input'])}
+            type="date"
+            name="lesson_date"
+            required
+            onChange={handleSearchDate}
+          />
+        </div>
+        <div className="col-md-4 offset-md-2 text-center pl-3">
+          <Search onSearch={handleSearchTheme} placeholder="Lesson's name" />
+        </div>
+        {currentUser.role !== 3 && 
+          <div className="col-md-4 col-12 text-right">
+            <Button onClick={addLesson} variant="warning">
+              <Icon icon="Plus" className="icon" />
+                Add a lesson
+            </Button>
           </div>
-          <div className="col-md-6 offset-md-1 text-center pl-4">
-            <Search onSearch={handleSearchTheme} placeholder="Search lesson" />
-          </div>
-          {currentUser.role !== 3 && 
-            <div className="col-md-2 offset-md-1 text-right">
-              <Button onClick={addLesson} variant="warning">
-                <Icon icon="Plus" className="icon" />
-                  Add a Lesson
-              </Button>
-            </div>
-          }
+        }
+      </div>
+      <div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
           <WithLoading isLoading={isLoading}>
@@ -140,11 +165,13 @@ export const ListOfLessons = () => {
           </WithLoading>
         </div>
       </div>
-      {filteredLessonsList.length > 12 && 
+      {filteredLessonsList.length > 12 && !isLoading &&
         <Pagination 
           itemsPerPage={lessonsPerPage} 
           totalItems={filteredLessonsList.length} 
           paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
         />
       }
     </div>

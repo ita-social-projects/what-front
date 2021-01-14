@@ -52,7 +52,7 @@ function* createStudentsClassbookWorker(data) {
   } catch (error) {
     yield put({
       type: actionTypes.CREATING_STUDENTS_CLASSBOOK_FAILED,
-      payload: { error: error.message },
+      payload: { error },
     });
   }
 }
@@ -69,7 +69,7 @@ function* createStudentsResultsWorker(data) {
   } catch (error) {
     yield put({
       type: actionTypes.CREATING_STUDENTS_RESULTS_FAILED,
-      payload: { error: error.message },
+      payload: { error },
     });
   }
 }
@@ -85,7 +85,7 @@ function* createStudentClassbookWorker(data) {
   } catch (error) {
     yield put({
       type: actionTypes.CREATING_STUDENT_CLASSBOOK_FAILED,
-      payload: { error: error.message },
+      payload: { error },
     });
   }
 }
@@ -101,7 +101,7 @@ function* createStudentResultsWorker(data) {
   } catch (error) {
     yield put({
       type: actionTypes.CREATING_STUDENT_RESULTS_FAILED,
-      payload: { error: error.message },
+      payload: { error },
     });
   }
 }
@@ -117,7 +117,7 @@ function* createStudentGroupResultsWorker(data) {
   } catch (error) {
     yield put({
       type: actionTypes.CREATING_STUDENT_GROUP_RESULTS_FAILED,
-      payload: { error: error.message },
+      payload: { error },
     });
   }
 }
