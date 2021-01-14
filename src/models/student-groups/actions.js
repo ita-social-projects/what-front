@@ -68,7 +68,7 @@ function* watchEditingStudentGroups() {
 }
 
 export const addStudentGroup = (group) => ({
-  type: actionTypes.EDIT_STUDENT_GROUP,
+  type: actionTypes.ADD_STUDENT_GROUP,
   payload: group,
 });
 
@@ -76,7 +76,7 @@ function* addStudentGroupAsync({ payload }) {
   try {
     yield put({ type: actionTypes.ADDING_STUDENT_GROUP_STARTED });
 
-    const group = yield call(ApiService.create, `/student_groups/${payload.id}`, payload);
+    const group = yield call(ApiService.create, '/student_groups/', payload);
 
     yield put({ type: actionTypes.ADDING_STUDENT_GROUP_SUCCEED, payload: group });
   } catch (e) {

@@ -1,0 +1,18 @@
+@import '../../styles/main';
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+}
+
+.search-container {
+  display: block;
+  margin: auto;
+}
+
+.button-container {
+  position: absolute;
+  right: 0;
+}
