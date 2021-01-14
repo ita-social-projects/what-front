@@ -34,6 +34,11 @@ export const deleteCourseReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoaded: false
       }
+    case actionTypes.CLEAR_ERROR:
+      return {
+        ...state,
+        error: '',
+      };
     default: return state;
   }
 };
