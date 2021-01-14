@@ -8,7 +8,7 @@ const paths = require('./paths.js');
 const common = require('./webpack.common.js');
 
 const PlatformCores = os.cpus().length;
-const JSCompilationThreads = os.cpus().length - 1;
+const JSCompilationThreads = PlatformCores - 1;
 
 // eslint-disable-next-line no-console
 console.table({
@@ -59,7 +59,7 @@ module.exports = merge(common, {
           {
             loader: 'thread-loader',
             options: {
-              workers: os.cpus().length - 1,
+              workers: JSCompilationThreads,
             },
           },
           'babel-loader',
