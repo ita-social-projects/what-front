@@ -57,7 +57,7 @@ return (
       <div className="row justify-content-center">
         <div className="w-100 card shadow p-4">
           <div className="px-2 py-4">
-            <h3>Group Starting</h3>
+            <h3>Uploading Groups</h3>
             <hr />
   
             <Formik
