@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
-import { fetchLessons, lessonsSelector } from '@/models/index.js';
+import { currentUserSelector, fetchLessons, lessonsSelector } from '@/models/index.js';
 import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
@@ -18,6 +18,7 @@ export const ListOfLessons = () => {
   const [lessonsPerPage] = useState(12);
 
   const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const getLessons = useActions(fetchLessons);
 
@@ -51,6 +52,10 @@ export const ListOfLessons = () => {
     history.push(paths.LESSON_ADD);
   };
 
+  const lessonDetails = (id) => {
+    history.push(`${paths.LESSON_DETAILS}/${id}`);
+  };
+
   const editLesson = (id) => {
     history.push(`${paths.LESSON_EDIT}/${id}`);
   };
@@ -75,50 +80,82 @@ export const ListOfLessons = () => {
       })
       .map((lesson) => {
         const { date, time } = transformDateTime(lesson.lessonDate);
-        return (
-          <Card
-            key={lesson.id}
-            id={lesson.id}
-            title={lesson.themeName}
-            iconName="Edit"
-            onEdit={editLesson}
-          >
-            <p className={styles.timeDate}>Date: {date}</p>
-            <p className={styles.timeDate}>Time: {time}</p>
-          </Card>
-        );
-      });
+          return (
+            <Card
+              key={lesson.id}
+              id={lesson.id}
+              title={lesson.themeName}
+              buttonName="Details"
+              iconName={currentUser.role !== 3 ? "Edit" : null}
+              onEdit={currentUser.role !== 3 ? editLesson : null}
+              onDetails={() => lessonDetails(lesson.id)}
+            >
+              <p className={styles.timeDate}>Date: {date}</p>
+              <p className={styles.timeDate}>Time: {time}</p>
+            </Card>
+          );
+        });
+
     if (!lessonsList.length && searchLessonsDateValue) {
-      return <h4>Lesson not found</h4>;
+      return <h4>Lesson is not found</h4>;
     } if (!lessonsList.length && searchLessonsThemeValue) {
-      return <h4>Lesson not found</h4>;
+      return <h4>Lesson is not found</h4>;
     }
     return lessonsList;
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(filteredLessonsList.length / 12);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage = (pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
   };
 
   return (
     <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row">
-        <div className={classNames(styles.heading, 'col-12 mb-2')}>
-          <div>
-            <input
-              className={classNames('form-control ', styles['calendar-input'])}
-              type="date"
-              name="lesson_date"
-              required
-              onChange={handleSearchDate}
-            />
-          </div>
-          <Search onSearch={handleSearchTheme} placeholder="Search lesson" />
-          <Button onClick={addLesson} variant="warning">
-            <Icon icon="Plus" className="icon" />
-            Add a Lesson
-          </Button>
+        <div className="col-md-2 text-left">
+          <input
+            className={classNames('form-control ', styles['calendar-input'])}
+            type="date"
+            name="lesson_date"
+            required
+            onChange={handleSearchDate}
+          />
         </div>
+        <div className="col-md-4 offset-md-2 text-center pl-3">
+          <Search onSearch={handleSearchTheme} placeholder="Lesson's name" />
+        </div>
+        {currentUser.role !== 3 && 
+          <div className="col-md-4 col-12 text-right">
+            <Button onClick={addLesson} variant="warning">
+              <Icon icon="Plus" className="icon" />
+                Add a lesson
+            </Button>
+          </div>
+        }
+      </div>
+      <div>
         <hr className="col-8" />
         <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
           <WithLoading isLoading={isLoading}>
@@ -128,11 +165,13 @@ export const ListOfLessons = () => {
           </WithLoading>
         </div>
       </div>
-      {filteredLessonsList.length > 12 && 
+      {filteredLessonsList.length > 12 && !isLoading &&
         <Pagination 
           itemsPerPage={lessonsPerPage} 
           totalItems={filteredLessonsList.length} 
           paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
         />
       }
     </div>

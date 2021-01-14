@@ -36,14 +36,20 @@ export const logOut = () => ({
   type: actionTypes.LOGOUT,
 });
 
-function* logingWorker(data) {
+export const newPassword = (newData) => ({
+  type: actionTypes.NEW_PASSWORD,
+  payload: { newData },
+});
+
+function* loginWorker({ payload }) {
   try {
     yield put({ type: actionTypes.LOGIN_STARTED });
-    const logUser = yield call(ApiService.create, '/accounts/auth', data.payload.currentUser);
+    const logUser = yield call(ApiService.create, '/accounts/auth', payload.currentUser);
+    logUser.email = payload.currentUser.email;
     yield call(Cookie.set, 'user', JSON.stringify(logUser), 1);
     yield put({ type: actionTypes.LOGIN_SUCCESS, payload: { logUser } });
   } catch (error) {
-    yield put({ type: actionTypes.LOGIN_ERROR, payload: { error: error.message } });
+    yield put({ type: actionTypes.LOGIN_ERROR, payload: { error } });
   }
 }
 
@@ -55,60 +61,77 @@ function* logOutWorker() {
 
 function* registrationWorker(data) {
   try {
-    yield put({ type: actionTypes.REGIST_STARTED});
+    yield put({ type: actionTypes.REGIST_STARTED });
     const regUser = yield call(ApiService.create, '/accounts/reg', data.payload.newUser);
     yield put({ type: actionTypes.REGIST_SUCCESS, payload: { regUser } });
     // yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
-    yield put({ type: actionTypes.REGIST_ERROR, payload: { error: error.message } });
+    yield put({ type: actionTypes.REGIST_ERROR, payload: { error } });
   }
 }
 
-function* getAssigenUsersWorker() {
+function* getAssignedUsersWorker() {
   try {
     yield put({ type: actionTypes.FETCH_ASSIGNED_STARTED });
     const usersList = yield call(ApiService.load, '/accounts');
     yield put({ type: actionTypes.FETCH_ASSIGNED_SUCCESS, payload: { usersList } });
   } catch (error) {
-    yield put({ type: actionTypes.FETCH_ASSIGNED_ERROR, payload: { error: error.message } });
+    yield put({ type: actionTypes.FETCH_ASSIGNED_ERROR, payload: { error } });
   }
 }
 
-function* getUnAssigenUsersWorker() {
+function* getUnAssignedUsersWorker() {
   try {
     yield put({ type: actionTypes.FETCH_UNASSIGNED_STARTED });
     const unAssigned = yield call(ApiService.load, '/accounts/NotAssigned');
     yield put({ type: actionTypes.FETCH_UNASSIGNED_SUCCESS, payload: { unAssigned } });
   } catch (error) {
-    yield put({ type: actionTypes.FETCH_UNASSIGNED_ERROR, payload: { error: error.message } });
+    yield put({ type: actionTypes.FETCH_UNASSIGNED_ERROR, payload: { error } });
   }
 }
 
-function* loginWtacher() {
-  yield takeLatest(actionTypes.LOGIN_REQUESTING, logingWorker);
+function* changePasswordWorker({ payload }) {
+  try {
+    yield put({ type: actionTypes.NEW_PASSWORD_CREATING_STARTED });
+    yield call(ApiService.create, '/accounts/ChangePassword', payload.newData);
+    yield put({ type: actionTypes.NEW_PASSWORD_CREATING_SUCCESS });
+    yield put({ type: actionTypes.CLEAR_LOADED });
+  } catch (error) {
+    yield put({ type: actionTypes.NEW_PASSWORD_CREATING_FAILED, payload: { error } });
+  }
+}
+
+function* loginWatcher() {
+  yield takeLatest(actionTypes.LOGIN_REQUESTING, loginWorker);
 }
 
 function* logOutWatcher() {
   yield takeEvery(actionTypes.LOGOUT, logOutWorker);
 }
 
-function* registrationWather() {
+function* registrationWatcher() {
   yield takeLatest(actionTypes.REGIST_REQUSTING, registrationWorker);
 }
 
 function* fetchAssignedUserListWatcher() {
-  yield takeLatest(actionTypes.FETCH_ASSIGNED, getAssigenUsersWorker);
+  yield takeLatest(actionTypes.FETCH_ASSIGNED, getAssignedUsersWorker);
 }
+
 function* fetchUnAssignedUserListWatcher() {
-  yield takeLatest(actionTypes.FETCH_UNASSIGNED, getUnAssigenUsersWorker);
+  yield takeLatest(actionTypes.FETCH_UNASSIGNED, getUnAssignedUsersWorker);
+}
+
+function* changePasswordWatcher() {
+  yield takeEvery(actionTypes.NEW_PASSWORD, changePasswordWorker);
 }
 
 export function* authWatcher() {
   yield all([
-    fork(loginWtacher),
+    fork(loginWatcher),
     fork(logOutWatcher),
-    fork(registrationWather),
+    fork(registrationWatcher),
     fork(fetchAssignedUserListWatcher),
     fork(fetchUnAssignedUserListWatcher),
+    fork(changePasswordWatcher),
   ]);
 }

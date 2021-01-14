@@ -44,7 +44,7 @@ function* fetchLessonsAsync() {
     yield put({
       type: actionsTypes.LOADING_LESSONS_FAILED,
       payload: {
-        error: error.message,
+        error,
       },
     });
   }
@@ -81,7 +81,7 @@ function* addLessonAsync(lessonData) {
     yield put({
       type: actionsTypes.ADDING_FAILED,
       payload: {
-        error: error.message,
+        error,
       },
     });
   }
@@ -105,7 +105,7 @@ function* editLessonAsync(editData) {
     yield put({
       type: actionsTypes.EDITING_FAILED,
       payload: {
-        error: error.message,
+        error,
       },
     });
   }

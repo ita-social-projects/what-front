@@ -30,31 +30,7 @@ export const mentorCurrentReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: action.payload.error.message,
-      };
-
-    case types.EDITING_MENTOR_STARTED:
-      return {
-        ...state,
-        isLoading: true,
-        isLoaded: false,
-        error: '',
-      };
-
-    case types.EDITING_MENTOR_SUCCEED:
-      return {
-        ...state,
-        data: action.payload.data,
-        isLoading: false,
-        isLoaded: true,
-      };
-
-    case types.EDITING_MENTOR_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        isLoaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
 
     default:

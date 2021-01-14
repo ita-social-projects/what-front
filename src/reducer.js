@@ -4,7 +4,7 @@ import {
   mentorsReducer, themesReducer, coursesReducer,
   schedulesReducer, studentsReducer, lessonsReducer,
   accountReducer, secretariesReducer, studentGroupsReducer, dashboardReducer,
-  attachmentsReducer,
+  attachmentsReducer, importReducer,
 } from './models/index.js';
 
 export const rootReducer = combineReducers({
@@ -25,5 +25,6 @@ export const rootReducer = combineReducers({
     studentGroups: studentGroupsReducer,
     dashboard: dashboardReducer,
     attachments: attachmentsReducer,
+    import: importReducer,
   }),
 });

@@ -6,6 +6,7 @@ import {
   schedulesWatcher, studentsWatcher, lessonsWatcher,
   authWatcher, secretariesWatcher, studentGroupsWatcher,
   dashboardWatcher, attachmentsWatcher,
+ importWatcher,
 } from './models/index.js';
 
 export function* rootSaga() {
@@ -23,5 +24,6 @@ export function* rootSaga() {
     fork(watchAddAlert),
     fork(dashboardWatcher),
     fork(attachmentsWatcher),
+    fork(importWatcher),
   ]);
 }
