@@ -21,9 +21,14 @@ export const editCourse = (course, id) => ({
   },
 });
 
-function* deleteCourseWatcher() {
-  yield takeEvery(actionTypes.DELETE_COURSE, deleteCourseWorker)
-}
+export const deleteCourse = (id) => {
+  return {
+    type: actionTypes.DELETE_COURSE,
+    payload: {
+      id,
+    },
+  };
+};
 
 function* loadCoursesWorker() {
   try {
@@ -58,6 +63,17 @@ function* editCourseWorker(data) {
   }
 }
 
+function* deleteCourseWorker(data) {
+  try {
+    yield put({type: actionTypes.DELETING_COURSE_STARTED});
+    yield call(ApiService.remove, `/courses/${data.payload.id}`);
+    yield put({type: actionTypes.DELETING_COURSE_SUCCESS});
+    yield put({type: actionTypes.CLEAR_LOADED});
+  } catch (error) {
+    yield put({type: actionTypes.DELETING_COURSE_FAILED, payload: {error: error.message}});
+  }
+}
+
 function* fetchCoursesWatcher() {
   yield takeLatest(actionTypes.FETCH_COURSES, loadCoursesWorker);
 }
@@ -68,6 +84,10 @@ function* createCourseWatcher() {
 
 function* editCourseWatcher() {
   yield takeEvery(actionTypes.EDIT_COURSE, editCourseWorker);
+}
+
+function* deleteCourseWatcher() {
+  yield takeEvery(actionTypes.DELETE_COURSE, deleteCourseWorker)
 }
 
 export function* coursesWatcher() {

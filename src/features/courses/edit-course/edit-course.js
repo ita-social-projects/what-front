@@ -7,13 +7,17 @@ import { shape, number } from 'prop-types';
 
 import { paths, useActions } from '@/shared';
 import { addAlert } from '@/features';
-import { editCourse, editedCourseSelector } from '@/models';
-import { WithLoading } from '@/components';
+import { deleteCourse, deletedCourseSelector, editCourse, editedCourseSelector } from '@/models';
+import { Button, WithLoading } from '@/components';
+import { ModalWindow } from '@/features/modal-window';
 import { coursesStateShape } from '@/features/shared';
 import { editCourseValidation } from '@features/validation/validation-helpers.js';
 import styles from './edit-course.scss';
 
 export const EditCourse = ({ id, coursesData }) => {
+  const history = useHistory();
+  const [toShowModal, setShowModal] = useState(false);
+
   const {
     data,
     isLoading: isCourseLoading,
@@ -26,7 +30,13 @@ export const EditCourse = ({ id, coursesData }) => {
     error: editingError,
   } = useSelector(editedCourseSelector, shallowEqual);
 
-  const [updateCourse, dispatchAddAlert] = useActions([editCourse, addAlert]);
+  const {
+    isLoading: isDeletedLoading,
+    isLoaded: isDeletedLoaded,
+    error: isDeletedError
+  } = useSelector(deletedCourseSelector, shallowEqual);
+
+  const [updateCourse, dispatchAddAlert, removeCourse] = useActions([editCourse, addAlert, deleteCourse]);
 
   const course = data.find((course) => course.id == id);
 
@@ -47,8 +57,12 @@ export const EditCourse = ({ id, coursesData }) => {
   }, [dispatchAddAlert, history, editingError, isEditedLoaded, isEditedLoading]);
 
   useEffect(() => {
-    if (!isDeletedError && isDeletedLoaded) {
+    if (!isDeletedError && isDeletedLoaded && !isDeletedLoading) {
       history.push(paths.COURSES);
+      dispatchAddAlert('The course has been successfully deleted', 'success');
+    }
+    if (isDeletedError && !isDeletedLoaded && !isDeletedLoading) {
+      dispatchAddAlert(isDeletedError);
     }
   }, [isDeletedError, isDeletedLoaded, history]);
 
@@ -82,7 +96,7 @@ export const EditCourse = ({ id, coursesData }) => {
                 onSubmit={onSubmit}
                 validationSchema={editCourseValidation}
               >
-                {({ errors, isValid, dirty }) => (
+                {({ errors, isValid, dirty, handleReset }) => (
                   <Form name="start-group">
                     <div className="row mb-3">
                       <div className="col d-flex align-items-center">
