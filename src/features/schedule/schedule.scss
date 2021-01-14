@@ -15,7 +15,6 @@
     width: 100%;
     padding-top: 10px;
     border-bottom: 1px solid $theme-colorMedium;
-    @include franklin-semibold;
 }
 
 .current-day {
@@ -50,7 +49,6 @@
     }
 
     &__group-name {
-        @include franklin-semibold;
         margin-bottom: 0;
     }
 }
