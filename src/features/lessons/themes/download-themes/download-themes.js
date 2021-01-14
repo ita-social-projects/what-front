@@ -43,15 +43,6 @@ export const DownloadThemes = () => {
                   <div className="col d-flex align-items-center">
                     <label className="mb-0 font-weight-bolder" htmlFor="file">Theme('s):</label>
                   </div>
-                  {/*<div className="col-md-8">*/}
-                    {/*<Field*/}
-                    {/*  type="file"*/}
-                    {/*  name="file"*/}
-                    {/*  id="file"*/}
-                    {/*  accept=".xlsx"*/}
-                    {/*  className={classNames(styles.label)}*/}
-                    {/*/>*/}
-                  {/*</div>*/}
                   <div className='col-md-8'>
                     <input type="file" id="actual-btn" name="themes" accept=".xlsx" onChange={(event) => {
                       setFileName(event.target.files[0].name);
