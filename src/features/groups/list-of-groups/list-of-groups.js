@@ -61,15 +61,7 @@ export const ListOfGroups = () => {
     const indexOfLastGroup = currentPage * groupsPerPage;
     const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
 
-    if (isLoaded && error.length > 0) {
-      return <h4>{error}</h4>;
-    }
-
-    if (isLoaded && !groups.length) {
-      return <h4>List of groups is empty</h4>;
-    }
-
-    return listByDate.slice(indexOfFirstGroup, indexOfLastGroup)
+    const groupList = listByDate.slice(indexOfFirstGroup, indexOfLastGroup)
       .sort((a, b) => {
         return a.startDate < b.startDate ? -1 : a.startDate > b.startDate ? 1 : 0;
       })
@@ -85,6 +77,14 @@ export const ListOfGroups = () => {
           onDetails={() => handleCardDetails(group.id)}
         />
       ));
+
+      if (!groupList.length && searchGroupName || searchStartDate) {
+        return <h4>Group is not found</h4>;
+      } if (!groupList.length && searchGroupName || searchStartDate) {
+        return <h4>Group is not found</h4>;
+      }
+
+      return groupList;
     };
 
   const paginate = (pageNumber) => {
