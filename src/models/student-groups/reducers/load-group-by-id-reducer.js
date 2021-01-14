@@ -27,7 +27,7 @@ export const loadStudentGroupByIdReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: 'Student Groups loading by id was failed',
+        error: action.payload.error,
       };
     default: return state;
   }

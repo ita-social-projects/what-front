@@ -27,7 +27,7 @@ export const addStudentGroupReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: 'Adding Student Group was failed',
+        error: action.payload.error,
       };
     default: return state;
   }

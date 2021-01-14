@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { coursesSelector, currentUserSelector } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
-import { WithLoading } from '@/components';
-import { paths } from '@/shared';
+import { number, shape } from 'prop-types';
 import classNames from 'classnames';
 
-export const CourseDetails = ({ id }) => {
-  const { data, isLoading, loaded } = useSelector(coursesSelector, shallowEqual);
+import { WithLoading } from '@/components';
+import { paths } from '@/shared';
+import { coursesStateShape } from '@features/shared';
+
+export const CourseDetails = ({ id, coursesData }) => {
+  const { data, isLoading, loaded } = coursesData;
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const course = data.find((course) => course.id == id);
@@ -23,8 +25,8 @@ export const CourseDetails = ({ id }) => {
   return (
     <div className="container">
       <div className="row justify-content-center">
-        <div className={classNames("col-sm-12 card shadow", 
-          {"col-md-12": currentUser.role === 3 || currentUser.role === 4, 
+        <div className={classNames("col-sm-12 card shadow",
+          {"col-md-12": currentUser.role === 3 || currentUser.role === 4,
           "col-md-6": currentUser.role === 2 || currentUser.role === 1})}
         >
           <div className="px-2 py-4">
@@ -41,4 +43,9 @@ export const CourseDetails = ({ id }) => {
       </div>
     </div>
   );
+};
+
+CourseDetails.propTypes = {
+  id: number.isRequired,
+  coursesData: shape(coursesStateShape).isRequired,
 };

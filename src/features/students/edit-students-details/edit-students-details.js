@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions } from '@shared';
-import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector,
-  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent } from '@models';
-
+import classNames from 'classnames';
 import { Formik, Form, Field } from 'formik';
-import { editStudentValidation } from '@features/validation/validation-helpers.js';
 
-import { WithLoading } from '@components';
+import { WithLoading } from '@/components';
+import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector,
+  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent } from '@/models';
 import { Button } from '@components/index.js';
 import Icon from '@/icon.js';
-
-import classNames from 'classnames';
-import { paths } from '@shared/routes/paths.js';
-import { ModalWindow } from '@features/modal-window/index.js';
+import { paths, useActions } from '@/shared';
+import { addAlert, ModalWindow } from '@/features';
+import { editStudentValidation } from '@features/validation/validation-helpers';
 import styles from './edit-students-details.scss';
 
 export const EditStudentsDetails = ({ id }) => {
@@ -51,7 +48,11 @@ export const EditStudentsDetails = ({ id }) => {
     error: isRemovedError,
   } = useSelector(removeStudentSelector, shallowEqual);
 
-  const [updateStudent, deleteStudent] = useActions([editStudent, removeStudent]);
+  const [
+    updateStudent,
+    deleteStudent,
+    dispatchAddAlert,
+  ] = useActions([editStudent, removeStudent, addAlert]);
 
   const [groups, setGroups] = useState(studentGroups || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
@@ -62,13 +63,24 @@ export const EditStudentsDetails = ({ id }) => {
     if (studentError && studentGroupsError) {
       history.push(paths.NOT_FOUND);
     }
-  }, [studentError, studentGroupsError]);
+  }, [history, studentError, studentGroupsError]);
 
   useEffect(() => {
-    if (!isEditedError && isEditedLoaded || !isRemovedError && isRemovedLoaded) {
+    if (!isEditedError && isEditedLoaded) {
       history.push(paths.STUDENTS);
+      dispatchAddAlert('Student information has been edited successfully', 'success');
     }
-  }, [isEditedError, isEditedLoaded, isRemovedError, isRemovedLoaded]);
+    if (isEditedError && !isEditedLoaded) {
+      dispatchAddAlert(isEditedError);
+    }
+  }, [dispatchAddAlert, history, isEditedError, isEditedLoaded]);
+
+  useEffect(() => {
+    if (!isRemovedError && isRemovedLoaded) {
+      history.push(paths.STUDENTS);
+      dispatchAddAlert('Student has been excluded', 'success');
+    }
+  }, [dispatchAddAlert, history, isRemovedError, isRemovedLoaded]);
 
   useEffect(() => {
     setGroups(studentGroups);

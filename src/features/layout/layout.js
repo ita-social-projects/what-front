@@ -1,48 +1,26 @@
 import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { Alert } from 'react-bootstrap';
-import { paths, homepages, useActions } from '@/shared';
-import { currentUserSelector } from '@/models';
 
+import { paths, homepages } from '@/shared';
+import { currentUserSelector } from '@/models';
 import {
   ListOfStudents, ListOfMentors, ListOfSecretaries,
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  alertSelector, removeAlert, Header, AllSchedules, ScheduleGroup,
+  Header, AlertBox, AllSchedules, ScheduleGroup,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
 
-import styles from './layout.scss';
-
 export const Layout = () => {
-  const { messages } = useSelector(alertSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-  const dispatchRemoveAlert = useActions(removeAlert);
 
   return (
     <>
-      <Header roles={[1, 2, 3, 4]} />
-      {
-        messages.length ? (
-          <div className={styles['alert-container']}>
-            {
-              messages.map(({ variant, message, id }) => (
-                <Alert
-                  variant={variant}
-                  key={id}
-                  dismissible
-                  onClose={() => dispatchRemoveAlert(id)}
-                >
-                  {message}
-                </Alert>
-              ))
-            }
-          </div>
-        ) : null
-      }
+      <Header />
+      <AlertBox />
       <div className="pt-5 position-relative">
         <Switch>
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.STUDENTS} component={ListOfStudents} />

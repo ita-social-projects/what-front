@@ -7,7 +7,6 @@ const initialState = {
   error: '',
 };
 
-
 export const mentorCoursesReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.FETCHING_MENTOR_COURSES_STARTED:
@@ -17,7 +16,7 @@ export const mentorCoursesReducer = (state = initialState, action) => {
         isLoaded: false,
         error: '',
       };
-    
+
     case types.FETCHING_MENTOR_COURSES_SUCCEED:
       return {
         ...state,
@@ -25,15 +24,15 @@ export const mentorCoursesReducer = (state = initialState, action) => {
         isLoading: false,
         isLoaded: true,
       };
-    
+
     case types.FETCHING_MENTOR_COURSES_FAILED:
       return {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
-    
+
     default:
       return state;
   }

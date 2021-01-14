@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 import { BASE_URL } from './config.js';
-import { requestInterceptor, responseInterceptor } from './interceptors.js';
+import { requestInterceptor, responseErrorInterceptor, responseInterceptor } from './interceptors.js';
 
 axios.interceptors.request.use(requestInterceptor, (error) => Promise.reject(error));
-axios.interceptors.response.use(responseInterceptor, (error) => Promise.reject(error));
+axios.interceptors.response.use(responseInterceptor, responseErrorInterceptor);
 
 export class ApiService {
   static sendRequest = async (

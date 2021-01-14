@@ -97,15 +97,38 @@ export const ListOfLessons = () => {
         });
 
     if (!lessonsList.length && searchLessonsDateValue) {
-      return <h4>Lesson not found</h4>;
+      return <h4>Lesson is not found</h4>;
     } if (!lessonsList.length && searchLessonsThemeValue) {
-      return <h4>Lesson not found</h4>;
+      return <h4>Lesson is not found</h4>;
     }
     return lessonsList;
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(filteredLessonsList.length / 12);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage = (pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
   };
 
   return (
@@ -147,6 +170,8 @@ export const ListOfLessons = () => {
           itemsPerPage={lessonsPerPage} 
           totalItems={filteredLessonsList.length} 
           paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
         />
       }
     </div>
