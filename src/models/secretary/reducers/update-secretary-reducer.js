@@ -35,6 +35,11 @@ export const updateSecretaryReducer = (state = initialState, action) => {
         ...state,
         loaded: false,
       };
+    case actions.CLEAR_ERROR:
+      return {
+        ...state,
+        error: '',
+      };
     default: return state;
   }
 };

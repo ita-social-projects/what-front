@@ -18,6 +18,7 @@ import { Formik, Field, Form } from 'formik';
 import classNames from 'classnames';
 import Icon from '@/icon';
 import { ModalWindow } from '@/features/modal-window/index.js';
+import { addAlert } from '@/features';
 import { editMentorValidation } from '@features/validation/validation-helpers.js';
 import styles from './edit-mentor.scss';
 
@@ -26,7 +27,6 @@ export const EditMentor = ({ id }) => {
   const {
     data: mentor,
     isLoading: mentorIsLoading,
-    isLoaded: mentorIsLoaded,
     error: mentorError,
   } = useSelector(mentorIdSelector, shallowEqual);
 
@@ -45,13 +45,11 @@ export const EditMentor = ({ id }) => {
   const {
     data: allGroups,
     isLoading: allGroupsAreLoading,
-    isLoaded: allGroupsAreLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
     data: allCourses,
     isLoading: allCoursesAreLoading,
-    isLoaded: allCoursesAreLoaded,
   } = useSelector(coursesSelector, shallowEqual);
 
   const {
@@ -66,7 +64,7 @@ export const EditMentor = ({ id }) => {
     error: deletedIsError,
   } = useSelector(mentorDeletingSelector, shallowEqual);
 
-  const [updateMentor, removeMentor] = useActions([editMentor, deleteMentor]);
+  const [updateMentor, removeMentor, dispatchAddAlert] = useActions([editMentor, deleteMentor, addAlert]);
   const [groups, setGroups] = useState(mentorGroups || 0);
   const [courses, setCourses] = useState(mentorCourses || 0);
   const [groupInput, setGroupInputValue] = useState('Type name of a group');
@@ -98,13 +96,24 @@ export const EditMentor = ({ id }) => {
     if (mentorError && mentorGroupsError && mentorCoursesError) {
       history.push(paths.NOT_FOUND);
     }
-  }, [mentorError, mentorGroupsError, mentorCoursesError]);
+  }, [mentorError, mentorGroupsError, mentorCoursesError, history]);
 
   useEffect(() => {
-    if ((!editedIsError && editedIsLoaded) || (!deletedIsError && deletedIsLoaded)) {
+    if (!editedIsError && editedIsLoaded) {
       history.push(paths.MENTORS);
+      dispatchAddAlert('Mentor has been successfully edited', 'success');
     }
-  }, [editedIsError, editedIsLoaded, deletedIsError, deletedIsLoaded]);
+    if (editedIsError && !editedIsLoaded) {
+      dispatchAddAlert(editedIsError);
+    }
+  }, [dispatchAddAlert, editedIsError, editedIsLoaded, history]);
+
+  useEffect(() => {
+    if (!deletedIsError && deletedIsLoaded) {
+      history.push(paths.MENTORS);
+      dispatchAddAlert('Mentor has been fired', 'success');
+    }
+  }, [deletedIsError, deletedIsLoaded, dispatchAddAlert, history]);
 
   const handleGroupInputChange = (e) => {
     setErrorGroup('');
@@ -206,7 +215,7 @@ export const EditMentor = ({ id }) => {
             <h3>Mentor Editing</h3>
             <hr />
             <WithLoading
-              isLoading={(mentorIsLoading || !mentorIsLoaded) && (allCoursesAreLoading || !allCoursesAreLoaded) && (allGroupsAreLoading || !allGroupsAreLoaded)}
+              isLoading={mentorIsLoading && allCoursesAreLoading && allGroupsAreLoading}
               className={styles['loader-centered']}
             >
               <Formik

@@ -21,25 +21,13 @@ export const editCourse = (course, id) => ({
   },
 });
 
-function* fetchCoursesWatcher() {
-  yield takeLatest(actionTypes.FETCH_COURSES, loadCoursesWorker);
-}
-
-function* createCourseWatcher() {
-  yield takeEvery(actionTypes.CREATE_COURSE, createCourseWorker);
-}
-
-function* editCourseWatcher() {
-  yield takeEvery(actionTypes.EDIT_COURSE, editCourseWorker);
-}
-
 function* loadCoursesWorker() {
   try {
     yield put({ type: actionTypes.LOADING_COURSES_STARTED });
     const courses = yield call(ApiService.load, '/courses');
     yield put({ type: actionTypes.LOADING_COURSES_SUCCESS, payload: { courses } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error } });
+    yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error: error.message } });
   }
 }
 
@@ -50,7 +38,7 @@ function* createCourseWorker(data) {
     yield put({ type: actionTypes.CREATING_COURSE_SUCCESS, payload: { course } });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
-    yield put({ type: actionTypes.CREATING_COURSE_FAILED, payload: { error } });
+    yield put({ type: actionTypes.CREATING_COURSE_FAILED, payload: { error: error.message } });
   }
 }
 
@@ -61,8 +49,21 @@ function* editCourseWorker(data) {
     yield put({ type: actionTypes.EDITING_COURSE_SUCCESS, payload: { course } });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
-    yield put({ type: actionTypes.EDITING_COURSE_FAILED, payload: { error } });
+    yield put({ type: actionTypes.EDITING_COURSE_FAILED, payload: { error: error.message } });
+    yield put({ type: actionTypes.EDITING_CLEAR_ERROR });
   }
+}
+
+function* fetchCoursesWatcher() {
+  yield takeLatest(actionTypes.FETCH_COURSES, loadCoursesWorker);
+}
+
+function* createCourseWatcher() {
+  yield takeEvery(actionTypes.CREATE_COURSE, createCourseWorker);
+}
+
+function* editCourseWatcher() {
+  yield takeEvery(actionTypes.EDIT_COURSE, editCourseWorker);
 }
 
 export function* coursesWatcher() {

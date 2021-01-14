@@ -60,6 +60,7 @@ function* editStudentGroupsAsync({ payload }) {
     yield put({ type: actionTypes.EDIT_CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.EDITING_STUDENT_GROUP_FAILED, payload: { error } });
+    yield put({ type: actionTypes.EDIT_CLEAR_ERROR });
   }
 }
 
