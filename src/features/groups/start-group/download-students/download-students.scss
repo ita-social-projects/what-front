@@ -1,0 +1,25 @@
+@import '../../../../styles/main';
+
+.button{
+  @include button();
+}
+
+.error{
+  padding-top:5px;
+  color:red;
+}
+
+.loader-centered {
+  display: block !important;
+  margin: 20px auto;
+}
+
+.label {
+  background-color: $theme-colorN2;
+  color: white;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}

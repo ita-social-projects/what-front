@@ -9,10 +9,11 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  Header, Schedule, AlertBox,
+  Header, Schedule, AlertBox, DownloadStudents,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
+import {GroupStartTabs} from "@screens/groups/group-start-tabs";
 
 export const Layout = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);

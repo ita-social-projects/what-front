@@ -9,6 +9,7 @@ export const paths = {
   STUDENTS_DETAILS: '/students',
   STUDENT_EDIT: '/students/edit',
   STUDENT_ADD: '/students/add',
+  STUDENT_DOWNLOAD: '/imports/students',
 
   COURSES: '/courses',
   COURSE_DETAILS: '/courses',
