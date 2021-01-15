@@ -25,8 +25,9 @@ export const registrationValidation = Yup.object().shape({
   password: Yup.string()
     .min(8, 'Password must to contain at least 8 characters')
     .matches(
-      /^(?=.*[^A-zА-я])(?=.*\d)(?=.*[@$!%*#?&])[^A-zА-я\d@$!%*#?&]$/,
-      "Must contain at least one uppercase, one lowercase, one number and one special case character")
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]$/,
+      "Must contain at least one uppercase, one lowercase, one number"
+    )
     .required('This field is required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'You should confirm your password')
@@ -131,15 +132,13 @@ export const editStudentValidation = Yup.object().shape({
 export const changePasswordValidation = Yup.object().shape({
   currentPassword: Yup.string()
     .min(8, 'Password must to contain at least 8 characters')
-    .matches(
-      /^(?=.*[^A-zА-я])(?=.*\d)(?=.*[@$!%*#?&])[^A-zА-я\d@$!%*#?&]$/,
-      "Must contain at least one uppercase, one lowercase, one number and one special case character")
     .required('This field is required'),
   newPassword: Yup.string()
     .min(8, 'Password must to contain at least 8 characters')
     .matches(
-      /^(?=.*[^A-zА-я])(?=.*\d)(?=.*[@$!%*#?&])[^A-zА-я\d@$!%*#?&]$/,
-      "Must contain at least one uppercase, one lowercase, one number and one special case character")
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]$/,
+      "Must contain at least one uppercase, one lowercase, one number"
+    )
     .notOneOf([Yup.ref('currentPassword'), null], 'You should provide a new password')
     .required('This field is required'),
   confirmNewPassword: Yup.string()
