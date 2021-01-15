@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import { number } from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { WithLoading } from '@components/index.js';
+import { number } from 'prop-types';
+
 import { currentUserSelector, activeSecretariesSelector } from '@models/index.js';
+import { paths } from '@/shared';
+
+import { WithLoading } from '@components/index.js';
+
 import classNames from 'classnames';
 
 export const SecretarysDetails = ({ id }) => {
@@ -14,7 +18,7 @@ export const SecretarysDetails = ({ id }) => {
 
   useEffect(() => {
     if (!secretary && isLoaded) {
-      history.push('/404');
+      history.push(paths.NOT_FOUND);
     }
   }, [secretary, isLoaded, history]);
 

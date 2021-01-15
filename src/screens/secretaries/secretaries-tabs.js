@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
+import { number } from 'prop-types';
+
 import { useActions, paths } from '@/shared/index.js';
 import { currentUserSelector, fetchActiveSecretaries } from '@models/index.js';
 
 import { Tab, Tabs } from '@/components';
 import { SecretarysDetails, EditSecretarysDetails } from '@/features';
-
-import { number } from 'prop-types';
 
 export const SecretariesTabs = ({ index }) => {
   const { id } = useParams();
