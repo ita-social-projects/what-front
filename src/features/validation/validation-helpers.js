@@ -4,7 +4,7 @@ export const authValidation = Yup.object().shape({
   email: Yup.string()
     .required('This field is required'),
   password: Yup.string()
-    .min(8, 'Password must to contain at least 8 characters')
+    .min(8, 'Password must contain at least 8 characters')
     .required('This field is required'),
 });
 
@@ -23,7 +23,7 @@ export const registrationValidation = Yup.object().shape({
     .email('Invalid email address')
     .required('This field is required'),
   password: Yup.string()
-    .min(8, 'Password must to contain at least 8 characters')
+    .min(8, 'Password must contain at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]$/,
       "Must contain at least one uppercase, one lowercase, one number"
@@ -131,10 +131,9 @@ export const editStudentValidation = Yup.object().shape({
 
 export const changePasswordValidation = Yup.object().shape({
   currentPassword: Yup.string()
-    .min(8, 'Password must to contain at least 8 characters')
     .required('This field is required'),
   newPassword: Yup.string()
-    .min(8, 'Password must to contain at least 8 characters')
+    .min(8, 'Password must contain at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]$/,
       "Must contain at least one uppercase, one lowercase, one number"
