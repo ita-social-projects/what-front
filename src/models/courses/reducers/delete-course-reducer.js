@@ -1,7 +1,6 @@
 import * as actionTypes from '../types.js';
 
 const INITIAL_STATE = {
-  data: {},
   isLoading: false,
   isLoaded: false,
   error: '',
