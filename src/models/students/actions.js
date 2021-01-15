@@ -57,7 +57,7 @@ function* loadStudentByIdAsync({ payload }) {
     const studentId = payload.id;
     const data = yield call(ApiService.load, `/students/${studentId}`);
     // TODO Remove extra 'data' field when backend fix response
-    yield put({ type: actionTypes.LOADING_BY_ID_SUCCEED, payload: { data: data.data } });
+    yield put({ type: actionTypes.LOADING_BY_ID_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: actionTypes.LOADING_BY_ID_FAILED, payload: { error } });
   }
@@ -69,7 +69,7 @@ function* loadActiveStudentsAsync() {
 
     const data = yield call(ApiService.load, '/students/active');
     // TODO Remove extra 'data' field when backend fix response
-    yield put({ type: actionTypes.LOADING_ACTIVE_SUCCEED, payload: { data: data.data } });
+    yield put({ type: actionTypes.LOADING_ACTIVE_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: actionTypes.LOADING_ACTIVE_SUCCEED, payload: { error } });
   }
