@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import {
   Formik, Field, Form, FieldArray,
@@ -9,14 +9,9 @@ import { useActions, paths } from '@/shared';
 import * as Yup from 'yup';
 import { WithLoading } from '@/components';
 import {
-  editLessonSelector,
-  activeStudentsSelector,
-  loadStudentGroupsSelector,
-  lessonsSelector,
-  fetchLessons,
-  globalLoadStudentGroups,
-  loadActiveStudents,
-  editLesson,
+  editLessonSelector, activeStudentsSelector, loadStudentGroupsSelector,
+  lessonsSelector, fetchLessons, globalLoadStudentGroups,
+  loadActiveStudents, editLesson,
 } from '@/models';
 import { addAlert } from '@/features';
 import styles from './edit-lesson.scss';
