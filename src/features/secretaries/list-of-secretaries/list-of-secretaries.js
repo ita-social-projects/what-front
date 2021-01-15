@@ -102,8 +102,7 @@ export const ListOfSecretaries = () => {
   };
 
   return (
-    <div className="container shadow card p-3" style={{ minHeight: 750 }}>
-      <h2 className="text-center p-2">List Of Secretaries</h2>
+    <div className="container" style={{ minHeight: 750 }}>
       <div className="row">
         <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />

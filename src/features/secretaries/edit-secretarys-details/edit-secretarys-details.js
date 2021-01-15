@@ -159,7 +159,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           <Button
                             disabled={!dirty}
                             type="button"
-                            className="btn btn-secondary w-100"
+                            className="w-100"
                             onClick={handleReset}
                           >
                             Clear
@@ -168,7 +168,8 @@ export const EditSecretarysDetails = ({ id }) => {
                         <div className="col-md-3 col-4 px-1">
                           <Button
                             disabled={!isValid || !dirty || isUpdateLoading}
-                            className="btn btn-success w-100"
+                            className="w-100"
+                            variant="success"
                             type="submit"
                             onClick={onSubmit}
                           >
