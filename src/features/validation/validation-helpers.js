@@ -5,9 +5,6 @@ export const authValidation = Yup.object().shape({
     .required('This field is required'),
   password: Yup.string()
     .min(8, 'Password must to contain at least 8 characters')
-    .matches(
-      /^(?=.*[^A-zА-я])(?=.*\d)(?=.*[@$!%*#?&])[^A-zА-я\d@$!%*#?&]$/,
-      "Must contain at least one uppercase, one lowercase, one number and one special case character")
     .required('This field is required'),
 });
 
@@ -65,13 +62,13 @@ export const editGroupValidation = Yup.object().shape({
     .required('This field is required'),
 });
 
-export const addLessonValidation = Yup.object().shape({
+export const lessonValidation = Yup.object().shape({
   themeName: Yup.string()
     .min(1, 'Too short')
     .max(200, 'Too long')
     .required('This field is required'),
   groupName: Yup.string()
-    .min(2, 'Too short')
+    .min(1, 'Too short')
     .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid group name')
     .max(50, 'Too long')
     .required('This field is required'),

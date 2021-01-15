@@ -20,6 +20,7 @@ import {
 } from '@/models';
 import { addAlert } from '@/features';
 import styles from './edit-lesson.scss';
+import {lessonValidation} from "@features/validation/validation-helpers";
 
 export const EditLesson = () => {
   const history = useHistory();
@@ -155,16 +156,6 @@ export const EditLesson = () => {
     .split(/\s+/)
     .map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
 
-  const validateForm = Yup.object().shape({
-    themeName: Yup.string()
-      .min(2, 'Invalid lesson theme: too short')
-      .max(50, 'Invalid lesson theme: too long')
-      .matches(
-        '^[A-Za-zа-яА-ЯёЁ ]+$',
-        'Invalid lesson theme',
-      ),
-  });
-
   const openStudentDetails = useCallback((studentId) => {
     history.push(`${paths.STUDENTS_DETAILS}/${studentId}`);
   }, [history]);
@@ -248,7 +239,7 @@ export const EditLesson = () => {
                   formData,
                 }}
                 onSubmit={onSubmit}
-                validationSchema={validateForm}
+                validationSchema={lessonValidation}
               >
                 {({ errors }) => (
                   <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
