@@ -33,6 +33,12 @@ export const ChangePassword = () => {
   const handleCloseModal = () => setShowModal(false);
 
   useEffect(() => {
+    if (!currentUser) {
+      history.push(paths.NOT_FOUND);
+    }
+  }, [currentUser, history]);
+
+  useEffect(() => {
     if (!changePasswordError && isChangePasswordLoaded) {
       history.push(paths.MY_PROFILE);
       dispatchAddAlert('The password has been successfully changed', 'success');
