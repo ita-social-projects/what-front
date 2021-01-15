@@ -94,12 +94,12 @@ export const DownloadStudents = () => {
                   </div>
                   <div className="row m-0 pt-3">
                     <div className="col-md-4 font-weight-bolder pt-3">
-                      <label htmlFor="studentsInput">Student(s):</label>
+                      <label htmlFor="file">Student(s):</label>
                     </div>
                     <div className='col-md-8'>
-                      <input type="file" id="actual-btn" name="themes" accept=".xlsx" onChange={(event) => {
+                      <input type="file" id="actual-btn" name="students" accept=".xlsx" onChange={(event) => {
                         setFileName(event.target.files[0].name);
-                        setFieldValue("themes", event.currentTarget.files[0]);
+                        setFieldValue("students", event.currentTarget.files[0]);
                       }} className="form-control" hidden/>
                       <label className={classNames(styles.label, "mr-2 col-md-6")} htmlFor="actual-btn">Choose File</label>
                       <span className='font-weight-bolder'>{fileName}</span>
