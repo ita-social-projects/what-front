@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import {
   Formik, Field, Form, FieldArray,
@@ -9,15 +9,10 @@ import { useActions, paths } from '@/shared';
 import * as Yup from 'yup';
 import { WithLoading } from '@/components';
 import {
-  editLessonSelector,
-  activeStudentsSelector,
-  loadStudentGroupsSelector,
-  lessonsSelector,
-  fetchLessons,
-  globalLoadStudentGroups,
-  loadActiveStudents,
-  editLesson,
+  editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector, 
+  fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
 } from '@/models';
+import { addAlert } from '@/features';
 import styles from './edit-lesson.scss';
 
 export const EditLesson = () => {
@@ -25,7 +20,7 @@ export const EditLesson = () => {
 
   const { id } = useParams();
 
-  const today = new Date().toISOString().split(".")[0];
+  const today = new Date().toISOString().substring(0, 19);
 
   const [studentsGroup, setStudentsGroup] = useState(null);
   const [studentsGroupInput, setStudentsGroupInput] = useState('');
@@ -37,7 +32,8 @@ export const EditLesson = () => {
     getStudents,
     loadLessons,
     updateLesson,
-  ] = useActions([globalLoadStudentGroups, loadActiveStudents, fetchLessons, editLesson]);
+    dispatchAddAlert,
+  ] = useActions([globalLoadStudentGroups, loadStudents, fetchLessons, editLesson, addAlert]);
 
   const {
     data: groups,
@@ -51,7 +47,7 @@ export const EditLesson = () => {
     isLoading: studentsIsLoading,
     isLoaded: studentsIsLoaded,
     error: studentsError,
-  } = useSelector(activeStudentsSelector, shallowEqual);
+  } = useSelector(studentsSelector, shallowEqual);
 
   const {
     data: lessons,
@@ -88,29 +84,27 @@ export const EditLesson = () => {
     const studentD = uniqueIds.map(
       (id) => students.find((student) => student.id === id),
     );
-    
-    const activeStudents = studentD.filter((student) => student !== undefined);
 
-    const studentsData = activeStudents.map((student) => (
+    const studentsData = studentD.map((student) => (
       {
         studentId: student.id,
         studentName: `${student.firstName} ${student.lastName}`,
       }
     ));
-      
+
     const resultLessonVisits = studentsData.sort((a, b) => {
-      if(a.studentName < b.studentName) {
+      if (a.studentName < b.studentName) {
         return -1;
       }
-      if(a.studentName > b.studentName) {
+      if (a.studentName > b.studentName) {
         return 1;
       }
     })
-    .map((student, index) => ({
-      ...lessonOnEdit.lessonVisits[index],
-      ...student,
-    }));
-    
+      .map((student, index) => ({
+        ...lessonOnEdit.lessonVisits[index],
+        ...student,
+      }));
+
     setFormData(resultLessonVisits);
   };
 
@@ -142,8 +136,12 @@ export const EditLesson = () => {
   useEffect(() => {
     if (!editError && editIsLoaded) {
       history.push(paths.LESSONS);
+      dispatchAddAlert('The lesson has been edited successfully', 'success');
     }
-  }, [editError, editIsLoaded]);
+    if (editError && !editIsLoaded) {
+      dispatchAddAlert(editError);
+    }
+  }, [dispatchAddAlert, editError, editIsLoaded, history]);
 
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)

@@ -7,8 +7,8 @@ import {
   createSecretary, addStudent, fetchUnAssignedUserList,
 } from '@/models/index.js';
 import { Search, Button, WithLoading } from '@/components';
+import { addAlert } from '@/features';
 import Icon from '@/icon.js';
-
 import styles from './unassigned-list.scss';
 
 export const UnAssignedList = () => {
@@ -18,9 +18,12 @@ export const UnAssignedList = () => {
 
   const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
-  const [addStudentRole,
+  const [
+    addStudentRole,
     addSecretaryRole,
-    addMentorRole] = useActions([addStudent, createSecretary, addMentor]);
+    addMentorRole,
+    dispatchAddAlert,
+  ] = useActions([addStudent, createSecretary, addMentor, addAlert]);
 
   const [search, setSearch] = useState('');
   const [searchPersonValue, setSearchPersonValue] = useState([]);
@@ -63,12 +66,18 @@ export const UnAssignedList = () => {
       setSearchPersonValue(newState);
       switch (role) {
         case 1:
-          return addStudentRole(id);
+          addStudentRole(id);
+          dispatchAddAlert('The user has been successfully assigned as a student', 'success');
+          break;
         case 2:
-          return addMentorRole(id);
+          addMentorRole(id);
+          dispatchAddAlert('The user has been successfully assigned as a mentor', 'success');
+          break;
         case 3:
-          return addSecretaryRole(id);
-        default: return {};
+          addSecretaryRole(id);
+          dispatchAddAlert('The user has been successfully assigned as a secretary', 'success');
+          break;
+        default: break;
       }
     }
   };

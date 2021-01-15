@@ -11,7 +11,8 @@ import {
   studentsStateShape,
   studentGroupByIdStateShape,
 } from '@/features/shared';
-import { useActions } from '@/shared';
+import { addAlert } from '@/features';
+import { paths, useActions } from '@/shared';
 import { WithLoading, Button } from '@/components/index.js';
 import { editStudentGroup, editStudentGroupSelector } from '@/models';
 import Icon from '@/icon.js';
@@ -27,7 +28,7 @@ export const EditGroup = ({
     error: editingError,
   } = useSelector(editStudentGroupSelector, shallowEqual);
 
-  const dispatchEditGroup = useActions(editStudentGroup);
+  const [dispatchEditGroup, dispatchAddAlert] = useActions([editStudentGroup, addAlert]);
 
   const history = useHistory();
 
@@ -43,9 +44,13 @@ export const EditGroup = ({
 
   useEffect(() => {
     if (!isEditing && isEdited && !editingError) {
-      history.push('/groups');
+      history.push(paths.GROUPS);
+      dispatchAddAlert('The group has been successfully edited!', 'success');
     }
-  }, [isEdited, editingError, isEditing, history]);
+    if (!isEditing && !isEdited && editingError) {
+      dispatchAddAlert(editingError);
+    }
+  }, [isEdited, editingError, isEditing, history, dispatchAddAlert]);
 
   useEffect(() => {
     if (mentors.length) {
@@ -332,7 +337,6 @@ export const EditGroup = ({
                       Confirm
                     </Button>
                   </div>
-                  {editingError && <p className="text-danger mt-3 mb-0 text-center">{editingError}</p>}
                 </Form>
               )}
             </Formik>

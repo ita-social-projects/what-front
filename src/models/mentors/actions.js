@@ -58,8 +58,7 @@ function* fetchAsyncMentorById({ payload }) {
     yield put({ type: types.FETCHING_BY_ID_STARTED });
     const mentorId = payload.id;
     const data = yield call(ApiService.load, `/mentors/${mentorId}`);
-    // TODO Remove extra 'data' field when backend fix response
-    yield put({ type: types.FETCHING_BY_ID_SUCCEED, payload: { data: data.data } });
+    yield put({ type: types.FETCHING_BY_ID_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.FETCHING_BY_ID_FAILED, payload: { error } });
   }

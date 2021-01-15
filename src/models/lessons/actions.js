@@ -1,6 +1,7 @@
 import {
   put, call, takeLatest, fork, all, takeEvery,
 } from 'redux-saga/effects';
+
 import { ApiService } from '../../shared/index.js';
 import * as actionsTypes from './action-types.js';
 
@@ -84,6 +85,7 @@ function* addLessonAsync(lessonData) {
         error,
       },
     });
+    yield put({ type: actionsTypes.CLEAR_ERROR });
   }
 }
 
@@ -108,6 +110,7 @@ function* editLessonAsync(editData) {
         error,
       },
     });
+    yield put({ type: actionsTypes.CLEAR_ERROR });
   }
 }
 
