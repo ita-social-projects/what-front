@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { paths, useActions } from '@/shared';
 import { shallowEqual, useSelector } from 'react-redux';
-import { activeStudentsSelector, fetchActiveMentors, fetchLessons, 
-  globalLoadStudentGroups, lessonsSelector, loadActiveStudents, 
-  loadStudentGroupsSelector, mentorsActiveSelector 
+import { studentsSelector, fetchMentors, fetchLessons, 
+  globalLoadStudentGroups, lessonsSelector, loadStudents, 
+  loadStudentGroupsSelector, mentorsSelector 
 } from '@/models';
 
 import { Badge } from 'react-bootstrap';
@@ -29,7 +29,7 @@ export const LessonDetails = () => {
     loadMentors, 
     loadGroups,
     fetchStudents,
-  ] = useActions([fetchLessons, fetchActiveMentors, globalLoadStudentGroups, loadActiveStudents]);
+  ] = useActions([fetchLessons, fetchMentors, globalLoadStudentGroups, loadStudents]);
 
   const {
     data: lessons,
@@ -41,7 +41,7 @@ export const LessonDetails = () => {
     data: mentors,
     isLoading: mentorsIsLoading,
     isLoaded: mentorsIsLoaded,
-  } = useSelector(mentorsActiveSelector, shallowEqual)
+  } = useSelector(mentorsSelector, shallowEqual)
 
   const {
     data: groups,
@@ -52,7 +52,7 @@ export const LessonDetails = () => {
     data: students,
     isLoading: studentsIsLoading,
     isLoaded: studentsIsLoaded,
-  } = useSelector(activeStudentsSelector, shallowEqual);
+  } = useSelector(studentsSelector, shallowEqual);
   
   useEffect(() => {
     loadLessons();
@@ -76,9 +76,7 @@ export const LessonDetails = () => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
     const studentD = uniqueIds.map((id) => students.find((student) => student.id === id));
 
-    const activeStudents = studentD.filter((student) => student !== undefined);
-
-    const studentsData = activeStudents.map((student) => (
+    const studentsData = studentD.map((student) => (
       {
         studentId: student.id,
         studentName: `${student.firstName} ${student.lastName}`,

@@ -9,9 +9,8 @@ import { useActions, paths } from '@/shared';
 import * as Yup from 'yup';
 import { WithLoading } from '@/components';
 import {
-  editLessonSelector, activeStudentsSelector, loadStudentGroupsSelector,
-  lessonsSelector, fetchLessons, globalLoadStudentGroups,
-  loadActiveStudents, editLesson,
+  editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector, 
+  fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
 } from '@/models';
 import { addAlert } from '@/features';
 import styles from './edit-lesson.scss';
@@ -34,7 +33,7 @@ export const EditLesson = () => {
     loadLessons,
     updateLesson,
     dispatchAddAlert,
-  ] = useActions([globalLoadStudentGroups, loadActiveStudents, fetchLessons, editLesson, addAlert]);
+  ] = useActions([globalLoadStudentGroups, loadStudents, fetchLessons, editLesson, addAlert]);
 
   const {
     data: groups,
@@ -48,7 +47,7 @@ export const EditLesson = () => {
     isLoading: studentsIsLoading,
     isLoaded: studentsIsLoaded,
     error: studentsError,
-  } = useSelector(activeStudentsSelector, shallowEqual);
+  } = useSelector(studentsSelector, shallowEqual);
 
   const {
     data: lessons,
@@ -86,9 +85,7 @@ export const EditLesson = () => {
       (id) => students.find((student) => student.id === id),
     );
 
-    const activeStudents = studentD.filter((student) => student !== undefined);
-
-    const studentsData = activeStudents.map((student) => (
+    const studentsData = studentD.map((student) => (
       {
         studentId: student.id,
         studentName: `${student.firstName} ${student.lastName}`,
