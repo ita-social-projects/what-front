@@ -54,6 +54,9 @@ export const ListOfStudents = () => {
     const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
     const students = filteredStudentsList.slice(indexOfFirstStudent, indexOfLastStudent)
+      .sort((a, b) => {
+        return (a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0;
+      })
       .map(({ id, firstName, lastName }) => (
         <Card
           key={id}
@@ -64,8 +67,8 @@ export const ListOfStudents = () => {
           onDetails={() => studentDetails(id)}
         >
           <div className="w-75">
-            <p className="mb-2  pr-2 font-weight-bolder">{firstName}</p>
-            <p className="font-weight-bolder">{lastName}</p>
+            <p className="mb-2 pr-2">{firstName}</p>
+            <p>{lastName}</p>
           </div>
         </Card>
       ));
@@ -77,17 +80,40 @@ export const ListOfStudents = () => {
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if(currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(filteredStudentsList.length / 9);
+    setCurrentPage((prev) => {
+      if (prev === totalPages) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
+  };
+
+  const prevPage =(pageNumber) => {
+    setCurrentPage((prev) => {
+      if (prev - 1 === 0) {
+        return prev;
+      } else {
+        return pageNumber;
+      }
+    });
   };
 
   return (
     <div className="container" style={{minHeight: 750}}>
       <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
+        <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Student's name" />
         </div>
-        {currentUser.role !== 2 && 
-          <div className="col-md-4 col-12 text-right">
+        {currentUser.role !== 2 &&
+          <div className="col-md-4 text-right">
             <Button onClick={addStudent} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a student</span>
@@ -105,11 +131,13 @@ export const ListOfStudents = () => {
           </WithLoading>
         </div>
       </div>
-        {filteredStudentsList.length > 9 && 
-          <Pagination 
-            itemsPerPage={studentsPerPage} 
-            totalItems={filteredStudentsList.length} 
+        {filteredStudentsList.length > 9 && !isLoading &&
+          <Pagination
+            itemsPerPage={studentsPerPage}
+            totalItems={filteredStudentsList.length}
             paginate={paginate}
+            prevPage={prevPage}
+            nextPage={nextPage}
           />
         }
     </div>

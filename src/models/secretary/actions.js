@@ -57,6 +57,7 @@ function* updateSecretaryWorker({ payload }) {
     yield put({ type: actions.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actions.SECRETARY_UPDATING_FAILED, payload: { error } });
+    yield put({ type: actions.CLEAR_ERROR });
   }
 }
 

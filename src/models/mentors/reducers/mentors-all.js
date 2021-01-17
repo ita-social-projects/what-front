@@ -30,7 +30,7 @@ export const mentorsAllReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
 
     case types.ADDING_MENTOR_STARTED:
@@ -54,7 +54,7 @@ export const mentorsAllReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
 
     case types.DELETING_MENTOR_STARTED:

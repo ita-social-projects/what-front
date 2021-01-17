@@ -3,8 +3,8 @@ import { counterReducer, listOfGroupsReducer, alertReducer } from './features/in
 import {
   mentorsReducer, themesReducer, coursesReducer,
   schedulesReducer, studentsReducer, lessonsReducer,
-  accountReducer, secretariesReducer, studentGroupsReducer, 
-  dashboardReducer, importReducer,
+  accountReducer, secretariesReducer, studentGroupsReducer, dashboardReducer,
+  attachmentsReducer, importReducer,
 } from './models/index.js';
 
 export const rootReducer = combineReducers({
@@ -24,6 +24,7 @@ export const rootReducer = combineReducers({
     secretaries: secretariesReducer,
     studentGroups: studentGroupsReducer,
     dashboard: dashboardReducer,
+    attachments: attachmentsReducer,
     import: importReducer,
   }),
 });

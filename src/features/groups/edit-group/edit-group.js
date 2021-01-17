@@ -11,7 +11,8 @@ import {
   studentsStateShape,
   studentGroupByIdStateShape,
 } from '@/features/shared';
-import { useActions } from '@/shared';
+import { addAlert } from '@/features';
+import { paths, useActions } from '@/shared';
 import { WithLoading, Button } from '@/components/index.js';
 import { editStudentGroup, editStudentGroupSelector } from '@/models';
 import Icon from '@/icon.js';
@@ -27,14 +28,30 @@ export const EditGroup = ({
     error: editingError,
   } = useSelector(editStudentGroupSelector, shallowEqual);
 
-  const dispatchEditGroup = useActions(editStudentGroup);
+  const [dispatchEditGroup, dispatchAddAlert] = useActions([editStudentGroup, addAlert]);
 
   const history = useHistory();
 
-  const { data: group, isLoading: isGroupLoading } = studentGroupData;
-  const { data: students, isLoading: areStudentsLoading } = studentsData;
-  const { data: mentors, isLoading: areMentorsLoading } = mentorsData;
-  const { data: courses, isLoading: areCoursesLoading } = coursesData;
+  const { 
+    data: group, 
+    isLoading: isGroupLoading, 
+    isLoaded: isGroupLoaded 
+  } = studentGroupData;
+  const { 
+    data: students, 
+    isLoading: areStudentsLoading, 
+    isLoaded: areStudentsLoaded 
+  } = studentsData;
+  const { 
+    data: mentors, 
+    isLoading: areMentorsLoading, 
+    isLoaded: areMentorsLoaded 
+  } = mentorsData;
+  const { 
+    data: courses, 
+    isLoading: areCoursesLoading, 
+    loaded: areCoursesLoaded 
+  } = coursesData;
 
   const [groupMentors, setGroupMentors] = useState([]);
   const [mentorInputError, setMentorInputError] = useState('');
@@ -43,9 +60,13 @@ export const EditGroup = ({
 
   useEffect(() => {
     if (!isEditing && isEdited && !editingError) {
-      history.push('/groups');
+      history.push(paths.GROUPS);
+      dispatchAddAlert('The group has been successfully edited!', 'success');
     }
-  }, [isEdited, editingError, isEditing, history]);
+    if (!isEditing && !isEdited && editingError) {
+      dispatchAddAlert(editingError);
+    }
+  }, [isEdited, editingError, isEditing, history, dispatchAddAlert]);
 
   useEffect(() => {
     if (mentors.length) {
@@ -123,7 +144,10 @@ export const EditGroup = ({
     <div className="w-100">
       <div className="row justify-content-center">
         <div className="w-100 card shadow p-4">
-          <WithLoading isLoading={isGroupLoading} className={styles['loader-centered']}>
+        <WithLoading isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded ||
+          areCoursesLoading || !areCoursesLoaded || areStudentsLoading || !areStudentsLoaded} 
+          className={styles['loader-centered']}
+        >
             <Formik
               initialValues={{
                 name: group.name,
@@ -161,25 +185,23 @@ export const EditGroup = ({
                       <label className="mb-0" htmlFor="course">Course:</label>
                     </div>
                     <div className="col-md-8">
-                      <WithLoading isLoading={areCoursesLoading}>
-                        <Field
-                          as="select"
-                          className={classNames('custom-select')}
-                          name="courseId"
-                          id="course"
-                        >
-                          <option value={group.courseId} key={group.courseId}>
-                            { courses.find((course) => course.id === group.courseId)?.name }
-                          </option>
-                          {
-                            courses
-                              .filter((course) => course.id !== group.courseId)
-                              .map((course) => (
-                                <option value={course.id} key={course.id}>{course.name}</option>
-                              ))
-                          }
-                        </Field>
-                      </WithLoading>
+                      <Field
+                        as="select"
+                        className={classNames('custom-select')}
+                        name="courseId"
+                        id="course"
+                      >
+                        <option value={group.courseId} key={group.courseId}>
+                          { courses.find((course) => course.id === group.courseId)?.name }
+                        </option>
+                        {
+                          courses
+                            .filter((course) => course.id !== group.courseId)
+                            .map((course) => (
+                              <option value={course.id} key={course.id}>{course.name}</option>
+                            ))
+                        }
+                      </Field>
                     </div>
                   </div>
                   <div className="row mb-3">
@@ -215,56 +237,54 @@ export const EditGroup = ({
                       <label className="mt-2" htmlFor="mentor">Mentors:</label>
                     </div>
                     <div className="col-md-8">
-                      <WithLoading isLoading={areMentorsLoading}>
-                        <div className="d-flex">
-                          <Field
-                            className="form-control f"
-                            type="text"
-                            name="mentor"
-                            list="mentors-list"
-                          />
-                          <datalist id="mentors-list">
-                            {
-                              mentors
-                                .filter(({ id }) => !groupMentors.find((mentor) => mentor.id === id))
-                                .map(({
-                                  id, firstName, lastName, email,
-                                }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
-                            }
-                          </datalist>
-                          <Button
-                            variant="warning"
-                            onClick={() => addMentor(values.mentor, () => setFieldValue('mentor', ''))}
-                          >
-                            <Icon icon="Plus" />
-                          </Button>
-                        </div>
-                        {mentorInputError && <p className="text-danger mb-0">{mentorInputError}</p>}
-                        <div className="w-100">
-                          <ul className="col-md-12 d-flex flex-wrap justify-content-between p-0">
-                            {
-                              groupMentors.map(({ id, firstName, lastName }) => (
-                                <li
-                                  key={id}
-                                  className={classNames(
-                                    'd-flex bg-light border border-outline-secondary rounded',
-                                    styles['datalist-item'],
-                                  )}
+                      <div className="d-flex">
+                        <Field
+                          className="form-control f"
+                          type="text"
+                          name="mentor"
+                          list="mentors-list"
+                        />
+                        <datalist id="mentors-list">
+                          {
+                            mentors
+                              .filter(({ id }) => !groupMentors.find((mentor) => mentor.id === id))
+                              .map(({
+                                id, firstName, lastName, email,
+                              }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
+                          }
+                        </datalist>
+                        <Button
+                          variant="warning"
+                          onClick={() => addMentor(values.mentor, () => setFieldValue('mentor', ''))}
+                        >
+                          <Icon icon="Plus" />
+                        </Button>
+                      </div>
+                      {mentorInputError && <p className="text-danger mb-0">{mentorInputError}</p>}
+                      <div className="w-100">
+                        <ul className="col-md-12 d-flex flex-wrap justify-content-between p-0">
+                          {
+                            groupMentors.map(({ id, firstName, lastName }) => (
+                              <li
+                                key={id}
+                                className={classNames(
+                                  'd-flex bg-light border border-outline-secondary rounded',
+                                  styles['datalist-item'],
+                                )}
+                              >
+                                {firstName} {lastName}
+                                <button
+                                  type="button"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  onClick={() => removeMentor(id)}
                                 >
-                                  {firstName} {lastName}
-                                  <button
-                                    type="button"
-                                    className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                    onClick={() => removeMentor(id)}
-                                  >
-                                    X
-                                  </button>
-                                </li>
-                              ))
-                            }
-                          </ul>
-                        </div>
-                      </WithLoading>
+                                  X
+                                </button>
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </div>
                     </div>
                   </div>
                   <div className="row mb-3">
@@ -272,56 +292,54 @@ export const EditGroup = ({
                       <label className="mt-2" htmlFor="finish-date">Students:</label>
                     </div>
                     <div className="col-md-8">
-                      <WithLoading isLoading={areStudentsLoading}>
-                        <div className="d-flex">
-                          <Field
-                            className="form-control f"
-                            type="text"
-                            name="student"
-                            list="students-list"
-                          />
-                          <datalist id="students-list">
-                            {
-                              students
-                                .filter(({ id }) => !groupStudents.find((mentor) => mentor.id === id))
-                                .map(({
-                                  id, firstName, lastName, email,
-                                }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
-                            }
-                          </datalist>
-                          <Button
-                            variant="warning"
-                            onClick={() => addStudent(values.student, () => setFieldValue('student', ''))}
-                          >
-                            <Icon icon="Plus" />
-                          </Button>
-                        </div>
-                        {studentInputError && <p className="text-danger mb-0">{studentInputError}</p>}
-                        <div className="w-100">
-                          <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
-                            {
-                              groupStudents.map(({ id, firstName, lastName }) => (
-                                <li
-                                  key={id}
-                                  className={classNames(
-                                    'd-flex bg-light border border-outline-secondary rounded',
-                                    styles['datalist-item'],
-                                  )}
+                      <div className="d-flex">
+                        <Field
+                          className="form-control f"
+                          type="text"
+                          name="student"
+                          list="students-list"
+                        />
+                        <datalist id="students-list">
+                          {
+                            students
+                              .filter(({ id }) => !groupStudents.find((mentor) => mentor.id === id))
+                              .map(({
+                                id, firstName, lastName, email,
+                              }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
+                          }
+                        </datalist>
+                        <Button
+                          variant="warning"
+                          onClick={() => addStudent(values.student, () => setFieldValue('student', ''))}
+                        >
+                          <Icon icon="Plus" />
+                        </Button>
+                      </div>
+                      {studentInputError && <p className="text-danger mb-0">{studentInputError}</p>}
+                      <div className="w-100">
+                        <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
+                          {
+                            groupStudents.map(({ id, firstName, lastName }) => (
+                              <li
+                                key={id}
+                                className={classNames(
+                                  'd-flex bg-light border border-outline-secondary rounded',
+                                  styles['datalist-item'],
+                                )}
+                              >
+                                {firstName} {lastName}
+                                <button
+                                  type="button"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  onClick={() => removeStudent(id)}
                                 >
-                                  {firstName} {lastName}
-                                  <button
-                                    type="button"
-                                    className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                    onClick={() => removeStudent(id)}
-                                  >
-                                    X
-                                  </button>
-                                </li>
-                              ))
-                            }
-                          </ul>
-                        </div>
-                      </WithLoading>
+                                  X
+                                </button>
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </div>
                     </div>
                   </div>
                   <div className="row justify-content-around mt-4">
@@ -332,7 +350,6 @@ export const EditGroup = ({
                       Confirm
                     </Button>
                   </div>
-                  {editingError && <p className="text-danger mt-3 mb-0 text-center">{editingError}</p>}
                 </Form>
               )}
             </Formik>

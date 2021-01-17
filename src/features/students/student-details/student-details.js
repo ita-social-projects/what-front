@@ -20,12 +20,14 @@ export const StudentDetails = () => {
   const {
     data: studentGroups,
     isLoading: areStudentGroupsLoading,
+    isLoaded: areStudentsGroupsLoaded,
     error: studentGroupsError,
   } = useSelector(currentStudentGroupsSelector, shallowEqual);
 
   const {
     data: studentLessons,
     isLoading: studentLessonsIsLoading,
+    isLoaded: studentLessonsIsLoaded,
     error: studentLessonsError,
   } = useSelector(studentLessonsSelector, shallowEqual);
 
@@ -64,7 +66,7 @@ export const StudentDetails = () => {
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Group(s): </span></div>
                 <WithLoading
-                  isLoading={areStudentGroupsLoading}
+                  isLoading={areStudentGroupsLoading || !areStudentsGroupsLoaded}
                   className={styles['loader-centered']}
                 >
                   <div className="col-12 col-md-6 d-flex flex-wrap lead">
@@ -87,7 +89,7 @@ export const StudentDetails = () => {
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Lesson(s): </span></div>
                 <WithLoading
-                  isLoading={studentLessonsIsLoading}
+                  isLoading={studentLessonsIsLoading || !studentLessonsIsLoaded}
                   className={styles['loader-centered']}
                 >
                   <div className="col-12 col-md-6 d-flex flex-wrap lead">

@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
+import { number } from 'prop-types';
+
 import { useActions, paths } from '@/shared';
-import { currentUserSelector, fetchCourses } from '@/models';
+import { currentUserSelector, fetchCourses, coursesSelector } from '@/models';
 import { Tab, Tabs } from '@/components';
 import { CourseDetails, EditCourse } from '@/features';
 
 export const CoursesTabs = ({ index }) => {
   const { id } = useParams();
-
-  const [loadCourses] = useActions([fetchCourses]);
+  const loadCourses = useActions(fetchCourses);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+  const coursesData = useSelector(coursesSelector, shallowEqual);
 
   useEffect(() => {
     loadCourses();
@@ -20,14 +22,24 @@ export const CoursesTabs = ({ index }) => {
     return (
       <Tabs defaultIndex={index} className="container w-50" linkBack={paths.COURSES}>
         <Tab title="Course details">
-          <CourseDetails id={id} />
+          <CourseDetails
+            id={Number(id)}
+            coursesData={coursesData}
+          />
         </Tab>
         <Tab title="Edit course details">
-          <EditCourse id={id} />
+          <EditCourse
+            id={Number(id)}
+            coursesData={coursesData}
+          />
         </Tab>
       </Tabs>
     );
   } else {
-    return <CourseDetails id={id}/>
+    return <CourseDetails id={Number(id)} coursesData={coursesData} />
   }
+};
+
+CoursesTabs.propTypes = {
+  index: number.isRequired,
 };
