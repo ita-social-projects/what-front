@@ -20,7 +20,6 @@ export const StudentDetails = () => {
   const {
     data: studentGroups,
     isLoading: areStudentGroupsLoading,
-    isLoaded: areStudentsGroupsLoaded,
     error: studentGroupsError,
   } = useSelector(currentStudentGroupsSelector, shallowEqual);
 
