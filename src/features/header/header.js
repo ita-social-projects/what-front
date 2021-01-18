@@ -173,9 +173,6 @@ export const Header = () => {
           </div>
 
 
-          {/*<div className={styles['header__account-logout']}>*/}
-          {/*  <a onClick={() => { loggingOut(); }}>{logout}</a>*/}
-          {/*</div>*/}
           <div className={styles[`header__dropdown-toggler`]}
                onClick={toggleDropdown}>
             <span className="header__dropdown-icon">&#9660;</span>
