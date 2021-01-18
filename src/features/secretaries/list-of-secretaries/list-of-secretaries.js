@@ -54,7 +54,10 @@ export const ListOfSecretaries = () => {
     const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
 
     const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
-      .map(({ id, firstName, lastName }) => (
+      .sort((a, b) => ((a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0))
+      .map(({
+        id, firstName, lastName,
+      }) => (
         <Card
           key={id}
           id={id}
@@ -63,7 +66,7 @@ export const ListOfSecretaries = () => {
           onEdit={currentUser.role === 4 ? () => handleEditSecretary(id) : null}
           onDetails={() => handleSecretariesDetails(id)}
         >
-          <div className="w-75">
+          <div className=" w-75">
             <p className="mb-2 pr-2">{firstName}</p>
             <p>{lastName}</p>
           </div>

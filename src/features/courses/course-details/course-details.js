@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { WithLoading } from '@/components';
 import { paths } from '@/shared';
 import { coursesStateShape } from '@features/shared';
+import { currentUserSelector } from '@/models';
 
 export const CourseDetails = ({ id, coursesData }) => {
   const { data, isLoading, loaded } = coursesData;

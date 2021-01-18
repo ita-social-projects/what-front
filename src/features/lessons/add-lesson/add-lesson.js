@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Button, WithLoading } from '@/components';
 import { useActions, paths } from '@/shared';
-import { addLessonValidation } from '@features/validation/validation-helpers.js';
+import { lessonValidation } from '@features/validation/validation-helpers.js';
 
 import {
   mentorsActiveSelector,
@@ -265,7 +265,7 @@ export const AddLesson = () => {
                   formData,
                 }}
                 onSubmit={onSubmit}
-                validationSchema={addLessonValidation}
+                validationSchema={lessonValidation}
               >
                 {({ errors }) => (
                   <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>

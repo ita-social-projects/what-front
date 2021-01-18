@@ -249,7 +249,7 @@ export const EditStudentsDetails = ({ id }) => {
                       </div>
                     </div>
                     <WithLoading
-                      isLoading={areStudentGroupsLoading}
+                      isLoading={areStudentGroupsLoading || !areStudentGroupsLoaded}
                       className={styles['loader-centered']}
                     >
                       <div className="row m-0 pt-3">
