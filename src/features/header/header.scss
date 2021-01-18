@@ -110,7 +110,7 @@
       display: flex;
       align-items: center;
 
-      padding-right: 15%;
+      padding-right: 10%;
 
       &--icon {
         padding-right: 1rem;
@@ -182,3 +182,52 @@
   background-color: #FFB800 !important;
   font-weight: bold !important;
 }
+
+
+.header__dropdown-list {
+  position: absolute;
+  top: 75px;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+
+  transition: all 0.5s ease 0s;
+
+  &-show {
+    position: absolute;
+    opacity: 1;
+    z-index: 2;
+    top: 75px;
+    right: 0;
+    color: #fff;
+    border: 1px solid #000;
+    background-color: rgba(#01073A, 1);
+    padding: 0 5px;
+    width: 15%;
+    transition: all 0.5s ease 0s;
+  }
+    &--item {
+      list-style: none;
+      padding: 5px 5px;
+      border-bottom: 1px solid #FFF;
+    }
+
+    &--item:hover {
+      color: #fff;
+      opacity: 0.5;
+      text-decoration: underline;
+    }
+
+    &--item:last-child {
+      border: none;
+      & a {
+        cursor: pointer;
+      }
+    }
+
+  }
+
+.header__dropdown-toggler {
+  cursor: pointer;
+}
+
