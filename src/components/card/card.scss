@@ -21,13 +21,11 @@
 }
 
 .card-title {
-  @include baskerville-regular();
   width:95%;
   font-size: 20px;
 }
 
 .card-content {
-  @include baskerville-regular();
   width:95%;
   font-size: 18px;
   padding-top: 10px;
@@ -35,7 +33,6 @@
 }
 
 .card-date {
-  @include baskerville-regular();
   font-size: 14px;
   text-decoration: underline;
   color: map-get($colors, textAccentN1-color);

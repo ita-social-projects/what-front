@@ -50,6 +50,9 @@ export const ListOfMentors = () => {
     const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
 
     const mentors = filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor)
+      .sort((a, b) => {
+        return (a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0;
+      })
       .map((mentor) => {
         return (
           <Card
@@ -107,14 +110,14 @@ export const ListOfMentors = () => {
         <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Mentor's name" />
         </div>
-        {currentUser.role !== 2 && 
+        {currentUser.role !== 2 &&
           <div className="col-md-4 text-right">
             <Button onClick={addMentor} variant="warning">
               <Icon icon="Plus" className="icon" />
               <span>Add a mentor</span>
             </Button>
           </div>
-        } 
+        }
       </div>
       <div>
         <hr className="col-8" />
@@ -127,9 +130,9 @@ export const ListOfMentors = () => {
         </div>
       </div>
       {filteredMentorList.length > 9 && !isLoading &&
-        <Pagination 
-          itemsPerPage={mentorsPerPage} 
-          totalItems={filteredMentorList.length} 
+        <Pagination
+          itemsPerPage={mentorsPerPage}
+          totalItems={filteredMentorList.length}
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}

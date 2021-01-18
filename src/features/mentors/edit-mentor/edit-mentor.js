@@ -2,24 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@shared/index.js';
-import { WithLoading, Button } from '@components/index.js';
 import {
-  mentorIdSelector,
-  mentorEditingSelector,
-  mentorDeletingSelector,
-  mentorGroupsSelector,
-  mentorCoursesSelector,
-  editMentor,
-  deleteMentor,
-  loadStudentGroupsSelector,
+  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector,mentorGroupsSelector, 
+  mentorCoursesSelector, editMentor,deleteMentor, loadStudentGroupsSelector, 
   coursesSelector, fetchCourses, globalLoadStudentGroups,
 } from '@/models/index.js';
-import { Formik, Field, Form } from 'formik';
-import classNames from 'classnames';
-import Icon from '@/icon';
-import { ModalWindow } from '@/features/modal-window/index.js';
-import { addAlert } from '@/features';
+
+import { WithLoading, Button } from '@components/index.js';
 import { editMentorValidation } from '@features/validation/validation-helpers.js';
+import { addAlert, ModalWindow } from '@/features';
+import { Formik, Field, Form } from 'formik';
+import Icon from '@/icon';
+
+import classNames from 'classnames';
 import styles from './edit-mentor.scss';
 
 export const EditMentor = ({ id }) => {
@@ -27,29 +22,34 @@ export const EditMentor = ({ id }) => {
   const {
     data: mentor,
     isLoading: mentorIsLoading,
+    isLoaded: mentorIsLoaded,
     error: mentorError,
   } = useSelector(mentorIdSelector, shallowEqual);
 
   const {
     data: mentorGroups,
     isLoading: mentorGroupsAreLoading,
+    isLoaded: mentorGroupsAreLoaded,
     error: mentorGroupsError,
   } = useSelector(mentorGroupsSelector, shallowEqual);
 
   const {
     data: mentorCourses,
     isLoading: mentorCoursesAreLoading,
+    isLoaded: mentorCoursesAreLoaded,
     error: mentorCoursesError,
   } = useSelector(mentorCoursesSelector, shallowEqual);
 
   const {
     data: allGroups,
     isLoading: allGroupsAreLoading,
+    isLoaded: allGroupsAreLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
     data: allCourses,
     isLoading: allCoursesAreLoading,
+    loaded: allCoursesAreLoaded,
   } = useSelector(coursesSelector, shallowEqual);
 
   const {
@@ -215,7 +215,10 @@ export const EditMentor = ({ id }) => {
             <h3>Mentor Editing</h3>
             <hr />
             <WithLoading
-              isLoading={mentorIsLoading && allCoursesAreLoading && allGroupsAreLoading}
+              isLoading={mentorIsLoading || !mentorIsLoaded || allCoursesAreLoading || !allCoursesAreLoaded || 
+                mentorCoursesAreLoading || !mentorCoursesAreLoaded || allGroupsAreLoading || !allGroupsAreLoaded ||
+                !mentorGroupsAreLoaded || mentorGroupsAreLoading
+              }
               className={styles['loader-centered']}
             >
               <Formik
@@ -309,10 +312,7 @@ export const EditMentor = ({ id }) => {
                         { errorGroup ? <div className={styles.error}>{errorGroup}</div> : null}
                       </div>
                     </div>
-                    <WithLoading
-                      isLoading={mentorGroupsAreLoading}
-                      className={styles['loader-centered']}
-                    >
+
                       <div className="row m-0 pt-3">
                         <div className="col-md-8 offset-md-4">
                           <ul className="d-flex flex-wrap justify-content-between p-0">
@@ -335,7 +335,6 @@ export const EditMentor = ({ id }) => {
                           </ul>
                         </div>
                       </div>
-                    </WithLoading>
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
@@ -367,10 +366,7 @@ export const EditMentor = ({ id }) => {
                         { errorCourse ? <div className={styles.error}>{errorCourse}</div> : null}
                       </div>
                     </div>
-                    <WithLoading
-                      isLoading={mentorCoursesAreLoading}
-                      className={styles['loader-centered']}
-                    >
+    
                       <div className="row m-0 pt-3">
                         <div className="col-md-8 offset-md-4">
                           <ul className="d-flex flex-wrap justify-content-between p-0">
@@ -393,7 +389,6 @@ export const EditMentor = ({ id }) => {
                           </ul>
                         </div>
                       </div>
-                    </WithLoading>
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
