@@ -53,6 +53,9 @@ export const ListOfSecretaries = () => {
     const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
 
     const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
+      .sort((a, b) => {
+        return (a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0;
+      })
       .map(({
         id, firstName, lastName
       }) => {
@@ -71,7 +74,7 @@ export const ListOfSecretaries = () => {
             </div>
           </Card>
         );
-      }); 
+      });
 
     if (!secretaries.length && search) {
       return <h4>Secretary is not found</h4>;
@@ -112,7 +115,7 @@ export const ListOfSecretaries = () => {
         <div className="col-md-4 offset-md-4 text-center">
           <Search onSearch={handleSearch} placeholder="Secretary's name" />
         </div>
-        {currentUser.role === 4 && 
+        {currentUser.role === 4 &&
           <div className="col-md-4 text-right">
             <Button onClick={handleAddSecretary} variant="warning">
               <Icon icon="Plus" className="icon" />
@@ -132,9 +135,9 @@ export const ListOfSecretaries = () => {
         </div>
       </div>
       {searchResults.length > 9 && !isLoading &&
-        <Pagination 
-          itemsPerPage={secretariesPerPage} 
-          totalItems={searchResults.length} 
+        <Pagination
+          itemsPerPage={secretariesPerPage}
+          totalItems={searchResults.length}
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}

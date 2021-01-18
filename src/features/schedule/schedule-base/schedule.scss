@@ -1,9 +1,9 @@
 @import '../../../styles/main';
 
 .day-column {
-    border-left: 1px solid $disable-colorN1;
+    border-left: 1px solid $theme-colorMedium;
     &:last-child {
-        border-right: 1px solid $disable-colorN1;;
+        border-right: 1px solid $theme-colorMedium;;
     }
     display: flex;
     flex-direction: column;
@@ -14,12 +14,11 @@
 .day-column-header {
     width: 100%;
     padding-top: 10px;
-    border-bottom: 1px solid $disable-colorN1;
-    @include franklin-semibold;
+    border-bottom: 1px solid $theme-colorMedium;
 }
 
 .current-day {
-    background-color: $disable-colorN3;
+    background-color: $theme-colorMedium;
 }
 
 .lessons-list {
@@ -50,7 +49,6 @@
     }
 
     &__group-name {
-        @include franklin-semibold;
         margin-bottom: 0;
     }
 }
@@ -77,7 +75,7 @@
     padding: 5px;
     transition: .1s;
     &:focus {
-        box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
+        box-shadow: 0 0 10px map-get($colors, medium-color );
         outline: none;
     }
 }

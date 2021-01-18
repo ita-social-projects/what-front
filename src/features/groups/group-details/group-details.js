@@ -18,15 +18,30 @@ export const GroupDetails = ({
     isLoading: isGroupLoading,
     isLoaded: isGroupLoaded,
   } = studentGroupData;
-  const { data: students, isLoading: areStudentsLoading } = studentsData;
-  const { data: mentors, isLoading: areMentorsLoading } = mentorsData;
-  const { data: courses, isLoading: areCoursesLoading } = coursesData;
+  const {
+    data: students,
+    isLoading: areStudentsLoading,
+    isLoaded: areStudentsLoaded
+  } = studentsData;
+  const {
+    data: mentors,
+    isLoading: areMentorsLoading,
+    isLoaded: areMentorsLoaded
+  } = mentorsData;
+  const {
+    data: courses,
+    isLoading: areCoursesLoading,
+    loaded: areCoursesLoaded
+  } = coursesData;
 
   return (
     <div className="container">
       <div className="row justify-content-center">
         <div className="w-100 card shadow p-4">
-          <WithLoading isLoading={isGroupLoading || !isGroupLoaded} className={styles['loader-centered']}>
+          <WithLoading isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded ||
+            areCoursesLoading || !areCoursesLoaded}
+            className={styles['loader-centered']}
+          >
             <div className="d-flex flex-row text-left justify-content-between">
               <div className="d-flex flex-column">
                 <h2>
@@ -47,41 +62,34 @@ export const GroupDetails = ({
               <h4 className="pr-2 mb-2">
                 Mentors:
               </h4>
-              <WithLoading isLoading={areMentorsLoading}>
-                <div className="d-flex flex-wrap">
-                  { mentors
-                    .filter((mentor) => group.mentorIds?.includes(mentor.id))
-                    .map((mentor) => (
-                      <div className="pr-2 lead" key={mentor.id}>
-                        <Badge pill variant="warning">
-                          <Link
-                            to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
-                            className="text-decoration-none text-dark"
-                          >{mentor.firstName} {mentor.lastName}
-                          </Link>
-                        </Badge>
-                      </div>
-                    )) }
-                </div>
-              </WithLoading>
+              <div className="d-flex flex-wrap">
+                { mentors
+                  .filter((mentor) => group.mentorIds?.includes(mentor.id))
+                  .map((mentor) => (
+                    <div className="pr-2 lead" key={mentor.id}>
+                      <Badge pill variant="warning">
+                        <Link to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
+                          className="text-decoration-none text-dark"
+                        >{mentor.firstName} {mentor.lastName}</Link>
+                      </Badge>
+                    </div>
+                  )) }
+              </div>
             </div>
             <div className="d-flex align-items-center mb-2 lead">
               <h4 className="mb-2 pr-4">Course:</h4>
-              <WithLoading isLoading={areCoursesLoading}>
-                <Badge pill variant="primary">
-                  <Link
-                    to={`${paths.COURSE_DETAILS}/${group.courseId}`}
-                    className="text-decoration-none text-white"
-                  >
-                    {courses.find((course) => course.id === group.courseId)?.name }
-                  </Link>
-                </Badge>
-              </WithLoading>
+              <Badge pill variant="primary">
+                <Link to={`${paths.COURSE_DETAILS}/${group.courseId}`}
+                  className="text-decoration-none text-white"
+                >
+                  {courses.find((course) => course.id === group.courseId)?.name }
+                </Link>
+              </Badge>
             </div>
             <h4 className="h4 my-2">
               Students:
             </h4>
-            <WithLoading isLoading={areStudentsLoading}>
+            <WithLoading isLoading={areStudentsLoading || !areStudentsLoaded}>
               <Table bordered hover responsive>
                 <thead>
                   <tr>

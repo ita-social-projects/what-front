@@ -81,7 +81,7 @@ export const Header = () => {
       active: currentURL.includes(tab.title.toLowerCase()),
     }));
     setTabs(resultArr);
-  }, [currentUser]);
+  }, [currentUser, currentURL]);
 
   const toggleActiveTab = (event) => {
     setTabs((prevstate) => {

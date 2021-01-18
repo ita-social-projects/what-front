@@ -4,30 +4,19 @@
 
 //colors map
 $colors: (
-        backgroung-color: $neutral-colorN1,
-        header-color: $theme-colorN2,
-        textMain-color: $neutral-colorN2,
-        textAdd-color: $neutral-colorN1,
-        textAccentN1-color: $theme-colorN1,
-        buttonSuccess-color: $success-color,
-        buttonReject-color: $danger-color,
-        buttonCustom-color: $theme-colorN1,
-        buttonDisabled-color: $disable-colorN1,
-        selectedTab-color: $theme-colorN1,
-        diselectedTab-color: $disable-colorN3,
-        checkboxSuccess-color: $success-color,
-        checkboxReject-color: $danger-color,
-        dropdownButton-color: $theme-colorN1,
+        medium-color: $theme-colorMedium,
+        dark-color: $theme-colorDark,
+        accent-color: $theme-colorAccent,
+        nonAccent-color: $theme-colorLight,
 );
 
 //borders map
 $border-radius: (
-        button-borRad: $add-borRad,
-        card-boRad: $main-borRad,
-        tab-borRad: $main-borRad,
-        page-borRad: $add-borRad,
-        input-borRad: $main-borRad,
-        form-borRad: $main-borRad,
+        button-borRad: $button-radius,
+        card-boRad: $button-radius,
+        tab-borRad: $tab-radius,
+        page-borRad: $page-radius,
+        input-borRad: $button-radius,
 );
 
 //box-shadows map
@@ -35,8 +24,7 @@ $box-shadows: (
       card-boxShadow: 0 0 20px rgba(0, 0, 0, 0.25),
       button-boxShadow: 0 0 10px rgba(0, 0, 0, 0.25),
       iconEdit-boxShadow: 0 4px 4px rgba(0, 0, 0, 0.25),
-      page-boxShadow: 0 4px 10px rgba(0, 0, 0, 0.25),
+      page-boxShadow: 0 4px 20px rgba(0, 0, 0, 0.25),
       tab-boxShadow: 0 -4px 10px rgba(0, 0, 0, 0.25),
-
 );
 
