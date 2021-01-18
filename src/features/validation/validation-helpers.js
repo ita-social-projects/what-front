@@ -4,7 +4,6 @@ export const authValidation = Yup.object().shape({
   email: Yup.string()
     .required('This field is required'),
   password: Yup.string()
-    .min(8, 'Password must contain at least 8 characters')
     .required('This field is required'),
 });
 
