@@ -86,7 +86,7 @@ export const MentorDetails = ({ id }) => {
                     <div className="pr-2" key={id}>
                       <Badge pill variant="primary">
                         <Link
-                          to={`${paths.MENTORS_DETAILS}/${id}`}
+                          to={`${paths.GROUPS_DETAILS}/${id}`}
                           className="text-decoration-none text-white"
                         >{name}
                         </Link>
