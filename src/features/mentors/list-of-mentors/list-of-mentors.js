@@ -2,14 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@/shared';
-import { currentUserSelector, fetchActiveMentors, mentorsActiveSelector } from '@/models';
+import { currentUserSelector, fetchMentors, fetchActiveMentors, mentorsSelector, mentorsActiveSelector, loadActiveStudents } from '@/models';
 
 import { Button, Pagination, Search, WithLoading } from '@/components';
 import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-mentors.scss';
-
 
 const editIcon = (
   <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" className={classNames("bi bi-pencil", styles.scale)} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -36,34 +35,65 @@ export const ListOfMentors = () => {
 
   const [mentorsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+
   const [searchMentorValue, setSearchMentorValue] = useState('');
+
   const [filteredMentorList, setFilteredMentorList] = useState([]);
+  
   const [sortingCategories, setSortingCategories] = useState([
     { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
     { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
     { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
     { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ]);
-  const [visibleMentors, setVisibleMentors] = useState([]);
 
-  const { data, isLoading } = useSelector(mentorsActiveSelector, shallowEqual);
+  const [visibleMentors, setVisibleMentors] = useState([]);
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
+
+  const { data: allMentors, isLoading: areAllMentorsLoading } = useSelector(mentorsSelector, shallowEqual)
+  const { data: activeMentors, isLoading: areActiveMentorsLoading } = useSelector(mentorsActiveSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  const loadActiveMentors = useActions(fetchActiveMentors);
+  const [loadActiveMentors, loadAllMentors] = useActions([fetchActiveMentors, fetchMentors]);
 
   const indexOfLastMentor = currentPage * mentorsPerPage;
   const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
 
   useEffect(() => {
-    loadActiveMentors();
+    loadActiveMentors()
   }, [loadActiveMentors]);
+  
+  useEffect(() => {
+    if (isShowDisabled) {
+      const activeMentorIds = activeMentors.map(({ id }) => id);
+      const disabledMentors = allMentors.filter(({ id }) => !activeMentorIds.includes(id));
+
+      setFilteredMentorList(disabledMentors.map((mentor, index) => ({ index, ...mentor })));
+    }
+    if (!isShowDisabled && activeMentors.length && !areActiveMentorsLoading) {
+      setFilteredMentorList(activeMentors.map((mentor, index) => ({ index, ...mentor })));
+    }
+
+    setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
+  },
+  [activeMentors, areActiveMentorsLoading, allMentors, areAllMentorsLoading, isShowDisabled]);
 
   useEffect(() => {
-    const mentors = data.map((mentor, index) => ({ index, ...mentor }))
-      .filter((mentor) => `${mentor.firstName} ${mentor.lastName}`.toUpperCase()
-      .includes(searchMentorValue.toUpperCase()));
-    setFilteredMentorList(mentors);
-  }, [data, searchMentorValue]);
+    if (isShowDisabled) {
+      const activeMentorIds = activeMentors.map(({ id }) => id);
+      const disabledMentors = allMentors.filter(({ id }) => !activeMentorIds.includes(id));
+
+      const searchedMentors = disabledMentors.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
+        .toLowerCase().includes(searchMentorValue.toLowerCase()));
+
+      setFilteredMentorList(searchedMentors.map((mentor, index) => ({ index, ...mentor })));
+    } else {
+      const searchedMentors = activeMentors.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
+        .toLowerCase().includes(searchMentorValue.toLowerCase()));
+
+        setFilteredMentorList(searchedMentors.map((mentor, index) => ({ index, ...mentor })));
+    }
+  }, [searchMentorValue, isShowDisabled]);
 
   useEffect(() => {
     setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
@@ -110,6 +140,16 @@ export const ListOfMentors = () => {
     setVisibleMentors(sortedMentors)
   };
 
+  const handleShowDisabled = (event) => {
+    setIsShowDisabled(!isShowDisabled);
+
+    if (event.target.checked) {
+      loadAllMentors();
+    } else {
+      loadActiveMentors();
+    }
+  };
+
   const handleSearch = (inputValue) => {
     setSearchMentorValue(inputValue);
   };
@@ -134,7 +174,7 @@ export const ListOfMentors = () => {
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(data?.length / mentorsPerPage);
+    const totalPages = Math.ceil(activeMentors?.length / mentorsPerPage);
     setCurrentPage((prev) => {
       if (prev === totalPages) {
         return prev;
@@ -154,19 +194,22 @@ export const ListOfMentors = () => {
     });
   };
 
+  console.log(filteredMentorList.length)
+
   return (
     <div className="container">
       <div className="row d-flex justify-content-between align-items-center mb-3">
         <div className="col-6"><h2>Mentors</h2></div>
-        {filteredMentorList.length > 1 ? <span className="col-2 text-right">{filteredMentorList.length} mentors</span> : null}
+        {filteredMentorList.length > mentorsPerPage ? <span className="col-2 text-right">{filteredMentorList.length} mentors</span> : null}
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {filteredMentorList.length > mentorsPerPage && !isLoading &&
+          {filteredMentorList.length > mentorsPerPage && !areActiveMentorsLoading && !areAllMentorsLoading &&
             <Pagination
               itemsPerPage={mentorsPerPage}
               totalItems={filteredMentorList.length}
               paginate={paginate}
               prevPage={prevPage}
               nextPage={nextPage}
+              page={currentPage}
             />
           }
           
@@ -185,7 +228,7 @@ export const ListOfMentors = () => {
                   <Search onSearch={handleSearch} placeholder="Mentor's name" />
                 </div>
                 <div className="custom-control custom-switch col-2 offset-2">
-                  <input type="checkbox" className="custom-control-input" id="customSwitch1"/>
+                  <input onClick={handleShowDisabled} type="checkbox" className="custom-control-input" id="customSwitch1"/>
                   <label className="custom-control-label" htmlFor="customSwitch1">Disabled Mentors</label>
                 </div>
                 <div className="col-2">
@@ -199,7 +242,7 @@ export const ListOfMentors = () => {
               </div>
             </div>
             <div className="row">
-              <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
+              <WithLoading isLoading={areActiveMentorsLoading || areAllMentorsLoading} className="d-block mx-auto m-0">
                 <table className="table table-hover">
                   <thead>
                     <tr>
@@ -231,121 +274,3 @@ export const ListOfMentors = () => {
     </div>
   );
 };
-
-
-// export const ListOfStudents = () => {
-//   const {
-//     data: activeStudents,
-//     isLoading: areActiveStudentsLoading,
-//   } = useSelector(activeStudentsSelector, shallowEqual);
-
-//   const {
-//     data: allStudents,
-//     isLoading: areAllStudentsLoading,
-//   } = useSelector(studentsSelector, shallowEqual);
-
-//   const [
-//     dispatchLoadStudents,
-//     dispatchLoadActiveStudents,
-//   ] = useActions([loadStudents, loadActiveStudents]);
-
-//   const history = useHistory();
-
-//   const [students, setStudents] = useState([]);
-  // const [sortingCategories, setSortingCategories] = useState([
-  //   { id: 0, name: 'index', sortedByAscending: false, tableHead: '#' },
-  //   { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-  //   { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-  //   { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
-  // ]);
-
-//   useEffect(() => {
-//     dispatchLoadActiveStudents();
-//     dispatchLoadStudents();
-//   }, [dispatchLoadActiveStudents, dispatchLoadStudents]);
-
-  // useEffect(() => {
-  //   if (activeStudents.length && !areActiveStudentsLoading) {
-  //     setStudents(activeStudents.map((student, index) => ({ index, ...student })));
-  //   }
-  // }, [activeStudents, areActiveStudentsLoading]);
-
-  // const handleSortByParam = (event) => {
-  //   const { sortingParam, sortedByAscending } = event.target.dataset;
-  //   const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-  //   const sortedStudents = [...students].sort((prevStudent, currentStudent) => {
-  //     if (prevStudent[sortingParam] > currentStudent[sortingParam]) {
-  //       return sortingCoefficient * -1;
-  //     }
-  //     return sortingCoefficient;
-  //   });
-
-  //   setSortingCategories(sortingCategories.map((category) => {
-  //     if (category.name === sortingParam) {
-  //       return { ...category, sortedByAscending: !category.sortedByAscending };
-  //     }
-  //     return { ...category, sortedByAscending: false };
-  //   }));
-
-  //   setStudents(sortedStudents);
-  // };
-
-//   const handleShowDisabled = (event) => {
-//     if (event.target.checked) {
-//       setStudents(allStudents.map((student, index) => ({ index, ...student })));
-//     } else {
-//       setStudents(activeStudents.map((student, index) => ({ index, ...student })));
-//     }
-//   };
-
-//   const handleEdit = (event, id) => {
-//     event.preventDefault();
-//     history.push(`${paths.STUDENT_EDIT}/${id}`);
-//   };
-
-//   const handleDetails = (id) => {
-//     history.push(`${paths.STUDENTS_DETAILS}/${id}`);
-//   };
-
-//   return (
-//     <div className="container card shadow">
-//       <WithLoading isLoading={areActiveStudentsLoading} className="d-block mx-auto my-2">
-//         <div className="row">
-//           <div className="custom-control custom-switch">
-//             <input type="checkbox" className="custom-control-input" id="show-disabled-check" onChange={handleShowDisabled} />
-//             <label className="custom-control-label" htmlFor="show-disabled-check">Show disabled</label>
-//           </div>
-//         </div>
-//         <table className="table table-hover">
-//           <thead>
-//             <tr>
-              // {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-              //   <th
-              //     key={id}
-              //     onClick={handleSortByParam}
-              //     data-sorting-param={name}
-              //     data-sorted-by-ascending={Number(sortedByAscending)}
-              //   >
-              //     {tableHead}
-              //   </th>
-              // ))}
-//               <th>Edit</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-            // {students.map(({ id, index, firstName, lastName, email }) => (
-            //   <tr key={id} onClick={() => handleDetails(id)} data-student-id={id}>
-            //     <td>{index + 1}</td>
-            //     <td>{firstName}</td>
-            //     <td>{lastName}</td>
-            //     <td>{email}</td>
-            //     <td onClick={(event) => handleEdit(event, id)} data-student-id={id}>Edit</td>
-            //   </tr>
-            // ))}
-//           </tbody>
-//         </table>
-//       </WithLoading>
-//     </div>
-//   );
-// };
