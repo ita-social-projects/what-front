@@ -9,7 +9,7 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  Header, Schedule, AlertBox,
+  Header, Schedule, AlertBox, Sidebar
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
@@ -20,6 +20,7 @@ export const Layout = () => {
   return (
     <>
       <Header />
+      <Sidebar />
       <AlertBox />
       <div className="pt-5 position-relative">
         <Switch>

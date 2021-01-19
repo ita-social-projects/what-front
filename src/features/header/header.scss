@@ -1,25 +1,28 @@
 .header {
   height: 75px;
   padding: 0 3rem !important;
-
+  z-index: 10;
   color: white;
   background-color: #01073A;
 
+  &__logo {
+    font-size: 20px;
+    height: 100%;
+    position: relative;
+  }
+
   &__sidebar {
     position: absolute;
-    left: -29%;
+    left: -100%;
     top: 0;
-
-    width: 29%;
-    min-height: 500px;
-
+    height: 100vh;
     background-color: rgba(#01073A, 0.9);
     z-index: 9;
 
     transition: left .8s;
 
     &-toggler {
-      display: none;
+
       position: relative;
 
       cursor: pointer;
@@ -34,7 +37,6 @@
     &-links {
       display: flex;
       flex-wrap: wrap;
-
       padding-top: 80px;
     }
 
@@ -167,18 +169,57 @@
   }
 }
 
-@media(max-width: 480px) {
-  .header__sidebar {
-    width: 65%;
-    left: -65%;
-  }
-}
+// @media(max-width: 480px) {
+//   .header__sidebar {
+//     width: 65%;
+//     left: -65%;
+//   }
+// }
 
-.sidebar--active {
-  left: 0;
-}
 
-.active {
-  background-color: #FFB800 !important;
-  font-weight: bold !important;
-}
+// @media(min-width: 481px) {
+//   .header__sidebar {
+//     width: 45%;
+//   }
+// }
+
+// @media(min-width: 768px) {
+//   .header__sidebar {
+//     width: 35%;
+//     left: -27%
+//   }
+// }
+
+// @media(min-width: 992px) {
+//   .header__sidebar {
+//     width: 30%;
+//     left: -24%
+//   }
+// }
+
+// @media(min-width: 1200px) {
+//   .header__sidebar {
+//     width: 20%;
+//     left: -15%
+//   }
+// }
+
+// @media(min-width: 1920px) {
+//   .header__sidebar {
+//     width: 15%;
+//     left: 0;
+    
+//     &-toggler {
+//       display: none;
+//     }
+//   }
+// }
+
+// .sidebar--active {
+//   left: 0;
+// }
+
+// .active {
+//   background-color: #FFB800 !important;
+//   font-weight: bold !important;
+// }
