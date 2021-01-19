@@ -1,0 +1,20 @@
+@import '../../../styles/main';
+
+.pointer {
+  cursor: pointer;
+}
+
+.scale {
+  transition: .5s; 
+  &:hover {
+    transform: scale(1.4); 
+  }
+}
+
+.btn {
+  background-color: map-get($colors, accent-color) !important;
+  &:hover {
+    background-color: map-get($colors, accent-color);
+    opacity: 0.8;
+  }
+}
