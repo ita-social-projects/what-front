@@ -172,6 +172,7 @@ export const ListOfLessons = () => {
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}
+          page={currentPage}
         />
       }
     </div>

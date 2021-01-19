@@ -136,6 +136,7 @@ export const ListOfMentors = () => {
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}
+          page={currentPage}
         />
       }
     </div>
