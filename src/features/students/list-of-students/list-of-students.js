@@ -35,6 +35,7 @@ export const ListOfStudents = () => {
     { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
     { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ]);
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
 
   useEffect(() => {
     dispatchLoadActiveStudents();
@@ -42,10 +43,17 @@ export const ListOfStudents = () => {
   }, [dispatchLoadActiveStudents, dispatchLoadStudents]);
 
   useEffect(() => {
-    if (activeStudents.length && !areActiveStudentsLoading) {
+    if (isShowDisabled && allStudents.length && !areAllStudentsLoading) {
+      const activeStudentIds = activeStudents.map(({ id }) => id);
+      const disabledStudents = allStudents.filter(({ id }) => !activeStudentIds.includes(id));
+
+      setStudents(disabledStudents.map((student, index) => ({ index, ...student })));
+    }
+    if (!isShowDisabled && activeStudents.length && !areActiveStudentsLoading) {
       setStudents(activeStudents.map((student, index) => ({ index, ...student })));
     }
-  }, [activeStudents, areActiveStudentsLoading]);
+  },
+  [activeStudents, areActiveStudentsLoading, allStudents, areAllStudentsLoading, isShowDisabled]);
 
   const handleSortByParam = (event) => {
     const { sortingParam, sortedByAscending } = event.target.dataset;
@@ -69,10 +77,12 @@ export const ListOfStudents = () => {
   };
 
   const handleShowDisabled = (event) => {
+    setIsShowDisabled(!isShowDisabled);
+
     if (event.target.checked) {
-      setStudents(allStudents.map((student, index) => ({ index, ...student })));
+      dispatchLoadStudents();
     } else {
-      setStudents(activeStudents.map((student, index) => ({ index, ...student })));
+      dispatchLoadActiveStudents();
     }
   };
 
@@ -87,13 +97,18 @@ export const ListOfStudents = () => {
 
   return (
     <div className="container card shadow">
-      <WithLoading isLoading={areActiveStudentsLoading} className="d-block mx-auto my-2">
-        <div className="row">
-          <div className="custom-control custom-switch">
-            <input type="checkbox" className="custom-control-input" id="show-disabled-check" onChange={handleShowDisabled} />
-            <label className="custom-control-label" htmlFor="show-disabled-check">Show disabled</label>
-          </div>
+      <div className="row">
+        <div className="custom-control custom-switch">
+          <input
+            type="checkbox"
+            className="custom-control-input"
+            id="show-disabled-check"
+            onChange={handleShowDisabled}
+          />
+          <label className="custom-control-label" htmlFor="show-disabled-check">Show disabled</label>
         </div>
+      </div>
+      <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
         <table className="table table-hover">
           <thead>
             <tr>
