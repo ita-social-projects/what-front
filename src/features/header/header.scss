@@ -1,9 +1,8 @@
 .header {
   height: 75px;
   padding: 0 3rem !important;
-
   color: white;
-  background-color: #01073A;
+  background-color: #fff;
 
   &__sidebar {
     position: absolute;
@@ -111,6 +110,7 @@
       align-items: center;
 
       padding-right: 10%;
+      color: #000;
 
       &--icon {
         padding-right: 1rem;
@@ -119,7 +119,11 @@
 
         &:hover {
           color: #fff;
-          opacity: 0.5;
+          opacity: 1;
+          text-decoration: none;
+          & a {
+            opacity: 1;
+          }
         }
       }
     }
@@ -183,39 +187,49 @@
   font-weight: bold !important;
 }
 
+.header__dropdown-icon {
+  color: #000 !important;
+}
 
 .header__dropdown-list {
   position: absolute;
-  top: 75px;
-  right: 0;
+  top: 0;
+  right: 10px;
   opacity: 0;
   visibility: hidden;
 
-  transition: all 0.5s ease 0s;
+  transition: all 0.3s ease 0s;
 
   &-show {
     position: absolute;
     opacity: 1;
+    padding: 0;
     z-index: 2;
     top: 75px;
     right: 0;
     color: #fff;
-    border: 1px solid #000;
-    background-color: rgba(#01073A, 1);
-    padding: 0 5px;
+    background-color: #ffffff;
     width: 15%;
     transition: all 0.5s ease 0s;
+
   }
     &--item {
       list-style: none;
-      padding: 5px 5px;
-      border-bottom: 1px solid #FFF;
+      padding: 15px 10px;
+      color: #000;
+      transition: all 0.2s ease 0s;
+      & a{
+        color: #000 !important;
+        text-decoration: none;
+      }
     }
 
     &--item:hover {
       color: #fff;
-      opacity: 0.5;
-      text-decoration: underline;
+      cursor: pointer;
+      background-color: rgba(#F6F8FD, 0.8);
+      padding-left: 20px !important;
+
     }
 
     &--item:last-child {
