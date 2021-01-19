@@ -1,36 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { Formik, Form, Field } from 'formik';
-import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import classNames from 'classnames';
+import { number } from 'prop-types';
 
+import { paths, useActions } from '@/shared';
 import {
-  secretariesSelector, updatedSecretarySelector, deletedSecretarySelector,
+  activeSecretariesSelector, updatedSecretarySelector, deletedSecretarySelector,
   updateSecretary, deleteSecretary,
 } from '@models/index.js';
+
 import { Button, WithLoading } from '@/components/index.js';
-import { addAlert } from '@/features';
+import { addAlert, ModalWindow } from '@features';
+
+import { Formik, Form, Field } from 'formik';
 import { editSecretaryValidation } from '@features/validation/validation-helpers.js';
-import { paths, useActions } from '@/shared';
-import { ModalWindow } from '@features/modal-window/index.js';
+
+import classNames from 'classnames';
 
 export const EditSecretarysDetails = ({ id }) => {
   const {
     data,
     isLoading: isSecretariesLoading,
-    loaded: isSecretariesLoaded,
-  } = useSelector(secretariesSelector, shallowEqual);
+    isLoaded: isSecretariesLoaded,
+    error: secretaryError,
+  } = useSelector(activeSecretariesSelector, shallowEqual);
 
   const {
     isLoading: isUpdateLoading,
-    loaded: isUpdateLoaded,
+    isLoaded: isUpdateLoaded,
     error: secretaryUpdateError,
   } = useSelector(updatedSecretarySelector, shallowEqual);
 
   const {
     isLoading: isDeleteLoading,
-    loaded: isDeleteLoaded,
+    isLoaded: isDeleteLoaded,
     error: secretaryDeleteError,
   } = useSelector(deletedSecretarySelector, shallowEqual);
 
@@ -46,10 +49,10 @@ export const EditSecretarysDetails = ({ id }) => {
   const handleCloseModal = () => setShowModal(false);
 
   useEffect(() => {
-    if (!secretary && isSecretariesLoaded) {
+    if (secretaryError) {
       history.push(paths.NOT_FOUND);
     }
-  }, [secretary, isSecretariesLoaded, history]);
+  }, [secretaryError, history]);
 
   useEffect(() => {
     if (!secretaryUpdateError && isUpdateLoaded) {
@@ -84,7 +87,7 @@ export const EditSecretarysDetails = ({ id }) => {
           <div className="px-2 py-4">
             <h3>Edit Secretary&apos;s details</h3>
             <hr />
-            <WithLoading isLoading={isSecretariesLoading && !isSecretariesLoaded} className="d-block mx-auto">
+            <WithLoading isLoading={isSecretariesLoading || !isSecretariesLoaded} className="d-block mx-auto">
               <Formik
                 initialValues={{
                   firstName: secretary?.firstName,
@@ -95,7 +98,7 @@ export const EditSecretarysDetails = ({ id }) => {
                 onSubmit={onSubmit}
               >
                 {({
-                  values, errors, touched, handleReset, isValid, dirty,
+                  values, errors, touched, isValid, dirty,
                 }) => (
                   <Form>
                     <div className="container pb-3 px-0">
@@ -150,31 +153,31 @@ export const EditSecretarysDetails = ({ id }) => {
                       <div className="row m-0 pt-3">
                         <div className="col-md-3 col-4 px-1">
                           <Button
-                            disabled={!isValid || dirty || isDeleteLoading}
+                            type="button"
                             className="w-100"
                             variant="danger"
                             onClick={handleShowModal}
-                            type="button"
+                            disabled={!isValid || dirty || isDeleteLoading || isUpdateLoading}
                           >
                             Fire
                           </Button>
                         </div>
                         <div className="col-md-3 offset-md-3 col-4 px-1">
                           <Button
-                            disabled={!dirty}
                             type="reset"
-                            className="btn btn-secondary w-100"
-                            onClick={handleReset}
+                            className="w-100"
+                            disabled={!dirty}
                           >
                             Clear
                           </Button>
                         </div>
                         <div className="col-md-3 col-4 px-1">
                           <Button
-                            disabled={!isValid || !dirty || isUpdateLoading}
-                            className="btn btn-success w-100"
                             type="submit"
-                            onClick={() => onSubmit(values)}
+                            className="w-100"
+                            variant="success"
+                            disabled={!isValid || !dirty || isUpdateLoading || isDeleteLoading
+                              || errors.firstName || errors.lastName || errors.email}
                           >
                             Save
                           </Button>
