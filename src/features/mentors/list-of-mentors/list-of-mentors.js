@@ -38,45 +38,48 @@ export const ListOfMentors = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchMentorValue, setSearchMentorValue] = useState('');
   const [filteredMentorList, setFilteredMentorList] = useState([]);
-  // const [mentors, setMentors] = useState([]);
   const [sortingCategories, setSortingCategories] = useState([
-    {id: 0, name: 'index', sortedByAscending: false, tableHead: "#"},
-    {id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name'},
-    {id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname'},
-    {id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email'},
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ]);
+  const [visibleMentors, setVisibleMentors] = useState([]);
 
   const { data, isLoading } = useSelector(mentorsActiveSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const loadActiveMentors = useActions(fetchActiveMentors);
 
+  const indexOfLastMentor = currentPage * mentorsPerPage;
+  const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
+
   useEffect(() => {
     loadActiveMentors();
   }, [loadActiveMentors]);
 
   useEffect(() => {
-    const mentors = data.filter((mentor) => mentor.firstName.concat(mentor.lastName).toUpperCase()
+    const mentors = data.map((mentor, index) => ({ index, ...mentor }))
+      .filter((mentor) => `${mentor.firstName} ${mentor.lastName}`.toUpperCase()
       .includes(searchMentorValue.toUpperCase()));
     setFilteredMentorList(mentors);
   }, [data, searchMentorValue]);
 
-  const mentorList = () => {
-    const indexOfLastMentor = currentPage * mentorsPerPage;
-    const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
+  useEffect(() => {
+    setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
+  }, [currentPage, filteredMentorList]);
 
-    const mentors = filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor)
-      .sort((a, b) => {
-        return (a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0;
-      })
-      .map((mentor, index) => {
+  const mentorList = () => {
+
+    const mentors = visibleMentors
+      .map(({ id, index, firstName, lastName, email}) => {
         return (
-          <tr onClick={() => mentorDetails(mentor.id)} key={mentor.id} className={styles.pointer}>
+          <tr onClick={() => mentorDetails(id)} key={id} className={styles.pointer} data-mentor-id={id}>
             <td className="text-center">{index + 1}</td>
-            <td>{mentor.firstName}</td>
-            <td>{mentor.lastName}</td>
-            <td>{mentor.email}</td>
-            {currentUser.role !== 2 ? <td className="text-center" onClick={(event) => mentorEdit(event, mentor.id) }>{editIcon}</td> : null}
+            <td>{firstName}</td>
+            <td>{lastName}</td>
+            <td>{email}</td>
+            {currentUser.role !== 2 ? <td className="text-center" data-mentor-id={id} onClick={(event) => mentorEdit(event, mentor.id) }>{editIcon}</td> : null}
           </tr>
         );
       })
@@ -87,11 +90,11 @@ export const ListOfMentors = () => {
     return mentors;
   };
 
-  const handleSortByParams = (event) => {
+  const handleSortByParam = (event) => {
     const { sortingParam, sortedByAscending } = event.target.dataset;
     const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
 
-    const sortedMentors = [...filteredMentorList].sort((prevMentor, currentMentor) => {
+    const sortedMentors = [...visibleMentors].sort((prevMentor, currentMentor) => {
       if (prevMentor[sortingParam] > currentMentor[sortingParam]) {
         return sortingCoefficient * -1;
       }
@@ -100,12 +103,12 @@ export const ListOfMentors = () => {
 
     setSortingCategories(sortingCategories.map((category) => {
       if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: category.sortedByAscending };
+        return { ...category, sortedByAscending: !category.sortedByAscending };
       }
       return { ...category, sortedByAscending: false };
     }));
 
-    setFilteredMentorList(sortedMentors);
+    setVisibleMentors(sortedMentors)
   };
 
   const handleSearch = (inputValue) => {
@@ -132,7 +135,7 @@ export const ListOfMentors = () => {
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(data?.length / 5);
+    const totalPages = Math.ceil(data?.length / mentorsPerPage);
     setCurrentPage((prev) => {
       if (prev === totalPages) {
         return prev;
@@ -152,19 +155,13 @@ export const ListOfMentors = () => {
     });
   };
 
-  // <th scope="col" className="text-center">#</th>
-  //                     <th scope="col">Name</th>
-  //                     <th scope="col">Surname</th>
-  //                     <th scope="col">E-mail</th>
-
   return (
     <div className="container">
       <div className="row d-flex justify-content-between align-items-center mb-3">
         <div className="col-6"><h2>Mentors</h2></div>
-        {filteredMentorList.length > 1 ? <span className="col-2 text-right">{filteredMentorList.length} mentors</span> : 
-        filteredMentorList.length === 1 ? <div className="col-2 text-right">{filteredMentorList.length} mentor</div> : null}
+        {filteredMentorList.length > 1 ? <span className="col-2 text-right">{filteredMentorList.length} mentors</span> : null}
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {filteredMentorList.length > 10 && !isLoading &&
+          {filteredMentorList.length > mentorsPerPage && !isLoading &&
             <Pagination
               itemsPerPage={mentorsPerPage}
               totalItems={filteredMentorList.length}
@@ -207,12 +204,12 @@ export const ListOfMentors = () => {
                 <table className="table table-hover">
                   <thead>
                     <tr>
-                      {sortingCategories.map(({id, name, tableHead, sortedByAscending}) => (
+                      {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
                         <th
                           key={id}
-                          onClick={handleSortByParams}
+                          onClick={handleSortByParam}
                           data-sorting-param={name}
-                          data-sorted-by-ascending={sortedByAscending}
+                          data-sorted-by-ascending={Number(sortedByAscending)}
                         >
                           {tableHead}
                         </th>
@@ -234,3 +231,121 @@ export const ListOfMentors = () => {
     </div>
   );
 };
+
+
+// export const ListOfStudents = () => {
+//   const {
+//     data: activeStudents,
+//     isLoading: areActiveStudentsLoading,
+//   } = useSelector(activeStudentsSelector, shallowEqual);
+
+//   const {
+//     data: allStudents,
+//     isLoading: areAllStudentsLoading,
+//   } = useSelector(studentsSelector, shallowEqual);
+
+//   const [
+//     dispatchLoadStudents,
+//     dispatchLoadActiveStudents,
+//   ] = useActions([loadStudents, loadActiveStudents]);
+
+//   const history = useHistory();
+
+//   const [students, setStudents] = useState([]);
+  // const [sortingCategories, setSortingCategories] = useState([
+  //   { id: 0, name: 'index', sortedByAscending: false, tableHead: '#' },
+  //   { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+  //   { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+  //   { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  // ]);
+
+//   useEffect(() => {
+//     dispatchLoadActiveStudents();
+//     dispatchLoadStudents();
+//   }, [dispatchLoadActiveStudents, dispatchLoadStudents]);
+
+  // useEffect(() => {
+  //   if (activeStudents.length && !areActiveStudentsLoading) {
+  //     setStudents(activeStudents.map((student, index) => ({ index, ...student })));
+  //   }
+  // }, [activeStudents, areActiveStudentsLoading]);
+
+  // const handleSortByParam = (event) => {
+  //   const { sortingParam, sortedByAscending } = event.target.dataset;
+  //   const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+  //   const sortedStudents = [...students].sort((prevStudent, currentStudent) => {
+  //     if (prevStudent[sortingParam] > currentStudent[sortingParam]) {
+  //       return sortingCoefficient * -1;
+  //     }
+  //     return sortingCoefficient;
+  //   });
+
+  //   setSortingCategories(sortingCategories.map((category) => {
+  //     if (category.name === sortingParam) {
+  //       return { ...category, sortedByAscending: !category.sortedByAscending };
+  //     }
+  //     return { ...category, sortedByAscending: false };
+  //   }));
+
+  //   setStudents(sortedStudents);
+  // };
+
+//   const handleShowDisabled = (event) => {
+//     if (event.target.checked) {
+//       setStudents(allStudents.map((student, index) => ({ index, ...student })));
+//     } else {
+//       setStudents(activeStudents.map((student, index) => ({ index, ...student })));
+//     }
+//   };
+
+//   const handleEdit = (event, id) => {
+//     event.preventDefault();
+//     history.push(`${paths.STUDENT_EDIT}/${id}`);
+//   };
+
+//   const handleDetails = (id) => {
+//     history.push(`${paths.STUDENTS_DETAILS}/${id}`);
+//   };
+
+//   return (
+//     <div className="container card shadow">
+//       <WithLoading isLoading={areActiveStudentsLoading} className="d-block mx-auto my-2">
+//         <div className="row">
+//           <div className="custom-control custom-switch">
+//             <input type="checkbox" className="custom-control-input" id="show-disabled-check" onChange={handleShowDisabled} />
+//             <label className="custom-control-label" htmlFor="show-disabled-check">Show disabled</label>
+//           </div>
+//         </div>
+//         <table className="table table-hover">
+//           <thead>
+//             <tr>
+              // {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+              //   <th
+              //     key={id}
+              //     onClick={handleSortByParam}
+              //     data-sorting-param={name}
+              //     data-sorted-by-ascending={Number(sortedByAscending)}
+              //   >
+              //     {tableHead}
+              //   </th>
+              // ))}
+//               <th>Edit</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+            // {students.map(({ id, index, firstName, lastName, email }) => (
+            //   <tr key={id} onClick={() => handleDetails(id)} data-student-id={id}>
+            //     <td>{index + 1}</td>
+            //     <td>{firstName}</td>
+            //     <td>{lastName}</td>
+            //     <td>{email}</td>
+            //     <td onClick={(event) => handleEdit(event, id)} data-student-id={id}>Edit</td>
+            //   </tr>
+            // ))}
+//           </tbody>
+//         </table>
+//       </WithLoading>
+//     </div>
+//   );
+// };
