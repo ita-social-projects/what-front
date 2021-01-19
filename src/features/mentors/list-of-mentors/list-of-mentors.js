@@ -34,10 +34,17 @@ const icon2 = (
 export const ListOfMentors = () => {
   const history = useHistory();
 
-  const [mentorsPerPage] = useState(5);
+  const [mentorsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchMentorValue, setSearchMentorValue] = useState('');
   const [filteredMentorList, setFilteredMentorList] = useState([]);
+  // const [mentors, setMentors] = useState([]);
+  const [sortingCategories, setSortingCategories] = useState([
+    {id: 0, name: 'index', sortedByAscending: false, tableHead: "#"},
+    {id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name'},
+    {id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname'},
+    {id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email'},
+  ]);
 
   const { data, isLoading } = useSelector(mentorsActiveSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -78,6 +85,27 @@ export const ListOfMentors = () => {
       return <tr><td colSpan="5" className="text-center">Mentor is not found</td></tr>;
     }
     return mentors;
+  };
+
+  const handleSortByParams = (event) => {
+    const { sortingParam, sortedByAscending } = event.target.dataset;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    const sortedMentors = [...filteredMentorList].sort((prevMentor, currentMentor) => {
+      if (prevMentor[sortingParam] > currentMentor[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+
+    setSortingCategories(sortingCategories.map((category) => {
+      if (category.name === sortingParam) {
+        return { ...category, sortedByAscending: category.sortedByAscending };
+      }
+      return { ...category, sortedByAscending: false };
+    }));
+
+    setFilteredMentorList(sortedMentors);
   };
 
   const handleSearch = (inputValue) => {
@@ -124,6 +152,10 @@ export const ListOfMentors = () => {
     });
   };
 
+  // <th scope="col" className="text-center">#</th>
+  //                     <th scope="col">Name</th>
+  //                     <th scope="col">Surname</th>
+  //                     <th scope="col">E-mail</th>
 
   return (
     <div className="container">
@@ -132,7 +164,7 @@ export const ListOfMentors = () => {
         {filteredMentorList.length > 1 ? <span className="col-2 text-right">{filteredMentorList.length} mentors</span> : 
         filteredMentorList.length === 1 ? <div className="col-2 text-right">{filteredMentorList.length} mentor</div> : null}
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {filteredMentorList.length > 5 && !isLoading &&
+          {filteredMentorList.length > 10 && !isLoading &&
             <Pagination
               itemsPerPage={mentorsPerPage}
               totalItems={filteredMentorList.length}
@@ -148,7 +180,7 @@ export const ListOfMentors = () => {
         <div className="row justify-content-center">
           <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
             <div className="px-3 py-2 mb-2">
-              <div className="row d-flex align-items-center">
+              <div className="row align-items-center">
                 <div className="col-2">
                   <button className="btn">{icon1}</button>
                   <button className="btn">{icon2}</button>
@@ -175,10 +207,16 @@ export const ListOfMentors = () => {
                 <table className="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col" className="text-center">#</th>
-                      <th scope="col">First Name</th>
-                      <th scope="col">Last Name</th>
-                      <th scope="col">E-mail</th>
+                      {sortingCategories.map(({id, name, tableHead, sortedByAscending}) => (
+                        <th
+                          key={id}
+                          onClick={handleSortByParams}
+                          data-sorting-param={name}
+                          data-sorted-by-ascending={sortedByAscending}
+                        >
+                          {tableHead}
+                        </th>
+                      ))}
                       {currentUser.role !== 2 ? <th scope="col" className="text-center">Edit</th> : null}
                     </tr>
                   </thead>
