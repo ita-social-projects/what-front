@@ -70,7 +70,6 @@ export const ListOfMentors = () => {
   }, [currentPage, filteredMentorList]);
 
   const mentorList = () => {
-
     const mentors = visibleMentors
       .map(({ id, index, firstName, lastName, email}) => {
         return (
@@ -206,6 +205,7 @@ export const ListOfMentors = () => {
                     <tr>
                       {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
                         <th
+                          className={styles.th}
                           key={id}
                           onClick={handleSortByParam}
                           data-sorting-param={name}

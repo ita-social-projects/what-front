@@ -18,3 +18,10 @@
     opacity: 0.8;
   }
 }
+
+.th {
+  cursor: default;
+  &:first-of-type {
+    text-align: center;
+  }
+}

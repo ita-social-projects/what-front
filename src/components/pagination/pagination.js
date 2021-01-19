@@ -28,7 +28,8 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
         }
       }
       return accum;
-    }, []);
+    }, 
+  []);
 
   const changePage = (page) => {
     if (page !== currentPage) {
