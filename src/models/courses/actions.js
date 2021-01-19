@@ -27,7 +27,7 @@ function* loadCoursesWorker() {
     const courses = yield call(ApiService.load, '/courses');
     yield put({ type: actionTypes.LOADING_COURSES_SUCCESS, payload: { courses } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error: error.message } });
+    yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error } });
   }
 }
 
@@ -38,7 +38,7 @@ function* createCourseWorker(data) {
     yield put({ type: actionTypes.CREATING_COURSE_SUCCESS, payload: { course } });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
-    yield put({ type: actionTypes.CREATING_COURSE_FAILED, payload: { error: error.message } });
+    yield put({ type: actionTypes.CREATING_COURSE_FAILED, payload: { error } });
   }
 }
 
@@ -49,7 +49,7 @@ function* editCourseWorker(data) {
     yield put({ type: actionTypes.EDITING_COURSE_SUCCESS, payload: { course } });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
-    yield put({ type: actionTypes.EDITING_COURSE_FAILED, payload: { error: error.message } });
+    yield put({ type: actionTypes.EDITING_COURSE_FAILED, payload: { error } });
     yield put({ type: actionTypes.EDITING_CLEAR_ERROR });
   }
 }
