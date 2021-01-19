@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
+import { number } from 'prop-types';
+
 import { useActions, paths } from '@/shared/index.js';
-import { currentUserSelector, fetchSecretaries } from '@models/index.js';
+import { currentUserSelector, fetchActiveSecretaries } from '@models/index.js';
+
 import { Tab, Tabs } from '@/components';
 import { SecretarysDetails, EditSecretarysDetails } from '@/features';
-import { number } from 'prop-types';
 
 export const SecretariesTabs = ({ index }) => {
   const { id } = useParams();
-  
-  const [loadSecretaries] = useActions([fetchSecretaries]);
+
+  const [loadSecretaries] = useActions([fetchActiveSecretaries]);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   useEffect(() => {
@@ -28,9 +30,8 @@ export const SecretariesTabs = ({ index }) => {
         </Tab>
       </Tabs>
     );
-  } else {
-    return <SecretarysDetails id={Number(id)}/>
   }
+  return <SecretarysDetails id={Number(id)} />;
 };
 
 SecretariesTabs.propTypes = {
