@@ -36,7 +36,7 @@ function* loadCoursesWorker() {
     const courses = yield call(ApiService.load, '/courses');
     yield put({ type: actionTypes.LOADING_COURSES_SUCCESS, payload: { courses } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error: error.message } });
+    yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error } });
   }
 }
 

@@ -22,7 +22,11 @@ export const registrationValidation = Yup.object().shape({
     .email('Invalid email address')
     .required('This field is required'),
   password: Yup.string()
-    .min(6, 'Password has to be longer than 6 characters')
+    .min(8, 'Password must contain at least 8 characters')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+      "Must contain at least one uppercase, one lowercase, one number"
+    )
     .required('This field is required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'You should confirm your password')
@@ -58,19 +62,18 @@ export const editGroupValidation = Yup.object().shape({
     .required('This field is required'),
 });
 
-export const addLessonValidation = Yup.object().shape({
+export const lessonValidation = Yup.object().shape({
   themeName: Yup.string()
-    .min(2, 'Too short')
-    .matches('^([A-Za-zА-Яа-яёЁ0-9.#/][ &:_-]?|[, ]?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid theme name')
-    .max(50, 'Too long')
+    .min(1, 'Too short')
+    .max(200, 'Too long')
     .required('This field is required'),
   groupName: Yup.string()
-    .min(2, 'Too short')
+    .min(1, 'Too short')
     .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid group name')
     .max(50, 'Too long')
     .required('This field is required'),
   lessonDate: Yup.string()
-    .min(new Date(Date.now() - 86400000), 'The lesson cannot start in the past')
+    .max(new Date(), 'The lesson cannot start in the future')
     .required('This field is required'),
   mentorEmail: Yup.string()
     .email('Invalid email address')
@@ -127,10 +130,13 @@ export const editStudentValidation = Yup.object().shape({
 
 export const changePasswordValidation = Yup.object().shape({
   currentPassword: Yup.string()
-    .min(6, 'Password has to be longer than 6 characters')
     .required('This field is required'),
   newPassword: Yup.string()
-    .min(6, 'Password has to be longer than 6 characters')
+    .min(8, 'Password must contain at least 8 characters')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]$/,
+      "Must contain at least one uppercase, one lowercase, one number"
+    )
     .notOneOf([Yup.ref('currentPassword'), null], 'You should provide a new password')
     .required('This field is required'),
   confirmNewPassword: Yup.string()

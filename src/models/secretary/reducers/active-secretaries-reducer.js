@@ -7,23 +7,23 @@ const initialState = {
   error: '',
 };
 
-export const allSecretariesReducer = (state = initialState, action) => {
+export const activeSecretariesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actions.SECRETARIES_LOADING_STARTED:
+    case actions.ACTIVE_SECRETARIES_LOADING_STARTED:
       return {
         ...state,
         isLoading: true,
         error: '',
       };
-    case actions.SECRETARIES_LOADING_SUCCESS:
+    case actions.ACTIVE_SECRETARIES_LOADING_SUCCESS:
       return {
         ...state,
         isLoading: false,
         isLoaded: true,
-        data: action.payload.secretaries,
+        data: action.payload.data,
         error: '',
       };
-    case actions.SECRETARIES_LOADING_FAILED:
+    case actions.ACTIVE_SECRETARIES_LOADING_FAILED:
       return {
         ...state,
         isLoading: false,
