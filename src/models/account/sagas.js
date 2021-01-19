@@ -93,7 +93,7 @@ function* getUnAssignedUsersWorker() {
 function* changePasswordWorker({ payload }) {
   try {
     yield put({ type: actionTypes.NEW_PASSWORD_CREATING_STARTED });
-    yield call(ApiService.create, '/accounts/ChangePassword', payload.newData);
+    yield call(ApiService.update, '/accounts/password', payload.newData);
     yield put({ type: actionTypes.NEW_PASSWORD_CREATING_SUCCESS });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
