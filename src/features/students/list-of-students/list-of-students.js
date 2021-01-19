@@ -1,145 +1,128 @@
-import React, { useState, useEffect } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector, shallowEqual } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { paths, useActions } from '@/shared/index.js';
-import { loadActiveStudents, activeStudentsSelector, currentUserSelector } from '@/models/index.js';
-import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
-import Icon from '@/icon.js';
+
+import { paths, useActions } from '@/shared';
+import {
+  loadStudents, loadActiveStudents,
+  studentsSelector, activeStudentsSelector,
+} from '@/models';
+import { WithLoading, Search } from '@/components';
+import Icon from '@/icon';
 
 export const ListOfStudents = () => {
-  const [fetchStudents] = useActions([loadActiveStudents]);
+  const {
+    data: activeStudents,
+    isLoading: areActiveStudentsLoading,
+  } = useSelector(activeStudentsSelector, shallowEqual);
 
-  const [filteredStudentsList, setFilteredStudentsList] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [studentsPerPage] = useState(9);
+  const {
+    data: allStudents,
+    isLoading: areAllStudentsLoading,
+  } = useSelector(studentsSelector, shallowEqual);
 
-  const { data, isLoading } = useSelector(activeStudentsSelector, shallowEqual);
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+  const [
+    dispatchLoadStudents,
+    dispatchLoadActiveStudents,
+  ] = useActions([loadStudents, loadActiveStudents]);
 
   const history = useHistory();
 
-  useEffect(() => {
-    fetchStudents();
-  }, [fetchStudents]);
+  const [students, setStudents] = useState([]);
+  const [sortingCategories, setSortingCategories] = useState([
+    { id: 0, name: 'index', sortedByAscending: false, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  ]);
 
   useEffect(() => {
-    setFilteredStudentsList(data);
-  }, [data]);
+    dispatchLoadActiveStudents();
+    dispatchLoadStudents();
+  }, [dispatchLoadActiveStudents, dispatchLoadStudents]);
 
-  const handleSearch = (inputValue) => {
-    setSearchValue(inputValue);
-    setFilteredStudentsList(data.filter(({ firstName, lastName }) => {
-      const name = `${firstName} ${lastName}`;
+  useEffect(() => {
+    if (activeStudents.length && !areActiveStudentsLoading) {
+      setStudents(activeStudents.map((student, index) => ({ index, ...student })));
+    }
+  }, [activeStudents, areActiveStudentsLoading]);
 
-      return name.toLowerCase().includes(inputValue.toLowerCase());
+  const handleSortByParam = (event) => {
+    const { sortingParam, sortedByAscending } = event.target.dataset;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    const sortedStudents = [...students].sort((prevStudent, currentStudent) => {
+      if (prevStudent[sortingParam] > currentStudent[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+
+    setSortingCategories(sortingCategories.map((category) => {
+      if (category.name === sortingParam) {
+        return { ...category, sortedByAscending: !category.sortedByAscending };
+      }
+      return { ...category, sortedByAscending: false };
     }));
-    setCurrentPage(1);
+
+    setStudents(sortedStudents);
   };
 
-  const addStudent = () => {
-    history.push(paths.UNASSIGNED_USERS);
+  const handleShowDisabled = (event) => {
+    if (event.target.checked) {
+      setStudents(allStudents.map((student, index) => ({ index, ...student })));
+    } else {
+      setStudents(activeStudents.map((student, index) => ({ index, ...student })));
+    }
   };
 
-  const studentDetails = (id) => {
-    history.push(`${paths.STUDENTS_DETAILS}/${id}`);
-  };
-
-  const studentEditing = (id) => {
+  const handleEdit = (event, id) => {
+    event.preventDefault();
     history.push(`${paths.STUDENT_EDIT}/${id}`);
   };
 
-  const getStudents = () => {
-    const indexOfLastStudent = currentPage * studentsPerPage;
-    const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
-
-    const students = filteredStudentsList.slice(indexOfFirstStudent, indexOfLastStudent)
-      .sort((a, b) => {
-        return (a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0;
-      })
-      .map(({ id, firstName, lastName }) => (
-        <Card
-          key={id}
-          id={id}
-          buttonName="Details"
-          iconName="Edit"
-          onEdit={() => studentEditing(id)}
-          onDetails={() => studentDetails(id)}
-        >
-          <div className="w-75">
-            <p className="mb-2 pr-2">{firstName}</p>
-            <p>{lastName}</p>
-          </div>
-        </Card>
-      ));
-
-    if (!students.length && searchValue) {
-      return <h4>Student is not found</h4>;
-    }
-    return students;
-  };
-
-  const paginate = (pageNumber) => {
-    if(currentPage !== pageNumber) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(filteredStudentsList.length / 9);
-    setCurrentPage((prev) => {
-      if (prev === totalPages) {
-        return prev;
-      } else {
-        return pageNumber;
-      }
-    });
-  };
-
-  const prevPage =(pageNumber) => {
-    setCurrentPage((prev) => {
-      if (prev - 1 === 0) {
-        return prev;
-      } else {
-        return pageNumber;
-      }
-    });
+  const handleDetails = (id) => {
+    history.push(`${paths.STUDENTS_DETAILS}/${id}`);
   };
 
   return (
-    <div className="container" style={{minHeight: 750}}>
-      <div className="row">
-        <div className="col-md-4 offset-md-4 text-center">
-          <Search onSearch={handleSearch} placeholder="Student's name" />
-        </div>
-        {currentUser.role !== 2 &&
-          <div className="col-md-4 text-right">
-            <Button onClick={addStudent} variant="warning">
-              <Icon icon="Plus" className="icon" />
-              <span>Add a student</span>
-            </Button>
+    <div className="container card shadow">
+      <WithLoading isLoading={areActiveStudentsLoading} className="d-block mx-auto my-2">
+        <div className="row">
+          <div className="custom-control custom-switch">
+            <input type="checkbox" className="custom-control-input" id="show-disabled-check" onChange={handleShowDisabled} />
+            <label className="custom-control-label" htmlFor="show-disabled-check">Show disabled</label>
           </div>
-        }
-      </div>
-      <div>
-        <hr className="col-8" />
-        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
-          <WithLoading isLoading={isLoading}>
-            {
-              getStudents()
-            }
-          </WithLoading>
         </div>
-      </div>
-        {filteredStudentsList.length > 9 && !isLoading &&
-          <Pagination
-            itemsPerPage={studentsPerPage}
-            totalItems={filteredStudentsList.length}
-            paginate={paginate}
-            prevPage={prevPage}
-            nextPage={nextPage}
-          />
-        }
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                <th
+                  key={id}
+                  onClick={handleSortByParam}
+                  data-sorting-param={name}
+                  data-sorted-by-ascending={Number(sortedByAscending)}
+                >
+                  {tableHead}
+                </th>
+              ))}
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.map(({ id, index, firstName, lastName, email }) => (
+              <tr key={id} onClick={() => handleDetails(id)} data-student-id={id}>
+                <td>{index + 1}</td>
+                <td>{firstName}</td>
+                <td>{lastName}</td>
+                <td>{email}</td>
+                <td onClick={(event) => handleEdit(event, id)} data-student-id={id}>Edit</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </WithLoading>
     </div>
   );
 };
