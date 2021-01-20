@@ -215,59 +215,57 @@ export const ListOfMentors = () => {
           
         </div>
       </div>
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
-            <div className="px-3 py-2 mb-2">
-              <div className="row align-items-center">
-                <div className="col-2">
-                  <button className="btn">{icon1}</button>
-                  <button className="btn">{icon2}</button>
-                </div>
-                <div className="col-4">
-                  <Search onSearch={handleSearch} placeholder="Mentor's name" />
-                </div>
-                <div className="custom-control custom-switch col-2 offset-2">
-                  <input onClick={handleShowDisabled} type="checkbox" className="custom-control-input" id="customSwitch1"/>
-                  <label className="custom-control-label" htmlFor="customSwitch1">Disabled Mentors</label>
-                </div>
-                <div className="col-2">
-                  {currentUser.role !== 2 &&
-                    <Button onClick={addMentor} className={styles.btn}>
-                      <Icon icon="Plus" className="icon" />
-                      <span>Add a mentor</span>
-                    </Button>
-                  }
-                </div>
+      <div className="row justify-content-center">
+        <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
+          <div className="px-3 py-2 mb-2">
+            <div className="row align-items-center">
+              <div className="col-2">
+                <button className="btn">{icon1}</button>
+                <button className="btn">{icon2}</button>
+              </div>
+              <div className="col-4">
+                <Search onSearch={handleSearch} placeholder="Mentor's name" />
+              </div>
+              <div className="custom-control custom-switch col-2 offset-2">
+                <input onClick={handleShowDisabled} type="checkbox" className="custom-control-input" id="customSwitch1"/>
+                <label className="custom-control-label" htmlFor="customSwitch1">Disabled Mentors</label>
+              </div>
+              <div className="col-2">
+                {currentUser.role !== 2 &&
+                  <Button onClick={addMentor} className={styles.btn}>
+                    <Icon icon="Plus" className="icon" />
+                    <span>Add a mentor</span>
+                  </Button>
+                }
               </div>
             </div>
-            <div className="row">
-              <WithLoading isLoading={areActiveMentorsLoading || areAllMentorsLoading} className="d-block mx-auto m-0">
-                <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                        <th
-                          className={styles.th}
-                          key={id}
-                          onClick={handleSortByParam}
-                          data-sorting-param={name}
-                          data-sorted-by-ascending={Number(sortedByAscending)}
-                        >
-                          {tableHead}
-                        </th>
-                      ))}
-                      {currentUser.role !== 2 ? <th scope="col" className="text-center">Edit</th> : null}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      mentorList()
-                    }
-                  </tbody>
-                </table>
-              </WithLoading>
-            </div>
+          </div>
+          <div className="row">
+            <WithLoading isLoading={areActiveMentorsLoading || areAllMentorsLoading} className="d-block mx-auto m-0">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                      <th
+                        className={styles.th}
+                        key={id}
+                        onClick={handleSortByParam}
+                        data-sorting-param={name}
+                        data-sorted-by-ascending={Number(sortedByAscending)}
+                      >
+                        {tableHead}
+                      </th>
+                    ))}
+                    {currentUser.role !== 2 ? <th scope="col" className="text-center">Edit</th> : null}
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    mentorList()
+                  }
+                </tbody>
+              </table>
+            </WithLoading>
           </div>
         </div>
       </div>
