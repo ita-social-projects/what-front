@@ -49,6 +49,13 @@ export const ListOfGroups = () => {
 
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
 
+  const [sortingCategories, setSortingCategories] = useState([
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '№' },
+    { id: 1, name: 'group', sortedByAscending: false, tableHead: 'Group Name' },
+    { id: 2, name: 'quantity', sortedByAscending: false, tableHead: 'Quantity of students' },
+    { id: 3, name: 'date', sortedByAscending: false, tableHead: 'Date of start' },
+  ]);
+
   useEffect(() => {
     fetchListOfGroups();
   }, [fetchListOfGroups]);
@@ -149,7 +156,9 @@ export const ListOfGroups = () => {
       }
     });
   };
-
+  const handleSortByParam = () => {
+    console.log('Hello')
+  }
   return (
     <div className={classNames("container", styles['list-wrapper'])}>
       <div className="row d-flex justify-content-between align-items-center mb-3">
@@ -208,13 +217,19 @@ export const ListOfGroups = () => {
             <WithLoading isLoading={isLoading}>
             <table className="table">
               <thead>
-              <tr>
-                <th scope="col">№</th>
-                <th scope="col">Group name</th>
-                <th scope="col">Quantity of students</th>
-                <th scope="col">Date of start</th>
-                <th scope="col">Edit</th>
-              </tr>
+              {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                  <th
+                      className='th'
+                      key={id}
+                      onClick={handleSortByParam}
+                      data-sorting-param={name}
+                      data-sorted-by-ascending={Number(sortedByAscending)}
+                  >
+                    {tableHead}
+                  </th>
+
+                ))}
+              <th scope="col" className="">Edit</th>
               </thead>
 
 
