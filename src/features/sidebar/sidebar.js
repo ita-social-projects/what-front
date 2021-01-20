@@ -52,6 +52,26 @@ export const Sidebar = () => {
     ],
   };
 
+  const toggleActiveTab = (event) => {
+    setTabs((prevstate) => {
+      prevstate.find((tab) => {
+        if (tab.active) {
+          tab.active = false;
+        }
+      });
+
+      return prevstate.map((tab, index) => {
+        if (index == event.target.dataset.id) {
+          return {
+            ...tab,
+            active: !tab.active,
+          };
+        }
+        return tab;
+      });
+    });
+  };
+
   const [tabs, setTabs] = useState([]);
   const [sidebar, setSidebar] = useState({
     active: false,
@@ -89,11 +109,13 @@ export const Sidebar = () => {
 
       <div onMouseOver={toggleSidebar} onMouseOut={toggleSidebar} className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
         <div className={styles['sidebar__links']}>
-          {tabs.map(({ id, title, link }) => (
+          {tabs.map(({ id, title, link, active }) => (
             <Link
-              className="nav-item nav-link d-flex justify-content-between"
+              className={classNames("nav-item nav-link d-flex justify-content-between", { [`${styles.active}`]: active } )}
               to={`${link}`}
               key={id}
+              data-id={id}
+              onClick={(event) => toggleActiveTab(event)}
             >
               {title}
               <Icon icon={title} className="icon" size={32} viewBox="0 0 32 32" />

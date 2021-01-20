@@ -45,11 +45,12 @@
     color: white;
 
       &:focus {
-        background-color: orange;
+        background-color: #88C0D0;
+        color: #2E3440;
       }
       &:hover {
-        background-color: orange;
-        color: #212529;
+        background-color: #88C0D0;
+        color: #2E3440;
       }
   }
   
@@ -106,6 +107,7 @@
 }
 
 .active {
-  background-color: #FFB800 !important;
+  background-color:#88C0D0 !important;
   font-weight: bold !important;
+  color: #2E3440 !important;
 }
