@@ -157,7 +157,7 @@ export const ListOfGroups = () => {
     });
   };
   const handleSortByParam = () => {
-    console.log('Hello')
+    console.log(listByName)
   }
   return (
     <div className={classNames("container", styles['list-wrapper'])}>
@@ -217,6 +217,7 @@ export const ListOfGroups = () => {
             <WithLoading isLoading={isLoading}>
             <table className="table">
               <thead>
+              <tr>
               {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
                   <th
                       className='th'
@@ -230,6 +231,7 @@ export const ListOfGroups = () => {
 
                 ))}
               <th scope="col" className="">Edit</th>
+              </tr>
               </thead>
 
 
