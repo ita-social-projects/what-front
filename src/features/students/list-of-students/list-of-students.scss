@@ -1,15 +1,57 @@
-@import "../../../styles/color-palette";
+@import "../../../styles/main";
 
 .icon {
-  fill: $theme-colorDark;
+  fill: map-get($colors, dark-color);
+  cursor: pointer;
+
+  &.edit-icon {
+    transition: .5s;
+    &:hover {
+      transform: scale(1.4);
+    }
+  }
+}
+
+.switch, .table-row {
   cursor: pointer;
 }
 
-.category, .switch, .table-row {
+.category {
   cursor: pointer;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    width: 8px;
+    height: 8px;
+    transform: rotateZ(45deg);
+    transition: .3s;
+  }
+
+  &-sorted {
+    &::after {
+      transform: rotateZ(225deg);
+      top: 5px;
+    }
+  }
 }
 
-.button {
-  background-color: $theme-colorAccent !important;
-  border: none !important;
+.switch-input:checked~.switch-label {
+  &::before {
+    background-color: map-get($colors, accent-color) !important;
+    border-color: map-get($colors, accent-color) !important;
+  }
+  &::after {
+    background-color: white !important;
+  }
+}
+
+.switch-label::after {
+  background-color: map-get($colors, accent-color) !important;
 }

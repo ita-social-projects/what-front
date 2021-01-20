@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
@@ -6,10 +6,9 @@ import classNames from 'classnames';
 import { paths, useActions } from '@/shared';
 import {
   loadStudents, loadActiveStudents,
-  studentsSelector, activeStudentsSelector,
+  studentsSelector, activeStudentsSelector, currentUserSelector,
 } from '@/models';
 import { WithLoading, Pagination, Search, Button } from '@/components';
-import Icon from '@/icon';
 import styles from './list-of-students.scss';
 
 export const ListOfStudents = () => {
@@ -22,6 +21,8 @@ export const ListOfStudents = () => {
     data: allStudents,
     isLoading: areAllStudentsLoading,
   } = useSelector(studentsSelector, shallowEqual);
+
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const [
     dispatchLoadStudents,
@@ -52,8 +53,8 @@ export const ListOfStudents = () => {
     return allStudents.filter(({ id }) => !activeStudentIds.includes(id));
   };
 
-  const searchStudents = (searchedStudents) => searchedStudents.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
-    .toLowerCase().includes(searchFieldValue.toLowerCase()));
+  const searchStudents = (searchedStudents, value) => searchedStudents.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
+    .toLowerCase().includes(value.toLowerCase()));
 
   useEffect(() => {
     dispatchLoadActiveStudents();
@@ -80,17 +81,17 @@ export const ListOfStudents = () => {
   useEffect(() => {
     if (isShowDisabled) {
       const disabledStudents = getDisabledStudents();
-      const searchedStudents = searchStudents(disabledStudents);
+      const searchedStudents = searchStudents(disabledStudents, searchFieldValue);
 
       setStudents(searchedStudents.map((student, index) => ({ index, ...student })));
     } else {
-      const searchedStudents = searchStudents(activeStudents);
+      const searchedStudents = searchStudents(activeStudents, searchFieldValue);
 
       setStudents(searchedStudents.map((student, index) => ({ index, ...student })));
     }
   }, [searchFieldValue, isShowDisabled]);
 
-  const handleSortByParam = (event) => {
+  const handleSortByParam = useCallback((event) => {
     const { sortingParam, sortedByAscending } = event.target.dataset;
     const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
 
@@ -109,7 +110,7 @@ export const ListOfStudents = () => {
     }));
 
     setVisibleStudents(sortedStudents);
-  };
+  }, [sortingCategories, visibleStudents]);
 
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
@@ -154,11 +155,43 @@ export const ListOfStudents = () => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
 
+  const getStudentsRows = () => {
+    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
+      <tr
+        key={id}
+        onClick={() => handleDetails(id)}
+        data-student-id={id}
+        className={styles['table-row']}
+      >
+        <td>{index + 1}</td>
+        <td>{firstName}</td>
+        <td>{lastName}</td>
+        <td>{email}</td>
+        <td
+          className="d-flex justify-content-center"
+          onClick={(event) => handleEdit(event, id)}
+        >
+          <Icon icon="Pencil" className={classNames(styles['edit-icon'], styles.icon)} />
+        </td>
+      </tr>
+    ));
+
+    if (!visibleStudents.length && searchFieldValue) {
+      return <tr><td colSpan="5" className="text-center">Student is not found</td></tr>;
+    }
+
+    return studentsRows;
+  };
+
   return (
     <div className="container">
       <div className="row d-flex justify-content-between align-items-center mb-3 px-3 py-2">
         <h2 className="col-6">Students</h2>
-        <div className="col-2 text-right">{students.length > studentsPerPage ? `${students.length} students` : null}</div>
+        <div className="col-2 text-right">{
+          students.length > studentsPerPage && !areActiveStudentsLoading && !areAllStudentsLoading
+          && `${students.length} students`
+        }
+        </div>
         <div className="col-4 d-flex align-items-center justify-content-end">
           {students.length > studentsPerPage && !areActiveStudentsLoading && !areAllStudentsLoading
           && (
@@ -176,10 +209,10 @@ export const ListOfStudents = () => {
         <div className="row align-items-center px-3 py-2 mb-2">
           <div className="col-2">
             <button className="btn">
-              <Icon icon="List" className={styles.icon} />
+              <Icon icon="List" className={styles.icon} size={25} />
             </button>
             <button className="btn">
-              <Icon icon="Cards" className={styles.icon} />
+              <Icon icon="Cards" className={styles.icon} size={25} />
             </button>
           </div>
           <div className="col-4">
@@ -193,19 +226,21 @@ export const ListOfStudents = () => {
             <input
               value={isShowDisabled}
               type="checkbox"
-              className="custom-control-input"
+              className={classNames('custom-control-input', styles['switch-input'])}
               id="show-disabled-check"
               onChange={handleShowDisabled}
             />
-            <label className={classNames('custom-control-label', styles.switch)} htmlFor="show-disabled-check">Show disabled</label>
+            <label
+              className={classNames('custom-control-label', styles.switch, styles['switch-label'])}
+              htmlFor="show-disabled-check"
+            >
+              Show disabled
+            </label>
           </div>
           <div className="col-2">
-            <Button
-              className={styles.button}
-              onClick={handleAddStudent}
-            >
-              Add a student
-            </Button>
+            {[3, 4].includes(currentUser.role) && (
+              <Button onClick={handleAddStudent}>Add a student</Button>
+            )}
           </div>
         </div>
         <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
@@ -213,40 +248,22 @@ export const ListOfStudents = () => {
             <thead>
               <tr>
                 {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                  <th
-                    key={id}
-                    onClick={handleSortByParam}
-                    data-sorting-param={name}
-                    data-sorted-by-ascending={Number(sortedByAscending)}
-                    className={styles.category}
-                  >
-                    {tableHead}
+                  <th key={id}>
+                    <span
+                      onClick={handleSortByParam}
+                      data-sorting-param={name}
+                      data-sorted-by-ascending={Number(sortedByAscending)}
+                      className={classNames(styles.category, { [styles['category-sorted']]: sortedByAscending })}
+                    >
+                      {tableHead}
+                    </span>
                   </th>
                 ))}
-                <th>Edit</th>
+                <th className="text-center">Edit</th>
               </tr>
             </thead>
             <tbody>
-              {visibleStudents.map(({ id, index, firstName, lastName, email }) => (
-                <tr
-                  key={id}
-                  onClick={() => handleDetails(id)}
-                  data-student-id={id}
-                  className={styles['table-row']}
-                >
-                  <td>{index + 1}</td>
-                  <td>{firstName}</td>
-                  <td>{lastName}</td>
-                  <td>{email}</td>
-                  <td
-                    onClick={(event) => handleEdit(event, id)}
-                    data-student-id={id}
-                    className="d-flex justify-content-center"
-                  >
-                    <Icon icon="Pencil" className={styles.icon} />
-                  </td>
-                </tr>
-              ))}
+              {getStudentsRows()}
             </tbody>
           </table>
         </WithLoading>

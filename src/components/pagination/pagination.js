@@ -14,18 +14,16 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
 
   const pagination = [...new Array(totalPages).keys()].map((number) => number + 1)
     .reduce((accum, i) => {
-      if(i === currentPage) {
-        accum.push({id: i, current: true, ellipsis: false});
-      } else {
-        if (i < 2 || i > totalPages - 1 || i === currentPage - 1 || i === currentPage + 1) {
-          accum.push({id: i, current: false, ellipsis: false});
-        } else if (i > 1 && i < currentPage && !ellipsisLeft) {
-          ellipsisLeft = true;
-          accum.push({id: i, current: false, ellipsis: true});
-        } else if (i < totalPages && i > currentPage && !ellipsisRight) {
-          ellipsisRight = true;
-          accum.push({id: i, current: false, ellipsis: true});
-        }
+      if (i === currentPage) {
+        accum.push({ id: i, current: true, ellipsis: false });
+      } else if (i < 2 || i > totalPages - 1 || i === currentPage - 1 || i === currentPage + 1) {
+        accum.push({ id: i, current: false, ellipsis: false });
+      } else if (i > 1 && i < currentPage && !ellipsisLeft) {
+        ellipsisLeft = true;
+        accum.push({ id: i, current: false, ellipsis: true });
+      } else if (i < totalPages && i > currentPage && !ellipsisRight) {
+        ellipsisRight = true;
+        accum.push({ id: i, current: false, ellipsis: true });
       }
       return accum;
     }, []);
@@ -37,58 +35,62 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   };
 
   const goToPrevPage = () => {
-    setCurrentPage((prev) => prev - 1 === 0 ? prev : prev - 1);
+    setCurrentPage((prev) => (prev - 1 === 0 ? prev : prev - 1));
   };
 
   const goToNextPage = () => {
-    setCurrentPage((prev) => prev === totalPages ? prev : prev + 1);
+    setCurrentPage((prev) => (prev === totalPages ? prev : prev + 1));
   };
 
-  return ( 
-    <div className={styles.wrapper}>
+  return (
+    <div>
       <nav className="col-12 d-flex flex-row flex-wrap justify-content-center">
-        <ul className="pagination">
+        <ul className="pagination mb-0 align-items-center">
           <li className="page-item">
-            <button className={classNames("page-link", styles.link)} 
+            <button
+              className={classNames('page-link', styles.link)}
               onClick={() => {
-                goToPrevPage()
-                prevPage(currentPage - 1)
+                goToPrevPage();
+                prevPage(currentPage - 1);
               }}
-            >&lt;</button>
+            >&lt;
+            </button>
           </li>
         </ul>
-        <ul className="pagination">
+        <ul className="pagination mb-0 align-items-center">
           {pagination.map((page) => {
             if (!page.ellipsis) {
               return (
                 <li key={page.id} className="page-item">
-                  <button className={classNames("page-link", styles.link, {[styles["active"]]: page.current})} 
+                  <button
+                    className={classNames('page-link', styles.link, { [styles.active]: page.current })}
                     onClick={() => {
-                      paginate(page.id)
-                      changePage(page.id)
+                      paginate(page.id);
+                      changePage(page.id);
                     }}
                   >
                     {page.id}
                   </button>
                 </li>
-              )
-            } else {
-                return (
-                  <li key={page.id} >
-                    <span className={classNames("pagination-ellipsis px-1", styles.ellipsis)}>&hellip;</span>
-                  </li>
-                );
+              );
             }
+            return (
+              <li key={page.id}>
+                <span className={classNames('pagination-ellipsis px-1', styles.ellipsis)}>&hellip;</span>
+              </li>
+            );
           })}
         </ul>
-        <ul className="pagination">
+        <ul className="pagination mb-0 align-items-center">
           <li className="page-item">
-            <button className={classNames("page-link", styles.link)} 
+            <button
+              className={classNames('page-link', styles.link)}
               onClick={() => {
-                goToNextPage()
-                nextPage(currentPage + 1)
+                goToNextPage();
+                nextPage(currentPage + 1);
               }}
-            >&gt;</button>
+            >&gt;
+            </button>
           </li>
         </ul>
       </nav>
@@ -101,5 +103,5 @@ Pagination.propTypes = {
   totalItems: propTypes.number.isRequired,
   paginate: propTypes.func.isRequired,
   prevPage: propTypes.func.isRequired,
-  nextPage: propTypes.func.isRequired
+  nextPage: propTypes.func.isRequired,
 };
