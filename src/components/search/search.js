@@ -13,14 +13,14 @@ export const Search = ({
   const handleChange = (event) => onSearch(event.target.value);
 
   return (
-    <div className={styles.search}>
+    <div className={classNames(styles.search)}>
       <input
         type="text"
         className={classNames(styles.searchInput, className)}
         onChange={handleChange}
         placeholder={placeholder}
       />
-      <Icon className={styles.searchIcon} icon="Search" size={32} color="#FFB800" />
+      <Icon className={styles.searchIcon} icon="Search" size={32} color="#4C566A" />
     </div>
   );
 };
