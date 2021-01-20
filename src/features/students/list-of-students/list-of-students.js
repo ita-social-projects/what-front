@@ -138,6 +138,7 @@ export const ListOfStudents = () => {
             paginate={paginate}
             prevPage={prevPage}
             nextPage={nextPage}
+            page={currentPage}
           />
         }
     </div>
