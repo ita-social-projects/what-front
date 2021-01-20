@@ -111,6 +111,9 @@
 
       padding-right: 10%;
       color: #000;
+      &--fullname {
+        cursor: pointer;
+      }
 
       &--icon {
         padding-right: 1rem;
@@ -193,8 +196,9 @@
 
 .header__dropdown-list {
   position: absolute;
-  top: 0;
-  right: 10px;
+  top: 10px;
+  right: 2.5%;
+  width: 15%;
   opacity: 0;
   visibility: hidden;
 
