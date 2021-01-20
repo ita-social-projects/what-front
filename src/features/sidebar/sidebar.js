@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-import { useActions, paths } from '@/shared';
-import { currentUserSelector, logOut } from '@/models';
+import { paths } from '@/shared';
+import { currentUserSelector } from '@/models';
 import { shallowEqual, useSelector } from 'react-redux';
 import Icon from '@/icon.js';
 
 import styles from './sidebar.scss';
-
-// const sidebarToggler = (
-//   <svg width="2em" height="2.5em" viewBox="0 0 16 16" className="bi bi-justify" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-//     <path fillRule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
-//   </svg>
-// );
 
 export const Sidebar = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -72,26 +66,6 @@ export const Sidebar = () => {
     setTabs(resultArr);
   }, [currentUser]);
 
-  const toggleActiveTab = (event) => {
-    setTabs((prevstate) => {
-      prevstate.find((tab) => {
-        if (tab.active) {
-          tab.active = false;
-        }
-      });
-
-      return prevstate.map((tab, index) => {
-        if (index == event.target.dataset.id) {
-          return {
-            ...tab,
-            active: !tab.active,
-          };
-        }
-        return tab;
-      });
-    });
-  };
-
   function toggleSidebar(event) {
     const screenWidth = document.documentElement.clientWidth;
     if ( (event.type === 'mouseout' && screenWidth < 769) || (event.type === 'mouseover' && screenWidth < 769) ) {
@@ -104,35 +78,30 @@ export const Sidebar = () => {
     }));
   }
 
-  const [logoutDefined] = useActions([logOut]);
+  return (
+    <nav className={styles.sidebar}>
 
-  const loggingOut = () => {
-    logoutDefined();
-  };
+      <div className={classNames(styles['sidebar__toggler'])} onClick={toggleSidebar}>
+        <Icon icon={'SidebarToggler'} className="icon" size={26} viewBox="0 0 32 38" />
+      </div>
 
-    return (
-      <nav className={styles.sidebar}>
+      <div className={styles.sidebar__icons}></div>
 
-        <div className={classNames(styles['sidebar__toggler'])} onClick={toggleSidebar}>
-          <Icon icon={'SidebarToggler'} className="icon" size={26} viewBox="0 0 32 38" />
+      <div onMouseOver={toggleSidebar} onMouseOut={toggleSidebar} className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
+        <div className={styles['sidebar__links']}>
+          {tabs.map(({ id, title, link }) => (
+            <Link
+              className="nav-item nav-link d-flex justify-content-between"
+              to={`${link}`}
+              key={id}
+            >
+              {title}
+              <Icon icon={title} className="icon" size={32} viewBox="0 0 32 32" />
+            </Link>
+          ))}
         </div>
-
-        <div className={styles.sidebar__icons}></div>
-
-        <div onMouseOver={toggleSidebar} onMouseOut={toggleSidebar} className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
-          <div className={styles['sidebar__links']}>
-            {tabs.map(({ id, title, link }) => (
-              <Link
-                className="nav-item nav-link d-flex justify-content-between"
-                to={`${link}`}
-                key={id}
-              >
-                {title}
-                <Icon icon={title} className="icon" size={32} viewBox="0 0 32 32" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </nav>
-    )
+      </div>
+      
+    </nav>
+  )
 }
