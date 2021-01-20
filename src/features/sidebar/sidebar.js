@@ -8,11 +8,11 @@ import Icon from '@/icon.js';
 
 import styles from './sidebar.scss';
 
-const sidebarToggler = (
-  <svg width="2em" height="2.5em" viewBox="0 0 16 16" className="bi bi-justify" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
-  </svg>
-);
+// const sidebarToggler = (
+//   <svg width="2em" height="2.5em" viewBox="0 0 16 16" className="bi bi-justify" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+//     <path fillRule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+//   </svg>
+// );
 
 export const Sidebar = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -113,7 +113,9 @@ export const Sidebar = () => {
     return (
       <nav className={styles.sidebar}>
 
-        <div className={classNames(styles['sidebar__toggler'])} onClick={toggleSidebar}>{sidebarToggler}</div>
+        <div className={classNames(styles['sidebar__toggler'])} onClick={toggleSidebar}>
+          <Icon icon={'SidebarToggler'} className="icon" size={26} viewBox="0 0 32 38" />
+        </div>
 
         <div className={styles.sidebar__icons}></div>
 
