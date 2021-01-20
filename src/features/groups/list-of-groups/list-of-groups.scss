@@ -13,4 +13,24 @@
 
 .list-wrapper {
   min-height: 724px;
+  margin: 10px;
+}
+.table-item {
+  transition: all 0.2s ease 0s;
+}
+.table-item:hover {
+  background-color:rgba(#4C566A, 0.2);
+}
+
+.scale {
+  transition: .5s;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.4);
+  }
+}
+
+.btn-add{
+  background-color: $theme-colorAccent !important;
+  border: $theme-colorAccent !important;
 }
