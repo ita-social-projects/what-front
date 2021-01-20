@@ -11,7 +11,7 @@
     transition: all .1s;
     &:focus {
       outline: none;
-      box-shadow: 0 0 10px map-get($colors, medium-color);
+      box-shadow: 0 0 8px map-get($colors, medium-color);
     }
   }
 
@@ -19,5 +19,6 @@
       position: absolute;
       left: 7px;
       top: 7px;
+      fill: $theme-colorDark;
     }
 }

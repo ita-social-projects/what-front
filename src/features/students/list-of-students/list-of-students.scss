@@ -1,0 +1,15 @@
+@import "../../../styles/color-palette";
+
+.icon {
+  fill: $theme-colorDark;
+  cursor: pointer;
+}
+
+.category, .switch, .table-row {
+  cursor: pointer;
+}
+
+.button {
+  background-color: $theme-colorAccent !important;
+  border: none !important;
+}
