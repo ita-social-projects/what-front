@@ -264,7 +264,7 @@ export const StartGroup = () => {
                       </datalist>
                       <Button
                         variant="warning"
-                        onClick={() => addMentor(values.mentors, () => setFieldValue('mentor', ''))}
+                        onClick={() => addMentor(values.mentors, () => setFieldValue('mentors', ''))}
                       >
                         <Icon icon="Plus" />
                       </Button>
@@ -319,7 +319,7 @@ export const StartGroup = () => {
                       </datalist>
                       <Button
                         variant="warning"
-                        onClick={() => addStudent(values.students, () => setFieldValue('student', ''))}
+                        onClick={() => addStudent(values.students, () => setFieldValue('students', ''))}
                       >
                         <Icon icon="Plus" />
                       </Button>

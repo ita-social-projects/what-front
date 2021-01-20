@@ -80,8 +80,10 @@ function* addStudentGroupAsync({ payload }) {
     const group = yield call(ApiService.create, '/student_groups/', payload);
 
     yield put({ type: actionTypes.ADDING_STUDENT_GROUP_SUCCEED, payload: group });
+    yield put({ type: actionTypes.ADD_CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.ADDING_STUDENT_GROUP_FAILED, payload: { error } });
+    yield put({ type: actionTypes.ADD_CLEAR_ERROR });
   }
 }
 
