@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { currentUserSelector, fetchActiveSecretaries, activeSecretariesSelector } from '@/models/index.js';
+import { currentUserSelector, fetchActiveSecretaries, fetchSecretaries, activeSecretariesSelector, secretariesSelector } from '@/models/index.js';
 import { paths, useActions } from '@/shared/index.js';
 
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
@@ -9,30 +9,41 @@ import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
 
 export const ListOfSecretaries = () => {
-  const history = useHistory();
-
-  const [loadSecretaries] = useActions([fetchActiveSecretaries]);
-
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [secretariesPerPage] = useState(1);
 
-  const { data, isLoading } = useSelector(activeSecretariesSelector, shallowEqual);
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
+
+  const {
+    data: activeSecretaries,
+    isLoading: areActiveSecretariesLoading,
+  } = useSelector(activeSecretariesSelector, shallowEqual);
+
+  const {
+    data: allSecretaries,
+    isLoading: areAllSecretariesLoading,
+  } = useSelector(secretariesSelector, shallowEqual);
+
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  useEffect(() => {
-    loadSecretaries();
-  }, [loadSecretaries]);
+  const [loadActiveSecretaries, loadAllSecretaries] = useActions([fetchActiveSecretaries, fetchSecretaries]);
+
+  const history = useHistory();
 
   useEffect(() => {
-    setSearchResults(data);
-  }, [data]);
+    loadActiveSecretaries();
+  }, [loadActiveSecretaries]);
+
+  useEffect(() => {
+    setSearchResults(activeSecretaries);
+  }, [activeSecretaries]);
 
   const handleSearch = (value) => {
     setSearch(value);
-    setSearchResults(data.filter(({ firstName, lastName }) => {
+    setSearchResults(activeSecretaries.filter(({ firstName, lastName }) => {
       const fullName = `${firstName} ${lastName}`;
       return fullName.toUpperCase().includes(value.toUpperCase());
     }));
@@ -49,6 +60,15 @@ export const ListOfSecretaries = () => {
   const handleEditSecretary = (event, id) => {
     event.stopPropagation();
     history.push(`${paths.SECRETARY_EDIT}/${id}`);
+  };
+
+  const handleShowDisabled = (event) => {
+    setIsShowDisabled(!isShowDisabled);
+    if (event.target.checked) {
+      loadAllSecretaries();
+    } else {
+      loadActiveSecretaries();
+    }
   };
 
   const paginate = (pageNumber) => {
@@ -113,16 +133,18 @@ export const ListOfSecretaries = () => {
         </div>
         {searchResults.length > secretariesPerPage ? <div className="col-2 text-right">{searchResults.length} secretaries</div> : null}
         <div className="col-md-4 d-flex align-items-center justify-content-end">
-          {searchResults.length > secretariesPerPage && !isLoading
-        && (
-        <Pagination
-          itemsPerPage={secretariesPerPage}
-          totalItems={searchResults.length}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-        />
-        )}
+          {searchResults.length > secretariesPerPage && !areActiveSecretariesLoading
+          && !areAllSecretariesLoading
+          && (
+          <Pagination
+            itemsPerPage={secretariesPerPage}
+            totalItems={searchResults.length}
+            paginate={paginate}
+            prevPage={prevPage}
+            nextPage={nextPage}
+            page={currentPage}
+          />
+          )}
         </div>
       </div>
       <div className="container card shadow">
@@ -138,8 +160,8 @@ export const ListOfSecretaries = () => {
           </div>
           <div className="col-md-3 pt-2 text-right">
             <div className="custom-control custom-switch">
-              <input type="checkbox" className="custom-control-input" id="switch" />
-              <label className="custom-control-label" htmlFor="switch">Disabled Secretaries</label>
+              <input type="checkbox" className="custom-control-input" id="switchDisabled" onClick={handleShowDisabled} />
+              <label className="custom-control-label" htmlFor="switchDisabled">Disabled Secretaries</label>
             </div>
           </div>
           {currentUser.role === 4
@@ -151,7 +173,7 @@ export const ListOfSecretaries = () => {
           </div>
           )}
         </div>
-        <WithLoading isLoading={isLoading} className="d-block mx-auto">
+        <WithLoading isLoading={areActiveSecretariesLoading || areAllSecretariesLoading} className="d-block mx-auto">
           <table className="table table-hover mt-2">
             <thead>
               <tr>
