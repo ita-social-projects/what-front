@@ -48,7 +48,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   return ( 
     <div className={styles.wrapper}>
       <nav className="col-12 d-flex flex-row flex-wrap justify-content-center">
-        <ul className="pagination mb-0 align-items-center">
+        <ul className="pagination mb-0">
           <li className="page-item">
             <button className={classNames("page-link", styles.link)} 
               onClick={() => {
@@ -58,7 +58,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
             >&lt;</button>
           </li>
         </ul>
-        <ul className="pagination mb-0 align-items-center">
+        <ul className="pagination mb-0">
           {pagination.map((page) => {
             if (!page.ellipsis) {
               return (
@@ -82,7 +82,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
             }
           })}
         </ul>
-        <ul className="pagination mb-0 align-items-center">
+        <ul className="pagination mb-0">
           <li className="page-item">
             <button className={classNames("page-link", styles.link)} 
               onClick={() => {

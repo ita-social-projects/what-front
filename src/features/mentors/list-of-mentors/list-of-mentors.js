@@ -30,6 +30,13 @@ const icon2 = (
   </svg>
 );
 
+const arrow = (
+  <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" d="M4.646 9.646a.5.5 0 0 1 .708 0L8 12.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
+    <path fillRule="evenodd" d="M8 2.5a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5z"/>
+</svg>
+);
+
 export const ListOfMentors = () => {
   const history = useHistory();
 
@@ -108,7 +115,7 @@ export const ListOfMentors = () => {
             <td>{firstName}</td>
             <td>{lastName}</td>
             <td>{email}</td>
-            {currentUser.role !== 2 ? <td className="text-center" data-mentor-id={id} onClick={(event) => mentorEdit(event, mentor.id) }>{editIcon}</td> : null}
+            {currentUser.role !== 2 ? <td className="text-center" data-mentor-id={id} onClick={(event) => mentorEdit(event, id) }>{editIcon}</td> : null}
           </tr>
         );
       })
@@ -226,10 +233,11 @@ export const ListOfMentors = () => {
               <div className="col-4">
                 <Search onSearch={handleSearch} placeholder="Mentor's name" />
               </div>
+              {currentUser.role !== 2 && 
               <div className="custom-control custom-switch col-2 offset-2">
                 <input onClick={handleShowDisabled} type="checkbox" className="custom-control-input" id="customSwitch1"/>
                 <label className="custom-control-label" htmlFor="customSwitch1">Disabled Mentors</label>
-              </div>
+              </div>}
               <div className="col-2">
                 {currentUser.role !== 2 &&
                   <Button onClick={addMentor} className={styles.btn}>
@@ -247,7 +255,7 @@ export const ListOfMentors = () => {
                   <tr>
                     {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
                       <th
-                        className={styles.th}
+                        className={classNames(styles.th, {[styles.throtate]: sortedByAscending})}
                         key={id}
                         onClick={handleSortByParam}
                         data-sorting-param={name}
