@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { currentUserSelector, fetchActiveSecretaries, activeSecretariesSelector } from '@/models/index.js';
 import { paths, useActions } from '@/shared/index.js';
 
-import { Button, Search, Card, WithLoading, Pagination } from '@/components/index.js';
+import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
+
 import Icon from '@/icon.js';
 
 export const ListOfSecretaries = () => {
@@ -16,7 +17,7 @@ export const ListOfSecretaries = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage] = useState(9);
+  const [secretariesPerPage] = useState(1);
 
   const { data, isLoading } = useSelector(activeSecretariesSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -41,42 +42,13 @@ export const ListOfSecretaries = () => {
     history.push(paths.UNASSIGNED_USERS);
   };
 
-  const handleEditSecretary = (id) => {
-    history.push(`${paths.SECRETARY_EDIT}/${id}`);
-  };
-
   const handleSecretariesDetails = (id) => {
     history.push(`${paths.SECRETARIES_DETAILS}/${id}`);
   };
 
-  const getSecretaries = () => {
-    const indexOfLastSecretary = currentPage * secretariesPerPage;
-    const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
-
-    const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
-      .sort((a, b) => ((a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0))
-      .map(({
-        id, firstName, lastName,
-      }) => (
-        <Card
-          key={id}
-          id={id}
-          iconName={currentUser.role === 4 ? 'Edit' : null}
-          buttonName="Details"
-          onEdit={currentUser.role === 4 ? () => handleEditSecretary(id) : null}
-          onDetails={() => handleSecretariesDetails(id)}
-        >
-          <div className=" w-75">
-            <p className="mb-2 pr-2">{firstName}</p>
-            <p>{lastName}</p>
-          </div>
-        </Card>
-      ));
-
-    if (!secretaries.length && search) {
-      return <h4>Secretary is not found</h4>;
-    }
-    return secretaries;
+  const handleEditSecretary = (event, id) => {
+    event.stopPropagation();
+    history.push(`${paths.SECRETARY_EDIT}/${id}`);
   };
 
   const paginate = (pageNumber) => {
@@ -86,7 +58,7 @@ export const ListOfSecretaries = () => {
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(searchResults.length / 9);
+    const totalPages = Math.ceil(searchResults.length / secretariesPerPage);
     setCurrentPage((prev) => {
       if (prev === totalPages) {
         return prev;
@@ -104,31 +76,44 @@ export const ListOfSecretaries = () => {
     });
   };
 
-  return (
-    <div className="container" style={{ minHeight: 750 }}>
-      <div className="row">
-        <div className="col-md-4 offset-md-4 text-center">
-          <Search onSearch={handleSearch} placeholder="Secretary's name" />
-        </div>
-        {currentUser.role === 4
+  const getSecretaries = () => {
+    const indexOfLastSecretary = currentPage * secretariesPerPage;
+    const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
+
+    const secretaries = searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary)
+      .sort((a, b) => ((a.lastName).toUpperCase() < (b.lastName).toUpperCase() ? -1 : (a.lastName).toUpperCase() > (b.lastName).toUpperCase() ? 1 : 0))
+      .map((secretary, index) => (
+        <tr key={secretary.id} onClick={() => handleSecretariesDetails(secretary.id)}>
+          <td className="text-center">{index + 1}</td>
+          <td>{secretary.firstName}</td>
+          <td>{secretary.lastName}</td>
+          <td>{secretary.email}</td>
+          {currentUser.role === 4
           && (
-          <div className="col-md-4 text-right">
-            <Button onClick={handleAddSecretary} variant="warning">
-              <Icon icon="Plus" className="icon" />
-              <span>Add a secretary</span>
-            </Button>
-          </div>
+          <td className="text-center" onClick={(event) => handleEditSecretary(event, secretary.id)}>
+            <Icon viewBox="0 0 45 45" size={25} icon="Edit" />
+          </td>
           )}
-      </div>
-      <div>
-        <hr className="col-8" />
-        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
-          <WithLoading isLoading={isLoading}>
-            { getSecretaries() }
-          </WithLoading>
+        </tr>
+      ));
+    if (!secretaries.length && search) {
+      return (
+        <tr>
+          <td colSpan="5" className="text-center">Secretary is not found</td>
+        </tr>
+      );
+    }
+    return secretaries;
+  };
+  return (
+    <div className="container">
+      <div className="row justify-content-between align-items-center mb-3">
+        <div className="col-md-6">
+          <h2 className="mb-0 px-3">Secretaries</h2>
         </div>
-      </div>
-      {searchResults.length > 9 && !isLoading
+        {searchResults.length > secretariesPerPage ? <div className="col-2 text-right">{searchResults.length} secretaries</div> : null}
+        <div className="col-md-4 d-flex align-items-center justify-content-end">
+          {searchResults.length > secretariesPerPage && !isLoading
         && (
         <Pagination
           itemsPerPage={secretariesPerPage}
@@ -138,6 +123,52 @@ export const ListOfSecretaries = () => {
           nextPage={nextPage}
         />
         )}
+        </div>
+      </div>
+      <div className="container card shadow">
+        <div className="row my-2">
+          <div className="col-md-2">
+            <div className="btn-group">
+              <button type="button" className="btn btn-secondary">List</button>
+              <button type="button" className="btn btn-secondary">Card</button>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <Search onSearch={handleSearch} placeholder="Secretary's name" />
+          </div>
+          <div className="col-md-3 pt-2 text-right">
+            <div className="custom-control custom-switch">
+              <input type="checkbox" className="custom-control-input" id="switch" />
+              <label className="custom-control-label" htmlFor="switch">Disabled Secretaries</label>
+            </div>
+          </div>
+          {currentUser.role === 4
+          && (
+          <div className="col-md-3 text-right">
+            <Button onClick={handleAddSecretary}>
+              <span>Add a secretary</span>
+            </Button>
+          </div>
+          )}
+        </div>
+        <WithLoading isLoading={isLoading} className="d-block mx-auto">
+          <table className="table table-hover mt-2">
+            <thead>
+              <tr>
+                <th scope="col" className="text-center">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Email <Icon icon="DropDown" className="pl-1 pt-1" /></th>
+                {currentUser.role === 4 && (<th scope="col" className="text-center">Edit</th>)}
+              </tr>
+            </thead>
+
+            <tbody>
+              { getSecretaries() }
+            </tbody>
+          </table>
+        </WithLoading>
+      </div>
     </div>
   );
 };
