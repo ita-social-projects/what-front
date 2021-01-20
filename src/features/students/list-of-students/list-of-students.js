@@ -9,6 +9,7 @@ import {
   studentsSelector, activeStudentsSelector, currentUserSelector,
 } from '@/models';
 import { WithLoading, Pagination, Search, Button } from '@/components';
+import Icon from '@/icon';
 import styles from './list-of-students.scss';
 
 export const ListOfStudents = () => {
