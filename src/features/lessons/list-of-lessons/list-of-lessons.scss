@@ -1,27 +1,60 @@
 @import '../../../styles/main';
 
-.calendar-input {
-  border-color: map-get($colors, textAccentN1-color) !important;
-  width: 18%;
-}
-
-.calendar-input:focus {
-  outline: none;
-  box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
-  border-color: map-get($colors, textAccentN1-color);
-}
-
-.timeDate{
-  font-size: 15px;
-  margin-bottom: 0px;
-}
-
-.list-wrapper {
-  min-height: 940px;
-}
-
-@media(max-width: 1199px) {
-  .list-wrapper {
-    min-height: 988px;
+.button {
+  @include button();
+  background-color: $theme-colorAccent;
+  &:focus{
+    outline: none;
   }
+}
+
+.page {
+  @include pageWindow();
+}
+.date {
+  border: 1px solid $theme-colorLight !important;
+  color: $theme-colorMedium !important;
+  border-radius: 3px !important;
+  height: calc(1.5em + .75rem) !important;
+  &:focus{
+    border-color: $theme-colorLight !important;
+    box-shadow: 0 0 7px map-get($colors, nonAccent-color) !important;
+  }
+}
+
+.text {
+  color:  $theme-colorMedium !important;
+}
+
+.edit {
+  transition: .3s ease;
+  &:hover {
+    transform: scale(1.4);
+  }
+}
+.rotate:active {}
+
+.button-sort {
+  background-color: #fff !important;
+  border: none;
+    &:focus{
+      background-color: #fff !important;
+      outline: none !important; ;
+    }
+}
+
+.arrow-up, .arrow-down {
+  padding-top: 5px;
+}
+
+.arrow-up {
+  display: none;
+}
+
+.descending .arrow-up {
+  display: initial;
+}
+
+.descending .arrow-down {
+  display: none;
 }

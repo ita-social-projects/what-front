@@ -8,6 +8,8 @@
 @mixin button() {
   border-radius: map-get($border-radius, button-borRad);
   box-shadow: map-get($box-shadows, button-boxShadow);
+  padding: $button-padding;
+  border: none;
 }
 
 @mixin modalWindow() {
