@@ -17,9 +17,12 @@
 }
 .table-item {
   transition: all 0.2s ease 0s;
+  td {
+    cursor: pointer;
+  }
 }
 .table-item:hover {
-  background-color:rgba(#4C566A, 0.2);
+  background-color:rgba(#4C566A, 0.1);
 }
 
 .scale {
