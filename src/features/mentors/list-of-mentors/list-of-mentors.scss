@@ -1,15 +1,28 @@
 @import '../../../styles/main';
 
-.pointer {
+.table-rows {
   cursor: pointer;
   transition: all .2s ease-out;
 }
 
 .scale {
-  transition: .5s; 
+  transition: .5s;  
   &:hover {
     transform: scale(1.4); 
   }
+}
+
+.switch-input:checked~.switch-label {
+  &::before {
+    background-color: map-get($colors, accent-color) !important;
+  }
+  &::after {
+    background-color: white !important;
+  }
+}
+
+.switch-label::after {
+  background-color: map-get($colors, accent-color) !important;
 }
 
 .btn {
@@ -20,33 +33,36 @@
   }
 }
 
-.th {
-  cursor: default;
-  position: relative;
-  &::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 3.5px solid transparent;
-    border-right: 3.5px solid transparent;
-    border-top: 8px solid #4C566A;
-    position: absolute;
-    top: 48%;
-    margin-left: 5px;
-    transition: transform .3s ease-out;
-  }
+.table-head {
   &:first-of-type {
     text-align: center;
   }
-}
 
-.throtate {
-  &::after {
-    transition: transform .3s ease-in-out;
-    transform: rotate(180deg);
+  & span {
+    position: relative;
+
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 44%;
+
+      width: 0;
+      height: 0;
+
+      margin-left: 5px;
+
+      border-left: 3.5px solid transparent;
+      border-right: 3.5px solid transparent;
+      border-top: 8px solid black;
+
+      transition: transform .3s ease-out;
+    }
   }
 }
 
-.rotate {
+.rotate::after {
+  transition: transform .3s ease-out;
   transform: rotate(180deg);
 }
