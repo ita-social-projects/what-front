@@ -94,10 +94,12 @@ export const ListOfMentors = () => {
       const disabledMentors = getDisabledMentors();
       const searchedMentors = searchMentors(disabledMentors);
 
+      setCurrentPage(1)
       setFilteredMentorList(searchedMentors.map((mentor, index) => ({ index, ...mentor })));
     } else {
       const searchedMentors = searchMentors(activeMentors);
-      
+
+      setCurrentPage(1)
       setFilteredMentorList(searchedMentors.map((mentor, index) => ({ index, ...mentor })));
     }
   }, [searchMentorValue, isShowDisabled]);
