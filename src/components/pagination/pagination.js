@@ -9,7 +9,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
 
   useEffect(() => {
     setCurrentPage(page)
-  }, [page])
+  }, [page]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   let ellipsisLeft = false;

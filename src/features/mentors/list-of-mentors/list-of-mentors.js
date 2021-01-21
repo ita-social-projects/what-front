@@ -8,6 +8,7 @@ import { Button, Pagination, Search, WithLoading } from '@/components';
 
 import classNames from 'classnames';
 import styles from './list-of-mentors.scss';
+import { addAlert } from '@/features/layout';
 
 const editIcon = (
   <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" className={classNames("bi bi-pencil", styles.scale)} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -49,11 +50,11 @@ export const ListOfMentors = () => {
   const [visibleMentors, setVisibleMentors] = useState([]);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
 
-  const { data: allMentors, isLoading: areAllMentorsLoading } = useSelector(mentorsSelector, shallowEqual)
-  const { data: activeMentors, isLoading: areActiveMentorsLoading } = useSelector(mentorsActiveSelector, shallowEqual);
+  const { data: allMentors, isLoading: areAllMentorsLoading, error: allMentorsError } = useSelector(mentorsSelector, shallowEqual)
+  const { data: activeMentors, isLoading: areActiveMentorsLoading, error: activeMentorsError } = useSelector(mentorsActiveSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  const [loadActiveMentors, loadAllMentors] = useActions([fetchActiveMentors, fetchMentors]);
+  const [loadActiveMentors, loadAllMentors, dispatchAddAlert] = useActions([fetchActiveMentors, fetchMentors, addAlert]);
 
   const indexOfLastMentor = currentPage * mentorsPerPage;
   const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
@@ -70,6 +71,12 @@ export const ListOfMentors = () => {
   useEffect(() => {
     loadActiveMentors()
   }, [loadActiveMentors]);
+
+  useEffect(() => {
+    if (allMentorsError || activeMentorsError) {
+      dispatchAddAlert('Mentors loading is failed');
+    }
+  }, [allMentorsError, activeMentorsError, dispatchAddAlert]);
   
   useEffect(() => {
     if (isShowDisabled) {
@@ -90,16 +97,15 @@ export const ListOfMentors = () => {
   }, [currentPage, filteredMentorList]);
 
   useEffect(() => {
+    setCurrentPage(1);
     if (isShowDisabled) {
       const disabledMentors = getDisabledMentors();
       const searchedMentors = searchMentors(disabledMentors);
 
-      setCurrentPage(1)
       setFilteredMentorList(searchedMentors.map((mentor, index) => ({ index, ...mentor })));
     } else {
       const searchedMentors = searchMentors(activeMentors);
 
-      setCurrentPage(1)
       setFilteredMentorList(searchedMentors.map((mentor, index) => ({ index, ...mentor })));
     }
   }, [searchMentorValue, isShowDisabled]);

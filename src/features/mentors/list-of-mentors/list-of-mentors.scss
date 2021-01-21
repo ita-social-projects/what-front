@@ -12,21 +12,21 @@
   }
 }
 
-.switch-input:checked~.switch-label {
-  &::before {
-    background-color: map-get($colors, accent-color) !important;
-  }
-  &::after {
-    background-color: white !important;
-  }
-}
-
-.switch-label::after {
+.switch-input:focus~
+.switch-label::before { 
+  border-color: map-get($colors, accent-color) !important;
+  box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;  
+} 
+  
+.switch-input:checked~
+.switch-label::before { 
+  border-color: map-get($colors, accent-color) !important;
   background-color: map-get($colors, accent-color) !important;
 }
 
 .btn {
   background-color: map-get($colors, accent-color) !important;
+
   &:hover {
     background-color: map-get($colors, accent-color);
     opacity: 0.8;
@@ -43,26 +43,33 @@
 
     cursor: pointer;
 
+    &:hover {
+      opacity: 0.7;
+      transition: .4s;
+    }
+
     &::after {
       content: '';
+      display: block;
       position: absolute;
-      top: 44%;
+      right: -15px;
+      top: 10px;
 
-      width: 0;
-      height: 0;
+      width: 8px;
+      height: 8px;
 
-      margin-left: 5px;
+      border-top: 1px solid #000;
+      border-left: 1px solid #000;
+      
+      transform: rotateZ(45deg);
+      transition: .3s;
+    }
 
-      border-left: 3.5px solid transparent;
-      border-right: 3.5px solid transparent;
-      border-top: 8px solid black;
-
-      transition: transform .3s ease-out;
+    &.rotate::after {
+      top: 7px;
+      transform: rotateZ(225deg);
     }
   }
 }
 
-.rotate::after {
-  transition: transform .3s ease-out;
-  transform: rotate(180deg);
-}
+
