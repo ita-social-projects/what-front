@@ -19,6 +19,11 @@
 .category {
   cursor: pointer;
   position: relative;
+  transition: opacity .3s;
+
+  &:hover {
+    opacity: .7;
+  }
 
   &::after {
     content: '';
@@ -37,21 +42,23 @@
   &-sorted {
     &::after {
       transform: rotateZ(225deg);
-      top: 5px;
+      top: 7px;
     }
   }
 }
 
-.switch-input:checked~.switch-label {
-  &::before {
-    background-color: map-get($colors, accent-color) !important;
-    border-color: map-get($colors, accent-color) !important;
-  }
-  &::after {
-    background-color: white !important;
-  }
+.custom-control-label {
+  cursor: pointer;
 }
 
-.switch-label::after {
+.custom-control-input:focus~
+.custom-control-label::before {
+  border-color: map-get($colors, accent-color) !important;
+  box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;
+}
+
+.custom-control-input:checked~
+.custom-control-label::before {
+  border-color: map-get($colors, accent-color) !important;
   background-color: map-get($colors, accent-color) !important;
 }

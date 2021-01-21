@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
 import classNames from 'classnames';
 import styles from './pagination.scss';
 
-export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage }) => {
+export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage, page }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(page);
+  }, [page]);
 
   let ellipsisLeft = false;
   let ellipsisRight = false;

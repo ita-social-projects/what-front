@@ -9,6 +9,7 @@ import {
   studentsSelector, activeStudentsSelector, currentUserSelector,
 } from '@/models';
 import { WithLoading, Pagination, Search, Button } from '@/components';
+import { addAlert } from '@/features';
 import Icon from '@/icon';
 import styles from './list-of-students.scss';
 
@@ -16,11 +17,13 @@ export const ListOfStudents = () => {
   const {
     data: activeStudents,
     isLoading: areActiveStudentsLoading,
+    error: activeStudentsError,
   } = useSelector(activeStudentsSelector, shallowEqual);
 
   const {
     data: allStudents,
     isLoading: areAllStudentsLoading,
+    error: allStudentsError,
   } = useSelector(studentsSelector, shallowEqual);
 
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -28,7 +31,8 @@ export const ListOfStudents = () => {
   const [
     dispatchLoadStudents,
     dispatchLoadActiveStudents,
-  ] = useActions([loadStudents, loadActiveStudents]);
+    dispatchAddAlert,
+  ] = useActions([loadStudents, loadActiveStudents, addAlert]);
 
   const history = useHistory();
 
@@ -80,6 +84,12 @@ export const ListOfStudents = () => {
   }, [currentPage, students]);
 
   useEffect(() => {
+    if (allStudentsError || activeStudentsError) {
+      dispatchAddAlert(allStudentsError || activeStudentsError);
+    }
+  }, [activeStudentsError, allStudentsError, dispatchAddAlert]);
+
+  useEffect(() => {
     if (isShowDisabled) {
       const disabledStudents = getDisabledStudents();
       const searchedStudents = searchStudents(disabledStudents, searchFieldValue);
@@ -90,6 +100,7 @@ export const ListOfStudents = () => {
 
       setStudents(searchedStudents.map((student, index) => ({ index, ...student })));
     }
+    setCurrentPage(1);
   }, [searchFieldValue, isShowDisabled]);
 
   const handleSortByParam = useCallback((event) => {
@@ -202,6 +213,7 @@ export const ListOfStudents = () => {
               paginate={paginate}
               prevPage={prevPage}
               nextPage={nextPage}
+              page={currentPage}
             />
           )}
         </div>
@@ -209,12 +221,12 @@ export const ListOfStudents = () => {
       <div className="card shadow p-3 mb-5 bg-white rounded">
         <div className="row align-items-center px-3 py-2 mb-2">
           <div className="col-2">
-            <button className="btn">
-              <Icon icon="List" className={styles.icon} size={25} />
-            </button>
-            <button className="btn">
-              <Icon icon="Cards" className={styles.icon} size={25} />
-            </button>
+            {/* <button className="btn"> */}
+            {/*  <Icon icon="List" className={styles.icon} size={25} /> */}
+            {/* </button> */}
+            {/* <button className="btn"> */}
+            {/*  <Icon icon="Cards" className={styles.icon} size={25} /> */}
+            {/* </button> */}
           </div>
           <div className="col-4">
             <Search
@@ -227,12 +239,12 @@ export const ListOfStudents = () => {
             <input
               value={isShowDisabled}
               type="checkbox"
-              className={classNames('custom-control-input', styles['switch-input'])}
+              className={classNames('custom-control-input', styles['custom-control-input'])}
               id="show-disabled-check"
               onChange={handleShowDisabled}
             />
             <label
-              className={classNames('custom-control-label', styles.switch, styles['switch-label'])}
+              className={classNames('custom-control-label', styles['custom-control-label'])}
               htmlFor="show-disabled-check"
             >
               Show disabled
