@@ -1,37 +1,42 @@
-import * as actions from '../types.js';
+import * as actionTypes from '../types.js';
 
-const initialState = {
+const INITIAL_STATE = {
   isLoading: false,
-  isloaded: false,
+  isLoaded: false,
   error: '',
-};
+}; 
 
-export const changePasswordReducer = (state = initialState, action) => {
+export const deleteCourseReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case actions.NEW_PASSWORD_CREATING_STARTED:
+    case actionTypes.DELETING_COURSE_STARTED:
       return {
         ...state,
         isLoading: true,
         error: '',
       };
-    case actions.NEW_PASSWORD_CREATING_SUCCESS:
+    case actionTypes.DELETING_COURSE_SUCCESS:
       return {
         ...state,
         isLoading: false,
         isLoaded: true,
         error: '',
       };
-    case actions.NEW_PASSWORD_CREATING_FAILED:
+    case actionTypes.DELETING_COURSE_FAILED:
       return {
         ...state,
         isLoading: false,
         isLoaded: false,
         error: action.payload.error,
       };
-    case actions.CLEAR_LOADED:
+    case actionTypes.CLEAR_LOADED:
       return {
         ...state,
-        isLoaded: false,
+        isLoaded: false
+      }
+    case actionTypes.CLEAR_ERROR:
+      return {
+        ...state,
+        error: '',
       };
     default: return state;
   }

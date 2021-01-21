@@ -9,7 +9,7 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  Header, Schedule, AlertBox,
+  Header, Schedule, AlertBox, StartGroup,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
@@ -37,6 +37,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.LESSON_DETAILS}/:id`} component={LessonDetails} />
           <ProtectedRoute roles={[2, 4]} exact path={`${paths.LESSON_EDIT}/:id`} component={EditLesson} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUPS} component={ListOfGroups} />
+          <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUP_ADD} component={StartGroup} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.GROUPS_DETAILS}/:id`} render={() => <GroupsTabs index={0} />} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.GROUP_EDIT}/:id`} render={() => <GroupsTabs index={1} />} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.COURSES} component={ListOfCourses} />
