@@ -106,7 +106,6 @@ export const AddLesson = () => {
   }, [history]);
 
   const onSubmit = (values) => {
-    console.log(values)
     const { lessonDate, themeName } = values;
     const lessonVisits = formData.map((lessonVisit) => {
       const {
