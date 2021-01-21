@@ -188,6 +188,10 @@ export const ListOfStudents = () => {
       </tr>
     ));
 
+    if (!allStudentsError || !activeStudentsError) {
+      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
+    }
+
     if (!visibleStudents.length && searchFieldValue) {
       return <tr><td colSpan="5" className="text-center">Student is not found</td></tr>;
     }
