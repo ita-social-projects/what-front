@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
 import classNames from 'classnames';
@@ -7,8 +7,11 @@ import styles from './pagination.scss';
 export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage, page }) => {
   const [currentPage, setCurrentPage] = useState(page);
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  useEffect(() => {
+    setCurrentPage(page)
+  }, [page]);
 
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
   let ellipsisLeft = false;
   let ellipsisRight = false;
 
@@ -28,7 +31,8 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
         }
       }
       return accum;
-    }, []);
+    }, 
+  []);
 
   const changePage = (page) => {
     if (page !== currentPage) {
@@ -47,7 +51,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   return ( 
     <div className={styles.wrapper}>
       <nav className="col-12 d-flex flex-row flex-wrap justify-content-center">
-        <ul className="pagination">
+        <ul className="pagination mb-0">
           <li className="page-item">
             <button className={classNames("page-link", styles.link)} 
               onClick={() => {
@@ -57,7 +61,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
             >&lt;</button>
           </li>
         </ul>
-        <ul className="pagination">
+        <ul className="pagination mb-0">
           {pagination.map((page) => {
             if (!page.ellipsis) {
               return (
@@ -81,7 +85,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
             }
           })}
         </ul>
-        <ul className="pagination">
+        <ul className="pagination mb-0">
           <li className="page-item">
             <button className={classNames("page-link", styles.link)} 
               onClick={() => {
