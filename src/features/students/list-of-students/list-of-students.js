@@ -85,6 +85,7 @@ export const ListOfStudents = () => {
 
   useEffect(() => {
     if (allStudentsError || activeStudentsError) {
+      console.log();
       dispatchAddAlert(allStudentsError || activeStudentsError);
     }
   }, [activeStudentsError, allStudentsError, dispatchAddAlert]);
@@ -188,7 +189,7 @@ export const ListOfStudents = () => {
       </tr>
     ));
 
-    if (!allStudentsError || !activeStudentsError) {
+    if (allStudentsError || activeStudentsError) {
       return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
     }
 
@@ -225,12 +226,12 @@ export const ListOfStudents = () => {
       <div className="card shadow p-3 mb-5 bg-white rounded">
         <div className="row align-items-center px-3 py-2 mb-2">
           <div className="col-2">
-            {/* <button className="btn"> */}
-            {/*  <Icon icon="List" className={styles.icon} size={25} /> */}
-            {/* </button> */}
-            {/* <button className="btn"> */}
-            {/*  <Icon icon="Cards" className={styles.icon} size={25} /> */}
-            {/* </button> */}
+            <button className="btn">
+              <Icon icon="List" className={styles.icon} size={25} />
+            </button>
+            <button className="btn">
+              <Icon icon="Cards" className={styles.icon} size={25} />
+            </button>
           </div>
           <div className="col-4">
             <Search
