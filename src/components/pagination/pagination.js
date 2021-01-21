@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
 import classNames from 'classnames';
 import styles from './pagination.scss';
 
-export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage }) => {
+export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage, page }) => {
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(page);
+  }, [page]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -43,7 +47,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div>
       <nav className="col-12 d-flex flex-row flex-wrap justify-content-center">
         <ul className="pagination m-0">
           <li className="page-item">
