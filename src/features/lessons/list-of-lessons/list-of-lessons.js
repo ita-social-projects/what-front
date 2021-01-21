@@ -16,25 +16,11 @@ export const ListOfLessons = () => {
   const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [lessonsPerPage] = useState(10);
-  const [lessonsNew, setLessonsNew] = useState([]);
-  
-  const [arrowActive, setArrowState] = useState([false, false, false, false]);
-  
-  const toggleSort = (key) => {
-    arrowActive[key] = arrowActive[key] ? false : true;
-    setArrowState(arrowActive);
-  };
-  
-  const [sortingCategories, setSortingCategories] = useState([
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'theme', sortedByAscending: false, tableHead: 'Theme' },
-    { id: 2, name: 'date', sortedByAscending: false, tableHead: 'Date' },
-    { id: 3, name: 'time', sortedByAscending: false, tableHead: 'Time' },
-  ]);
+  const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
+  const [prevSort, setPrevSort] = useState('id');
   
   const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-  
   const getLessons = useActions(fetchLessons);
   
   useEffect(() => {
@@ -44,14 +30,23 @@ export const ListOfLessons = () => {
   useEffect(() => {
     setFilteredLessonsList(data);
   }, [data]);
+  
+  useEffect(() => {
+    if (data.length && !isLoading) {
+      setFilteredLessonsList(data.map((lesson, index) => ({ index, ...lesson })));
+    }
+  }, [data, isLoading])
 
-  // useEffect(() => {
-  //   if (data.length && !isLoading) {
-  //     setLessonsNew(data.map((lesson, index) => ({index, ...lesson})));
-  //   }
-  // }, [data])
-  //
-  // console.log(setLessons)
+  
+  const transformDateTime = (dateTime) => {
+    const arr = dateTime.split('T');
+    const date = arr[0].split('-');
+    const resultDate = date.reverse().join('.');
+    return {
+      date: resultDate,
+      time: arr[1].slice(0, 5),
+    };
+  };
   
   useEffect(() => {
     const lessons = data.filter(
@@ -84,58 +79,45 @@ export const ListOfLessons = () => {
     history.push(`${paths.LESSON_EDIT}/${id}`);
   })
   
-  const transformDateTime = (dateTime) => {
-    const arr = dateTime.split('T');
-    const date = arr[0].split('-');
-    const resultDate = date.reverse().join('.');
-    return {
-      date: resultDate,
-      time: arr[1].slice(0, 5),
-    };
-  };
-  
-  const handleSortByParam = (event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-    const sortedLessons = [...filteredLessonsList].sort((prev, current) => {
-      if (prev > current) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
+  const handleSortByParam = (key) => {
+    if (prevSort === key) {
+      descendingSorts[key] = descendingSorts[key] ? false : true;
+      setDescendingSorts(descendingSorts);
+    } else {
+      setDescendingSorts({ id: false, themeName: false, lessonDate: false, lessonTime: false });
 
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
+    }
+    setPrevSort(key);
     
+    const sortedLessons = [...filteredLessonsList].sort((a, b) => {
+      if (descendingSorts[key]) {
+        return a[key] <= b[key] ? -1 : 1;
+      } else {
+        return b[key] <= a[key] ? -1 : 1;
+      }
+    });
     setFilteredLessonsList(sortedLessons);
   };
   
+  const indexOfLastLesson = currentPage * lessonsPerPage;
+  const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
   
   const getLessonsList = () => {
-    const indexOfLastLesson = currentPage * lessonsPerPage;
-    const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
     const lessonsList = filteredLessonsList.slice(indexOfFirstLesson, indexOfLastLesson)
-      .sort((a, b) => {
-        return a.lessonDate > b.lessonDate ? -1 : a.lessonDate < b.lessonDate ? 1 : 0;
-      })
-      .map((lesson, index) => {
+      .map((lesson) => {
         const { date, time } = transformDateTime(lesson.lessonDate);
         return (
           <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)}>
-            <td className="text-center">{index + 1}</td>
+            <td className="text-center">{lesson.index + 1}</td>
             <td>{lesson.themeName}</td>
             <td>{date}</td>
             <td>{time}</td>
             {currentUser.role !== 2 ?
-            <td onClick={(e) => {
+              <td onClick={(e) => {
                 editLesson(e, lesson.id)}
-                }>
-              <Icon className={classNames(styles.edit)} icon="Edit" color="#2E3440" size={30} />
-            </td> : null}
+              }>
+                <Icon className={classNames(styles.edit)} icon="Edit" color="#2E3440" size={30} />
+              </td> : null}
           </tr>
         );
       });
@@ -145,8 +127,6 @@ export const ListOfLessons = () => {
     }
     return lessonsList;
   };
-  
-  
   const paginate = (pageNumber) => {
     if(currentPage !== pageNumber) {
       setCurrentPage(pageNumber);
@@ -171,6 +151,7 @@ export const ListOfLessons = () => {
       }
     });
   };
+  
   return (
     <div className="container">
       <div className="row">
@@ -183,13 +164,13 @@ export const ListOfLessons = () => {
               {filteredLessonsList.length > lessonsPerPage ? <span className="text-right">{filteredLessonsList.length} lessons</span> : null}
             </div>
             {filteredLessonsList.length > lessonsPerPage && !isLoading &&
-              <Pagination
-                itemsPerPage={lessonsPerPage}
-                totalItems={filteredLessonsList.length}
-                paginate={paginate}
-                prevPage={prevPage}
-                nextPage={nextPage}
-              />
+            <Pagination
+              itemsPerPage={lessonsPerPage}
+              totalItems={filteredLessonsList.length}
+              paginate={paginate}
+              prevPage={prevPage}
+              nextPage={nextPage}
+            />
             }
           </div>
         </div>
@@ -215,88 +196,88 @@ export const ListOfLessons = () => {
             </div>
             <div className="d-flex justify-content-end">
               {currentUser.role !== 2 &&
-                <div>
-                  <button
-                    className={classNames(styles.button)}
-                    onClick={addLesson}
-                  >
-                    <span className="text-white">Add a lesson</span>
-                  </button>
-                </div>
+              <div>
+                <button
+                  className={classNames(styles.button)}
+                  onClick={addLesson}
+                >
+                  <span className="text-white">Add a lesson</span>
+                </button>
+              </div>
               }
             </div>
           </div>
-          <WithLoading isLoading={isLoading}>
-            <table className="table table-hover ">
+          <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
+            <table className="table table-hover">
               <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="text-center align-middle"
-                    onClick={handleSortByParam}
+              <tr>
+                <th
+                  scope="col"
+                  className={classNames(`${descendingSorts.id ? classNames(styles.descending) : ''}`, 'text-center', 'align-middle')}
+                  onClick={() => handleSortByParam('id')}
+                >
+                  <button
+                    className={classNames(styles['button-sort'])}
                   >
-                    <button
-                      className={classNames(styles['button-sort'], `${arrowActive[0] ? classNames(styles.descending) : ''}`)}
-                      onClick={() => toggleSort(0)}
-                    >
-                      <span className="font-weight-bolder">#</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={32} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={32} />
-                      </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    onClick={handleSortByParam}
+                    <span className="font-weight-bolder">#</span>
+                    <span className="pl-2">
+                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
+                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
+                    </span>
+                  </button>
+                </th>
+                <th
+                  scope="col"
+                  className={classNames(`${descendingSorts.themeName ? classNames(styles.descending) : ''}`)}
+                  onClick={() => handleSortByParam('themeName')}
+                >
+                  <button
+                    className={classNames(styles['button-sort'])}
                   >
-                    <button
-                      className={classNames(styles['button-sort'], `${arrowActive[1] ? classNames(styles.descending) : ''}`)}
-                      onClick={() => toggleSort(1)}
-                    >
-                      <span className="font-weight-bolder">Theme Name</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={32} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={32} />
-                      </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    onClick={handleSortByParam}
+                    <span className="font-weight-bolder">Theme Name</span>
+                    <span className="pl-2">
+                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
+                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
+                    </span>
+                  </button>
+                </th>
+                <th
+                  scope="col"
+                  className={classNames(`${descendingSorts.lessonDate ? classNames(styles.descending) : ''}`)}
+                  onClick={() => handleSortByParam('lessonDate')}
+                >
+                  <button
+                    className={classNames(styles['button-sort'])}
                   >
-                    <button
-                      className={classNames(styles['button-sort'], `${arrowActive[2] ? classNames(styles.descending) : ''}`)}
-                      onClick={() => toggleSort(2)}
-                    >
-                      <span className="font-weight-bolder">Date</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={32} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={32} />
+                    <span className="font-weight-bolder">Date</span>
+                    <span className="pl-2">
+                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
+                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
                       </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    onClick={handleSortByParam}
+                  </button>
+                </th>
+                <th
+                  scope="col"
+                  className={classNames(`${descendingSorts.lessonTime ? classNames(styles.descending) : ''}`)}
+                  onClick={() => handleSortByParam('lessonTime')}
+                >
+                  <button
+                    className={classNames(styles['button-sort'])}
                   >
-                    <button
-                      className={classNames(styles['button-sort'], `${arrowActive[3] ? classNames(styles.descending) : ''}`)}
-                      onClick={() => toggleSort(3)}
-                    >
-                      <span className="font-weight-bolder">Time</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={32} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={32} />
-                      </span>
-                    </button>
-
-                  </th>
-                  {currentUser.role !== 2 ? <th scope="col" className="align-middle">Edit</th> : null}
-                </tr>
+                    <span className="font-weight-bolder">Time</span>
+                    <span className="pl-2">
+                      <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
+                      <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
+                    </span>
+                  </button>
+                </th>
+                {currentUser.role !== 2 ? <th scope="col" className="align-middle">Edit</th> : null}
+              </tr>
               </thead>
               <tbody>
-                {getLessonsList()}
+                {
+                  getLessonsList()
+                }
               </tbody>
             </table>
           </WithLoading>
