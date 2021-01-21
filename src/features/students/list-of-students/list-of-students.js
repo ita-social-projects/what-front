@@ -184,7 +184,7 @@ export const ListOfStudents = () => {
           className="d-flex justify-content-center"
           onClick={(event) => handleEdit(event, id)}
         >
-          <Icon icon="Pencil" className={classNames(styles['edit-icon'], styles.icon)} />
+          <Icon icon="Edit" className={classNames(styles['edit-icon'], styles.icon)} />
         </td>
       </tr>
     ));
@@ -202,7 +202,7 @@ export const ListOfStudents = () => {
 
   return (
     <div className="container">
-      <div className="row d-flex justify-content-between align-items-center mb-3 px-3 py-2">
+      <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Students</h2>
         <div className="col-2 text-right">{
           students.length > studentsPerPage && !areActiveStudentsLoading && !areAllStudentsLoading
@@ -223,68 +223,70 @@ export const ListOfStudents = () => {
           )}
         </div>
       </div>
-      <div className="card shadow p-3 mb-5 bg-white rounded">
-        <div className="row align-items-center px-3 py-2 mb-2">
-          <div className="col-2">
-            <button className="btn">
-              <Icon icon="List" className={styles.icon} size={25} />
-            </button>
-            <button className="btn">
-              <Icon icon="Cards" className={styles.icon} size={25} />
-            </button>
+      <div className="row">
+        <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
+          <div className="row align-items-center px-3 py-2 mb-2">
+            <div className="col-2">
+              <button className="btn">
+                <Icon icon="List" className={styles.icon} size={25} />
+              </button>
+              <button className="btn">
+                <Icon icon="Cards" className={styles.icon} size={25} />
+              </button>
+            </div>
+            <div className="col-4">
+              <Search
+                value={searchFieldValue}
+                onSearch={handleSearch}
+                placeholder="student's name"
+              />
+            </div>
+            <div className="col-2 offset-2 custom-control custom-switch">
+              <input
+                value={isShowDisabled}
+                type="checkbox"
+                className={classNames('custom-control-input', styles['custom-control-input'])}
+                id="show-disabled-check"
+                onChange={handleShowDisabled}
+              />
+              <label
+                className={classNames('custom-control-label', styles['custom-control-label'])}
+                htmlFor="show-disabled-check"
+              >
+                Disabled students
+              </label>
+            </div>
+            <div className="col-2">
+              {[3, 4].includes(currentUser.role) && (
+                <Button onClick={handleAddStudent}>Add a student</Button>
+              )}
+            </div>
           </div>
-          <div className="col-4">
-            <Search
-              value={searchFieldValue}
-              onSearch={handleSearch}
-              placeholder="student's name"
-            />
-          </div>
-          <div className="col-2 offset-2 custom-control custom-switch">
-            <input
-              value={isShowDisabled}
-              type="checkbox"
-              className={classNames('custom-control-input', styles['custom-control-input'])}
-              id="show-disabled-check"
-              onChange={handleShowDisabled}
-            />
-            <label
-              className={classNames('custom-control-label', styles['custom-control-label'])}
-              htmlFor="show-disabled-check"
-            >
-              Show disabled
-            </label>
-          </div>
-          <div className="col-2">
-            {[3, 4].includes(currentUser.role) && (
-              <Button onClick={handleAddStudent}>Add a student</Button>
-            )}
-          </div>
+          <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                    <th key={id}>
+                      <span
+                        onClick={handleSortByParam}
+                        data-sorting-param={name}
+                        data-sorted-by-ascending={Number(sortedByAscending)}
+                        className={classNames(styles.category, { [styles['category-sorted']]: !sortedByAscending })}
+                      >
+                        {tableHead}
+                      </span>
+                    </th>
+                  ))}
+                  <th className="text-center">Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getStudentsRows()}
+              </tbody>
+            </table>
+          </WithLoading>
         </div>
-        <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                  <th key={id}>
-                    <span
-                      onClick={handleSortByParam}
-                      data-sorting-param={name}
-                      data-sorted-by-ascending={Number(sortedByAscending)}
-                      className={classNames(styles.category, { [styles['category-sorted']]: sortedByAscending })}
-                    >
-                      {tableHead}
-                    </span>
-                  </th>
-                ))}
-                <th className="text-center">Edit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getStudentsRows()}
-            </tbody>
-          </table>
-        </WithLoading>
       </div>
     </div>
   );

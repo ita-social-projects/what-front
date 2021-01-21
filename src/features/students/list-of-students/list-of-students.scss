@@ -62,3 +62,7 @@
   border-color: map-get($colors, accent-color) !important;
   background-color: map-get($colors, accent-color) !important;
 }
+
+.table-cell {
+  width: 20%;
+}
