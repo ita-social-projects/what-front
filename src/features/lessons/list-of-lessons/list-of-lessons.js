@@ -10,7 +10,6 @@ import styles from './list-of-lessons.scss';
 
 export const ListOfLessons = () => {
   const history = useHistory();
-  
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
@@ -18,25 +17,16 @@ export const ListOfLessons = () => {
   const [lessonsPerPage] = useState(10);
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
-  
   const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const getLessons = useActions(fetchLessons);
   
+  const indexOfLastLesson = currentPage * lessonsPerPage;
+  const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
+  
   useEffect(() => {
     getLessons();
   }, [getLessons]);
-  
-  useEffect(() => {
-    setFilteredLessonsList(data);
-  }, [data]);
-  
-  useEffect(() => {
-    if (data.length && !isLoading) {
-      setFilteredLessonsList(data.map((lesson, index) => ({ index, ...lesson })));
-    }
-  }, [data, isLoading])
-
   
   const transformDateTime = (dateTime) => {
     const arr = dateTime.split('T');
@@ -44,9 +34,22 @@ export const ListOfLessons = () => {
     const resultDate = date.reverse().join('.');
     return {
       date: resultDate,
-      time: arr[1].slice(0, 5),
+      time: arr[1],
     };
   };
+  
+  useEffect(() => {
+    setFilteredLessonsList(
+      data.map((lesson, index) => {
+        transformDateTime(lesson.lessonDate);
+        const { date, time } = transformDateTime(lesson.lessonDate);
+        lesson.lessonDate = date;
+        lesson.lessonTime = time;
+        lesson.index = index;
+        return lesson;
+      })
+    );
+  }, [data]);
   
   useEffect(() => {
     const lessons = data.filter(
@@ -54,8 +57,9 @@ export const ListOfLessons = () => {
     ).filter(
       (lesson) => lesson.lessonDate.includes(searchLessonsDateValue),
     );
+    setCurrentPage(1);
     setFilteredLessonsList(lessons);
-  }, [searchLessonsDateValue, searchLessonsThemeValue]);
+  }, [searchLessonsDateValue, searchLessonsThemeValue, currentPage]);
   
   const handleSearchTheme = (inputValue) => {
     setSearchLessonsThemeValue(inputValue);
@@ -85,7 +89,6 @@ export const ListOfLessons = () => {
       setDescendingSorts(descendingSorts);
     } else {
       setDescendingSorts({ id: false, themeName: false, lessonDate: false, lessonTime: false });
-
     }
     setPrevSort(key);
     
@@ -98,26 +101,21 @@ export const ListOfLessons = () => {
     });
     setFilteredLessonsList(sortedLessons);
   };
-  
-  const indexOfLastLesson = currentPage * lessonsPerPage;
-  const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
-  
+
   const getLessonsList = () => {
-    const lessonsList = filteredLessonsList.slice(indexOfFirstLesson, indexOfLastLesson)
-      .map((lesson) => {
-        const { date, time } = transformDateTime(lesson.lessonDate);
-        return (
-          <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)}>
-            <td className="text-center">{lesson.index + 1}</td>
-            <td>{lesson.themeName}</td>
-            <td>{date}</td>
-            <td>{time}</td>
+    const lessonsList = filteredLessonsList.map((lesson) => {
+      return (
+        <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)}>
+          <td className="text-center">{lesson.index + 1}</td>
+          <td>{lesson.themeName}</td>
+          <td>{lesson.lessonDate}</td>
+          <td>{lesson.lessonTime}</td>
             {currentUser.role !== 2 ?
               <td onClick={(e) => {
                 editLesson(e, lesson.id)}
               }>
                 <Icon className={classNames(styles.edit)} icon="Edit" color="#2E3440" size={30} />
-              </td> : null}
+            </td> : null}
           </tr>
         );
       });
@@ -127,29 +125,18 @@ export const ListOfLessons = () => {
     }
     return lessonsList;
   };
+  
   const paginate = (pageNumber) => {
     if(currentPage !== pageNumber) {
       setCurrentPage(pageNumber);
     }
   };
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(filteredLessonsList.length / lessonsPerPage);
-    setCurrentPage((prev) => {
-      if (prev === totalPages) {
-        return prev;
-      } else {
-        return pageNumber;
-      }
-    });
+    const totalPages = Math.ceil(filteredLessonsList?.length / lessonsPerPage);
+    setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
   };
   const prevPage = (pageNumber) => {
-    setCurrentPage((prev) => {
-      if (prev - 1 === 0) {
-        return prev;
-      } else {
-        return pageNumber;
-      }
-    });
+    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
   
   return (
@@ -170,6 +157,7 @@ export const ListOfLessons = () => {
               paginate={paginate}
               prevPage={prevPage}
               nextPage={nextPage}
+              page={currentPage}
             />
             }
           </div>
@@ -178,8 +166,12 @@ export const ListOfLessons = () => {
           <div className="d-flex justify-content-between pb-3">
             <div className="d-flex justify-content-start">
               <div>
-                <Icon icon="List" color="#2E3440" size={40} className="px-1" />
-                <Icon icon="Card" color="#2E3440" size={40} className="px-1" />
+                <button className={classNames(styles['button-sort'])}>
+                  <Icon icon="List" color="#2E3440" size={40} className="px-1" />
+               </button>
+                <button className={classNames(styles['button-sort'])}>
+                  <Icon icon="Card" color="#2E3440" size={40} className="px-1" />
+                </button>
               </div>
               <div className="px-2">
                 <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
@@ -216,9 +208,7 @@ export const ListOfLessons = () => {
                   className={classNames(`${descendingSorts.id ? classNames(styles.descending) : ''}`, 'text-center', 'align-middle')}
                   onClick={() => handleSortByParam('id')}
                 >
-                  <button
-                    className={classNames(styles['button-sort'])}
-                  >
+                  <button className={classNames(styles['button-sort'])}>
                     <span className="font-weight-bolder">#</span>
                     <span className="pl-2">
                         <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
@@ -231,13 +221,11 @@ export const ListOfLessons = () => {
                   className={classNames(`${descendingSorts.themeName ? classNames(styles.descending) : ''}`)}
                   onClick={() => handleSortByParam('themeName')}
                 >
-                  <button
-                    className={classNames(styles['button-sort'])}
-                  >
+                  <button className={classNames(styles['button-sort'])}>
                     <span className="font-weight-bolder">Theme Name</span>
                     <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
+                      <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
+                      <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
                     </span>
                   </button>
                 </th>
@@ -246,14 +234,12 @@ export const ListOfLessons = () => {
                   className={classNames(`${descendingSorts.lessonDate ? classNames(styles.descending) : ''}`)}
                   onClick={() => handleSortByParam('lessonDate')}
                 >
-                  <button
-                    className={classNames(styles['button-sort'])}
-                  >
+                  <button className={classNames(styles['button-sort'])}>
                     <span className="font-weight-bolder">Date</span>
                     <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
+                      <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
+                      <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
+                    </span>
                   </button>
                 </th>
                 <th
@@ -261,9 +247,7 @@ export const ListOfLessons = () => {
                   className={classNames(`${descendingSorts.lessonTime ? classNames(styles.descending) : ''}`)}
                   onClick={() => handleSortByParam('lessonTime')}
                 >
-                  <button
-                    className={classNames(styles['button-sort'])}
-                  >
+                  <button className={classNames(styles['button-sort'])}>
                     <span className="font-weight-bolder">Time</span>
                     <span className="pl-2">
                       <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
