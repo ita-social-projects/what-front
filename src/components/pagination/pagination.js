@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import styles from './pagination.scss';
 
 export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage, page }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(page);
 
   useEffect(() => {
     setCurrentPage(page);
