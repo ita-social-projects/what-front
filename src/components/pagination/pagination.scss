@@ -1,9 +1,14 @@
+@import '@/styles/main';
 .link {
   color: #B7B5B5 !important;
+  border: none !important;
+  border-radius: 20% !important;
+  margin: 0 10px;
+  box-shadow: 0 0 0 0 !important;
 }
 
 .active {
-  background-color: #B7B5B5 !important;
+  background-color: map-get($colors, accent-color) !important;
   color: white !important;
 }
 

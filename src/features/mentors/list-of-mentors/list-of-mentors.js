@@ -199,11 +199,11 @@ export const ListOfMentors = () => {
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
-        <div className="col-6"><h2>Mentors</h2></div>
+        <div className="col-5"><h2>Mentors</h2></div>
         {filteredMentorList.length > mentorsPerPage ? 
           <span className="col-2 text-right">{filteredMentorList.length} mentors</span> : null
         }
-        <div className="col-4 d-flex align-items-center justify-content-end">
+        <div className="col-5 d-flex align-items-center justify-content-end">
           {filteredMentorList.length > mentorsPerPage && !areActiveMentorsLoading && !areAllMentorsLoading &&
             <Pagination
               itemsPerPage={mentorsPerPage}
