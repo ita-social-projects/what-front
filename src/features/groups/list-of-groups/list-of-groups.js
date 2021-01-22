@@ -273,7 +273,7 @@ export const ListOfGroups = () => {
         <div className='container mt-4'>
 
             <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
-            <table className="table">
+            <table className={classNames(styles['table'], 'table')}>
               <thead>
               <tr>
               {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
