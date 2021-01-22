@@ -28,11 +28,12 @@
 
 .edit {
   transition: .3s ease;
+  padding-top: 3px;
   &:hover {
     transform: scale(1.4);
+    padding-top: 5px;
   }
 }
-.rotate:active {}
 
 .button-sort {
   background-color: #fff !important;
