@@ -3,6 +3,9 @@
 .calendar-input{
   border-color: map-get($colors, textAccentN1-color) !important;
   width: 18%;
+  .form-control {
+    max-width: 50%;
+  }
 }
 
 .calendar-input:focus {
@@ -36,4 +39,30 @@
 .btn-add{
   background-color: $theme-colorAccent !important;
   border: $theme-colorAccent !important;
+}
+
+.category {
+  cursor: pointer;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    width: 8px;
+    height: 8px;
+    transform: rotateZ(45deg);
+    transition: .3s;
+  }
+
+  &-sorted {
+    &::after {
+      transform: rotateZ(225deg);
+      top: 5px;
+    }
+  }
 }

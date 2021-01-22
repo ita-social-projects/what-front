@@ -4,8 +4,8 @@ import propTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './pagination.scss';
 
-export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage, page }) => {
+  const [currentPage, setCurrentPage] = useState(page);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -44,12 +44,12 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
     setCurrentPage((prev) => prev === totalPages ? prev : prev + 1);
   };
 
-  return ( 
+  return (
     <div className={styles.wrapper}>
       <nav className="col-12 d-flex flex-row flex-wrap justify-content-center">
         <ul className="pagination">
           <li className="page-item">
-            <button className={classNames("page-link", styles.link)} 
+            <button className={classNames("page-link", styles.link)}
               onClick={() => {
                 goToPrevPage()
                 prevPage(currentPage - 1)
@@ -62,7 +62,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
             if (!page.ellipsis) {
               return (
                 <li key={page.id} className="page-item">
-                  <button className={classNames("page-link", styles.link, {[styles["active"]]: page.current})} 
+                  <button className={classNames("page-link", styles.link, {[styles["active"]]: page.current})}
                     onClick={() => {
                       paginate(page.id)
                       changePage(page.id)
@@ -83,7 +83,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
         </ul>
         <ul className="pagination">
           <li className="page-item">
-            <button className={classNames("page-link", styles.link)} 
+            <button className={classNames("page-link", styles.link)}
               onClick={() => {
                 goToNextPage()
                 nextPage(currentPage + 1)
