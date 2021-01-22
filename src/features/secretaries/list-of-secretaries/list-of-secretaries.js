@@ -123,8 +123,18 @@ export const ListOfSecretaries = () => {
     setVisibleSecretaries(sortedSecretary);
   };
 
+  const resetSortingCategory = useCallback(() => {
+    setSortingCategories(sortingCategories.map((category) => {
+      if (category.name === 'index') {
+        return { ...category, sortedByAscending: true };
+      }
+      return { ...category, sortedByAscending: false };
+    }));
+  }, [sortingCategories]);
+
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
+    resetSortingCategory();
     if (event.target.checked) {
       loadAllSecretaries();
     } else {
@@ -134,6 +144,7 @@ export const ListOfSecretaries = () => {
 
   const handleSearch = (value) => {
     setSearch(value);
+    resetSortingCategory();
   };
 
   const handleAddSecretary = useCallback(() => {
@@ -153,15 +164,22 @@ export const ListOfSecretaries = () => {
     if (currentPage !== pageNumber) {
       setCurrentPage(pageNumber);
     }
+    resetSortingCategory();
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(activeSecretaries?.length / secretariesPerPage);
-    setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
+    const totalPages = Math.ceil(searchResults?.length / secretariesPerPage);
+    if (currentPage !== totalPages) {
+      setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
+      resetSortingCategory();
+    }
   };
 
   const prevPage = (pageNumber) => {
-    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
+    if (currentPage - 1 !== 0) {
+      setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
+      resetSortingCategory();
+    }
   };
 
   const getSecretaries = () => {
@@ -178,7 +196,7 @@ export const ListOfSecretaries = () => {
               onClick={(event) => handleEditSecretary(event, id)}
               data-secretary-id={id}
             >
-              <Icon viewBox="0 0 45 45" size={20} icon="Edit" />
+              <Icon icon="Edit" size={30} />
             </td>
             )}
       </tr>
@@ -216,11 +234,11 @@ export const ListOfSecretaries = () => {
         </div>
       </div>
       <div className="container card shadow">
-        <div className="row my-2">
-          <div className="col-md-2">
+        <div className="row align-items-center my-2">
+          <div className="col-md-2 d-flex justify-content-center">
             <div className="btn-group">
-              <button type="button" className="btn btn-info">List</button>
-              <button type="button" className="btn btn-info">Card</button>
+              <button type="button" className="btn" disabled><Icon icon="List" size={25} /></button>
+              <button type="button" className="btn" disabled><Icon icon="Card" size={25} /></button>
             </div>
           </div>
           <div className="col-md-4">
@@ -244,13 +262,13 @@ export const ListOfSecretaries = () => {
           {currentUser.role === 4
           && (
           <div className="col-md-3 text-right">
-            <Button variant="info" onClick={handleAddSecretary}>
+            <Button onClick={handleAddSecretary} className={styles['add-button']} variant="info">
               <span>Add a secretary</span>
             </Button>
           </div>
           )}
         </div>
-        <WithLoading isLoading={areActiveSecretariesLoading || areAllSecretariesLoading} className="d-block mx-auto">
+        <WithLoading isLoading={areActiveSecretariesLoading || areAllSecretariesLoading} className="d-block mx-auto my-3" variant="info">
           <table className="table table-hover mt-2">
             <thead>
               <tr>
