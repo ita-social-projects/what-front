@@ -29,11 +29,9 @@ export const ListOfLessons = () => {
   }, [getLessons]);
   
   const transformDateTime = (dateTime) => {
-    const arr = dateTime.split('T');
-    const date = arr[0].split('-');
-    const resultDate = date.reverse().join('.');
+    const arr = dateTime.toString().split('T');
     return {
-      date: resultDate,
+      date: new Date(arr[0]),
       time: arr[1],
     };
   };
@@ -55,7 +53,7 @@ export const ListOfLessons = () => {
     const lessons = data.filter(
       (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
     ).filter(
-      (lesson) => lesson.lessonDate.includes(searchLessonsDateValue),
+      (lesson) => lesson.lessonDate.toString().includes(searchLessonsDateValue),
     );
     setCurrentPage(1);
     setFilteredLessonsList(lessons);
@@ -108,7 +106,7 @@ export const ListOfLessons = () => {
         <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)}>
           <td className="text-center">{lesson.index + 1}</td>
           <td>{lesson.themeName}</td>
-          <td>{lesson.lessonDate}</td>
+          <td>{lesson.lessonDate.toDateString()}</td>
           <td>{lesson.lessonTime}</td>
             {currentUser.role !== 2 ?
               <td onClick={(e) => {
@@ -208,7 +206,9 @@ export const ListOfLessons = () => {
                   className={classNames(`${descendingSorts.id ? classNames(styles.descending) : ''}`, 'text-center', 'align-middle')}
                   onClick={() => handleSortByParam('id')}
                 >
-                  <button className={classNames(styles['button-sort'])}>
+                  <button
+                    className={classNames(styles['button-sort'])}
+                  >
                     <span className="font-weight-bolder">#</span>
                     <span className="pl-2">
                         <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
@@ -221,7 +221,9 @@ export const ListOfLessons = () => {
                   className={classNames(`${descendingSorts.themeName ? classNames(styles.descending) : ''}`)}
                   onClick={() => handleSortByParam('themeName')}
                 >
-                  <button className={classNames(styles['button-sort'])}>
+                  <button
+                    className={classNames(styles['button-sort'])}
+                  >
                     <span className="font-weight-bolder">Theme Name</span>
                     <span className="pl-2">
                       <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
@@ -234,12 +236,14 @@ export const ListOfLessons = () => {
                   className={classNames(`${descendingSorts.lessonDate ? classNames(styles.descending) : ''}`)}
                   onClick={() => handleSortByParam('lessonDate')}
                 >
-                  <button className={classNames(styles['button-sort'])}>
+                  <button
+                    className={classNames(styles['button-sort'])}
+                  >
                     <span className="font-weight-bolder">Date</span>
                     <span className="pl-2">
                       <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
                       <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                    </span>
+                      </span>
                   </button>
                 </th>
                 <th
@@ -247,7 +251,9 @@ export const ListOfLessons = () => {
                   className={classNames(`${descendingSorts.lessonTime ? classNames(styles.descending) : ''}`)}
                   onClick={() => handleSortByParam('lessonTime')}
                 >
-                  <button className={classNames(styles['button-sort'])}>
+                  <button
+                    className={classNames(styles['button-sort'])}
+                  >
                     <span className="font-weight-bolder">Time</span>
                     <span className="pl-2">
                       <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
