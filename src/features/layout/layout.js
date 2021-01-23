@@ -9,7 +9,7 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  Header, Schedule, AlertBox, StartGroup,
+  Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
@@ -45,7 +45,8 @@ export const Layout = () => {
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={`${paths.COURSE_DETAILS}/:id`} component={() => <CoursesTabs index={0} />} />
           <ProtectedRoute roles={[3, 4]} exact path={`${paths.COURSE_EDIT}/:id`} component={() => <CoursesTabs index={1} />} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.MY_PROFILE} component={MyProfile} />
-          <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.SCHEDULE} component={Schedule} />
+          <ProtectedRoute roles={[3, 4]} exact path={paths.SCHEDULE} component={AllSchedules} />
+          <ProtectedRoute roles={[3, 4]} exact path={`${paths.SCHEDULE_BY_GROUP_ID}/:id`} component={ScheduleGroup} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.CHANGE_PASSWORD} component={ChangePassword} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
