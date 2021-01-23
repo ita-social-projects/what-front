@@ -136,6 +136,7 @@ export const ListOfCourses = () => {
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}
+          page={currentPage}
         />
       }
     </div>

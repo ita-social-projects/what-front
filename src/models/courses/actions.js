@@ -21,13 +21,22 @@ export const editCourse = (course, id) => ({
   },
 });
 
+export const deleteCourse = (id) => {
+  return {
+    type: actionTypes.DELETE_COURSE,
+    payload: {
+      id,
+    },
+  };
+};
+
 function* loadCoursesWorker() {
   try {
     yield put({ type: actionTypes.LOADING_COURSES_STARTED });
     const courses = yield call(ApiService.load, '/courses');
     yield put({ type: actionTypes.LOADING_COURSES_SUCCESS, payload: { courses } });
   } catch (error) {
-    yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error: error.message } });
+    yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error } });
   }
 }
 
@@ -39,6 +48,7 @@ function* createCourseWorker(data) {
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.CREATING_COURSE_FAILED, payload: { error: error.message } });
+    yield put({ type: actionTypes.CLEAR_ERROR });
   }
 }
 
@@ -50,7 +60,19 @@ function* editCourseWorker(data) {
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.EDITING_COURSE_FAILED, payload: { error: error.message } });
-    yield put({ type: actionTypes.EDITING_CLEAR_ERROR });
+    yield put({ type: actionTypes.CLEAR_ERROR });
+  }
+}
+
+function* deleteCourseWorker(data) {
+  try {
+    yield put({type: actionTypes.DELETING_COURSE_STARTED});
+    yield call(ApiService.remove, `/courses/${data.payload.id}`);
+    yield put({type: actionTypes.DELETING_COURSE_SUCCESS});
+    yield put({type: actionTypes.CLEAR_LOADED});
+  } catch (error) {
+    yield put({type: actionTypes.DELETING_COURSE_FAILED, payload: {error: error.message}});
+    yield put({ type: actionTypes.CLEAR_ERROR });
   }
 }
 
@@ -66,10 +88,15 @@ function* editCourseWatcher() {
   yield takeEvery(actionTypes.EDIT_COURSE, editCourseWorker);
 }
 
+function* deleteCourseWatcher() {
+  yield takeEvery(actionTypes.DELETE_COURSE, deleteCourseWorker)
+}
+
 export function* coursesWatcher() {
   yield all([
     fork(fetchCoursesWatcher),
     fork(createCourseWatcher),
     fork(editCourseWatcher),
+    fork(deleteCourseWatcher)
   ]);
 }
