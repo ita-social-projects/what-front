@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Badge } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
@@ -28,6 +28,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
 
   const [currentWeek, setCurrentWeek] = useState([]);
   const [chosenDate, setChosenDate] = useState(new Date());
+  const [inputDateValue, setInputDateValue] = useState('');
 
   const history = useHistory();
 
@@ -73,15 +74,27 @@ export const Schedule = ({ groupsData, schedulesData }) => {
 
   const handleInputDate = (event) => {
     setChosenDate(new Date(event.target.value));
-  };
-
-  const handleEditSchedule = (id) => {
-    history.push(`${paths.SCHEDULE_EDIT}/${id}`);
+    setInputDateValue(event.target.value);
   };
 
   const handleAddSchedule = () => {
     history.push(paths.SCHEDULE_ADD);
   };
+
+  const handleSetToday = () => {
+    setInputDateValue('');
+    setChosenDate(new Date());
+  };
+
+  const handleEditSchedule = (id) => {
+    console.log(id);
+    history.push(`${paths.SCHEDULE_EDIT}/${id}`);
+  };
+
+  const handleGroupSchedule = useCallback((event) => {
+    const { groupId } = event.target.dataset;
+    history.push(`${paths.SCHEDULE_BY_GROUP_ID}/${groupId}`);
+  }, [history]);
 
   return (
     <div className="container">
@@ -93,12 +106,13 @@ export const Schedule = ({ groupsData, schedulesData }) => {
               min={`${new Date().getFullYear() - 1}-${new Date().getMonth() + 1}-${new Date().getDate()}`}
               max={`${new Date().getFullYear() + 1}-${new Date().getMonth() + 1}-${new Date().getDate()}`}
               onChange={handleInputDate}
+              value={inputDateValue}
               className={styles['date-input']}
             />
             <Button
               className="ml-2"
-              variant="warning"
-              onClick={() => setChosenDate(new Date())}
+              variant="info"
+              onClick={handleSetToday}
             >
               Today
             </Button>
@@ -122,8 +136,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
           </div>
           {[3, 4].includes(currentUser.role) ? (
             <div className="col-3 d-flex justify-content-end pr-0">
-              <Button variant="warning" onClick={handleAddSchedule}>
-                <Icon icon="Plus" className="icon" />
+              <Button variant="info" onClick={handleAddSchedule}>
                 Add schedule
               </Button>
             </div>
@@ -139,7 +152,11 @@ export const Schedule = ({ groupsData, schedulesData }) => {
               <ul className={styles['lessons-list']}>
                 { lessons.map(({ id: lessonId, studentGroupId, lessonEnd, lessonStart }) => (
                   <li key={lessonId} className={styles['lessons-list__item']}>
-                    <p className={styles['lessons-list__group-name']}>
+                    <p
+                      className={styles['lessons-list__group-name']}
+                      onClick={handleGroupSchedule}
+                      data-group-id={studentGroupId}
+                    >
                       { Array.isArray(groups)
                         ? groups.find((group) => studentGroupId === group.id).name
                         : groups.name }
@@ -149,7 +166,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                         variant={classNames(
                           { primary: isToday },
                           { secondary: isPast && !isToday },
-                          { warning: !isToday && !isPast },
+                          { info: !isToday && !isPast },
                         )}
                       >
                         {lessonStart.substring(0, 5)} - {lessonEnd.substring(0, 5)}
