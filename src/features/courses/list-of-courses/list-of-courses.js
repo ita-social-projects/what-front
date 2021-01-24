@@ -4,11 +4,10 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
 import { fetchCourses, coursesSelector, currentUserSelector } from '@/models/index.js';
 
+import classNames from 'classnames';
 import { Search, Button, WithLoading, Pagination } from '../../../components/index.js';
 
 import styles from './list-of-courses.scss';
-import classNames from 'classnames';
-import { addAlert } from '@/features/layout';
 
 const editIcon = (
   <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" className={classNames("bi bi-pencil", styles.scale)} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -31,6 +30,8 @@ const iconCards = (
 );
 
 export const ListOfCourses = () => {
+  console.log(styles);
+
   const history = useHistory();
 
   const [coursesPerPage] = useState(10);
@@ -42,13 +43,13 @@ export const ListOfCourses = () => {
 
   const [sortingCategories, setSortingCategories] = useState([
     { id: 0, name: 'index', sortedByAscending: false, tableHead: '#' },
-    { id: 1, name: 'title', sortedByAscending: false, tableHead: 'Title' }
+    { id: 1, name: 'title', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
-  const { data, isLoading } = useSelector(coursesSelector, shallowEqual); //array of courses ,true/false
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual); //role of user
+  const { data, isLoading } = useSelector(coursesSelector, shallowEqual); // array of courses ,true/false
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual); // role of user
 
-  const [loadCourses] = useActions([fetchCourses]); //loading courses
+  const [loadCourses] = useActions([fetchCourses]); // loading courses
 
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
@@ -186,12 +187,12 @@ export const ListOfCourses = () => {
                 <div className="col-2 offset-4">
                   {currentUser.role === 4
                   && (
-                      <Button onClick={addCourse}>
+                      <Button onClick={addCourse} className={styles.btn}>
                         <span>Add a course</span>
                       </Button>
                   ) || currentUser.role === 3
                   && (
-                      <Button onClick={addCourse}>
+                      <Button onClick={addCourse} className={styles.btn}>
                         <span>Add a course</span>
                       </Button>
                   )}
@@ -205,7 +206,7 @@ export const ListOfCourses = () => {
                     {sortingCategories.map(({ id, title, tableHead, sortedByAscending}) => (
                       <th
                         key={id}
-                        className={styles["tableHead"]}
+                        className={styles.tablehead}
                       >
                         <span
                           data-sorting-param={title}
@@ -214,7 +215,7 @@ export const ListOfCourses = () => {
                           className={classNames({[styles.rotate]: sortedByAscending})}
                         >
                         {tableHead}
-                      </span>
+                        </span>
                       </th>
                     ))}
                     <th className="text-center">Edit</th>

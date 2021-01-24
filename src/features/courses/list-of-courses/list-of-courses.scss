@@ -12,17 +12,6 @@
   }
 }
 
-.switch-input:focus~,
-.switch-label::before {
-  border-color: map-get($colors, accent-color) !important;
-  box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;
-}
-
-.switch-input:checked~,
-.switch-label::before {
-  border-color: map-get($colors, accent-color) !important;
-  background-color: map-get($colors, accent-color) !important;
-}
 
 .btn {
   background-color: map-get($colors, accent-color) !important;
@@ -33,7 +22,7 @@
   }
 }
 
-.table-head {
+.tablehead {
   &:first-of-type {
     text-align: center;
   }
