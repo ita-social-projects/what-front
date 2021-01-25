@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { useActions, paths } from '@/shared';
 import { createCourse, createdCourseSelector } from '@/models';
 import { addAlert } from '@/features';
+import { Button } from '@/components';
 import { addCourseValidation } from '@features/validation/validation-helpers.js';
 import styles from './add-course.scss';
 
@@ -64,13 +65,13 @@ export const AddCourse = () => {
                     className={classNames('btn btn-secondary w-25', styles.button)}
                   >Back
                   </Link>
-                  <input
+                  <Button
                     type="submit"
-                    name="submit-btn"
                     disabled={!isValid || !dirty || isLoading || errors.name}
-                    className={classNames('btn btn-success w-25', styles.button)}
-                    value="Save"
-                  />
+                    className={classNames('w-25', styles.button)}
+                  >
+                    Save
+                  </Button>
                 </div>
               </Form>
             )}
