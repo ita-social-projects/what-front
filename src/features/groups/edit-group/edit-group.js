@@ -276,7 +276,7 @@ export const EditGroup = ({
                                 {firstName} {lastName}
                                 <button
                                   type="button"
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  className={classNames('btn p-0 ml-auto mr-2 font-weight-bold', styles.cross)}
                                   onClick={() => removeMentor(id)}
                                 >
                                   X
@@ -331,7 +331,7 @@ export const EditGroup = ({
                                 {firstName} {lastName}
                                 <button
                                   type="button"
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  className={classNames('btn p-0 ml-auto mr-2 font-weight-bold', styles.cross)}
                                   onClick={() => removeStudent(id)}
                                 >
                                   X
