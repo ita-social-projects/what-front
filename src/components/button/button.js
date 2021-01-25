@@ -19,6 +19,7 @@ export const Button = ({
       styles.button,
       'btn',
       { [`btn-${variant}`]: variant },
+        { [styles.default]: !variant },
       className,
     )}
     disabled={disabled}
@@ -43,6 +44,6 @@ Button.defaultProps = {
   type: 'button',
   className: '',
   disabled: false,
-  variant: 'secondary',
+  variant: '',
   onClick: () => false,
 };
