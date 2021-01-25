@@ -1,3 +1,5 @@
+@import '../../index.scss';
+
 .sidebar {
   color: white;
 
@@ -45,12 +47,12 @@
     color: white;
 
       &:focus {
-        background-color: #88C0D0;
-        color: #2E3440;
+        background-color: map-get($colors, accent-color);
+        color: map-get($colors, dark-color);
       }
       &:hover {
-        background-color: #88C0D0;
-        color: #2E3440;
+        background-color: map-get($colors, accent-color);
+        color: map-get($colors, dark-color);
       }
   }
   
@@ -107,7 +109,7 @@
 }
 
 .active {
-  background-color:#88C0D0 !important;
+  background-color: map-get($colors, accent-color) !important;
+  color: map-get($colors, dark-color) !important;
   font-weight: bold !important;
-  color: #2E3440 !important;
 }
