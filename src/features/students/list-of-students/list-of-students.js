@@ -102,7 +102,6 @@ export const ListOfStudents = () => {
   [activeStudents, areActiveStudentsLoading, allStudents, areAllStudentsLoading, isShowDisabled]);
 
   useEffect(() => {
-    setSortingCategories(INITIAL_CATEGORIES);
     setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
   }, [currentPage, students]);
 
@@ -128,12 +127,12 @@ export const ListOfStudents = () => {
 
   const handleSortByParam = useCallback((event) => {
     const categoryParams = event.target.dataset;
-    const sortedStudents = getSortedByParam(visibleStudents, categoryParams);
+    const sortedStudents = getSortedByParam(students, categoryParams);
 
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
-
-    setVisibleStudents(sortedStudents);
-  }, [sortingCategories, visibleStudents]);
+    setStudents(sortedStudents);
+    setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
+  }, [sortingCategories, students]);
 
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
