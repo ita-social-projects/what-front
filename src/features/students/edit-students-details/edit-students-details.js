@@ -242,7 +242,7 @@ export const EditStudentsDetails = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
+                            <Button variant="info" onClick={handleGroupAdd}>+</Button>
                           </div>
                         </div>
                         { error ? <div className={styles.error}>{error}</div> : null}
@@ -258,13 +258,13 @@ export const EditStudentsDetails = ({ id }) => {
                             {groups.map(({ id, name }) => (
                               <li
                                 className={classNames(styles['list-element'],
-                                  'd-flex bg-light border border-outline-secondary rounded')}
+                                  'd-flex bg-light border border-outline-secondary rounded font-weight-bold')}
                                 key={id}
                                 data-groupid={id}
                                 data-groupname={name}
                               >{name}
                                 <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-muted"
                                   type="button"
                                   onClick={handleGroupDelete}
                                 >X
@@ -279,7 +279,7 @@ export const EditStudentsDetails = ({ id }) => {
                       <div className="col-md-3 col-4">
                         <Button
                           className="w-100"
-                          variant="danger"
+                          variant="dark"
                           onClick={handleShowModal}
                           disabled={!isValid || dirty || isEditedLoading || isRemovedLoading}
                         >Exclude
@@ -296,7 +296,7 @@ export const EditStudentsDetails = ({ id }) => {
                       </div>
                       <div className="col-md-3 col-4">
                         <button
-                          className={classNames('w-100 btn btn-success', styles.button)}
+                          className={classNames('w-100 btn btn-info', styles.button)}
                           type="submit"
                           disabled={!isValid || !dirty || isEditedLoading || isRemovedLoading
                             || errors.firstName || errors.lastName || errors.email}
