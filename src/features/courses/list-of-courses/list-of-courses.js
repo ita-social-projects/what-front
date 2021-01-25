@@ -30,9 +30,10 @@ const iconCards = (
 );
 
 export const ListOfCourses = () => {
-  console.log(styles);
 
   const history = useHistory();
+
+  const [visibleCourses, setVisibleCourses] = useState([])
 
   const [coursesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +44,7 @@ export const ListOfCourses = () => {
 
   const [sortingCategories, setSortingCategories] = useState([
     { id: 0, name: 'index', sortedByAscending: false, tableHead: '#' },
-    { id: 1, name: 'title', sortedByAscending: false, tableHead: 'Title' },
+    { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
   const { data, isLoading } = useSelector(coursesSelector, shallowEqual); // array of courses ,true/false
@@ -63,6 +64,9 @@ export const ListOfCourses = () => {
     setFilteredCourses(data);
   }, [data]);
 
+  useEffect(() => {
+    setVisibleCourses(filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse));
+  }, [currentPage, filteredCourses]);
 
   {filteredCourses.map(({ id, name }) => (
     <tr key={id} onClick={() => courseDetails(id)}>
@@ -74,7 +78,7 @@ export const ListOfCourses = () => {
 
 
   const coursesList = () => {
-    const courses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
+    const courses = visibleCourses
       .map((course) => (
         <tr key={course.id} onClick={(event) => courseDetails(course.id)} data-student-id={course.id}>
           <td>{course.id}</td>
@@ -111,7 +115,7 @@ export const ListOfCourses = () => {
     const { sortingParam, sortedByAscending } = event.target.dataset;
     const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
 
-    const sortedCourses = [...filteredCourses].sort((prevCourse, currentCourse) => {
+    const sortedCourses = [...visibleCourses].sort((prevCourse, currentCourse) => {
       if (prevCourse[sortingParam] > currentCourse[sortingParam]) {
         return sortingCoefficient * -1;
       }
@@ -125,7 +129,7 @@ export const ListOfCourses = () => {
       return { ...category, sortedByAscending: false };
     }));
 
-    setFilteredCourses(sortedCourses)
+    setVisibleCourses(sortedCourses)
   };
 
 
@@ -203,16 +207,16 @@ export const ListOfCourses = () => {
               <table className="table table-hover">
                 <thead>
                   <tr>
-                    {sortingCategories.map(({ id, title, tableHead, sortedByAscending}) => (
+                    {sortingCategories.map(({ id, name, tableHead, sortedByAscending}) => (
                       <th
                         key={id}
                         className={styles.tablehead}
                       >
                         <span
-                          data-sorting-param={title}
-                          data-sorted-by-ascending={Number(sortedByAscending)}
+                          data-sorting-param={name}
+                          data-sorted-by-ascending={Number(!sortedByAscending)}
                           onClick={handleSortByParam}
-                          className={classNames({[styles.rotate]: sortedByAscending})}
+                          className={classNames({[styles.rotate]: !sortedByAscending})}
                         >
                         {tableHead}
                         </span>
