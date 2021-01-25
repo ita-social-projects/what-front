@@ -38,12 +38,15 @@ export const ListOfStudents = () => {
 
   const [students, setStudents] = useState([]);
   const [visibleStudents, setVisibleStudents] = useState([]);
-  const [sortingCategories, setSortingCategories] = useState([
+
+  const INITIAL_CATEGORIES = [
     { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
     { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
     { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
     { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
-  ]);
+  ];
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchFieldValue, setSearchFieldValue] = useState('');
@@ -61,6 +64,25 @@ export const ListOfStudents = () => {
   const searchStudents = (searchedStudents, value) => searchedStudents.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
     .toLowerCase().includes(value.toLowerCase()));
 
+  const getSortedByParam = (data, activeCategory) => {
+    const { sortingParam, sortedByAscending } = activeCategory;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    return [...data].sort((prevItem, currentItem) => {
+      if (prevItem[sortingParam] > currentItem[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+  };
+
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
+
   useEffect(() => {
     dispatchLoadActiveStudents();
   }, [dispatchLoadActiveStudents]);
@@ -74,18 +96,18 @@ export const ListOfStudents = () => {
     if (!isShowDisabled && activeStudents.length && !areActiveStudentsLoading) {
       setStudents(activeStudents.map((student, index) => ({ index, ...student })));
     }
-
+    setSortingCategories(INITIAL_CATEGORIES);
     setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
   },
   [activeStudents, areActiveStudentsLoading, allStudents, areAllStudentsLoading, isShowDisabled]);
 
   useEffect(() => {
+    setSortingCategories(INITIAL_CATEGORIES);
     setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
   }, [currentPage, students]);
 
   useEffect(() => {
     if (allStudentsError || activeStudentsError) {
-      console.log();
       dispatchAddAlert(allStudentsError || activeStudentsError);
     }
   }, [activeStudentsError, allStudentsError, dispatchAddAlert]);
@@ -105,22 +127,10 @@ export const ListOfStudents = () => {
   }, [searchFieldValue, isShowDisabled]);
 
   const handleSortByParam = useCallback((event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+    const categoryParams = event.target.dataset;
+    const sortedStudents = getSortedByParam(visibleStudents, categoryParams);
 
-    const sortedStudents = [...visibleStudents].sort((prevStudent, currentStudent) => {
-      if (prevStudent[sortingParam] > currentStudent[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
 
     setVisibleStudents(sortedStudents);
   }, [sortingCategories, visibleStudents]);
