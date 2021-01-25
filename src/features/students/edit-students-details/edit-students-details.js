@@ -258,7 +258,7 @@ export const EditStudentsDetails = ({ id }) => {
                             {groups.map(({ id, name }) => (
                               <li
                                 className={classNames(styles['list-element'],
-                                  'd-flex bg-light border border-outline-secondary rounded font-weight-bold')}
+                                  'd-flex bg-light border border-outline-secondary rounded')}
                                 key={id}
                                 data-groupid={id}
                                 data-groupname={name}
