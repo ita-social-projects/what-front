@@ -35,7 +35,7 @@ export const editCourseReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loaded: false,
       };
-    case actionTypes.EDITING_CLEAR_ERROR:
+    case actionTypes.CLEAR_ERROR:
       return {
         ...state,
         error: '',

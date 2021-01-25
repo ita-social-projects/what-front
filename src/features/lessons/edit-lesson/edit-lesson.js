@@ -1,20 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import classNames from 'classnames';
-import {
-  Formik, Field, Form, FieldArray,
-} from 'formik';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions, paths } from '@/shared';
-import * as Yup from 'yup';
-import { WithLoading } from '@/components';
-import {
-  editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector, 
+import { editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector, 
   fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
 } from '@/models';
-import { addAlert } from '@/features';
-import styles from './edit-lesson.scss';
+import { useActions, paths } from '@/shared';
+
+import { WithLoading } from '@/components';
 import {lessonValidation} from "@features/validation/validation-helpers";
+import { addAlert } from '@/features';
+import { Formik, Field, Form, FieldArray } from 'formik';
+
+import classNames from 'classnames';
+import styles from './edit-lesson.scss';
+
 
 export const EditLesson = () => {
   const history = useHistory();

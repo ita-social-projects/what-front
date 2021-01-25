@@ -152,6 +152,7 @@ export const ListOfGroups = () => {
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}
+          page={currentPage}
         />
       }
     </div>
