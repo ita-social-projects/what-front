@@ -43,7 +43,7 @@ export const ListOfCourses = () => {
   const [filteredCourses, setFilteredCourses] = useState([]);
 
   const [sortingCategories, setSortingCategories] = useState([
-    { id: 0, name: 'index', sortedByAscending: false, tableHead: '#' },
+    { id: 0, name: 'id', sortedByAscending: false, tableHead: '#' },
     { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
@@ -95,7 +95,7 @@ export const ListOfCourses = () => {
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
-    setFilteredCourses(data.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
+    setVisibleCourses(data.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
   };
 
   const addCourse = () => {
@@ -214,7 +214,7 @@ export const ListOfCourses = () => {
                       >
                         <span
                           data-sorting-param={name}
-                          data-sorted-by-ascending={Number(!sortedByAscending)}
+                          data-sorted-by-ascending={Number(sortedByAscending)}
                           onClick={handleSortByParam}
                           className={classNames({[styles.rotate]: !sortedByAscending})}
                         >
