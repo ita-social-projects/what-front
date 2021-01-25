@@ -3,7 +3,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { number } from 'prop-types';
 
-import { currentUserSelector, activeSecretariesSelector } from '@models/index.js';
+import { currentUserSelector, secretariesSelector } from '@models/index.js';
 import { paths } from '@/shared';
 
 import { WithLoading } from '@components/index.js';
@@ -11,7 +11,7 @@ import { WithLoading } from '@components/index.js';
 import classNames from 'classnames';
 
 export const SecretarysDetails = ({ id }) => {
-  const { data, isLoading, isLoaded } = useSelector(activeSecretariesSelector, shallowEqual);
+  const { data, isLoading, isLoaded } = useSelector(secretariesSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const history = useHistory();
   const secretary = data.find((user) => user.id === id);
