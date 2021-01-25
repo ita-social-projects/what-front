@@ -21,25 +21,26 @@ export const GroupDetails = ({
   const {
     data: students,
     isLoading: areStudentsLoading,
-    isLoaded: areStudentsLoaded
+    isLoaded: areStudentsLoaded,
   } = studentsData;
   const {
     data: mentors,
     isLoading: areMentorsLoading,
-    isLoaded: areMentorsLoaded
+    isLoaded: areMentorsLoaded,
   } = mentorsData;
   const {
     data: courses,
     isLoading: areCoursesLoading,
-    loaded: areCoursesLoaded
+    loaded: areCoursesLoaded,
   } = coursesData;
 
   return (
     <div className="container">
       <div className="row justify-content-center">
         <div className="w-100 card shadow p-4">
-          <WithLoading isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded ||
-            areCoursesLoading || !areCoursesLoaded}
+          <WithLoading
+            isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded
+            || areCoursesLoading || !areCoursesLoaded}
             className={styles['loader-centered']}
           >
             <div className="d-flex flex-row text-left justify-content-between">
@@ -67,10 +68,13 @@ export const GroupDetails = ({
                   .filter((mentor) => group.mentorIds?.includes(mentor.id))
                   .map((mentor) => (
                     <div className="pr-2 lead" key={mentor.id}>
-                      <Badge pill variant="warning">
-                        <Link to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
-                          className="text-decoration-none text-dark"
-                        >{mentor.firstName} {mentor.lastName}</Link>
+                      <Badge pill variant="info">
+                        <Link
+                          to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
+                          className="text-decoration-none text-light"
+                        >
+                          {mentor.firstName} {mentor.lastName}
+                        </Link>
                       </Badge>
                     </div>
                   )) }
@@ -79,7 +83,8 @@ export const GroupDetails = ({
             <div className="d-flex align-items-center mb-2 lead">
               <h4 className="mb-2 pr-4">Course:</h4>
               <Badge pill variant="primary">
-                <Link to={`${paths.COURSE_DETAILS}/${group.courseId}`}
+                <Link
+                  to={`${paths.COURSE_DETAILS}/${group.courseId}`}
                   className="text-decoration-none text-white"
                 >
                   {courses.find((course) => course.id === group.courseId)?.name }
