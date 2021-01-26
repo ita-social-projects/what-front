@@ -5,6 +5,7 @@ import { paths, useActions } from '@/shared';
 import { currentUserSelector, fetchMentors, fetchActiveMentors, mentorsSelector, mentorsActiveSelector } from '@/models';
 
 import { Button, Pagination, Search, WithLoading } from '@/components';
+import Icon from '@/icon';
 
 import classNames from 'classnames';
 import { addAlert } from '@/features/layout';
@@ -31,31 +32,39 @@ const iconCards = (
 );
 
 export const ListOfMentors = () => {
-  const history = useHistory();
+  const { 
+    data: allMentors, 
+    isLoading: areAllMentorsLoading, 
+    error: allMentorsError 
+  } = useSelector(mentorsSelector, shallowEqual);
+  const { 
+    data: activeMentors, 
+    isLoading: areActiveMentorsLoading, 
+    error: activeMentorsError 
+  } = useSelector(mentorsActiveSelector, shallowEqual);
 
-  const [mentorsPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [searchMentorValue, setSearchMentorValue] = useState('');
-
-  const [filteredMentorList, setFilteredMentorList] = useState([]);
-
-  const [sortingCategories, setSortingCategories] = useState([
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
-  ]);
-
-  const [visibleMentors, setVisibleMentors] = useState([]);
-  const [isShowDisabled, setIsShowDisabled] = useState(false);
-
-  const { data: allMentors, isLoading: areAllMentorsLoading, error: allMentorsError } = useSelector(mentorsSelector, shallowEqual);
-  const { data: activeMentors, isLoading: areActiveMentorsLoading, error: activeMentorsError } = useSelector(mentorsActiveSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const [loadActiveMentors, loadAllMentors, dispatchAddAlert] = useActions([fetchActiveMentors, fetchMentors, addAlert]);
 
+  const history = useHistory();
+
+  const [filteredMentorList, setFilteredMentorList] = useState([]);
+  const [visibleMentors, setVisibleMentors] = useState([]);
+
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  ];
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchMentorValue, setSearchMentorValue] = useState('');
+
+  const [mentorsPerPage] = useState(10);
   const indexOfLastMentor = currentPage * mentorsPerPage;
   const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
 
@@ -65,12 +74,49 @@ export const ListOfMentors = () => {
     return allMentors.filter(({ id }) => !activeMentorIds.includes(id));
   };
 
-  const searchMentors = (searchedMentors) => searchedMentors.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
-    .toLowerCase().includes(searchMentorValue.toLowerCase()));
+  const searchMentors = (searchedMentors, value) => searchedMentors.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
+    .toLowerCase().includes(value.toLowerCase()));
+
+  const getSortedByParam = (data, activeCategory) => {
+    const { sortingParam, sortedByAscending } = activeCategory;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    return [...data].sort((prevItem, currentItem) => {
+      if (prevItem[sortingParam] > currentItem[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+  };
+
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
 
   useEffect(() => {
     loadActiveMentors();
   }, [loadActiveMentors]);
+
+  useEffect(() => {
+    if (isShowDisabled && allMentors.length && !areAllMentorsLoading) {
+      const disabledMentors = getDisabledMentors();
+
+      setFilteredMentorList(disabledMentors.map((mentor, index) => ({ index, ...mentor })));
+    }
+    if (!isShowDisabled && activeMentors.length && !areActiveMentorsLoading) {
+      setFilteredMentorList(activeMentors.map((mentor, index) => ({ index, ...mentor })));
+    }
+    setSortingCategories(INITIAL_CATEGORIES);
+    setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
+  },
+  [activeMentors, areActiveMentorsLoading, allMentors, areAllMentorsLoading, isShowDisabled]);
+
+  useEffect(() => {
+    setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
+  }, [currentPage, filteredMentorList]);
 
   useEffect(() => {
     if (allMentorsError || activeMentorsError) {
@@ -81,33 +127,15 @@ export const ListOfMentors = () => {
   useEffect(() => {
     if (isShowDisabled) {
       const disabledMentors = getDisabledMentors();
-
-      setFilteredMentorList(disabledMentors.map((mentor, index) => ({ index, ...mentor })));
-    }
-    if (!isShowDisabled && activeMentors.length && !areActiveMentorsLoading) {
-      setFilteredMentorList(activeMentors.map((mentor, index) => ({ index, ...mentor })));
-    }
-
-    setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
-  },
-  [activeMentors, areActiveMentorsLoading, allMentors, areAllMentorsLoading, isShowDisabled]);
-
-  useEffect(() => {
-    setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
-  }, [currentPage, filteredMentorList]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-    if (isShowDisabled) {
-      const disabledMentors = getDisabledMentors();
-      const searchedMentors = searchMentors(disabledMentors);
+      const searchedMentors = searchMentors(disabledMentors, searchMentorValue);
 
       setFilteredMentorList(searchedMentors.map((mentor, index) => ({ index, ...mentor })));
     } else {
-      const searchedMentors = searchMentors(activeMentors);
+      const searchedMentors = searchMentors(activeMentors, searchMentorValue);
 
       setFilteredMentorList(searchedMentors.map((mentor, index) => ({ index, ...mentor })));
     }
+    setCurrentPage(1);
   }, [searchMentorValue, isShowDisabled]);
 
   const mentorList = () => {
@@ -129,26 +157,14 @@ export const ListOfMentors = () => {
     return mentors;
   };
 
-  const handleSortByParam = (event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+  const handleSortByParam = useCallback((event) => {
+    const categoryParams = event.target.dataset;
+    const sortedMentors = getSortedByParam(filteredMentorList, categoryParams);
 
-    const sortedMentors = [...visibleMentors].sort((prevMentor, currentMentor) => {
-      if (prevMentor[sortingParam] > currentMentor[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
-
-    setVisibleMentors(sortedMentors);
-  };
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setFilteredMentorList(sortedMentors);
+    setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
+  }, [sortingCategories, filteredMentorList]);
 
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
