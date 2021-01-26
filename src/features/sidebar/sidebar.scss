@@ -112,12 +112,14 @@
   }
 }
 
-.sidebar:hover .menu-item {
-  animation: menu-item-appear 2s;
-}
+@media screen and (min-width: 768px) and (max-width: 1919px) {
+  .sidebar:hover .menu-item {
+    animation: menu-item-appear 2s;
+  }
 
-.sidebar:not(:hover) .menu-item {
-  animation: menu-item-hide 2s;
+  .sidebar:not(:hover) .menu-item {
+    animation: menu-item-hide 2s;
+  }
 }
 
 @keyframes menu-item-hide {
