@@ -214,16 +214,16 @@ export const StartGroup = () => {
                   <div className="col d-flex align-items-center">
                     <label className="mb-0" htmlFor="start-date">Start date</label>
                   </div>
-                    <div className="col-md-8">
-                      <Field
-                        className={classNames('form-control', { 'border-danger': errors.startDate })}
-                        type="date"
-                        name="startDate"
-                        id="startDate"
-                        required
-                      />
-                      {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
-                    </div>
+                  <div className="col-md-8">
+                    <Field
+                      className={classNames('form-control', { 'border-danger': errors.startDate })}
+                      type="date"
+                      name="startDate"
+                      id="startDate"
+                      required
+                    />
+                    {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
+                  </div>
                 </div>
                 <div className="row mb-3">
                   <div className="col d-flex align-items-center">
@@ -254,42 +254,42 @@ export const StartGroup = () => {
                       />
                       <datalist id="mentors-list">
                         {
-                              mentorsData
-                                .filter(({ id }) => !groupMentors
-                                  .find((mentor) => mentor.id === id))
-                                .map(({
-                                  id, firstName, lastName, email,
-                                }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
-                            }
+                          mentorsData
+                            .filter(({ id }) => !groupMentors
+                              .find((mentor) => mentor.id === id))
+                            .map(({
+                              id, firstName, lastName, email,
+                            }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
+                        }
                       </datalist>
                       <Button
-                        variant="warning"
+                        variant="info"
                         onClick={() => addMentor(values.mentors, () => setFieldValue('mentors', ''))}
                       >
-                        <Icon icon="Plus" />
+                        +
                       </Button>
                     </div>
                     <div className="w-100">
                       <ul className="col-md-12 d-flex flex-wrap justify-content-between p-0">
                         {
-                            groupMentors.map(({ id, firstName, lastName }) => (
-                              <li
-                                key={id}
-                                className={classNames(
-                                  'd-flex bg-light border border-outline-secondary rounded',
-                                  styles['datalist-item'],
-                                )}
+                          groupMentors.map(({ id, firstName, lastName }) => (
+                            <li
+                              key={id}
+                              className={classNames(
+                                'd-flex bg-light border border-outline-secondary rounded',
+                                styles['datalist-item'],
+                              )}
+                            >
+                              {firstName} {lastName}
+                              <button
+                                type="button"
+                                className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                onClick={() => removeMentor(id)}
                               >
-                                {firstName} {lastName}
-                                <button
-                                  type="button"
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                  onClick={() => removeMentor(id)}
-                                >
-                                  X
-                                </button>
-                              </li>
-                            ))
+                                X
+                              </button>
+                            </li>
+                          ))
                           }
                       </ul>
                     </div>
@@ -309,56 +309,63 @@ export const StartGroup = () => {
                       />
                       <datalist id="student-list">
                         {
-                              studentsData
-                                .filter(({ id }) => !groupStudents
-                                  .find((mentor) => mentor.id === id))
-                                .map(({
-                                  id, firstName, lastName, email,
-                                }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
-                            }
+                          studentsData
+                            .filter(({ id }) => !groupStudents
+                              .find((mentor) => mentor.id === id))
+                            .map(({
+                              id, firstName, lastName, email,
+                            }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
+                        }
                       </datalist>
                       <Button
-                        variant="warning"
+                        variant="info"
                         onClick={() => addStudent(values.students, () => setFieldValue('students', ''))}
                       >
-                        <Icon icon="Plus" />
+                        +
                       </Button>
                     </div>
                     <div className="w-100">
-                        <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
-                          {
-                            groupStudents.map(({ id, firstName, lastName }) => (
-                              <li
-                                key={id}
-                                className={classNames(
-                                  'd-flex bg-light border border-outline-secondary rounded',
-                                  styles['datalist-item'],
-                                )}
+                      <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
+                        {
+                          groupStudents.map(({ id, firstName, lastName }) => (
+                            <li
+                              key={id}
+                              className={classNames(
+                                'd-flex bg-light border border-outline-secondary rounded',
+                                styles['datalist-item'],
+                              )}
+                            >
+                              {firstName} {lastName}
+                              <button
+                                type="button"
+                                className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                onClick={() => removeStudent(id)}
                               >
-                                {firstName} {lastName}
-                                <button
-                                  type="button"
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                  onClick={() => removeStudent(id)}
-                                >
-                                  X
-                                </button>
-                              </li>
-                            ))
+                                X
+                              </button>
+                            </li>
+                          ))
                           }
-                        </ul>
+                      </ul>
                     </div>
                   </div>
                 </div>
                 <div className="row justify-content-around mt-4">
-                  <input
+                  <Button
                     type="reset"
-                    className="btn btn-secondary w-25"
-                    name="reset-btn"
-                    value="Clear all"
+                    className="w-25"
+                    variant="secondary"
                     onClick={handleReset}
-                  />
-                  <input type="submit" name="submit-btn" className="btn btn-success w-25" value="Create" disabled={!isValid || !dirty || isAdding} />
+                  >
+                    Clear all
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="w-25"
+                    disabled={!isValid || !dirty || isAdding}
+                  >
+                    Create
+                  </Button>
                 </div>
               </Form>
             )}
@@ -366,4 +373,5 @@ export const StartGroup = () => {
         </div>
       </div>
     </div>
-  );};
+  );
+};
