@@ -55,24 +55,33 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
   
-  useEffect(() => {
-    const lessons = data.filter(
-      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
-    ).filter(
-      (lesson) => lesson.lessonDate.toString().includes(searchLessonsDateValue),
-    );
-    setFilteredLessonsList(lessons);
-    setCurrentPage(1);
-  }, [searchLessonsDateValue, searchLessonsThemeValue, currentPage]);
-  
   const handleSearchTheme = (inputValue) => {
     setSearchLessonsThemeValue(inputValue);
   };
-  
   const handleSearchDate = (event) => {
     const date = event.target.value;
     setSearchLessonsDateValue(date);
   };
+  
+  useEffect(() => {
+    const lessons = data.filter(
+      (lesson) => {
+        console.log(lesson.lessonDate.toLocaleDateString())
+        lesson.lessonDate.toLocaleDateString().includes(searchLessonsDateValue)
+      },
+    );
+    setFilteredLessonsList(lessons);
+    setCurrentPage(1);
+  }, [searchLessonsDateValue, currentPage])
+  
+  useEffect(() => {
+    const lessons = data.filter(
+      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
+    )
+    setFilteredLessonsList(lessons);
+    setCurrentPage(1);
+  }, [searchLessonsThemeValue, currentPage]);
+  
   
   const addLesson = () => {
     history.push(paths.LESSON_ADD);
@@ -126,7 +135,7 @@ export const ListOfLessons = () => {
         <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)}>
           <td className="text-center">{lesson.index + 1}</td>
           <td>{lesson.themeName}</td>
-          <td>{lesson.lessonDate.toDateString()}</td>
+          <td>{lesson.lessonDate.toLocaleDateString()}</td>
           <td>{lesson.lessonTime}</td>
           {currentUser.role !== 2 ?
             <td onClick={(e) => {
@@ -139,7 +148,7 @@ export const ListOfLessons = () => {
     });
     
     if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
-      return <td colSpan="5" className="text-center">Lesson is not found</td>;
+      return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
   };
