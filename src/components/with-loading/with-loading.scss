@@ -1,0 +1,6 @@
+@import "../../styles/color-palette";
+
+.default {
+  border-color: $theme-colorAccent !important;
+  border-right-color: transparent !important;
+}

@@ -16,10 +16,10 @@ export const Button = ({
     type={type}
     onClick={onClick}
     className={classNames(
-      styles.button,
       'btn',
       { [`btn-${variant}`]: variant },
-        { [styles.default]: !variant },
+      { [styles.default]: !variant },
+      styles.button,
       className,
     )}
     disabled={disabled}
