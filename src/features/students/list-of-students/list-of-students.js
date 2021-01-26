@@ -193,7 +193,7 @@ export const ListOfStudents = () => {
           className="d-flex justify-content-center"
           onClick={(event) => handleEdit(event, id)}
         >
-          <Icon icon="Edit" className={classNames(styles['edit-icon'], styles.icon)} />
+          <Icon icon="Edit" className={classNames(styles['edit-icon'], styles.icon)} size={24} />
         </td>
       </tr>
     ));
