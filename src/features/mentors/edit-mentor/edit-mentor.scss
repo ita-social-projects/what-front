@@ -21,6 +21,10 @@
 
 .button{
   @include button();
+  cursor: pointer;
+  .submit {
+    background-color: $theme-colorAccent !important;
+  }
 }
 
 .error{

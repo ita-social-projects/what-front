@@ -5,11 +5,20 @@
   transition: all .2s ease-out;
 }
 
-.scale {
-  transition: .5s;  
-  &:hover {
-    transform: scale(1.4); 
+.icon {
+  fill: map-get($colors, dark-color);
+  cursor: pointer;
+
+  &.edit-icon {
+    transition: .5s;
+    &:hover {
+      transform: scale(1.4);
+    }
   }
+}
+
+.switch-label {
+  cursor: pointer;
 }
 
 .switch-input:focus~
