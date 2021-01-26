@@ -59,11 +59,12 @@ export const AddCourse = () => {
                   </div>
                   {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
                 </div>
-                <div className="row justify-content-around mt-4">
+                <div className="d-flex justify-content-between mt-4">
                   <Link
                     to="/courses"
                     className={classNames('btn btn-secondary w-25', styles.button)}
-                  >Back
+                  >
+                    Cancel
                   </Link>
                   <Button
                     type="submit"

@@ -114,7 +114,7 @@ export const EditCourse = ({ id, coursesData }) => {
                       {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
                     </div>
                     <div className="row m-0 pt-3">
-                      <div className="col-md-3 col-4 px-1">
+                      <div className="col-md-3 col-4 pl-0">
                         <Button
                           disabled={!isValid || dirty || isDeletedLoading}
                           className={classNames('w-100', styles['remove-button'])}
@@ -122,7 +122,7 @@ export const EditCourse = ({ id, coursesData }) => {
                         >Delete
                         </Button>
                       </div>
-                      <div className="col-md-3 offset-md-3 col-4 px-1">
+                      <div className="col-md-3 offset-md-3 col-4">
                         <Button
                           type="reset"
                           variant="secondary"
@@ -132,7 +132,7 @@ export const EditCourse = ({ id, coursesData }) => {
                         >Clear
                         </Button>
                       </div>
-                      <div className="col-md-3 col-4 px-1">
+                      <div className="col-md-3 col-4 pr-0">
                         <Button
                           type="submit"
                           disabled={!isValid || !dirty || isEditedLoading || errors.name}
