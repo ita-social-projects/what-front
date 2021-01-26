@@ -278,8 +278,7 @@ export const EditStudentsDetails = ({ id }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button
-                          className="w-100"
-                          variant="dark"
+                          className={classNames(styles['exclude-btn'], 'w-100')}
                           onClick={handleShowModal}
                           disabled={!isValid || dirty || isEditedLoading || isRemovedLoading}
                         >Exclude

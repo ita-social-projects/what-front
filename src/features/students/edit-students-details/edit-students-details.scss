@@ -23,6 +23,10 @@
   @include button();
 }
 
+.exclude-btn {
+  background-color: $theme-colorDark !important;
+}
+
 .error{
   padding-top:5px;
   color:red;
