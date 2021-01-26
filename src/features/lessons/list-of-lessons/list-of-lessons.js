@@ -146,11 +146,11 @@ export const ListOfLessons = () => {
   
   return (
     <div className="container">
-      <div className="row">
+      <div className="row justify-content-between mb-3">
         <div className="d-flex w-100 justify-content-between">
-          <h3>
+          <h2>
             Lessons
-          </h3>
+          </h2>
           <div className="d-flex justify-content-end w-50">
             <div className="col-4">
               {filteredLessonsList.length > lessonsPerPage ? <span className="text-right">{filteredLessonsList.length} lessons</span> : null}
@@ -167,18 +167,18 @@ export const ListOfLessons = () => {
             }
           </div>
         </div>
-        <div className={classNames(styles.page, 'container pt-4')}>
-          <div className="d-flex justify-content-between pb-3">
-            <div className="d-flex justify-content-start">
+        <div className={classNames(styles.page, 'container pt-3 mt-3 ')}>
+          <div className="d-flex justify-content-between pb-3 align-items-center">
+            <div className="d-flex justify-content-start align-items-center">
               <div>
-                <button className={classNames(styles['button-sort'])}>
-                  <Icon icon="List" color="#2E3440" size={40} className="px-1" />
+                <button className={classNames(styles.switch)}>
+                  <Icon icon="List" color="#2E3440" size={40} className='mt-1 px-1' />
                </button>
-                <button className={classNames(styles['button-sort'])}>
-                  <Icon icon="Card" color="#2E3440" size={40} className="px-1" />
+                <button className={classNames(styles.switch, 'btn active')}>
+                  <Icon icon="Card" color="#2E3440" size={40} className='mt-1 px-1' />
                 </button>
               </div>
-              <div className="px-2">
+              <div className="px-3">
                 <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
               </div>
               <div className="px-2">
@@ -214,7 +214,7 @@ export const ListOfLessons = () => {
                   onClick={() => handleSortByParam('id')}
                 >
                   <button
-                    className={classNames(styles['button-sort'])}
+                    className={classNames(styles['button-sort'], 'px-0')}
                   >
                     <span className="font-weight-bolder">#</span>
                     <span className="pl-2">
@@ -229,7 +229,7 @@ export const ListOfLessons = () => {
                   onClick={() => handleSortByParam('themeName')}
                 >
                   <button
-                    className={classNames(styles['button-sort'])}
+                    className={classNames(styles['button-sort'], 'px-0')}
                   >
                     <span className="font-weight-bolder">Theme Name</span>
                     <span className="pl-2">
@@ -244,7 +244,7 @@ export const ListOfLessons = () => {
                   onClick={() => handleSortByParam('lessonDate')}
                 >
                   <button
-                    className={classNames(styles['button-sort'])}
+                    className={classNames(styles['button-sort'], 'px-0')}
                   >
                     <span className="font-weight-bolder">Date</span>
                     <span className="pl-2">
@@ -259,7 +259,7 @@ export const ListOfLessons = () => {
                   onClick={() => handleSortByParam('lessonTime')}
                 >
                   <button
-                    className={classNames(styles['button-sort'])}
+                    className={classNames(styles['button-sort'], 'px-0')}
                   >
                     <span className="font-weight-bolder">Time</span>
                     <span className="pl-2">
@@ -280,16 +280,6 @@ export const ListOfLessons = () => {
           </WithLoading>
         </div>
       </div>
-      {filteredLessonsList.length > 12 && !isLoading &&
-        <Pagination 
-          itemsPerPage={lessonsPerPage} 
-          totalItems={filteredLessonsList.length} 
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          page={currentPage}
-        />
-      }
     </div>
   );
 };

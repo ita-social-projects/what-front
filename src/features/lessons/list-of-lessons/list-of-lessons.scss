@@ -15,7 +15,6 @@
   border: 1px solid $theme-colorLight !important;
   color: $theme-colorMedium !important;
   border-radius: 3px !important;
-  height: calc(1.5em + .75rem) !important;
   &:focus{
     border-color: $theme-colorLight !important;
     box-shadow: 0 0 7px map-get($colors, nonAccent-color) !important;
@@ -44,10 +43,18 @@
     }
 }
 
+.switch{
+  background-color: #fff !important;
+  border: 0.5px solid  $theme-colorLight;
+  border-radius: 3px;
+  &:focus{
+    background-color: #fff !important;
+    outline: none !important;
+  }
+}
 .arrow-up, .arrow-down {
   padding-top: 5px;
 }
-
 .arrow-up {
   display: none;
 }
