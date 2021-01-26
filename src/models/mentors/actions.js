@@ -118,6 +118,7 @@ function* editAsyncMentor({ payload }) {
     yield put({ type: types.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: types.EDITING_MENTOR_FAILED, payload: { error } });
+    yield put({ type: types.CLEAR_ERROR });
   }
 }
 
