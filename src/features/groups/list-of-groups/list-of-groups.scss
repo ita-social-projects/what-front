@@ -14,39 +14,41 @@
   border-color: map-get($colors, textAccentN1-color);
 }
 
-.list-wrapper {
-  min-height: 724px;
-  margin: 10px;
-}
 .table {
   margin-bottom: 0 !important;
 }
+
 .table-item {
-  transition: all 0.2s ease 0s;
-  td {
-    cursor: pointer;
-  }
-}
-.table-item:hover {
-  background-color:rgba(#4C566A, 0.1);
+  cursor: pointer;
+  transition: all .2s ease-out;
 }
 
 .scale {
-  transition: .5s;
-  cursor: pointer;
+  transition: .3s ease;
+  padding-top: 3px;
   &:hover {
-    transform: scale(1.4);
+    transform: scale(1.4); 
+    padding-top: 5px;
   }
 }
 
-.btn-add{
-  background-color: $theme-colorAccent !important;
-  border: $theme-colorAccent !important;
+.table-head {
+  min-width: 150px;
+
+  &:first-of-type {
+    text-align: center;
+    min-width: 0;
+  }
 }
 
 .category {
   cursor: pointer;
   position: relative;
+
+  &:hover {
+    opacity: 0.7;
+    transition: .4s;
+  }
 
   &::after {
     content: '';

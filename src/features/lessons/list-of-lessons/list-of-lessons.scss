@@ -1,16 +1,10 @@
 @import '../../../styles/main';
 
-.button {
-  @include button();
-  background-color: $theme-colorAccent;
-  &:focus{
-    outline: none;
-  }
+.table-row {
+  cursor: pointer;
+  transition: all .2s ease-out;
 }
 
-.page {
-  @include pageWindow();
-}
 .date {
   border: 1px solid $theme-colorLight !important;
   color: $theme-colorMedium !important;
@@ -57,6 +51,25 @@
 }
 .arrow-up {
   display: none;
+}
+
+.table-head {
+  min-width: 150px;
+
+  &:first-of-type {
+    text-align: center;
+    min-width: 0;
+  }
+
+  & span {
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+      transition: .4s;
+    }
+  }
 }
 
 .descending .arrow-up {
