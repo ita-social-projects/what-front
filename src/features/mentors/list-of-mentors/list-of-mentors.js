@@ -11,13 +11,6 @@ import classNames from 'classnames';
 import { addAlert } from '@/features/layout';
 import styles from './list-of-mentors.scss';
 
-const editIcon = (
-  <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" className={classNames('bi bi-pencil', styles.scale)} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" />
-    <path fillRule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z" />
-  </svg>
-);
-
 const iconTable = (
   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-layout-text-sidebar" viewBox="0 0 16 16">
     <path d="M3.5 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM3 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z" />
@@ -147,7 +140,9 @@ export const ListOfMentors = () => {
           <td>{lastName}</td>
           <td>{email}</td>
           {currentUser.role !== 2
-            ? <td className="text-center" data-mentor-id={id} onClick={(event) => mentorEdit(event, id)}>{editIcon}</td> : null}
+            ? <td className="text-center" data-mentor-id={id} onClick={(event) => mentorEdit(event, id)}>
+                <Icon icon="Edit" className={classNames(styles['edit-icon'], styles.icon)} size={24} />
+            </td> : null}
         </tr>
       ));
 
