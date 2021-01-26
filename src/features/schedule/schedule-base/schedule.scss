@@ -81,3 +81,8 @@
         outline: none;
     }
 }
+
+.future-lesson {
+    background-color: map-get($colors, medium-color);
+    color: #fff;
+}
