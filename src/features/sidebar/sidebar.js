@@ -88,7 +88,7 @@ export const Sidebar = () => {
 
   function toggleSidebar(event) {
     const screenWidth = document.documentElement.clientWidth;
-    if ( (event.type === 'mouseout' && screenWidth < 769) || (event.type === 'mouseover' && screenWidth < 769) ) {
+    if ((event.type === 'mouseout' && screenWidth < 769) || (event.type === 'mouseover' && screenWidth < 769)) {
       return false;
     }
 
@@ -101,27 +101,27 @@ export const Sidebar = () => {
   return (
     <nav className={styles.sidebar}>
 
-      <div className={classNames(styles['sidebar__toggler'])} onClick={toggleSidebar}>
-        <Icon icon={'SidebarToggler'} className="icon" size={26} viewBox="0 0 32 38" />
+      <div className={classNames(styles.sidebar__toggler)} onClick={toggleSidebar}>
+        <Icon icon="SidebarToggler" className="icon" size={26} viewBox="0 0 32 38" />
       </div>
 
       <div onMouseOver={toggleSidebar} onMouseOut={toggleSidebar} className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
-        <div className={styles['sidebar__links']}>
+        <div className={styles.sidebar__links}>
           {tabs.map(({ id, title, link, active }) => (
             <Link
-              className={classNames("nav-item nav-link d-flex justify-content-left", { [`${styles.active}`]: active } )}
+              className={classNames('nav-item nav-link d-flex justify-content-left', { [`${styles.active}`]: active })}
               to={`${link}`}
               key={id}
               data-id={id}
               onClick={(event) => toggleActiveTab(event)}
             >
               <Icon icon={title} className={styles.sidebar__icon} size={24} viewBox="0 0 32 32" />
-              {title}
+              <span className={styles['menu-item']}>{title}</span>
             </Link>
           ))}
         </div>
       </div>
-      
+
     </nav>
-  )
-}
+  );
+};

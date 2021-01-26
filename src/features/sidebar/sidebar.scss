@@ -41,7 +41,7 @@
     }
   }
 
-  &__links {    
+  &__links {
     padding-top: 85px;
   }
 
@@ -57,14 +57,14 @@
 
     &:focus {
       background-color: map-get($colors, accent-color);
-      color: map-get($colors, dark-color);
+      color: #fff;
     }
     &:hover {
       background-color: map-get($colors, accent-color);
-      color: map-get($colors, dark-color);
+      color: #fff;
     }
   }
-  
+
 }
 
 @media(max-width: 480px) {
@@ -108,9 +108,34 @@
     .sidebar--active svg {
       left: 20px;
     }
-    
-  }
 
+  }
+}
+
+.sidebar:hover .menu-item {
+  animation: menu-item-appear 2s;
+}
+
+.sidebar:not(:hover) .menu-item {
+  animation: menu-item-hide 2s;
+}
+
+@keyframes menu-item-hide {
+  from {
+    color: #fff;
+  }
+  20% {
+    color: transparent;
+  }
+}
+
+@keyframes menu-item-appear {
+  from {
+    color: transparent;
+  }
+  90% {
+    color: #fff;
+  }
 }
 
 @media(min-width: 769px) {
@@ -135,6 +160,5 @@
 
 .active {
   background-color: map-get($colors, accent-color) !important;
-  color: map-get($colors, dark-color) !important;
   font-weight: bold !important;
 }
