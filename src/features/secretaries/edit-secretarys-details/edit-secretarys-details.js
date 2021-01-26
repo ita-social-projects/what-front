@@ -155,7 +155,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           <Button
                             type="button"
                             className="w-100"
-                            variant="danger"
+                            variant="dark"
                             onClick={handleShowModal}
                             disabled={!isValid || dirty || isDeleteLoading || isUpdateLoading}
                           >
@@ -167,6 +167,7 @@ export const EditSecretarysDetails = ({ id }) => {
                             type="reset"
                             className="w-100"
                             disabled={!dirty}
+                            variant="secondary"
                           >
                             Clear
                           </Button>
@@ -175,7 +176,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           <Button
                             type="submit"
                             className="w-100"
-                            variant="success"
+                            variant="info"
                             disabled={!isValid || !dirty || isUpdateLoading || isDeleteLoading
                               || errors.firstName || errors.lastName || errors.email}
                           >

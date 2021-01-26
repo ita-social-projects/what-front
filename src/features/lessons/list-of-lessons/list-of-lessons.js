@@ -58,24 +58,31 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  useEffect(() => {
-    const lessons = data.filter(
-      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
-    ).filter(
-      (lesson) => lesson.lessonDate.toString().includes(searchLessonsDateValue),
-    );
-    setFilteredLessonsList(lessons);
-    setCurrentPage(1);
-  }, [searchLessonsDateValue, searchLessonsThemeValue, currentPage]);
-
   const handleSearchTheme = (inputValue) => {
     setSearchLessonsThemeValue(inputValue);
   };
-
   const handleSearchDate = (event) => {
     const date = event.target.value;
     setSearchLessonsDateValue(date);
   };
+
+  useEffect(() => {
+    const lessons = data.filter(
+      (lesson) => {
+        lesson.lessonDate.toLocaleDateString().includes(searchLessonsDateValue);
+      },
+    );
+    setFilteredLessonsList(lessons);
+    setCurrentPage(1);
+  }, [searchLessonsDateValue, currentPage]);
+
+  useEffect(() => {
+    const lessons = data.filter(
+      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
+    );
+    setFilteredLessonsList(lessons);
+    setCurrentPage(1);
+  }, [searchLessonsThemeValue, currentPage]);
 
   const addLesson = () => {
     history.push(paths.LESSON_ADD);
@@ -144,7 +151,7 @@ export const ListOfLessons = () => {
     ));
 
     if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
-      return <td colSpan="5" className="text-center">Lesson is not found</td>;
+      return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
   };
@@ -168,11 +175,8 @@ export const ListOfLessons = () => {
             )}
         </div>
       </div>
-      {/* <div className={classNames(styles.page, 'container pt-3 mt-3 ')}> */}
       <div className="row">
-        {/* <div className="d-flex justify-content-between pb-3 align-items-center"> */}
         <div className="col-12 card shadow p-3 mb-5 bg-white">
-          {/* <div className="d-flex justify-content-start align-items-center"> */}
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
@@ -180,19 +184,9 @@ export const ListOfLessons = () => {
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            {/* <div>
-                <button className={classNames(styles.switch)}>
-                  <Icon icon="List" color="#2E3440" size={40} className="mt-1 px-1" />
-                </button>
-                <button className={classNames(styles.switch, 'btn active')}>
-                  <Icon icon="Card" color="#2E3440" size={40} className="mt-1 px-1" />
-                </button>
-              </div> */}
-            {/* <div className="px-3"> */}
             <div className="col-3">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
-            {/* <div className="px-2"> */}
             <div className="col-2">
               <input
                 className={classNames(styles.date, 'form-control')}
@@ -202,7 +196,6 @@ export const ListOfLessons = () => {
                 onChange={handleSearchDate}
               />
             </div>
-            {/* <div className="d-flex justify-content-end"> */}
             <div className="col-2 offset-3 text-right">
               {currentUser.role !== 2
               && (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
+import classNames from 'classnames';
 
 import { paths, homepages } from '@/shared';
 import { currentUserSelector } from '@/models';
@@ -9,10 +10,12 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup,
+  Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
+
+import styles from './layout.scss';
 
 export const Layout = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -20,8 +23,9 @@ export const Layout = () => {
   return (
     <>
       <Header />
+      <Sidebar />
       <AlertBox />
-      <div className="pt-5 position-relative">
+      <div className={classNames(styles.container, 'pt-5')}>
         <Switch>
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.STUDENTS} component={ListOfStudents} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.STUDENTS_DETAILS}/:id`} component={() => <StudentsTabs index={0} />} />
