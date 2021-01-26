@@ -32,25 +32,25 @@ export const EditGroup = ({
 
   const history = useHistory();
 
-  const { 
-    data: group, 
-    isLoading: isGroupLoading, 
-    isLoaded: isGroupLoaded 
+  const {
+    data: group,
+    isLoading: isGroupLoading,
+    isLoaded: isGroupLoaded,
   } = studentGroupData;
-  const { 
-    data: students, 
-    isLoading: areStudentsLoading, 
-    isLoaded: areStudentsLoaded 
+  const {
+    data: students,
+    isLoading: areStudentsLoading,
+    isLoaded: areStudentsLoaded,
   } = studentsData;
-  const { 
-    data: mentors, 
-    isLoading: areMentorsLoading, 
-    isLoaded: areMentorsLoaded 
+  const {
+    data: mentors,
+    isLoading: areMentorsLoading,
+    isLoaded: areMentorsLoaded,
   } = mentorsData;
-  const { 
-    data: courses, 
-    isLoading: areCoursesLoading, 
-    loaded: areCoursesLoaded 
+  const {
+    data: courses,
+    isLoading: areCoursesLoading,
+    loaded: areCoursesLoaded,
   } = coursesData;
 
   const [groupMentors, setGroupMentors] = useState([]);
@@ -144,10 +144,11 @@ export const EditGroup = ({
     <div className="w-100">
       <div className="row justify-content-center">
         <div className="w-100 card shadow p-4">
-        <WithLoading isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded ||
-          areCoursesLoading || !areCoursesLoaded || areStudentsLoading || !areStudentsLoaded} 
-          className={styles['loader-centered']}
-        >
+          <WithLoading
+            isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded
+          || areCoursesLoading || !areCoursesLoaded || areStudentsLoading || !areStudentsLoaded}
+            className={styles['loader-centered']}
+          >
             <Formik
               initialValues={{
                 name: group.name,
@@ -254,10 +255,10 @@ export const EditGroup = ({
                           }
                         </datalist>
                         <Button
-                          variant="warning"
+                          variant="info"
                           onClick={() => addMentor(values.mentor, () => setFieldValue('mentor', ''))}
                         >
-                          <Icon icon="Plus" />
+                          +
                         </Button>
                       </div>
                       {mentorInputError && <p className="text-danger mb-0">{mentorInputError}</p>}
@@ -275,7 +276,7 @@ export const EditGroup = ({
                                 {firstName} {lastName}
                                 <button
                                   type="button"
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  className={classNames('btn p-0 ml-auto mr-2 font-weight-bold', styles.cross)}
                                   onClick={() => removeMentor(id)}
                                 >
                                   X
@@ -309,10 +310,10 @@ export const EditGroup = ({
                           }
                         </datalist>
                         <Button
-                          variant="warning"
+                          variant="info"
                           onClick={() => addStudent(values.student, () => setFieldValue('student', ''))}
                         >
-                          <Icon icon="Plus" />
+                          +
                         </Button>
                       </div>
                       {studentInputError && <p className="text-danger mb-0">{studentInputError}</p>}
@@ -330,7 +331,7 @@ export const EditGroup = ({
                                 {firstName} {lastName}
                                 <button
                                   type="button"
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  className={classNames('btn p-0 ml-auto mr-2 font-weight-bold', styles.cross)}
                                   onClick={() => removeStudent(id)}
                                 >
                                   X
@@ -343,10 +344,10 @@ export const EditGroup = ({
                     </div>
                   </div>
                   <div className="row justify-content-around mt-4">
-                    <Button type="reset" className="btn btn-secondary w-25" disabled={!dirty || isEditing} onClick={handleReset}>
+                    <Button type="reset" variant="secondary" className="btn btn-secondary w-25" disabled={!dirty || isEditing} onClick={handleReset}>
                       Clear
                     </Button>
-                    <Button type="submit" variant="success" className="btn btn-secondary w-25" disabled={!isValid || !dirty || isEditing}>
+                    <Button type="submit" className="btn btn-secondary w-25" disabled={!isValid || !dirty || isEditing}>
                       Confirm
                     </Button>
                   </div>
