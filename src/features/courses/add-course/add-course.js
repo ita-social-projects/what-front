@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { useActions, paths } from '@/shared';
 import { createCourse, createdCourseSelector } from '@/models';
 import { addAlert } from '@/features';
+import { Button } from '@/components';
 import { addCourseValidation } from '@features/validation/validation-helpers.js';
 import styles from './add-course.scss';
 
@@ -58,19 +59,20 @@ export const AddCourse = () => {
                   </div>
                   {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
                 </div>
-                <div className="row justify-content-around mt-4">
+                <div className="d-flex justify-content-between mt-4">
                   <Link
                     to="/courses"
                     className={classNames('btn btn-secondary w-25', styles.button)}
-                  >Back
+                  >
+                    Cancel
                   </Link>
-                  <input
+                  <Button
                     type="submit"
-                    name="submit-btn"
                     disabled={!isValid || !dirty || isLoading || errors.name}
-                    className={classNames('btn btn-success w-25', styles.button)}
-                    value="Save"
-                  />
+                    className={classNames('w-25', styles.button)}
+                  >
+                    Save
+                  </Button>
                 </div>
               </Form>
             )}
