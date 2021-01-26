@@ -280,6 +280,16 @@ export const ListOfLessons = () => {
           </WithLoading>
         </div>
       </div>
+      {filteredLessonsList.length > 12 && !isLoading &&
+        <Pagination 
+          itemsPerPage={lessonsPerPage} 
+          totalItems={filteredLessonsList.length} 
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+          page={currentPage}
+        />
+      }
     </div>
   );
 };

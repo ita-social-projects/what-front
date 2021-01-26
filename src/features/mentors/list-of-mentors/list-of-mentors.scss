@@ -6,12 +6,23 @@
 }
 
 .scale {
-  transition: .5s;
+  transition: .5s;  
   &:hover {
-    transform: scale(1.4);
+    transform: scale(1.4); 
   }
 }
 
+.switch-input:focus~
+.switch-label::before { 
+  border-color: map-get($colors, accent-color) !important;
+  box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;  
+} 
+  
+.switch-input:checked~
+.switch-label::before { 
+  border-color: map-get($colors, accent-color) !important;
+  background-color: map-get($colors, accent-color) !important;
+}
 
 .btn {
   background-color: map-get($colors, accent-color) !important;
@@ -22,9 +33,9 @@
   }
 }
 
-.tablehead {
+.table-head {
   &:first-of-type {
-    text-align: start;
+    text-align: center;
   }
 
   & span {
@@ -49,7 +60,7 @@
 
       border-top: 1px solid #000;
       border-left: 1px solid #000;
-
+      
       transform: rotateZ(45deg);
       transition: .3s;
     }
@@ -60,3 +71,5 @@
     }
   }
 }
+
+

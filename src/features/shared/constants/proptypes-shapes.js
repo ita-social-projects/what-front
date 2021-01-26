@@ -65,3 +65,19 @@ export const studentGroupByIdStateShape = {
   isLoaded: bool.isRequired,
   data: oneOfType([shape(studentGroupShape), object]).isRequired,
 };
+
+export const scheduleShape = {
+  id: number.isRequired,
+  studentGroupId: number.isRequired,
+  lessonStart: string.isRequired,
+  lessonEnd: string.isRequired,
+  repeatRate: number.isRequired,
+  dayNumber: number.isRequired,
+};
+
+export const scheduleStateShape = {
+  error: string.isRequired,
+  isLoading: bool.isRequired,
+  isLoaded: bool.isRequired,
+  data: oneOfType([arrayOf(shape(scheduleShape)), arrayOf(undefined)]).isRequired,
+};

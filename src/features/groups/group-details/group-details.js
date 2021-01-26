@@ -2,6 +2,7 @@ import React from 'react';
 import { shape } from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
 import { paths } from '@/shared';
 import { WithLoading } from '@/components/index.js';
 import {
@@ -17,20 +18,20 @@ export const GroupDetails = ({
     isLoading: isGroupLoading,
     isLoaded: isGroupLoaded,
   } = studentGroupData;
-  const { 
-    data: students, 
-    isLoading: areStudentsLoading, 
-    isLoaded: areStudentsLoaded 
+  const {
+    data: students,
+    isLoading: areStudentsLoading,
+    isLoaded: areStudentsLoaded
   } = studentsData;
-  const { 
-    data: mentors, 
-    isLoading: areMentorsLoading, 
-    isLoaded: areMentorsLoaded 
+  const {
+    data: mentors,
+    isLoading: areMentorsLoading,
+    isLoaded: areMentorsLoaded
   } = mentorsData;
-  const { 
-    data: courses, 
-    isLoading: areCoursesLoading, 
-    loaded: areCoursesLoaded 
+  const {
+    data: courses,
+    isLoading: areCoursesLoading,
+    loaded: areCoursesLoaded
   } = coursesData;
 
   return (
@@ -38,7 +39,7 @@ export const GroupDetails = ({
       <div className="row justify-content-center">
         <div className="w-100 card shadow p-4">
           <WithLoading isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded ||
-            areCoursesLoading || !areCoursesLoaded} 
+            areCoursesLoading || !areCoursesLoaded}
             className={styles['loader-centered']}
           >
             <div className="d-flex flex-row text-left justify-content-between">
@@ -51,6 +52,9 @@ export const GroupDetails = ({
                   &nbsp;-&nbsp;
                   {new Date(group.finishDate).toLocaleDateString()}
                 </p>
+              </div>
+              <div className="pt-3">
+                <Link to={`${paths.SCHEDULE_BY_GROUP_ID}/${group.id}`}>View schedule</Link>
               </div>
             </div>
             <hr className="p-0" />
