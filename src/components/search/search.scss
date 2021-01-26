@@ -12,7 +12,7 @@
     transition: all .1s;
     &:focus {
       outline: none;
-      box-shadow: 0 0 5px map-get($colors, medium-color);
+      box-shadow: 0 0 7px map-get($colors, nonAccent-color);
     }
   }
 
