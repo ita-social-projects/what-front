@@ -10,6 +10,9 @@
   box-shadow: map-get($box-shadows, button-boxShadow);
   padding: $button-padding;
   border: none;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 @mixin modalWindow() {
