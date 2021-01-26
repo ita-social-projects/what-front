@@ -172,7 +172,7 @@ export const LessonDetails = () => {
                   </div>
                   <div className="col-sm-6 lead">
                     <Badge pill variant="warning">
-                      <Link to={`${paths.GROUPS_DETAILS}/2`}
+                      <Link to={`${paths.GROUPS_DETAILS}/${studentsGroup?.id}`}
                         className="text-decoration-none text-dark"
                       >{studentsGroup?.name}</Link>
                     </Badge>
