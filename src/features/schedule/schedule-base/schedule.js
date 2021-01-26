@@ -164,10 +164,10 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                     <div className={styles['lessons-list__details']}>
                       <Badge
                         variant={classNames(
-                          { primary: isToday },
+                          { info: isToday },
                           { secondary: isPast && !isToday },
-                          { info: !isToday && !isPast },
                         )}
+                        className={classNames({ [styles['future-lesson']]: !isToday && !isPast })}
                       >
                         {lessonStart.substring(0, 5)} - {lessonEnd.substring(0, 5)}
                       </Badge>
@@ -177,7 +177,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                           className={styles['edit-button']}
                           onClick={() => handleEditSchedule(lessonId)}
                         >
-                          <Icon icon="Edit" viewBox="0 0 45 45" size={20} />
+                          <Icon icon="Edit" size={24} />
                         </button>
                       ) : null}
                     </div>
