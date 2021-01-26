@@ -265,7 +265,6 @@ export const ListOfGroups = () => {
 
           <div className="col-3 d-flex justify-content-end">
             <Button onClick={handleAddGroup} className={styles['btn-add']}>
-              <Icon icon="Plus" className="icon" />
                 Add a group
             </Button>
           </div>
