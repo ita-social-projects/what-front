@@ -1,0 +1,140 @@
+@import '../../index.scss';
+
+.sidebar {
+  color: white;
+
+  &__toggler {
+    display: inline-block;
+    position: absolute;
+    top: 20px;
+    left: 173px;
+    color: white;
+    cursor: pointer;
+    z-index: 19;
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+
+  &__icon {
+    display: block;
+    position: fixed;
+    left: 20px;
+    z-index: 10;
+  }
+
+  &__content {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    height: 100%;
+    overflow-y: scroll;
+    justify-content: flex-start;
+    align-items: flex-end;
+    background-color: #2E3440;
+    z-index: 9;
+    transition: left .6s;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__links {    
+    padding-top: 85px;
+  }
+
+  &__links > a {
+    position: relative;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-left: 60px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+
+    &:focus {
+      background-color: map-get($colors, accent-color);
+      color: map-get($colors, dark-color);
+    }
+    &:hover {
+      background-color: map-get($colors, accent-color);
+      color: map-get($colors, dark-color);
+    }
+  }
+  
+}
+
+@media(max-width: 480px) {
+  .sidebar__content {
+    left: -65%;
+    width: 200px;
+  }
+  .sidebar__toggler {
+    left: 153px;
+  }
+}
+
+@media(min-width: 481px) {
+  .sidebar__content {
+    width: 220px;
+    left: -155px;
+  }
+  .sidebar__toggler {
+    left: 173px;
+  }
+}
+
+@media(max-width: 768px) {
+  .sidebar {
+
+    &__content {
+      left: -200px;
+      width: 200px;
+    }
+
+    &__toggler {
+      top: 24px;
+      left: 153px;
+    }
+
+    &__icon {
+      left: -30px;
+      transition: ease .2s;
+    }
+
+    .sidebar--active svg {
+      left: 20px;
+    }
+    
+  }
+
+}
+
+@media(min-width: 769px) {
+  .sidebar__toggler {
+    display: none;
+  }
+}
+
+@media(min-width: 1920px) {
+  .sidebar__content {
+    left: 0;
+  }
+  .sidebar__toggler {
+    display: none;
+  }
+}
+
+.sidebar--active {
+  left: 0;
+
+}
+
+.active {
+  background-color: map-get($colors, accent-color) !important;
+  color: map-get($colors, dark-color) !important;
+  font-weight: bold !important;
+}

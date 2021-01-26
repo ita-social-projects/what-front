@@ -33,7 +33,7 @@ export const EditCourse = ({ id, coursesData }) => {
   const {
     isLoading: isDeletedLoading,
     isLoaded: isDeletedLoaded,
-    error: isDeletedError
+    error: isDeletedError,
   } = useSelector(deletedCourseSelector, shallowEqual);
 
   const [updateCourse, dispatchAddAlert, removeCourse] = useActions([editCourse, addAlert, deleteCourse]);
@@ -114,28 +114,31 @@ export const EditCourse = ({ id, coursesData }) => {
                       {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
                     </div>
                     <div className="row m-0 pt-3">
-                      <div className="col-md-3 col-4 px-1">
-                      <Button
-                        disabled={!isValid || dirty || isDeletedLoading}
-                        className="w-100"
-                        variant="danger"
-                        onClick={handleShowModal}
-                      >Delete</Button>
-                    </div>
-                    <div className="col-md-3 offset-md-3 col-4 px-1">
-                      <Button
-                        type="submit"
-                        disabled={!isValid || !dirty || isEditedLoading || errors.name}
-                        className="btn btn-secondary w-100"
-                        onClick={handleReset}
-                      >Clear</Button>
+                      <div className="col-md-3 col-4 pl-0">
+                        <Button
+                          disabled={!isValid || dirty || isDeletedLoading}
+                          className={classNames('w-100', styles['remove-button'])}
+                          onClick={handleShowModal}
+                        >Delete
+                        </Button>
                       </div>
-                      <div className="col-md-3 col-4 px-1">
+                      <div className="col-md-3 offset-md-3 col-4">
+                        <Button
+                          type="reset"
+                          variant="secondary"
+                          disabled={!isValid || !dirty || isEditedLoading || errors.name}
+                          className="btn w-100"
+                          onClick={handleReset}
+                        >Clear
+                        </Button>
+                      </div>
+                      <div className="col-md-3 col-4 pr-0">
                         <Button
                           type="submit"
                           disabled={!isValid || !dirty || isEditedLoading || errors.name}
-                          className="btn btn-success w-100"
-                        >Save</Button>
+                          className="btn w-100"
+                        >Save
+                        </Button>
                       </div>
                     </div>
                   </Form>
@@ -146,7 +149,7 @@ export const EditCourse = ({ id, coursesData }) => {
                 onSubmit={handleDelete}
                 onClose={handleCloseModal}
               >
-                Are you sure you want to delete this course? 
+                Are you sure you want to delete this course?
               </ModalWindow>
             </WithLoading>
           </div>

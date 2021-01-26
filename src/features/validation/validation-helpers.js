@@ -25,7 +25,7 @@ export const registrationValidation = Yup.object().shape({
     .min(8, 'Password must contain at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-      "Must contain at least one uppercase, one lowercase, one number"
+      'Must contain at least one uppercase, one lowercase, one number',
     )
     .required('This field is required'),
   confirmPassword: Yup.string()
@@ -145,7 +145,7 @@ export const changePasswordValidation = Yup.object().shape({
     .min(8, 'Password must contain at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]$/,
-      "Must contain at least one uppercase, one lowercase, one number"
+      'Must contain at least one uppercase, one lowercase, one number',
     )
     .notOneOf([Yup.ref('currentPassword'), null], 'You should provide a new password')
     .required('This field is required'),

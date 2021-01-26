@@ -70,7 +70,7 @@ function* fetchAsyncActiveMentors() {
     const data = yield call(ApiService.load, '/mentors/active');
     yield put({ type: types.FETCHING_ACTIVE_SUCCEED, payload: { data } });
   } catch (error) {
-    yield put({ type: types.FETCHING_ACTIVE_SUCCEED, payload: { error } });
+    yield put({ type: types.FETCHING_ACTIVE_FAILED, payload: { error } });
   }
 }
 

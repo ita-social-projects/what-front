@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { paths, useActions } from '@/shared';
 import { shallowEqual, useSelector } from 'react-redux';
-import { studentsSelector, fetchMentors, fetchLessons, 
-  globalLoadStudentGroups, lessonsSelector, loadStudents, 
-  loadStudentGroupsSelector, mentorsSelector 
+import { studentsSelector, fetchMentors, fetchLessons,
+  globalLoadStudentGroups, lessonsSelector, loadStudents,
+  loadStudentGroupsSelector, mentorsSelector,
 } from '@/models';
 
 import { Badge } from 'react-bootstrap';
@@ -25,23 +25,23 @@ export const LessonDetails = () => {
   const [mentor, setMentor] = useState({});
 
   const [
-    loadLessons, 
-    loadMentors, 
+    loadLessons,
+    loadMentors,
     loadGroups,
     fetchStudents,
   ] = useActions([fetchLessons, fetchMentors, globalLoadStudentGroups, loadStudents]);
-
+  
   const {
     data: lessons,
     isLoading: lessonsIsLoading,
     isLoaded: lessonsIsLoaded,
   } = useSelector(lessonsSelector, shallowEqual);
-
+  
   const {
     data: mentors,
     isLoading: mentorsIsLoading,
     isLoaded: mentorsIsLoaded,
-  } = useSelector(mentorsSelector, shallowEqual)
+  } = useSelector(mentorsSelector, shallowEqual);
 
   const {
     data: groups,
@@ -61,6 +61,9 @@ export const LessonDetails = () => {
     loadMentors();
   }, [loadLessons, fetchStudents, loadGroups, loadMentors]);
 
+
+ 
+  
   useEffect(() => {
     if (lessonsIsLoaded) {
       const lesson = lessons.find((lesson) => lesson.id === Number(id));
@@ -71,7 +74,29 @@ export const LessonDetails = () => {
       }
     }
   }, [lessonsIsLoaded, lesson]);
+  
+  const transformDateTime = (dateTime) => {
+    const arr = dateTime.toString().split('T');
+    console.log(arr)
+    return {
+      date: arr[0],
+      time: arr[1],
+    };
 
+  };
+  
+  useEffect(() => {
+    setLesson(
+      lessons.map(lesson => {
+        transformDateTime(lesson.lessonDate);
+        const { date, time } = transformDateTime(lesson.lessonDate);
+        lesson.lessonDate = date;
+        lesson.lessonTime = time;
+        return lesson;
+      })
+    );
+  }, [lessons]);
+  
   const getFormData = () => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
     const studentD = uniqueIds.map((id) => students.find((student) => student.id === id));
@@ -82,19 +107,19 @@ export const LessonDetails = () => {
         studentName: `${student.firstName} ${student.lastName}`,
       }
     ));
-      
+
     const resultLessonVisits = studentsData.sort((a, b) => {
-      if(a.studentName < b.studentName) {
+      if (a.studentName < b.studentName) {
         return -1;
       }
-      if(a.studentName > b.studentName) {
+      if (a.studentName > b.studentName) {
         return 1;
       }
     })
-    .map((student, index) => ({
-      ...lesson.lessonVisits[index],
-      ...student,
-    }));
+      .map((student, index) => ({
+        ...lesson.lessonVisits[index],
+        ...student,
+      }));
 
     setFormData(resultLessonVisits);
   };
@@ -134,101 +159,116 @@ export const LessonDetails = () => {
   const handleCancel = useCallback(() => {
     history.push(paths.LESSONS);
   }, [history]);
-  
+
   return (
     <div className="container">
       <div className={classNames(styles.page, 'mx-auto', 'col-12')}>
         <div className="d-flex flex-row">
-        <WithLoading 
-              isLoading={lessonsIsLoading || mentorsIsLoading || groupsIsLoading || 
-                studentsIsLoading || !lesson || !formData.length
-              }
-              className={styles['loader-centered']}
-            >
-          <div className="col-6">
-            <h3>Lesson details</h3>
-            <hr />
-            <div className="d-flex flex-row w-100">
-              <div className="col-12">
-                <div className="mt-3 mb-4 row">
-                  <div className="col-sm-6 font-weight-bolder"><span>Lesson Theme: </span></div>
-                  <div className="col-sm-6"><span>{lesson?.themeName}</span></div>
+          <WithLoading
+            isLoading={lessonsIsLoading || mentorsIsLoading || groupsIsLoading
+                || studentsIsLoading || !lesson || !formData.length}
+            className={styles['loader-centered']}
+          >
+            <div className="col-6">
+              <h3>Lesson details</h3>
+              <hr />
+              <div className="d-flex flex-row w-100">
+                <div className="col-12">
+                  <div className="mt-3 mb-4 row">
+                    <div className="col-sm-6 font-weight-bolder"><span>Lesson Theme: </span></div>
+                    <div className="col-sm-6"><span>{lesson?.themeName}</span></div>
+                  </div>
+                  <div className="row mb-4">
+                    <div className="col-sm-6 font-weight-bolder d-flex align-items-center">
+                      <span>Mentor name: </span>
+                    </div>
+                    <div className="col-sm-6 lead">
+                      <Badge pill variant="warning">
+                        <Link
+                          to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
+                          className="text-decoration-none text-dark"
+                        >{`${mentor.firstName} ${mentor.lastName}`}
+                        </Link>
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="row mb-4">
+                    <div className="col-sm-6 font-weight-bolder d-flex align-items-center">
+                      <span>Group name: </span>
+                    </div>
+                    <div className="col-sm-6 lead">
+                      <Badge pill variant="warning">
+                        <Link
+                          to={`${paths.GROUPS_DETAILS}/${studentsGroup?.id}`}
+                          className="text-decoration-none text-dark"
+                        >{studentsGroup?.name}
+                        </Link>
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="row mb-4">
+                    <div className="col-sm-6 font-weight-bolder">
+                      <span>Lesson Date: </span>
+                    </div>
+                    <div className="col-sm-6">
+                      {lesson?.lessonDate}
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-6 font-weight-bolder">
+                      <span>Lesson Time: </span>
+                    </div>
+                    <div className="col-sm-6">
+                      {lesson?.lessonTime}
+                    </div>
+                  </div>
                 </div>
-                <div className="row mb-4">
-                  <div className="col-sm-6 font-weight-bolder d-flex align-items-center">
-                    <span>Mentor name: </span>
-                  </div>
-                  <div className="col-sm-6 lead">
-                    <Badge pill variant="warning">
-                      <Link to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
-                        className="text-decoration-none text-dark"
-                      >{`${mentor.firstName} ${mentor.lastName}`}</Link>
-                    </Badge>
-                  </div>
+                <div className="col-lg-12">
+                  <table className="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col" aria-label="first_col" />
+                        <th scope="col">Full Student`s Name</th>
+                        <th scope="col" className="text-center">Mark</th>
+                        <th scope="col" className="text-center">Presence</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {formData.map((lessonVisit, index) => (
+                        <tr key={lessonVisit.studentId}>
+                          <th scope="row">{ index + 1 }</th>
+                          <td>
+                            <p
+                            className={classNames(styles.link)}
+                            onClick={() => openStudentDetails(lessonVisit.studentId)}
+                          >
+                            { lessonVisit.studentName }
+                          </p>
+                          </td>
+                          <td className="text-center align-content-center">
+                            <div>{lessonVisit.presence && lessonVisit.studentMark}</div>
+                          </td>
+                          <td className="text-center font-weight-bolder">
+                            <span>{lessonVisit.presence ? <Icon icon="Present" /> : <Icon icon="Absent" />}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-                <div className="row mb-4">
-                  <div className="col-sm-6 font-weight-bolder d-flex align-items-center">
-                    <span>Group name: </span>
-                  </div>
-                  <div className="col-sm-6 lead">
-                    <Badge pill variant="warning">
-                      <Link to={`${paths.GROUPS_DETAILS}/${studentsGroup?.id}`}
-                        className="text-decoration-none text-dark"
-                      >{studentsGroup?.name}</Link>
-                    </Badge>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-sm-6 font-weight-bolder">
-                    <span>Lesson Date/Time: </span>
-                  </div>
-                  <div className="col-sm-6">
-                    {lesson.lessonDate && <span>{lesson?.lessonDate.split('T').join(' | ')}</span>}
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-12">
-                <table className="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col" aria-label="first_col" />
-                      <th scope="col">Full Student`s Name</th>
-                      <th scope="col" className="text-center">Mark</th>
-                      <th scope="col" className="text-center">Presence</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {formData.map((lessonVisit, index) => (
-                    <tr key={lessonVisit.studentId}>
-                      <th scope="row">{ index + 1 }</th>
-                      <td>
-                        <p
-                          className={classNames(styles.link)}
-                          onClick={() => openStudentDetails(lessonVisit.studentId)}
-                        >
-                          { lessonVisit.studentName }
-                        </p>
-                      </td>
-                      <td className="text-center align-content-center">
-                        <div>{lessonVisit.presence && lessonVisit.studentMark}</div>
-                      </td>
-                      <td className="text-center font-weight-bolder">
-                        <span>{lessonVisit.presence ? <Icon icon="Present" /> : <Icon icon="Absent" />}</span>
-                      </td>
-                    </tr>
-                  ))}
-                  </tbody>
-                </table>
               </div>
             </div>
-          </div>
           </WithLoading>
         </div>
         <div className="col-12">
-          <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}
-            >Cancel
+          <button
+            form="form"
+            type="button"
+            className="btn btn-secondary btn-lg"
+            onClick={handleCancel}
+          >Cancel
           </button>
-        </div> 
+        </div>
       </div>
     </div>
   );
