@@ -8,7 +8,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   const [currentPage, setCurrentPage] = useState(page);
 
   useEffect(() => {
-    setCurrentPage(page)
+    setCurrentPage(page);
   }, [page]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -17,22 +17,20 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
 
   const pagination = [...new Array(totalPages).keys()].map((number) => number + 1)
     .reduce((accum, i) => {
-      if(i === currentPage) {
-        accum.push({id: i, current: true, ellipsis: false});
-      } else {
-        if (i < 2 || i > totalPages - 1 || i === currentPage - 1 || i === currentPage + 1) {
-          accum.push({id: i, current: false, ellipsis: false});
-        } else if (i > 1 && i < currentPage && !ellipsisLeft) {
-          ellipsisLeft = true;
-          accum.push({id: i, current: false, ellipsis: true});
-        } else if (i < totalPages && i > currentPage && !ellipsisRight) {
-          ellipsisRight = true;
-          accum.push({id: i, current: false, ellipsis: true});
-        }
+      if (i === currentPage) {
+        accum.push({ id: i, current: true, ellipsis: false });
+      } else if (i < 2 || i > totalPages - 1 || i === currentPage - 1 || i === currentPage + 1) {
+        accum.push({ id: i, current: false, ellipsis: false });
+      } else if (i > 1 && i < currentPage && !ellipsisLeft) {
+        ellipsisLeft = true;
+        accum.push({ id: i, current: false, ellipsis: true });
+      } else if (i < totalPages && i > currentPage && !ellipsisRight) {
+        ellipsisRight = true;
+        accum.push({ id: i, current: false, ellipsis: true });
       }
       return accum;
-    }, 
-  []);
+    },
+    []);
 
   const changePage = (page) => {
     if (page !== currentPage) {
@@ -41,11 +39,11 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   };
 
   const goToPrevPage = () => {
-    setCurrentPage((prev) => prev - 1 === 0 ? prev : prev - 1);
+    setCurrentPage((prev) => (prev - 1 === 0 ? prev : prev - 1));
   };
 
   const goToNextPage = () => {
-    setCurrentPage((prev) => prev === totalPages ? prev : prev + 1);
+    setCurrentPage((prev) => (prev === totalPages ? prev : prev + 1));
   };
 
   return ( 
@@ -103,5 +101,5 @@ Pagination.propTypes = {
   totalItems: propTypes.number.isRequired,
   paginate: propTypes.func.isRequired,
   prevPage: propTypes.func.isRequired,
-  nextPage: propTypes.func.isRequired
+  nextPage: propTypes.func.isRequired,
 };
