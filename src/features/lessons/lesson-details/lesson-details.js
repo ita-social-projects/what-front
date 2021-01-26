@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { paths, useActions } from '@/shared';
 import { shallowEqual, useSelector } from 'react-redux';
-import { studentsSelector, fetchMentors, fetchLessons, 
-  globalLoadStudentGroups, lessonsSelector, loadStudents, 
-  loadStudentGroupsSelector, mentorsSelector 
+import { studentsSelector, fetchMentors, fetchLessons,
+  globalLoadStudentGroups, lessonsSelector, loadStudents,
+  loadStudentGroupsSelector, mentorsSelector
 } from '@/models';
 
 import { Badge } from 'react-bootstrap';
@@ -25,8 +25,8 @@ export const LessonDetails = () => {
   const [mentor, setMentor] = useState({});
 
   const [
-    loadLessons, 
-    loadMentors, 
+    loadLessons,
+    loadMentors,
     loadGroups,
     fetchStudents,
   ] = useActions([fetchLessons, fetchMentors, globalLoadStudentGroups, loadStudents]);
@@ -53,7 +53,7 @@ export const LessonDetails = () => {
     isLoading: studentsIsLoading,
     isLoaded: studentsIsLoaded,
   } = useSelector(studentsSelector, shallowEqual);
-  
+
   useEffect(() => {
     loadLessons();
     fetchStudents();
@@ -82,7 +82,7 @@ export const LessonDetails = () => {
         studentName: `${student.firstName} ${student.lastName}`,
       }
     ));
-      
+
     const resultLessonVisits = studentsData.sort((a, b) => {
       if(a.studentName < b.studentName) {
         return -1;
@@ -134,13 +134,13 @@ export const LessonDetails = () => {
   const handleCancel = useCallback(() => {
     history.push(paths.LESSONS);
   }, [history]);
-  
+
   return (
     <div className="container">
       <div className={classNames(styles.page, 'mx-auto', 'col-12')}>
         <div className="d-flex flex-row">
-        <WithLoading 
-              isLoading={lessonsIsLoading || mentorsIsLoading || groupsIsLoading || 
+        <WithLoading
+              isLoading={lessonsIsLoading || mentorsIsLoading || groupsIsLoading ||
                 studentsIsLoading || !lesson || !formData.length
               }
               className={styles['loader-centered']}
@@ -159,9 +159,9 @@ export const LessonDetails = () => {
                     <span>Mentor name: </span>
                   </div>
                   <div className="col-sm-6 lead">
-                    <Badge pill variant="warning">
+                    <Badge pill className={styles.bg_colour}>
                       <Link to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
-                        className="text-decoration-none text-dark"
+                        className="text-decoration-none text-white"
                       >{`${mentor.firstName} ${mentor.lastName}`}</Link>
                     </Badge>
                   </div>
@@ -171,9 +171,9 @@ export const LessonDetails = () => {
                     <span>Group name: </span>
                   </div>
                   <div className="col-sm-6 lead">
-                    <Badge pill variant="warning">
+                    <Badge pill className={styles.bg_colour}>
                       <Link to={`${paths.GROUPS_DETAILS}/${studentsGroup?.id}`}
-                        className="text-decoration-none text-dark"
+                        className="text-decoration-none text-white"
                       >{studentsGroup?.name}</Link>
                     </Badge>
                   </div>
@@ -228,7 +228,7 @@ export const LessonDetails = () => {
           <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}
             >Cancel
           </button>
-        </div> 
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector, 
+import { editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector,
   fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
 } from '@/models';
 import { useActions, paths } from '@/shared';
@@ -342,7 +342,7 @@ export const EditLesson = () => {
         </div>
         <div className={classNames(styles.placement, 'col-12')}>
           <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
-          <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
+          <button form="form" type="submit" className="btn btn-info btn-lg">Save</button>
         </div>
       </div>
     </div>

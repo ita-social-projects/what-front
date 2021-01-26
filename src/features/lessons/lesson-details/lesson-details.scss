@@ -6,6 +6,10 @@
   font-size: 16px;
 }
 
+.bg_colour{
+  background-color: map-get($colors, accent-color);
+}
+
 .link:hover{
   cursor:pointer;
   text-decoration: underline;
