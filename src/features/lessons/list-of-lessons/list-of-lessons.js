@@ -66,7 +66,6 @@ export const ListOfLessons = () => {
   useEffect(() => {
     const lessons = data.filter(
       (lesson) => {
-        console.log(lesson.lessonDate.toLocaleDateString())
         lesson.lessonDate.toLocaleDateString().includes(searchLessonsDateValue)
       },
     );
