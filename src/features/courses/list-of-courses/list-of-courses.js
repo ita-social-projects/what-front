@@ -1,25 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
 import { fetchCourses, coursesSelector, currentUserSelector } from '@/models/index.js';
-import { Card, Search, Button, WithLoading, Pagination } from '../../../components/index.js';
-import Icon from '../../../icon.js';
+
 import classNames from 'classnames';
+import { Search, Button, WithLoading, Pagination } from '../../../components/index.js';
+
 import styles from './list-of-courses.scss';
 
+const editIcon = (
+  <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" className={classNames("bi bi-pencil", styles.scale)} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z"/>
+    <path fillRule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z"/>
+  </svg>
+);
+
+const iconTable = (
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-layout-text-sidebar" viewBox="0 0 16 16">
+    <path d="M3.5 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM3 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"/>
+    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm12-1v14h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zm-1 0H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h9V1z"/>
+  </svg>
+);
+
+const iconCards = (
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-grid" viewBox="0 0 16 16">
+    <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
+  </svg>
+);
+
 export const ListOfCourses = () => {
-  const [searchValue, setSearchValue] = useState('');
-  const [filteredCourses, setFilteredCourses] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [coursesPerPage] = useState(12);
-
-  const { data, isLoading } = useSelector(coursesSelector, shallowEqual);
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-
-  const [loadCourses] = useActions([fetchCourses]);
 
   const history = useHistory();
+
+  const [visibleCourses, setVisibleCourses] = useState([])
+
+  const [coursesPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const [filteredCourses, setFilteredCourses] = useState([]);
+
+  const [sortingCategories, setSortingCategories] = useState([
+    { id: 0, name: 'id', sortedByAscending: false, tableHead: '#' },
+    { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Title' },
+  ]);
+
+  const { data, isLoading } = useSelector(coursesSelector, shallowEqual); // array of courses ,true/false
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual); // role of user
+
+  const [loadCourses] = useActions([fetchCourses]); // loading courses
+
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+
 
   useEffect(() => {
     loadCourses();
@@ -29,41 +64,28 @@ export const ListOfCourses = () => {
     setFilteredCourses(data);
   }, [data]);
 
-  const handleSearch = (inputValue) => {
-    setSearchValue(inputValue);
-    setFilteredCourses(data.filter(({ name }) => name.toUpperCase().includes(inputValue.toUpperCase())));
-  };
+  useEffect(() => {
+    setVisibleCourses(filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse));
+  }, [currentPage, filteredCourses]);
 
-  const addCourse = () => {
-    history.push(paths.COURSE_ADD);
-  };
+  {filteredCourses.map(({ id, name }) => (
+    <tr key={id} onClick={() => courseDetails(id)}>
+      <td>{id}</td>
+      <td>{name}</td>
+      <td className="text-center" onClick={(event) => courseEdit(event, id)} data-student-id={id}>{editIcon}</td>
+    </tr>
+  ))}
 
-  const courseDetails = (id) => {
-    history.push(`${paths.COURSE_DETAILS}/${id}`);
-  };
-
-  const courseEdit = (id) => {
-    history.push(`${paths.COURSE_EDIT}/${id}`);
-  };
 
   const coursesList = () => {
-    const indexOfLastCourse = currentPage * coursesPerPage;
-    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-
-    const courses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
-      .map((course) => {
-        return (
-          <Card
-            key={course.id}
-            id={course.id}
-            buttonName="Details"
-            title={course.name}
-            iconName={currentUser.role === 3 || currentUser.role === 4 ? "Edit" : null}
-            onEdit={currentUser.role === 3 || currentUser.role === 4 ? () => courseEdit(course.id) : null}
-            onDetails={() => courseDetails(course.id)}
-          />
-        );
-      });
+    const courses = visibleCourses
+      .map((course) => (
+        <tr key={course.id} onClick={(event) => courseDetails(course.id)} data-student-id={course.id}>
+          <td>{course.id}</td>
+          <td>{course.name}</td>
+          <td className="text-center" onClick={(event) => courseEdit(event, course.id)} data-student-id={course.id}>{editIcon}</td>
+        </tr>
+      ));
 
     if (!courses.length && searchValue) {
       return <h4>Course is not found</h4>;
@@ -71,10 +93,50 @@ export const ListOfCourses = () => {
     return courses;
   };
 
+  const handleSearch = (inputValue) => {
+    setSearchValue(inputValue);
+    setVisibleCourses(data.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
+  };
+
+  const addCourse = () => {
+    history.push(paths.COURSE_ADD);
+  };
+
+  const courseDetails = useCallback((id) => {
+    history.push(`${paths.COURSE_DETAILS}/${id}`);
+  });
+
+  const courseEdit = useCallback((event, id) => {
+    event.stopPropagation();
+    history.push(`${paths.COURSE_EDIT}/${id}`);
+  });
+
+  const handleSortByParam = (event) => {
+    const { sortingParam, sortedByAscending } = event.target.dataset;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    const sortedCourses = [...visibleCourses].sort((prevCourse, currentCourse) => {
+      if (prevCourse[sortingParam] > currentCourse[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+
+    setSortingCategories(sortingCategories.map((category) => {
+      if (category.name === sortingParam) {
+        return { ...category, sortedByAscending: !category.sortedByAscending };
+      }
+      return { ...category, sortedByAscending: false };
+    }));
+
+    setVisibleCourses(sortedCourses)
+  };
+
+
   const paginate = (pageNumber) => {
-    if(currentPage !== pageNumber) {
-      setCurrentPage(pageNumber)
-    } 
+    if (currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
   };
 
   const nextPage = (pageNumber) => {
@@ -82,63 +144,96 @@ export const ListOfCourses = () => {
     setCurrentPage((prev) => {
       if (prev === totalPages) {
         return prev;
-      } else {
-        return pageNumber;
       }
+      return pageNumber;
     });
   };
 
-  const prevPage =(pageNumber) => {
+  const prevPage = (pageNumber) => {
     setCurrentPage((prev) => {
       if (prev - 1 === 0) {
         return prev;
-      } else {
-        return pageNumber;
       }
+      return pageNumber;
     });
   };
 
   return (
-    <div className={classNames("container", styles['list-wrapper'])}>
-      <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
-          <Search onSearch={handleSearch} placeholder="Course's name" />
-        </div>
-        {currentUser.role === 4 && 
-          <div className="col-md-4 text-right">
-            <Button onClick={addCourse} variant="warning">
-              <Icon icon="Plus" className="icon" />
-              <span>Add a course</span>
-            </Button>
-          </div> || currentUser.role === 3 &&
-          <div className="col-md-4 text-right">
-            <Button onClick={addCourse} variant="warning">
-              <Icon icon="Plus" className="icon" />
-              <span>Add a course</span>
-            </Button>
+      <div className="container">
+        <div className="row justify-content-between align-items-center mb-3">
+          <div className="col-6"><h2>Courses</h2></div>
+          {filteredCourses.length > coursesPerPage ?
+            <span className="col-2 text-right">{filteredCourses.length} courses</span> : null
+          }
+          <div className="col-4 align-items-center justify-content-end">
+            {filteredCourses.length > coursesPerPage &&
+            <Pagination
+              itemsPerPage={coursesPerPage}
+              totalItems={filteredCourses.length}
+              paginate={paginate}
+              prevPage={prevPage}
+              nextPage={nextPage}
+              page={currentPage}
+            />}
           </div>
-        }
-      </div>
-      <div>
-        <hr className="col-8" />
-        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
-          <WithLoading isLoading={isLoading}>
-            {
-              coursesList()
-            }
-          </WithLoading>
+        </div>
+        <div className="row justify-content-center">
+          <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
+            <div className="px-3 py-2 mb-2">
+              <div className="row align-items-center">
+                <div className="col-2">
+                  <button className="btn">{iconTable}</button>
+                  <button className="btn">{iconCards}</button>
+                </div>
+                <div className="col-4">
+                  <Search  onSearch={handleSearch} placeholder="Course`s title" />
+                </div>
+                <div className="col-2 offset-4">
+                  {currentUser.role === 4
+                  && (
+                      <Button onClick={addCourse} className={styles.btn}>
+                        <span>Add a course</span>
+                      </Button>
+                  ) || currentUser.role === 3
+                  && (
+                      <Button onClick={addCourse} className={styles.btn}>
+                        <span>Add a course</span>
+                      </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+            <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    {sortingCategories.map(({ id, name, tableHead, sortedByAscending}) => (
+                      <th
+                        key={id}
+                        className={styles.tablehead}
+                      >
+                        <span
+                          data-sorting-param={name}
+                          data-sorted-by-ascending={Number(sortedByAscending)}
+                          onClick={handleSortByParam}
+                          className={classNames({[styles.rotate]: !sortedByAscending})}
+                        >
+                        {tableHead}
+                        </span>
+                      </th>
+                    ))}
+                    <th className="text-center">Edit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    coursesList()
+                  }
+                </tbody>
+              </table>
+            </WithLoading>
+          </div>
         </div>
       </div>
-      {filteredCourses.length > 12 && !isLoading &&
-        <Pagination 
-          itemsPerPage={coursesPerPage} 
-          totalItems={filteredCourses.length} 
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          page={currentPage}
-        />
-      }
-    </div>
   );
 };

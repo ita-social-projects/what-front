@@ -1,22 +1,26 @@
 @import '../../index.scss';
 
 .tab {
+  color: white;
   flex: 1;
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+  transition: .2s;
   @include tab;
-
+  
   &:not(:last-of-type) {
     margin-right: -2%;
   }
 
   &:hover {
-    color: black;
-    background-color: #FFB800;
+    color: white;
+    background-color: $theme-colorAccent;
     z-index: 3;
   }
 }
 
 .active {
-  background-color:#FFB800;
+  background-color: $theme-colorAccent;
   font-weight: 600;
   z-index: 2;
 }

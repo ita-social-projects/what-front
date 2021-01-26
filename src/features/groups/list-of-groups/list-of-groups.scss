@@ -3,6 +3,9 @@
 .calendar-input{
   border-color: map-get($colors, textAccentN1-color) !important;
   width: 18%;
+  .form-control {
+    max-width: 50%;
+  }
 }
 
 .calendar-input:focus {
@@ -13,4 +16,56 @@
 
 .list-wrapper {
   min-height: 724px;
+  margin: 10px;
+}
+.table {
+  margin-bottom: 0 !important;
+}
+.table-item {
+  transition: all 0.2s ease 0s;
+  td {
+    cursor: pointer;
+  }
+}
+.table-item:hover {
+  background-color:rgba(#4C566A, 0.1);
+}
+
+.scale {
+  transition: .5s;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.4);
+  }
+}
+
+.btn-add{
+  background-color: $theme-colorAccent !important;
+  border: $theme-colorAccent !important;
+}
+
+.category {
+  cursor: pointer;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    width: 8px;
+    height: 8px;
+    transform: rotateZ(45deg);
+    transition: .3s;
+  }
+
+  &-sorted {
+    &::after {
+      transform: rotateZ(225deg);
+      top: 5px;
+    }
+  }
 }
