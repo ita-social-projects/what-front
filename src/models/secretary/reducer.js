@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import {
-  allSecretariesReducer, createSecretaryReducer, deleteSecretaryReducer, updateSecretaryReducer,
+  allSecretariesReducer, activeSecretariesReducer, createSecretaryReducer,
+  deleteSecretaryReducer, updateSecretaryReducer,
 } from './reducers/index.js';
 
 export const secretariesReducer = combineReducers({
   secretaries: allSecretariesReducer,
+  activeSecretaries: activeSecretariesReducer,
   createdSecretary: createSecretaryReducer,
   updatedSecretary: updateSecretaryReducer,
   deletedSecretary: deleteSecretaryReducer,

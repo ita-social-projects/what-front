@@ -1,3 +1,62 @@
-.list-wrapper {
-  min-height: 796px;
+@import '../../../styles/main';
+
+.table-rows {
+  cursor: pointer;
+  transition: all .2s ease-out;
+}
+
+.scale {
+  transition: .5s;
+  &:hover {
+    transform: scale(1.4);
+  }
+}
+
+
+.btn {
+  background-color: map-get($colors, accent-color) !important;
+
+  &:hover {
+    background-color: map-get($colors, accent-color);
+    opacity: 0.8;
+  }
+}
+
+.tablehead {
+  &:first-of-type {
+    text-align: start;
+  }
+
+  & span {
+    position: relative;
+
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+      transition: .4s;
+    }
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: -15px;
+      top: 10px;
+
+      width: 8px;
+      height: 8px;
+
+      border-top: 1px solid #000;
+      border-left: 1px solid #000;
+
+      transform: rotateZ(45deg);
+      transition: .3s;
+    }
+
+    &.rotate::after {
+      top: 7px;
+      transform: rotateZ(225deg);
+    }
+  }
 }

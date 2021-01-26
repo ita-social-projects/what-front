@@ -1,25 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  Formik, Field, Form, FieldArray,
-} from 'formik';
-import classNames from 'classnames';
 import { useSelector, shallowEqual } from 'react-redux';
-import { Button, WithLoading } from '@/components';
 import { useActions, paths } from '@/shared';
-import { lessonValidation } from '@features/validation/validation-helpers.js';
-
 import {
-  mentorsActiveSelector,
-  activeStudentsSelector,
-  loadStudentGroupsSelector,
-  addLessonSelector,
-  fetchActiveMentors,
-  globalLoadStudentGroups,
-  loadActiveStudents,
-  addLesson,
+  mentorsActiveSelector, studentsSelector, loadStudentGroupsSelector,
+  addLessonSelector, fetchActiveMentors, globalLoadStudentGroups,
+  loadStudents, addLesson,
 } from '@/models/index.js';
+
+import { Button, WithLoading } from '@/components';
+import { addLessonValidation } from '@features/validation/validation-helpers.js';
 import { addAlert } from '@/features';
+import { Formik, Field, Form, FieldArray } from 'formik';
+
+import classNames from 'classnames';
 import styles from './add-lesson.scss';
 
 export const AddLesson = () => {
@@ -55,7 +49,7 @@ export const AddLesson = () => {
     isLoading: studentsIsLoading,
     isLoaded: studentsIsLoaded,
     error: studentsError,
-  } = useSelector(activeStudentsSelector, shallowEqual);
+  } = useSelector(studentsSelector, shallowEqual);
 
   const {
     isLoaded: addIsLoaded,
@@ -69,13 +63,7 @@ export const AddLesson = () => {
     getStudents,
     createLesson,
     dispatchAddAlert,
-  ] = useActions([
-    fetchActiveMentors,
-    globalLoadStudentGroups,
-    loadActiveStudents,
-    addLesson,
-    addAlert,
-  ]);
+  ] = useActions([fetchActiveMentors, globalLoadStudentGroups, loadStudents, addLesson, addAlert]);
 
   useEffect(() => {
     if (!mentorsIsLoaded && !mentorError) {
@@ -265,7 +253,7 @@ export const AddLesson = () => {
                   formData,
                 }}
                 onSubmit={onSubmit}
-                validationSchema={lessonValidation}
+                validationSchema={addLessonValidation}
               >
                 {({ errors }) => (
                   <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>

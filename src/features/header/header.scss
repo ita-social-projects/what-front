@@ -1,9 +1,11 @@
+@import '../../styles/main';
+
 .header {
   height: 75px;
   padding: 0 3rem !important;
   z-index: 10;
   color: white;
-  background-color: #01073A;
+  background-color: $theme-colorDark;
 
   &__logo {
     font-size: 20px;
@@ -25,8 +27,11 @@
     &-user {
       display: flex;
       align-items: center;
-
-      padding-right: 15%;
+      padding-right: 10%;
+      color: white;
+      &--fullname {
+        cursor: pointer;
+      }
 
       &--icon {
         padding-right: 1rem;
@@ -35,7 +40,11 @@
 
         &:hover {
           color: #fff;
-          opacity: 0.5;
+          opacity: 1;
+          text-decoration: none;
+          & a {
+            opacity: 1;
+          }
         }
       }
     }
@@ -50,35 +59,62 @@
   }
 }
 
-@media(max-width: 1300px) {
-  .header {
-    padding: 0 1.5rem !important;
-
-    &__navbar-links {
-      width: 75%;
-    }
-
-    &__navbar-links > a {
-      font-size: 16px;
-    }
-  }
+.header__dropdown-icon {
+  color: white !important;
 }
 
-@media(max-width: 768px) {
-  .header {
-    height: 55px;
-    padding: 0 1.5rem !important;
+.header__dropdown-list {
+  position: absolute;
+  top: 10px;
+  right: 2.5%;
+  width: 15%;
+  opacity: 0;
+  visibility: hidden;
 
-    &__navbar-links  {
-      display: none !important;
-    }
+  transition: all 0.3s ease 0s;
 
-    &__account-user--fullname {
-      display: none;
-    }
+  &-show {
+    position: absolute;
+    opacity: 1;
+    padding: 0;
+    z-index: 2;
+    top: 75px;
+    right: 0;
+    color: #fff;
+    background-color: #ffffff;
+    width: 15%;
+    transition: all 0.5s ease 0s;
 
-    &__sidebar-toggler {
-      display: block;
-    }
   }
+    &--item {
+      list-style: none;
+      padding: 15px 10px;
+      color: #000;
+      transition: all 0.2s ease 0s;
+      & a{
+        color: #000 !important;
+        text-decoration: none;
+      }
+    }
+
+    &--item:hover {
+      color: #fff;
+      cursor: pointer;
+      background-color: rgba(#F6F8FD, 0.8);
+      padding-left: 20px !important;
+
+    }
+
+    &--item:last-child {
+      border: none;
+      & a {
+        cursor: pointer;
+      }
+    }
+
+  }
+
+.header__dropdown-toggler {
+  cursor: pointer;
 }
+

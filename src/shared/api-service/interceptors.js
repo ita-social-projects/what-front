@@ -40,5 +40,10 @@ export const responseErrorInterceptor = (error) => {
     return Promise.reject(error.response.data);
   }
 
-  return Promise.reject(error.response.data.error.message);
+  if (error.response.data.error) {
+    return Promise.reject(error.response.data.error.message);
+  }
+
+  // eslint-disable-next-line prefer-promise-reject-errors
+  return Promise.reject('An error occurred');
 };
