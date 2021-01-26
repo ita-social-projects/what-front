@@ -39,11 +39,11 @@ export const Tabs = ({
   return (
     <div className={className}>
       <div className="nav nav-tabs">
-        <Link
+        {/* <Link
           className="nav-item nav-link d-flex align-items-center"
           to={linkBack}
         >{arrow}
-        </Link>
+        </Link> */}
         {renderTabs()}
       </div>
       <div>
