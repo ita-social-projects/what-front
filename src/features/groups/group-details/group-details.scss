@@ -1,4 +1,18 @@
+@import "../../../styles/color-palette";
+
 .loader-centered {
   display: block;
   margin: 0 auto;
+}
+
+.table-row {
+  cursor: pointer;
+}
+
+.schedule-link {
+  color: $theme-colorAccent;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }

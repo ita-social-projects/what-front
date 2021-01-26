@@ -3,8 +3,8 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@shared/index.js';
 import {
-  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector,mentorGroupsSelector, 
-  mentorCoursesSelector, editMentor,deleteMentor, loadStudentGroupsSelector, 
+  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector,mentorGroupsSelector,
+  mentorCoursesSelector, editMentor,deleteMentor, loadStudentGroupsSelector,
   coursesSelector, fetchCourses, globalLoadStudentGroups,
 } from '@/models/index.js';
 
@@ -74,19 +74,19 @@ export const EditMentor = ({ id }) => {
   const [loadCourses] = useActions([fetchCourses]);
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
   const [toShowModal, setShowModal] = useState(false);
-  
+
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-  
+
   useEffect(() => {
     fetchListOfGroups();
   }, [fetchListOfGroups]);
-  
+
   useEffect(() => {
     loadCourses();
   }, [loadCourses]);
-  
-  
+
+
   useEffect(() => {
     setGroups(mentorGroups);
     setCourses(mentorCourses);
@@ -215,7 +215,7 @@ export const EditMentor = ({ id }) => {
             <h3>Mentor Editing</h3>
             <hr />
             <WithLoading
-              isLoading={mentorIsLoading || !mentorIsLoaded || allCoursesAreLoading || !allCoursesAreLoaded || 
+              isLoading={mentorIsLoading || !mentorIsLoaded || allCoursesAreLoading || !allCoursesAreLoaded ||
                 mentorCoursesAreLoading || !mentorCoursesAreLoaded || allGroupsAreLoading || !allGroupsAreLoaded ||
                 !mentorGroupsAreLoaded || mentorGroupsAreLoading
               }
@@ -306,7 +306,7 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
+                            <Button variant="info" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
                           </div>
                         </div>
                         { errorGroup ? <div className={styles.error}>{errorGroup}</div> : null}
@@ -325,7 +325,7 @@ export const EditMentor = ({ id }) => {
                                 data-groupname={name}
                               >{name}
                                 <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-dark"
                                   type="button"
                                   onClick={handleGroupDelete}
                                 >&#10005;
@@ -360,13 +360,13 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="warning" onClick={handleCourseAdd}><Icon icon="Plus" /></Button>
+                            <Button variant="info" onClick={handleCourseAdd}><Icon icon="Plus" /></Button>
                           </div>
                         </div>
                         { errorCourse ? <div className={styles.error}>{errorCourse}</div> : null}
                       </div>
                     </div>
-    
+
                       <div className="row m-0 pt-3">
                         <div className="col-md-8 offset-md-4">
                           <ul className="d-flex flex-wrap justify-content-between p-0">
@@ -394,7 +394,7 @@ export const EditMentor = ({ id }) => {
                       <div className="col-md-3 col-4">
                         <Button
                           className="w-100"
-                          variant="danger"
+                          variant="dark"
                           onClick={handleShowModal}
                           disabled={!isValid || dirty || editedIsLoading || deletedIsLoading}
                         >Fire
@@ -411,7 +411,7 @@ export const EditMentor = ({ id }) => {
                       </div>
                       <div className="col-md-3 col-4">
                         <button
-                          className={classNames('w-100 btn btn-success', styles.button)}
+                          className={classNames('w-100 btn btn-info', styles.button, styles.submit)}
                           type="submit"
                           disabled={!isValid || !dirty || editedIsLoading || deletedIsLoading
                                 || errors.firstName || errors.lastName || errors.email}
