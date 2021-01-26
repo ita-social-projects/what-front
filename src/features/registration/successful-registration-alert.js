@@ -20,8 +20,8 @@ export const SuccessfulRegistrationAlert = ({toShow, onClose, onSubmit}) => {
         Please, wait until your account is approved and your role is assigned.
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center">
-        <button 
-          className={classNames("btn btn-success w-75", styles["modal-btn"])} 
+        <button
+          className={classNames("btn btn-info w-75", styles["modal-btn"])}
           type="submit" onClick={onSubmit}
         >Ok</button>
       </Modal.Footer>
