@@ -1,97 +1,16 @@
+@import '../../styles/main';
+
 .header {
   height: 75px;
   padding: 0 3rem !important;
+  z-index: 10;
   color: white;
-  background-color: #fff;
+  background-color: $theme-colorDark;
 
-  &__sidebar {
-    position: absolute;
-    left: -29%;
-    top: 0;
-
-    width: 29%;
-    min-height: 500px;
-
-    background-color: rgba(#01073A, 0.9);
-    z-index: 9;
-
-    transition: left .8s;
-
-    &-toggler {
-      display: none;
-      position: relative;
-
-      cursor: pointer;
-
-      z-index: 19;
-
-      &:hover {
-        opacity: 0.5;
-      }
-    }
-
-    &-links {
-      display: flex;
-      flex-wrap: wrap;
-
-      padding-top: 80px;
-    }
-
-    &-links > a {
-      width: 100%;
-      margin-bottom: .5rem;
-
-      text-align: center;
-
-      font-size: 18px;
-      font-weight: bold;
-
-      color: white;
-      background-color: transparent;
-
-      &:focus {
-        background-color: orange;
-      }
-      &:hover {
-        background-color: orange;
-        color: #212529;
-      }
-    }
-  }
-
-  &__navbar-links {
-    width: 65%;
+  &__logo {
+    font-size: 20px;
     height: 100%;
-
-    justify-content: flex-start;
-    align-items: flex-end;
-  }
-
-  &__navbar-links > a {
-    width: 22%;
-    margin-right: .7rem;
-
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-
-    text-align: center;
-    font-weight: 600;
-    font-size: 18px;
-
-    color: #212529;
-    background-color: white;
-
-      &:focus {
-        background-color: orange;
-      }
-      &:hover {
-        background-color: orange;
-        color: #212529;
-      }
-  }
-
-  &__navbar-links > a:last-of-type {
-    margin-right: 0 !important;
+    position: relative;
   }
 
   &__account {
@@ -108,9 +27,8 @@
     &-user {
       display: flex;
       align-items: center;
-
       padding-right: 10%;
-      color: #000;
+      color: white;
       &--fullname {
         cursor: pointer;
       }
@@ -141,57 +59,8 @@
   }
 }
 
-@media(max-width: 1300px) {
-  .header {
-    padding: 0 1.5rem !important;
-
-    &__navbar-links {
-      width: 75%;
-    }
-
-    &__navbar-links > a {
-      font-size: 16px;
-    }
-  }
-}
-
-@media(max-width: 768px) {
-  .header {
-    height: 55px;
-    padding: 0 1.5rem !important;
-
-    &__navbar-links  {
-      display: none !important;
-    }
-
-    &__account-user--fullname {
-      display: none;
-    }
-
-    &__sidebar-toggler {
-      display: block;
-    }
-  }
-}
-
-@media(max-width: 480px) {
-  .header__sidebar {
-    width: 65%;
-    left: -65%;
-  }
-}
-
-.sidebar--active {
-  left: 0;
-}
-
-.active {
-  background-color: #FFB800 !important;
-  font-weight: bold !important;
-}
-
 .header__dropdown-icon {
-  color: #000 !important;
+  color: white !important;
 }
 
 .header__dropdown-list {
