@@ -1,19 +1,25 @@
 @import "../../../styles/main";
 
-.icon {
-  fill: map-get($colors, dark-color);
-  cursor: pointer;
-
-  &.edit-icon {
-    transition: .5s;
-    &:hover {
-      transform: scale(1.4);
-    }
+.scale {
+  transition: .3s ease;
+  padding-top: 3px;
+  &:hover {
+    transform: scale(1.4); 
+    padding-top: 5px;
   }
 }
 
 .switch, .table-row {
   cursor: pointer;
+}
+
+.table-head {
+  min-width: 150px;
+
+  &:first-of-type {
+    text-align: center;
+    min-width: 0;
+  }
 }
 
 .category {

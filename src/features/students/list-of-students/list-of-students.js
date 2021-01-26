@@ -185,15 +185,15 @@ export const ListOfStudents = () => {
         data-student-id={id}
         className={styles['table-row']}
       >
-        <td>{index + 1}</td>
+        <td className="text-center">{index + 1}</td>
         <td>{firstName}</td>
         <td>{lastName}</td>
         <td>{email}</td>
         <td
-          className="d-flex justify-content-center"
+          className="text-center"
           onClick={(event) => handleEdit(event, id)}
         >
-          <Icon icon="Edit" className={classNames(styles['edit-icon'], styles.icon)} size={24} />
+          <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
         </td>
       </tr>
     ));
@@ -233,24 +233,22 @@ export const ListOfStudents = () => {
         </div>
       </div>
       <div className="row">
-        <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
-          <div className="row align-items-center px-3 py-2 mb-2">
+        <div className="col-12 card shadow p-3 mb-5 bg-white">
+          <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
-              <button className="btn">
-                <Icon icon="List" className={styles.icon} size={25} />
-              </button>
-              <button className="btn">
-                <Icon icon="Cards" className={styles.icon} size={25} />
-              </button>
+              <div className="btn-group">
+                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
+                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+              </div>
             </div>
-            <div className="col-4">
+            <div className="col-3">
               <Search
                 value={searchFieldValue}
                 onSearch={handleSearch}
                 placeholder="student's name"
               />
             </div>
-            <div className="col-2 offset-2 custom-control custom-switch">
+            <div className="col-2 offset-3 custom-control custom-switch text-right">
               <input
                 value={isShowDisabled}
                 type="checkbox"
@@ -265,9 +263,9 @@ export const ListOfStudents = () => {
                 Disabled students
               </label>
             </div>
-            <div className="col-2">
+            <div className="col-2 text-right">
               {[3, 4].includes(currentUser.role) && (
-                <Button onClick={handleAddStudent}>Add a student</Button>
+                <Button onClick={handleAddStudent}><span>Add a student</span></Button>
               )}
             </div>
           </div>
@@ -276,7 +274,10 @@ export const ListOfStudents = () => {
               <thead>
                 <tr>
                   {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th key={id}>
+                    <th
+                      key={id}
+                      className={styles['table-head']}
+                    >
                       <span
                         onClick={handleSortByParam}
                         data-sorting-param={name}
