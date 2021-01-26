@@ -105,20 +105,18 @@ export const Sidebar = () => {
         <Icon icon={'SidebarToggler'} className="icon" size={26} viewBox="0 0 32 38" />
       </div>
 
-      <div className={styles.sidebar__icons}></div>
-
       <div onMouseOver={toggleSidebar} onMouseOut={toggleSidebar} className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
         <div className={styles['sidebar__links']}>
           {tabs.map(({ id, title, link, active }) => (
             <Link
-              className={classNames("nav-item nav-link d-flex justify-content-between", { [`${styles.active}`]: active } )}
+              className={classNames("nav-item nav-link d-flex justify-content-left", { [`${styles.active}`]: active } )}
               to={`${link}`}
               key={id}
               data-id={id}
               onClick={(event) => toggleActiveTab(event)}
             >
+              <Icon icon={title} className={styles.sidebar__icon} size={24} viewBox="0 0 32 32" />
               {title}
-              <Icon icon={title} className="icon" size={32} viewBox="0 0 32 32" />
             </Link>
           ))}
         </div>

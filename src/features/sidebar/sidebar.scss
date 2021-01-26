@@ -17,6 +17,13 @@
     }
   }
 
+  &__icon {
+    display: block;
+    position: fixed;
+    left: 20px;
+    z-index: 10;
+  }
+
   &__content {
     position: fixed;
     left: -100%;
@@ -39,21 +46,23 @@
   }
 
   &__links > a {
+    position: relative;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    padding-left: 60px;
     text-align: center;
     font-weight: 600;
     font-size: 18px;
     color: white;
 
-      &:focus {
-        background-color: map-get($colors, accent-color);
-        color: map-get($colors, dark-color);
-      }
-      &:hover {
-        background-color: map-get($colors, accent-color);
-        color: map-get($colors, dark-color);
-      }
+    &:focus {
+      background-color: map-get($colors, accent-color);
+      color: map-get($colors, dark-color);
+    }
+    &:hover {
+      background-color: map-get($colors, accent-color);
+      color: map-get($colors, dark-color);
+    }
   }
   
 }
@@ -79,14 +88,29 @@
 }
 
 @media(max-width: 768px) {
-  .sidebar__content {
-    left: -200px;
-    width: 200px;
+  .sidebar {
+
+    &__content {
+      left: -200px;
+      width: 200px;
+    }
+
+    &__toggler {
+      top: 13px;
+      left: 153px;
+    }
+
+    &__icon {
+      left: -30px;
+      transition: ease .2s;
+    }
+
+    .sidebar--active svg {
+      left: 20px;
+    }
+    
   }
-  .sidebar__toggler {
-    top: 13px;
-    left: 153px;
-  }
+
 }
 
 @media(min-width: 769px) {
@@ -106,6 +130,7 @@
 
 .sidebar--active {
   left: 0;
+
 }
 
 .active {
