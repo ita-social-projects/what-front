@@ -53,7 +53,7 @@ export const Registration = () => {
     <div className={styles.wrapper}>
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-6 col-md-6 col-sm-12">
+          <div className="col-xl-6 col-md-8 col-sm-10 col-12">
             <div className={styles.form}>
               <Formik
                 initialValues={{
@@ -132,7 +132,7 @@ export const Registration = () => {
                     </div>
                     <p className="text-danger text-center mt-2">{error}</p>
                     <div className="text-center mt-3">
-                      <p>Already have an account? <Link to={paths.AUTH} className="text-info">Log in</Link></p>
+                      <p>Already have an account? <Link to={paths.AUTH} className={styles['form-link']}>Log in</Link></p>
                     </div>
                     <SuccessfulRegistrationAlert
                       toShow={toShowModal}
