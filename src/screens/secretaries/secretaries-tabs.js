@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { number } from 'prop-types';
 
 import { useActions, paths } from '@/shared/index.js';
-import { currentUserSelector, fetchActiveSecretaries } from '@models/index.js';
+import { currentUserSelector, fetchSecretaries } from '@models/index.js';
 
 import { Tab, Tabs } from '@/components';
 import { SecretarysDetails, EditSecretarysDetails } from '@/features';
@@ -12,12 +12,12 @@ import { SecretarysDetails, EditSecretarysDetails } from '@/features';
 export const SecretariesTabs = ({ index }) => {
   const { id } = useParams();
 
-  const [loadSecretaries] = useActions([fetchActiveSecretaries]);
+  const [loadAllSecretaries] = useActions([fetchSecretaries]);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   useEffect(() => {
-    loadSecretaries();
-  }, [loadSecretaries]);
+    loadAllSecretaries();
+  }, [loadAllSecretaries]);
 
   if (currentUser.role === 4) {
     return (
