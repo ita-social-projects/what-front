@@ -84,7 +84,7 @@ export const Sidebar = () => {
       active: currentURL.includes(tab.title.toLowerCase()),
     }));
     setTabs(resultArr);
-  }, [currentUser]);
+  }, [currentUser, currentURL]);
 
   function toggleSidebar(event) {
     const screenWidth = document.documentElement.clientWidth;
