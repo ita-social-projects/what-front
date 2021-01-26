@@ -13,7 +13,7 @@ export const Search = ({
   const handleChange = (event) => onSearch(event.target.value);
 
   return (
-    <div className={styles.search}>
+    <div className={classNames(styles.search)}>
       <input
         type="text"
         className={classNames(styles.searchInput, className)}

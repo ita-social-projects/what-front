@@ -5,8 +5,8 @@ import { number } from 'prop-types';
 
 import { paths, useActions } from '@/shared';
 import {
-  activeSecretariesSelector, updatedSecretarySelector, deletedSecretarySelector,
-  updateSecretary, deleteSecretary,
+  updatedSecretarySelector, deletedSecretarySelector,
+  updateSecretary, deleteSecretary, secretariesSelector,
 } from '@models/index.js';
 
 import { Button, WithLoading } from '@/components/index.js';
@@ -23,7 +23,7 @@ export const EditSecretarysDetails = ({ id }) => {
     isLoading: isSecretariesLoading,
     isLoaded: isSecretariesLoaded,
     error: secretaryError,
-  } = useSelector(activeSecretariesSelector, shallowEqual);
+  } = useSelector(secretariesSelector, shallowEqual);
 
   const {
     isLoading: isUpdateLoading,

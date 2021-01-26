@@ -5,14 +5,13 @@ import classNames from 'classnames';
 import styles from './pagination.scss';
 
 export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextPage, page }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const [currentPage, setCurrentPage] = useState(page);
 
   useEffect(() => {
     setCurrentPage(page);
   }, [page]);
 
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
   let ellipsisLeft = false;
   let ellipsisRight = false;
 
@@ -30,7 +29,8 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
         accum.push({ id: i, current: false, ellipsis: true });
       }
       return accum;
-    }, []);
+    },
+    []);
 
   const changePage = (page) => {
     if (page !== currentPage) {
@@ -49,7 +49,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
   return (
     <div>
       <nav className="col-12 d-flex flex-row flex-wrap justify-content-center">
-        <ul className="pagination mb-0 align-items-center">
+        <ul className="pagination mb-0">
           <li className="page-item">
             <button
               className={classNames('page-link', styles.link)}
@@ -61,7 +61,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
             </button>
           </li>
         </ul>
-        <ul className="pagination mb-0 align-items-center">
+        <ul className="pagination mb-0">
           {pagination.map((page) => {
             if (!page.ellipsis) {
               return (
@@ -85,7 +85,7 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
             );
           })}
         </ul>
-        <ul className="pagination mb-0 align-items-center">
+        <ul className="pagination mb-0">
           <li className="page-item">
             <button
               className={classNames('page-link', styles.link)}
