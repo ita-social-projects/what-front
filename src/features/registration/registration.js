@@ -127,7 +127,7 @@ export const Registration = () => {
                     </div>
                     <div className="d-flex justify-content-center">
                       <WithLoading isLoading={isLoading}>
-                        <Button type="submit" className="btn btn-block btn-warning">Sign up</Button>
+                        <Button type="submit" className="btn btn-block btn-info">Sign up</Button>
                       </WithLoading>
                     </div>
                     <p className="text-danger text-center mt-2">{error}</p>
