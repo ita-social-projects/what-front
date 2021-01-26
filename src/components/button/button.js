@@ -19,7 +19,6 @@ export const Button = ({
       styles.button,
       'btn',
       { [`btn-${variant}`]: variant },
-        { [styles.default]: !variant },
       className,
     )}
     disabled={disabled}
