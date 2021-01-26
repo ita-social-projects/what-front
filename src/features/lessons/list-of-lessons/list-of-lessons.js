@@ -12,17 +12,18 @@ export const ListOfLessons = () => {
   const history = useHistory();
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
+  const [visibleLessonsList, setVisibleLessonsList] = useState([]);
   const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [lessonsPerPage] = useState(10);
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
   const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const getLessons = useActions(fetchLessons);
   
-  const indexOfLastLesson = currentPage * lessonsPerPage;
-  const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
+  const lessonsPerPage = 10;
+  const indexOfLast = currentPage * lessonsPerPage;
+  const indexOfFirst = indexOfLast - lessonsPerPage;
   
   useEffect(() => {
     getLessons();
@@ -47,7 +48,12 @@ export const ListOfLessons = () => {
         return lesson;
       })
     );
+    setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast))
   }, [data]);
+  
+  useEffect(() => {
+    setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
+  }, [currentPage, filteredLessonsList]);
   
   useEffect(() => {
     const lessons = data.filter(
@@ -55,8 +61,8 @@ export const ListOfLessons = () => {
     ).filter(
       (lesson) => lesson.lessonDate.toString().includes(searchLessonsDateValue),
     );
-    setCurrentPage(1);
     setFilteredLessonsList(lessons);
+    setCurrentPage(1);
   }, [searchLessonsDateValue, searchLessonsThemeValue, currentPage]);
   
   const handleSearchTheme = (inputValue) => {
@@ -98,31 +104,8 @@ export const ListOfLessons = () => {
       }
     });
     setFilteredLessonsList(sortedLessons);
-  };
-
-  const getLessonsList = () => {
-    const lessonsList = filteredLessonsList.map((lesson) => {
-      return (
-        <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)}>
-          <td className="text-center">{lesson.index + 1}</td>
-          <td>{lesson.themeName}</td>
-          <td>{lesson.lessonDate.toDateString()}</td>
-          <td>{lesson.lessonTime}</td>
-            {currentUser.role !== 2 ?
-              <td onClick={(e) => {
-                editLesson(e, lesson.id)}
-              }>
-                <Icon className={classNames(styles.edit)} icon="Edit" color="#2E3440" size={30} />
-            </td> : null}
-          </tr>
-        );
-      });
-    
-    if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
-      return <td colSpan="5" className="text-center">Lesson is not found</td>;
-    }
-    return lessonsList;
-  };
+    setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
+  }
   
   const paginate = (pageNumber) => {
     if(currentPage !== pageNumber) {
@@ -135,6 +118,30 @@ export const ListOfLessons = () => {
   };
   const prevPage = (pageNumber) => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
+  };
+  
+  const getLessonsList = () => {
+    const lessonsList = visibleLessonsList.map((lesson) => {
+      return (
+        <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)}>
+          <td className="text-center">{lesson.index + 1}</td>
+          <td>{lesson.themeName}</td>
+          <td>{lesson.lessonDate.toDateString()}</td>
+          <td>{lesson.lessonTime}</td>
+          {currentUser.role !== 2 ?
+            <td onClick={(e) => {
+              editLesson(e, lesson.id)}
+            }>
+              <Icon className={classNames(styles.edit)} icon="Edit" color="#2E3440" size={30} />
+            </td> : null}
+        </tr>
+      );
+    });
+    
+    if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
+      return <td colSpan="5" className="text-center">Lesson is not found</td>;
+    }
+    return lessonsList;
   };
   
   return (
