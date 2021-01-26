@@ -1,7 +1,7 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { paths } from '@/shared';
 import { WithLoading } from '@/components/index.js';
@@ -34,6 +34,8 @@ export const GroupDetails = ({
     loaded: areCoursesLoaded,
   } = coursesData;
 
+  const history = useHistory();
+
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -55,7 +57,9 @@ export const GroupDetails = ({
                 </p>
               </div>
               <div className="pt-3">
-                <Link to={`${paths.SCHEDULE_BY_GROUP_ID}/${group.id}`}>View schedule</Link>
+                <Link to={`${paths.SCHEDULE_BY_GROUP_ID}/${group.id}`}>
+                  <span className={styles['schedule-link']}>View schedule</span>
+                </Link>
               </div>
             </div>
             <hr className="p-0" />
@@ -82,7 +86,7 @@ export const GroupDetails = ({
             </div>
             <div className="d-flex align-items-center mb-2 lead">
               <h4 className="mb-2 pr-4">Course:</h4>
-              <Badge pill variant="primary">
+              <Badge pill variant="info">
                 <Link
                   to={`${paths.COURSE_DETAILS}/${group.courseId}`}
                   className="text-decoration-none text-white"
@@ -107,13 +111,13 @@ export const GroupDetails = ({
                   { students
                     .filter((student) => group.studentIds?.includes(student.id))
                     .map((student, index) => (
-                      <tr key={student.id}>
+                      <tr
+                        key={student.id}
+                        onClick={() => history.push(`${paths.STUDENTS_DETAILS}/${student.id}`)}
+                        className={styles['table-row']}
+                      >
                         <td>{index + 1}</td>
-                        <td>
-                          <Link to={`${paths.STUDENTS_DETAILS}/${student.id}`}>
-                            {student.firstName} {student.lastName}
-                          </Link>
-                        </td>
+                        <td>{student.firstName} {student.lastName}</td>
                         <td>{student.email}</td>
                       </tr>
                     )) }
