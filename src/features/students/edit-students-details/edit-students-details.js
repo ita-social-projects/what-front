@@ -264,7 +264,7 @@ export const EditStudentsDetails = ({ id }) => {
                                 data-groupname={name}
                               >{name}
                                 <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-muted"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-dark"
                                   type="button"
                                   onClick={handleGroupDelete}
                                 >X
