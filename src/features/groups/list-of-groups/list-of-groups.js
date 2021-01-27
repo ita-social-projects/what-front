@@ -55,7 +55,8 @@ export const ListOfGroups = () => {
     setSearchGroupValue(inputValue);
   };
 
-  const handleCardEdit = useCallback((id) => {
+  const handleCardEdit = useCallback((id, event) => {
+    event.stopPropagation();
     history.push(`${paths.GROUP_EDIT}/${id}`);
   }, [history]);
 
@@ -117,7 +118,7 @@ export const ListOfGroups = () => {
           </td>
           <td
             className="text-center"
-            onClick={() => handleCardEdit(id)}
+            onClick={(event) => handleCardEdit(id, event)}
           >
             <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
           </td>

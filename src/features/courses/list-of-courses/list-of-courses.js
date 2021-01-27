@@ -47,27 +47,21 @@ export const ListOfCourses = () => {
     setVisibleCourses(filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse));
   }, [currentPage, filteredCourses]);
 
-  // { filteredCourses.map(({ id, name }) => (
-  //   <tr key={id} onClick={() => courseDetails(id)}>
-  //     <td>{id}</td>
-  //     <td>{name}</td>
-  //     <td className="text-center" onClick={(event) => courseEdit(event, id)} data-student-id={id}>{editIcon}</td>
-  //   </tr>
-  // )); }
-
   const coursesList = () => {
     const courses = visibleCourses
       .map((course) => (
         <tr key={course.id} onClick={(event) => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
           <td className="text-center">{course.id}</td>
           <td>{course.name}</td>
-          <td
-            className="text-center"
-            onClick={(event) => courseEdit(event, course.id)}
-            data-student-id={course.id}
-          >
-            <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
-          </td>
+          {currentUser.role !== 2 && 
+            <td
+              className="text-center"
+              onClick={(event) => courseEdit(event, course.id)}
+              data-student-id={course.id}
+            >
+              <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
+            </td>
+          }
         </tr>
       ));
 
@@ -200,7 +194,7 @@ export const ListOfCourses = () => {
                       </span>
                     </th>
                   ))}
-                  <th className="text-center">Edit</th>
+                  {currentUser.role !== 2 && <th className="text-center">Edit</th>}
                 </tr>
               </thead>
               <tbody>
