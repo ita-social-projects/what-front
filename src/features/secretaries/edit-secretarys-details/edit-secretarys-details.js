@@ -150,7 +150,7 @@ export const EditSecretarysDetails = ({ id }) => {
                           {touched.email && errors.email && <div className="text-danger mt-3">{errors?.email}</div>}
                         </div>
                       </div>
-                      <div className="row m-0 pt-3">
+                      <div className="row m-0 pt-3 px-2">
                         <div className="col-md-3 col-4 px-1">
                           <Button
                             type="button"
