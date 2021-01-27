@@ -14,7 +14,7 @@ import styles from './unassigned-list.scss';
 export const UnAssignedList = () => {
   const { currentUser } = useSelector(currentUserSelector);
   const currentUserRole = currentUser.role;
-  const { isLoaded, data, isLoading } = useSelector(newUserSelector);
+  const { isLoaded, data, isLoading, error } = useSelector(newUserSelector);
 
   const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
@@ -26,7 +26,8 @@ export const UnAssignedList = () => {
   ] = useActions([addStudent, createSecretary, addMentor, addAlert]);
 
   const [search, setSearch] = useState('');
-  const [searchPersonValue, setSearchPersonValue] = useState([]);
+
+  const [users, setUsers] = useState([]);
 
   const roles = [
     { id: 0, name: 'Choose role' },
@@ -35,13 +36,22 @@ export const UnAssignedList = () => {
     { id: 3, name: 'secretary' },
   ];
 
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  ];
+
+  //const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+
   useEffect(() => {
     getUnAssignedUserList();
   }, [getUnAssignedUserList]);
 
   useEffect(() => {
     if (isLoading || isLoaded) {
-      setSearchPersonValue(data?.map((user) => ({ id: user.id, role: 1 })));
+      setUsers(data?.map((user, index) => ({ id: user.id, index, role: 1, ...user })));
     }
   }, [isLoaded, data, isLoading]);
 
@@ -50,20 +60,20 @@ export const UnAssignedList = () => {
       const results = data?.filter((user) => (
         (user.firstName.concat(user.lastName)).toUpperCase())
         .includes(search.toUpperCase()));
-      setSearchPersonValue(results);
+      setUsers(results?.map((user, index) => ({ id: user.id, index, role: 1, ...user })));
     }
   }, [isLoaded, data, search, isLoading]);
 
   const changeRole = (id, value) => {
-    const newState = searchPersonValue.map((user) => (user.id === id ? ({ ...user, role: Number(value) }) : user));
-    setSearchPersonValue(newState);
+    const newState = users.map((user) => (user.id === id ? ({ ...user, role: Number(value) }) : user));
+    setUsers(newState);
   };
 
   const handleButtonClick = (id) => {
-    const { role } = searchPersonValue.find((user) => user.id === id);
+    const { role } = users.find((user) => user.id === id);
     if (role !== 0) {
-      const newState = searchPersonValue.filter((user) => user.id !== id);
-      setSearchPersonValue(newState);
+      const newState = users.filter((user) => user.id !== id);
+      setUsers(newState);
       switch (role) {
         case 1:
           addStudentRole(id);
@@ -105,43 +115,73 @@ export const UnAssignedList = () => {
       default: return {};
     }
   };
-  const list = () => {
-    const users = searchPersonValue.map((user) => (
-      <div className={styles.card} key={user.id}>
-        <p><span className={styles.name}>{user.firstName} {user.lastName}</span><br /><span className="font-italic">{user.email}</span></p>
-        <div className={styles['add-role']}>
-          <select
-            className={styles.select}
-            onChange={(event) => { changeRole(user.id, event.target.value); }}
-          >
-            {options()}
-          </select>
-          <Button
-            className={styles.btn}
-            onClick={() => handleButtonClick(user.id)}
-            variant="warning"
-          >
-            <Icon icon="Plus" size={20} className="icon" />
-            Add role
-          </Button>
-        </div>
-      </div>
+  const getPersonsRows = () => {
+    const personsRows = users.map(({ id, index, firstName, lastName, email }) => (
+      <tr
+        key={id}
+        data-person-id={id}
+        className={styles['table-row']}
+      >
+        <td>{index + 1}</td>
+        <td>{firstName}</td>
+        <td>{lastName}</td>
+        <td>{email}</td>
+        <td
+          className="d-flex justify-content-center"
+        >
+          <div className={styles['add-role']}>
+            <select
+              className={styles.select}
+              onChange={(event) => { changeRole(id, event.target.value); }}
+            >
+              {options()}
+            </select>
+            <Button
+              className={styles.btn}
+              onClick={() => handleButtonClick(id)}
+            >
+              Add role
+            </Button>
+          </div>
+        </td>
+      </tr>
     ));
 
-    if (!searchPersonValue.length && search) {
-      return <span className={styles.massage}>Nobody was found</span>;
+    if (error) {
+      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
     }
 
-    return users;
+    if (!users.length && users) {
+      return <tr><td colSpan="5" className="text-center">No one has been found</td></tr>;
+    }
+    return personsRows;
   };
 
   return (
-    <div className={styles['container-list']}>
-      <div className={styles.panel}>
-        <Search onSearch={handleSearch} placeholder="Enter a person`s name" />
+    <div className="container">
+      <div className="row justify-content-between align-items-center mb-3">
+        <h2 className="col-6">Unassigmed Users</h2>
       </div>
-      <div className={styles.list}>
-        <WithLoading isLoading={!isLoaded} className="mt-3 d-block mx-auto">{list()}</WithLoading>
+      <div className="row">
+        <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
+          <div className="row align-items-center px-3 py-2 mb-2">
+            <div className="col-4">
+              <Search
+                value={search}
+                onSearch={handleSearch}
+                placeholder="person's name"
+              />
+            </div>
+          </div>
+          <WithLoading isLoading={!isLoaded} className="d-block mx-auto my-2">
+            <table className="table table-hover">
+              <thead />
+              <tbody>
+                {getPersonsRows()}
+              </tbody>
+            </table>
+          </WithLoading>
+        </div>
       </div>
     </div>
   );
