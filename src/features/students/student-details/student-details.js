@@ -72,7 +72,7 @@ export const StudentDetails = () => {
                     {studentGroups
                       .map(({ id, name }) => (
                         <div className="pr-2" key={id}>
-                          <Badge pill variant="primary">
+                          <Badge pill variant="info">
                             <Link
                               to={`${paths.GROUPS_DETAILS}/${id}`}
                               className="text-decoration-none text-white"
@@ -95,7 +95,7 @@ export const StudentDetails = () => {
                     {studentLessons
                       .map(({ id, themeName }) => (
                         <div className="pr-2" key={id}>
-                          <Badge pill variant="primary">
+                          <Badge pill variant="info">
                             <Link
                               to={`${paths.LESSON_DETAILS}/${id}`}
                               className="text-decoration-none text-white"
