@@ -55,7 +55,8 @@ export const ListOfGroups = () => {
     setSearchGroupValue(inputValue);
   };
 
-  const handleCardEdit = useCallback((id) => {
+  const handleCardEdit = useCallback((id, event) => {
+    event.stopPropagation();
     history.push(`${paths.GROUP_EDIT}/${id}`);
   }, [history]);
 
@@ -117,7 +118,7 @@ export const ListOfGroups = () => {
           </td>
           <td
             className="text-center"
-            onClick={() => handleCardEdit(id)}
+            onClick={(event) => handleCardEdit(id, event)}
           >
             <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
           </td>
@@ -231,8 +232,8 @@ export const ListOfGroups = () => {
               </Button>
             </div>
           </div>
-          <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
-            <table className={classNames(styles.table, 'table')}>
+          <WithLoading isLoading={isLoading} className="d-block mx-auto">
+            <table className="table table-hover mb-0">
               <thead>
                 <tr>
                   {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (

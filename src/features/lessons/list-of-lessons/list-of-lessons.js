@@ -74,7 +74,7 @@ export const ListOfLessons = () => {
     );
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
-  }, [searchLessonsDateValue, currentPage]);
+  }, [searchLessonsDateValue]);
 
   useEffect(() => {
     const lessons = data.filter(
@@ -82,7 +82,7 @@ export const ListOfLessons = () => {
     );
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
-  }, [searchLessonsThemeValue, currentPage]);
+  }, [searchLessonsThemeValue]);
 
   const addLesson = () => {
     history.push(paths.LESSON_ADD);
@@ -136,7 +136,7 @@ export const ListOfLessons = () => {
         <td>{lesson.themeName}</td>
         <td>{lesson.lessonDate.toDateString()}</td>
         <td>{lesson.lessonTime}</td>
-        {currentUser.role !== 2
+        {currentUser.role !== 3
           ? (
             <td
               className="text-center"
@@ -197,7 +197,7 @@ export const ListOfLessons = () => {
               />
             </div>
             <div className="col-2 offset-3 text-right">
-              {currentUser.role !== 2
+              {currentUser.role !== 3
               && (
               <div>
                 <Button onClick={addLesson}>
@@ -271,7 +271,7 @@ export const ListOfLessons = () => {
                       </span>
                     </button>
                   </th>
-                  {currentUser.role !== 2 ? <th scope="col" className="text-center">Edit</th> : null}
+                  {currentUser.role !== 3 ? <th scope="col" className="text-center">Edit</th> : null}
                 </tr>
               </thead>
               <tbody>

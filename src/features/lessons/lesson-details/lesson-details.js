@@ -61,9 +61,6 @@ export const LessonDetails = () => {
     loadMentors();
   }, [loadLessons, fetchStudents, loadGroups, loadMentors]);
 
-
- 
-  
   useEffect(() => {
     if (lessonsIsLoaded) {
       const lesson = lessons.find((lesson) => lesson.id === Number(id));
@@ -77,12 +74,10 @@ export const LessonDetails = () => {
   
   const transformDateTime = (dateTime) => {
     const arr = dateTime.toString().split('T');
-    console.log(arr)
     return {
       date: arr[0],
       time: arr[1],
     };
-
   };
   
   useEffect(() => {
@@ -138,13 +133,13 @@ export const LessonDetails = () => {
   }, [groups, students, studentsIsLoaded, studentsIsLoading, lesson, studentsGroup]);
 
   useEffect(() => {
-    if (lesson && mentorsIsLoaded) {
+    if (lesson && mentorsIsLoaded && !mentorsIsLoading) {
       const mentor = mentors?.find((mentor) => mentor.id === lesson.mentorId);
       if (mentor) {
         setMentor(mentor);
       }
     }
-  }, [lesson, mentorsIsLoaded]);
+  }, [lesson, mentorsIsLoaded, !mentorsIsLoading]);
 
   useEffect(() => {
     if (!lessons && lessonsIsLoaded) {
@@ -260,7 +255,7 @@ export const LessonDetails = () => {
             </div>
           </WithLoading>
         </div>
-        <div className="col-12">
+        <div className="col-12 mt-3">
           <button
             form="form"
             type="button"

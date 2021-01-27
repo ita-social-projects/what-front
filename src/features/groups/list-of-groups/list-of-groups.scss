@@ -14,10 +14,6 @@
   border-color: map-get($colors, textAccentN1-color);
 }
 
-.table {
-  margin-bottom: 0 !important;
-}
-
 .table-item {
   cursor: pointer;
   transition: all .2s ease-out;
