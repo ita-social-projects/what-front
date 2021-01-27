@@ -3,8 +3,8 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@shared/index.js';
 import {
-  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector,mentorGroupsSelector,
-  mentorCoursesSelector, editMentor,deleteMentor, loadStudentGroupsSelector,
+  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector, mentorGroupsSelector,
+  mentorCoursesSelector, editMentor, deleteMentor, loadStudentGroupsSelector,
   coursesSelector, fetchCourses, globalLoadStudentGroups,
 } from '@/models/index.js';
 
@@ -85,7 +85,6 @@ export const EditMentor = ({ id }) => {
   useEffect(() => {
     loadCourses();
   }, [loadCourses]);
-
 
   useEffect(() => {
     setGroups(mentorGroups);
@@ -215,10 +214,9 @@ export const EditMentor = ({ id }) => {
             <h3>Mentor Editing</h3>
             <hr />
             <WithLoading
-              isLoading={mentorIsLoading || !mentorIsLoaded || allCoursesAreLoading || !allCoursesAreLoaded ||
-                mentorCoursesAreLoading || !mentorCoursesAreLoaded || allGroupsAreLoading || !allGroupsAreLoaded ||
-                !mentorGroupsAreLoaded || mentorGroupsAreLoading
-              }
+              isLoading={mentorIsLoading || !mentorIsLoaded || allCoursesAreLoading || !allCoursesAreLoaded
+                || mentorCoursesAreLoading || !mentorCoursesAreLoaded || allGroupsAreLoading || !allGroupsAreLoaded
+                || !mentorGroupsAreLoaded || mentorGroupsAreLoading}
               className={styles['loader-centered']}
             >
               <Formik
@@ -306,35 +304,35 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="info" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
+                            <Button variant="info" onClick={handleGroupAdd}>+</Button>
                           </div>
                         </div>
                         { errorGroup ? <div className={styles.error}>{errorGroup}</div> : null}
                       </div>
                     </div>
 
-                      <div className="row m-0 pt-3">
-                        <div className="col-md-8 offset-md-4">
-                          <ul className="d-flex flex-wrap justify-content-between p-0">
-                            {groups.map(({ id, name }) => (
-                              <li
-                                className={classNames(styles['list-element'],
-                                  'd-flex bg-light border border-outline-secondary rounded')}
-                                key={id}
-                                data-groupid={id}
-                                data-groupname={name}
-                              >{name}
-                                <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-dark"
-                                  type="button"
-                                  onClick={handleGroupDelete}
-                                >&#10005;
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                    <div className="row m-0 pt-3">
+                      <div className="col-md-8 offset-md-4">
+                        <ul className="d-flex flex-wrap justify-content-between p-0">
+                          {groups.map(({ id, name }) => (
+                            <li
+                              className={classNames(styles['list-element'],
+                                'd-flex bg-light border border-outline-secondary rounded')}
+                              key={id}
+                              data-groupid={id}
+                              data-groupname={name}
+                            >{name}
+                              <button
+                                className="btn p-0 ml-auto mr-2 text-dark"
+                                type="button"
+                                onClick={handleGroupDelete}
+                              >&#10005;
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
+                    </div>
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
@@ -360,35 +358,35 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="info" onClick={handleCourseAdd}><Icon icon="Plus" /></Button>
+                            <Button variant="info" onClick={handleCourseAdd}>+</Button>
                           </div>
                         </div>
                         { errorCourse ? <div className={styles.error}>{errorCourse}</div> : null}
                       </div>
                     </div>
 
-                      <div className="row m-0 pt-3">
-                        <div className="col-md-8 offset-md-4">
-                          <ul className="d-flex flex-wrap justify-content-between p-0">
-                            {courses.map(({ id, name }) => (
-                              <li
-                                className={classNames(styles['list-element'],
-                                  'd-flex bg-light border border-outline-secondary rounded')}
-                                key={id}
-                                data-courseid={id}
-                                data-coursename={name}
-                              >{name}
-                                <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                  type="button"
-                                  onClick={handleCourseDelete}
-                                >&#10005;
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                    <div className="row m-0 pt-3">
+                      <div className="col-md-8 offset-md-4">
+                        <ul className="d-flex flex-wrap justify-content-between p-0">
+                          {courses.map(({ id, name }) => (
+                            <li
+                              className={classNames(styles['list-element'],
+                                'd-flex bg-light border border-outline-secondary rounded')}
+                              key={id}
+                              data-courseid={id}
+                              data-coursename={name}
+                            >{name}
+                              <button
+                                className="btn p-0 ml-auto mr-2 text-dark"
+                                type="button"
+                                onClick={handleCourseDelete}
+                              >&#10005;
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
+                    </div>
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
