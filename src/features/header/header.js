@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import { useActions, paths } from '@/shared';
@@ -22,21 +22,43 @@ export const Header = () => {
 
   const history = useHistory();
 
-  // exper
-  const [dropdown, setDropdown] = useState({
-    show: false,
-  });
+
+  const [dropdown, setDropdown] = useState(false);
 
   const [logoutDefined] = useActions([logOut]);
 
   const loggingOut = () => {
+    toggleDropdown();
     logoutDefined();
   };
 
+
+
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          if(dropdown === true) {
+            toggleDropdown();
+          }
+        }
+      }
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref, dropdown] );
+  }
+
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
+
+
+
   function toggleDropdown() {
-    setDropdown((prevState) => ({
-      show: !prevState.show,
-    }));
+    setDropdown(!dropdown);
   }
 
   return (
@@ -44,7 +66,7 @@ export const Header = () => {
       <div className="collapse navbar-collapse d-flex justify-content-between h-100 w-100">
         <div className={classNames('d-flex align-items-center', styles.header__logo)}>WHAT</div>
 
-        <div className={styles.header__account}>
+        <div className={styles.header__account} ref={wrapperRef}>
           <div className={styles['header__account-user']}>
             <Link
               className={styles['header__account-user--icon']}
@@ -64,15 +86,15 @@ export const Header = () => {
           >
             <span className={styles['header__dropdown-icon']}>&#9660;</span>
           </div>
-          <ul className={dropdown.show ? styles['header__dropdown-list-show'] : styles['header__dropdown-list']}>
-            <li className={styles['header__dropdown-list--item']}>
+          <ul className={dropdown ? styles['header__dropdown-list-show'] : styles['header__dropdown-list']}>
+            <li className={styles['header__dropdown-list--item']} onClick={toggleDropdown}>
               <Link
                 className={styles['header__account-user--icon']}
                 to={paths.MY_PROFILE}
               >My profile
               </Link>
             </li>
-            <li className={styles['header__dropdown-list--item']}>
+            <li className={styles['header__dropdown-list--item']} onClick={toggleDropdown}>
               <Link
                 className={styles['header__account-user--icon']}
                 to={paths.CHANGE_PASSWORD}
