@@ -192,11 +192,11 @@ export const ListOfSecretaries = () => {
         {currentUser.role === 4
             && (
             <td
-              className={classNames(styles.scale, 'text-center')}
+              className="text-center"
               onClick={(event) => handleEditSecretary(event, id)}
               data-secretary-id={id}
             >
-              <Icon icon="Edit" size={30} />
+              <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
             </td>
             )}
       </tr>
@@ -214,11 +214,9 @@ export const ListOfSecretaries = () => {
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
-        <div className="col-md-6">
-          <h2 className="">Secretaries</h2>
-        </div>
+        <h2 className="col-6">Secretaries</h2>
         {searchResults.length > secretariesPerPage ? <div className="col-2 text-right">{searchResults.length} secretaries</div> : null}
-        <div className="col-md-4 d-flex align-items-center justify-content-end">
+        <div className="col-4 d-flex align-items-center justify-content-end">
           {searchResults.length > secretariesPerPage && !areActiveSecretariesLoading
           && !areAllSecretariesLoading
           && (
@@ -233,19 +231,19 @@ export const ListOfSecretaries = () => {
           )}
         </div>
       </div>
-      <div className="container card shadow">
-        <div className="row align-items-center my-2">
-          <div className="col-md-2 d-flex justify-content-center">
-            <div className="btn-group">
-              <button type="button" className="btn" disabled><Icon icon="List" size={25} /></button>
-              <button type="button" className="btn" disabled><Icon icon="Card" size={25} /></button>
+      <div className="row">
+        <div className="col-12 card shadow p-3 mb-5 bg-white">
+          <div className="row align-items-center mt-2 mb-3">
+            <div className="col-2">
+              <div className="btn-group">
+                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
+                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+              </div>
             </div>
-          </div>
-          <div className="col-md-4">
-            <Search onSearch={handleSearch} placeholder="Secretary's name" />
-          </div>
-          <div className="col-md-3 pt-2 text-right">
-            <div className="custom-control custom-switch">
+            <div className="col-3">
+              <Search onSearch={handleSearch} placeholder="Secretary's name" />
+            </div>
+            <div className="col-3 offset-2 custom-control custom-switch text-right">
               <input
                 type="checkbox"
                 onClick={handleShowDisabled}
@@ -258,43 +256,43 @@ export const ListOfSecretaries = () => {
               >Disabled Secretaries
               </label>
             </div>
-          </div>
-          {currentUser.role === 4
+            {currentUser.role === 4
           && (
-          <div className="col-md-3 text-right">
-            <Button onClick={handleAddSecretary} className={styles['add-button']} variant="info">
+          <div className="col-2 text-right">
+            <Button onClick={handleAddSecretary}>
               <span>Add a secretary</span>
             </Button>
           </div>
           )}
-        </div>
-        <WithLoading isLoading={areActiveSecretariesLoading || areAllSecretariesLoading} className="d-block mx-auto my-3" variant="info">
-          <table className="table table-hover mt-2">
-            <thead>
-              <tr>
-                {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                  <th
-                    key={id}
-                    className={styles['table-head']}
-                  >
-                    <span
-                      data-sorting-param={name}
-                      data-sorted-by-ascending={Number(sortedByAscending)}
-                      onClick={handleSortByParam}
-                      className={classNames({ [styles.rotate]: sortedByAscending })}
+          </div>
+          <WithLoading isLoading={areActiveSecretariesLoading || areAllSecretariesLoading} className="d-block mx-auto my-3" variant="info">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                    <th
+                      key={id}
+                      className={styles['table-head']}
                     >
-                      {tableHead}
-                    </span>
-                  </th>
-                ))}
-                {currentUser.role === 4 && (<th scope="col" className="text-center">Edit</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              { getSecretaries() }
-            </tbody>
-          </table>
-        </WithLoading>
+                      <span
+                        data-sorting-param={name}
+                        data-sorted-by-ascending={Number(sortedByAscending)}
+                        onClick={handleSortByParam}
+                        className={classNames({ [styles.rotate]: sortedByAscending })}
+                      >
+                        {tableHead}
+                      </span>
+                    </th>
+                  ))}
+                  {currentUser.role === 4 && (<th scope="col" className="text-center">Edit</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                { getSecretaries() }
+              </tbody>
+            </table>
+          </WithLoading>
+        </div>
       </div>
     </div>
   );

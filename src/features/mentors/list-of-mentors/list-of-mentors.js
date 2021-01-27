@@ -5,35 +5,23 @@ import { paths, useActions } from '@/shared';
 import { currentUserSelector, fetchMentors, fetchActiveMentors, mentorsSelector, mentorsActiveSelector } from '@/models';
 
 import { Button, Pagination, Search, WithLoading } from '@/components';
-import Icon from '@/icon';
+import { addAlert } from '@/features/layout';
+
+import Icon from '@/icon.js';
 
 import classNames from 'classnames';
-import { addAlert } from '@/features/layout';
 import styles from './list-of-mentors.scss';
 
-const iconTable = (
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-layout-text-sidebar" viewBox="0 0 16 16">
-    <path d="M3.5 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM3 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z" />
-    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm12-1v14h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zm-1 0H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h9V1z" />
-  </svg>
-);
-
-const iconCards = (
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-grid" viewBox="0 0 16 16">
-    <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
-  </svg>
-);
-
 export const ListOfMentors = () => {
-  const { 
-    data: allMentors, 
-    isLoading: areAllMentorsLoading, 
-    error: allMentorsError 
+  const {
+    data: allMentors,
+    isLoading: areAllMentorsLoading,
+    error: allMentorsError,
   } = useSelector(mentorsSelector, shallowEqual);
-  const { 
-    data: activeMentors, 
-    isLoading: areActiveMentorsLoading, 
-    error: activeMentorsError 
+  const {
+    data: activeMentors,
+    isLoading: areActiveMentorsLoading,
+    error: activeMentorsError,
   } = useSelector(mentorsActiveSelector, shallowEqual);
 
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -140,9 +128,15 @@ export const ListOfMentors = () => {
           <td>{lastName}</td>
           <td>{email}</td>
           {currentUser.role !== 2
-            ? <td className="text-center" data-mentor-id={id} onClick={(event) => mentorEdit(event, id)}>
-                <Icon icon="Edit" className={classNames(styles['edit-icon'], styles.icon)} size={24} />
-            </td> : null}
+            && (
+            <td
+              className="text-center"
+              onClick={(event) => mentorEdit(event, id)}
+              data-mentor-id={id}
+            >
+              <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
+            </td>
+            )}
         </tr>
       ));
 
@@ -177,16 +171,16 @@ export const ListOfMentors = () => {
 
   const addMentor = useCallback(() => {
     history.push(paths.UNASSIGNED_USERS);
-  });
+  }, [history]);
 
   const mentorDetails = useCallback((id) => {
     history.push(`${paths.MENTORS_DETAILS}/${id}`);
-  });
+  }, [history]);
 
   const mentorEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.MENTOR_EDIT}/${id}`);
-  });
+  }, [history]);
 
   const paginate = (pageNumber) => {
     if (currentPage !== pageNumber) {
@@ -224,20 +218,21 @@ export const ListOfMentors = () => {
             )}
         </div>
       </div>
-      <div className="row justify-content-center">
-        <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
-          <div className="px-3 py-2 mb-2">
-            <div className="row align-items-center">
-              <div className="col-2">
-                <button className="btn">{iconTable}</button>
-                <button className="btn">{iconCards}</button>
+      <div className="row">
+        <div className="col-12 card shadow p-3 mb-5 bg-white">
+          <div className="row align-items-center mt-2 mb-3">
+            <div className="col-2">
+              <div className="btn-group">
+                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
+                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
-              <div className="col-4">
-                <Search onSearch={handleSearch} placeholder="Mentor's name" />
-              </div>
-              {currentUser.role !== 2
+            </div>
+            <div className="col-3">
+              <Search onSearch={handleSearch} placeholder="Mentor's name" />
+            </div>
+            {currentUser.role !== 2
               && (
-              <div className="custom-control custom-switch col-2 offset-2">
+              <div className="custom-control custom-switch col-2 offset-3">
                 <input
                   onClick={handleShowDisabled}
                   type="checkbox"
@@ -252,14 +247,13 @@ export const ListOfMentors = () => {
                 </label>
               </div>
               )}
-              <div className="col-2">
-                {currentUser.role !== 2
+            <div className="col-2 text-right">
+              {currentUser.role !== 2
                   && (
-                  <Button onClick={addMentor} className={styles.btn}>
+                  <Button onClick={addMentor}>
                     <span>Add a mentor</span>
                   </Button>
                   )}
-              </div>
             </div>
           </div>
           <WithLoading isLoading={areActiveMentorsLoading || areAllMentorsLoading} className="d-block mx-auto m-0">

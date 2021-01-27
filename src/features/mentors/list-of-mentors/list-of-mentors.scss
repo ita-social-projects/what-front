@@ -5,15 +5,12 @@
   transition: all .2s ease-out;
 }
 
-.icon {
-  fill: map-get($colors, dark-color);
-  cursor: pointer;
-
-  &.edit-icon {
-    transition: .5s;
-    &:hover {
-      transform: scale(1.4);
-    }
+.scale {
+  transition: .3s ease;
+  padding-top: 3px;
+  &:hover {
+    transform: scale(1.4); 
+    padding-top: 5px;
   }
 }
 
@@ -33,18 +30,12 @@
   background-color: map-get($colors, accent-color) !important;
 }
 
-.btn {
-  background-color: map-get($colors, accent-color) !important;
-
-  &:hover {
-    background-color: map-get($colors, accent-color);
-    opacity: 0.8;
-  }
-}
-
 .table-head {
+  min-width: 150px;
+
   &:first-of-type {
     text-align: center;
+    min-width: 0;
   }
 
   & span {
