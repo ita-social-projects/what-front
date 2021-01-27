@@ -113,7 +113,7 @@ export const LessonDetails = () => {
   }, [groups, students, studentsIsLoaded, studentsIsLoading, lesson, studentsGroup]);
 
   useEffect(() => {
-    if (lesson && mentorsIsLoaded) {
+    if (lesson && mentorsIsLoaded && !mentorsIsLoading) {
       const mentor = mentors?.find((mentor) => mentor.id === lesson.mentorId);
       if (mentor) {
         setMentor(mentor);
@@ -224,7 +224,7 @@ export const LessonDetails = () => {
           </div>
           </WithLoading>
         </div>
-        <div className="col-12">
+        <div className="col-12 mt-3">
           <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}
             >Cancel
           </button>
