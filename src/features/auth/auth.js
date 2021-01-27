@@ -58,7 +58,7 @@ export const Auth = () => {
                   errors,
                   touched,
                 }) => (
-                  <Form className="p-3">
+                  <Form className="p-3" noValidate>
                     <h3 className="text-center">Sign in to WHAT</h3>
                     <hr />
                     <div className="form-group">

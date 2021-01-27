@@ -67,7 +67,7 @@ export const Registration = () => {
                 validationSchema={registrationValidation}
               >
                 {({ values, errors, touched }) => (
-                  <Form className="p-3">
+                  <Form className="p-3" noValidate>
                     <h3 className="text-center">Sign up to WHAT</h3>
                     <hr />
                     <div className="form-group">
