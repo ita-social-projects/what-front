@@ -232,8 +232,8 @@ export const ListOfGroups = () => {
               </Button>
             </div>
           </div>
-          <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
-            <table className={classNames(styles.table, 'table')}>
+          <WithLoading isLoading={isLoading} className="d-block mx-auto">
+            <table className="table table-hover mb-0">
               <thead>
                 <tr>
                   {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
