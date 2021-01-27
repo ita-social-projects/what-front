@@ -4,3 +4,8 @@
   max-width: 750px;
   margin: 0 auto;
 }
+
+.button {
+  background-color: map-get($colors, nonAccent-color) !important;
+  border-color: map-get($colors, nonAccent-color) !important;
+}

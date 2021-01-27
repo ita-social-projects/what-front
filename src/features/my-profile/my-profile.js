@@ -35,8 +35,11 @@ export const MyProfile = () => {
           </div>
           <hr />
           <div className="row mb-2">
-            <div className="col-sm-6 offset-sm-6">
-              <Button className="float-right" onClick={() => (history.push(paths.CHANGE_PASSWORD))}>
+            <div className="col-sm-6 offset-sm-6 d-flex justify-content-end">
+              <Button
+                className={styles.button}
+                onClick={() => (history.push(paths.CHANGE_PASSWORD))}
+              >
                 <span>Change password</span>
               </Button>
             </div>

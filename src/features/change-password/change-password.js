@@ -142,8 +142,7 @@ export const ChangePassword = () => {
                       <div className="col-md-3 col-sm-4 col-6 pl-0 pr-1">
                         <Button
                           type="button"
-                          className="w-100"
-                          variant="secondary"
+                          className={className(styles['cancel-button'], 'w-100')}
                           onClick={() => { history.push(paths.MY_PROFILE); }}
                         >
                           Cancel
@@ -153,7 +152,6 @@ export const ChangePassword = () => {
                         <Button
                           type="submit"
                           className=" w-100"
-                          variant="success"
                           disabled={!isValid || !dirty || isChangePasswordLoading
                           || errors.currentPassword || errors.newPassword
                           || errors.confirmNewPassword}
