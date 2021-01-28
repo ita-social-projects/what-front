@@ -30,13 +30,13 @@ export const LessonDetails = () => {
     loadGroups,
     fetchStudents,
   ] = useActions([fetchLessons, fetchMentors, globalLoadStudentGroups, loadStudents]);
-  
+
   const {
     data: lessons,
     isLoading: lessonsIsLoading,
     isLoaded: lessonsIsLoaded,
   } = useSelector(lessonsSelector, shallowEqual);
-  
+
   const {
     data: mentors,
     isLoading: mentorsIsLoading,
@@ -53,7 +53,7 @@ export const LessonDetails = () => {
     isLoading: studentsIsLoading,
     isLoaded: studentsIsLoaded,
   } = useSelector(studentsSelector, shallowEqual);
-  
+
   useEffect(() => {
     loadLessons();
     fetchStudents();
@@ -71,7 +71,7 @@ export const LessonDetails = () => {
       }
     }
   }, [lessonsIsLoaded, lesson]);
-  
+
   const transformDateTime = (dateTime) => {
     const arr = dateTime.toString().split('T');
     return {
@@ -79,7 +79,7 @@ export const LessonDetails = () => {
       time: arr[1],
     };
   };
-  
+
   useEffect(() => {
     setLesson(
       lessons.map(lesson => {
@@ -91,7 +91,7 @@ export const LessonDetails = () => {
       })
     );
   }, [lessons]);
-  
+
   const getFormData = () => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
     const studentD = uniqueIds.map((id) => students.find((student) => student.id === id));
@@ -178,10 +178,10 @@ export const LessonDetails = () => {
                       <span>Mentor name: </span>
                     </div>
                     <div className="col-sm-6 lead">
-                      <Badge pill variant="warning">
+                      <Badge pill className={styles.bg_colour}>
                         <Link
                           to={`${paths.MENTORS_DETAILS}/${mentor.id}`}
-                          className="text-decoration-none text-dark"
+                          className="text-decoration-none text-white"
                         >{`${mentor.firstName} ${mentor.lastName}`}
                         </Link>
                       </Badge>
@@ -192,10 +192,10 @@ export const LessonDetails = () => {
                       <span>Group name: </span>
                     </div>
                     <div className="col-sm-6 lead">
-                      <Badge pill variant="warning">
+                      <Badge pill className={styles.bg_colour}>
                         <Link
                           to={`${paths.GROUPS_DETAILS}/${studentsGroup?.id}`}
-                          className="text-decoration-none text-dark"
+                          className="text-decoration-none text-white"
                         >{studentsGroup?.name}
                         </Link>
                       </Badge>
