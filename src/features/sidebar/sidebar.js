@@ -85,11 +85,12 @@ export const Sidebar = () => {
     setTabs(resultArr);
   }, [currentUser, currentURL]);
 
-  function toggleSidebar(event) {
-    const screenWidth = document.documentElement.clientWidth;
-    if ((event.type === 'mouseout' && screenWidth < 769) || (event.type === 'mouseover' && screenWidth < 769)) {
-      return false;
-    }
+  function toggleSidebar() {
+    console.log('sdsf');
+    // const screenWidth = document.documentElement.clientWidth;
+    // if (screenWidth > 768) {
+    //   return false;
+    // }
 
     setSidebar((prevState) => ({
       ...prevState,
@@ -101,10 +102,10 @@ export const Sidebar = () => {
     <nav className={styles.sidebar}>
 
       <div className={classNames(styles.sidebar__toggler)} onClick={toggleSidebar}>
-        <Icon icon="SidebarToggler" className="icon" size={26} viewBox="0 0 32 38" />
+        <Icon icon="SidebarToggler" className="icon" size={24} viewBox="0 0 32 38" />
       </div>
 
-      <div onMouseOver={toggleSidebar} onMouseOut={toggleSidebar} className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
+      <div className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
         <div className={styles.sidebar__links}>
           {tabs.map(({ id, title, link, active }) => (
             <Link
@@ -112,7 +113,8 @@ export const Sidebar = () => {
               to={`${link}`}
               key={id}
               data-id={id}
-              onClick={(event) => toggleActiveTab(event)}
+              // onClick={toggleSidebar}
+              onClick={event => toggleActiveTab(event)}
             >
               <Icon icon={title} className={styles.sidebar__icon} size={24} viewBox="0 0 32 32" />
               <span className={styles['menu-item']}>{title}</span>
