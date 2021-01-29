@@ -41,6 +41,11 @@ export const newPassword = (newData) => ({
   payload: { newData },
 });
 
+export const forgotPassword = (data) => ({
+  type: actionTypes.FORGOT_PASSWORD,
+  payload: { data },
+});
+
 function* loginWorker({ payload }) {
   try {
     yield put({ type: actionTypes.LOGIN_STARTED });
@@ -101,6 +106,17 @@ function* changePasswordWorker({ payload }) {
   }
 }
 
+function* forgotPasswordWorker({ payload }) {
+  try {
+    yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_STARTED });
+    const data = yield call(ApiService.create, 'accounts/password/forgot', payload.data);
+    yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_SUCCESS, payload: { data } });
+    yield put({ type: actionTypes.CLEAR_LOADED });
+  } catch (error) {
+    yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_FAILED, payload: { error } });
+  }
+}
+
 function* loginWatcher() {
   yield takeLatest(actionTypes.LOGIN_REQUESTING, loginWorker);
 }
@@ -125,6 +141,10 @@ function* changePasswordWatcher() {
   yield takeEvery(actionTypes.NEW_PASSWORD, changePasswordWorker);
 }
 
+function* forgotPasswordWatcher() {
+  yield takeEvery(actionTypes.FORGOT_PASSWORD, forgotPasswordWorker);
+}
+
 export function* authWatcher() {
   yield all([
     fork(loginWatcher),
@@ -133,5 +153,6 @@ export function* authWatcher() {
     fork(fetchAssignedUserListWatcher),
     fork(fetchUnAssignedUserListWatcher),
     fork(changePasswordWatcher),
+    fork(forgotPasswordWatcher),
   ]);
 }
