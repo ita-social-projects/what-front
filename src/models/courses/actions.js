@@ -33,7 +33,7 @@ export const deleteCourse = (id) => {
 function* loadCoursesWorker() {
   try {
     yield put({ type: actionTypes.LOADING_COURSES_STARTED });
-    const courses = yield call(ApiService.load, '/courses');
+    const courses = yield call(ApiService.load, '/courses/isActive');
     yield put({ type: actionTypes.LOADING_COURSES_SUCCESS, payload: { courses } });
   } catch (error) {
     yield put({ type: actionTypes.LOADING_COURSES_FAILED, payload: { error } });
