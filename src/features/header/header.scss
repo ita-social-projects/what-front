@@ -61,6 +61,14 @@
 
 .header__dropdown-icon {
   color: white !important;
+  display: inline-block;
+  transition: all 0.3s ease 0s;
+}
+
+.header__dropdown-icon-active {
+  display: inline-block;
+  transform: rotate(180deg);
+  transition: all 0.3s ease 0s;
 }
 
 .header__dropdown-list {
@@ -70,7 +78,6 @@
   width: 15%;
   opacity: 0;
   visibility: hidden;
-
   transition: all 0.3s ease 0s;
 
   &-show {
@@ -81,10 +88,11 @@
     top: 75px;
     right: 0;
     color: #fff;
-    background-color: #ffffff;
+    background-color: #fff;
     width: 15%;
     transition: all 0.5s ease 0s;
-
+    border-bottom: 0.5px solid rgba($theme-colorDark, 0.5);
+    border-left: 0.5px solid rgba($theme-colorDark, 0.5);
   }
     &--item {
       list-style: none;
