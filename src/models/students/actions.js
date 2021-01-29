@@ -127,6 +127,7 @@ function* removeStudentAsync({ payload }) {
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.REMOVING_STUDENT_FAILED, payload: { error } });
+    yield put({ type: actionTypes.CLEAR_ERROR });
   }
 }
 
