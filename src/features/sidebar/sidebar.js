@@ -86,12 +86,6 @@ export const Sidebar = () => {
   }, [currentUser, currentURL]);
 
   function toggleSidebar() {
-    console.log('sdsf');
-    // const screenWidth = document.documentElement.clientWidth;
-    // if (screenWidth > 768) {
-    //   return false;
-    // }
-
     setSidebar((prevState) => ({
       ...prevState,
       active: !prevState.active,
@@ -113,7 +107,6 @@ export const Sidebar = () => {
               to={`${link}`}
               key={id}
               data-id={id}
-              // onClick={toggleSidebar}
               onClick={event => toggleActiveTab(event)}
             >
               <Icon icon={title} className={styles.sidebar__icon} size={24} viewBox="0 0 32 32" />
