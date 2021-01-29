@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useActions } from '@/shared/index.js';
@@ -6,9 +6,10 @@ import {
   newUserSelector, currentUserSelector, addMentor,
   createSecretary, addStudent, fetchUnAssignedUserList,
 } from '@/models/index.js';
-import { Search, Button, WithLoading } from '@/components';
+import { Search, Button, Pagination, WithLoading } from '@/components';
 import { addAlert } from '@/features';
 import Icon from '@/icon.js';
+import classNames from 'classnames';
 import styles from './unassigned-list.scss';
 
 export const UnAssignedList = () => {
@@ -43,7 +44,12 @@ export const UnAssignedList = () => {
     { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
-  //const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersVisible, setUsersVisible] = useState([]);
+  const usersPerPage = 10;
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
 
   useEffect(() => {
     getUnAssignedUserList();
@@ -64,6 +70,45 @@ export const UnAssignedList = () => {
     }
   }, [isLoaded, data, search, isLoading]);
 
+  useEffect(() => {
+    setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
+  }, [indexOfFirstUser, indexOfLastUser, users]);
+
+  const getSortedByParam = (array, activeCategory) => {
+    const { sortingParam, sortedByAscending } = activeCategory;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    return [...array].sort((prevItem, currentItem) => {
+      if (prevItem[sortingParam].toUpperCase() > currentItem[sortingParam].toUpperCase()) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+  };
+
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
+
+  const paginate = (pageNumber) => {
+    if (currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(users?.length / usersPerPage);
+
+    setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
+  };
+
+  const prevPage = (pageNumber) => {
+    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
+  };
+
   const changeRole = (id, value) => {
     const newState = users.map((user) => (user.id === id ? ({ ...user, role: Number(value) }) : user));
     setUsers(newState);
@@ -73,7 +118,7 @@ export const UnAssignedList = () => {
     const { role } = users.find((user) => user.id === id);
     if (role !== 0) {
       const newState = users.filter((user) => user.id !== id);
-      setUsers(newState);
+      setUsers(newState?.map((user, index) => ({ id: user.id, index, ...user })));
       switch (role) {
         case 1:
           addStudentRole(id);
@@ -96,6 +141,16 @@ export const UnAssignedList = () => {
     setSearch(inputValue);
   };
 
+  const handleSortByParam = useCallback((event) => {
+    const categoryParams = event.target.dataset;
+    const sortedUsers = getSortedByParam(users, categoryParams);
+
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setUsers(sortedUsers);
+    setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
+  }, [indexOfFirstUser, indexOfLastUser, sortingCategories, users]);
+
+
   const options = () => {
     switch (currentUserRole) {
       case 2:
@@ -116,7 +171,7 @@ export const UnAssignedList = () => {
     }
   };
   const getPersonsRows = () => {
-    const personsRows = users.map(({ id, index, firstName, lastName, email }) => (
+    const personsRows = usersVisible.map(({ id, index, firstName, lastName, email }) => (
       <tr
         key={id}
         data-person-id={id}
@@ -161,6 +216,24 @@ export const UnAssignedList = () => {
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Unassigmed Users</h2>
+        <div className="col-2 text-right">{
+          users.length > usersPerPage && !isLoading
+          && `${users.length} unassigmed users `
+        }
+        </div>
+        <div className="col-4 d-flex align-items-center justify-content-end">
+          {users.length > usersPerPage && !isLoading
+          && (
+            <Pagination
+              itemsPerPage={usersPerPage}
+              totalItems={users.length}
+              paginate={paginate}
+              prevPage={prevPage}
+              nextPage={nextPage}
+              page={currentPage}
+            />
+          )}
+        </div>
       </div>
       <div className="row">
         <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
@@ -175,7 +248,26 @@ export const UnAssignedList = () => {
           </div>
           <WithLoading isLoading={!isLoaded} className="d-block mx-auto my-2">
             <table className="table table-hover">
-              <thead />
+              <thead>
+                <tr>
+                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                    <th
+                      key={id}
+                      className={styles['table-head']}
+                    >
+                      <span
+                        onClick={handleSortByParam}
+                        data-sorting-param={name}
+                        data-sorted-by-ascending={Number(sortedByAscending)}
+                        className={classNames(styles.category, { [styles['category-sorted']]: !sortedByAscending })}
+                      >
+                        {tableHead}
+                      </span>
+                    </th>
+                  ))}
+                  <th className="text-center">Choose role</th>
+                </tr>
+              </thead>
               <tbody>
                 {getPersonsRows()}
               </tbody>
