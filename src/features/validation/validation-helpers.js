@@ -64,21 +64,26 @@ export const editGroupValidation = Yup.object().shape({
 
 export const addLessonValidation = Yup.object().shape({
   themeName: Yup.string()
-    .min(1, 'Too short')
+    .min(2, 'Too short')
     .max(200, 'Too long')
     .required('This field is required'),
-  lessonDate: Yup.string()
+  lessonDate: Yup.date()
     .max(new Date(), 'The lesson cannot start in the future')
+    .required('This field is required'),
+  mentorEmail: Yup.string()
+    .email('Invalid email address')
+    .required('This field is required'),
+  groupName: Yup.string()
     .required('This field is required'),
 });
 
 export const lessonValidation = Yup.object().shape({
   themeName: Yup.string()
-    .min(1, 'Too short')
+    .min(2, 'Too short')
     .max(200, 'Too long')
     .required('This field is required'),
   groupName: Yup.string()
-    .min(1, 'Too short')
+    .min(2, 'Too short')
     .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid group name')
     .max(50, 'Too long')
     .required('This field is required'),

@@ -240,7 +240,7 @@ export const EditGroup = ({
                     <div className="col-md-8">
                       <div className="d-flex">
                         <Field
-                          className="form-control f"
+                          className="form-control"
                           type="text"
                           name="mentor"
                           list="mentors-list"

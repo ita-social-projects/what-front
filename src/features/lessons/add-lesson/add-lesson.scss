@@ -5,16 +5,12 @@
   padding: 30px;
   font-size: 16px;
 }
-h3{
+h3 {
   font-size: 22px !important;
 }
 
-table{
+table {
   border: 1px !important;
-}
-
-.size {
-  width: 100%;
 }
 
 .mode {
@@ -33,17 +29,12 @@ a {
   justify-content: space-between;
 }
 
-.error{
+.error {
   padding-top:5px;
   color:red;
 }
 
-.loader-centered {
-  display: block !important;
-  margin: 0 auto;
-}
-
-.link:hover{
+.link:hover {
   cursor:pointer;
   text-decoration: underline;
 }

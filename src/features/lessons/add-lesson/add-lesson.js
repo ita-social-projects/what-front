@@ -25,9 +25,6 @@ export const AddLesson = () => {
   const [mentorError, setMentorError] = useState(false);
   const [groupError, setGroupError] = useState(false);
   const [studentsGroup, setStudentsGroup] = useState(null);
-  const [mentorInput, setMentorInput] = useState('');
-  const [btnSave, setBtnSave] = useState(false);
-  const [classRegister, setClassRegister] = useState(false);
   const [formData, setFormData] = useState([]);
 
   const {
@@ -52,9 +49,9 @@ export const AddLesson = () => {
   } = useSelector(studentsSelector, shallowEqual);
 
   const {
-    isLoaded: addIsLoaded,
-    isLoading: lessonsIsLoading,
-    error: addError,
+    isLoaded: lessonIsAdded,
+    isLoading: lessonsIsAdding,
+    error: addLessonError,
   } = useSelector(addLessonSelector, shallowEqual);
 
   const [
@@ -66,32 +63,20 @@ export const AddLesson = () => {
   ] = useActions([fetchActiveMentors, globalLoadStudentGroups, loadStudents, addLesson, addAlert]);
 
   useEffect(() => {
-    if (!mentorsIsLoaded && !mentorError) {
-      getMentors();
-    }
-  }, [mentorsError, mentorsIsLoaded, getMentors]);
+    getGroups()
+    getMentors()
+    getStudents()
+  }, [getGroups, getMentors, getStudents]);
 
   useEffect(() => {
-    if (!groupsIsLoaded && !groupsError) {
-      getGroups();
-    }
-  }, [groupsError, groupsIsLoaded, getGroups]);
-
-  useEffect(() => {
-    if (!studentsIsLoaded && !studentsError) {
-      getStudents();
-    }
-  }, [studentsError, studentsIsLoaded, getStudents]);
-
-  useEffect(() => {
-    if (!addError && addIsLoaded) {
+    if (!addLessonError && lessonIsAdded) {
       history.push(paths.LESSONS);
       dispatchAddAlert('The lesson has been added successfully!', 'success');
     }
-    if (addError && !addIsLoaded) {
-      dispatchAddAlert(addError);
+    if (addLessonError && !lessonIsAdded) {
+      dispatchAddAlert(addLessonError);
     }
-  }, [addError, addIsLoaded, dispatchAddAlert, history]);
+  }, [addLessonError, lessonIsAdded, dispatchAddAlert, history]);
 
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)
@@ -106,22 +91,20 @@ export const AddLesson = () => {
   }, [history]);
 
   const onSubmit = (values) => {
-    const { lessonDate, themeName } = values;
+    const { lessonDate, themeName, mentorEmail } = values;
     const lessonVisits = formData.map((lessonVisit) => {
       const {
         presence, studentId, studentMark,
       } = lessonVisit;
-      return (
-        {
+      return {
           comment: '',
           presence,
           studentId,
           studentMark,
         }
-      );
     });
 
-    const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
+    const mentorData = mentors.find((mentor) => mentor.email === mentorEmail);
 
     const theme = capitalizeTheme(themeName);
 
@@ -141,7 +124,7 @@ export const AddLesson = () => {
   const getFormData = () => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
 
-    const studentD = uniqueIds.map(
+    const studentD = uniqueIds?.map(
       (id) => students.find((student) => student.id === id),
     );
 
@@ -163,45 +146,38 @@ export const AddLesson = () => {
     setFormData(resultLessonVisits);
   };
 
-  const openClassRegister = () => {
+  useEffect(() => {
     if (studentsGroup) {
       getFormData();
-      setBtnSave(true);
-      setClassRegister(true);
       setGroupError(false);
-    }
-    if (!studentsGroup) {
-      setGroupError(true);
-    }
-  };
+    } 
+  }, [studentsGroup])
 
-  const hideClassRegister = () => {
-    setBtnSave(false);
-    setClassRegister(false);
-    setGroupError(false);
-  };
-
-  const handleMentorChange = (ev) => {
-    setMentorInput(ev.target.value);
-    const mentorData = mentors.find((mentor) => mentor.email === ev.target.value);
+  const handleMentorChange = (event) => {
+    const mentorData = mentors.find((mentor) => mentor.email === event.target.value);
 
     if (mentorData) {
       setMentorError(false);
     } else {
-      setMentorError(true);
+      setMentorError('Invalid email address');
     }
   };
 
-  const handleGroupChange = (ev) => {
-    const resultGroup = groups.find((group) => group.name.toUpperCase() === ev.target.value.toUpperCase());
-    setStudentsGroup(null);
-    if (resultGroup) {
+  const handleGroupChange = (event) => {
+    const resultGroup = groups.find((group) => group.name.toUpperCase() === event.target.value.toUpperCase());
+    
+    if(resultGroup && event.type === 'blur' || resultGroup && event.type === 'input') {
       setStudentsGroup(resultGroup);
       setGroupError(false);
-      setBtnSave(false);
-      setClassRegister(false);
-    } else {
-      setGroupError(true);
+    }
+
+    if (event.type === 'blur' && event.target.value.length === 0) {
+      setStudentsGroup(null);
+      setGroupError("This field is required");
+    } else 
+    if(event.type === 'blur' && !resultGroup && event.target.value.length !== 0) {
+      setStudentsGroup(null);
+      setGroupError('Invalid group name');
     }
   };
 
@@ -225,25 +201,20 @@ export const AddLesson = () => {
 
   return (
     <div className="container">
-      <div className={classNames(styles.page, 'mx-auto', `${classRegister ? 'col-12' : 'col-8'}`)}>
+      <div className={classNames(styles.page, 'mx-auto col-12')}>
+        <h3>Add a Lesson</h3>
+        <hr />
         <div className="d-flex flex-row">
           {groupsError && mentorsError && studentsError && (
             <div className="col-12 alert-danger">
               Server Problems
             </div>
           )}
-          <div className={`${classRegister ? 'col-6' : 'col-12'}`}>
-            <h3>Add a Lesson</h3>
-            <hr />
-            <WithLoading
-              isLoading={
-                  lessonsIsLoading
-                  || mentorsIsLoading
-                  || studentsIsLoading
-                  || groupsIsLoading
-                }
-              className={classNames(styles['loader-centered'])}
-            >
+          <WithLoading
+            isLoading={mentorsIsLoading || studentsIsLoading || groupsIsLoading}
+            className="d-block my-0 mx-auto"
+          >
+            <div className="col-6">
               <Formik
                 initialValues={{
                   themeName: '',
@@ -255,10 +226,10 @@ export const AddLesson = () => {
                 onSubmit={onSubmit}
                 validationSchema={addLessonValidation}
               >
-                {({ errors }) => (
-                  <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
+                {({ errors, touched }) => (
+                  <Form id="form" className="d-flex flex-row">
                     <div className="col-12">
-                      <div className="mt-3 form-group row">
+                      <div className="form-group row mt-3">
                         <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
                         <div className="col-sm-8">
                           <Field
@@ -267,29 +238,22 @@ export const AddLesson = () => {
                             name="themeName"
                             id="inputLessonTheme"
                             placeholder="Lesson Theme"
-                            required
                           />
-                          {
-                          errors.themeName
-                            ? <div className={styles.error}>{errors.themeName}</div>
-                            : null
-                        }
+                          {touched.themeName || errors.themeName && <div className={styles.error}>{errors?.themeName}</div>}
                         </div>
                       </div>
                       <div className="form-group row">
-                        <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name:</label>
+                        <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name*:</label>
                         <div className="col-sm-8 input-group">
-                          <input
+                          <Field
                             name="groupName"
                             id="inputGroupName"
                             type="text"
-                            className={classNames('form-control group-input', { 'border-danger': groupError })}
+                            className={classNames('form-control group-input', { 'border-danger': errors.groupName || groupError})}
                             placeholder="Group Name"
-                            onChange={handleGroupChange}
-                            onFocus={hideClassRegister}
+                            onBlur={handleGroupChange}
+                            onInput={handleGroupChange}
                             list="group-list"
-                            disabled={groupsIsLoading}
-                            required
                           />
                           <datalist id="group-list">
                             {groups.map(({ id, name }) => (
@@ -297,38 +261,32 @@ export const AddLesson = () => {
                             ))}
                           </datalist>
                         </div>
-                        {
-                            groupError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid group name</div>
-                              : null
-                          }
+                        {touched.groupError || (errors.groupName || groupError) && <div className={classNames('col-8 offset-4', styles.error)}>{errors?.groupName || groupError}</div>}
                       </div>
                       <div className="form-group row">
                         <label className="col-sm-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
                         <div className="col-md-8">
                           <Field
-                            className="form-control"
+                            className={classNames('form-control group-input', { 'border-danger': errors.lessonDate })}
                             type="datetime-local"
                             name="lessonDate"
                             id="choose-date/time"
                             max={today}
-                            required
                           />
                         </div>
+                        {touched.lessonDate || errors.lessonDate && <div className={classNames('col-8 offset-4', styles.error)}>{errors?.lessonDate}</div>}
                       </div>
                       <div className="form-group row">
                         <label className="col-sm-4 col-form-label" htmlFor="mentorEmail">Mentor Email:</label>
                         <div className="col-md-8 input-group">
-                          <input
-                            className={classNames('form-control group-input', { 'border-danger': mentorError })}
+                          <Field
                             type="text"
+                            className={classNames('form-control', { 'border-danger': errors.mentorEmail || mentorError})}
                             name="mentorEmail"
                             id="mentorEmail"
                             list="mentor-list"
                             placeholder="Mentor Email"
-                            onChange={handleMentorChange}
-                            disabled={mentorsIsLoading}
-                            required
+                            onInput={handleMentorChange}
                           />
                           <datalist id="mentor-list">
                             {mentors.map(({ id, firstName, lastName, email }) => (
@@ -338,14 +296,9 @@ export const AddLesson = () => {
                             ))}
                           </datalist>
                         </div>
-                        {
-                            mentorError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid mentor email</div>
-                              : null
-                          }
+                        {touched.mentorEmail || (errors.mentorEmail || mentorError) && <div className={classNames('col-8 offset-4', styles.error)}>{errors?.mentorEmail || mentorError}</div>}
                       </div>
                     </div>
-                    { classRegister && formData && (
                     <div className="col-lg-12">
                       <FieldArray name="formData">
                         {() => (
@@ -360,7 +313,7 @@ export const AddLesson = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                { formData && formData.length > 0 && (
+                                { formData && formData.length > 0 && studentsGroup && (
                                   formData.map((lessonVisit, index) => (
                                     <tr key={lessonVisit.studentId}>
                                       <th scope="row">{ index + 1 }</th>
@@ -408,25 +361,15 @@ export const AddLesson = () => {
                         )}
                       </FieldArray>
                     </div>
-                    )}
                   </Form>
                 )}
               </Formik>
-            </WithLoading>
-          </div>
+            </div>
+          </WithLoading>
         </div>
         <div className={classNames(styles.placement, 'col-12')}>
           <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
-          {btnSave
-            ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
-            : (
-              <Button
-                className="btn btn-success btn-lg"
-                onClick={openClassRegister}
-              >
-                Class Register
-              </Button>
-            )}
+          <button form="form" type="submit" className="btn btn-info btn-lg" disabled={lessonsIsAdding}>Save</button>
         </div>
       </div>
     </div>
