@@ -36,12 +36,15 @@ export const ListOfGroups = () => {
 
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
 
-  const [sortingCategories, setSortingCategories] = useState([
+  const INITIAL_CATEGORIES = [
     { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
     { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
     { id: 2, name: 'quantity', sortedByAscending: false, tableHead: 'Quantity of students' },
     { id: 3, name: 'startDate', sortedByAscending: false, tableHead: 'Date of start' },
-  ]);
+    { id: 4, name: 'finishDate', sortedByAscending: false, tableHead: 'Date of finish' }
+  ];
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
 
   useEffect(() => {
     fetchListOfGroups();
@@ -72,6 +75,25 @@ export const ListOfGroups = () => {
   const searchGroups = (searchedGroups) => searchedGroups.filter(({ name }) => `${name}`
     .toLowerCase().includes(searchGroupValue.toLowerCase()));
 
+  const getSortedByParam = (data, activeCategory) => {
+    const { sortingParam, sortedByAscending } = activeCategory;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    return [...data].sort((prevItem, currentItem) => {
+      if (prevItem[sortingParam] > currentItem[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+  };
+
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
+
   const listByName = groups.filter((group) => {
     const normalizedName = group.name.toUpperCase();
     return normalizedName.includes(searchGroupName.toUpperCase());
@@ -90,6 +112,7 @@ export const ListOfGroups = () => {
       setFilteredGroupsList(newGroups);
     }
 
+    setSortingCategories(INITIAL_CATEGORIES);
     setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
   }, [groups, isLoading]);
 
@@ -104,17 +127,18 @@ export const ListOfGroups = () => {
   }, [searchGroupValue]);
 
   const getGroupList = () => {
-    const indexOfLastGroup = currentPage * groupsPerPage;
-    const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
 
     const groupList = visibleGroups
-      .map(({ name, studentIds, startDate, id, index }) => (
+      .map(({ name, studentIds, startDate, id, index, finishDate}) => (
         <tr className={styles['table-item']} onClick={() => handleCardDetails(id)} key={id}>
           <td className="text-center">{index + 1}</td>
           <td>{name}</td>
           <td>{studentIds.length}</td>
           <td>{startDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
             .join('.')}
+          </td>
+          <td>{finishDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
+              .join('.')}
           </td>
           <td
             className="text-center"
@@ -144,45 +168,20 @@ export const ListOfGroups = () => {
   const nextPage = (pageNumber) => {
     const totalPages = Math.ceil(listByDate.length / groupsPerPage);
     setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === 'index') {
-        return { ...category, sortedByAscending: true };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
   };
 
   const prevPage = (pageNumber) => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === 'index') {
-        return { ...category, sortedByAscending: true };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
   };
 
-  const handleSortByParam = (event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
+  const handleSortByParam = useCallback((event) => {
+    const categoryParams = event.target.dataset;
+    const sortedGroups = getSortedByParam(filteredGroupsList, categoryParams);
 
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    const sortedGroups = [...visibleGroups].sort((prevGroup, currentGroup) => {
-      if (prevGroup[sortingParam] > currentGroup[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
-
-    setVisibleGroups(sortedGroups);
-  };
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setFilteredGroupsList(sortedGroups);
+    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
+  }, [sortingCategories, filteredGroupsList]);
 
   return (
     <div className="container">
