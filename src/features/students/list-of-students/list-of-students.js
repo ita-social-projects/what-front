@@ -273,7 +273,22 @@ export const ListOfStudents = () => {
                 placeholder="student's name"
               />
             </div>
-            <div className="d-flex">
+            <div className="col-3 custom-control custom-switch text-right">
+              <input
+                value={isShowDisabled}
+                type="checkbox"
+                className={classNames('custom-control-input', styles['custom-control-input'])}
+                id="show-disabled-check"
+                onChange={handleShowDisabled}
+              />
+              <label
+                className={classNames('custom-control-label', styles['custom-control-label'])}
+                htmlFor="show-disabled-check"
+              >
+                Show disabled students
+              </label>
+            </div>
+            <div className="col-2 d-flex">
               <label
                 className={classNames(styles['label-for-select'])}
                 htmlFor="change-visible-people"
@@ -291,21 +306,6 @@ export const ListOfStudents = () => {
                 <option>75</option>
                 <option>100</option>
               </select>
-            </div>
-            <div className="col-2 custom-control custom-switch text-right">
-              <input
-                value={isShowDisabled}
-                type="checkbox"
-                className={classNames('custom-control-input', styles['custom-control-input'])}
-                id="show-disabled-check"
-                onChange={handleShowDisabled}
-              />
-              <label
-                className={classNames('custom-control-label', styles['custom-control-label'])}
-                htmlFor="show-disabled-check"
-              >
-                Disabled students
-              </label>
             </div>
             <div className="col-2 text-right">
               {[3, 4].includes(currentUser.role) && (

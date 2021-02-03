@@ -15,7 +15,7 @@ export const ListOfCourses = () => {
 
   const [visibleCourses, setVisibleCourses] = useState([]);
 
-  const [coursesPerPage] = useState(10);
+  const [coursesPerPage, setcoursesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [searchValue, setSearchValue] = useState('');
@@ -135,24 +135,44 @@ export const ListOfCourses = () => {
     });
   };
 
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleCourses(data.slice(start, finish));
+    setcoursesPerPage(newNumber);
+  };
+
+  const paginationComponent = () => {
+    if (data.length < coursesPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={coursesPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={coursesPerPage}
+        totalItems={data.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Courses</h2>
-        {filteredCourses.length > coursesPerPage
-          ? <span className="col-2 text-right">{filteredCourses.length} courses</span> : null}
+        <span className="col-2 text-right">{visibleCourses.length} of {filteredCourses.length} courses</span>
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {filteredCourses.length > coursesPerPage
-            && (
-            <Pagination
-              itemsPerPage={coursesPerPage}
-              totalItems={filteredCourses.length}
-              paginate={paginate}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              page={currentPage}
-            />
-            )}
+          {paginationComponent()}
         </div>
       </div>
       <div className="row">
@@ -167,7 +187,26 @@ export const ListOfCourses = () => {
             <div className="col-3">
               <Search onSearch={handleSearch} placeholder="Course`s title" />
             </div>
-            <div className="col-2 offset-5 text-right">
+            <div className="col-2 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
+            </div>
+            <div className="col-2 offset-3 text-right">
               {[3, 4].includes(currentUser.role) && (
               <Button onClick={addCourse}>
                 <span>Add a course</span>
@@ -203,6 +242,7 @@ export const ListOfCourses = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );

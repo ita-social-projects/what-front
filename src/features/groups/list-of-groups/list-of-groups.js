@@ -20,7 +20,7 @@ export const ListOfGroups = () => {
   const { data: groups, isLoading, isLoaded, error } = studentGroupsState;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [groupsPerPage] = useState(10);
+  const [groupsPerPage, setGroupsPerPage] = useState(10);
 
   const [filteredGroupsList, setFilteredGroupsList] = useState([]);
 
@@ -41,7 +41,7 @@ export const ListOfGroups = () => {
     { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
     { id: 2, name: 'quantity', sortedByAscending: false, tableHead: 'Quantity of students' },
     { id: 3, name: 'startDate', sortedByAscending: false, tableHead: 'Date of start' },
-    { id: 4, name: 'finishDate', sortedByAscending: false, tableHead: 'Date of finish' }
+    { id: 4, name: 'finishDate', sortedByAscending: false, tableHead: 'Date of finish' },
   ];
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
@@ -183,24 +183,49 @@ export const ListOfGroups = () => {
     setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
   }, [sortingCategories, filteredGroupsList]);
 
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleGroups(filteredGroupsList.slice(start, finish));
+    setGroupsPerPage(newNumber);
+  };
+
+  const paginationComponent = () => {
+    if (filteredGroupsList.length < groupsPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={groupsPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={groupsPerPage}
+        totalItems={filteredGroupsList.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Groups</h2>
-        {filteredGroupsList.length > groupsPerPage
-          ? <span className="col-2 text-right">{filteredGroupsList.length} groups</span> : null}
+        <div className="col-2 text-right">
+          {
+            !isLoading
+            && `${visibleGroups.length} of ${filteredGroupsList.length} students`
+          }
+        </div>
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {listByDate.length > groupsPerPage && !isLoading
-            && (
-            <Pagination
-              itemsPerPage={groupsPerPage}
-              totalItems={filteredGroupsList.length}
-              paginate={paginate}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              page={currentPage}
-            />
-            )}
+          {paginationComponent()}
         </div>
       </div>
       <div className="row">
@@ -225,7 +250,26 @@ export const ListOfGroups = () => {
                 placeholder="year-month-day"
               />
             </div>
-            <div className="col-2 offset-3 text-right">
+            <div className="col-2 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
+            </div>
+            <div className="col-2 offset-1 text-right">
               <Button onClick={handleAddGroup}>
                 <span>Add a group</span>
               </Button>
@@ -259,6 +303,7 @@ export const ListOfGroups = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );
