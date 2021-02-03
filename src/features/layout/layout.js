@@ -10,7 +10,7 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
+  Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar, StudentLessons,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
@@ -54,6 +54,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.CHANGE_PASSWORD} component={ChangePassword} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
+          <ProtectedRoute roles={[1]} exact path={`${paths.LESSON_BY_STUDENT_ID}/:id`} component={StudentLessons} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
           <Redirect to={paths.NOT_FOUND} />
         </Switch>
