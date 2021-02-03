@@ -391,11 +391,10 @@ export const EditMentor = ({ id }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button
-                          className="w-100"
-                          variant="dark"
+                            className={classNames('w-100', styles['disable-button'])}
                           onClick={handleShowModal}
                           disabled={!isValid || dirty || editedIsLoading || deletedIsLoading}
-                        >Fire
+                        >Disable
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
@@ -409,7 +408,7 @@ export const EditMentor = ({ id }) => {
                       </div>
                       <div className="col-md-3 col-4">
                         <button
-                          className={classNames('w-100 btn btn-info', styles.button, styles.submit)}
+                          className={classNames('w-100 btn ', styles.button, styles.submit)}
                           type="submit"
                           disabled={!isValid || !dirty || editedIsLoading || deletedIsLoading
                                 || errors.firstName || errors.lastName || errors.email}
