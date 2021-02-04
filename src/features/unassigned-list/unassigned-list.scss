@@ -1,46 +1,11 @@
 @import '../../styles/main';
 
-.container-list{
-    width: 70%;
-    height: 800px;
-    margin: auto;
-    box-shadow: #dddddd 0px 0px 10px 5px;
-    border-radius: 15px;
-    padding: 10px;
-}
 
-.list{
-    margin: 20px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 700px;
-    border-bottom: solid 1px grey;
-    border-top: solid 1px grey;
-}
-
-.list p{
-    width: 83%;
-    padding: 10px;
-}
 
 .add-role{
     display: flex;
 }
 
-.card{
-    display: flex;
-    position: relative;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: .25rem;
-}
-.name {
-  font-size: larger;
-  font-weight: bolder;
-}
 
 .btn{
     height: fit-content;
@@ -54,17 +19,35 @@
     margin:10px;
     padding: 7px;
 }
-.massage{
-    text-align: center;
-    font-weight: 900;
-    position: relative;
-    padding: 10px;
-    left: 46%;
-    color:#FFB800;
-}
 
-.panel{
-    padding-top: 10px;
-    margin: auto;
-    width: fit-content;
-}
+.category {
+    cursor: pointer;
+    position: relative;
+    transition: opacity .3s;
+  
+    &:hover {
+      opacity: .7;
+    }
+  
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: -15px;
+      top: 10px;
+      border-top: 1px solid #000;
+      border-left: 1px solid #000;
+      width: 8px;
+      height: 8px;
+      transform: rotateZ(45deg);
+      transition: .3s;
+    }
+  
+    &-sorted {
+      &::after {
+        transform: rotateZ(225deg);
+        top: 7px;
+      }
+    }
+  }
+  
