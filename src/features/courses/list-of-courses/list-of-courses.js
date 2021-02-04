@@ -53,7 +53,7 @@ export const ListOfCourses = () => {
         <tr key={course.id} onClick={(event) => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
           <td className="text-center">{course.id}</td>
           <td>{course.name}</td>
-          {currentUser.role !== 2 && 
+          {currentUser.role !== 2 &&
             <td
               className="text-center"
               onClick={(event) => courseEdit(event, course.id)}
@@ -93,7 +93,7 @@ export const ListOfCourses = () => {
     const { sortingParam, sortedByAscending } = event.target.dataset;
     const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
 
-    const sortedCourses = [...visibleCourses].sort((prevCourse, currentCourse) => {
+    const sortedCourses = [...filteredCourses].sort((prevCourse, currentCourse) => {
       if (prevCourse[sortingParam] > currentCourse[sortingParam]) {
         return sortingCoefficient * -1;
       }
@@ -107,7 +107,8 @@ export const ListOfCourses = () => {
       return { ...category, sortedByAscending: false };
     }));
 
-    setVisibleCourses(sortedCourses);
+    setFilteredCourses(sortedCourses);
+    setVisibleCourses(sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse));
   };
 
   const paginate = (pageNumber) => {
@@ -117,7 +118,7 @@ export const ListOfCourses = () => {
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(filteredCourses.length / 12);
+    const totalPages = Math.ceil(filteredCourses.length / 10);
     setCurrentPage((prev) => {
       if (prev === totalPages) {
         return prev;
