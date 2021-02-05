@@ -80,7 +80,7 @@ export const Sidebar = () => {
     const headerArray = rolesObject[currentUser.role];
     const resultArr = headerArray.map((tab) => ({
       ...tab,
-      active: currentURL.includes(tab.title.toLowerCase()),
+      active: currentURL.includes(tab.link.toLowerCase()),
     }));
     setTabs(resultArr);
   }, [currentUser, currentURL]);
