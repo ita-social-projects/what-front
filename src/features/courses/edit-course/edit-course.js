@@ -148,6 +148,8 @@ export const EditCourse = ({ id, coursesData }) => {
                 toShow={toShowModal}
                 onSubmit={handleDelete}
                 onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
               >
                 Are you sure you want to delete this course?
               </ModalWindow>
