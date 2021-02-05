@@ -17,5 +17,6 @@ export * from './students';
 export * from './my-profile';
 export * from './change-password';
 export * from './forgot-password';
+export * from './reset-password';
 export * from './layout';
 export * from './alert-box';
