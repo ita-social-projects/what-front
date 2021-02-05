@@ -245,7 +245,7 @@ export const EditStudentsDetails = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="info" onClick={handleGroupAdd}>+</Button>
+                            <Button  onClick={handleGroupAdd}>+</Button>
                           </div>
                         </div>
                         { error ? <div className={styles.error}>{error}</div> : null}
