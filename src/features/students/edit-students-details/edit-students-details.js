@@ -80,6 +80,9 @@ export const EditStudentsDetails = ({ id }) => {
       history.push(paths.STUDENTS);
       dispatchAddAlert('Student has been excluded', 'success');
     }
+    if (isRemovedError && !isRemovedLoaded) {
+      dispatchAddAlert(isRemovedError);
+    }
   }, [dispatchAddAlert, history, isRemovedError, isRemovedLoaded]);
 
   useEffect(() => {
@@ -235,8 +238,7 @@ export const EditStudentsDetails = ({ id }) => {
                               ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button 
-                              variant="info" 
+                            <Button
                               onClick={ () => handleGroupAdd(values.groupsInput, () => setFieldValue('groupsInput', '')) }
                               disabled={!dirty}
                             >
@@ -308,6 +310,8 @@ export const EditStudentsDetails = ({ id }) => {
                 toShow={toShowModal}
                 onSubmit={handleExclude}
                 onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
               >Are you sure you want to exclude this student?
               </ModalWindow>
             </WithLoading>

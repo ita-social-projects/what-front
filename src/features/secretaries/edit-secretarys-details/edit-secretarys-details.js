@@ -69,6 +69,9 @@ export const EditSecretarysDetails = ({ id }) => {
       history.push(paths.SECRETARIES);
       dispatchAddAlert('The secretary has been fired', 'success');
     }
+    if (secretaryDeleteError && !isDeleteLoaded) {
+      dispatchAddAlert(secretaryDeleteError);
+    }
   }, [secretaryDeleteError, isDeleteLoaded, history, dispatchAddAlert]);
 
   const onSubmit = (values) => {
@@ -159,7 +162,7 @@ export const EditSecretarysDetails = ({ id }) => {
                             onClick={handleShowModal}
                             disabled={!isValid || dirty || isDeleteLoading || isUpdateLoading}
                           >
-                            Fire
+                            Lay off
                           </Button>
                         </div>
                         <div className="col-md-3 offset-md-3 col-4 px-1">
@@ -192,6 +195,8 @@ export const EditSecretarysDetails = ({ id }) => {
                 toShow={toShowModal}
                 onSubmit={handleDelete}
                 onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
               >
                 Are you sure you want to fire this secretary?
               </ModalWindow>
