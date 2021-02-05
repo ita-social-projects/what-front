@@ -59,16 +59,6 @@ export const EditStudentsDetails = ({ id }) => {
   const [error, setError] = useState(null);
   const [toShowModal, setShowModal] = useState(false);
 
-  // const prevGroups = usePrevious(groups);
-
-  // function usePrevious(value) {
-  //   const ref = useRef();
-  //   useEffect(() => {
-  //     ref.current = value;
-  //   });
-  //   return ref.current;
-  // }
-
   useEffect(() => {
     if (studentError && studentGroupsError) {
       history.push(paths.NOT_FOUND);
