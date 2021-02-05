@@ -84,7 +84,7 @@ export const Header = () => {
             className={styles['header__dropdown-toggler']}
             onClick={toggleDropdown}
           >
-            <span className={styles['header__dropdown-icon']}>&#9660;</span>
+            <span className={dropdown ? styles['header__dropdown-icon-active'] : styles['header__dropdown-icon']}>&#9660;</span>
           </div>
           <ul className={dropdown ? styles['header__dropdown-list-show'] : styles['header__dropdown-list']}>
             <li className={styles['header__dropdown-list--item']} onClick={toggleDropdown}>

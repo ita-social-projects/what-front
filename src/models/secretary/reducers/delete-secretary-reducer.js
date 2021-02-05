@@ -33,6 +33,11 @@ export const deleteSecretaryReducer = (state = initialState, action) => {
         ...state,
         isLoaded: false,
       };
+    case actions.CLEAR_ERROR:
+      return {
+        ...state,
+        error: '',
+      };
     default: return state;
   }
 };

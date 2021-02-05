@@ -14,8 +14,12 @@ import className from 'classnames';
 import styles from './change-password.scss';
 
 export const ChangePassword = () => {
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const [password, setPassword] = useState({});
+  const [toShowModal, setShowModal] = useState(false);
+
+  const history = useHistory();
+
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const {
     isLoading: isChangePasswordLoading,
@@ -24,10 +28,6 @@ export const ChangePassword = () => {
   } = useSelector(changePasswordSelector, shallowEqual);
 
   const [setNewPassword, dispatchAddAlert] = useActions([newPassword, addAlert]);
-
-  const history = useHistory();
-
-  const [toShowModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -40,7 +40,7 @@ export const ChangePassword = () => {
 
   useEffect(() => {
     if (!changePasswordError && isChangePasswordLoaded) {
-      history.push(paths.MY_PROFILE);
+      history.goBack();
       dispatchAddAlert('The password has been successfully changed', 'success');
     }
     if (changePasswordError && !isChangePasswordLoaded) {

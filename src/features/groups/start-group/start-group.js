@@ -242,7 +242,7 @@ export const StartGroup = () => {
                 </div>
                 <div className="row mb-3">
                   <div className="col">
-                    <label className="mb-0" htmlFor="students">Mentors' data</label>
+                    <label className="mb-0" htmlFor="students">Mentors</label>
                   </div>
                   <div className="col-md-8">
                     <div className="d-flex">
@@ -297,7 +297,7 @@ export const StartGroup = () => {
                 </div>
                 <div className="row mb-3">
                   <div className="col">
-                    <label className="mb-0" htmlFor="students">Students' data</label>
+                    <label className="mb-0" htmlFor="students">Students</label>
                   </div>
                   <div className="col-md-8">
                     <div className="d-flex">

@@ -16,7 +16,13 @@ export const ModalWindow = ({
   submitButtonText,
   useRedButton,
 }) => (
-  <Modal show={toShow} onHide={onClose} onExited={onAfterClose} onEscapeKeyDown={onClose}>
+  <Modal
+    className={styles.wrapper}
+    show={toShow}
+    onHide={onClose}
+    onExited={onAfterClose}
+    onEscapeKeyDown={onClose}
+  >
     <Modal.Header closeButton>
       <h4>{title}</h4>
     </Modal.Header>

@@ -12,29 +12,33 @@
     cursor: pointer;
     z-index: 19;
 
-    &:hover {
+    &:active {
       opacity: 0.5;
     }
   }
 
   &__icon {
+    position: absolute;
     display: block;
-    position: fixed;
-    left: 20px;
+    left: 18px;
     z-index: 10;
   }
 
   &__content {
+    background: map-get($colors, dark-color);
     position: fixed;
-    left: -100%;
     top: 0;
+    bottom: 0;
     height: 100%;
+    left: 0;
+    width: 60px;
     overflow-y: scroll;
-    justify-content: flex-start;
-    align-items: flex-end;
-    background-color: #2E3440;
+    transition: .3s linear;
     z-index: 9;
-    transition: left .6s;
+
+    &:hover {
+      width: 200px;
+    }
 
     &::-webkit-scrollbar {
       display: none;
@@ -68,22 +72,8 @@
 }
 
 @media(max-width: 480px) {
-  .sidebar__content {
-    left: -65%;
-    width: 200px;
-  }
   .sidebar__toggler {
     left: 153px;
-  }
-}
-
-@media(min-width: 481px) {
-  .sidebar__content {
-    width: 220px;
-    left: -155px;
-  }
-  .sidebar__toggler {
-    left: 173px;
   }
 }
 
@@ -96,8 +86,8 @@
     }
 
     &__toggler {
-      top: 24px;
-      left: 153px;
+      top: 25px;
+      left: 100px;
     }
 
     &__icon {
@@ -114,11 +104,23 @@
 
 @media screen and (min-width: 768px) and (max-width: 1919px) {
   .sidebar:hover .menu-item {
-    animation: menu-item-appear 2s;
+    animation: menu-item-appear 1s;
   }
 
   .sidebar:not(:hover) .menu-item {
-    animation: menu-item-hide 2s;
+    animation: menu-item-hide 1s;
+  }
+}
+
+@media(min-width: 769px) {
+  .sidebar__toggler {
+    display: none;
+  }
+}
+
+@media(min-width: 1920px) {
+  .sidebar__content {
+    width: 200px;
   }
 }
 
@@ -140,24 +142,9 @@
   }
 }
 
-@media(min-width: 769px) {
-  .sidebar__toggler {
-    display: none;
-  }
-}
-
-@media(min-width: 1920px) {
-  .sidebar__content {
-    left: 0;
-  }
-  .sidebar__toggler {
-    display: none;
-  }
-}
-
 .sidebar--active {
   left: 0;
-
+  transition: .4s;
 }
 
 .active {
