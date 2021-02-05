@@ -22,7 +22,6 @@ export const ForgotPassword = () => {
   const history = useHistory();
 
   const { origin } = window.location;
-  console.log(window.location);
 
   const [toShowModal, setShowModal] = useState(false);
 
@@ -32,7 +31,6 @@ export const ForgotPassword = () => {
   const submitHandler = (value) => {
     const sendingValue = value;
     sendingValue.formUrl = origin.concat('/forgot-password');
-    console.log(sendingValue);
     setforgotPassword(sendingValue);
   };
 
@@ -66,8 +64,7 @@ export const ForgotPassword = () => {
                 }) => (
                   <Form className="p-3" noValidate>
                     <h3 className="text-center">Forgot your password?</h3>
-                    <hr />
-                    <p className="text-center">Don&apos;t worry! Just fill in your email and we&apos;ll send you a link to reset your password</p>
+                    <p className="text-center mt-3">Don&apos;t worry! Just fill in your email and we&apos;ll send you a link to reset your password</p>
                     <hr />
                     <div className="form-group">
                       <label htmlFor="email">Email address</label>
@@ -78,7 +75,7 @@ export const ForgotPassword = () => {
                         placeholder="Email address"
                         id="email"
                       />
-                      <p className="text-danger">{touched.email && errors.email}</p>
+                      {touched.email && errors.email && <div className="text-danger mt-2">{errors?.email}</div>}
                     </div>
                     <div className="d-flex justify-content-center">
                       <WithLoading isLoading={isLoading} variant="info" className="d-block mx-auto">
