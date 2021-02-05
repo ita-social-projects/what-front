@@ -46,6 +46,11 @@ export const forgotPassword = (data) => ({
   payload: { data },
 });
 
+export const resetPassword = (id, data) => ({
+  type: actionTypes.RESET_PASSWORD,
+  payload: { id, data },
+});
+
 function* loginWorker({ payload }) {
   try {
     yield put({ type: actionTypes.LOGIN_STARTED });
@@ -69,7 +74,6 @@ function* registrationWorker(data) {
     yield put({ type: actionTypes.REGIST_STARTED });
     const regUser = yield call(ApiService.create, '/accounts/reg', data.payload.newUser);
     yield put({ type: actionTypes.REGIST_SUCCESS, payload: { regUser } });
-    // yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({ type: actionTypes.REGIST_ERROR, payload: { error } });
   }
@@ -111,9 +115,18 @@ function* forgotPasswordWorker({ payload }) {
     yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_STARTED });
     const data = yield call(ApiService.create, '/accounts/password/forgot', payload.data);
     yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_SUCCESS, payload: { data } });
-    // yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_FAILED, payload: { error } });
+  }
+}
+
+function* resetPasswordWorker({ payload }) {
+  try {
+    yield put({ type: actionTypes.RESET_PASSWORD_REQUEST_STARTED });
+    const data = yield call(ApiService.create, `/accounts/password/reset/${payload.id}`, payload.data);
+    yield put({ type: actionTypes.RESET_PASSWORD_REQUEST_SUCCESS, payload: { data } });
+  } catch (error) {
+    yield put({ type: actionTypes.RESET_PASSWORD_REQUEST_FAILED, payload: { error } });
   }
 }
 
@@ -145,6 +158,10 @@ function* forgotPasswordWatcher() {
   yield takeEvery(actionTypes.FORGOT_PASSWORD, forgotPasswordWorker);
 }
 
+function* resetPasswordWatcher() {
+  yield takeEvery(actionTypes.RESET_PASSWORD, resetPasswordWorker);
+}
+
 export function* authWatcher() {
   yield all([
     fork(loginWatcher),
@@ -154,5 +171,6 @@ export function* authWatcher() {
     fork(fetchUnAssignedUserListWatcher),
     fork(changePasswordWatcher),
     fork(forgotPasswordWatcher),
+    fork(resetPasswordWatcher),
   ]);
 }
