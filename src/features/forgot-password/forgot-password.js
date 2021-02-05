@@ -21,7 +21,7 @@ export const ForgotPassword = () => {
 
   const history = useHistory();
 
-  const { href } = window.location;
+  const { origin } = window.location;
   console.log(window.location);
 
   const [toShowModal, setShowModal] = useState(false);
@@ -31,7 +31,7 @@ export const ForgotPassword = () => {
 
   const submitHandler = (value) => {
     const sendingValue = value;
-    sendingValue.formUrl = href;
+    sendingValue.formUrl = origin.concat('/forgot-password');
     console.log(sendingValue);
     setforgotPassword(sendingValue);
   };
