@@ -80,17 +80,12 @@ export const Sidebar = () => {
     const headerArray = rolesObject[currentUser.role];
     const resultArr = headerArray.map((tab) => ({
       ...tab,
-      active: currentURL.includes(tab.title.toLowerCase()),
+      active: currentURL.includes(tab.link.toLowerCase()),
     }));
     setTabs(resultArr);
   }, [currentUser, currentURL]);
 
-  function toggleSidebar(event) {
-    const screenWidth = document.documentElement.clientWidth;
-    if ((event.type === 'mouseout' && screenWidth < 769) || (event.type === 'mouseover' && screenWidth < 769)) {
-      return false;
-    }
-
+  function toggleSidebar() {
     setSidebar((prevState) => ({
       ...prevState,
       active: !prevState.active,
@@ -101,10 +96,10 @@ export const Sidebar = () => {
     <nav className={styles.sidebar}>
 
       <div className={classNames(styles.sidebar__toggler)} onClick={toggleSidebar}>
-        <Icon icon="SidebarToggler" className="icon" size={26} viewBox="0 0 32 38" />
+        <Icon icon="SidebarToggler" className="icon" size={24} viewBox="0 0 32 38" />
       </div>
 
-      <div onMouseOver={toggleSidebar} onMouseOut={toggleSidebar} className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
+      <div className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
         <div className={styles.sidebar__links}>
           {tabs.map(({ id, title, link, active }) => (
             <Link
@@ -112,7 +107,7 @@ export const Sidebar = () => {
               to={`${link}`}
               key={id}
               data-id={id}
-              onClick={(event) => toggleActiveTab(event)}
+              onClick={event => toggleActiveTab(event)}
             >
               <Icon icon={title} className={styles.sidebar__icon} size={24} viewBox="0 0 32 32" />
               <span className={styles['menu-item']}>{title}</span>

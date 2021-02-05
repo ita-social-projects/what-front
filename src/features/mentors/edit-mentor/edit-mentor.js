@@ -112,6 +112,9 @@ export const EditMentor = ({ id }) => {
       history.push(paths.MENTORS);
       dispatchAddAlert('Mentor has been fired', 'success');
     }
+    if (deletedIsError && !deletedIsLoaded) {
+      dispatchAddAlert(deletedIsError);
+    }
   }, [deletedIsError, deletedIsLoaded, dispatchAddAlert, history]);
 
   const handleGroupInputChange = (e) => {
@@ -423,6 +426,8 @@ export const EditMentor = ({ id }) => {
                 toShow={toShowModal}
                 onSubmit={onFire}
                 onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
               >Are you sure you want to fire this mentor?
               </ModalWindow>
             </WithLoading>
