@@ -3,7 +3,7 @@ import * as actions from '../types.js';
 const initialState = {
   data: {},
   isLoading: false,
-  isloaded: false,
+  isLoaded: false,
   error: '',
 };
 

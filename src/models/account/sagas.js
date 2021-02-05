@@ -20,7 +20,7 @@ export const registration = (newUser) => ({
   },
 });
 
-export const clearRegistration = () => ({
+export const clearLoaded = () => ({
   type: actionTypes.CLEAR_LOADED,
 });
 
@@ -109,9 +109,9 @@ function* changePasswordWorker({ payload }) {
 function* forgotPasswordWorker({ payload }) {
   try {
     yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_STARTED });
-    const data = yield call(ApiService.create, 'accounts/password/forgot', payload.data);
+    const data = yield call(ApiService.create, '/accounts/password/forgot', payload.data);
     yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_SUCCESS, payload: { data } });
-    yield put({ type: actionTypes.CLEAR_LOADED });
+    // yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_FAILED, payload: { error } });
   }
