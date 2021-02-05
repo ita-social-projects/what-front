@@ -4,7 +4,7 @@ import {
 import { ApiService } from '../../shared/api-service/api-service.js';
 import * as actions from './action-types.js';
 import {
-  CREATE_SECRETARY, DELETE_SECRETARY, FETCH_SECRETARIES, UPDATE_SECRETARY,
+  FETCH_SECRETARIES, FETCH_ACTIVE_SECRETARIES, CREATE_SECRETARY, DELETE_SECRETARY, UPDATE_SECRETARY,
 } from './action-types.js';
 
 export const fetchSecretaries = () => ({ type: actions.FETCH_SECRETARIES });
@@ -21,6 +21,25 @@ function* fetchSecretaryWorker() {
 
 function* fetchSecretariesWatcher() {
   yield takeLatest(FETCH_SECRETARIES, fetchSecretaryWorker);
+}
+
+export const fetchActiveSecretaries = () => ({ type: actions.FETCH_ACTIVE_SECRETARIES });
+
+function* fetchActiveSecretaryWorker() {
+  try {
+    yield put({ type: actions.ACTIVE_SECRETARIES_LOADING_STARTED });
+    const activeSecretaries = yield call(ApiService.load, '/secretaries/active');
+    yield put({
+      type: actions.ACTIVE_SECRETARIES_LOADING_SUCCESS,
+      payload: { data: activeSecretaries },
+    });
+  } catch (error) {
+    yield put({ type: actions.ACTIVE_SECRETARIES_LOADING_FAILED, payload: { error } });
+  }
+}
+
+function* fetchActiveSecretariesWatcher() {
+  yield takeLatest(FETCH_ACTIVE_SECRETARIES, fetchActiveSecretaryWorker);
 }
 
 export const createSecretary = (id) => ({
@@ -74,11 +93,11 @@ function* deleteSecretaryWorker({ payload }) {
   try {
     yield put({ type: actions.SECRETARY_DELETING_STARTED });
     yield call(ApiService.remove, `/secretaries/${payload.id}`);
-    const secretaryId = payload.id;
-    yield put({ type: actions.SECRETARY_DELETING_SUCCESS, payload: { secretaryId } });
+    yield put({ type: actions.SECRETARY_DELETING_SUCCESS });
     yield put({ type: actions.CLEAR_LOADED });
   } catch (error) {
-    yield put({ type: actions.SECRETARY_UPDATING_FAILED, payload: { error } });
+    yield put({ type: actions.SECRETARY_DELETING_FAILED, payload: { error } });
+    yield put({ type: actions.CLEAR_ERROR });
   }
 }
 
@@ -88,8 +107,9 @@ function* deleteSecretaryWatcher() {
 
 export function* secretariesWatcher() {
   yield all([
-    fork(createSecretaryWatcher),
     fork(fetchSecretariesWatcher),
+    fork(fetchActiveSecretariesWatcher),
+    fork(createSecretaryWatcher),
     fork(updateSecretaryWatcher),
     fork(deleteSecretaryWatcher),
   ]);

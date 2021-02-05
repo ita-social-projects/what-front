@@ -35,6 +35,11 @@ export const createCourseReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loaded: false
       }
+    case actionTypes.CLEAR_ERROR:
+      return {
+        ...state,
+        error: '',
+      };
     default: return state;
   }
 }

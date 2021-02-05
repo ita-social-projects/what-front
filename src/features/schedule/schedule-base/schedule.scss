@@ -1,9 +1,9 @@
-@import '../../styles/main';
+@import '../../../styles/main';
 
 .day-column {
     border-left: 1px solid $theme-colorMedium;
     &:last-child {
-        border-right: 1px solid $theme-colorMedium;;
+        border-right: 1px solid $theme-colorMedium;
     }
     display: flex;
     flex-direction: column;
@@ -18,7 +18,7 @@
 }
 
 .current-day {
-    background-color: $theme-colorMedium;
+    background-color: darken(#fff, 10);
 }
 
 .lessons-list {
@@ -50,6 +50,7 @@
 
     &__group-name {
         margin-bottom: 0;
+        cursor: pointer;
     }
 }
 
@@ -61,6 +62,7 @@
         width: 25px;
         height: 25px;
         margin: 5px 0;
+        fill: $theme-colorAccent;
     }
     .arrow-left {
         transform: rotateZ(180deg);
@@ -78,4 +80,9 @@
         box-shadow: 0 0 10px map-get($colors, medium-color );
         outline: none;
     }
+}
+
+.future-lesson {
+    background-color: map-get($colors, medium-color);
+    color: #fff;
 }

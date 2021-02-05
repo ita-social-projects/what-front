@@ -70,7 +70,7 @@ function* fetchAsyncActiveMentors() {
     const data = yield call(ApiService.load, '/mentors/active');
     yield put({ type: types.FETCHING_ACTIVE_SUCCEED, payload: { data } });
   } catch (error) {
-    yield put({ type: types.FETCHING_ACTIVE_SUCCEED, payload: { error } });
+    yield put({ type: types.FETCHING_ACTIVE_FAILED, payload: { error } });
   }
 }
 
@@ -118,6 +118,7 @@ function* editAsyncMentor({ payload }) {
     yield put({ type: types.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: types.EDITING_MENTOR_FAILED, payload: { error } });
+    yield put({ type: types.CLEAR_ERROR });
   }
 }
 

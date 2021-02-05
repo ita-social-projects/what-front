@@ -1,20 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import classNames from 'classnames';
-import {
-  Formik, Field, Form, FieldArray,
-} from 'formik';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions, paths } from '@/shared';
-import * as Yup from 'yup';
-import { WithLoading } from '@/components';
-import {
-  editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector, 
+import { editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector,
   fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
 } from '@/models';
+import { useActions, paths } from '@/shared';
+
+import { WithLoading } from '@/components';
+import { lessonValidation } from "@features/validation/validation-helpers";
 import { addAlert } from '@/features';
+import { Formik, Field, Form, FieldArray } from 'formik';
+
+import classNames from 'classnames';
 import styles from './edit-lesson.scss';
-import {lessonValidation} from "@features/validation/validation-helpers";
+
 
 export const EditLesson = () => {
   const history = useHistory();
@@ -343,7 +342,7 @@ export const EditLesson = () => {
         </div>
         <div className={classNames(styles.placement, 'col-12')}>
           <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
-          <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
+          <button form="form" type="submit" className="btn btn-info btn-lg">Save</button>
         </div>
       </div>
     </div>

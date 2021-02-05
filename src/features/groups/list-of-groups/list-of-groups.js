@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { paths } from '@/shared';
-import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
-import { useActions } from '@shared/hooks/index.js';
-import { Button, Search, WithLoading, Card, Pagination } from '@components/index.js';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
-import classNames from 'classnames';
-import styles from './list-of-groups.scss';
+import { paths, useActions } from '@/shared/index.js';
+
+import { Button, Search, WithLoading, Pagination } from '@components/index.js';
+
 import Icon from '@/icon.js';
+import { inputGroupStartDate } from '@features/groups/list-of-groups/redux/actions';
+
+import classNames from 'classnames';
+import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
+import styles from './list-of-groups.scss';
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -17,13 +20,31 @@ export const ListOfGroups = () => {
   const { data: groups, isLoading, isLoaded, error } = studentGroupsState;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [groupsPerPage] = useState(12);
+  const [groupsPerPage] = useState(10);
 
-  const { setSearchGroupValue, inputGroupStartDate } = useActions(listOfGroupsActions);
+  const [filteredGroupsList, setFilteredGroupsList] = useState([]);
+
+  const [visibleGroups, setVisibleGroups] = useState([]);
+
+  const [searchGroupValue, setSearchGroupValue] = useState('');
+
+  const indexOfLastGroup = currentPage * groupsPerPage;
+  const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
+
   const searchGroupName = useSelector(searchGroup, shallowEqual);
   const searchStartDate = useSelector(searchDate, shallowEqual);
 
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
+
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
+    { id: 2, name: 'quantity', sortedByAscending: false, tableHead: 'Quantity of students' },
+    { id: 3, name: 'startDate', sortedByAscending: false, tableHead: 'Date of start' },
+    { id: 4, name: 'finishDate', sortedByAscending: false, tableHead: 'Date of finish' }
+  ];
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
 
   useEffect(() => {
     fetchListOfGroups();
@@ -33,11 +54,12 @@ export const ListOfGroups = () => {
     history.push(paths.GROUP_ADD);
   }, [history]);
 
-  const handleSearch = useCallback((inputValue) => {
+  const handleSearch = (inputValue) => {
     setSearchGroupValue(inputValue);
-  }, [setSearchGroupValue]);
+  };
 
-  const handleCardEdit = useCallback((id) => {
+  const handleCardEdit = useCallback((id, event) => {
+    event.stopPropagation();
     history.push(`${paths.GROUP_EDIT}/${id}`);
   }, [history]);
 
@@ -50,6 +72,28 @@ export const ListOfGroups = () => {
     inputGroupStartDate(date);
   };
 
+  const searchGroups = (searchedGroups) => searchedGroups.filter(({ name }) => `${name}`
+    .toLowerCase().includes(searchGroupValue.toLowerCase()));
+
+  const getSortedByParam = (data, activeCategory) => {
+    const { sortingParam, sortedByAscending } = activeCategory;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    return [...data].sort((prevItem, currentItem) => {
+      if (prevItem[sortingParam] > currentItem[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+  };
+
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
+
   const listByName = groups.filter((group) => {
     const normalizedName = group.name.toUpperCase();
     return normalizedName.includes(searchGroupName.toUpperCase());
@@ -57,103 +101,165 @@ export const ListOfGroups = () => {
 
   const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
 
-  const getGroupList = () => {
-    const indexOfLastGroup = currentPage * groupsPerPage;
-    const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
+  useEffect(() => {
+    setCurrentPage(currentPage);
+  }, [currentPage]);
 
-    const groupList = listByDate.slice(indexOfFirstGroup, indexOfLastGroup)
-      .sort((a, b) => {
-        return a.startDate < b.startDate ? -1 : a.startDate > b.startDate ? 1 : 0;
-      })
-      .map((group) => (
-        <Card
-          key={group.id}
-          id={group.id}
-          title={group.name}
-          date={group.startDate.replaceAll('-', '.').slice(0, 10).split('.').reverse().join('.')}
-          buttonName="Details"
-          iconName="Edit"
-          onEdit={() => handleCardEdit(group.id)}
-          onDetails={() => handleCardDetails(group.id)}
-        />
+  useEffect(() => {
+    if (groups.length && !isLoading) {
+      let newGroups = groups.map((group, index) => ({ index, ...group }));
+      newGroups = newGroups.map((group) => ({ quantity: group.studentIds.length, ...group }));
+      setFilteredGroupsList(newGroups);
+    }
+
+    setSortingCategories(INITIAL_CATEGORIES);
+    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
+  }, [groups, isLoading]);
+
+  useEffect(() => {
+    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
+  }, [currentPage, filteredGroupsList]);
+
+  useEffect(() => {
+    const searchedGroups = searchGroups(groups);
+
+    setFilteredGroupsList(searchedGroups.map((mentor, index) => ({ index, ...mentor })));
+  }, [searchGroupValue]);
+
+  const getGroupList = () => {
+
+    const groupList = visibleGroups
+      .map(({ name, studentIds, startDate, id, index, finishDate}) => (
+        <tr className={styles['table-item']} onClick={() => handleCardDetails(id)} key={id}>
+          <td className="text-center">{index + 1}</td>
+          <td>{name}</td>
+          <td>{studentIds.length}</td>
+          <td>{startDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
+            .join('.')}
+          </td>
+          <td>{finishDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
+              .join('.')}
+          </td>
+          <td
+            className="text-center"
+            onClick={(event) => handleCardEdit(id, event)}
+          >
+            <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
+          </td>
+        </tr>
       ));
 
-      if (!groupList.length && searchGroupName || searchStartDate) {
-        return <h4>Group is not found</h4>;
-      } if (!groupList.length && searchGroupName || searchStartDate) {
-        return <h4>Group is not found</h4>;
-      }
+    if (!groupList.length && searchGroupName || searchStartDate) {
+      return <h4>Group is not found</h4>;
+    }
+    if (!filteredGroupsList.length) {
+      return <tr><td className="text-info">Group is not found</td></tr>;
+    }
 
-      return groupList;
-    };
+    return groupList;
+  };
 
   const paginate = (pageNumber) => {
-    if(currentPage !== pageNumber) {
+    if (currentPage !== pageNumber) {
       setCurrentPage(pageNumber);
     }
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(listByDate.length / 12);
-    setCurrentPage((prev) => {
-      if (prev === totalPages) {
-        return prev;
-      } else {
-        return pageNumber;
-      }
-    });
+    const totalPages = Math.ceil(listByDate.length / groupsPerPage);
+    setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
   };
 
-  const prevPage =(pageNumber) => {
-    setCurrentPage((prev) => {
-      if (prev - 1 === 0) {
-        return prev;
-      } else {
-        return pageNumber;
-      }
-    });
+  const prevPage = (pageNumber) => {
+    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
+
+  const handleSortByParam = useCallback((event) => {
+    const categoryParams = event.target.dataset;
+    const sortedGroups = getSortedByParam(filteredGroupsList, categoryParams);
+
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setFilteredGroupsList(sortedGroups);
+    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
+  }, [sortingCategories, filteredGroupsList]);
 
   return (
-    <div className={classNames("container", styles['list-wrapper'])}>
+    <div className="container">
+      <div className="row justify-content-between align-items-center mb-3">
+        <h2 className="col-6">Groups</h2>
+        {filteredGroupsList.length > groupsPerPage
+          ? <span className="col-2 text-right">{filteredGroupsList.length} groups</span> : null}
+        <div className="col-4 d-flex align-items-center justify-content-end">
+          {listByDate.length > groupsPerPage && !isLoading
+            && (
+            <Pagination
+              itemsPerPage={groupsPerPage}
+              totalItems={filteredGroupsList.length}
+              paginate={paginate}
+              prevPage={prevPage}
+              nextPage={nextPage}
+              page={currentPage}
+            />
+            )}
+        </div>
+      </div>
       <div className="row">
-        <div className="col-md-2 text-left">
-          <input
-            className={classNames('form-control ', styles['calendar-input'])}
-            type="date"
-            name="group_date"
-            required
-            onChange={handleCalendarChange}
-            placeholder="year-month-day"
-          />
-        </div>
-        <div className="col-md-4 offset-md-2 text-center pl-3">
-          <Search onSearch={handleSearch} placeholder="Group's name" />
-        </div>
-          <div className="col-md-4 col-12 text-right">
-            <Button onClick={handleAddGroup} variant="warning">
-              <Icon icon="Plus" className="icon" />
-                Add a group
-            </Button>
+        <div className="col-12 card shadow p-3 mb-5 bg-white">
+          <div className="row align-items-center mt-2 mb-3">
+            <div className="col-2">
+              <div className="btn-group">
+                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
+                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+              </div>
+            </div>
+            <div className="col-3">
+              <Search onSearch={handleSearch} placeholder="Group's name" />
+            </div>
+            <div className="col-2 text-left">
+              <input
+                className={classNames('form-control ', styles['calendar-input'])}
+                type="date"
+                name="group_date"
+                required
+                onChange={handleCalendarChange}
+                placeholder="year-month-day"
+              />
+            </div>
+            <div className="col-2 offset-3 text-right">
+              <Button onClick={handleAddGroup}>
+                <span>Add a group</span>
+              </Button>
+            </div>
           </div>
+          <WithLoading isLoading={isLoading} className="d-block mx-auto">
+            <table className="table table-hover mb-0">
+              <thead>
+                <tr>
+                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                    <th
+                      className={styles['table-head']}
+                      key={id}
+                    >
+                      <span
+                        onClick={handleSortByParam}
+                        data-sorting-param={name}
+                        data-sorted-by-ascending={Number(sortedByAscending)}
+                        className={classNames(styles.category, { [styles['category-sorted']]: sortedByAscending })}
+                      >
+                        {tableHead}
+                      </span>
+                    </th>
+                  ))}
+                  <th scope="col" className="text-center">Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getGroupList()}
+              </tbody>
+            </table>
+          </WithLoading>
         </div>
-        <div>
-          <hr className="col-8" />
-          <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
-            <WithLoading isLoading={isLoading}>
-              {getGroupList()}
-            </WithLoading>
-          </div>
-        </div>
-      {listByDate.length > 12 && !isLoading &&
-        <Pagination 
-          itemsPerPage={groupsPerPage} 
-          totalItems={listByDate.length} 
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-        />
-      }
+      </div>
     </div>
   );
 };

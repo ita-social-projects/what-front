@@ -19,37 +19,37 @@ export const MentorDetails = ({ id }) => {
     isLoaded: mentorIsLoaded,
     error: mentorError
   } = useSelector(mentorIdSelector, shallowEqual);
-  
+
   const {
     data: mentorGroups,
     isLoading: mentorGroupsAreLoading,
     isLoaded: mentorGroupsAreLoaded,
     error: mentorGroupsError
   } = useSelector(mentorGroupsSelector, shallowEqual);
-  
+
   const {
     data: mentorCourses,
     isLoading:mentorCoursesAreLoading ,
     isLoaded: mentorCoursesAreLoaded,
     error: mentorCoursesError
   } = useSelector(mentorCoursesSelector, shallowEqual);
-  
+
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const [
     dispatchLoadMentors,
   ] = useActions([fetchMentorById, fetchActiveMentors]);
-  
+
   useEffect(() => {
     if (mentorError && mentorCoursesError && mentorGroupsError) {
       history.push(paths.NOT_FOUND);
     }
   }, [mentorError, mentorCoursesError, mentorGroupsError, history]);
-  
+
   useEffect(() => {
     dispatchLoadMentors(id);
   }, [dispatchLoadMentors, id]);
-  
+
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -59,8 +59,8 @@ export const MentorDetails = ({ id }) => {
           <div className="px-2 py-4">
             <h3>Mentor Details</h3>
             <hr />
-            <WithLoading isLoading={mentorIsLoading || !mentorIsLoaded || 
-                mentorCoursesAreLoading || !mentorCoursesAreLoaded || mentorGroupsAreLoading || !mentorGroupsAreLoaded} 
+            <WithLoading isLoading={mentorIsLoading || !mentorIsLoaded ||
+                mentorCoursesAreLoading || !mentorCoursesAreLoaded || mentorGroupsAreLoading || !mentorGroupsAreLoaded}
               className="d-block mx-auto m-0"
             >
               <div className="row">
@@ -84,10 +84,10 @@ export const MentorDetails = ({ id }) => {
                 {mentorGroups
                   .map(({ id, name }) => (
                     <div className="pr-2" key={id}>
-                      <Badge pill variant="primary">
+                      <Badge pill variant="info">
                         <Link
-                          to={`${paths.MENTORS_DETAILS}/${id}`}
-                          className="text-decoration-none text-white"
+                          to={`${paths.GROUPS_DETAILS}/${id}`}
+                          className="text-decoration-none text-light"
                         >{name}
                         </Link>
                       </Badge>
@@ -102,10 +102,10 @@ export const MentorDetails = ({ id }) => {
                   {mentorCourses
                     .map(({ id, name }) => (
                       <div className="pr-2" key={id}>
-                        <Badge pill variant="primary">
+                        <Badge pill variant="info">
                           <Link
                             to={`${paths.COURSE_DETAILS}/${id}`}
-                            className="text-decoration-none text-white"
+                            className="text-decoration-none text-light"
                           >{name}</Link>
                         </Badge>
                       </div>

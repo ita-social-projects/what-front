@@ -1,13 +1,15 @@
+@import '@styles/main';
+
 .wrapper {
   position: absolute;
   width: 100%;
-  min-height: 100%;  
-  background-color: #020520;  
+  min-height: 100%; 
+  background-color: map-get($colors, medium-color);
 }
 
 .form {
   background-color: #fff;
-  margin-top: 30vh;
+  margin-top: 25vh;
   border-radius: 3px;
   transition: all ease .5s;
 
@@ -19,6 +21,28 @@
   @media (max-width: 576px) {
     margin-top: 10vh;
     transition: all ease .5s;
+  }
+
+  &-button {
+    @include button();
+    display: block;
+    width: 100%;
+    background-color: map-get($colors, accent-color) !important;
+    border-color: map-get($colors, accent-color) !important;
+    box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;
+
+    &:hover {
+      opacity: .8;
+    }
+  }
+
+  &-link {
+    color: map-get($colors, nonAccent-color);    
+
+    &:hover {
+      text-decoration: none;
+      color: map-get($colors, accent-color); 
+    }   
   }
 }
 

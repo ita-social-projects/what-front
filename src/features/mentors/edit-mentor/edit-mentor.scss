@@ -21,6 +21,13 @@
 
 .button{
   @include button();
+  cursor: pointer;
+
+}
+.submit {
+  background-color: $theme-colorAccent !important;
+  border-color: $theme-colorAccent !important;
+  color: #fff !important;
 }
 
 .error{
@@ -32,3 +39,15 @@
   display: block !important;
   margin: 20px auto;
 }
+
+.disable-button {
+  background-color: $theme-colorDark !important;
+  border-color: $theme-colorDark !important;
+}
+
+.btn-secondary {
+  background-color: $theme-colorLight !important;
+  border-color: $theme-colorLight !important;
+  color:#fff !important;
+}
+

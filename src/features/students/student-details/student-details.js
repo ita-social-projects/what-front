@@ -20,21 +20,19 @@ export const StudentDetails = () => {
   const {
     data: studentGroups,
     isLoading: areStudentGroupsLoading,
-    error: studentGroupsError,
   } = useSelector(currentStudentGroupsSelector, shallowEqual);
 
   const {
     data: studentLessons,
     isLoading: studentLessonsIsLoading,
     isLoaded: studentLessonsIsLoaded,
-    error: studentLessonsError,
   } = useSelector(studentLessonsSelector, shallowEqual);
 
   useEffect(() => {
-    if (studentError && studentGroupsError && studentLessonsError) {
+    if (studentError && !isStudentLoading) {
       history.push(paths.NOT_FOUND);
     }
-  }, [studentError, studentGroupsError, studentLessonsError]);
+  }, [history, isStudentLoading, studentError]);
 
   return (
     <div className="container">
@@ -72,7 +70,7 @@ export const StudentDetails = () => {
                     {studentGroups
                       .map(({ id, name }) => (
                         <div className="pr-2" key={id}>
-                          <Badge pill variant="primary">
+                          <Badge pill variant="info">
                             <Link
                               to={`${paths.GROUPS_DETAILS}/${id}`}
                               className="text-decoration-none text-white"
@@ -95,11 +93,12 @@ export const StudentDetails = () => {
                     {studentLessons
                       .map(({ id, themeName }) => (
                         <div className="pr-2" key={id}>
-                          <Badge pill variant="primary">
+                          <Badge pill variant="info">
                             <Link
                               to={`${paths.LESSON_DETAILS}/${id}`}
                               className="text-decoration-none text-white"
-                            >{themeName}</Link>
+                            >{themeName}
+                            </Link>
                           </Badge>
                         </div>
                       ))}

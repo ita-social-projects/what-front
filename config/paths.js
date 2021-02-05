@@ -1,10 +1,11 @@
 const path = require('path');
 
-const getSourcePath = (folder) => path.resolve(__dirname, '..', 'src', folder || '');
+const getSourcePath = (folderOrFile) => path.resolve(__dirname, '..', 'src', folderOrFile || '');
 
 module.exports = {
   src: {
     _: getSourcePath(),
+    html: getSourcePath('index.html'),
     utils: getSourcePath('utils'),
     assets: getSourcePath('assets'),
     styles: getSourcePath('styles'),

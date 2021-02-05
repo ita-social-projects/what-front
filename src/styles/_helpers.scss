@@ -8,6 +8,11 @@
 @mixin button() {
   border-radius: map-get($border-radius, button-borRad);
   box-shadow: map-get($box-shadows, button-boxShadow);
+  padding: $button-padding;
+  border: none;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 @mixin modalWindow() {
@@ -37,6 +42,5 @@
   box-shadow: map-get($box-shadows, tab-boxShadow);
   color: map-get($colors, textMain-color);
   background-color: map-get($colors, medium-color);
-  border-radius: map-get($border-radius, tab-borRad);
   cursor: pointer;
 }

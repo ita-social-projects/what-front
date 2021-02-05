@@ -1,9 +1,8 @@
 import * as actions from '../action-types.js';
 
 const initialState = {
-  data: null,
   isLoading: false,
-  loaded: false,
+  isLoaded: false,
   error: '',
 };
 
@@ -19,21 +18,25 @@ export const deleteSecretaryReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        loaded: true,
-        data: action.payload.secretaryId,
+        isLoaded: true,
         erroe: '',
       };
     case actions.SECRETARY_DELETING_FAILED:
       return {
         ...state,
         isLoading: false,
-        loaded: false,
+        isLoaded: false,
         error: action.payload.error,
       };
     case actions.CLEAR_LOADED:
       return {
         ...state,
-        loaded: false,
+        isLoaded: false,
+      };
+    case actions.CLEAR_ERROR:
+      return {
+        ...state,
+        error: '',
       };
     default: return state;
   }

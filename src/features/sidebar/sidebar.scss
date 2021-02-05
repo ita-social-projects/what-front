@@ -1,0 +1,153 @@
+@import '../../index.scss';
+
+.sidebar {
+  color: white;
+
+  &__toggler {
+    display: inline-block;
+    position: absolute;
+    top: 20px;
+    left: 173px;
+    color: white;
+    cursor: pointer;
+    z-index: 19;
+
+    &:active {
+      opacity: 0.5;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    display: block;
+    left: 18px;
+    z-index: 10;
+  }
+
+  &__content {
+    background: map-get($colors, dark-color);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    width: 60px;
+    overflow-y: scroll;
+    transition: .3s linear;
+    z-index: 9;
+
+    &:hover {
+      width: 200px;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__links {
+    padding-top: 85px;
+  }
+
+  &__links > a {
+    position: relative;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-left: 60px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+
+    &:focus {
+      background-color: map-get($colors, accent-color);
+      color: #fff;
+    }
+    &:hover {
+      background-color: map-get($colors, accent-color);
+      color: #fff;
+    }
+  }
+
+}
+
+@media(max-width: 480px) {
+  .sidebar__toggler {
+    left: 153px;
+  }
+}
+
+@media(max-width: 768px) {
+  .sidebar {
+
+    &__content {
+      left: -200px;
+      width: 200px;
+    }
+
+    &__toggler {
+      top: 25px;
+      left: 100px;
+    }
+
+    &__icon {
+      left: -30px;
+      transition: ease .2s;
+    }
+
+    .sidebar--active svg {
+      left: 20px;
+    }
+
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1919px) {
+  .sidebar:hover .menu-item {
+    animation: menu-item-appear 1s;
+  }
+
+  .sidebar:not(:hover) .menu-item {
+    animation: menu-item-hide 1s;
+  }
+}
+
+@media(min-width: 769px) {
+  .sidebar__toggler {
+    display: none;
+  }
+}
+
+@media(min-width: 1920px) {
+  .sidebar__content {
+    width: 200px;
+  }
+}
+
+@keyframes menu-item-hide {
+  from {
+    color: #fff;
+  }
+  20% {
+    color: transparent;
+  }
+}
+
+@keyframes menu-item-appear {
+  from {
+    color: transparent;
+  }
+  90% {
+    color: #fff;
+  }
+}
+
+.sidebar--active {
+  left: 0;
+  transition: .4s;
+}
+
+.active {
+  background-color: map-get($colors, accent-color) !important;
+  font-weight: bold !important;
+}

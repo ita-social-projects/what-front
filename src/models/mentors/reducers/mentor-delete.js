@@ -36,9 +36,8 @@ export const mentorDeletingReducer = (state = initialState, action) => {
     case types.CLEAR_LOADED:
       return {
         ...state,
-        loaded: false,
+        isLoaded: false,
       };
-
     default:
       return state;
   }
