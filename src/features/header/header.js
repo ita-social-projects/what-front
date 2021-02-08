@@ -89,20 +89,20 @@ export const Header = () => {
           <ul className={dropdown ? styles['header__dropdown-list-show'] : styles['header__dropdown-list']}>
             <li className={styles['header__dropdown-list--item']} onClick={toggleDropdown}>
               <Link
-                className={styles['header__account-user--icon']}
+                className={classNames('d-block w-100',styles['header__account-user--icon'])}
                 to={paths.MY_PROFILE}
               >My profile
               </Link>
             </li>
             <li className={styles['header__dropdown-list--item']} onClick={toggleDropdown}>
               <Link
-                className={styles['header__account-user--icon']}
+                className={classNames('d-block w-100',styles['header__account-user--icon'])}
                 to={paths.CHANGE_PASSWORD}
               >Change password
               </Link>
             </li>
             <li className={styles['header__dropdown-list--item']}>
-              <a onClick={() => { loggingOut(); }}>Log Out</a>
+              <a className={classNames('d-block w-100',styles['header__account-user--icon'])} onClick={() => { loggingOut(); }}>Log Out</a>
             </li>
           </ul>
         </div>
