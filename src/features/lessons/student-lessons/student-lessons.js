@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
-import { currentUserSelector,fetchLessonsByStudentId, lessonsSelector } from '@/models/index.js';
+import { fetchLessonsByStudentId, studentLessonsSelector} from '@/models/index.js';
 import { Search, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
 import classNames from 'classnames';
@@ -17,18 +17,21 @@ export const StudentLessons = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
-  const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-  const getLessons = useActions(fetchLessonsByStudentId);
+  const { data, isLoading } = useSelector(studentLessonsSelector, shallowEqual);
+  const fetchStudentLessons = useActions(fetchLessonsByStudentId);
 
   const lessonsPerPage = 10;
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
+  const { id } = useParams();
+
+
 
   useEffect(() => {
-    getLessons();
-  }, [getLessons]);
+    fetchStudentLessons(id);
+  }, [fetchStudentLessons, id]);
 
+  console.log();
 
   const transformDateTime = (dateTime) => {
     const arr = dateTime.toString().split('T');
@@ -51,6 +54,8 @@ export const StudentLessons = () => {
     );
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [data]);
+
+
 
   useEffect(() => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
@@ -120,6 +125,7 @@ export const StudentLessons = () => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
   const getLessonsList = () => {
+    console.log(visibleLessonsList);
     const lessonsList = visibleLessonsList.map((lesson) => (
         <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)} className={styles['table-row']}>
           <td className="text-center">{lesson.index + 1}</td>
@@ -128,6 +134,8 @@ export const StudentLessons = () => {
           <td>{lesson.lessonTime}</td>
         </tr>
     ));
+
+
 
     if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
