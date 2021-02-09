@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+import classNames from 'classnames';
 import styles from './modal-window.scss';
 
 export const ModalWindow = ({
@@ -14,9 +15,10 @@ export const ModalWindow = ({
   cancelButtonText,
   submitButtonText,
   useRedButton,
+  marginLeft,
 }) => (
   <Modal
-    className={styles.wrapper}
+    className={`${marginLeft ? classNames(styles.wrapper, 'ml-4') : styles.wrapper}`}
     show={toShow}
     onHide={onClose}
     onExited={onAfterClose}
@@ -48,6 +50,7 @@ ModalWindow.propTypes = {
   cancelButtonText: PropTypes.string,
   submitButtonText: PropTypes.string,
   useRedButton: PropTypes.bool,
+  marginLeft: PropTypes.bool,
 };
 
 ModalWindow.defaultProps = {
@@ -56,4 +59,5 @@ ModalWindow.defaultProps = {
   submitButtonText: 'Confirm',
   useRedButton: false,
   onAfterClose: () => false,
+  marginLeft: false,
 };
