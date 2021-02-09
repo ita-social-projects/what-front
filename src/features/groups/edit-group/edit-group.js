@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { number, shape } from 'prop-types';
 import { Formik, Field, Form } from 'formik';
 import { useSelector, shallowEqual } from 'react-redux';
@@ -57,6 +57,17 @@ export const EditGroup = ({
   const [mentorInputError, setMentorInputError] = useState('');
   const [groupStudents, setGroupStudents] = useState([]);
   const [studentInputError, setStudentInputError] = useState('');
+
+  const prevGroupMentors = usePrevious(groupMentors);
+  const prevGroupStudents = usePrevious(groupStudents);
+
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
 
   useEffect(() => {
     if (!isEditing && isEdited && !editingError) {
@@ -142,7 +153,7 @@ export const EditGroup = ({
 
   return (
     <div className="w-100">
-      <div className="row justify-content-center">
+      <div className="justify-content-center">
         <div className="w-100 card shadow p-4">
           <WithLoading
             isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded
@@ -257,6 +268,7 @@ export const EditGroup = ({
                         <Button
                           variant="info"
                           onClick={() => addMentor(values.mentor, () => setFieldValue('mentor', ''))}
+                          disabled={!dirty}
                         >
                           +
                         </Button>
@@ -312,6 +324,7 @@ export const EditGroup = ({
                         <Button
                           variant="info"
                           onClick={() => addStudent(values.student, () => setFieldValue('student', ''))}
+                          disabled={!dirty}
                         >
                           +
                         </Button>
@@ -344,10 +357,10 @@ export const EditGroup = ({
                     </div>
                   </div>
                   <div className="row justify-content-around mt-4">
-                    <Button type="reset" variant="secondary" className="btn btn-secondary w-25" disabled={!dirty || isEditing} onClick={handleReset}>
+                    <Button type="reset" variant="secondary" className={classNames('w-25', styles['clear-button'])} disabled={ (!dirty &&  prevGroupMentors !== groupMentors && prevGroupStudents !== groupStudents) || isEditing} onClick={handleReset}>
                       Clear
                     </Button>
-                    <Button type="submit" className="btn btn-secondary w-25" disabled={!isValid || !dirty || isEditing}>
+                    <Button type="submit" className="btn btn-secondary w-25" disabled={!isValid || (!dirty &&  prevGroupMentors !== groupMentors && prevGroupStudents !== groupStudents) || isEditing}>
                       Confirm
                     </Button>
                   </div>

@@ -31,22 +31,46 @@ export const ListOfSecretaries = () => {
 
   const [visibleSecretaries, setVisibleSecretaries] = useState([]);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
-
   const {
     data: activeSecretaries,
     isLoading: areActiveSecretariesLoading,
     error: activeSecretariesError,
   } = useSelector(activeSecretariesSelector, shallowEqual);
+
   const {
     data: allSecretaries,
     isLoading: areAllSecretariesLoading,
     error: allSecretariesError,
   } = useSelector(secretariesSelector, shallowEqual);
+
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  const [loadActiveSecretaries, loadAllSecretaries, dispatchAddAlert] = useActions(
-    [fetchActiveSecretaries, fetchSecretaries, addAlert],
-  );
+  const [
+    loadActiveSecretaries,
+    loadAllSecretaries,
+    dispatchAddAlert,
+  ] = useActions([fetchActiveSecretaries, fetchSecretaries, addAlert]);
+
+  const history = useHistory();
+
+  const [secretaries, setSecretaries] = useState([]);
+  const [visibleSecretaries, setVisibleSecretaries] = useState([]);
+
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  ];
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [secretariesPerPage] = useState(10);
 
   const indexOfLastSecretary = currentPage * secretariesPerPage;
   const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
@@ -57,71 +81,77 @@ export const ListOfSecretaries = () => {
     return allSecretaries.filter(({ id }) => !activeSecretariesIds.includes(id));
   };
 
-  const searchSecretaries = (secretaries) => secretaries.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
-    .toLowerCase().includes(search.toLowerCase()));
+  const searchSecretaries = (serchedSecretaries, value) => serchedSecretaries.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
+    .toLowerCase().includes(value.toLowerCase()));
+
+  const getSortedByParam = (data, activeCategory) => {
+    const { sortingParam, sortedByAscending } = activeCategory;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    return [...data].sort((prevItem, currentItem) => {
+      if (prevItem[sortingParam] > currentItem[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+  };
+
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
 
   useEffect(() => {
     loadActiveSecretaries();
   }, [loadActiveSecretaries]);
 
   useEffect(() => {
+    if (isShowDisabled && allSecretaries.length && !areAllSecretariesLoading) {
+      const disabledSecretaries = getDisabledSecretaries();
+
+      setSecretaries(disabledSecretaries.map((secretary, index) => ({ index, ...secretary })));
+    }
+    if (!isShowDisabled && activeSecretaries.length && !areActiveSecretariesLoading) {
+      setSecretaries(activeSecretaries.map((secretary, index) => ({ index, ...secretary })));
+    }
+    setSortingCategories(INITIAL_CATEGORIES);
+    setVisibleSecretaries(secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary));
+  }, [activeSecretaries, areActiveSecretariesLoading, allSecretaries, areAllSecretariesLoading, isShowDisabled]);
+
+  useEffect(() => {
+    setVisibleSecretaries(secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary));
+  }, [currentPage, secretaries]);
+
+  useEffect(() => {
     if (activeSecretariesError || allSecretariesError) {
-      dispatchAddAlert('Secretaries loading is failed');
+      dispatchAddAlert(allSecretariesError || activeSecretariesError);
     }
   }, [activeSecretariesError, allSecretariesError, dispatchAddAlert]);
 
   useEffect(() => {
     if (isShowDisabled) {
       const disabledSecretaries = getDisabledSecretaries();
+      const searchedSecretaries = searchSecretaries(disabledSecretaries, searchValue);
 
-      setSearchResults(disabledSecretaries.map((secretary, index) => ({ index, ...secretary })));
-    }
-    if (!isShowDisabled && activeSecretaries.length && !areActiveSecretariesLoading) {
-      setSearchResults(activeSecretaries.map((secretary, index) => ({ index, ...secretary })));
-    }
-
-    setVisibleSecretaries(searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary));
-  }, [activeSecretaries, areActiveSecretariesLoading, allSecretaries, areAllSecretariesLoading,
-    isShowDisabled, indexOfFirstSecretary, indexOfLastSecretary]);
-
-  useEffect(() => {
-    setVisibleSecretaries(searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary));
-  }, [currentPage, searchResults, indexOfFirstSecretary, indexOfLastSecretary]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-    if (isShowDisabled) {
-      const disabledSecretaries = getDisabledSecretaries();
-      const searchedSecretaries = searchSecretaries(disabledSecretaries);
-
-      setSearchResults(searchedSecretaries.map((secretary, index) => ({ index, ...secretary })));
+      setSecretaries(searchedSecretaries.map((secretary, index) => ({ index, ...secretary })));
     } else {
-      const searchedSecretaries = searchSecretaries(activeSecretaries);
+      const searchedSecretaries = searchSecretaries(activeSecretaries, searchValue);
 
-      setSearchResults(searchedSecretaries.map((secretary, index) => ({ index, ...secretary })));
+      setSecretaries(searchedSecretaries.map((secretary, index) => ({ index, ...secretary })));
     }
-  }, [search, isShowDisabled]);
+    setCurrentPage(1);
+  }, [searchValue, isShowDisabled]);
 
-  const handleSortByParam = (event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+  const handleSortByParam = useCallback((event) => {
+    const categoryParams = event.target.dataset;
+    const sortedSecretaries = getSortedByParam(secretaries, categoryParams);
 
-    const sortedSecretary = [...visibleSecretaries].sort((prevSecretary, currentSecretary) => {
-      if (prevSecretary[sortingParam] > currentSecretary[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
-
-    setVisibleSecretaries(sortedSecretary);
-  };
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setSecretaries(sortedSecretaries);
+    setVisibleSecretaries(secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary));
+  }, [sortingCategories, secretaries]);
 
   const resetSortingCategory = useCallback(() => {
     setSortingCategories(sortingCategories.map((category) => {
@@ -132,19 +162,18 @@ export const ListOfSecretaries = () => {
     }));
   }, [sortingCategories]);
 
+  const handleSearch = (value) => {
+    setSearchValue(value);
+    resetSortingCategory();
+  };
+
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
-    resetSortingCategory();
     if (event.target.checked) {
       loadAllSecretaries();
     } else {
       loadActiveSecretaries();
     }
-  };
-
-  const handleSearch = (value) => {
-    setSearch(value);
-    resetSortingCategory();
   };
 
   const handleAddSecretary = useCallback(() => {
@@ -164,27 +193,29 @@ export const ListOfSecretaries = () => {
     if (currentPage !== pageNumber) {
       setCurrentPage(pageNumber);
     }
-    resetSortingCategory();
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(searchResults?.length / secretariesPerPage);
+    const totalPages = Math.ceil(secretaries?.length / secretariesPerPage);
     if (currentPage !== totalPages) {
       setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-      resetSortingCategory();
     }
   };
 
   const prevPage = (pageNumber) => {
     if (currentPage - 1 !== 0) {
       setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-      resetSortingCategory();
     }
   };
 
   const getSecretaries = () => {
-    const secretaries = visibleSecretaries.map(({ id, firstName, lastName, email, index }) => (
-      <tr key={id} onClick={() => handleSecretariesDetails(id)} className={styles['table-row']} data-secretary-id={id}>
+    const secretariesRows = visibleSecretaries.map(({ id, firstName, lastName, email, index }) => (
+      <tr
+        key={id}
+        onClick={() => handleSecretariesDetails(id)}
+        className={styles['table-row']}
+        data-secretary-id={id}
+      >
         <td className="text-center">{index + 1}</td>
         <td>{firstName}</td>
         <td>{lastName}</td>
@@ -201,14 +232,15 @@ export const ListOfSecretaries = () => {
             )}
       </tr>
     ));
-    if (!secretaries.length && search) {
-      return (
-        <tr>
-          <td colSpan="5" className="text-center">Secretary is not found</td>
-        </tr>
-      );
+
+    if (allSecretariesError || activeSecretariesError) {
+      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
     }
-    return secretaries;
+
+    if (!visibleSecretaries.length && searchValue) {
+      return <tr><td colSpan="5" className="text-center">Secretary is not found</td></tr>;
+    }
+    return secretariesRows;
   };
 
   const changeCountVisibleItems = (newNumber) => {
@@ -275,7 +307,7 @@ export const ListOfSecretaries = () => {
               <label
                 className={classNames('custom-control-label', styles['custom-control-label'])}
                 htmlFor="switchDisabled"
-              >Disabled Secretaries
+              >Show disabled Secretaries
               </label>
             </div>
             <div className="col-2 d-flex">
