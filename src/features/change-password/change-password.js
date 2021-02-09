@@ -168,6 +168,7 @@ export const ChangePassword = () => {
               toShow={toShowModal}
               onSubmit={handleConfirm}
               onClose={handleCloseModal}
+              marginLeft
             >Are you sure you want to change password?
             </ModalWindow>
           </WithLoading>

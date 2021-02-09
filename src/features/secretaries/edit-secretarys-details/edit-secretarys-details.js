@@ -197,6 +197,7 @@ export const EditSecretarysDetails = ({ id }) => {
                 onClose={handleCloseModal}
                 submitButtonText="Delete"
                 useRedButton
+                marginLeft
               >
                 Are you sure you want to fire this secretary?
               </ModalWindow>

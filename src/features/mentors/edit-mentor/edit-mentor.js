@@ -394,7 +394,7 @@ export const EditMentor = ({ id }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button
-                            className={classNames('w-100', styles['disable-button'])}
+                          className={classNames('w-100', styles['disable-button'])}
                           onClick={handleShowModal}
                           disabled={!isValid || dirty || editedIsLoading || deletedIsLoading}
                         >Disable
@@ -428,6 +428,7 @@ export const EditMentor = ({ id }) => {
                 onClose={handleCloseModal}
                 submitButtonText="Delete"
                 useRedButton
+                marginLeft
               >Are you sure you want to fire this mentor?
               </ModalWindow>
             </WithLoading>

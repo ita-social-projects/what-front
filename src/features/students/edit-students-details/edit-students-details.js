@@ -245,7 +245,7 @@ export const EditStudentsDetails = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button  onClick={handleGroupAdd}>+</Button>
+                            <Button onClick={handleGroupAdd}>+</Button>
                           </div>
                         </div>
                         { error ? <div className={styles.error}>{error}</div> : null}
@@ -315,6 +315,7 @@ export const EditStudentsDetails = ({ id }) => {
                 onClose={handleCloseModal}
                 submitButtonText="Delete"
                 useRedButton
+                marginLeft
               >Are you sure you want to exclude this student?
               </ModalWindow>
             </WithLoading>
