@@ -51,10 +51,7 @@ export const ListOfSecretaries = () => {
     dispatchAddAlert,
   ] = useActions([fetchActiveSecretaries, fetchSecretaries, addAlert]);
 
-  const history = useHistory();
-
   const [secretaries, setSecretaries] = useState([]);
-  const [visibleSecretaries, setVisibleSecretaries] = useState([]);
 
   const INITIAL_CATEGORIES = [
     { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
@@ -63,15 +60,7 @@ export const ListOfSecretaries = () => {
     { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
-  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
-
   const [searchValue, setSearchValue] = useState('');
-
-  const [isShowDisabled, setIsShowDisabled] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage] = useState(10);
-
   const indexOfLastSecretary = currentPage * secretariesPerPage;
   const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
 
@@ -246,12 +235,12 @@ export const ListOfSecretaries = () => {
   const changeCountVisibleItems = (newNumber) => {
     const finish = currentPage * newNumber;
     const start = finish - newNumber;
-    setVisibleSecretaries(searchResults.slice(start, finish));
+    setVisibleSecretaries(secretaries.slice(start, finish));
     setSecretariesPerPage(newNumber);
   };
 
   const paginationComponent = () => {
-    if (allSecretaries.length < secretariesPerPage) {
+    if (secretaries.length < secretariesPerPage) {
       return (
         <Pagination
           itemsPerPage={secretariesPerPage}
@@ -265,7 +254,7 @@ export const ListOfSecretaries = () => {
     return (
       <Pagination
         itemsPerPage={secretariesPerPage}
-        totalItems={allSecretaries.length}
+        totalItems={secretaries.length}
         paginate={paginate}
         prevPage={prevPage}
         nextPage={nextPage}
@@ -278,7 +267,7 @@ export const ListOfSecretaries = () => {
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Secretaries</h2>
-        <div className="col-2 text-right">{visibleSecretaries.length} of {searchResults.length} secretaries</div>
+        <div className="col-2 text-right">{visibleSecretaries.length} of {secretaries.length} secretaries</div>
         <div className="col-4 d-flex align-items-center justify-content-end">
           {!areActiveSecretariesLoading
           && !areAllSecretariesLoading
