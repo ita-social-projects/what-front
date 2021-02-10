@@ -59,7 +59,7 @@ export const DownloadThemes = () => {
                             variant="info"
                             disabled={!dirty || isLoading || errors.name }
                           >
-                            Save
+                            Send
                   </Button>
                 </div>
               </Form>
