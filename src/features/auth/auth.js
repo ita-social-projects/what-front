@@ -8,9 +8,9 @@ import { login, currentUserSelector } from '@/models/index.js';
 import { Button, WithLoading } from '@/components/index.js';
 
 import { Formik, Field, Form } from 'formik';
-import classNames from 'classnames';
 import { authValidation } from '@features/validation/validation-helpers.js';
 
+import classNames from 'classnames';
 import styles from './auth.scss';
 
 export const Auth = () => {
@@ -44,8 +44,8 @@ export const Auth = () => {
     <div className={styles.wrapper}>
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-6 col-md-6 col-sm-12">
-            <div className={styles.form}>
+          <div className="col-xl-6 col-md-8 col-sm-10 col-12">
+            <div className={classNames(styles.form, 'card, shadow')}>
               <Formik
                 initialValues={{
                   email: '',
@@ -58,7 +58,7 @@ export const Auth = () => {
                   errors,
                   touched,
                 }) => (
-                  <Form className="p-3">
+                  <Form className="p-3" noValidate>
                     <h3 className="text-center">Sign in to WHAT</h3>
                     <hr />
                     <div className="form-group">
@@ -85,13 +85,18 @@ export const Auth = () => {
                       <p className="text-danger">{touched.password && errors.password}</p>
                     </div>
                     <div className="d-flex justify-content-center">
-                      <WithLoading isLoading={isLoading}>
-                        <Button type="submit" className="btn btn-block btn-warning">Sign in</Button>
+                      <WithLoading isLoading={isLoading} variant="info" className="d-block mx-auto">
+                        <Button type="submit" className={styles['form-button']}>Sign in</Button>
                       </WithLoading>
                     </div>
-                    {requestError && <p className="text-danger text-center mt-2">Invalid credentials</p>}
-                    <div className="text-center mt-3">
-                      <p>Don&apos;t have an account? <Link to={paths.REGISTRATION}>Registration</Link></p>
+                    {requestError && <p className="text-center text-danger mt-2">{requestError}</p>}
+                    <div className="d-flex justify-content-between mt-3">
+                      <div className="text-center">
+                        <p><Link to={paths.FORGOT_PASSWORD} className={styles['form-link']}>Fogot Password?</Link></p>
+                      </div>
+                      <div className="text-right">
+                        <p>Don&apos;t have an account? <Link to={paths.REGISTRATION} className={styles['form-link']}>Registration</Link></p>
+                      </div>
                     </div>
                   </Form>
                 )}

@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions } from '@shared';
-import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector,
-  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent } from '@models';
-
+import classNames from 'classnames';
 import { Formik, Form, Field } from 'formik';
-import { editStudentValidation } from '@features/validation/validation-helpers.js';
 
-import { WithLoading } from '@components';
+import { WithLoading } from '@/components';
+import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector,
+  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent } from '@/models';
 import { Button } from '@components/index.js';
 import Icon from '@/icon.js';
-
-import classNames from 'classnames';
-import { paths } from '@shared/routes/paths.js';
-import { ModalWindow } from '@features/modal-window/index.js';
+import { paths, useActions } from '@/shared';
+import { addAlert, ModalWindow } from '@/features';
+import { editStudentValidation } from '@features/validation/validation-helpers';
 import styles from './edit-students-details.scss';
 
 export const EditStudentsDetails = ({ id }) => {
@@ -51,7 +48,11 @@ export const EditStudentsDetails = ({ id }) => {
     error: isRemovedError,
   } = useSelector(removeStudentSelector, shallowEqual);
 
-  const [updateStudent, deleteStudent] = useActions([editStudent, removeStudent]);
+  const [
+    updateStudent,
+    deleteStudent,
+    dispatchAddAlert,
+  ] = useActions([editStudent, removeStudent, addAlert]);
 
   const [groups, setGroups] = useState(studentGroups || 0);
   const [groupInput, setInputValue] = useState('Type name of group');
@@ -62,13 +63,27 @@ export const EditStudentsDetails = ({ id }) => {
     if (studentError && studentGroupsError) {
       history.push(paths.NOT_FOUND);
     }
-  }, [studentError, studentGroupsError]);
+  }, [history, studentError, studentGroupsError]);
 
   useEffect(() => {
-    if (!isEditedError && isEditedLoaded || !isRemovedError && isRemovedLoaded) {
+    if (!isEditedError && isEditedLoaded) {
       history.push(paths.STUDENTS);
+      dispatchAddAlert('Student information has been edited successfully', 'success');
     }
-  }, [isEditedError, isEditedLoaded, isRemovedError, isRemovedLoaded]);
+    if (isEditedError && !isEditedLoaded) {
+      dispatchAddAlert(isEditedError);
+    }
+  }, [dispatchAddAlert, history, isEditedError, isEditedLoaded]);
+
+  useEffect(() => {
+    if (!isRemovedError && isRemovedLoaded) {
+      history.push(paths.STUDENTS);
+      dispatchAddAlert('Student has been excluded', 'success');
+    }
+    if (isRemovedError && !isRemovedLoaded) {
+      dispatchAddAlert(isRemovedError);
+    }
+  }, [dispatchAddAlert, history, isRemovedError, isRemovedLoaded]);
 
   useEffect(() => {
     setGroups(studentGroups);
@@ -230,14 +245,14 @@ export const EditStudentsDetails = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
+                            <Button  onClick={handleGroupAdd}>+</Button>
                           </div>
                         </div>
                         { error ? <div className={styles.error}>{error}</div> : null}
                       </div>
                     </div>
                     <WithLoading
-                      isLoading={areStudentGroupsLoading}
+                      isLoading={areStudentGroupsLoading || !areStudentGroupsLoaded}
                       className={styles['loader-centered']}
                     >
                       <div className="row m-0 pt-3">
@@ -252,7 +267,7 @@ export const EditStudentsDetails = ({ id }) => {
                                 data-groupname={name}
                               >{name}
                                 <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-dark"
                                   type="button"
                                   onClick={handleGroupDelete}
                                 >X
@@ -266,8 +281,7 @@ export const EditStudentsDetails = ({ id }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button
-                          className="w-100"
-                          variant="danger"
+                          className={classNames(styles['exclude-btn'], 'w-100')}
                           onClick={handleShowModal}
                           disabled={!isValid || dirty || isEditedLoading || isRemovedLoading}
                         >Exclude
@@ -284,7 +298,7 @@ export const EditStudentsDetails = ({ id }) => {
                       </div>
                       <div className="col-md-3 col-4">
                         <button
-                          className={classNames('w-100 btn btn-success', styles.button)}
+                          className={classNames('w-100 btn btn-info', styles.button)}
                           type="submit"
                           disabled={!isValid || !dirty || isEditedLoading || isRemovedLoading
                             || errors.firstName || errors.lastName || errors.email}
@@ -299,6 +313,8 @@ export const EditStudentsDetails = ({ id }) => {
                 toShow={toShowModal}
                 onSubmit={handleExclude}
                 onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
               >Are you sure you want to exclude this student?
               </ModalWindow>
             </WithLoading>

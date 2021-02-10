@@ -15,8 +15,8 @@ function* loadStudentGroupsAsync() {
     const groups = yield call(ApiService.load, '/student_groups');
 
     yield put({ type: actionTypes.LOADING_STUDENT_GROUPS_SUCCEED, payload: groups });
-  } catch (e) {
-    yield put({ type: actionTypes.LOADING_STUDENT_GROUPS_FAILED });
+  } catch (error) {
+    yield put({ type: actionTypes.LOADING_STUDENT_GROUPS_FAILED, payload: { error } });
   }
 }
 
@@ -36,8 +36,8 @@ function* loadStudentGroupByIdAsync({ payload }) {
     const group = yield call(ApiService.load, `/student_groups/${payload.id}`);
 
     yield put({ type: actionTypes.LOADING_BY_ID_STUDENT_GROUP_SUCCEED, payload: group });
-  } catch (e) {
-    yield put({ type: actionTypes.LOADING_BY_ID_STUDENT_GROUP_FAILED });
+  } catch (error) {
+    yield put({ type: actionTypes.LOADING_BY_ID_STUDENT_GROUP_FAILED, payload: { error } });
   }
 }
 
@@ -58,8 +58,9 @@ function* editStudentGroupsAsync({ payload }) {
 
     yield put({ type: actionTypes.EDITING_STUDENT_GROUP_SUCCEED, payload: group });
     yield put({ type: actionTypes.EDIT_CLEAR_LOADED });
-  } catch (e) {
-    yield put({ type: actionTypes.EDITING_STUDENT_GROUP_FAILED });
+  } catch (error) {
+    yield put({ type: actionTypes.EDITING_STUDENT_GROUP_FAILED, payload: { error } });
+    yield put({ type: actionTypes.EDIT_CLEAR_ERROR });
   }
 }
 
@@ -68,7 +69,7 @@ function* watchEditingStudentGroups() {
 }
 
 export const addStudentGroup = (group) => ({
-  type: actionTypes.EDIT_STUDENT_GROUP,
+  type: actionTypes.ADD_STUDENT_GROUP,
   payload: group,
 });
 
@@ -76,11 +77,13 @@ function* addStudentGroupAsync({ payload }) {
   try {
     yield put({ type: actionTypes.ADDING_STUDENT_GROUP_STARTED });
 
-    const group = yield call(ApiService.create, `/student_groups/${payload.id}`, payload);
+    const group = yield call(ApiService.create, '/student_groups/', payload);
 
     yield put({ type: actionTypes.ADDING_STUDENT_GROUP_SUCCEED, payload: group });
-  } catch (e) {
-    yield put({ type: actionTypes.ADDING_STUDENT_GROUP_FAILED });
+    yield put({ type: actionTypes.ADD_CLEAR_LOADED });
+  } catch (error) {
+    yield put({ type: actionTypes.ADDING_STUDENT_GROUP_FAILED, payload: { error } });
+    yield put({ type: actionTypes.ADD_CLEAR_ERROR });
   }
 }
 

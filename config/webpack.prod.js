@@ -1,20 +1,18 @@
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { merge } = require('webpack-merge');
 const os = require('os');
+const glob = require('glob');
 const paths = require('./paths.js');
 const common = require('./webpack.common.js');
-
-const PlatformCores = os.cpus().length;
-const JSCompilationThreads = os.cpus().length - 1;
 
 // eslint-disable-next-line no-console
 console.table({
   'Environment mode': process.env.NODE_ENV,
-  'Platform cores': PlatformCores,
-  'JS|X Compilation Threads': JSCompilationThreads,
+  'Webpack Threads': os.cpus().length,
 });
 
 module.exports = merge(common, {
@@ -30,6 +28,12 @@ module.exports = merge(common, {
     new MiniCssExtractPlugin({
       filename: 'styles/[name].[contenthash].css',
       chunkFilename: '[id].css',
+    }),
+    new PurgecssPlugin({
+      paths: [
+        paths.src.html,
+        ...glob.sync(`${paths.src._}/**/*`, { nodir: true }),
+      ],
     }),
     // new BundleAnalyzerPlugin(),
   ],
@@ -59,7 +63,7 @@ module.exports = merge(common, {
           {
             loader: 'thread-loader',
             options: {
-              workers: os.cpus().length - 1,
+              workers: os.cpus().length,
             },
           },
           'babel-loader',
@@ -87,9 +91,7 @@ module.exports = merge(common, {
             options: {
               postcssOptions: {
                 plugins: [
-                  [
-                    'autoprefixer',
-                  ],
+                  ['autoprefixer'],
                 ],
                 sourceMap: false,
               },
@@ -115,9 +117,7 @@ module.exports = merge(common, {
             options: {
               postcssOptions: {
                 plugins: [
-                  [
-                    'autoprefixer',
-                  ],
+                  ['autoprefixer'],
                 ],
                 sourceMap: false,
               },
@@ -135,7 +135,6 @@ module.exports = merge(common, {
         test: /\.ttf$/,
         type: 'asset/inline',
       },
-
     ],
   },
 });

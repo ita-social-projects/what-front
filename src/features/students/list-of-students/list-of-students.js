@@ -1,117 +1,348 @@
-import React, { useState, useEffect } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector, shallowEqual } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { paths, useActions } from '@/shared/index.js';
-import { loadActiveStudents, activeStudentsSelector, currentUserSelector } from '@/models/index.js';
-import { Card, Search, Button, WithLoading, Pagination } from '@/components/index.js';
-import Icon from '@/icon.js';
+import classNames from 'classnames';
+
+import { paths, useActions } from '@/shared';
+import {
+  loadStudents, loadActiveStudents,
+  studentsSelector, activeStudentsSelector, currentUserSelector,
+} from '@/models';
+import { WithLoading, Pagination, Search, Button } from '@/components';
+import { addAlert } from '@/features';
+import Icon from '@/icon';
+import styles from './list-of-students.scss';
 
 export const ListOfStudents = () => {
-  const [fetchStudents] = useActions([loadActiveStudents]);
+  const {
+    data: activeStudents,
+    isLoading: areActiveStudentsLoading,
+    error: activeStudentsError,
+  } = useSelector(activeStudentsSelector, shallowEqual);
 
-  const [filteredStudentsList, setFilteredStudentsList] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [studentsPerPage] = useState(9);
+  const {
+    data: allStudents,
+    isLoading: areAllStudentsLoading,
+    error: allStudentsError,
+  } = useSelector(studentsSelector, shallowEqual);
 
-  const { data, isLoading } = useSelector(activeStudentsSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+
+  const [
+    dispatchLoadStudents,
+    dispatchLoadActiveStudents,
+    dispatchAddAlert,
+  ] = useActions([loadStudents, loadActiveStudents, addAlert]);
 
   const history = useHistory();
 
-  useEffect(() => {
-    fetchStudents();
-  }, [fetchStudents]);
+  const [students, setStudents] = useState([]);
+  const [visibleStudents, setVisibleStudents] = useState([]);
+
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  ];
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchFieldValue, setSearchFieldValue] = useState('');
+
+  const [studentsPerPage, setStudentsPerPage] = useState(10);
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+
+  const getDisabledStudents = () => {
+    const activeStudentIds = activeStudents.map(({ id }) => id);
+
+    return allStudents.filter(({ id }) => !activeStudentIds.includes(id));
+  };
+
+  const searchStudents = (searchedStudents, value) => searchedStudents.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
+    .toLowerCase().includes(value.toLowerCase()));
+
+  const getSortedByParam = (data, activeCategory) => {
+    const { sortingParam, sortedByAscending } = activeCategory;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    return [...data].sort((prevItem, currentItem) => {
+      if (prevItem[sortingParam] > currentItem[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+  };
+
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
 
   useEffect(() => {
-    setFilteredStudentsList(data);
-  }, [data]);
+    dispatchLoadActiveStudents();
+  }, [dispatchLoadActiveStudents]);
 
-  const handleSearch = (inputValue) => {
-    setSearchValue(inputValue);
-    setFilteredStudentsList(data.filter(({ firstName, lastName }) => {
-      const name = `${firstName} ${lastName}`;
+  useEffect(() => {
+    if (isShowDisabled && allStudents.length && !areAllStudentsLoading) {
+      const disabledStudents = getDisabledStudents();
 
-      return name.toLowerCase().includes(inputValue.toLowerCase());
-    }));
+      setStudents(disabledStudents.map((student, index) => ({ index, ...student })));
+    }
+    if (!isShowDisabled && activeStudents.length && !areActiveStudentsLoading) {
+      setStudents(activeStudents.map((student, index) => ({ index, ...student })));
+    }
+    setSortingCategories(INITIAL_CATEGORIES);
+    setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
+  },
+  [activeStudents, areActiveStudentsLoading, allStudents, areAllStudentsLoading, isShowDisabled]);
+
+  useEffect(() => {
+    setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
+  }, [currentPage, students]);
+
+  useEffect(() => {
+    if (allStudentsError || activeStudentsError) {
+      dispatchAddAlert(allStudentsError || activeStudentsError);
+    }
+  }, [activeStudentsError, allStudentsError, dispatchAddAlert]);
+
+  useEffect(() => {
+    if (isShowDisabled) {
+      const disabledStudents = getDisabledStudents();
+      const searchedStudents = searchStudents(disabledStudents, searchFieldValue);
+
+      setStudents(searchedStudents.map((student, index) => ({ index, ...student })));
+    } else {
+      const searchedStudents = searchStudents(activeStudents, searchFieldValue);
+
+      setStudents(searchedStudents.map((student, index) => ({ index, ...student })));
+    }
     setCurrentPage(1);
+  }, [searchFieldValue, isShowDisabled]);
+
+  const handleSortByParam = useCallback((event) => {
+    const categoryParams = event.target.dataset;
+    const sortedStudents = getSortedByParam(students, categoryParams);
+
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setStudents(sortedStudents);
+    setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
+  }, [sortingCategories, students]);
+
+  const handleShowDisabled = (event) => {
+    setIsShowDisabled(!isShowDisabled);
+
+    if (event.target.checked) {
+      dispatchLoadStudents();
+    } else {
+      dispatchLoadActiveStudents();
+    }
   };
 
-  const addStudent = () => {
-    history.push(paths.UNASSIGNED_USERS);
-  };
-
-  const studentDetails = (id) => {
-    history.push(`${paths.STUDENTS_DETAILS}/${id}`);
-  };
-
-  const studentEditing = (id) => {
+  const handleEdit = (event, id) => {
+    event.stopPropagation();
     history.push(`${paths.STUDENT_EDIT}/${id}`);
   };
 
-  const getStudents = () => {
-    const indexOfLastStudent = currentPage * studentsPerPage;
-    const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const handleDetails = (id) => {
+    history.push(`${paths.STUDENTS_DETAILS}/${id}`);
+  };
 
-    const students = filteredStudentsList.slice(indexOfFirstStudent, indexOfLastStudent)
-      .map(({ id, firstName, lastName }) => (
-        <Card
-          key={id}
-          id={id}
-          buttonName="Details"
-          iconName="Edit"
-          onEdit={() => studentEditing(id)}
-          onDetails={() => studentDetails(id)}
-        >
-          <div className="w-75">
-            <p className="mb-2  pr-2 font-weight-bolder">{firstName}</p>
-            <p className="font-weight-bolder">{lastName}</p>
-          </div>
-        </Card>
-      ));
+  const handleSearch = (value) => {
+    setSearchFieldValue(value);
+  };
 
-    if (!students.length && searchValue) {
-      return <h4>Student is not found</h4>;
-    }
-    return students;
+  const handleAddStudent = () => {
+    history.push(paths.UNASSIGNED_USERS);
+  };
+
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleStudents(students.slice(start, finish));
+    setStudentsPerPage(newNumber);
   };
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if (currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const nextPage = (pageNumber) => {
+    const totalPages = Math.ceil(students?.length / studentsPerPage);
+
+    setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
+  };
+
+  const prevPage = (pageNumber) => {
+    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
+  };
+
+  const getStudentsRows = () => {
+    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
+      <tr
+        key={id}
+        onClick={() => handleDetails(id)}
+        data-student-id={id}
+        className={styles['table-row']}
+      >
+        <td className="text-center">{index + 1}</td>
+        <td>{firstName}</td>
+        <td>{lastName}</td>
+        <td>{email}</td>
+        <td
+          className="text-center"
+          onClick={(event) => handleEdit(event, id)}
+        >
+          <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
+        </td>
+      </tr>
+    ));
+
+    if (allStudentsError || activeStudentsError) {
+      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
+    }
+
+    if (!visibleStudents.length && searchFieldValue) {
+      return <tr><td colSpan="5" className="text-center">Student is not found</td></tr>;
+    }
+
+    return studentsRows;
+  };
+
+  const paginationComponent = () => {
+    if (students.length < studentsPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={studentsPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={studentsPerPage}
+        totalItems={students.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
   };
 
   return (
-    <div className="container" style={{minHeight: 750}}>
-      <div className="row">
-        <div className="col-md-4 offset-md-4 col-12 text-center">
-          <Search onSearch={handleSearch} placeholder="Student's name" />
-        </div>
-        {currentUser.role !== 2 && 
-          <div className="col-md-4 col-12 text-right">
-            <Button onClick={addStudent} variant="warning">
-              <Icon icon="Plus" className="icon" />
-              <span>Add a student</span>
-            </Button>
-          </div>
+    <div className="container">
+      <div className="row justify-content-between align-items-center mb-3">
+        <h2 className="col-6">Students</h2>
+        <div className="col-2 text-right">
+          {
+           !areActiveStudentsLoading && !areAllStudentsLoading
+          && `${visibleStudents.length} of ${students.length} students`
         }
+        </div>
+        <div className="col-4 d-flex align-items-center justify-content-end">
+          {!areActiveStudentsLoading && !areAllStudentsLoading
+          && (
+            paginationComponent()
+          )}
+        </div>
       </div>
-      <div>
-        <hr className="col-8" />
-        <div className="col-12 d-flex flex-row flex-wrap justify-content-center">
-          <WithLoading isLoading={isLoading}>
-            {
-              getStudents()
-            }
+      <div className="row">
+        <div className="col-12 card shadow p-3 mb-5 bg-white">
+          <div className="row align-items-center mt-2 mb-3">
+            <div className="col-2">
+              <div className="btn-group">
+                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
+                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+              </div>
+            </div>
+            <div className="col-3">
+              <Search
+                value={searchFieldValue}
+                onSearch={handleSearch}
+                placeholder="student's name"
+              />
+            </div>
+            <div className="col-3 custom-control custom-switch text-right">
+              <input
+                value={isShowDisabled}
+                type="checkbox"
+                className={classNames('custom-control-input', styles['custom-control-input'])}
+                id="show-disabled-check"
+                onChange={handleShowDisabled}
+              />
+              <label
+                className={classNames('custom-control-label', styles['custom-control-label'])}
+                htmlFor="show-disabled-check"
+              >
+                Show disabled students
+              </label>
+            </div>
+            <div className="col-2 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
+            </div>
+            <div className="col-2 text-right">
+              {[3, 4].includes(currentUser.role) && (
+                <Button onClick={handleAddStudent}><span>Add a student</span></Button>
+              )}
+            </div>
+          </div>
+          <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                    <th
+                      key={id}
+                      className={styles['table-head']}
+                    >
+                      <span
+                        onClick={handleSortByParam}
+                        data-sorting-param={name}
+                        data-sorted-by-ascending={Number(sortedByAscending)}
+                        className={classNames(styles.category, { [styles['category-sorted']]: !sortedByAscending })}
+                      >
+                        {tableHead}
+                      </span>
+                    </th>
+                  ))}
+                  <th className="text-center">Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getStudentsRows()}
+              </tbody>
+            </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
-        {filteredStudentsList.length > 9 && 
-          <Pagination 
-            itemsPerPage={studentsPerPage} 
-            totalItems={filteredStudentsList.length} 
-            paginate={paginate}
-          />
-        }
     </div>
   );
 };

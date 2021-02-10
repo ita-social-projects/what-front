@@ -1,38 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { Formik, Form, Field } from 'formik';
-import { Button, WithLoading } from '@/components/index.js';
-import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
-import {
-  secretariesSelector, updatedSecretarySelector, deletedSecretarySelector,
-  updateSecretary, deleteSecretary,
-} from '@models/index.js';
-import { editSecretaryValidation } from '@features/validation/validation-helpers.js';
 import { useHistory } from 'react-router-dom';
-import { useActions } from '@/shared';
-import { ModalWindow } from '@features/modal-window/index.js';
+import { number } from 'prop-types';
+
+import { paths, useActions } from '@/shared';
+import {
+  updatedSecretarySelector, deletedSecretarySelector,
+  updateSecretary, deleteSecretary, secretariesSelector,
+} from '@models/index.js';
+
+import { Button, WithLoading } from '@/components/index.js';
+import { addAlert, ModalWindow } from '@features';
+
+import { Formik, Form, Field } from 'formik';
+import { editSecretaryValidation } from '@features/validation/validation-helpers.js';
+
+import classNames from 'classnames';
 
 export const EditSecretarysDetails = ({ id }) => {
   const {
     data,
     isLoading: isSecretariesLoading,
-    loaded: isSecretariesLoaded,
+    isLoaded: isSecretariesLoaded,
+    error: secretaryError,
   } = useSelector(secretariesSelector, shallowEqual);
 
   const {
     isLoading: isUpdateLoading,
-    loaded: isUpdateLoaded,
+    isLoaded: isUpdateLoaded,
     error: secretaryUpdateError,
   } = useSelector(updatedSecretarySelector, shallowEqual);
 
   const {
     isLoading: isDeleteLoading,
-    loaded: isDeleteLoaded,
+    isLoaded: isDeleteLoaded,
     error: secretaryDeleteError,
   } = useSelector(deletedSecretarySelector, shallowEqual);
 
-  const [editeSecretary] = useActions([updateSecretary]);
+  const [editSecretary, dispatchAddAlert] = useActions([updateSecretary, addAlert]);
   const [fireSecretary] = useActions([deleteSecretary]);
 
   const secretary = data.find((user) => user.id === id);
@@ -44,25 +49,33 @@ export const EditSecretarysDetails = ({ id }) => {
   const handleCloseModal = () => setShowModal(false);
 
   useEffect(() => {
-    if (!secretary && isSecretariesLoaded) {
-      history.push('/404');
+    if (secretaryError) {
+      history.push(paths.NOT_FOUND);
     }
-  }, [secretary, isSecretariesLoaded, history]);
+  }, [secretaryError, history]);
 
   useEffect(() => {
     if (!secretaryUpdateError && isUpdateLoaded) {
-      history.push('/secretaries');
+      history.push(paths.SECRETARIES);
+      dispatchAddAlert('The secretary has been successfully edited', 'success');
     }
-  }, [secretaryUpdateError, isUpdateLoaded, history]);
+    if (secretaryUpdateError && !isUpdateLoaded) {
+      dispatchAddAlert(secretaryUpdateError);
+    }
+  }, [secretaryUpdateError, isUpdateLoaded, history, dispatchAddAlert]);
 
   useEffect(() => {
     if (!secretaryDeleteError && isDeleteLoaded) {
-      history.push('/secretaries');
+      history.push(paths.SECRETARIES);
+      dispatchAddAlert('The secretary has been fired', 'success');
     }
-  }, [secretaryDeleteError, isDeleteLoaded, history]);
+    if (secretaryDeleteError && !isDeleteLoaded) {
+      dispatchAddAlert(secretaryDeleteError);
+    }
+  }, [secretaryDeleteError, isDeleteLoaded, history, dispatchAddAlert]);
 
-  const onSubmit = (value) => {
-    editeSecretary(id, value);
+  const onSubmit = (values) => {
+    editSecretary(id, values);
   };
 
   const handleDelete = () => {
@@ -75,115 +88,119 @@ export const EditSecretarysDetails = ({ id }) => {
       <div className="row justify-content-center">
         <div className="col-md-12 col-sm-8 card shadow">
           <div className="px-2 py-4">
-          <h3>Edit Secretary&apos;s details</h3>
-          <hr />
-          <WithLoading isLoading={isSecretariesLoading && !isSecretariesLoaded} className="d-block mx-auto">
-            <Formik
-              initialValues={{
-                firstName: secretary?.firstName,
-                lastName: secretary?.lastName,
-                email: secretary?.email,
-              }}
-              validationSchema={editSecretaryValidation}
-              onSubmit={onSubmit}
-            >
-              {({
-                values, errors, touched, handleReset, isValid, dirty,
-              }) => (
-                <Form>
-                  <div className="container pb-3 px-0">
-                    <div className="row m-0 pt-3">
-                      <div className="col-md-4">
-                        <label htmlFor="firstName" className="font-weight-bold">First Name:</label>
+            <h3>Edit Secretary&apos;s details</h3>
+            <hr />
+            <WithLoading isLoading={isSecretariesLoading || !isSecretariesLoaded} className="d-block mx-auto">
+              <Formik
+                initialValues={{
+                  firstName: secretary?.firstName,
+                  lastName: secretary?.lastName,
+                  email: secretary?.email,
+                }}
+                validationSchema={editSecretaryValidation}
+                onSubmit={onSubmit}
+              >
+                {({
+                  values, errors, touched, isValid, dirty,
+                }) => (
+                  <Form>
+                    <div className="container pb-3 px-0">
+                      <div className="row m-0 pt-3">
+                        <div className="col-md-4">
+                          <label htmlFor="firstName" className="font-weight-bold">First Name:</label>
+                        </div>
+                        <div className="col-md-8">
+                          <Field
+                            type="text"
+                            className={classNames('form-control', { 'border-danger': errors.firstName })}
+                            name="firstName"
+                            id="firstName"
+                            placeholder="Name"
+                            value={values?.firstName}
+                          />
+                          {touched.firstName && errors.firstName && <div className="text-danger mt-3">{errors?.firstName}</div>}
+                        </div>
                       </div>
-                      <div className="col-md-8">
-                        <Field
-                          type="text"
-                          className={classNames('form-control', { 'border-danger': errors.firstName })}
-                          name="firstName"
-                          id="firstName"
-                          placeholder="Name"
-                          value={values?.firstName}
-                        />
-                        {touched.firstName && errors.firstName && <div className="text-danger mt-3">{errors?.firstName}</div>}
+                      <div className="row m-0 pt-3">
+                        <div className="col-md-4">
+                          <label htmlFor="lastName" className="font-weight-bold">Last Name:</label>
+                        </div>
+                        <div className="col-md-8">
+                          <Field
+                            type="text"
+                            className={classNames('form-control', { 'border-danger': errors.lastName })}
+                            name="lastName"
+                            id="lastName"
+                            placeholder="Lastname"
+                            value={values?.lastName}
+                          />
+                          {touched.lastName && errors.lastName && <div className="text-danger mt-3">{errors?.lastName}</div>}
+                        </div>
+                      </div>
+                      <div className="row m-0 pt-3">
+                        <div className="col-md-4">
+                          <label htmlFor="email" className="font-weight-bold">Email:</label>
+                        </div>
+                        <div className="col-md-8">
+                          <Field
+                            type="email"
+                            className={classNames('form-control', { 'border-danger': errors.email })}
+                            name="email"
+                            id="email"
+                            placeholder="Email"
+                            value={values?.email}
+                          />
+                          {touched.email && errors.email && <div className="text-danger mt-3">{errors?.email}</div>}
+                        </div>
+                      </div>
+                      <div className="row m-0 pt-3 px-2">
+                        <div className="col-md-3 col-4 px-1">
+                          <Button
+                            type="button"
+                            className="w-100"
+                            variant="dark"
+                            onClick={handleShowModal}
+                            disabled={!isValid || dirty || isDeleteLoading || isUpdateLoading}
+                          >
+                            Lay off
+                          </Button>
+                        </div>
+                        <div className="col-md-3 offset-md-3 col-4 px-1">
+                          <Button
+                            type="reset"
+                            className="w-100"
+                            disabled={!dirty}
+                            variant="secondary"
+                          >
+                            Clear
+                          </Button>
+                        </div>
+                        <div className="col-md-3 col-4 px-1">
+                          <Button
+                            type="submit"
+                            className="w-100"
+                            variant="info"
+                            disabled={!isValid || !dirty || isUpdateLoading || isDeleteLoading
+                              || errors.firstName || errors.lastName || errors.email}
+                          >
+                            Save
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                    <div className="row m-0 pt-3">
-                      <div className="col-md-4">
-                        <label htmlFor="lastName" className="font-weight-bold">Last Name:</label>
-                      </div>
-                      <div className="col-md-8">
-                        <Field
-                          type="text"
-                          className={classNames('form-control', { 'border-danger': errors.lastName })}
-                          name="lastName"
-                          id="lastName"
-                          placeholder="Lastname"
-                          value={values?.lastName}
-                        />
-                        {touched.lastName && errors.lastName && <div className="text-danger mt-3">{errors?.lastName}</div>}
-                      </div>
-                    </div>
-                    <div className="row m-0 pt-3">
-                      <div className="col-md-4">
-                        <label htmlFor="email" className="font-weight-bold">Email:</label>
-                      </div>
-                      <div className="col-md-8">
-                        <Field
-                          type="email"
-                          className={classNames('form-control', { 'border-danger': errors.email })}
-                          name="email"
-                          id="email"
-                          placeholder="Email"
-                          value={values?.email}
-                        />
-                        {touched.email && errors.email && <div className="text-danger mt-3">{errors?.email}</div>}
-                      </div>
-                    </div>
-                    <div className="row m-0 pt-3">
-                      <div className="col-md-3 col-4 px-1">
-                        <Button
-                          disabled={!isValid || dirty || isDeleteLoading}
-                          className="w-100"
-                          variant="danger"
-                          onClick={handleShowModal}
-                        >
-                          Fire
-                        </Button>
-                      </div>
-                      <div className="col-md-3 offset-md-3 col-4 px-1">
-                        <Button
-                          disabled={!dirty}
-                          type="button"
-                          className="btn btn-secondary w-100"
-                          onClick={handleReset}
-                        >
-                          Clear
-                        </Button>
-                      </div>
-                      <div className="col-md-3 col-4 px-1">
-                        <Button
-                          disabled={!isValid || !dirty || isUpdateLoading}
-                          className="btn btn-success w-100"
-                          type="submit"
-                          onClick={onSubmit}
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-            <ModalWindow
-              toShow={toShowModal}
-              onSubmit={handleDelete}
-              onClose={handleCloseModal}
-            >
-              Are you sure you want to fire this secretary?
-            </ModalWindow>
-          </WithLoading>
+                  </Form>
+                )}
+              </Formik>
+              <ModalWindow
+                toShow={toShowModal}
+                onSubmit={handleDelete}
+                onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
+              >
+                Are you sure you want to fire this secretary?
+              </ModalWindow>
+            </WithLoading>
           </div>
         </div>
       </div>

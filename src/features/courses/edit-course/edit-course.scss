@@ -4,6 +4,16 @@
   @include button();
 }
 
+.remove-button {
+  background-color: $theme-colorDark !important;
+  border-color: $theme-colorDark !important;
+}
+
+.clear-button {
+  background-color: $theme-colorMedium !important;
+  border-color: $theme-colorMedium !important;
+}
+
 .error {
   margin-left: 37%;
 }

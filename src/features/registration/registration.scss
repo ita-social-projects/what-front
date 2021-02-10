@@ -3,21 +3,30 @@
 .wrapper {
   position: absolute;
   width: 100%;
-  min-height: 100%;  
-  background-color: #020520;  
+  min-height: 100%;
+  background-color: map-get($colors, medium-color);
 }
 
 .form {
   background-color: #fff;
   margin-top: 5vh;
   border-radius: 3px;
+
+  &-link {
+    color: map-get($colors, nonAccent-color);    
+
+    &:hover {
+      text-decoration: none;
+      color: map-get($colors, accent-color); 
+    }   
+  }
 }
 
 .modal-body {
-  @include franklin-regular();
   font-size: 22px;
 }
 
 .modal-btn {
   @include button();
 }
+

@@ -53,7 +53,7 @@ export const Registration = () => {
     <div className={styles.wrapper}>
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-6 col-md-6 col-sm-12">
+          <div className="col-xl-6 col-md-8 col-sm-10 col-12">
             <div className={styles.form}>
               <Formik
                 initialValues={{
@@ -67,7 +67,7 @@ export const Registration = () => {
                 validationSchema={registrationValidation}
               >
                 {({ values, errors, touched }) => (
-                  <Form className="p-3">
+                  <Form className="p-3" noValidate>
                     <h3 className="text-center">Sign up to WHAT</h3>
                     <hr />
                     <div className="form-group">
@@ -127,12 +127,12 @@ export const Registration = () => {
                     </div>
                     <div className="d-flex justify-content-center">
                       <WithLoading isLoading={isLoading}>
-                        <Button type="submit" className="btn btn-block btn-warning">Sign up</Button>
+                        <Button type="submit" className="btn btn-block btn-info">Sign up</Button>
                       </WithLoading>
                     </div>
                     <p className="text-danger text-center mt-2">{error}</p>
                     <div className="text-center mt-3">
-                      <p>Already have an account? <Link to={paths.AUTH}>Log in</Link></p>
+                      <p>Already have an account? <Link to={paths.AUTH} className={styles['form-link']}>Log in</Link></p>
                     </div>
                     <SuccessfulRegistrationAlert
                       toShow={toShowModal}

@@ -34,21 +34,28 @@ export const paths = {
   LESSON_ADD: '/lessons/add',
   LESSON_DETAILS: '/lessons',
   LESSON_EDIT: '/lessons/edit',
+<<<<<<< HEAD
   
   THEMES_DOWNLOAD: '/imports/themes',
   
   SCHEDULE: '/schedule',
+=======
+
+  SCHEDULE: '/schedules',
+  SCHEDULE_BY_GROUP_ID: '/schedule/group',
+>>>>>>> dev
   SCHEDULE_EDIT: '/schedule/edit',
   SCHEDULE_ADD: '/schedule/add',
 
   UNASSIGNED_USERS: '/unassigned',
   MY_PROFILE: '/my-profile',
   CHANGE_PASSWORD: '/change-password',
+  FORGOT_PASSWORD: '/forgot-password',
   SUPPORT: '/support',
 };
 
 export const homepages = {
-  1: paths.SCHEDULE, // student homepage
+  1: paths.SUPPORT, // student homepage
   2: paths.LESSONS, // mentor homepage
   3: paths.MENTORS, // secretary
   4: paths.STUDENTS, // admin homepage

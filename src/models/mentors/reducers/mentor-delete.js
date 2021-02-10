@@ -16,7 +16,7 @@ export const mentorDeletingReducer = (state = initialState, action) => {
         isLoaded: false,
         error: '',
       };
-    
+
     case types.DELETING_MENTOR_SUCCEED:
       return {
         ...state,
@@ -24,21 +24,20 @@ export const mentorDeletingReducer = (state = initialState, action) => {
         isLoading: false,
         isLoaded: true,
       };
-    
+
     case types.DELETING_MENTOR_FAILED:
       return {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
-      
+
     case types.CLEAR_LOADED:
       return {
         ...state,
-        loaded: false
-      }
-      
+        isLoaded: false,
+      };
     default:
       return state;
   }

@@ -30,13 +30,19 @@ export const mentorEditingReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
 
     case types.CLEAR_LOADED:
       return {
         ...state,
         isLoaded: false,
+      };
+
+    case types.CLEAR_ERROR:
+      return {
+        ...state,
+        error: '',
       };
 
     default:

@@ -16,7 +16,7 @@ export const mentorAddingReducer = (state = initialState, action) => {
         isLoaded: false,
         error: '',
       };
-    
+
     case types.ADDING_MENTOR_SUCCEED:
       return {
         ...state,
@@ -24,20 +24,20 @@ export const mentorAddingReducer = (state = initialState, action) => {
         isLoading: false,
         isLoaded: true,
       };
-    
+
     case types.ADDING_MENTOR_FAILED:
       return {
         ...state,
         isLoading: false,
         isLoaded: false,
-        error: action.payload.error.message,
+        error: action.payload.error,
       };
-      
+
     case types.CLEAR_LOADED:
       return {
         ...state,
-        loaded: false
-      }
+        loaded: false,
+      };
     default:
       return state;
   }

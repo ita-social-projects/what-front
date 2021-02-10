@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   isLoading: false,
   loaded: false,
   error: '',
-}; 
+};
 
 export const editCourseReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -33,8 +33,13 @@ export const editCourseReducer = (state = INITIAL_STATE, action) => {
     case actionTypes.CLEAR_LOADED:
       return {
         ...state,
-        loaded: false
-      }
+        loaded: false,
+      };
+    case actionTypes.CLEAR_ERROR:
+      return {
+        ...state,
+        error: '',
+      };
     default: return state;
   }
 };

@@ -2,6 +2,9 @@
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/what-front?style=flat-square)](https://github.com/ita-social-projects/what-front/issues)
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/what-front?style=flat-square)](https://github.com/ita-social-projects/what-front/pulls)
+[![version](https://img.shields.io/badge/version-1.1.0-blue)](https://github.com/ita-social-projects/what-front)
+[![date](https://img.shields.io/badge/date-05.02.2021-orange)](https://github.com/ita-social-projects/what-front)
+
 
 ## 1. About the project
 "WHAT" (Who is absent today) is a project for control education process in the training centers. The main purpose is to control the quality of education: attendance, achievement, materials studied, etc.

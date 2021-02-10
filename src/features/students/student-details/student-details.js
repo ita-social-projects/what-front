@@ -20,20 +20,19 @@ export const StudentDetails = () => {
   const {
     data: studentGroups,
     isLoading: areStudentGroupsLoading,
-    error: studentGroupsError,
   } = useSelector(currentStudentGroupsSelector, shallowEqual);
 
   const {
     data: studentLessons,
     isLoading: studentLessonsIsLoading,
-    error: studentLessonsError,
+    isLoaded: studentLessonsIsLoaded,
   } = useSelector(studentLessonsSelector, shallowEqual);
 
   useEffect(() => {
-    if (studentError && studentGroupsError && studentLessonsError) {
+    if (studentError && !isStudentLoading) {
       history.push(paths.NOT_FOUND);
     }
-  }, [studentError, studentGroupsError, studentLessonsError]);
+  }, [history, isStudentLoading, studentError]);
 
   return (
     <div className="container">
@@ -71,7 +70,7 @@ export const StudentDetails = () => {
                     {studentGroups
                       .map(({ id, name }) => (
                         <div className="pr-2" key={id}>
-                          <Badge pill variant="primary">
+                          <Badge pill variant="info">
                             <Link
                               to={`${paths.GROUPS_DETAILS}/${id}`}
                               className="text-decoration-none text-white"
@@ -87,18 +86,19 @@ export const StudentDetails = () => {
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Lesson(s): </span></div>
                 <WithLoading
-                  isLoading={studentLessonsIsLoading}
+                  isLoading={studentLessonsIsLoading || !studentLessonsIsLoaded}
                   className={styles['loader-centered']}
                 >
                   <div className="col-12 col-md-6 d-flex flex-wrap lead">
                     {studentLessons
                       .map(({ id, themeName }) => (
                         <div className="pr-2" key={id}>
-                          <Badge pill variant="primary">
+                          <Badge pill variant="info">
                             <Link
                               to={`${paths.LESSON_DETAILS}/${id}`}
                               className="text-decoration-none text-white"
-                            >{themeName}</Link>
+                            >{themeName}
+                            </Link>
                           </Badge>
                         </div>
                       ))}

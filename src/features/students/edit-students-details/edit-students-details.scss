@@ -3,7 +3,6 @@
 .wrapper {
   max-width: 700px;
   margin: 0 auto;
-  @include franklin-regular();
 }
 
 .list-element {
@@ -22,6 +21,11 @@
 
 .button{
   @include button();
+}
+
+.exclude-btn {
+  background-color: $theme-colorDark !important;
+  border-color: $theme-colorDark !important;
 }
 
 .error{

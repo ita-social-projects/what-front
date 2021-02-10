@@ -1,5 +1,16 @@
-.alert-container {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
+@media screen and (min-width: 768px) and (max-width: 1919px) {
+  .container {
+    padding-left: 64px;
+  }
 }
+@media screen and (min-width: 1920px) {
+  .container {
+    padding-left: 220px;
+  }
+}
+
+.container {
+  position: relative;
+}
+
+

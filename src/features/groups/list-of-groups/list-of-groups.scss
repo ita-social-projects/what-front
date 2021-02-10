@@ -1,15 +1,11 @@
 @import '../../../styles/main';
 
-.list-head{
-  display:flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
-
 .calendar-input{
   border-color: map-get($colors, textAccentN1-color) !important;
   width: 18%;
+  .form-control {
+    max-width: 50%;
+  }
 }
 
 .calendar-input:focus {
@@ -17,17 +13,72 @@
   box-shadow: 0 0 10px map-get($colors, textAccentN1-color);
   border-color: map-get($colors, textAccentN1-color);
 }
-.search{
-  width: 250px;
+
+.table-item {
+  cursor: pointer;
+  transition: all .2s ease-out;
 }
 
-.group-list{
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
+.scale {
+  transition: .3s ease;
+  padding-top: 3px;
+  &:hover {
+    transform: scale(1.4); 
+    padding-top: 5px;
+  }
 }
 
-.list-wrapper {
-  min-height: 750px;
+.table-head {
+  min-width: 150px;
+
+  &:first-of-type {
+    text-align: center;
+    min-width: 0;
+  }
 }
+
+.category {
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    opacity: 0.7;
+    transition: .4s;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    width: 8px;
+    height: 8px;
+    transform: rotateZ(45deg);
+    transition: .3s;
+  }
+
+  &-sorted {
+    &::after {
+      transform: rotateZ(225deg);
+      top: 5px;
+    }
+  }
+}
+
+.change-rows{
+  margin: 0 10px;
+  width: fit-content !important; 
+}
+
+.label-for-select{
+  padding: .375rem .75rem;
+  margin-bottom: 0 !important;
+}
+
+.paginate{
+  margin: auto !important;
+}
+

@@ -6,8 +6,8 @@ const paths = require('./paths.js');
 
 const PORT = 8080;
 const PlatformCores = os.cpus().length;
-const JSCompilationThreads = os.cpus().length / 2 - 1;
-const SCSSCompilationThreads = os.cpus().length / 2;
+const JSCompilationThreads = PlatformCores / 2 - 1;
+const SCSSCompilationThreads = PlatformCores - JSCompilationThreads - 1;
 
 // eslint-disable-next-line no-console
 console.table({
@@ -15,6 +15,7 @@ console.table({
   'Platform cores': PlatformCores,
   'JS|X Compilation Threads': JSCompilationThreads,
   'SCSS Compilation Threads': SCSSCompilationThreads,
+  'Webpack Development Server Thread': 1,
 });
 
 module.exports = merge(common, {
@@ -53,7 +54,7 @@ module.exports = merge(common, {
           {
             loader: 'thread-loader',
             options: {
-              workers: os.cpus().length / 2 - 1,
+              workers: JSCompilationThreads,
               poolTimeout: Infinity,
             },
           },
@@ -74,7 +75,7 @@ module.exports = merge(common, {
           {
             loader: 'thread-loader',
             options: {
-              workers: os.cpus().length / 2,
+              workers: SCSSCompilationThreads,
               poolTimeout: Infinity,
             },
           },

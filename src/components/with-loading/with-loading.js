@@ -1,6 +1,9 @@
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
+import styles from './with-loading.scss';
 
 export const WithLoading = ({
   isLoading,
@@ -9,8 +12,13 @@ export const WithLoading = ({
   animation,
   variant,
 }) => (isLoading
-  ? <Spinner animation={animation} variant={variant} className={className} />
-  : children
+  ? (
+    <Spinner
+      animation={animation}
+      variant={variant}
+      className={classNames(className, { [styles.default]: !variant })}
+    />
+  ) : children
 );
 
 WithLoading.propTypes = {
@@ -27,6 +35,6 @@ WithLoading.propTypes = {
 WithLoading.defaultProps = {
   className: '',
   animation: 'border',
-  variant: 'warning',
+  variant: '',
   children: '',
 };

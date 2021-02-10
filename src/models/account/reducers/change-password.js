@@ -18,20 +18,20 @@ export const changePasswordReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        isloaded: true,
+        isLoaded: true,
         error: '',
       };
     case actions.NEW_PASSWORD_CREATING_FAILED:
       return {
         ...state,
         isLoading: false,
-        isloaded: false,
-        error: action.payload.error.message,
+        isLoaded: false,
+        error: action.payload.error,
       };
     case actions.CLEAR_LOADED:
       return {
         ...state,
-        isloaded: false,
+        isLoaded: false,
       };
     default: return state;
   }

@@ -1,3 +1,4 @@
+import { paths } from '@/shared';
 import { BASE_URL } from './config.js';
 import { Cookie } from '../../utils/index.js';
 
@@ -24,4 +25,25 @@ export const responseInterceptor = (response) => {
     Cookie.set('jwt', token, 1);
   }
   return response;
+};
+
+export const responseErrorInterceptor = (error) => {
+  const requestUrl = error.response.config.url.split('/api')[1];
+
+  if (error.response.status === 401 && requestUrl !== '/accounts/auth') {
+    Cookie.del('jwt');
+    Cookie.del('user');
+    window.location.href = paths.AUTH;
+  }
+
+  if (typeof error.response.data === 'string') {
+    return Promise.reject(error.response.data);
+  }
+
+  if (error.response.data.error) {
+    return Promise.reject(error.response.data.error.message);
+  }
+
+  // eslint-disable-next-line prefer-promise-reject-errors
+  return Promise.reject('An error occurred');
 };
