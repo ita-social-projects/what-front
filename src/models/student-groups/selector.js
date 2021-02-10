@@ -4,3 +4,4 @@ export const loadStudentGroupsSelector = (state) => state.models.studentGroups.l
 export const loadStudentGroupByIdSelector = (state) => (
   state.models.studentGroups.loadStudentGroupById
 );
+export const loadStudentGroupHomeworksSelector = (state) => state.models.studentGroupHomeworks.loadStudentGroupHomework;
