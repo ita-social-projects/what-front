@@ -199,25 +199,6 @@ export const ListOfLessons = () => {
         { !isLoading ? (
           <div className="col-2 text-right"> {visibleLessonsList.length} of {filteredLessonsList.length} lessons
           </div>
-<<<<<<< HEAD
-          <div className="col-4 offset-md-1 text-center pl-4 mr-5">
-            <Search onSearch={handleSearchTheme} placeholder="Search lesson" />
-          </div>
-          {currentUser.role !== 3 &&
-            <div className="col-4 offset-md-1 text-right align-items-center ml-5 pl-5">
-              <div className="btn-group" >
-                <Button onClick={downloadThemes} type="button" className="btn btn-warning">
-                  <Icon icon="Plus" className="icon" />
-                  Add themes
-                </Button>
-                <Button onClick={addLesson} variant="warning">
-                  <Icon icon="Plus" className="icon" />
-                  Add a lesson
-                </Button>
-              </div>
-
-
-=======
         ) : null}
         <div className="col-4 d-flex align-items-center justify-content-end">
           {paginationComponent()}
@@ -227,13 +208,12 @@ export const ListOfLessons = () => {
         <div className="col-12 card shadow p-3 mb-5 bg-white">
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
-              <div className="btn-group">
+              <div className="btn-group"> 
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
->>>>>>> dev
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
             <div className="col-2">
@@ -264,10 +244,13 @@ export const ListOfLessons = () => {
                 <option>100</option>
               </select>
             </div>
-            <div className="col-2 offset-1 text-right">
+            <div className="col-3 offset-1 text-right">
               {currentUser.role !== 3
               && (
-              <div>
+              <div className="btn-group">
+                <Button onClick={downloadThemes} type="button" className="btn btn-warning">
+                  Add theme('s)
+                </Button>
                 <Button onClick={addLesson}>
                   <span>Add a lesson</span>
                 </Button>
@@ -352,16 +335,6 @@ export const ListOfLessons = () => {
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
-<<<<<<< HEAD
-      {filteredLessonsList.length > 12 &&
-        <Pagination
-          itemsPerPage={lessonsPerPage}
-          totalItems={filteredLessonsList.length}
-          paginate={paginate}
-        />
-      }
-=======
->>>>>>> dev
     </div>
   );
 };

@@ -5,8 +5,8 @@ import { useActions, paths } from '@/shared';
 import { sendThemes, importThemesSelector } from '@/models';
 import { Formik, Form } from 'formik';
 import classNames from "classnames";
-import styles from "./download-groups.scss"
-
+import styles from "./download-themes.scss"
+import { Button } from '@/components';
 
 export const DownloadThemes = () => {
   const { isLoading, isLoaded, error } = useSelector(importThemesSelector, shallowEqual);
@@ -37,7 +37,7 @@ export const DownloadThemes = () => {
           >
             {({ values, errors, dirty, setFieldValue }) => (
               <Form className="px-2 py-4" name="start-group">
-                <h3>Download Themes</h3>
+                <h3>Upload Theme</h3>
                 <hr />
                 <div className="row mb-3">
                   <div className="col d-flex align-items-center">
@@ -52,19 +52,15 @@ export const DownloadThemes = () => {
                     <span className='font-weight-bolder'>{fileName}</span>
                   </div>
                 </div>
-                <div className="row justify-content-between mt-4 px-4">
-                  <Link
-                    to="/lessons"
-                    className='btn btn-secondary w-25'
-                  >Back
-                  </Link>
-                  <input
-                    type="submit"
-                    name="submit-btn"
-                    disabled={isLoading || !dirty ||errors.name}
-                    className='btn btn-success w-25'
-                    value="Send"
-                  />
+                <div className="row justify-content-end px-4">
+                <Button
+                            type="submit"
+                            className="w-25"
+                            variant="info"
+                            disabled={!dirty || isLoading || errors.name }
+                          >
+                            Save
+                  </Button>
                 </div>
               </Form>
             )}

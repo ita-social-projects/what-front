@@ -10,12 +10,7 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-<<<<<<< HEAD
-  alertSelector, removeAlert, Header, Schedule,
-  DownloadThemes
-=======
-  Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
->>>>>>> dev
+  DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';

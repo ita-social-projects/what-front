@@ -34,16 +34,11 @@ export const paths = {
   LESSON_ADD: '/lessons/add',
   LESSON_DETAILS: '/lessons',
   LESSON_EDIT: '/lessons/edit',
-<<<<<<< HEAD
-  
+
   THEMES_DOWNLOAD: '/imports/themes',
   
-  SCHEDULE: '/schedule',
-=======
-
   SCHEDULE: '/schedules',
   SCHEDULE_BY_GROUP_ID: '/schedule/group',
->>>>>>> dev
   SCHEDULE_EDIT: '/schedule/edit',
   SCHEDULE_ADD: '/schedule/add',
 
