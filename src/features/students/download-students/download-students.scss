@@ -1,12 +1,12 @@
-@import '../../../../styles/main';
+@import '../../../styles/main';
 
-.button{
+.button {
   @include button();
 }
 
-.error{
-  padding-top:5px;
-  color:red;
+.error {
+  padding-top: 5px;
+  color: red;
 }
 
 .loader-centered {
@@ -15,7 +15,7 @@
 }
 
 .label {
-  background-color: $theme-colorN2;
+  background-color: map-get($colors, nonAccent-color);
   color: white;
   padding: 0.5rem;
   font-family: sans-serif;

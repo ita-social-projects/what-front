@@ -9,7 +9,8 @@ export const paths = {
   STUDENTS_DETAILS: '/students',
   STUDENT_EDIT: '/students/edit',
   STUDENT_ADD: '/students/add',
-  STUDENT_DOWNLOAD: '/imports/students',
+
+  STUDENTS_BY_GROUP_ID: '/imports/students',
 
   COURSES: '/courses',
   COURSE_DETAILS: '/courses',
@@ -37,7 +38,7 @@ export const paths = {
   LESSON_EDIT: '/lessons/edit',
 
   THEMES_DOWNLOAD: '/imports/themes',
-  
+
   SCHEDULE: '/schedules',
   SCHEDULE_BY_GROUP_ID: '/schedule/group',
   SCHEDULE_EDIT: '/schedule/edit',

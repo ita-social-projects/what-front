@@ -4,60 +4,63 @@ import {Link, useHistory} from 'react-router-dom';
 import {paths, useActions} from '@/shared';
 import {WithLoading} from '@/components/index.js';
 import {
-  importStudentsSelector,
-  loadStudentGroups, sendStudents, loadStudentGroupsSelector,
-} from '@/models/index.js';
+  importStudentsSelector, globalLoadStudentGroups,
+ sendStudents, loadStudentGroupsSelector,
+} from '@/models';
+import { Button } from '@/components';
 import classNames from 'classnames';
 import {shallowEqual, useSelector} from "react-redux";
 import styles from './download-students.scss'
 
 
 export const DownloadStudents = () => {
+  const history = useHistory();
+  const downloadStudents = useActions(sendStudents);
+
   const {
     data: groups,
     isLoading: areLoading,
-    loaded: areLoaded,
-    error: coursesError,
+    isLoaded: areLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
-  const [loadCourses] = useActions([loadStudentGroups]);
-  
-  useEffect(() => {
-    loadCourses()
-  }, [loadCourses]);
+
+  const [loadGroups] = useActions([globalLoadStudentGroups]);
+
+   useEffect(() => {
+    loadGroups();
+  }, [loadGroups]);
   
   const [fileName, setFileName] = useState('');
   
   const {
-    data: groupsDownloading,
+    data: studentsDownloading,
     isLoading: isDownloadingLoading,
     isLoaded: isDownloadingLoaded,
     error: downloadingError,
   } = useSelector(importStudentsSelector, shallowEqual);
   
-  const history = useHistory();
-  
   useEffect(() => {
-    if (!groups && areLoading || !groupsDownloading && isDownloadingLoading ) {
+    if (!groups && areLoading || !studentsDownloading && isDownloadingLoading ) {
       history.push(paths.NOT_FOUND);
     }
-  }, [groups, areLoading, groupsDownloading, isDownloadingLoading]);
+  }, [groups, areLoading, studentsDownloading, isDownloadingLoading]);
   
   useEffect(() => {
     if (!downloadingError && isDownloadingLoaded) {
       history.push(paths.GROUPS);
     }
   }, [downloadingError, isDownloadingLoaded]);
-  
+
   const onSubmit = (values) => {
-    sendStudents(values);
+    downloadStudents(values);
   };
+
   
   return (
     <div className="container">
       <div className="row justify-content-center">
         <div className="w-100 card shadow p-4">
           <div className="px-2 py-4">
-            <h3>Group Starting</h3>
+            <h3>Upload Student('s)</h3>
             <hr />
             
             <Formik
@@ -67,11 +70,11 @@ export const DownloadStudents = () => {
               }}
               onSubmit={onSubmit}
             >
-              {({dirty, setFieldValue}) => (
+              {({dirty, setFieldValue, errors, isEmpty}) => (
                 <Form>
                   <div className="row m-0 pt-3">
                     <div className="col-md-4 font-weight-bolder">
-                      <label htmlFor="groupsInput">Course:</label>
+                      <label htmlFor="groupsInput">Group:</label>
                     </div>
                     <div className="col-md-8">
                       <WithLoading isLoading={areLoading}>
@@ -94,7 +97,7 @@ export const DownloadStudents = () => {
                   </div>
                   <div className="row m-0 pt-3">
                     <div className="col-md-4 font-weight-bolder pt-3">
-                      <label htmlFor="file">Student(s):</label>
+                      <label htmlFor="file">Student('s):</label>
                     </div>
                     <div className='col-md-8'>
                       <input type="file" id="actual-btn" name="students" accept=".xlsx" onChange={(event) => {
@@ -105,20 +108,16 @@ export const DownloadStudents = () => {
                       <span className='font-weight-bolder'>{fileName}</span>
                     </div>
                   </div>
-                  <div className="row justify-content-between mt-4 px-4">
-                    <Link
-                      to="/lessons"
-                      className={classNames('btn btn-secondary w-25', styles.button)}
-                    >Back
-                    </Link>
-                    <input
-                      type="submit"
-                      name="submit-btn"
-                      className={classNames('w-25 btn btn-success', styles.button)}
-                      disabled={!dirty || isDownloadingLoading|| coursesError || downloadingError}
-                      value="Save"
-                    />
-                  </div>
+                  <div className="row justify-content-end px-4">
+                <Button
+                            type="submit"
+                            className="w-25"
+                            variant="info"
+                            disabled={!dirty || isEmpty || isDownloadingLoading || errors.groupId || errors.students}
+                          >
+                            Send
+                  </Button>
+                </div>
                 </Form>
               )}
             </Formik>

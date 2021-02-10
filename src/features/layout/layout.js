@@ -11,12 +11,11 @@ import {
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
   DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
+  DownloadStudents
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
-
 import styles from './layout.scss';
-import { DownloadStudents } from '../groups/start-group/download-students';
 
 export const Layout = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
