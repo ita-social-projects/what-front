@@ -6,8 +6,8 @@ export {
   mentorIdSelector,
   mentorGroupsSelector,
   mentorCoursesSelector,
+  mentorLessonsSelector,
   mentorAddingSelector,
   mentorDeletingSelector,
-  mentorEditingSelector
+  mentorEditingSelector,
 } from './selectors.js';
-

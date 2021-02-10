@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
-import { currentUserSelector, fetchLessons, lessonsSelector } from '@/models/index.js';
+import { currentUserSelector, fetchLessons, lessonsSelector, mentorLessonsSelector, fetchMentorLessons  } from '@/models/index.js';
 
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 
@@ -13,24 +13,37 @@ import styles from './list-of-lessons.scss';
 
 export const ListOfLessons = () => {
   const history = useHistory();
+
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [visibleLessonsList, setVisibleLessonsList] = useState([]);
   const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
-  const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-  const getLessons = useActions(fetchLessons);
 
+  const mentorsLessonsState = useSelector(mentorLessonsSelector, shallowEqual);
+  const allLessonsState = useSelector(lessonsSelector, shallowEqual);
+
+  const getAllLessons = useActions(fetchLessons);
+  const getMetorsLessons = useActions(fetchMentorLessons);
+
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+
+  const { data, isLoading } = (currentUser.role === 2) ? mentorsLessonsState : allLessonsState;
+
+  const [currentPage, setCurrentPage] = useState(1);
   const [lessonsPerPage, setLessonsPerPage] = useState(10);
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
 
   useEffect(() => {
-    getLessons();
-  }, [getLessons]);
+    if (currentUser.role === 2) {
+      getMetorsLessons(currentUser.id);
+    } else {
+      getAllLessons();
+    }
+  }, [currentUser, getAllLessons, getMetorsLessons]);
 
   const transformDateTime = (dateTime) => {
     const arr = dateTime.toString().split('T');
@@ -86,6 +99,10 @@ export const ListOfLessons = () => {
 
   const addLesson = () => {
     history.push(paths.LESSON_ADD);
+  };
+  
+  const downloadThemes = () => {
+    history.push(paths.THEMES_DOWNLOAD);
   };
 
   const lessonDetails = useCallback((id) => {
@@ -204,12 +221,12 @@ export const ListOfLessons = () => {
         <div className="col-12 card shadow p-3 mb-5 bg-white">
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
-              <div className="btn-group">
+              <div className="btn-group"> 
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
             <div className="col-2">
@@ -240,10 +257,13 @@ export const ListOfLessons = () => {
                 <option>100</option>
               </select>
             </div>
-            <div className="col-2 offset-1 text-right">
+            <div className="col-3 offset-1 text-right">
               {currentUser.role !== 3
               && (
-              <div>
+              <div className="btn-group">
+                <Button onClick={downloadThemes} type="button" className="btn btn-warning">
+                  Add theme('s)
+                </Button>
                 <Button onClick={addLesson}>
                   <span>Add a lesson</span>
                 </Button>

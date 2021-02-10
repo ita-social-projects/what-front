@@ -28,6 +28,16 @@ export const fetchMentorCourses = (id) => ({
   payload: { id },
 });
 
+export const fetchMentorFilteredLessonsById = (data) => ({
+  type: types.FETCH_MENTORS_FILTER_LESSONS,
+  payload: { data },
+});
+
+export const fetchMentorLessons = (id) => ({
+  type: types.FETCH_MENTORS_LESSONS,
+  payload: { id },
+});
+
 export const addMentor = (id) => ({
   type: types.ADD_MENTOR,
   payload: { id },
@@ -96,6 +106,27 @@ function* fetchAsyncMentorsCourses({ payload }) {
   }
 }
 
+function* fetchAsyncMentorFilteredLessons({ payload }) {
+  try {
+    yield put({ type: types.FETCHING_MENTORS_FILTER_LESSONS_STARTED });
+    const data = yield call(ApiService.load, '/mentors/lesssons', payload);
+    yield put({ type: types.FETCHING_MENTORS_FILTER_LESSONS_SUCCEED, payload: { data } });
+  } catch (error) {
+    yield put({ type: types.FETCHING_MENTORS_FILTER_LESSONS_FAILED, payload: { error } });
+  }
+}
+
+function* fetchAsyncMentorsLesons({ payload }) {
+  try {
+    yield put({ type: types.FETCHING_MENTORS_LESSONS_STARTED });
+    const mentorId = payload.id;
+    const data = yield call(ApiService.load, `/mentors/${mentorId}/lessons`);
+    yield put({ type: types.FETCHING_MENTORS_LESSONS_SUCCEED, payload: { data } });
+  } catch (error) {
+    yield put({ type: types.FETCHING_MENTORS_LESSONS_FAILED, payload: { error } });
+  }
+}
+
 function* addAsyncMentor({ payload }) {
   try {
     yield put({ type: types.ADDING_MENTOR_STARTED });
@@ -153,6 +184,13 @@ function* fetchingMentorsGroupsWatcher() {
 function* fetchingMentorsCoursesWatcher() {
   yield takeLatest(types.FETCH_MENTOR_GROUPS, fetchAsyncMentorsCourses);
 }
+function* fetchAsyncMentorFilteredLessonsWatcher() {
+  yield takeLatest(types.FETCH_MENTORS_FILTER_LESSONS, fetchAsyncMentorFilteredLessons);
+}
+
+function* fetchingMentorsLessonsWatcher() {
+  yield takeLatest(types.FETCH_MENTORS_LESSONS, fetchAsyncMentorsLesons);
+}
 
 function* addingMentorWatcher() {
   yield takeEvery(types.ADD_MENTOR, addAsyncMentor);
@@ -173,6 +211,8 @@ export function* mentorsWatcher() {
     fork(fetchingActiveMentorsWatcher),
     fork(fetchingMentorsGroupsWatcher),
     fork(fetchingMentorsCoursesWatcher),
+    fork(fetchingMentorsLessonsWatcher),
+    fork(fetchAsyncMentorFilteredLessonsWatcher),
     fork(addingMentorWatcher),
     fork(editingMentorWatcher),
     fork(deletingMentorWatcher),
