@@ -22,6 +22,8 @@ export const paths = {
   GROUP_EDIT: '/groups/edit',
   GROUP_ADD: '/groups/add',
 
+  GROUPS_DOWNLOAD: '/imports/groups',
+
   MENTORS: '/mentors',
   MENTORS_DETAILS: '/mentors',
   MENTOR_EDIT: '/mentors/edit',
