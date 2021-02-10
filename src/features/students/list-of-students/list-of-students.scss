@@ -1,0 +1,85 @@
+@import "../../../styles/main";
+
+.scale {
+  transition: .3s ease;
+  padding-top: 3px;
+  &:hover {
+    transform: scale(1.4); 
+    padding-top: 5px;
+  }
+}
+
+.switch, .table-row {
+  cursor: pointer;
+  transition: all .2s ease-out;
+}
+
+.table-head {
+  min-width: 150px;
+
+  &:first-of-type {
+    text-align: center;
+    min-width: 0;
+  }
+}
+
+.category {
+  cursor: pointer;
+  position: relative;
+  transition: opacity .3s;
+
+  &:hover {
+    opacity: .7;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    width: 8px;
+    height: 8px;
+    transform: rotateZ(45deg);
+    transition: .3s;
+  }
+
+  &-sorted {
+    &::after {
+      transform: rotateZ(225deg);
+      top: 7px;
+    }
+  }
+}
+
+.custom-control-label {
+  cursor: pointer;
+}
+
+.custom-control-input:focus~
+.custom-control-label::before {
+  border-color: map-get($colors, accent-color) !important;
+  box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;
+}
+
+.custom-control-input:checked~
+.custom-control-label::before {
+  border-color: map-get($colors, accent-color) !important;
+  background-color: map-get($colors, accent-color) !important;
+}
+
+.change-rows{
+  margin: 0 10px;
+  width: fit-content !important; 
+}
+
+.label-for-select{
+  padding: .375rem .75rem;
+  margin-bottom: 0 !important;
+}
+
+.paginate{
+  margin: auto !important;
+}

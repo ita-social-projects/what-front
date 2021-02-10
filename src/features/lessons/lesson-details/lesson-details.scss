@@ -2,7 +2,6 @@
 
 .page {
   @include pageWindow();
-  @include franklin-regular();
   padding: 30px;
   font-size: 16px;
 }
@@ -15,4 +14,7 @@
 .loader-centered {
   display: block !important;
   margin: 0 auto;
+}
+.bg_colour{
+  background-color: map-get($colors, accent-color);
 }

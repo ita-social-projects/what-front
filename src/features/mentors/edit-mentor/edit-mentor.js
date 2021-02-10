@@ -2,24 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@shared/index.js';
-import { WithLoading, Button } from '@components/index.js';
 import {
-  mentorIdSelector,
-  mentorEditingSelector,
-  mentorDeletingSelector,
-  mentorGroupsSelector,
-  mentorCoursesSelector,
-  editMentor,
-  deleteMentor,
-  loadStudentGroupsSelector,
+  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector, mentorGroupsSelector,
+  mentorCoursesSelector, editMentor, deleteMentor, loadStudentGroupsSelector,
   coursesSelector, fetchCourses, globalLoadStudentGroups,
 } from '@/models/index.js';
-import { Formik, Field, Form } from 'formik';
-import classNames from 'classnames';
-import Icon from '@/icon';
-import { ModalWindow } from '@/features/modal-window/index.js';
-import { addAlert } from '@/features';
+
+import { WithLoading, Button } from '@components/index.js';
 import { editMentorValidation } from '@features/validation/validation-helpers.js';
+import { addAlert, ModalWindow } from '@/features';
+import { Formik, Field, Form } from 'formik';
+import Icon from '@/icon';
+
+import classNames from 'classnames';
 import styles from './edit-mentor.scss';
 
 export const EditMentor = ({ id }) => {
@@ -27,29 +22,34 @@ export const EditMentor = ({ id }) => {
   const {
     data: mentor,
     isLoading: mentorIsLoading,
+    isLoaded: mentorIsLoaded,
     error: mentorError,
   } = useSelector(mentorIdSelector, shallowEqual);
 
   const {
     data: mentorGroups,
     isLoading: mentorGroupsAreLoading,
+    isLoaded: mentorGroupsAreLoaded,
     error: mentorGroupsError,
   } = useSelector(mentorGroupsSelector, shallowEqual);
 
   const {
     data: mentorCourses,
     isLoading: mentorCoursesAreLoading,
+    isLoaded: mentorCoursesAreLoaded,
     error: mentorCoursesError,
   } = useSelector(mentorCoursesSelector, shallowEqual);
 
   const {
     data: allGroups,
     isLoading: allGroupsAreLoading,
+    isLoaded: allGroupsAreLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
     data: allCourses,
     isLoading: allCoursesAreLoading,
+    loaded: allCoursesAreLoaded,
   } = useSelector(coursesSelector, shallowEqual);
 
   const {
@@ -74,19 +74,18 @@ export const EditMentor = ({ id }) => {
   const [loadCourses] = useActions([fetchCourses]);
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
   const [toShowModal, setShowModal] = useState(false);
-  
+
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-  
+
   useEffect(() => {
     fetchListOfGroups();
   }, [fetchListOfGroups]);
-  
+
   useEffect(() => {
     loadCourses();
   }, [loadCourses]);
-  
-  
+
   useEffect(() => {
     setGroups(mentorGroups);
     setCourses(mentorCourses);
@@ -112,6 +111,9 @@ export const EditMentor = ({ id }) => {
     if (!deletedIsError && deletedIsLoaded) {
       history.push(paths.MENTORS);
       dispatchAddAlert('Mentor has been fired', 'success');
+    }
+    if (deletedIsError && !deletedIsLoaded) {
+      dispatchAddAlert(deletedIsError);
     }
   }, [deletedIsError, deletedIsLoaded, dispatchAddAlert, history]);
 
@@ -215,7 +217,9 @@ export const EditMentor = ({ id }) => {
             <h3>Mentor Editing</h3>
             <hr />
             <WithLoading
-              isLoading={mentorIsLoading && allCoursesAreLoading && allGroupsAreLoading}
+              isLoading={mentorIsLoading || !mentorIsLoaded || allCoursesAreLoading || !allCoursesAreLoaded
+                || mentorCoursesAreLoading || !mentorCoursesAreLoaded || allGroupsAreLoading || !allGroupsAreLoaded
+                || !mentorGroupsAreLoaded || mentorGroupsAreLoading}
               className={styles['loader-centered']}
             >
               <Formik
@@ -303,39 +307,35 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
+                            <Button variant="info" onClick={handleGroupAdd}>+</Button>
                           </div>
                         </div>
                         { errorGroup ? <div className={styles.error}>{errorGroup}</div> : null}
                       </div>
                     </div>
-                    <WithLoading
-                      isLoading={mentorGroupsAreLoading}
-                      className={styles['loader-centered']}
-                    >
-                      <div className="row m-0 pt-3">
-                        <div className="col-md-8 offset-md-4">
-                          <ul className="d-flex flex-wrap justify-content-between p-0">
-                            {groups.map(({ id, name }) => (
-                              <li
-                                className={classNames(styles['list-element'],
-                                  'd-flex bg-light border border-outline-secondary rounded')}
-                                key={id}
-                                data-groupid={id}
-                                data-groupname={name}
-                              >{name}
-                                <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                  type="button"
-                                  onClick={handleGroupDelete}
-                                >&#10005;
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+
+                    <div className="row m-0 pt-3">
+                      <div className="col-md-8 offset-md-4">
+                        <ul className="d-flex flex-wrap justify-content-between p-0">
+                          {groups.map(({ id, name }) => (
+                            <li
+                              className={classNames(styles['list-element'],
+                                'd-flex bg-light border border-outline-secondary rounded')}
+                              key={id}
+                              data-groupid={id}
+                              data-groupname={name}
+                            >{name}
+                              <button
+                                className="btn p-0 ml-auto mr-2 text-dark"
+                                type="button"
+                                onClick={handleGroupDelete}
+                              >&#10005;
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                    </WithLoading>
+                    </div>
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
@@ -361,48 +361,43 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="warning" onClick={handleCourseAdd}><Icon icon="Plus" /></Button>
+                            <Button variant="info" onClick={handleCourseAdd}>+</Button>
                           </div>
                         </div>
                         { errorCourse ? <div className={styles.error}>{errorCourse}</div> : null}
                       </div>
                     </div>
-                    <WithLoading
-                      isLoading={mentorCoursesAreLoading}
-                      className={styles['loader-centered']}
-                    >
-                      <div className="row m-0 pt-3">
-                        <div className="col-md-8 offset-md-4">
-                          <ul className="d-flex flex-wrap justify-content-between p-0">
-                            {courses.map(({ id, name }) => (
-                              <li
-                                className={classNames(styles['list-element'],
-                                  'd-flex bg-light border border-outline-secondary rounded')}
-                                key={id}
-                                data-courseid={id}
-                                data-coursename={name}
-                              >{name}
-                                <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                  type="button"
-                                  onClick={handleCourseDelete}
-                                >&#10005;
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+
+                    <div className="row m-0 pt-3">
+                      <div className="col-md-8 offset-md-4">
+                        <ul className="d-flex flex-wrap justify-content-between p-0">
+                          {courses.map(({ id, name }) => (
+                            <li
+                              className={classNames(styles['list-element'],
+                                'd-flex bg-light border border-outline-secondary rounded')}
+                              key={id}
+                              data-courseid={id}
+                              data-coursename={name}
+                            >{name}
+                              <button
+                                className="btn p-0 ml-auto mr-2 text-dark"
+                                type="button"
+                                onClick={handleCourseDelete}
+                              >&#10005;
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                    </WithLoading>
+                    </div>
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button
-                          className="w-100"
-                          variant="danger"
+                            className={classNames('w-100', styles['disable-button'])}
                           onClick={handleShowModal}
                           disabled={!isValid || dirty || editedIsLoading || deletedIsLoading}
-                        >Fire
+                        >Disable
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
@@ -416,7 +411,7 @@ export const EditMentor = ({ id }) => {
                       </div>
                       <div className="col-md-3 col-4">
                         <button
-                          className={classNames('w-100 btn btn-success', styles.button)}
+                          className={classNames('w-100 btn ', styles.button, styles.submit)}
                           type="submit"
                           disabled={!isValid || !dirty || editedIsLoading || deletedIsLoading
                                 || errors.firstName || errors.lastName || errors.email}
@@ -431,6 +426,8 @@ export const EditMentor = ({ id }) => {
                 toShow={toShowModal}
                 onSubmit={onFire}
                 onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
               >Are you sure you want to fire this mentor?
               </ModalWindow>
             </WithLoading>

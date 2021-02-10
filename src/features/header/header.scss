@@ -1,98 +1,16 @@
+@import '../../styles/main';
+
 .header {
   height: 75px;
   padding: 0 3rem !important;
-
+  z-index: 10;
   color: white;
-  background-color: #01073A;
+  background-color: $theme-colorDark;
 
-  &__sidebar {
-    position: absolute;
-    left: -29%;
-    top: 0;
-
-    width: 29%;
-    min-height: 500px;
-
-    background-color: rgba(#01073A, 0.9);
-    z-index: 9;
-
-    transition: left .8s;
-
-    &-toggler {
-      display: none;
-      position: relative;
-
-      cursor: pointer;
-
-      z-index: 19;
-
-      &:hover {
-        opacity: 0.5;
-      }
-    }
-
-    &-links {
-      display: flex;
-      flex-wrap: wrap;
-
-      padding-top: 80px;
-    }
-
-    &-links > a {
-      width: 100%;
-      margin-bottom: .5rem;
-
-      text-align: center;
-
-      font-size: 18px;
-      font-weight: bold;
-
-      color: white;
-      background-color: transparent;
-
-      &:focus {
-        background-color: orange;
-      }
-      &:hover {
-        background-color: orange;
-        color: #212529;
-      }
-    }
-  }
-
-  &__navbar-links {
-    width: 65%;
+  &__logo {
+    font-size: 20px;
     height: 100%;
-
-    justify-content: flex-start;
-    align-items: flex-end;
-  }
-
-  &__navbar-links > a {
-    width: 22%;
-    margin-right: .7rem;
-
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-
-    text-align: center;
-    font-weight: 600;
-    font-size: 18px;
-
-    color: #212529;
-    background-color: white;
-
-      &:focus {
-        background-color: orange;
-      }
-      &:hover {
-        background-color: orange;
-        color: #212529;
-      }
-  }
-
-  &__navbar-links > a:last-of-type {
-    margin-right: 0 !important;
+    position: relative;
   }
 
   &__account {
@@ -109,8 +27,11 @@
     &-user {
       display: flex;
       align-items: center;
-
-      padding-right: 15%;
+      padding-right: 10%;
+      color: white;
+      &--fullname {
+        cursor: pointer;
+      }
 
       &--icon {
         padding-right: 1rem;
@@ -119,7 +40,11 @@
 
         &:hover {
           color: #fff;
-          opacity: 0.5;
+          opacity: 1;
+          text-decoration: none;
+          & a {
+            opacity: 1;
+          }
         }
       }
     }
@@ -134,51 +59,70 @@
   }
 }
 
-@media(max-width: 1300px) {
-  .header {
-    padding: 0 1.5rem !important;
+.header__dropdown-icon {
+  color: white !important;
+  display: inline-block;
+  transition: all 0.3s ease 0s;
+}
 
-    &__navbar-links {
-      width: 75%;
-    }
+.header__dropdown-icon-active {
+  display: inline-block;
+  transform: rotate(180deg);
+  transition: all 0.3s ease 0s;
+}
 
-    &__navbar-links > a {
-      font-size: 16px;
-    }
+.header__dropdown-list {
+  position: absolute;
+  top: 10px;
+  right: 2.5%;
+  width: 15%;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease 0s;
+
+  &-show {
+    position: absolute;
+    opacity: 1;
+    padding: 0;
+    z-index: 2;
+    top: 75px;
+    right: 0;
+    color: #fff;
+    background-color: #fff;
+    width: 15%;
+    transition: all 0.5s ease 0s;
+    border-bottom: 0.5px solid rgba($theme-colorDark, 0.5);
+    border-left: 0.5px solid rgba($theme-colorDark, 0.5);
   }
-}
-
-@media(max-width: 768px) {
-  .header {
-    height: 55px;
-    padding: 0 1.5rem !important;
-
-    &__navbar-links  {
-      display: none !important;
+    &--item {
+      list-style: none;
+      padding: 15px 10px;
+      color: #000;
+      transition: all 0.2s ease 0s;
+      & a{
+        color: #000 !important;
+        text-decoration: none;
+      }
     }
 
-    &__account-user--fullname {
-      display: none;
+    &--item:hover {
+      color: #fff;
+      cursor: pointer;
+      background-color: rgba(#F6F8FD, 0.8);
+      padding-left: 20px !important;
+
     }
 
-    &__sidebar-toggler {
-      display: block;
+    &--item:last-child {
+      border: none;
+      & a {
+        cursor: pointer;
+      }
     }
+
   }
+
+.header__dropdown-toggler {
+  cursor: pointer;
 }
 
-@media(max-width: 480px) {
-  .header__sidebar {
-    width: 65%;
-    left: -65%;
-  }
-}
-
-.sidebar--active {
-  left: 0;
-}
-
-.active {
-  background-color: #FFB800 !important;
-  font-weight: bold !important;
-}

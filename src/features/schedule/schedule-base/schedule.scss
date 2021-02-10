@@ -1,0 +1,88 @@
+@import '../../../styles/main';
+
+.day-column {
+    border-left: 1px solid $theme-colorMedium;
+    &:last-child {
+        border-right: 1px solid $theme-colorMedium;
+    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 75vh;
+}
+
+.day-column-header {
+    width: 100%;
+    padding-top: 10px;
+    border-bottom: 1px solid $theme-colorMedium;
+}
+
+.current-day {
+    background-color: darken(#fff, 10);
+}
+
+.lessons-list {
+    width: 100%;
+    padding-left: 0;
+    list-style: none;
+    &__item {
+        padding: 10px;
+    }
+
+    &__details {
+        position: relative;
+
+        .edit-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: transparent;
+            border: none;
+            display: none;
+        }
+    }
+
+    &__item:hover {
+        .edit-button {
+            display: block;
+        }
+    }
+
+    &__group-name {
+        margin-bottom: 0;
+        cursor: pointer;
+    }
+}
+
+.change-week-btn {
+    border: none;
+    background-color: transparent;
+    margin: 0 10px;
+    .arrow {
+        width: 25px;
+        height: 25px;
+        margin: 5px 0;
+        fill: $theme-colorAccent;
+    }
+    .arrow-left {
+        transform: rotateZ(180deg);
+    }
+    &:focus {
+        outline: none;
+    }
+}
+
+.date-input {
+    @include input;
+    padding: 5px;
+    transition: .1s;
+    &:focus {
+        box-shadow: 0 0 10px map-get($colors, medium-color );
+        outline: none;
+    }
+}
+
+.future-lesson {
+    background-color: map-get($colors, medium-color);
+    color: #fff;
+}

@@ -80,6 +80,9 @@ export const EditStudentsDetails = ({ id }) => {
       history.push(paths.STUDENTS);
       dispatchAddAlert('Student has been excluded', 'success');
     }
+    if (isRemovedError && !isRemovedLoaded) {
+      dispatchAddAlert(isRemovedError);
+    }
   }, [dispatchAddAlert, history, isRemovedError, isRemovedLoaded]);
 
   useEffect(() => {
@@ -242,14 +245,14 @@ export const EditStudentsDetails = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="warning" onClick={handleGroupAdd}><Icon icon="Plus" /></Button>
+                            <Button  onClick={handleGroupAdd}>+</Button>
                           </div>
                         </div>
                         { error ? <div className={styles.error}>{error}</div> : null}
                       </div>
                     </div>
                     <WithLoading
-                      isLoading={areStudentGroupsLoading}
+                      isLoading={areStudentGroupsLoading || !areStudentGroupsLoaded}
                       className={styles['loader-centered']}
                     >
                       <div className="row m-0 pt-3">
@@ -264,7 +267,7 @@ export const EditStudentsDetails = ({ id }) => {
                                 data-groupname={name}
                               >{name}
                                 <button
-                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-dark"
                                   type="button"
                                   onClick={handleGroupDelete}
                                 >X
@@ -278,8 +281,7 @@ export const EditStudentsDetails = ({ id }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button
-                          className="w-100"
-                          variant="danger"
+                          className={classNames(styles['exclude-btn'], 'w-100')}
                           onClick={handleShowModal}
                           disabled={!isValid || dirty || isEditedLoading || isRemovedLoading}
                         >Exclude
@@ -296,7 +298,7 @@ export const EditStudentsDetails = ({ id }) => {
                       </div>
                       <div className="col-md-3 col-4">
                         <button
-                          className={classNames('w-100 btn btn-success', styles.button)}
+                          className={classNames('w-100 btn btn-info', styles.button)}
                           type="submit"
                           disabled={!isValid || !dirty || isEditedLoading || isRemovedLoading
                             || errors.firstName || errors.lastName || errors.email}
@@ -311,6 +313,8 @@ export const EditStudentsDetails = ({ id }) => {
                 toShow={toShowModal}
                 onSubmit={handleExclude}
                 onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
               >Are you sure you want to exclude this student?
               </ModalWindow>
             </WithLoading>

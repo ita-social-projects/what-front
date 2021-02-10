@@ -1,25 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import classNames from 'classnames';
-import {
-  Formik, Field, Form, FieldArray,
-} from 'formik';
+import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useActions, paths } from '@/shared';
-import * as Yup from 'yup';
-import { WithLoading } from '@/components';
-import {
-  editLessonSelector,
-  activeStudentsSelector,
-  loadStudentGroupsSelector,
-  lessonsSelector,
-  fetchLessons,
-  globalLoadStudentGroups,
-  loadActiveStudents,
-  editLesson,
+import { editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector,
+  fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
 } from '@/models';
+import { useActions, paths } from '@/shared';
+
+import { WithLoading } from '@/components';
+import { lessonValidation } from "@features/validation/validation-helpers";
 import { addAlert } from '@/features';
+import { Formik, Field, Form, FieldArray } from 'formik';
+
+import classNames from 'classnames';
 import styles from './edit-lesson.scss';
+
 
 export const EditLesson = () => {
   const history = useHistory();
@@ -39,7 +33,7 @@ export const EditLesson = () => {
     loadLessons,
     updateLesson,
     dispatchAddAlert,
-  ] = useActions([globalLoadStudentGroups, loadActiveStudents, fetchLessons, editLesson, addAlert]);
+  ] = useActions([globalLoadStudentGroups, loadStudents, fetchLessons, editLesson, addAlert]);
 
   const {
     data: groups,
@@ -53,7 +47,7 @@ export const EditLesson = () => {
     isLoading: studentsIsLoading,
     isLoaded: studentsIsLoaded,
     error: studentsError,
-  } = useSelector(activeStudentsSelector, shallowEqual);
+  } = useSelector(studentsSelector, shallowEqual);
 
   const {
     data: lessons,
@@ -91,9 +85,7 @@ export const EditLesson = () => {
       (id) => students.find((student) => student.id === id),
     );
 
-    const activeStudents = studentD.filter((student) => student !== undefined);
-
-    const studentsData = activeStudents.map((student) => (
+    const studentsData = studentD.map((student) => (
       {
         studentId: student.id,
         studentName: `${student.firstName} ${student.lastName}`,
@@ -154,16 +146,6 @@ export const EditLesson = () => {
   const capitalizeTheme = (str) => str.toLowerCase()
     .split(/\s+/)
     .map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
-
-  const validateForm = Yup.object().shape({
-    themeName: Yup.string()
-      .min(2, 'Invalid lesson theme: too short')
-      .max(50, 'Invalid lesson theme: too long')
-      .matches(
-        '^[A-Za-zа-яА-ЯёЁ ]+$',
-        'Invalid lesson theme',
-      ),
-  });
 
   const openStudentDetails = useCallback((studentId) => {
     history.push(`${paths.STUDENTS_DETAILS}/${studentId}`);
@@ -248,7 +230,7 @@ export const EditLesson = () => {
                   formData,
                 }}
                 onSubmit={onSubmit}
-                validationSchema={validateForm}
+                validationSchema={lessonValidation}
               >
                 {({ errors }) => (
                   <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
@@ -360,7 +342,7 @@ export const EditLesson = () => {
         </div>
         <div className={classNames(styles.placement, 'col-12')}>
           <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
-          <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
+          <button form="form" type="submit" className="btn btn-info btn-lg">Save</button>
         </div>
       </div>
     </div>

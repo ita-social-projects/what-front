@@ -1,8 +1,9 @@
 @import '../../../styles/main';
 
+
+
 .page {
   @include pageWindow();
-  @include franklin-regular();
   padding: 30px;
   font-size: 16px;
 }

@@ -3,6 +3,7 @@ export * from './support';
 export * from './schedule';
 export * from './auth';
 export * from './header';
+export * from './sidebar';
 export * from './not-found';
 export * from './modal-window';
 export * from './unassigned-list';
