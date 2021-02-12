@@ -50,6 +50,7 @@ export const paths = {
   MY_PROFILE: '/my-profile',
   CHANGE_PASSWORD: '/change-password',
   FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
   SUPPORT: '/support',
 };
 

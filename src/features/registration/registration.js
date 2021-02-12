@@ -6,7 +6,7 @@ import { Cookie } from '@/utils';
 import { Formik, Form, Field } from 'formik';
 import classNames from 'classnames';
 import { ModalWindow } from '@features';
-import { clearRegistration, registration, registrationSelector } from '../../models/index.js';
+import { clearLoaded, registration, registrationSelector } from '../../models/index.js';
 
 import { registrationValidation } from '../validation/validation-helpers.js';
 import { Button, WithLoading } from '../../components/index.js';
@@ -26,11 +26,11 @@ export const Registration = () => {
   const { isLoading, isLoaded, error } = useSelector(registrationSelector, shallowEqual);
 
   const signUp = useActions(registration);
-  const clearLoaded = useActions(clearRegistration);
+  const setClearLoaded = useActions(clearLoaded);
 
   const handleSubmitModal = () => {
     handleCloseModal();
-    clearLoaded();
+    setClearLoaded();
     history.push(paths.AUTH);
   };
 
