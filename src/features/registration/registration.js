@@ -3,15 +3,15 @@ import { useActions, paths } from '@/shared/index.js';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Cookie } from '@/utils';
-import { Formik, Form, Field } from 'formik';
-import classNames from 'classnames';
+import { clearLoaded, registration, registrationSelector } from '@models/index.js';
+
+import { Button, WithLoading } from '@components/index.js';
 import { ModalWindow } from '@features';
-import { clearLoaded, registration, registrationSelector } from '../../models/index.js';
 
-import { registrationValidation } from '../validation/validation-helpers.js';
-import { Button, WithLoading } from '../../components/index.js';
-// import { SuccessfulRegistrationAlert } from './successful-registration-alert.js';
+import { Formik, Form, Field } from 'formik';
+import { registrationValidation } from '@features/validation/validation-helpers.js';
 
+import classNames from 'classnames';
 import styles from './registration.scss';
 
 export const Registration = () => {
@@ -135,11 +135,6 @@ export const Registration = () => {
                     <div className="text-center mt-3">
                       <p>Already have an account? <Link to={paths.AUTH} className={styles['form-link']}>Log in</Link></p>
                     </div>
-                    {/* <SuccessfulRegistrationAlert
-                      toShow={toShowModal}
-                      onClose={handleCloseModal}
-                      onSubmit={handleSubmitModal}
-                    /> */}
                   </Form>
                 )}
               </Formik>
@@ -149,6 +144,7 @@ export const Registration = () => {
                 onClose={handleCloseModal}
                 submitButtonText="Back"
                 title="Congratulations"
+                hideCancelButton
               >
                 You have successfully registered.
                 Please, wait until your account is approved and your role is assigned.
