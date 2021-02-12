@@ -13,6 +13,7 @@ export const ModalWindow = ({
   onAfterClose,
   title,
   cancelButtonText,
+  hideCancelButton,
   submitButtonText,
   useRedButton,
   marginLeft,
@@ -31,7 +32,7 @@ export const ModalWindow = ({
       {children}
     </Modal.Body>
     <Modal.Footer className="justify-content-around">
-      <button className={`btn btn-secondary ${styles['modal-btn']}`} type="button" onClick={onClose}>{cancelButtonText}</button>
+      {hideCancelButton ? null : <button className={`btn btn-secondary ${styles['modal-btn']}`} type="button" onClick={onClose}>{cancelButtonText}</button>}
       <button className={`btn ${useRedButton ? 'btn-danger' : 'btn-success'} ${styles['modal-btn']}`} type="submit" onClick={onSubmit}>{submitButtonText}</button>
     </Modal.Footer>
   </Modal>
@@ -51,6 +52,7 @@ ModalWindow.propTypes = {
   submitButtonText: PropTypes.string,
   useRedButton: PropTypes.bool,
   marginLeft: PropTypes.bool,
+  hideCancelButton: PropTypes.bool,
 };
 
 ModalWindow.defaultProps = {
@@ -60,4 +62,5 @@ ModalWindow.defaultProps = {
   useRedButton: false,
   onAfterClose: () => false,
   marginLeft: false,
+  hideCancelButton: false,
 };

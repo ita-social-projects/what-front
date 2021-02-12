@@ -87,6 +87,10 @@ export const ListOfLessons = () => {
   const addLesson = () => {
     history.push(paths.LESSON_ADD);
   };
+  
+  const downloadThemes = () => {
+    history.push(paths.THEMES_DOWNLOAD);
+  };
 
   const lessonDetails = useCallback((id) => {
     history.push(`${paths.LESSON_DETAILS}/${id}`);
@@ -204,12 +208,12 @@ export const ListOfLessons = () => {
         <div className="col-12 card shadow p-3 mb-5 bg-white">
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
-              <div className="btn-group">
+              <div className="btn-group"> 
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
             <div className="col-2">
@@ -240,10 +244,13 @@ export const ListOfLessons = () => {
                 <option>100</option>
               </select>
             </div>
-            <div className="col-2 offset-1 text-right">
+            <div className="col-3 offset-1 text-right">
               {currentUser.role !== 3
               && (
-              <div>
+              <div className="btn-group">
+                <Button onClick={downloadThemes} type="button" className="btn btn-warning">
+                  Add theme('s)
+                </Button>
                 <Button onClick={addLesson}>
                   <span>Add a lesson</span>
                 </Button>

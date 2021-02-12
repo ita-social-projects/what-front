@@ -134,12 +134,12 @@ export const ListOfGroups = () => {
           <td className="text-center">{index + 1}</td>
           <td>{name}</td>
           <td>{studentIds.length}</td>
-          <td>{startDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
+          {/* <td>{startDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
             .join('.')}
           </td>
           <td>{finishDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
-              .join('.')}
-          </td>
+              .join('.')} */}
+          {/* </td> */}
           <td
             className="text-center"
             onClick={(event) => handleCardEdit(id, event)}
@@ -190,6 +190,10 @@ export const ListOfGroups = () => {
     setGroupsPerPage(newNumber);
   };
 
+  const downloadGroups = () => {
+    history.push(paths.GROUPS_DOWNLOAD);
+  };
+
   const paginationComponent = () => {
     if (filteredGroupsList.length < groupsPerPage) {
       return (
@@ -237,7 +241,7 @@ export const ListOfGroups = () => {
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <Search onSearch={handleSearch} placeholder="Group's name" />
             </div>
             <div className="col-2 text-left">
@@ -269,10 +273,15 @@ export const ListOfGroups = () => {
                 <option>100</option>
               </select>
             </div>
-            <div className="col-2 offset-1 text-right">
+            <div className="col-3 offset-1 text-right">
+            <div className="btn-group">
+                <Button onClick={downloadGroups} type="button" className="btn btn-warning">
+                  Upload Group('s)
+                </Button>
               <Button onClick={handleAddGroup}>
                 <span>Add a group</span>
               </Button>
+              </div>
             </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto">

@@ -10,11 +10,11 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
+  DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
+  DownloadStudents, DownloadGroups
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
-
 import styles from './layout.scss';
 
 export const Layout = () => {
@@ -53,6 +53,9 @@ export const Layout = () => {
           <ProtectedRoute roles={[3, 4]} exact path={`${paths.SCHEDULE_BY_GROUP_ID}/:id`} component={ScheduleGroup} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.CHANGE_PASSWORD} component={ChangePassword} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
+          <ProtectedRoute roles={[3, 4]} exact path={paths.GROUPS_DOWNLOAD} component={DownloadGroups} />
+          <ProtectedRoute roles={[2, 3, 4]} exact path={paths.THEMES_DOWNLOAD} component={DownloadThemes} />
+          <ProtectedRoute roles={[3, 4]} exact path={paths.STUDENTS_BY_GROUP_ID} component={DownloadStudents} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
           <Redirect to={paths.NOT_FOUND} />

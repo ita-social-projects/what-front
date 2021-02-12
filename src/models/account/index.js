@@ -1,9 +1,9 @@
 export { accountReducer } from './reducer.js';
 export {
   authWatcher, login, registration, logOut, fetchUsersList, fetchUnAssignedUserList,
-  clearRegistration, newPassword,
+  clearLoaded, newPassword, forgotPassword, resetPassword,
 } from './sagas.js';
 export {
   currentUserSelector, newUserSelector, fetchAssignedUsersSelector, registrationSelector,
-  changePasswordSelector,
+  changePasswordSelector, forgotPasswordSelector, resetPasswordSelector,
 } from './selectors.js';
