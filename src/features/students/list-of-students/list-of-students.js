@@ -51,7 +51,7 @@ export const ListOfStudents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchFieldValue, setSearchFieldValue] = useState('');
 
-  const studentsPerPage = 10;
+  const [studentsPerPage, setStudentsPerPage] = useState(10);
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
@@ -82,6 +82,10 @@ export const ListOfStudents = () => {
     }
     return { ...category, sortedByAscending: false };
   });
+
+  const downloadStudents = () => {
+    history.push(paths.STUDENTS_BY_GROUP_ID);
+  };
 
   useEffect(() => {
     dispatchLoadActiveStudents();
@@ -161,6 +165,13 @@ export const ListOfStudents = () => {
     history.push(paths.UNASSIGNED_USERS);
   };
 
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleStudents(students.slice(start, finish));
+    setStudentsPerPage(newNumber);
+  };
+
   const paginate = (pageNumber) => {
     if (currentPage !== pageNumber) {
       setCurrentPage(pageNumber);
@@ -209,46 +220,64 @@ export const ListOfStudents = () => {
     return studentsRows;
   };
 
+  const paginationComponent = () => {
+    if (students.length < studentsPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={studentsPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={studentsPerPage}
+        totalItems={students.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Students</h2>
-        <div className="col-2 text-right">{
-          students.length > studentsPerPage && !areActiveStudentsLoading && !areAllStudentsLoading
-          && `${students.length} students`
+        <div className="col-2 text-right">
+          {
+           !areActiveStudentsLoading && !areAllStudentsLoading
+          && `${visibleStudents.length} of ${students.length} students`
         }
         </div>
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {students.length > studentsPerPage && !areActiveStudentsLoading && !areAllStudentsLoading
+          {!areActiveStudentsLoading && !areAllStudentsLoading
           && (
-            <Pagination
-              itemsPerPage={studentsPerPage}
-              totalItems={students.length}
-              paginate={paginate}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              page={currentPage}
-            />
+            paginationComponent()
           )}
         </div>
       </div>
       <div className="row">
         <div className="col-12 card shadow p-3 mb-5 bg-white">
           <div className="row align-items-center mt-2 mb-3">
-            <div className="col-2">
+            <div className="col-1 mr-5">
               <div className="btn-group">
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <Search
                 value={searchFieldValue}
                 onSearch={handleSearch}
                 placeholder="student's name"
               />
             </div>
-            <div className="col-2 offset-3 custom-control custom-switch text-right">
+            <div className="col-3 pl-3 ml-4 custom-control custom-switch text-right">
               <input
                 value={isShowDisabled}
                 type="checkbox"
@@ -260,12 +289,36 @@ export const ListOfStudents = () => {
                 className={classNames('custom-control-label', styles['custom-control-label'])}
                 htmlFor="show-disabled-check"
               >
-                Disabled students
+                Show disabled students
               </label>
             </div>
-            <div className="col-2 text-right">
+            <div className="col-2 mx-2 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
+            </div>
+            <div className="col-3 text-right">
               {[3, 4].includes(currentUser.role) && (
+                <div className="btn-group">
+                <Button onClick={downloadStudents} type="button" className="btn btn-warning">
+                  Upload student('s)
+                </Button>
                 <Button onClick={handleAddStudent}><span>Add a student</span></Button>
+              </div>
               )}
             </div>
           </div>
@@ -297,6 +350,7 @@ export const ListOfStudents = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );

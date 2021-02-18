@@ -46,7 +46,7 @@ export const UnAssignedList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [usersVisible, setUsersVisible] = useState([]);
-  const usersPerPage = 10;
+  const [usersPerPage, setUserPerPage] = useState(10);
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
@@ -150,7 +150,6 @@ export const UnAssignedList = () => {
     setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
   }, [indexOfFirstUser, indexOfLastUser, sortingCategories, users]);
 
-
   const options = () => {
     switch (currentUserRole) {
       case 2:
@@ -212,27 +211,48 @@ export const UnAssignedList = () => {
     return personsRows;
   };
 
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setUsersVisible(users.slice(start, finish));
+    setUserPerPage(newNumber);
+  };
+
+  const paginationComponent = () => {
+    if (users.length < usersPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={usersPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={usersPerPage}
+        totalItems={users.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Unassigmed Users</h2>
-        <div className="col-2 text-right">{
-          users.length > usersPerPage && !isLoading
-          && `${users.length} unassigmed users `
+        <div className="col-3 text-right">{
+           !isLoading
+          && `${usersVisible.length} of ${users.length} unassigmed users `
         }
         </div>
-        <div className="col-4 d-flex align-items-center justify-content-end">
-          {users.length > usersPerPage && !isLoading
-          && (
-            <Pagination
-              itemsPerPage={usersPerPage}
-              totalItems={users.length}
-              paginate={paginate}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              page={currentPage}
-            />
-          )}
+        <div className="col-3 d-flex align-items-center justify-content-end">
+          {paginationComponent()}
         </div>
       </div>
       <div className="row">
@@ -244,6 +264,25 @@ export const UnAssignedList = () => {
                 onSearch={handleSearch}
                 placeholder="person's name"
               />
+            </div>
+            <div className="col-2 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
             </div>
           </div>
           <WithLoading isLoading={!isLoaded} className="d-block mx-auto my-2">
@@ -274,6 +313,7 @@ export const UnAssignedList = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );

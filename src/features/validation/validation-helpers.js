@@ -153,3 +153,26 @@ export const changePasswordValidation = Yup.object().shape({
     .oneOf([Yup.ref('newPassword'), null], 'You should confirm your password')
     .required('This field is required'),
 });
+
+export const forgotPasswordValidation = Yup.object().shape({
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('This field is required'),
+});
+
+export const resetPasswordValidation = Yup.object().shape({
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('This field is required'),
+  newPassword: Yup.string()
+    .min(8, 'Password must contain at least 8 characters')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+      'Must contain at least one uppercase, one lowercase, one number',
+    )
+    .notOneOf([Yup.ref('currentPassword'), null], 'You should provide a new password')
+    .required('This field is required'),
+  confirmNewPassword: Yup.string()
+    .oneOf([Yup.ref('newPassword'), null], 'You should confirm your password')
+    .required('This field is required'),
+});

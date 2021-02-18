@@ -312,6 +312,7 @@ export const EditStudentsDetails = ({ id }) => {
                 onClose={handleCloseModal}
                 submitButtonText="Delete"
                 useRedButton
+                marginLeft
               >Are you sure you want to exclude this student?
               </ModalWindow>
             </WithLoading>

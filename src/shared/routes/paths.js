@@ -10,6 +10,8 @@ export const paths = {
   STUDENT_EDIT: '/students/edit',
   STUDENT_ADD: '/students/add',
 
+  STUDENTS_BY_GROUP_ID: '/imports/students',
+
   COURSES: '/courses',
   COURSE_DETAILS: '/courses',
   COURSE_EDIT: '/courses/edit',
@@ -19,6 +21,8 @@ export const paths = {
   GROUPS_DETAILS: '/groups',
   GROUP_EDIT: '/groups/edit',
   GROUP_ADD: '/groups/add',
+
+  GROUPS_DOWNLOAD: '/imports/groups',
 
   MENTORS: '/mentors',
   MENTORS_DETAILS: '/mentors',
@@ -35,6 +39,8 @@ export const paths = {
   LESSON_DETAILS: '/lessons',
   LESSON_EDIT: '/lessons/edit',
 
+  THEMES_DOWNLOAD: '/imports/themes',
+
   SCHEDULE: '/schedules',
   SCHEDULE_BY_GROUP_ID: '/schedule/group',
   SCHEDULE_EDIT: '/schedule/edit',
@@ -44,6 +50,7 @@ export const paths = {
   MY_PROFILE: '/my-profile',
   CHANGE_PASSWORD: '/change-password',
   FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
   SUPPORT: '/support',
 };
 
