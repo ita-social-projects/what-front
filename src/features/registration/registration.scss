@@ -1,4 +1,4 @@
-@import '../../styles/main';
+@import '@styles/main';
 
 .wrapper {
   position: absolute;
@@ -21,12 +21,3 @@
     }   
   }
 }
-
-.modal-body {
-  font-size: 22px;
-}
-
-.modal-btn {
-  @include button();
-}
-

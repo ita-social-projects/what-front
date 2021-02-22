@@ -20,7 +20,7 @@ export const registration = (newUser) => ({
   },
 });
 
-export const clearRegistration = () => ({
+export const clearLoaded = () => ({
   type: actionTypes.CLEAR_LOADED,
 });
 
@@ -39,6 +39,16 @@ export const logOut = () => ({
 export const newPassword = (newData) => ({
   type: actionTypes.NEW_PASSWORD,
   payload: { newData },
+});
+
+export const forgotPassword = (data) => ({
+  type: actionTypes.FORGOT_PASSWORD,
+  payload: { data },
+});
+
+export const resetPassword = (id, data) => ({
+  type: actionTypes.RESET_PASSWORD,
+  payload: { id, data },
 });
 
 function* loginWorker({ payload }) {
@@ -64,7 +74,6 @@ function* registrationWorker(data) {
     yield put({ type: actionTypes.REGIST_STARTED });
     const regUser = yield call(ApiService.create, '/accounts/reg', data.payload.newUser);
     yield put({ type: actionTypes.REGIST_SUCCESS, payload: { regUser } });
-    // yield put({type: actionTypes.CLEAR_LOADED});
   } catch (error) {
     yield put({ type: actionTypes.REGIST_ERROR, payload: { error } });
   }
@@ -101,6 +110,26 @@ function* changePasswordWorker({ payload }) {
   }
 }
 
+function* forgotPasswordWorker({ payload }) {
+  try {
+    yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_STARTED });
+    const data = yield call(ApiService.create, '/accounts/password/forgot', payload.data);
+    yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_SUCCESS, payload: { data } });
+  } catch (error) {
+    yield put({ type: actionTypes.FORGOT_PASSWORD_REQUEST_FAILED, payload: { error } });
+  }
+}
+
+function* resetPasswordWorker({ payload }) {
+  try {
+    yield put({ type: actionTypes.RESET_PASSWORD_REQUEST_STARTED });
+    const data = yield call(ApiService.create, `/accounts/password/reset/${payload.id}`, payload.data);
+    yield put({ type: actionTypes.RESET_PASSWORD_REQUEST_SUCCESS, payload: { data } });
+  } catch (error) {
+    yield put({ type: actionTypes.RESET_PASSWORD_REQUEST_FAILED, payload: { error } });
+  }
+}
+
 function* loginWatcher() {
   yield takeLatest(actionTypes.LOGIN_REQUESTING, loginWorker);
 }
@@ -125,6 +154,14 @@ function* changePasswordWatcher() {
   yield takeEvery(actionTypes.NEW_PASSWORD, changePasswordWorker);
 }
 
+function* forgotPasswordWatcher() {
+  yield takeEvery(actionTypes.FORGOT_PASSWORD, forgotPasswordWorker);
+}
+
+function* resetPasswordWatcher() {
+  yield takeEvery(actionTypes.RESET_PASSWORD, resetPasswordWorker);
+}
+
 export function* authWatcher() {
   yield all([
     fork(loginWatcher),
@@ -133,5 +170,7 @@ export function* authWatcher() {
     fork(fetchAssignedUserListWatcher),
     fork(fetchUnAssignedUserListWatcher),
     fork(changePasswordWatcher),
+    fork(forgotPasswordWatcher),
+    fork(resetPasswordWatcher),
   ]);
 }

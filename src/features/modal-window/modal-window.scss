@@ -1,4 +1,8 @@
-@import '../../styles/main';
+@import '@styles/main';
+
+.wrapper {
+  margin-top: 20vh;
+}
 
 .modal-body {
   font-size: 18px;

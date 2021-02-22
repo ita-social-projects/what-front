@@ -20,7 +20,7 @@ export const ListOfSecretaries = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage] = useState(10);
+  const [secretariesPerPage, setSecretariesPerPage] = useState(10);
 
   const [sortingCategories, setSortingCategories] = useState([
     { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
@@ -31,23 +31,36 @@ export const ListOfSecretaries = () => {
 
   const [visibleSecretaries, setVisibleSecretaries] = useState([]);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
-
   const {
     data: activeSecretaries,
     isLoading: areActiveSecretariesLoading,
     error: activeSecretariesError,
   } = useSelector(activeSecretariesSelector, shallowEqual);
+
   const {
     data: allSecretaries,
     isLoading: areAllSecretariesLoading,
     error: allSecretariesError,
   } = useSelector(secretariesSelector, shallowEqual);
+
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  const [loadActiveSecretaries, loadAllSecretaries, dispatchAddAlert] = useActions(
-    [fetchActiveSecretaries, fetchSecretaries, addAlert],
-  );
+  const [
+    loadActiveSecretaries,
+    loadAllSecretaries,
+    dispatchAddAlert,
+  ] = useActions([fetchActiveSecretaries, fetchSecretaries, addAlert]);
 
+  const [secretaries, setSecretaries] = useState([]);
+
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  ];
+
+  const [searchValue, setSearchValue] = useState('');
   const indexOfLastSecretary = currentPage * secretariesPerPage;
   const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
 
@@ -57,71 +70,77 @@ export const ListOfSecretaries = () => {
     return allSecretaries.filter(({ id }) => !activeSecretariesIds.includes(id));
   };
 
-  const searchSecretaries = (secretaries) => secretaries.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
-    .toLowerCase().includes(search.toLowerCase()));
+  const searchSecretaries = (serchedSecretaries, value) => serchedSecretaries.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
+    .toLowerCase().includes(value.toLowerCase()));
+
+  const getSortedByParam = (data, activeCategory) => {
+    const { sortingParam, sortedByAscending } = activeCategory;
+    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+
+    return [...data].sort((prevItem, currentItem) => {
+      if (prevItem[sortingParam] > currentItem[sortingParam]) {
+        return sortingCoefficient * -1;
+      }
+      return sortingCoefficient;
+    });
+  };
+
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
 
   useEffect(() => {
     loadActiveSecretaries();
   }, [loadActiveSecretaries]);
 
   useEffect(() => {
+    if (isShowDisabled && allSecretaries.length && !areAllSecretariesLoading) {
+      const disabledSecretaries = getDisabledSecretaries();
+
+      setSecretaries(disabledSecretaries.map((secretary, index) => ({ index, ...secretary })));
+    }
+    if (!isShowDisabled && activeSecretaries.length && !areActiveSecretariesLoading) {
+      setSecretaries(activeSecretaries.map((secretary, index) => ({ index, ...secretary })));
+    }
+    setSortingCategories(INITIAL_CATEGORIES);
+    setVisibleSecretaries(secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary));
+  }, [activeSecretaries, areActiveSecretariesLoading, allSecretaries, areAllSecretariesLoading, isShowDisabled]);
+
+  useEffect(() => {
+    setVisibleSecretaries(secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary));
+  }, [currentPage, secretaries]);
+
+  useEffect(() => {
     if (activeSecretariesError || allSecretariesError) {
-      dispatchAddAlert('Secretaries loading is failed');
+      dispatchAddAlert(allSecretariesError || activeSecretariesError);
     }
   }, [activeSecretariesError, allSecretariesError, dispatchAddAlert]);
 
   useEffect(() => {
     if (isShowDisabled) {
       const disabledSecretaries = getDisabledSecretaries();
+      const searchedSecretaries = searchSecretaries(disabledSecretaries, searchValue);
 
-      setSearchResults(disabledSecretaries.map((secretary, index) => ({ index, ...secretary })));
-    }
-    if (!isShowDisabled && activeSecretaries.length && !areActiveSecretariesLoading) {
-      setSearchResults(activeSecretaries.map((secretary, index) => ({ index, ...secretary })));
-    }
-
-    setVisibleSecretaries(searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary));
-  }, [activeSecretaries, areActiveSecretariesLoading, allSecretaries, areAllSecretariesLoading,
-    isShowDisabled, indexOfFirstSecretary, indexOfLastSecretary]);
-
-  useEffect(() => {
-    setVisibleSecretaries(searchResults.slice(indexOfFirstSecretary, indexOfLastSecretary));
-  }, [currentPage, searchResults, indexOfFirstSecretary, indexOfLastSecretary]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-    if (isShowDisabled) {
-      const disabledSecretaries = getDisabledSecretaries();
-      const searchedSecretaries = searchSecretaries(disabledSecretaries);
-
-      setSearchResults(searchedSecretaries.map((secretary, index) => ({ index, ...secretary })));
+      setSecretaries(searchedSecretaries.map((secretary, index) => ({ index, ...secretary })));
     } else {
-      const searchedSecretaries = searchSecretaries(activeSecretaries);
+      const searchedSecretaries = searchSecretaries(activeSecretaries, searchValue);
 
-      setSearchResults(searchedSecretaries.map((secretary, index) => ({ index, ...secretary })));
+      setSecretaries(searchedSecretaries.map((secretary, index) => ({ index, ...secretary })));
     }
-  }, [search, isShowDisabled]);
+    setCurrentPage(1);
+  }, [searchValue, isShowDisabled]);
 
-  const handleSortByParam = (event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+  const handleSortByParam = useCallback((event) => {
+    const categoryParams = event.target.dataset;
+    const sortedSecretaries = getSortedByParam(secretaries, categoryParams);
 
-    const sortedSecretary = [...visibleSecretaries].sort((prevSecretary, currentSecretary) => {
-      if (prevSecretary[sortingParam] > currentSecretary[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
-
-    setVisibleSecretaries(sortedSecretary);
-  };
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setSecretaries(sortedSecretaries);
+    setVisibleSecretaries(secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary));
+  }, [sortingCategories, secretaries]);
 
   const resetSortingCategory = useCallback(() => {
     setSortingCategories(sortingCategories.map((category) => {
@@ -132,19 +151,18 @@ export const ListOfSecretaries = () => {
     }));
   }, [sortingCategories]);
 
+  const handleSearch = (value) => {
+    setSearchValue(value);
+    resetSortingCategory();
+  };
+
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
-    resetSortingCategory();
     if (event.target.checked) {
       loadAllSecretaries();
     } else {
       loadActiveSecretaries();
     }
-  };
-
-  const handleSearch = (value) => {
-    setSearch(value);
-    resetSortingCategory();
   };
 
   const handleAddSecretary = useCallback(() => {
@@ -164,27 +182,29 @@ export const ListOfSecretaries = () => {
     if (currentPage !== pageNumber) {
       setCurrentPage(pageNumber);
     }
-    resetSortingCategory();
   };
 
   const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(searchResults?.length / secretariesPerPage);
+    const totalPages = Math.ceil(secretaries?.length / secretariesPerPage);
     if (currentPage !== totalPages) {
       setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-      resetSortingCategory();
     }
   };
 
   const prevPage = (pageNumber) => {
     if (currentPage - 1 !== 0) {
       setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-      resetSortingCategory();
     }
   };
 
   const getSecretaries = () => {
-    const secretaries = visibleSecretaries.map(({ id, firstName, lastName, email, index }) => (
-      <tr key={id} onClick={() => handleSecretariesDetails(id)} className={styles['table-row']} data-secretary-id={id}>
+    const secretariesRows = visibleSecretaries.map(({ id, firstName, lastName, email, index }) => (
+      <tr
+        key={id}
+        onClick={() => handleSecretariesDetails(id)}
+        className={styles['table-row']}
+        data-secretary-id={id}
+      >
         <td className="text-center">{index + 1}</td>
         <td>{firstName}</td>
         <td>{lastName}</td>
@@ -201,34 +221,57 @@ export const ListOfSecretaries = () => {
             )}
       </tr>
     ));
-    if (!secretaries.length && search) {
+
+    if (allSecretariesError || activeSecretariesError) {
+      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
+    }
+
+    if (!visibleSecretaries.length && searchValue) {
+      return <tr><td colSpan="5" className="text-center">Secretary is not found</td></tr>;
+    }
+    return secretariesRows;
+  };
+
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleSecretaries(secretaries.slice(start, finish));
+    setSecretariesPerPage(newNumber);
+  };
+
+  const paginationComponent = () => {
+    if (secretaries.length < secretariesPerPage) {
       return (
-        <tr>
-          <td colSpan="5" className="text-center">Secretary is not found</td>
-        </tr>
+        <Pagination
+          itemsPerPage={secretariesPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
       );
     }
-    return secretaries;
+    return (
+      <Pagination
+        itemsPerPage={secretariesPerPage}
+        totalItems={secretaries.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
   };
 
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Secretaries</h2>
-        {searchResults.length > secretariesPerPage ? <div className="col-2 text-right">{searchResults.length} secretaries</div> : null}
+        <div className="col-2 text-right">{visibleSecretaries.length} of {secretaries.length} secretaries</div>
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {searchResults.length > secretariesPerPage && !areActiveSecretariesLoading
+          {!areActiveSecretariesLoading
           && !areAllSecretariesLoading
-          && (
-          <Pagination
-            itemsPerPage={secretariesPerPage}
-            totalItems={searchResults.length}
-            paginate={paginate}
-            prevPage={prevPage}
-            nextPage={nextPage}
-            page={currentPage}
-          />
-          )}
+          && (paginationComponent())}
         </div>
       </div>
       <div className="row">
@@ -240,10 +283,10 @@ export const ListOfSecretaries = () => {
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <Search onSearch={handleSearch} placeholder="Secretary's name" />
             </div>
-            <div className="col-3 offset-2 custom-control custom-switch text-right">
+            <div className="col-3 offset-1 custom-control custom-switch text-right">
               <input
                 type="checkbox"
                 onClick={handleShowDisabled}
@@ -253,8 +296,27 @@ export const ListOfSecretaries = () => {
               <label
                 className={classNames('custom-control-label', styles['custom-control-label'])}
                 htmlFor="switchDisabled"
-              >Disabled Secretaries
+              >Show disabled Secretaries
               </label>
+            </div>
+            <div className="col-2 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
             </div>
             {currentUser.role === 4
           && (
@@ -293,6 +355,7 @@ export const ListOfSecretaries = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );

@@ -3,3 +3,4 @@ export * from './edit-lesson';
 export * from './list-of-lessons';
 export * from './lesson-details';
 export * from './student-lessons'
+export * from './themes';

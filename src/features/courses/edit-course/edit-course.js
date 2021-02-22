@@ -125,9 +125,8 @@ export const EditCourse = ({ id, coursesData }) => {
                       <div className="col-md-3 offset-md-3 col-4">
                         <Button
                           type="reset"
-                          variant="secondary"
                           disabled={!isValid || !dirty || isEditedLoading || errors.name}
-                          className="btn w-100"
+                          className={classNames('w-100', styles['clear-button'])}
                           onClick={handleReset}
                         >Clear
                         </Button>
@@ -148,6 +147,9 @@ export const EditCourse = ({ id, coursesData }) => {
                 toShow={toShowModal}
                 onSubmit={handleDelete}
                 onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
+                marginLeft
               >
                 Are you sure you want to delete this course?
               </ModalWindow>
