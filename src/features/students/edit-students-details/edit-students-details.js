@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import classNames from 'classnames';
@@ -54,8 +54,8 @@ export const EditStudentsDetails = ({ id }) => {
     dispatchAddAlert,
   ] = useActions([editStudent, removeStudent, addAlert]);
 
-  const [groups, setGroups] = useState(studentGroups || 0);
-  const [groupInput, setInputValue] = useState('Type name of group');
+  const [groups, setGroups] = useState([]);
+  const [initialGroups, setInitialGroups] = useState(studentGroups);
   const [error, setError] = useState(null);
   const [toShowModal, setShowModal] = useState(false);
 
@@ -97,24 +97,16 @@ export const EditStudentsDetails = ({ id }) => {
     deleteStudent(id);
   };
 
-  const handleInputChange = (event) => {
-    setError('');
-    const { value } = event.target;
-    setInputValue(value);
-  };
-
-  const handleGroupAdd = () => {
-    const checkName = groups.find((group) => group.name === groupInput);
+  const handleGroupAdd = (groupsInfo, clearField) => {
+    
+    const checkName = groups.find(({name}) => name === groupsInfo);
     if (checkName) {
       setError('This group was already added to the list');
     } else {
-      const groupObject = allGroups.find((group) => group.name === groupInput);
+      const groupObject = allGroups.find(({name}) => name === groupsInfo);
       if (groupObject) {
-        const res = [
-          ...groups,
-          groupObject,
-        ];
-        setGroups(res);
+        clearField();
+        setGroups(prevState => [...prevState, groupObject]);
       } else {
         setError('Invalid group name');
       }
@@ -166,12 +158,13 @@ export const EditStudentsDetails = ({ id }) => {
                   firstName: student?.firstName,
                   lastName: student?.lastName,
                   email: student?.email,
-                  groups: '',
+                  groupsInput: '',
                 }}
                 validationSchema={editStudentValidation}
                 onSubmit={onSubmit}
+                validateOnMount={false}
               >
-                {({ values, errors, isValid, dirty }) => (
+                {({ values, errors, isValid, dirty, setFieldValue }) => (
                   <Form>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 font-weight-bolder">
@@ -236,16 +229,21 @@ export const EditStudentsDetails = ({ id }) => {
                               { 'border-danger': error },
                             )}
                             list="group-list"
-                            placeholder={groupInput}
-                            onChange={handleInputChange}
                           />
                           <datalist id="group-list">
-                            {allGroups.map(({ id, name }) => (
-                              <option key={id}>{name}</option>
-                            ))}
+                            {allGroups
+                              .filter(({id}) => !groups.find(group => group.id === id))
+                              .map(({ id, name }) => (
+                                <option key={id}>{name}</option>
+                              ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button onClick={handleGroupAdd}>+</Button>
+                            <Button
+                              onClick={ () => handleGroupAdd(values.groupsInput, () => setFieldValue('groupsInput', '')) }
+                              disabled={!dirty}
+                            >
+                              +
+                            </Button>
                           </div>
                         </div>
                         { error ? <div className={styles.error}>{error}</div> : null}
@@ -289,7 +287,7 @@ export const EditStudentsDetails = ({ id }) => {
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
                         <button
-                          disabled={!dirty}
+                          disabled={(!dirty && initialGroups === groups)}
                           className={classNames('w-100 btn btn-secondary', styles.button)}
                           type="reset"
                           onClick={resetInput}
@@ -300,8 +298,7 @@ export const EditStudentsDetails = ({ id }) => {
                         <button
                           className={classNames('w-100 btn btn-info', styles.button)}
                           type="submit"
-                          disabled={!isValid || !dirty || isEditedLoading || isRemovedLoading
-                            || errors.firstName || errors.lastName || errors.email}
+                          disabled={!isValid || (!dirty &&  initialGroups === groups) || isEditedLoading || isRemovedLoading || errors.firstName || errors.lastName || errors.email}
                         >Save
                         </button>
                       </div>
