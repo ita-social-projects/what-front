@@ -72,7 +72,8 @@ export const Counter = () => {
           <Button onClick={fetchStudents} variant="primary">Fetch students</Button>
           <Button
             onClick={() => fetchLessons({ studentGroupId: 29,
-              startDate: '2015-07-20T18:30:25' })}
+              startDate: '2015-07-20T18:30:25',
+              finishDate: "2015-07-20T18:30:25" })}
             variant="primary"
           >
             Get Lessons
