@@ -6,11 +6,13 @@
   &__toggler {
     display: inline-block;
     position: absolute;
-    top: 20px;
-    left: 173px;
+    top: 25px;
+    left: 2%;
     color: white;
     cursor: pointer;
     z-index: 19;
+    font-size: 20px;
+    cursor: pointer;
 
     &:active {
       opacity: 0.5;
@@ -36,9 +38,7 @@
     transition: .3s linear;
     z-index: 9;
 
-    &:hover {
-      width: 200px;
-    }
+
 
     &::-webkit-scrollbar {
       display: none;
@@ -62,65 +62,30 @@
     &:focus {
       background-color: map-get($colors, accent-color);
       color: #fff;
+      &:hover{
+        opacity: 1;
+      }
     }
     &:hover {
       background-color: map-get($colors, accent-color);
       color: #fff;
+      opacity: .8;
     }
   }
 
-}
-
-@media(max-width: 480px) {
-  .sidebar__toggler {
-    left: 153px;
-  }
-}
-
-@media(max-width: 768px) {
-  .sidebar {
-
-    &__content {
-      left: -200px;
-      width: 200px;
-    }
-
-    &__toggler {
-      top: 25px;
-      left: 100px;
-    }
-
-    &__icon {
-      left: -30px;
-      transition: ease .2s;
-    }
-
-    .sidebar--active svg {
-      left: 20px;
-    }
-
-  }
-}
-
-@media screen and (min-width: 768px) and (max-width: 1919px) {
-  .sidebar:hover .menu-item {
-    animation: menu-item-appear 1s;
-  }
-
-  .sidebar:not(:hover) .menu-item {
-    animation: menu-item-hide 1s;
-  }
 }
 
 @media(min-width: 769px) {
   .sidebar__toggler {
-    display: none;
+    top: 25px;
+    left: 2%;
   }
 }
 
-@media(min-width: 1920px) {
-  .sidebar__content {
-    width: 200px;
+@media (max-width: 768px )  {
+
+  .sidebar{
+    width: 0px;
   }
 }
 
@@ -143,8 +108,9 @@
 }
 
 .sidebar--active {
-  left: 0;
-  transition: .4s;
+
+    width: 200px;
+
 }
 
 .active {

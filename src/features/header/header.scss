@@ -11,6 +11,10 @@
     font-size: 20px;
     height: 100%;
     position: relative;
+    cursor: pointer;
+    &:hover{
+      opacity: .5;
+    }
   }
 
   &__account {
@@ -125,4 +129,3 @@
 .header__dropdown-toggler {
   cursor: pointer;
 }
-

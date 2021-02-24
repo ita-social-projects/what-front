@@ -47,8 +47,7 @@ export const Sidebar = () => {
     1: [
       { id: 0, title: 'Courses', link: paths.COURSES, active: false },
       { id: 1, title: 'Schedule', link: paths.SCHEDULE, active: false },
-      { id: 2, title: 'Support', link: paths.SUPPORT, active: false },
-      { id: 3, title: 'Lessons', link: `${paths.LESSON_BY_STUDENT_ID}/${currentUser.id}`, active: true}
+      { id: 2, title: 'Support', link: paths.SUPPORT, active: true },
     ],
   };
 
@@ -96,8 +95,10 @@ export const Sidebar = () => {
   return (
     <nav className={styles.sidebar}>
 
-      <div className={classNames(styles.sidebar__toggler)} onClick={toggleSidebar}>
-        <Icon icon="SidebarToggler" className="icon" size={24} viewBox="0 0 32 38" />
+      <div
+        className={classNames('d-flex align-items-center', styles.sidebar__toggler)}
+        onClick={toggleSidebar}
+      >WHAT
       </div>
 
       <div className={classNames(styles.sidebar__content, { [styles['sidebar--active']]: sidebar.active })}>
@@ -116,6 +117,7 @@ export const Sidebar = () => {
           ))}
         </div>
       </div>
+
     </nav>
   );
 };
