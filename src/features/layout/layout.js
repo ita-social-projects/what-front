@@ -11,7 +11,7 @@ import {
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
   DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
-  DownloadStudents, DownloadGroups,
+  DownloadStudents, DownloadGroups, HomeworkAdd,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs, HomeworkTabs } from '@/screens';
@@ -58,6 +58,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[3, 4]} exact path={paths.STUDENTS_BY_GROUP_ID} component={DownloadStudents} />
           <ProtectedRoute roles={[2]} exact path={paths.HOMEWORK_DETAILS} component={() => <HomeworkTabs index={0} />} />
           <ProtectedRoute roles={[2]} exact path={paths.HOMEWORK_EDIT} component={() => <HomeworkTabs index={1} />} />
+          <ProtectedRoute roles={[2]} exact path={paths.HOMEWORK_ADD} component={() => <HomeworkAdd />} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
           <Redirect to={paths.NOT_FOUND} />
