@@ -110,7 +110,7 @@ function* fetchAsyncMentorFilteredLessons({ payload }) {
   try {
     yield put({ type: types.FETCHING_MENTORS_FILTER_LESSONS_STARTED });
     console.log(payload.data);
-    const data = yield call(ApiService.load, '/mentors/lessons', payload.data);
+    const data = yield call(ApiService.create, '/mentors/lessons', payload.data);
     yield put({ type: types.FETCHING_MENTORS_FILTER_LESSONS_SUCCEED, payload: { data } });
   } catch (error) {
     yield put({ type: types.FETCHING_MENTORS_FILTER_LESSONS_FAILED, payload: { error } });
