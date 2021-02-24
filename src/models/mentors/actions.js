@@ -29,7 +29,7 @@ export const fetchMentorCourses = (id) => ({
 });
 
 export const fetchMentorFilteredLessonsById = (data) => ({
-  type: types.FETCH_MENTORS_FILTER_LESSONS,
+  type: types.FETCHING_MENTORS_FILTER_LESSONS,
   payload: { data },
 });
 
@@ -186,7 +186,7 @@ function* fetchingMentorsCoursesWatcher() {
   yield takeLatest(types.FETCH_MENTOR_GROUPS, fetchAsyncMentorsCourses);
 }
 function* fetchAsyncMentorFilteredLessonsWatcher() {
-  yield takeLatest(types.FETCH_MENTORS_FILTER_LESSONS, fetchAsyncMentorFilteredLessons);
+  yield takeLatest(types.FETCHING_MENTORS_FILTER_LESSONS, fetchAsyncMentorFilteredLessons);
 }
 
 function* fetchingMentorsLessonsWatcher() {

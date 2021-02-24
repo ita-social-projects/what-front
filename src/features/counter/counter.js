@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { addAlert } from '@/features';
+import { fetchMentorFilteredLessonsById } from '@/models/index.js';
 import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
 import { useActions, ApiService } from '../../shared/index.js';
 import { ModalWindow } from '../modal-window/index.js';
 import { Button, Search, WithLoading } from '../../components/index.js';
 import {
-  login, logOut, registration, loadStudents, fetchMentorFilteredLessonsById
+  login, logOut, registration, loadStudents,
 } from '../../models/index.js';
 
 export const Counter = () => {
@@ -73,7 +74,7 @@ export const Counter = () => {
           <Button
             onClick={() => fetchLessons({ studentGroupId: 29,
               startDate: '2015-07-20T18:30:25',
-              finishDate: "2015-07-20T18:30:25" })}
+              finishDate: '2015-07-20T18:30:25' })}
             variant="primary"
           >
             Get Lessons
