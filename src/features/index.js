@@ -20,3 +20,4 @@ export * from './forgot-password';
 export * from './reset-password';
 export * from './layout';
 export * from './alert-box';
+export * from './homework';

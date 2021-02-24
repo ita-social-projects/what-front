@@ -1,85 +1,67 @@
 import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { number } from 'prop-types';
-import { shallowEqual, useSelector } from 'react-redux';
-import { paths, useActions } from '@/shared/index.js';
 
 import { WithLoading } from '@/components/index.js';
-import { Badge } from 'react-bootstrap';
 
 import classNames from 'classnames';
 
 export const HomeworkDetails = () => {
-  const history = useHistory();
-
-  const editBtn = () => {
-    history.push(paths.HOMEWORK_EDIT);
-  };
-
   const homework = {
-      
+    dueDate: '2020-09-15T00:00:00',
+    taskText: '1. Please create new HTML page <br>2. Page should contain 2 tables 2x2 in center',
+    lessonId: 7,
+    attachmentIds: [
+      3,
+      12,
+    ],
   };
-     
+
+  const transformDateTime = (dateTime) => {
+    const arr = dateTime.toString().split('T');
+    return {
+      date: arr[0],
+      time: arr[1],
+    };
+  };
+
+  const changeText = (text) => text.split('<br>');
 
   return (
     <div className="container">
       <div className="row justify-content-center">
-        <div className={classNames("col-sm-12 card shadow">
+        <div className={classNames('col-sm-12 card shadow')}>
           <div className="px-2 py-4">
             <h3>Homework Details</h3>
+            <div className="col-3 offset-1 text-right"></div>
             <hr />
-            <WithLoading isLoading={false}
+            <WithLoading
+              isLoading={false}
               className="d-block mx-auto m-0"
             >
               <div className="row">
-                <span className="col-12 col-md-6 font-weight-bolder">First Name:</span>
-                <span className="col-12 col-md-6">{mentor?.firstName}</span>
+                <span className="col-12 col-md-6 font-weight-bolder">Lesson:</span>
+                <span className="col-12 col-md-6">{homework?.lessonId}</span>
               </div>
               <hr />
               <div className="row">
-                <span className="col-12 col-md-6 font-weight-bolder">Last Name:</span>
-                <span className="col-12 col-md-6 ">{mentor?.lastName}</span>
+                <span className="col-12 col-md-6 font-weight-bolder">Task:</span>
+                <span className="col-12 col-md-6 ">{changeText(homework?.taskText).map((item) => <p key={item.length}>{item}</p>)}</span>
               </div>
               <hr />
               <div className="row">
-                <span className="col-12 col-md-6 font-weight-bolder">Email:</span>
-                <span className="col-12 col-md-6">{mentor?.email}</span>
+                <span className="col-12 col-md-6 font-weight-bolder">Deadline date:</span>
+                <span className="col-12 col-md-6">{transformDateTime(homework?.dueDate).date}</span>
               </div>
               <hr />
-            <div className="row">
-              <div className="col-12 col-md-6 font-weight-bolder"><span>Group('s): </span></div>
-              <div className="col-12 col-md-6 d-flex flex-wrap lead">
-                {mentorGroups
-                  .map(({ id, name }) => (
-                    <div className="pr-2" key={id}>
-                      <Badge pill variant="info">
-                        <Link
-                          to={`${paths.GROUPS_DETAILS}/${id}`}
-                          className="text-decoration-none text-light"
-                        >{name}
-                        </Link>
-                      </Badge>
-                    </div>
-                  ))}
+              <div className="row">
+                <span className="col-12 col-md-6 font-weight-bolder">Deadline time</span>
+                <span className="col-12 col-md-6">{transformDateTime(homework?.dueDate).time}</span>
               </div>
-            </div>
-            <hr/>
-            <div className="row">
-              <div className="col-12 col-md-6 font-weight-bolder"><span>Course('s): </span></div>
-                <div className="col-12 col-md-6 d-flex flex-wrap lead">
-                  {mentorCourses
-                    .map(({ id, name }) => (
-                      <div className="pr-2" key={id}>
-                        <Badge pill variant="info">
-                          <Link
-                            to={`${paths.COURSE_DETAILS}/${id}`}
-                            className="text-decoration-none text-light"
-                          >{name}</Link>
-                        </Badge>
-                      </div>
-                    ))}
-                </div>
+              <hr />
+              <div className="row">
+                <div className="col-12 col-md-6 font-weight-bolder"><span>Attachment('s): </span></div>
+                <div className="col-12 col-md-6 d-flex flex-wrap lead"></div>
               </div>
+              <hr />
             </WithLoading>
           </div>
         </div>

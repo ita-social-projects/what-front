@@ -14,7 +14,7 @@ import {
   DownloadStudents, DownloadGroups,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
-import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs } from '@/screens';
+import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs, HomeworkTabs } from '@/screens';
 import styles from './layout.scss';
 
 export const Layout = () => {
@@ -56,6 +56,8 @@ export const Layout = () => {
           <ProtectedRoute roles={[3, 4]} exact path={paths.GROUPS_DOWNLOAD} component={DownloadGroups} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.THEMES_DOWNLOAD} component={DownloadThemes} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.STUDENTS_BY_GROUP_ID} component={DownloadStudents} />
+          <ProtectedRoute roles={[2]} exact path={paths.HOMEWORK_DETAILS} component={() => <HomeworkTabs index={0} />} />
+          <ProtectedRoute roles={[2]} exact path={paths.HOMEWORK_EDIT} component={() => <HomeworkTabs index={1} />} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
           <Redirect to={paths.NOT_FOUND} />
