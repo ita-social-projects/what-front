@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { WithLoading, Button } from '@/components/index.js';
+import styles from "./edit-homework.scss"
 
 import classNames from 'classnames';
 
@@ -47,7 +48,7 @@ export const HomeworkEdit = () => {
               <div className="row">
                 <span className="col-12 col-md-6 font-weight-bolder">Task:</span>
                 <span className="col-12 col-md-6 ">
-                  <textarea rows="7" className="form-control">{changeText(homework?.taskText)}</textarea>
+                  <textarea rows="7" className="form-control" >{changeText(homework?.taskText)}</textarea>
                 </span>
               </div>
               <hr />
