@@ -4,3 +4,4 @@ export * from './mentors';
 export * from './courses';
 export * from './groups';
 export * from './secretaries';
+export * from './homework';

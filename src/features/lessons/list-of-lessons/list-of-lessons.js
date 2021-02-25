@@ -3,11 +3,8 @@ import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
 import { currentUserSelector, fetchLessons, lessonsSelector, mentorLessonsSelector, fetchMentorLessons  } from '@/models/index.js';
-
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
-
 import Icon from '@/icon.js';
-
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
 
@@ -36,6 +33,9 @@ export const ListOfLessons = () => {
   const [lessonsPerPage, setLessonsPerPage] = useState(10);
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
+
+
+
 
   useEffect(() => {
     if (currentUser.role === 2) {

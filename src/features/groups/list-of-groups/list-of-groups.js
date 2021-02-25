@@ -127,7 +127,6 @@ export const ListOfGroups = () => {
   }, [searchGroupValue]);
 
   const getGroupList = () => {
-
     const groupList = visibleGroups
       .map(({ name, studentIds, startDate, id, index, finishDate}) => (
         <tr className={styles['table-item']} onClick={() => handleCardDetails(id)} key={id}>
@@ -138,7 +137,7 @@ export const ListOfGroups = () => {
             .join('.')}
           </td>
           <td>{finishDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
-              .join('.')}
+            .join('.')}
           </td>
           <td
             className="text-center"
@@ -190,6 +189,10 @@ export const ListOfGroups = () => {
     setGroupsPerPage(newNumber);
   };
 
+  const downloadGroups = () => {
+    history.push(paths.GROUPS_DOWNLOAD);
+  };
+
   const paginationComponent = () => {
     if (filteredGroupsList.length < groupsPerPage) {
       return (
@@ -237,20 +240,20 @@ export const ListOfGroups = () => {
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-3 ">
               <Search onSearch={handleSearch} placeholder="Group's name" />
             </div>
-            <div className="col-2 text-left">
+            <div className=" col-2 text-left">
               <input
                 className={classNames('form-control ', styles['calendar-input'])}
                 type="date"
                 name="group_date"
                 required
                 onChange={handleCalendarChange}
-                placeholder="year-month-day"
+                placeholder="Start Date"
               />
             </div>
-            <div className="col-2 d-flex">
+            <div className="col-1 d-flex">
               <label
                 className={classNames(styles['label-for-select'])}
                 htmlFor="change-visible-people"
@@ -269,7 +272,13 @@ export const ListOfGroups = () => {
                 <option>100</option>
               </select>
             </div>
-            <div className="col-2 offset-1 text-right">
+            <div className="col-4 text-right">
+              <Button
+                onClick={downloadGroups}
+                type="button"
+                className={classNames('btn btn-warning ', styles.btn)}>
+                Upload Group('s)
+              </Button>
               <Button onClick={handleAddGroup}>
                 <span>Add a group</span>
               </Button>

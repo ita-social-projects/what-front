@@ -1,0 +1,1 @@
+export { HomeworkDetails } from './homework-details.js';

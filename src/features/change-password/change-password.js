@@ -143,7 +143,7 @@ export const ChangePassword = () => {
                         <Button
                           type="button"
                           className={className(styles['cancel-button'], 'w-100')}
-                          onClick={() => { history.push(paths.MY_PROFILE); }}
+                          onClick={() => { history.goBack(); }}
                         >
                           Cancel
                         </Button>
@@ -168,6 +168,7 @@ export const ChangePassword = () => {
               toShow={toShowModal}
               onSubmit={handleConfirm}
               onClose={handleCloseModal}
+              marginLeft
             >Are you sure you want to change password?
             </ModalWindow>
           </WithLoading>
