@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { addAlert } from '@/features';
+import { fetchMentorFilteredLessonsById } from '@/models/index.js';
 import { counterSelector, counterIsLoadingSelector, counterActions } from './redux/index.js';
 import { useActions, ApiService } from '../../shared/index.js';
 import { ModalWindow } from '../modal-window/index.js';
@@ -20,7 +21,8 @@ export const Counter = () => {
     logout,
     regist,
     dispatchShowAlert,
-  ] = useActions([login, logOut, registration, addAlert]);
+    fetchLessons,
+  ] = useActions([login, logOut, registration, addAlert, fetchMentorFilteredLessonsById]);
   const fetchStudents = useActions(loadStudents);
   const [toShowModal, setShowModal] = useState(false);
 
@@ -69,6 +71,14 @@ export const Counter = () => {
             Regist
           </Button>
           <Button onClick={fetchStudents} variant="primary">Fetch students</Button>
+          <Button
+            onClick={() => fetchLessons({ studentGroupId: 29,
+              startDate: '2015-07-20T18:30:25',
+              finishDate: '2015-07-20T18:30:25' })}
+            variant="primary"
+          >
+            Get Lessons
+          </Button>
         </div>
         <div className="m-3">
           <Search

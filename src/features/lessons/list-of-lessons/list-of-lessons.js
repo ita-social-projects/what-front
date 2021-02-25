@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
-import { currentUserSelector, fetchLessons, lessonsSelector } from '@/models/index.js';
+import { currentUserSelector, fetchLessons, lessonsSelector, mentorLessonsSelector, fetchMentorLessons  } from '@/models/index.js';
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
 import classNames from 'classnames';
@@ -10,17 +10,26 @@ import styles from './list-of-lessons.scss';
 
 export const ListOfLessons = () => {
   const history = useHistory();
+
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [visibleLessonsList, setVisibleLessonsList] = useState([]);
   const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
-  const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-  const getLessons = useActions(fetchLessons);
 
+  const mentorsLessonsState = useSelector(mentorLessonsSelector, shallowEqual);
+  const allLessonsState = useSelector(lessonsSelector, shallowEqual);
+
+  const getAllLessons = useActions(fetchLessons);
+  const getMetorsLessons = useActions(fetchMentorLessons);
+
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+
+  const { data, isLoading } = (currentUser.role === 2) ? mentorsLessonsState : allLessonsState;
+
+  const [currentPage, setCurrentPage] = useState(1);
   const [lessonsPerPage, setLessonsPerPage] = useState(10);
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
@@ -29,8 +38,12 @@ export const ListOfLessons = () => {
 
 
   useEffect(() => {
-    getLessons();
-  }, [getLessons]);
+    if (currentUser.role === 2) {
+      getMetorsLessons(currentUser.id);
+    } else {
+      getAllLessons();
+    }
+  }, [currentUser, getAllLessons, getMetorsLessons]);
 
   const transformDateTime = (dateTime) => {
     const arr = dateTime.toString().split('T');
