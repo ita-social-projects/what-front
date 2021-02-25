@@ -47,6 +47,10 @@ export const paths = {
   SCHEDULE_EDIT: '/schedule/edit',
   SCHEDULE_ADD: '/schedule/add',
 
+  HOMEWORK_DETAILS: '/homework/details',
+  HOMEWORK_ADD: '/homework/add',
+  HOMEWORK_EDIT: '/homework/edit',
+
   UNASSIGNED_USERS: '/unassigned',
   MY_PROFILE: '/my-profile',
   CHANGE_PASSWORD: '/change-password',
