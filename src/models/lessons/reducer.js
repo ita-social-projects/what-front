@@ -9,4 +9,3 @@ export const lessonsReducer = combineReducers({
   addLesson: addLessonReducer,
   editLesson: editLessonReducer,
 });
-

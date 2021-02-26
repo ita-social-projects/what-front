@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import {
-  addHomeworkReducer, EditHomeworkReducer, getHomeworkReducer,
+  addHomeworkReducer, editHomeworkReducer, getHomeworkReducer,
 } from './reducers/index.js';
 
 export const homeworkReducer = combineReducers({
   addHomework: addHomeworkReducer,
-  editHomework: EditHomeworkReducer,
+  editHomework: editHomeworkReducer,
   getHomework: getHomeworkReducer,
 });
