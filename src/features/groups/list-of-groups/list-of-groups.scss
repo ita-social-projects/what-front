@@ -69,7 +69,6 @@
 }
 
 .change-rows{
-  margin: 0 10px;
   width: fit-content !important; 
 }
 
@@ -79,8 +78,26 @@
 }
 
 .paginate{
-  margin: auto !important;
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+  max-width: 49% !important;
 }
 
 .btn{margin-right: 3px;}
+
+.table-view{
+  max-width: 8.666667%;
+}
+
+.block{
+  max-width: 1300px !important;
+}
+
+.change-view{
+  max-width: 10.666667% !important;
+}
+
+.upload-add-btn {
+  max-width: 19.333333% !important;
+}
 

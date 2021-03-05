@@ -1,4 +1,6 @@
-export const BASE_URL = 'https://whatbackendapihosting.azurewebsites.net/api';
+export const BASE_URL = 'http://andydendy-api-test.azurewebsites.net/api';
+
+//export const BASE_URL = 'https://whatbackendapihosting.azurewebsites.net/api';
 
 //export const BASE_URL = 'https://whatbackendapi.azurewebsites.net/api';
 
