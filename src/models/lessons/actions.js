@@ -56,7 +56,7 @@ function* fetchLessonsByStudentIdAsync({ payload }) {
     yield put({ type: actionsTypes.LOADING_BY_ID_STARTED });
 
     const studentId = payload.id;
-    const data = yield call(ApiService.load, `/lessons/students/${studentId}`);
+    const data = yield call(ApiService.load, `/students/${studentId}/lessons`);
 
     yield put({ type: actionsTypes.LOADING_BY_ID_SUCCEED, payload: { data } });
   } catch (error) {
