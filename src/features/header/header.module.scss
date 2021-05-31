@@ -1,0 +1,45 @@
+.header {
+  height: 75px;
+  padding: 0 3rem !important;
+
+  background-color: #01073A;
+
+  &__container-links {
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  &__container-links > a {
+    width: 20%;
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: white;
+
+    font-weight: bold;
+    font-size: 20px;
+  } 
+
+  &__account {
+    width: 20%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    font-size: 22px;
+    
+    color: white;
+    cursor: default;
+
+    &-logout:hover {
+      opacity: 0.5;
+      cursor: pointer;
+    }
+  }
+}
+

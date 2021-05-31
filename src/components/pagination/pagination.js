@@ -32,9 +32,9 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
     },
     []);
 
-  const changePage = (page) => {
-    if (page !== currentPage) {
-      setCurrentPage(page);
+  const changePage = (item) => {
+    if (item !== currentPage) {
+      setCurrentPage(item);
     }
   };
 
@@ -46,14 +46,14 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
     setCurrentPage((prev) => (prev === totalPages ? prev : prev + 1));
   };
 
-  return ( 
+  return (
     <nav className="d-flex flex-row flex-wrap">
       <ul className="pagination mb-0">
         <li className="page-item">
           <button className={classNames("page-link", styles.link)} 
             onClick={() => {
-              goToPrevPage()
-              prevPage(currentPage - 1)
+              goToPrevPage();
+              prevPage(currentPage - 1);
             }}
           >&lt;</button>
         </li>
@@ -61,33 +61,51 @@ export const Pagination = ({ itemsPerPage, totalItems, paginate, prevPage, nextP
       <ul className="pagination mb-0">
         {pagination.map((page) => {
           if (!page.ellipsis) {
+            if (totalItems === 1) {
+              return (
+                <li key={page.id} className="page-item">
+                  <button
+                    className={classNames("page-link", styles.link)}
+                    disabled
+                    onClick={() => {
+                      paginate(page.id);
+                      changePage(page.id);
+                    }}
+                  >
+                    {page.id}
+                  </button>
+                </li>
+              );
+            }
             return (
               <li key={page.id} className="page-item">
-                <button className={classNames("page-link", styles.link, {[styles["active"]]: page.current})} 
+                <button
+                  className={classNames("page-link", styles.link, { [styles.active]: page.current })}
                   onClick={() => {
-                    paginate(page.id)
-                    changePage(page.id)
+                    paginate(page.id);
+                    changePage(page.id);
                   }}
                 >
                   {page.id}
                 </button>
               </li>
-            )
+            );
           } else {
-              return (
-                <li key={page.id} className="d-flex align-items-end">
-                  <span className={classNames("pagination-ellipsis px-1", styles.ellipsis)}>&hellip;</span>
-                </li>
-              );
+            return (
+              <li key={page.id} className="d-flex align-items-end">
+                <span className={classNames('pagination-ellipsis px-1', styles.ellipsis)}>&hellip;</span>
+              </li>
+            );
           }
         })}
       </ul>
       <ul className="pagination mb-0">
         <li className="page-item">
-          <button className={classNames("page-link", styles.link)} 
+          <button
+            className={classNames("page-link", styles.link)}
             onClick={() => {
-              goToNextPage()
-              nextPage(currentPage + 1)
+              goToNextPage();
+              nextPage(currentPage + 1);
             }}
           >&gt;</button>
         </li>

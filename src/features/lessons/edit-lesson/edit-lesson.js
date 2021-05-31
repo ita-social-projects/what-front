@@ -13,7 +13,7 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 
 import classNames from 'classnames';
 import styles from './edit-lesson.scss';
-
+import { GroupDetails } from '@/features/groups';
 
 export const EditLesson = () => {
   const history = useHistory();
@@ -111,7 +111,7 @@ export const EditLesson = () => {
   useEffect(() => {
     if (lessonOnEdit && groups.length) {
       const groupRes = groups?.find((group) => group.id === lessonOnEdit.studentGroupId);
-      setStudentsGroupInput(groupRes.name || '');
+      setStudentsGroupInput(!groupRes ? '' : groupRes.name);
       if (groupRes && studentsIsLoaded && !studentsIsLoading) {
         setStudentsGroup(groupRes);
         if (studentsGroup && students) {
@@ -171,7 +171,7 @@ export const EditLesson = () => {
       );
     });
 
-    const theme = capitalizeTheme(themeName);
+    const theme = capitalizeTheme(!themeName ? 'text' : themeName);
 
     const lessonObject = {
       lessonDate: lessonD,

@@ -14,6 +14,23 @@ import classNames from 'classnames';
 import styles from './list-of-secretaries.scss';
 
 export const ListOfSecretaries = () => {
+  const history = useHistory();
+
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [secretariesPerPage, setSecretariesPerPage] = useState(10);
+
+  const [sortingCategories, setSortingCategories] = useState([
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  ]);
+
+  const [visibleSecretaries, setVisibleSecretaries] = useState([]);
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
   const {
     data: activeSecretaries,
     isLoading: areActiveSecretariesLoading,
@@ -34,10 +51,7 @@ export const ListOfSecretaries = () => {
     dispatchAddAlert,
   ] = useActions([fetchActiveSecretaries, fetchSecretaries, addAlert]);
 
-  const history = useHistory();
-
   const [secretaries, setSecretaries] = useState([]);
-  const [visibleSecretaries, setVisibleSecretaries] = useState([]);
 
   const INITIAL_CATEGORIES = [
     { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
@@ -46,15 +60,7 @@ export const ListOfSecretaries = () => {
     { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
-  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
-
   const [searchValue, setSearchValue] = useState('');
-
-  const [isShowDisabled, setIsShowDisabled] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage] = useState(10);
-
   const indexOfLastSecretary = currentPage * secretariesPerPage;
   const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
 
@@ -226,23 +232,46 @@ export const ListOfSecretaries = () => {
     return secretariesRows;
   };
 
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleSecretaries(secretaries.slice(start, finish));
+    setSecretariesPerPage(newNumber);
+  };
+
+  const paginationComponent = () => {
+    if (secretaries.length < secretariesPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={secretariesPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={secretariesPerPage}
+        totalItems={secretaries.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Secretaries</h2>
-        {secretaries.length > secretariesPerPage ? <div className="col-2 text-right">{secretaries.length} secretaries</div> : null}
+        <div className="col-2 text-right">{visibleSecretaries.length} of {secretaries.length} secretaries</div>
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {!areActiveSecretariesLoading && !areAllSecretariesLoading
-          && (
-          <Pagination
-            itemsPerPage={secretariesPerPage}
-            totalItems={secretaries.length}
-            paginate={paginate}
-            prevPage={prevPage}
-            nextPage={nextPage}
-            page={currentPage}
-          />
-          )}
+          {!areActiveSecretariesLoading
+          && !areAllSecretariesLoading
+          && (paginationComponent())}
         </div>
       </div>
       <div className="row">
@@ -254,10 +283,10 @@ export const ListOfSecretaries = () => {
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <Search onSearch={handleSearch} placeholder="Secretary's name" />
             </div>
-            <div className="col-3 offset-2 custom-control custom-switch text-right">
+            <div className="col-3 offset-1 custom-control custom-switch text-right">
               <input
                 type="checkbox"
                 onClick={handleShowDisabled}
@@ -269,6 +298,25 @@ export const ListOfSecretaries = () => {
                 htmlFor="switchDisabled"
               >Show disabled Secretaries
               </label>
+            </div>
+            <div className="col-2 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
             </div>
             {currentUser.role === 4
           && (
@@ -307,6 +355,7 @@ export const ListOfSecretaries = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );
