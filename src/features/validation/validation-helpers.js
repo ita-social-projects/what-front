@@ -24,8 +24,8 @@ export const registrationValidation = Yup.object().shape({
   password: Yup.string()
     .min(8, 'Password must contain at least 8 characters')
     .matches(
-      /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_%^&+=]).*$/,
-//      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+//    /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_%^&+=]).*$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
       'Must contain at least one uppercase, one lowercase, one number',
     )
     .required('This field is required'),
