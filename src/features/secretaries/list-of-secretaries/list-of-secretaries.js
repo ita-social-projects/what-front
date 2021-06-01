@@ -386,7 +386,7 @@ export const ListOfSecretaries = () => {
                 )}
                 htmlFor="switchDisabled"
               >
-                Show disabled Secretaries
+                Disabled Secretaries
               </label>
             </div>
             <div className="col-2 d-flex">
