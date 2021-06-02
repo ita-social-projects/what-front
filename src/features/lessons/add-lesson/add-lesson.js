@@ -15,6 +15,7 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 
 import classNames from 'classnames';
 import styles from './add-lesson.scss';
+import { lessonValidation } from '@features/validation/validation-helpers';
 
 export const AddLesson = () => {
   const history = useHistory();
@@ -253,9 +254,9 @@ export const AddLesson = () => {
                   formData,
                 }}
                 onSubmit={onSubmit}
-                validationSchema={addLessonValidation}
+                validationSchema={lessonValidation}
               >
-                {({ errors }) => (
+                {({ errors, touched }) => (
                   <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
                     <div className="col-12">
                       <div className="mt-3 form-group row">
@@ -263,27 +264,30 @@ export const AddLesson = () => {
                         <div className="col-sm-8">
                           <Field
                             type="text"
-                            className={classNames('form-control', { 'border-danger': errors.themeName })}
+                            className={classNames('form-control',
+                              { 'border-danger': !!(errors.themeName && touched.themeName) })}
                             name="themeName"
                             id="inputLessonTheme"
                             placeholder="Lesson Theme"
                             required
                           />
                           {
-                          errors.themeName
-                            ? <div className={styles.error}>{errors.themeName}</div>
-                            : null
+                          errors.themeName && touched.themeName &&
+                          <div className={styles.error}>{errors.themeName}</div>
                         }
                         </div>
                       </div>
                       <div className="form-group row">
                         <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name:</label>
                         <div className="col-sm-8 input-group">
-                          <input
+                          <Field
                             name="groupName"
                             id="inputGroupName"
                             type="text"
-                            className={classNames('form-control group-input', { 'border-danger': groupError })}
+                            className={
+                              classNames('form-control group-input',
+                                { 'border-danger': !!(errors.groupName && touched.groupName) })
+                            }
                             placeholder="Group Name"
                             onChange={handleGroupChange}
                             onFocus={hideClassRegister}
@@ -298,10 +302,9 @@ export const AddLesson = () => {
                           </datalist>
                         </div>
                         {
-                            groupError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid group name</div>
-                              : null
-                          }
+                          errors.groupName && touched.groupName &&
+                          <div className={styles.error}>{errors.groupName}</div>
+                        }
                       </div>
                       <div className="form-group row">
                         <label className="col-sm-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
@@ -319,8 +322,8 @@ export const AddLesson = () => {
                       <div className="form-group row">
                         <label className="col-sm-4 col-form-label" htmlFor="mentorEmail">Mentor Email:</label>
                         <div className="col-md-8 input-group">
-                          <input
-                            className={classNames('form-control group-input', { 'border-danger': mentorError })}
+                          <Field
+                            className={classNames('form-control group-input', { 'border-danger': !!(errors.mentorEmail && touched.mentorEmail) })}
                             type="text"
                             name="mentorEmail"
                             id="mentorEmail"
@@ -339,10 +342,9 @@ export const AddLesson = () => {
                           </datalist>
                         </div>
                         {
-                            mentorError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid mentor email</div>
-                              : null
-                          }
+                          errors.mentorEmail && touched.mentorEmail &&
+                          <div className={styles.error}>{errors.mentorEmail}</div>
+                        }
                       </div>
                     </div>
                     { classRegister && formData && (
