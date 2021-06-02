@@ -196,19 +196,20 @@ export const StartGroup = () => {
                       <label className="mb-0" htmlFor="course">Course</label>
                     </div>
                     <div className="col-md-8">
-                      <Field
-                        as="select"
-                        className={classNames('custom-select')}
-                        name="courseId"
-                        id="course"
-                      >
-                        <WithLoading isLoading={coursesIsLoading}>{
-                        courses.map((course) => (
-                          <option value={course.id} key={course.id}>{course.name}</option>
-                        ))
-                        }
-                        </WithLoading>
-                      </Field>
+                      <WithLoading isLoading={coursesIsLoading} className="d-block mx-auto">
+                        <Field
+                          as="select"
+                          className={classNames('custom-select')}
+                          name="courseId"
+                          id="course"
+                        >
+                          {
+                          courses.map((course) => (
+                            <option value={course.id} key={course.id}>{course.name}</option>
+                          ))
+                          }
+                        </Field>
+                      </WithLoading>
                     </div>
                   </div>
                   <div className="row mb-3">
