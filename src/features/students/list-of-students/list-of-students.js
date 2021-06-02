@@ -289,7 +289,7 @@ export const ListOfStudents = () => {
                 className={classNames('custom-control-label', styles['custom-control-label'])}
                 htmlFor="show-disabled-check"
               >
-                Show disabled students
+                Disabled students
               </label>
             </div>
             <div className="col-2 mx-2 d-flex">
