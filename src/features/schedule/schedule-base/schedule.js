@@ -144,23 +144,23 @@ export const Schedule = ({ groupsData, schedulesData }) => {
           ) : null}
         </div>
         <section className={classNames('row', 'justify-content-center')}>
-          {currentWeek.map(({ id, isToday, day, date, lessons, isPast }) => (
+          { currentWeek.map(({ id, isToday, day, date, lessons, isPast }) => (
             <div key={id} className={classNames('col', 'px-0', { [styles['current-day']]: isToday }, styles['day-column'])}>
               <hgroup className={styles['day-column-header']}>
                 <h5 className="text-center">{day}</h5>
                 <h5 className="text-center">{date}</h5>
               </hgroup>
               <ul className={styles['lessons-list']}>
-                {lessons.map(({ id: lessonId, studentGroupId, lessonEnd, lessonStart }) => (
+                { lessons.map(({ id: lessonId, studentGroupId, lessonEnd, lessonStart }) => (
                   <li key={lessonId} className={styles['lessons-list__item']}>
                     <p
                       className={styles['lessons-list__group-name']}
                       onClick={handleGroupSchedule}
                       data-group-id={studentGroupId}
                     >
-                      {Array.isArray(groups)
+                      { Array.isArray(groups)
                         ? groups.find((group) => studentGroupId === group.id).name
-                        : groups.name}
+                        : groups.name }
                     </p>
                     <div className={styles['lessons-list__details']}>
                       <Badge
@@ -183,7 +183,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                       ) : null}
                     </div>
                   </li>
-                ))}
+                )) }
               </ul>
             </div>
           ))}
