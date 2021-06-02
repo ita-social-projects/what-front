@@ -76,7 +76,7 @@ export const addLessonValidation = Yup.object().shape({
 export const lessonValidation = Yup.object().shape({
   themeName: Yup.string()
     .min(1, 'Too short')
-    .max(200, 'Too long')
+    .max(100, 'Too long')
     .required('This field is required'),
   groupName: Yup.string()
     .min(1, 'Too short')
