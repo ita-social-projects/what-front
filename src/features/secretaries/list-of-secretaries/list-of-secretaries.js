@@ -1,37 +1,37 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { shallowEqual, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   currentUserSelector,
   fetchActiveSecretaries,
   fetchSecretaries,
   activeSecretariesSelector,
   secretariesSelector,
-} from "@/models/index.js";
-import { paths, useActions } from "@/shared/index.js";
+} from '@/models/index.js';
+import { paths, useActions } from '@/shared/index.js';
 
-import { Button, Search, WithLoading, Pagination } from "@/components/index.js";
-import { addAlert } from "@/features/layout";
+import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
+import { addAlert } from '@/features/layout';
 
-import Icon from "@/icon.js";
+import Icon from '@/icon.js';
 
-import classNames from "classnames";
-import styles from "./list-of-secretaries.scss";
+import classNames from 'classnames';
+import styles from './list-of-secretaries.scss';
 
 export const ListOfSecretaries = () => {
   const history = useHistory();
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [secretariesPerPage, setSecretariesPerPage] = useState(10);
 
   const [sortingCategories, setSortingCategories] = useState([
-    { id: 0, name: "index", sortedByAscending: true, tableHead: "#" },
-    { id: 1, name: "firstName", sortedByAscending: false, tableHead: "Name" },
-    { id: 2, name: "lastName", sortedByAscending: false, tableHead: "Surname" },
-    { id: 3, name: "email", sortedByAscending: false, tableHead: "Email" },
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ]);
 
   const [visibleSecretaries, setVisibleSecretaries] = useState([]);
@@ -56,13 +56,13 @@ export const ListOfSecretaries = () => {
   const [secretaries, setSecretaries] = useState([]);
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: "index", sortedByAscending: true, tableHead: "#" },
-    { id: 1, name: "firstName", sortedByAscending: false, tableHead: "Name" },
-    { id: 2, name: "lastName", sortedByAscending: false, tableHead: "Surname" },
-    { id: 3, name: "email", sortedByAscending: false, tableHead: "Email" },
+    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
+    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const indexOfLastSecretary = currentPage * secretariesPerPage;
   const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
 
@@ -187,7 +187,7 @@ export const ListOfSecretaries = () => {
   const resetSortingCategory = useCallback(() => {
     setSortingCategories(
       sortingCategories.map((category) => {
-        if (category.name === "index") {
+        if (category.name === 'index') {
           return { ...category, sortedByAscending: true };
         }
         return { ...category, sortedByAscending: false };
@@ -253,7 +253,7 @@ export const ListOfSecretaries = () => {
         <tr
           key={id}
           onClick={() => handleSecretariesDetails(id)}
-          className={styles["table-row"]}
+          className={styles['table-row']}
           data-secretary-id={id}
         >
           <td className="text-center">{index + 1}</td>
@@ -374,15 +374,15 @@ export const ListOfSecretaries = () => {
                 type="checkbox"
                 onClick={handleShowDisabled}
                 className={classNames(
-                  "custom-control-input",
-                  styles["custom-control-input"]
+                  'custom-control-input',
+                  styles['custom-control-input']
                 )}
                 id="switchDisabled"
               />
               <label
                 className={classNames(
-                  "custom-control-label",
-                  styles["custom-control-label"]
+                  'custom-control-label',
+                  styles['custom-control-label']
                 )}
                 htmlFor="switchDisabled"
               >
@@ -391,13 +391,13 @@ export const ListOfSecretaries = () => {
             </div>
             <div className="col-2 d-flex">
               <label
-                className={classNames(styles["label-for-select"])}
+                className={classNames(styles['label-for-select'])}
                 htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames("form-control", styles["change-rows"])}
+                className={classNames('form-control', styles['change-rows'])}
                 id="change-visible-people"
                 onChange={(event) => {
                   changeCountVisibleItems(event.target.value);
@@ -428,7 +428,7 @@ export const ListOfSecretaries = () => {
                 <tr>
                   {sortingCategories.map(
                     ({ id, name, tableHead, sortedByAscending }) => (
-                      <th key={id} className={styles["table-head"]}>
+                      <th key={id} className={styles['table-head']}>
                         <span
                           data-sorting-param={name}
                           data-sorted-by-ascending={Number(sortedByAscending)}
@@ -455,7 +455,7 @@ export const ListOfSecretaries = () => {
         </div>
         <div
           className={classNames(
-            "row justify-content-between align-items-center mb-3",
+            'row justify-content-between align-items-center mb-3',
             styles.paginate
           )}
         >
