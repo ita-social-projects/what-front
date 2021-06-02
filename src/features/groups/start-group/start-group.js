@@ -174,199 +174,201 @@ export const StartGroup = () => {
               <Form className="px-2 py-4" name="start-group">
                 <h3>Group starting</h3>
                 <hr />
-                <div className="row mb-3">
-                  <div className="col d-flex align-items-center">
-                    <label className="mb-0" htmlFor="name">Group name</label>
+                <WithLoading isLoading={isAdding} className="d-block mx-auto">
+                  <div className="row mb-3">
+                    <div className="col d-flex align-items-center">
+                      <label className="mb-0" htmlFor="name">Group name</label>
+                    </div>
+                    <div className="col-md-8">
+                      <Field
+                        className={classNames('form-control', { 'border-danger': errors.name })}
+                        type="text"
+                        name="name"
+                        id="name"
+                        required
+                        placeholder="group name"
+                      />
+                      {errors.name && <p className="w-100 text-danger mb-0">{errors.name}</p>}
+                    </div>
                   </div>
-                  <div className="col-md-8">
-                    <Field
-                      className={classNames('form-control', { 'border-danger': errors.name })}
-                      type="text"
-                      name="name"
-                      id="name"
-                      required
-                      placeholder="group name"
-                    />
-                    {errors.name && <p className="w-100 text-danger mb-0">{errors.name}</p>}
+                  <div className="row mb-3">
+                    <div className="col d-flex align-items-center">
+                      <label className="mb-0" htmlFor="course">Course</label>
+                    </div>
+                    <div className="col-md-8">
+                      <Field
+                        as="select"
+                        className={classNames('custom-select')}
+                        name="courseId"
+                        id="course"
+                      >
+                        <WithLoading isLoading={coursesIsLoading}>{
+                        courses.map((course) => (
+                          <option value={course.id} key={course.id}>{course.name}</option>
+                        ))
+                        }
+                        </WithLoading>
+                      </Field>
+                    </div>
                   </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col d-flex align-items-center">
-                    <label className="mb-0" htmlFor="course">Course</label>
+                  <div className="row mb-3">
+                    <div className="col d-flex align-items-center">
+                      <label className="mb-0" htmlFor="start-date">Start date</label>
+                    </div>
+                    <div className="col-md-8">
+                      <Field
+                        className={classNames('form-control', { 'border-danger': errors.startDate })}
+                        type="date"
+                        name="startDate"
+                        id="startDate"
+                        required
+                      />
+                      {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
+                    </div>
                   </div>
-                  <div className="col-md-8">
-                    <Field
-                      as="select"
-                      className={classNames('custom-select')}
-                      name="courseId"
-                      id="course"
+                  <div className="row mb-3">
+                    <div className="col d-flex align-items-center">
+                      <label className="mb-0" htmlFor="finish-date">Finish date</label>
+                    </div>
+                    <div className="col-md-8">
+                      <Field
+                        className={classNames('form-control', { 'border-danger': errors.finishDate })}
+                        type="date"
+                        name="finishDate"
+                        id="finishDate"
+                        required
+                      />
+                      {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <div className="col">
+                      <label className="mb-0" htmlFor="students">Mentors</label>
+                    </div>
+                    <div className="col-md-8">
+                      <div className="d-flex">
+                        <Field
+                          className="form-control"
+                          name="mentors"
+                          id="mentors"
+                          list="mentors-list"
+                        />
+                        <datalist id="mentors-list">
+                          {
+                            mentorsData
+                              .filter(({ id }) => !groupMentors
+                                .find((mentor) => mentor.id === id))
+                              .map(({
+                                id, firstName, lastName, email,
+                              }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
+                          }
+                        </datalist>
+                        <Button
+                          variant="info"
+                          onClick={() => addMentor(values.mentors, () => setFieldValue('mentors', ''))}
+                        >
+                          +
+                        </Button>
+                      </div>
+                      <div className="w-100">
+                        <ul className="col-md-12 d-flex flex-wrap justify-content-between p-0">
+                          {
+                            groupMentors.map(({ id, firstName, lastName }) => (
+                              <li
+                                key={id}
+                                className={classNames(
+                                  'd-flex bg-light border border-outline-secondary rounded',
+                                  styles['datalist-item'],
+                                )}
+                              >
+                                {firstName} {lastName}
+                                <button
+                                  type="button"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  onClick={() => removeMentor(id)}
+                                >
+                                  X
+                                </button>
+                              </li>
+                            ))
+                            }
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <div className="col">
+                      <label className="mb-0" htmlFor="students">Students</label>
+                    </div>
+                    <div className="col-md-8">
+                      <div className="d-flex">
+                        <Field
+                          className="form-control"
+                          name="students"
+                          id="students"
+                          list="student-list"
+                        />
+                        <datalist id="student-list">
+                          {
+                            studentsData
+                              .filter(({ id }) => !groupStudents
+                                .find((mentor) => mentor.id === id))
+                              .map(({
+                                id, firstName, lastName, email,
+                              }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
+                          }
+                        </datalist>
+                        <Button
+                          variant="info"
+                          onClick={() => addStudent(values.students, () => setFieldValue('students', ''))}
+                        >
+                          +
+                        </Button>
+                      </div>
+                      <div className="w-100">
+                        <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
+                          {
+                            groupStudents.map(({ id, firstName, lastName }) => (
+                              <li
+                                key={id}
+                                className={classNames(
+                                  'd-flex bg-light border border-outline-secondary rounded',
+                                  styles['datalist-item'],
+                                )}
+                              >
+                                {firstName} {lastName}
+                                <button
+                                  type="button"
+                                  className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
+                                  onClick={() => removeStudent(id)}
+                                >
+                                  X
+                                </button>
+                              </li>
+                            ))
+                            }
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row justify-content-around mt-4">
+                    <Button
+                      type="reset"
+                      className="w-25"
+                      variant="secondary"
+                      onClick={handleReset}
                     >
-                      <WithLoading isLoading={coursesIsLoading}>{
-                      courses.map((course) => (
-                        <option value={course.id} key={course.id}>{course.name}</option>
-                      ))
-                      }
-                      </WithLoading>
-                    </Field>
+                      Clear all
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="w-25"
+                      disabled={!isValid || !dirty || isAdding}
+                    >
+                      Create
+                    </Button>
                   </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col d-flex align-items-center">
-                    <label className="mb-0" htmlFor="start-date">Start date</label>
-                  </div>
-                  <div className="col-md-8">
-                    <Field
-                      className={classNames('form-control', { 'border-danger': errors.startDate })}
-                      type="date"
-                      name="startDate"
-                      id="startDate"
-                      required
-                    />
-                    {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col d-flex align-items-center">
-                    <label className="mb-0" htmlFor="finish-date">Finish date</label>
-                  </div>
-                  <div className="col-md-8">
-                    <Field
-                      className={classNames('form-control', { 'border-danger': errors.finishDate })}
-                      type="date"
-                      name="finishDate"
-                      id="finishDate"
-                      required
-                    />
-                    {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col">
-                    <label className="mb-0" htmlFor="students">Mentors</label>
-                  </div>
-                  <div className="col-md-8">
-                    <div className="d-flex">
-                      <Field
-                        className="form-control"
-                        name="mentors"
-                        id="mentors"
-                        list="mentors-list"
-                      />
-                      <datalist id="mentors-list">
-                        {
-                          mentorsData
-                            .filter(({ id }) => !groupMentors
-                              .find((mentor) => mentor.id === id))
-                            .map(({
-                              id, firstName, lastName, email,
-                            }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
-                        }
-                      </datalist>
-                      <Button
-                        variant="info"
-                        onClick={() => addMentor(values.mentors, () => setFieldValue('mentors', ''))}
-                      >
-                        +
-                      </Button>
-                    </div>
-                    <div className="w-100">
-                      <ul className="col-md-12 d-flex flex-wrap justify-content-between p-0">
-                        {
-                          groupMentors.map(({ id, firstName, lastName }) => (
-                            <li
-                              key={id}
-                              className={classNames(
-                                'd-flex bg-light border border-outline-secondary rounded',
-                                styles['datalist-item'],
-                              )}
-                            >
-                              {firstName} {lastName}
-                              <button
-                                type="button"
-                                className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                onClick={() => removeMentor(id)}
-                              >
-                                X
-                              </button>
-                            </li>
-                          ))
-                          }
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col">
-                    <label className="mb-0" htmlFor="students">Students</label>
-                  </div>
-                  <div className="col-md-8">
-                    <div className="d-flex">
-                      <Field
-                        className="form-control"
-                        name="students"
-                        id="students"
-                        list="student-list"
-                      />
-                      <datalist id="student-list">
-                        {
-                          studentsData
-                            .filter(({ id }) => !groupStudents
-                              .find((mentor) => mentor.id === id))
-                            .map(({
-                              id, firstName, lastName, email,
-                            }) => <option key={id} value={`${firstName} ${lastName} ${email}`} />)
-                        }
-                      </datalist>
-                      <Button
-                        variant="info"
-                        onClick={() => addStudent(values.students, () => setFieldValue('students', ''))}
-                      >
-                        +
-                      </Button>
-                    </div>
-                    <div className="w-100">
-                      <ul className="col-12 d-flex flex-wrap justify-content-between p-0">
-                        {
-                          groupStudents.map(({ id, firstName, lastName }) => (
-                            <li
-                              key={id}
-                              className={classNames(
-                                'd-flex bg-light border border-outline-secondary rounded',
-                                styles['datalist-item'],
-                              )}
-                            >
-                              {firstName} {lastName}
-                              <button
-                                type="button"
-                                className="btn p-0 ml-auto mr-2 font-weight-bold text-danger"
-                                onClick={() => removeStudent(id)}
-                              >
-                                X
-                              </button>
-                            </li>
-                          ))
-                          }
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div className="row justify-content-around mt-4">
-                  <Button
-                    type="reset"
-                    className="w-25"
-                    variant="secondary"
-                    onClick={handleReset}
-                  >
-                    Clear all
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="w-25"
-                    disabled={!isValid || !dirty || isAdding}
-                  >
-                    Create
-                  </Button>
-                </div>
+                </WithLoading>
               </Form>
             )}
           </Formik>
