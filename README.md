@@ -144,15 +144,28 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
 
 ### Front-end development team
 
-[![@so2niko](https://avatars2.githubusercontent.com/u/9075641?s=200&v=4)](https://github.com/so2niko)
-[![@archontis-cpu](https://avatars0.githubusercontent.com/u/57407473?s=200&v=4)](https://github.com/archontis-cpu)
-[![@Anastasiia0999](https://avatars0.githubusercontent.com/u/55295369?s=200&v=4)](https://github.com/Anastasiia0999)
-[![@Icemandov](https://avatars2.githubusercontent.com/u/50587976?s=200&v=4)](https://github.com/Icemandov)
-[![@Winchestery](https://avatars1.githubusercontent.com/u/56606870?s=200&v=4)](https://github.com/Winchestery)
-[![@MarinaPasternak](https://avatars3.githubusercontent.com/u/31963187?s=200&v=4)](https://github.com/MarinaPasternak)
-[![@PavelKundenko](https://avatars1.githubusercontent.com/u/47292994?s=200&v=4)](https://github.com/PavelKundenko)
-[![@iklopov](https://avatars3.githubusercontent.com/u/22566554?s=200&v=4)](https://github.com/iklopov)
-[![@MozdolevskyiMaksym](https://avatars1.githubusercontent.com/u/72501713?s=200&v=4)](https://github.com/MozdolevskyiMaksym)
+[![@so2niko](https://avatars2.githubusercontent.com/u/9075641?s=150&v=4)](https://github.com/so2niko)
+[![@archontis-cpu](https://avatars0.githubusercontent.com/u/57407473?s=150&v=4)](https://github.com/archontis-cpu)
+[![@Anastasiia0999](https://avatars0.githubusercontent.com/u/55295369?s=150&v=4)](https://github.com/Anastasiia0999)
+[![@Icemandov](https://avatars2.githubusercontent.com/u/50587976?s=150&v=4)](https://github.com/Icemandov)
+[![@Winchestery](https://avatars1.githubusercontent.com/u/56606870?s=150&v=4)](https://github.com/Winchestery)
+[![@MarinaPasternak](https://avatars3.githubusercontent.com/u/31963187?s=150&v=4)](https://github.com/MarinaPasternak)
+[![@PavelKundenko](https://avatars1.githubusercontent.com/u/47292994?s=150&v=4)](https://github.com/PavelKundenko)
+[![@iklopov](https://avatars3.githubusercontent.com/u/22566554?s=150&v=4)](https://github.com/iklopov)
+[![@MozdolevskyiMaksym](https://avatars1.githubusercontent.com/u/72501713?s=150&v=4)](https://github.com/MozdolevskyiMaksym)
+[![@anton-sedchenko](https://avatars.githubusercontent.com/u/48652896?s=150&v=4)](https://github.com/anton-sedchenko)
+[![@CaelumVallis](https://avatars.githubusercontent.com/u/64030284?s=150&v=4)](https://github.com/CaelumVallis)
+[![@ferbiy](https://avatars.githubusercontent.com/u/42357921?s=150&v=4)](https://github.com/ferbiy)
+[![@anogire](https://avatars.githubusercontent.com/u/70234990?s=150&v=4)](https://github.com/anogire)
+[![@7SergSmith7](https://avatars.githubusercontent.com/u/30880200?s=150&v=4)](https://github.com/7SergSmith7)
+[![@AllaYakymova](https://avatars.githubusercontent.com/u/62800248?s=150&v=4)](https://github.com/AllaYakymova)
+[![@D-mezentseff](https://avatars.githubusercontent.com/u/82518924?s=150&v=4)](https://github.com/D-mezentseff)
+[![@vladbragga](https://avatars.githubusercontent.com/u/79112212?s=150&v=4)](https://github.com/vladbragga)
+[![@viktoriiaKR](https://avatars.githubusercontent.com/u/58779629?s=150&v=4)](https://github.com/viktoriiaKR)
+[![@Keyxnx](https://avatars.githubusercontent.com/u/57628582?s=150&v=4)](https://github.com/Keyxnx)
+
+
+
 
 ---
 
