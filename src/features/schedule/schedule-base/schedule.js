@@ -186,7 +186,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                 )) }
               </ul>
             </div>
-          ))}
+          )) }
         </section>
       </WithLoading>
     </div>

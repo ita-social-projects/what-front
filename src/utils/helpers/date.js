@@ -1,14 +1,12 @@
 export const formatDate = (date) => {
-    let month = `${date.getMonth() + 1}`,
-        day = `${date.getDate()}`,
-        year = `${date.getFullYear()}`;
+    let month = checkDateLeadsZero(date.getMonth() + 1),
+        day = checkDateLeadsZero(date.getDate()),
+        year = date.getFullYear();
 
-    if (month.length < 2) {
-      month = '0' + month;
-    }
-    if (day.length < 2) {
-      day = '0' + day;
-    }
-    
     return [year, month, day].join('-');
-  }
+}
+
+const checkDateLeadsZero = (value) => {
+
+	return `${ value < 10 ? 0 : '' }${ value }`;
+}
