@@ -164,9 +164,6 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
 [![@viktoriiaKR](https://avatars.githubusercontent.com/u/58779629?s=150&v=4)](https://github.com/viktoriiaKR)
 [![@Keyxnx](https://avatars.githubusercontent.com/u/57628582?s=150&v=4)](https://github.com/Keyxnx)
 
-
-
-
 ---
 
 ## FAQ
