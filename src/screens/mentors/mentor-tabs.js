@@ -27,7 +27,7 @@ export const MentorTabs = ({ index }) => {
     return (
       <Tabs defaultIndex={index} linkBack={paths.MENTORS} className="container w-50">
         <Tab title="Mentor details">
-          <MentorDetails id={Number(id)} />
+          <MentorDetails />
         </Tab>
         <Tab title="Edit a mentor">
           <EditMentor id={Number(id)} />
