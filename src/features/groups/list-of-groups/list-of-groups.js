@@ -243,7 +243,7 @@ export const ListOfGroups = () => {
             <div className="col-3 ">
               <Search onSearch={handleSearch} placeholder="Group's name" />
             </div>
-            <div className=" col-2 text-left">
+            <div className="col-2">
               <input
                 className={classNames('form-control ', styles['calendar-input'])}
                 type="date"
