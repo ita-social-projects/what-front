@@ -161,7 +161,7 @@ Here is the back-end part of our project: _https://github.com/ita-social-project
 [![@AllaYakymova](https://avatars.githubusercontent.com/u/62800248?s=150&v=4)](https://github.com/AllaYakymova)
 [![@D-mezentseff](https://avatars.githubusercontent.com/u/82518924?s=150&v=4)](https://github.com/D-mezentseff)
 [![@vladbragga](https://avatars.githubusercontent.com/u/79112212?s=150&v=4)](https://github.com/vladbragga)
-[![@viktoriiaKR](https://avatars.githubusercontent.com/u/58779629?s=150&v=4)](https://github.com/viktoriiaKR)
+<a href="https://github.com/viktoriiaKR"><img src="https://avatars.githubusercontent.com/u/58779629" width="150" height="150"></a>
 [![@Keyxnx](https://avatars.githubusercontent.com/u/57628582?s=150&v=4)](https://github.com/Keyxnx)
 
 ---
