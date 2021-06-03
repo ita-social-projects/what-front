@@ -276,7 +276,7 @@ export const ListOfGroups = () => {
               <Button
                 onClick={downloadGroups}
                 type="button"
-                className={classNames('btn btn-warning ', styles.btn)}>
+                className={classNames('btn btn-warning ', styles['left-add-btn'])}>
                 Upload Group('s)
               </Button>
               <Button onClick={handleAddGroup}>
