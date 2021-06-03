@@ -13,7 +13,6 @@ import { scheduleStateShape, studentGroupsStateShape } from '@features/shared';
 import { formatDate } from '@/utils';
 import styles from './schedule.scss';
 
-
 export const Schedule = ({ groupsData, schedulesData }) => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
