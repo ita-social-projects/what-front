@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import propTypes from "prop-types";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import propTypes from 'prop-types';
 
 const arrow = (
   <svg
@@ -60,7 +60,7 @@ export const Tabs = ({ className, children, defaultIndex, linkBack }) => {
         }
         {renderTabs()}
       </div>
-      <div>{renderCondtent()}</div>
+      <div>{renderContent()}</div>
     </div>
   );
 };

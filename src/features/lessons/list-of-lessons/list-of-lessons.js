@@ -226,7 +226,7 @@ export const ListOfLessons = () => {
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-2">
+            <div className="col-3">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
             <div className="col-2">
@@ -238,7 +238,7 @@ export const ListOfLessons = () => {
                 onChange={handleSearchDate}
               />
             </div>
-            <div className="col-2 d-flex">
+            <div className="col-1 d-flex">
               <label
                 className={classNames(styles['label-for-select'])}
                 htmlFor="change-visible-people"
@@ -257,11 +257,10 @@ export const ListOfLessons = () => {
                 <option>100</option>
               </select>
             </div>
-            <div className="col-3 offset-1 text-right">
               {currentUser.role !== 3
               && (
-              <div className="btn-group">
-                <Button onClick={downloadThemes} type="button" className="btn btn-warning">
+              <div className="col-4 text-right">
+                <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
                   Add theme('s)
                 </Button>
                 <Button onClick={addLesson}>
@@ -269,7 +268,6 @@ export const ListOfLessons = () => {
                 </Button>
               </div>
               )}
-            </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
             <table className="table table-hover">

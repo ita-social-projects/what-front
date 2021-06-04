@@ -60,7 +60,7 @@ export const paths = {
 };
 
 export const homepages = {
-  1: paths.SUPPORT, // student homepage
+  1: paths.COURSES, // student homepage
   2: paths.LESSONS, // mentor homepage
   3: paths.MENTORS, // secretary
   4: paths.STUDENTS, // admin homepage
