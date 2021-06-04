@@ -12,7 +12,7 @@ import { Button, WithLoading } from '@/components';
 import { addLessonValidation } from '@features/validation/validation-helpers.js';
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
-import { Other } from '@/utils'
+import { Other } from '@/utils';
 
 import classNames from 'classnames';
 import styles from './add-lesson.scss';
@@ -168,7 +168,7 @@ export const AddLesson = () => {
       setGroupError(false);
     } else simpleValidation('#inputGroupName', setGroupError);
 
-    !mentorInput && simpleValidation('#mentorEmail', setMentorError)
+    !mentorInput && simpleValidation('#mentorEmail', setMentorError);
   };
 
   const simpleValidation = (inputSelector, setError) => {
@@ -236,11 +236,11 @@ export const AddLesson = () => {
             <hr />
             <WithLoading
               isLoading={
-                  lessonsIsLoading
-                  || mentorsIsLoading
-                  || studentsIsLoading
-                  || groupsIsLoading
-                }
+                lessonsIsLoading
+                || mentorsIsLoading
+                || studentsIsLoading
+                || groupsIsLoading
+              }
               className={classNames(styles['loader-centered'])}
             >
               <Formik
@@ -271,9 +271,9 @@ export const AddLesson = () => {
                               required
                             />
                             {
-                            errors.themeName &&
-                            <div className={styles.error}>{errors.themeName}</div>
-                          }
+                              errors.themeName &&
+                              <div className={styles.error}>{errors.themeName}</div>
+                            }
                           </div>
                         </div>
                         <div className="form-group row">
@@ -345,22 +345,22 @@ export const AddLesson = () => {
                           }
                         </div>
                       </div>
-                      { classRegister && formData && (
-                      <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
-                        <FieldArray name="formData">
-                          {() => (
-                            <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
-                              <table className="table table-bordered table-hover">
-                                <thead>
+                      {classRegister && formData && (
+                        <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
+                          <FieldArray name="formData">
+                            {() => (
+                              <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
+                                <table className="table table-bordered table-hover">
+                                  <thead>
                                   <tr>
                                     <th scope="col" aria-label="first_col" />
                                     <th scope="col">Full Student`s Name</th>
                                     <th scope="col" className="text-center">Mark</th>
                                     <th scope="col" className="text-center">Presence</th>
                                   </tr>
-                                </thead>
-                                <tbody>
-                                  { formData && formData.length > 0 && (
+                                  </thead>
+                                  <tbody>
+                                  {formData && formData.length > 0 && (
                                     formData.map((lessonVisit, index) => (
                                       <tr key={lessonVisit.studentId}>
                                         <th scope="row">{ index + 1 }</th>
@@ -402,12 +402,12 @@ export const AddLesson = () => {
                                       </tr>
                                     ))
                                   )}
-                                </tbody>
-                              </table>
-                            </div>
-                          )}
-                        </FieldArray>
-                      </div>
+                                  </tbody>
+                                </table>
+                              </div>
+                            )}
+                          </FieldArray>
+                        </div>
                       )}
                     </div>
                     <div className='col-12 d-flex justify-content-between'>
