@@ -243,7 +243,7 @@ export const ListOfGroups = () => {
             <div className="col-3 ">
               <Search onSearch={handleSearch} placeholder="Group's name" />
             </div>
-            <div className=" col-2 text-left">
+            <div className="col-2">
               <input
                 className={classNames('form-control ', styles['calendar-input'])}
                 type="date"
@@ -276,7 +276,7 @@ export const ListOfGroups = () => {
               <Button
                 onClick={downloadGroups}
                 type="button"
-                className={classNames('btn btn-warning ', styles.btn)}>
+                className={classNames('btn btn-warning ', styles['left-add-btn'])}>
                 Upload Group('s)
               </Button>
               <Button onClick={handleAddGroup}>
