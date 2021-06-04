@@ -1,1 +1,1 @@
-export { Cookie, Other } from './helpers/index.js';
+export { Cookie, CommonHelpers } from './helpers/index.js';
