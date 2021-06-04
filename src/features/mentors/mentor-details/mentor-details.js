@@ -2,13 +2,11 @@ import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
-import { paths, useActions } from '@/shared/index.js';
-import { mentorIdSelector, fetchMentorById, fetchActiveMentors, currentUserSelector,
+import { paths } from '@/shared/index.js';
+import { mentorIdSelector, currentUserSelector,
   mentorCoursesSelector, mentorGroupsSelector } from '@/models/index.js';
-
 import { WithLoading } from '@/components/index.js';
 import { Badge } from 'react-bootstrap';
-
 import classNames from 'classnames';
 
 export const MentorDetails = () => {
