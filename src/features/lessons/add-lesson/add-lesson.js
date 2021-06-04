@@ -168,14 +168,14 @@ export const AddLesson = () => {
       setGroupError(false);
     }
 
-    !studentsGroup && setCorrectError('#inputGroupName', setGroupError);
-    !mentorInput && setCorrectError('#mentorEmail', setMentorError);
+    !studentsGroup && setCorrectError('#inputGroupName', setGroupError, 'group name');
+    !mentorInput && setCorrectError('#mentorEmail', setMentorError, 'mentor email');
   };
 
-  const setCorrectError = (inputSelector, setError) => {
+  const setCorrectError = (inputSelector, setError, fieldName) => {
     const value = document.querySelector(inputSelector).value;
 
-    value ? setError('Invalid group name') : setError('This field is required');
+    value ? setError(`Invalid ${fieldName}`) : setError('This field is required');
   };
 
   const hideClassRegister = () => {
@@ -189,7 +189,7 @@ export const AddLesson = () => {
     const mentorData = mentors.find((mentor) => mentor.email === ev.target.value);
 
     mentorData ? setMentorError(false)
-      : setCorrectError('#mentorEmail', setMentorError);
+      : setCorrectError('#mentorEmail', setMentorError, 'mentor email');
   };
 
   const handleGroupChange = (ev) => {
@@ -201,7 +201,7 @@ export const AddLesson = () => {
       setBtnSave(false);
       setClassRegister(false);
     } else {
-      setCorrectError('#inputGroupName', setGroupError);
+      setCorrectError('#inputGroupName', setGroupError, 'group name');
     }
   };
 
