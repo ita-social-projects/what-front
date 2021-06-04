@@ -15,7 +15,6 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 
 import classNames from 'classnames';
 import styles from './add-lesson.scss';
-import { lessonValidation } from '@features/validation/validation-helpers';
 
 export const AddLesson = () => {
   const history = useHistory();
@@ -235,7 +234,7 @@ export const AddLesson = () => {
               Server Problems
             </div>
           )}
-          <div className={`${classRegister ? 'col-6' : 'col-12'}`}>
+          <div class='col-12'>
             <h3>Add a Lesson</h3>
             <hr />
             <WithLoading
@@ -260,11 +259,11 @@ export const AddLesson = () => {
               >
                 {({ errors, touched, setFieldTouched }) => (
                   <Form id="form" className={classNames(styles.size)}>
-                    <div className='d-flex flex-row'>
-                      <div className="col-12">
+                    <div className='d-flex flex-sm-column flex-lg-row'>
+                      <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
                         <div className="mt-3 form-group row">
-                          <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
-                          <div className="col-sm-8">
+                          <label htmlFor="inputLessonTheme" className="col-md-4 col-form-label">Lesson Theme:</label>
+                          <div className="col-md-8">
                             <Field
                               type="text"
                               className={classNames('form-control',
@@ -281,8 +280,8 @@ export const AddLesson = () => {
                           </div>
                         </div>
                         <div className="form-group row">
-                          <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name:</label>
-                          <div className="col-sm-8 input-group">
+                          <label htmlFor="inputGroupName" className="col-md-4 col-form-label">Group Name:</label>
+                          <div className="col-md-8 input-group">
                             <input
                               name="groupName"
                               id="inputGroupName"
@@ -308,7 +307,7 @@ export const AddLesson = () => {
                           }
                         </div>
                         <div className="form-group row">
-                          <label className="col-sm-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
+                          <label className="col-md-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
                           <div className="col-md-8">
                             <Field
                               className="form-control"
@@ -321,7 +320,7 @@ export const AddLesson = () => {
                           </div>
                         </div>
                         <div className="form-group row">
-                          <label className="col-sm-4 col-form-label" htmlFor="mentorEmail">Mentor Email:</label>
+                          <label className="col-md-4 col-form-label" htmlFor="mentorEmail">Mentor Email:</label>
                           <div className="col-md-8 input-group">
                             <input
                               className={classNames('form-control group-input', { 'border-danger': !!mentorError })}
@@ -350,7 +349,7 @@ export const AddLesson = () => {
                         </div>
                       </div>
                       { classRegister && formData && (
-                      <div className="col-lg-12">
+                      <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
                         <FieldArray name="formData">
                           {() => (
                             <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
@@ -414,7 +413,7 @@ export const AddLesson = () => {
                       </div>
                       )}
                     </div>
-                    <div className={classNames(styles.placement, 'col-12')}>
+                    <div className='col-12 d-flex justify-content-between'>
                       <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
                       {btnSave
                         ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
@@ -437,19 +436,6 @@ export const AddLesson = () => {
             </WithLoading>
           </div>
         </div>
-        {/*<div className={classNames(styles.placement, 'col-12')}>*/}
-        {/*  <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>*/}
-        {/*  {btnSave*/}
-        {/*    ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>*/}
-        {/*    : (*/}
-        {/*      <Button*/}
-        {/*        className="btn btn-success btn-lg"*/}
-        {/*        onClick={openClassRegister}*/}
-        {/*      >*/}
-        {/*        Class Register*/}
-        {/*      </Button>*/}
-        {/*    )}*/}
-        {/*</div>*/}
       </div>
     </div>
   );
