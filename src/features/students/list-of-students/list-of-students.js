@@ -264,20 +264,20 @@ export const ListOfStudents = () => {
       <div className="row">
         <div className="col-12 card shadow p-3 mb-5 bg-white">
           <div className="row align-items-center mt-2 mb-3">
-            <div className="col-1 mr-5">
+            <div className="col-2">
               <div className="btn-group">
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
               </div>
             </div>
-            <div className="col-2">
+            <div className="col-3">
               <Search
                 value={searchFieldValue}
                 onSearch={handleSearch}
                 placeholder="student's name"
               />
             </div>
-            <div className="col-3 pl-3 ml-4 custom-control custom-switch text-right">
+            <div className="col-2 custom-control custom-switch text-right">
               <input
                 value={isShowDisabled}
                 type="checkbox"
@@ -289,10 +289,10 @@ export const ListOfStudents = () => {
                 className={classNames('custom-control-label', styles['custom-control-label'])}
                 htmlFor="show-disabled-check"
               >
-                Show disabled students
+                Disabled students
               </label>
             </div>
-            <div className="col-2 mx-2 d-flex">
+            <div className="col-1 d-flex">
               <label
                 className={classNames(styles['label-for-select'])}
                 htmlFor="change-visible-people"
@@ -311,16 +311,14 @@ export const ListOfStudents = () => {
                 <option>100</option>
               </select>
             </div>
-            <div className="col-3 text-right">
               {[3, 4].includes(currentUser.role) && (
-                <div className="btn-group">
-                <Button onClick={downloadStudents} type="button" className="btn btn-warning">
+                <div className="col-4 text-right">
+                <Button onClick={downloadStudents} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
                   Upload student('s)
                 </Button>
                 <Button onClick={handleAddStudent}><span>Add a student</span></Button>
               </div>
               )}
-            </div>
           </div>
           <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
             <table className="table table-hover">

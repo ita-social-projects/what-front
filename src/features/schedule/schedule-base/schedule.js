@@ -10,6 +10,7 @@ import { currentUserSelector } from '@/models';
 import { Button, WithLoading } from '@/components';
 import Icon from '@/icon';
 import { scheduleStateShape, studentGroupsStateShape } from '@features/shared';
+import { formatDate } from '@/utils';
 import styles from './schedule.scss';
 
 export const Schedule = ({ groupsData, schedulesData }) => {
@@ -82,8 +83,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
   };
 
   const handleSetToday = () => {
-    setInputDateValue('');
-    setChosenDate(new Date());
+    setInputDateValue(formatDate(new Date()));
   };
 
   const handleEditSchedule = (id) => {

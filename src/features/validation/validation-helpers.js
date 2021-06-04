@@ -23,10 +23,10 @@ export const registrationValidation = Yup.object().shape({
     .required('This field is required'),
   password: Yup.string()
     .min(8, 'Password must contain at least 8 characters')
+    .max(16, 'Password must contain 16 characters maximum')
     .matches(
-      /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_%^&+=]).*$/,
-//      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-      'Must contain at least one uppercase, one lowercase, one number',
+      /^(?=.*[a-z])(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()_+=-]).*$/,
+      'Must contain at least one uppercase, one lowercase, one number and one special symbol',
     )
     .required('This field is required'),
   confirmPassword: Yup.string()
@@ -67,6 +67,7 @@ export const addLessonValidation = Yup.object().shape({
   themeName: Yup.string()
     .min(1, 'Too short')
     .max(200, 'Too long')
+    .matches('^[a-zA-Zа-яА-ЯЇїІіЄєҐґ0-9][a-zA-Zа-яА-ЯЇїІіЄєҐґ 0-9]*$', 'Invalid lesson theme')
     .required('This field is required'),
   lessonDate: Yup.string()
     .max(new Date(), 'The lesson cannot start in the future')
@@ -76,7 +77,7 @@ export const addLessonValidation = Yup.object().shape({
 export const lessonValidation = Yup.object().shape({
   themeName: Yup.string()
     .min(1, 'Too short')
-    .max(200, 'Too long')
+    .max(100, 'Too long')
     .required('This field is required'),
   groupName: Yup.string()
     .min(1, 'Too short')
