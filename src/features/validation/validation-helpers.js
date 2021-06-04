@@ -67,6 +67,7 @@ export const addLessonValidation = Yup.object().shape({
   themeName: Yup.string()
     .min(1, 'Too short')
     .max(200, 'Too long')
+    .matches('^[a-zA-Zа-яА-ЯЇїІіЄєҐґ0-9][a-zA-Zа-яА-ЯЇїІіЄєҐґ 0-9]*$', 'Invalid lesson theme')
     .required('This field is required'),
   lessonDate: Yup.string()
     .max(new Date(), 'The lesson cannot start in the future')
