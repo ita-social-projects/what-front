@@ -12,6 +12,7 @@ import { Button, WithLoading } from '@/components';
 import { addLessonValidation } from '@features/validation/validation-helpers.js';
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
+import { Other } from '@/utils'
 
 import classNames from 'classnames';
 import styles from './add-lesson.scss';
@@ -93,10 +94,6 @@ export const AddLesson = () => {
     }
   }, [addError, addIsLoaded, dispatchAddAlert, history]);
 
-  const capitalizeTheme = (str) => str.toLowerCase()
-    .split(/\s+/)
-    .map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
-
   const openStudentDetails = useCallback((id) => {
     history.push(`${paths.STUDENTS_DETAILS}/${id}`);
   }, [history]);
@@ -123,7 +120,7 @@ export const AddLesson = () => {
 
     const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
-    const theme = capitalizeTheme(themeName);
+    const theme = Other.capitalizeTheme(themeName);
 
     const lessonObject = {
       lessonDate,

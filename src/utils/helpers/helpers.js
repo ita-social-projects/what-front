@@ -16,3 +16,9 @@ export class Cookie{
       document.cookie = `${cname}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   }
 }
+
+export class Other {
+  static capitalizeTheme = (str) => str.toLowerCase()
+    .split(/\s+/)
+    .map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+}
