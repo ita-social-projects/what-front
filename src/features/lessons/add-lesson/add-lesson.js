@@ -166,12 +166,13 @@ export const AddLesson = () => {
       setBtnSave(true);
       setClassRegister(true);
       setGroupError(false);
-    } else simpleValidation('#inputGroupName', setGroupError);
+    }
 
-    !mentorInput && simpleValidation('#mentorEmail', setMentorError);
+    !studentsGroup && setCorrectError('#inputGroupName', setGroupError);
+    !mentorInput && setCorrectError('#mentorEmail', setMentorError);
   };
 
-  const simpleValidation = (inputSelector, setError) => {
+  const setCorrectError = (inputSelector, setError) => {
     const value = document.querySelector(inputSelector).value;
 
     value ? setError('Invalid group name') : setError('This field is required');
@@ -187,8 +188,8 @@ export const AddLesson = () => {
     setMentorInput(ev.target.value);
     const mentorData = mentors.find((mentor) => mentor.email === ev.target.value);
 
-    if (mentorData) setMentorError(false);
-    else simpleValidation('#mentorEmail', setMentorError)
+    mentorData ? setMentorError(false)
+      : setCorrectError('#mentorEmail', setMentorError);
   };
 
   const handleGroupChange = (ev) => {
@@ -200,7 +201,7 @@ export const AddLesson = () => {
       setBtnSave(false);
       setClassRegister(false);
     } else {
-      simpleValidation('#inputGroupName', setGroupError);
+      setCorrectError('#inputGroupName', setGroupError);
     }
   };
 
