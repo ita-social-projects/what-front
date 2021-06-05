@@ -12,7 +12,7 @@ import { Button, WithLoading } from '@/components';
 import { addLessonValidation } from '@features/validation/validation-helpers.js';
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
-import { CommonHelpers } from '@/utils';
+import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
 import styles from './add-lesson.scss';
@@ -120,7 +120,7 @@ export const AddLesson = () => {
 
     const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
-    const theme = CommonHelpers.capitalizeTheme(themeName);
+    const theme = commonHelpers.capitalizeTheme(themeName);
 
     const lessonObject = {
       lessonDate,
