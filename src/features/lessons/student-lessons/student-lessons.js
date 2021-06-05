@@ -52,7 +52,6 @@ export const StudentLessons = () => {
         }
       });
       setFilteredLessonsList(lessonsData);
-      setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
     }
   }, [data]);
 
@@ -60,14 +59,10 @@ export const StudentLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  const handleSearchTheme = (inputValue) => {
-    setSearchLessonsThemeValue(inputValue);
-  };
+  const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
 
-  const handleSearchDate = (event) => {
-    const date = event.target.value;
-    setSearchLessonsDateValue(date);
-  };
+  const handleSearchDate = (event) => setSearchLessonsDateValue(event.target.value);
+
   useEffect(() => {
     const lessons = data.filter(
         (lesson) => lesson.lessonShortDate === searchLessonsDateValue);
@@ -86,7 +81,7 @@ export const StudentLessons = () => {
 
   const lessonDetails = useCallback((id) => {
     history.push(`${paths.LESSON_DETAILS}/${id}`);
-  });
+  }, [history]);
 
 
   const handleSortByParam = (key) => {
@@ -113,15 +108,17 @@ export const StudentLessons = () => {
       setCurrentPage(pageNumber);
     }
   };
-  const nextPage = (pageNumber) => {
+
+  const nextPage = useCallback((pageNumber) => {
     const totalPages = Math.ceil(filteredLessonsList?.length / lessonsPerPage);
     setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-  };
-  const prevPage = (pageNumber) => {
+  },[lessonsPerPage, currentPage]);
+
+  const prevPage = useCallback((pageNumber) => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-  };
-  const getLessonsList = () => {
-    console.log(visibleLessonsList);
+  },[currentPage]);
+
+  const getLessonsList = useCallback(() => {
     const lessonsList = visibleLessonsList.map((lesson) => (
         <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)} className={styles['table-row']}>
           <td className="text-center">{lesson.id}</td>
@@ -130,14 +127,11 @@ export const StudentLessons = () => {
           <td>{lesson.lessonTime}</td>
         </tr>
     ));
-
-
-
     if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
-  };
+  }, [visibleLessonsList, searchLessonsDateValue, searchLessonsThemeValue]);
 
   return (
       <div className="container">
