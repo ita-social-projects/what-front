@@ -12,6 +12,7 @@ import { inputGroupStartDate } from '@features/groups/list-of-groups/redux/actio
 import classNames from 'classnames';
 import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
+import {commonHelpers} from "@/utils";
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -133,11 +134,9 @@ export const ListOfGroups = () => {
           <td className="text-center">{index + 1}</td>
           <td>{name}</td>
           <td>{studentIds.length}</td>
-          <td>{startDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
-            .join('.')}
+          <td>{commonHelpers.transformDateTime(1, startDate)}
           </td>
-          <td>{finishDate.replaceAll('-', '.').slice(0, 10).split('.').reverse()
-            .join('.')}
+          <td>{commonHelpers.transformDateTime(1, finishDate)}
           </td>
           <td
             className="text-center"

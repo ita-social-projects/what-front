@@ -20,8 +20,6 @@ import styles from './add-lesson.scss';
 export const AddLesson = () => {
   const history = useHistory();
 
-  const today = new Date().toISOString().substring(0, 19);
-
   const [markError, setMarkError] = useState(false);
   const [mentorError, setMentorError] = useState(false);
   const [groupError, setGroupError] = useState(false);
@@ -312,7 +310,7 @@ export const AddLesson = () => {
                               type="datetime-local"
                               name="lessonDate"
                               id="choose-date/time"
-                              max={today}
+                              max={new Date()}
                               required
                             />
                           </div>

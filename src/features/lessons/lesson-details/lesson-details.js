@@ -6,13 +6,14 @@ import { studentsSelector, fetchMentors, fetchLessons,
   globalLoadStudentGroups, lessonsSelector, loadStudents,
   loadStudentGroupsSelector, mentorsSelector,
 } from '@/models';
-
+import {commonHelpers} from "@/utils";
 import { Badge } from 'react-bootstrap';
 import { WithLoading } from '@/components';
 import Icon from '@/icon';
 
 import classNames from 'classnames';
 import styles from './lesson-details.scss';
+
 
 export const LessonDetails = () => {
   const history = useHistory();
@@ -67,7 +68,7 @@ export const LessonDetails = () => {
       if (!lesson) {
         history.push(paths.NOT_FOUND);
       } else {
-        const {date, time} = transformDateTime(lesson.lessonDate);
+        const {date, time} = commonHelpers.transformDateTime(0, lesson.lessonDate);
         const lessonsData = {
             lessonShortDate: date,
             lessonTime: time,
@@ -77,14 +78,6 @@ export const LessonDetails = () => {
       }
     }
   }, [lessons]);
-
-  const transformDateTime = (dateTime) => {
-    const arr = dateTime.toString().split('T');
-    return {
-      date: arr[0],
-      time: arr[1],
-    };
-  };
 
   const getFormData = () => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];

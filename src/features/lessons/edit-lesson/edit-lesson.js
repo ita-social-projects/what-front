@@ -18,10 +18,7 @@ import { GroupDetails } from '@/features/groups';
 
 export const EditLesson = () => {
   const history = useHistory();
-
   const { id } = useParams();
-
-  const today = new Date().toISOString().substring(0, 19);
 
   const [studentsGroup, setStudentsGroup] = useState(null);
   const [studentsGroupInput, setStudentsGroupInput] = useState('');
@@ -269,7 +266,7 @@ export const EditLesson = () => {
                             type="datetime-local"
                             name="lessonD"
                             id="choose-date/time"
-                            max={today}
+                            max={commonHelpers.transformDateTime(2)}
                             required
                           />
                         </div>

@@ -18,6 +18,7 @@ import { editStudentGroup, editStudentGroupSelector } from '@/models';
 import Icon from '@/icon.js';
 import { editGroupValidation } from '@features/validation/validation-helpers.js';
 import styles from './edit-groups.scss';
+import {commonHelpers} from "@/utils";
 
 export const EditGroup = ({
   id: groupId, studentGroupData, studentsData, mentorsData, coursesData,
@@ -132,12 +133,11 @@ export const EditGroup = ({
       id: groupId,
       name,
       courseId,
-      startDate: new Date(startDate).toISOString().substring(0, 19),
-      finishDate: new Date(finishDate).toISOString().substring(0, 19),
+      startDate: commonHelpers.transformDateTime(2, startDate),
+      finishDate: commonHelpers.transformDateTime(2, finishDate),
       studentIds: [...new Set(groupStudents.map(({ id }) => id))],
       mentorIds: [...new Set(groupMentors.map(({ id }) => id))],
     };
-
     dispatchEditGroup(newGroupData);
   };
 
@@ -147,9 +147,6 @@ export const EditGroup = ({
     setStudentInputError('');
     setMentorInputError('');
   };
-
-  const formatDate = (dateString) => new Date(dateString).toLocaleDateString().split('.').reverse()
-    .join('-');
 
   return (
     <div className="w-100">
@@ -163,8 +160,8 @@ export const EditGroup = ({
             <Formik
               initialValues={{
                 name: group.name,
-                startDate: formatDate(group.startDate),
-                finishDate: formatDate(group.finishDate),
+                startDate: commonHelpers.transformDateTime(3, group.startDate),
+                finishDate: commonHelpers.transformDateTime(3, group.finishDate),
                 courseId: group.courseId,
                 mentor: '',
                 student: '',
