@@ -36,26 +36,25 @@ export const StudentLessons = () => {
   const transformDateTime = (dateTime) => {
     const arr = dateTime.toString().split('T');
     return {
-      date: new Date(arr[0]),
+      date: arr[0],
       time: arr[1],
     };
   };
 
   useEffect(() => {
-    setFilteredLessonsList(
-        data.map((lesson, index) => {
-          transformDateTime(lesson.lessonDate);
-          const { date, time } = transformDateTime(lesson.lessonDate);
-          lesson.lessonDate = date;
-          lesson.lessonTime = time;
-          lesson.index = index;
-          return lesson;
-        }),
-    );
-    setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
+    if(data.length !== 0) {
+      const lessonsData = data.map((lesson) => {
+        const {date, time} = transformDateTime(lesson.lessonDate);
+        return {
+          lessonShortDate: date,
+          lessonTime: time,
+          ...lesson,
+        }
+      });
+      setFilteredLessonsList(lessonsData);
+      setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
+    }
   }, [data]);
-
-
 
   useEffect(() => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
@@ -71,10 +70,7 @@ export const StudentLessons = () => {
   };
   useEffect(() => {
     const lessons = data.filter(
-        (lesson) => {
-          lesson.lessonDate.toLocaleDateString().includes(searchLessonsDateValue);
-        },
-    );
+        (lesson) => lesson.lessonShortDate === searchLessonsDateValue);
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
   }, [searchLessonsDateValue]);
@@ -128,9 +124,9 @@ export const StudentLessons = () => {
     console.log(visibleLessonsList);
     const lessonsList = visibleLessonsList.map((lesson) => (
         <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)} className={styles['table-row']}>
-          <td className="text-center">{lesson.index + 1}</td>
+          <td className="text-center">{lesson.id}</td>
           <td>{lesson.themeName}</td>
-          <td>{lesson.lessonDate.toDateString()}</td>
+          <td>{lesson.lessonShortDate}</td>
           <td>{lesson.lessonTime}</td>
         </tr>
     ));
@@ -261,4 +257,4 @@ export const StudentLessons = () => {
         </div>
       </div>
 )
-}
+};
