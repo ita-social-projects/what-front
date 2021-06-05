@@ -159,7 +159,7 @@ export const ListOfLessons = () => {
     setLessonsPerPage(newNumber);
   }, [currentPage, filteredLessonsList]);
 
-  const paginationComponent = useCallback(() => {
+  const paginationComponent = () => {
     if (filteredLessonsList.length < lessonsPerPage) {
       return (
         <Pagination
@@ -182,7 +182,7 @@ export const ListOfLessons = () => {
         page={currentPage}
       />
     );
-  }, [ lessonsPerPage, currentPage]);
+  };
 
   return (
     <div className="container">
