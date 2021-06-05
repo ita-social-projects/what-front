@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
@@ -83,14 +83,14 @@ export const ListOfLessons = () => {
     setCurrentPage(1);
   }, [searchLessonsThemeValue]);
 
-  const addLesson = () => history.push(paths.LESSON_ADD);
-  const downloadThemes = () => history.push(paths.THEMES_DOWNLOAD);
-  const lessonDetails =(id) => history.push(`${paths.LESSON_DETAILS}/${id}`);
+  const addLesson = useCallback(() => history.push(paths.LESSON_ADD), [history]);
+  const downloadThemes = useCallback(() => history.push(paths.THEMES_DOWNLOAD), [history]);
+  const lessonDetails = useCallback((id) => history.push(`${paths.LESSON_DETAILS}/${id}`), [history]);
 
-  const editLesson =(event, id) => {
+  const editLesson = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.LESSON_EDIT}/${id}`);
-  };
+  }, [history]);
 
   const handleSortByParam = (key) => {
     if (prevSort === key) {
@@ -116,15 +116,16 @@ export const ListOfLessons = () => {
       setCurrentPage(pageNumber);
     }
   };
-  const nextPage = (pageNumber) => {
+  const nextPage = useCallback((pageNumber) => {
     const totalPages = Math.ceil(filteredLessonsList?.length / lessonsPerPage);
     setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-  };
-  const prevPage = (pageNumber) => {
-    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-  };
+  }, [lessonsPerPage, currentPage]);
 
-  const getLessonsList = () => {
+  const prevPage = useCallback((pageNumber) => {
+    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
+  }, [currentPage]);
+
+  const getLessonsList = useCallback(() => {
     const lessonsList = visibleLessonsList.map((lesson) => (
       <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)} className={styles['table-row']}>
         <td className="text-center">{lesson.id}</td>
@@ -149,16 +150,16 @@ export const ListOfLessons = () => {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
-  };
+  }, [visibleLessonsList, searchLessonsDateValue, searchLessonsThemeValue]);
 
-  const changeCountVisibleItems = (newNumber) => {
+  const changeCountVisibleItems = useCallback((newNumber) => {
     const finish = currentPage * newNumber;
     const start = finish - newNumber;
     setVisibleLessonsList(filteredLessonsList.slice(start, finish));
     setLessonsPerPage(newNumber);
-  };
+  }, [currentPage, filteredLessonsList]);
 
-  const paginationComponent = () => {
+  const paginationComponent = useCallback(() => {
     if (filteredLessonsList.length < lessonsPerPage) {
       return (
         <Pagination
@@ -181,7 +182,7 @@ export const ListOfLessons = () => {
         page={currentPage}
       />
     );
-  };
+  }, [ lessonsPerPage, currentPage]);
 
   return (
     <div className="container">
