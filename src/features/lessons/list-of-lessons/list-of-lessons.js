@@ -5,6 +5,7 @@ import { paths, useActions } from '@/shared';
 import { currentUserSelector, fetchLessons, lessonsSelector, mentorLessonsSelector, fetchMentorLessons  } from '@/models/index.js';
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
+import { commonHelpers } from "@/utils";
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
 
@@ -39,18 +40,10 @@ export const ListOfLessons = () => {
     }
   }, [currentUser, getAllLessons, getMentorsLessons]);
 
-  function transformDateTime(dateTime) {
-    const arr = dateTime.toString().split('T');
-    return {
-      date: arr[0],
-      time: arr[1],
-    };
-  }
-
   useEffect(() => {
     if(data.length !== 0) {
       const lessonsData = data.map((lesson) => {
-        const {date, time} = transformDateTime(lesson.lessonDate);
+        const {date, time} = commonHelpers.transformDateTime(lesson.lessonDate);
         return {
           lessonShortDate: date,
           lessonTime: time,
