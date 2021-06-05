@@ -36,45 +36,36 @@ export const StudentLessons = () => {
   const transformDateTime = (dateTime) => {
     const arr = dateTime.toString().split('T');
     return {
-      date: new Date(arr[0]),
+      date: arr[0],
       time: arr[1],
     };
   };
 
   useEffect(() => {
-    setFilteredLessonsList(
-        data.map((lesson, index) => {
-          transformDateTime(lesson.lessonDate);
-          const { date, time } = transformDateTime(lesson.lessonDate);
-          lesson.lessonDate = date;
-          lesson.lessonTime = time;
-          lesson.index = index;
-          return lesson;
-        }),
-    );
-    setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
+    if(data.length !== 0) {
+      const lessonsData = data.map((lesson) => {
+        const {date, time} = transformDateTime(lesson.lessonDate);
+        return {
+          lessonShortDate: date,
+          lessonTime: time,
+          ...lesson,
+        }
+      });
+      setFilteredLessonsList(lessonsData);
+    }
   }, [data]);
-
-
 
   useEffect(() => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  const handleSearchTheme = (inputValue) => {
-    setSearchLessonsThemeValue(inputValue);
-  };
+  const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
 
-  const handleSearchDate = (event) => {
-    const date = event.target.value;
-    setSearchLessonsDateValue(date);
-  };
+  const handleSearchDate = (event) => setSearchLessonsDateValue(event.target.value);
+
   useEffect(() => {
     const lessons = data.filter(
-        (lesson) => {
-          lesson.lessonDate.toLocaleDateString().includes(searchLessonsDateValue);
-        },
-    );
+        (lesson) => lesson.lessonShortDate === searchLessonsDateValue);
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
   }, [searchLessonsDateValue]);
@@ -90,7 +81,7 @@ export const StudentLessons = () => {
 
   const lessonDetails = useCallback((id) => {
     history.push(`${paths.LESSON_DETAILS}/${id}`);
-  });
+  }, [history]);
 
 
   const handleSortByParam = (key) => {
@@ -117,31 +108,30 @@ export const StudentLessons = () => {
       setCurrentPage(pageNumber);
     }
   };
-  const nextPage = (pageNumber) => {
+
+  const nextPage = useCallback((pageNumber) => {
     const totalPages = Math.ceil(filteredLessonsList?.length / lessonsPerPage);
     setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-  };
-  const prevPage = (pageNumber) => {
+  },[lessonsPerPage, currentPage]);
+
+  const prevPage = useCallback((pageNumber) => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-  };
-  const getLessonsList = () => {
-    console.log(visibleLessonsList);
+  },[currentPage]);
+
+  const getLessonsList = useCallback(() => {
     const lessonsList = visibleLessonsList.map((lesson) => (
         <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)} className={styles['table-row']}>
-          <td className="text-center">{lesson.index + 1}</td>
+          <td className="text-center">{lesson.id}</td>
           <td>{lesson.themeName}</td>
-          <td>{lesson.lessonDate.toDateString()}</td>
+          <td>{lesson.lessonShortDate}</td>
           <td>{lesson.lessonTime}</td>
         </tr>
     ));
-
-
-
     if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
-  };
+  }, [visibleLessonsList, searchLessonsDateValue, searchLessonsThemeValue]);
 
   return (
       <div className="container">
@@ -261,4 +251,4 @@ export const StudentLessons = () => {
         </div>
       </div>
 )
-}
+};
