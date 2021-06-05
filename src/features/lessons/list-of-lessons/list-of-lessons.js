@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
@@ -12,6 +12,7 @@ export const ListOfLessons = () => {
   const history = useHistory();
   const getAllLessons = useActions(fetchLessons);
   const getMentorsLessons = useActions(fetchMentorLessons);
+
   const allLessons = useSelector(lessonsSelector, shallowEqual);
   const mentorsLessons = useSelector(mentorLessonsSelector, shallowEqual);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -36,9 +37,9 @@ export const ListOfLessons = () => {
     } else {
       getAllLessons();
     }
-  }, []);
+  }, [currentUser, getAllLessons, getMentorsLessons]);
 
-  export function transformDateTime(dateTime) {
+  function transformDateTime(dateTime) {
     const arr = dateTime.toString().split('T');
     return {
       date: arr[0],
