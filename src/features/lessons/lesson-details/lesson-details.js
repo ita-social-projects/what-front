@@ -46,6 +46,7 @@ export const LessonDetails = () => {
   const {
     data: groups,
     isLoading: groupsIsLoading,
+    isLoaded: groupsIsLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
@@ -55,14 +56,14 @@ export const LessonDetails = () => {
   } = useSelector(studentsSelector, shallowEqual);
 
   useEffect(() => {
-    if(lessons.length === 0) loadLessons();
-    if(students.length === 0) fetchStudents();
-    if(groups.length === 0) loadGroups();
-    if(mentors.length === 0) loadMentors();
+    if(!lessonsIsLoaded) loadLessons();
+    if(!studentsIsLoaded) fetchStudents();
+    if(!groupsIsLoaded) loadGroups();
+    if(!mentorsIsLoaded) loadMentors();
   }, [loadLessons, fetchStudents, loadGroups, loadMentors]);
 
   useEffect(() => {
-    if (lessons.length !== 0) {
+    if (lessonsIsLoaded) {
       const lesson = lessons.find((lesson) => lesson.id === Number(id));
       if (!lesson) {
         history.push(paths.NOT_FOUND);
