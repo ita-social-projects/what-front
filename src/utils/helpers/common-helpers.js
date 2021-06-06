@@ -17,7 +17,7 @@ export const commonHelpers = {
       return date.toLocaleDateString().toString().replaceAll('.', '-') // DD-MM-YYYY
     }
     if(index === 2) {
-      return date.toISOString().substring(0, 19) // 2015-07-20T00:00:00 format for dispatch (post/put requests)
+      return `${date.toLocaleDateString().split('.').reverse().join('-')}T${date.toLocaleTimeString()}` // 2015-07-20T00:00:00 format for dispatch (post/put requests)
     }
     if(index === 3) {
       return date.toLocaleDateString().split('.').reverse().join('-') // YYYY-MM-DD
@@ -25,9 +25,7 @@ export const commonHelpers = {
     if(index === 4) {
       return date.toLocaleDateString() // DD.MM.YYYY
     }
-    if(index === 5) {
-      return date.toLocaleTimeString() // hh:mm:ss
-    }
+
   },
 
 };
