@@ -27,7 +27,6 @@ export const EditLesson = () => {
   const [studentsGroupInput, setStudentsGroupInput] = useState('');
   const [lessonOnEdit, setLessonOEdit] = useState(false);
   const [formData, setFormData] = useState([]);
-  const [formDataError, setFormDataError] = useState(false);
 
   const [
     getGroups,
@@ -158,7 +157,6 @@ export const EditLesson = () => {
   const onSubmit = async (values) => {
     try {
       const { lessonDate, themeName } = values;
-
       const lessonVisits = formData.map((lessonVisit) => {
         const {
           presence, studentId, studentMark,
@@ -186,7 +184,7 @@ export const EditLesson = () => {
         await updateLesson(lessonObject, id);
       }
     } catch (err) {
-      setFormDataError(err.errors);
+      dispatchAddAlert(err.errors);
     }
   };
 
@@ -350,7 +348,6 @@ export const EditLesson = () => {
                             </div>
                           )}
                         </FieldArray>
-                        { setFormDataError ? <div className={styles.error}>{formDataError}</div> : null }
                       </div>
                     </div>
                     <div className={classNames(styles.placement, 'col-12 ')}>

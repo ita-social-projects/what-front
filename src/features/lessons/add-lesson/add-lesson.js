@@ -31,7 +31,6 @@ export const AddLesson = () => {
   const [btnSave, setBtnSave] = useState(false);
   const [classRegister, setClassRegister] = useState(false);
   const [formData, setFormData] = useState([]);
-  const [formDataError, setFormDataError] = useState(false);
 
   const {
     data: mentors,
@@ -139,7 +138,7 @@ export const AddLesson = () => {
         await createLesson(lessonObject);
       }
     } catch (err) {
-      setFormDataError(err.errors);
+      dispatchAddAlert(err.errors);
     }
   };
 
@@ -416,7 +415,6 @@ export const AddLesson = () => {
                               </div>
                             )}
                           </FieldArray>
-                          { setFormDataError ? <div className={styles.error}>{formDataError}</div> : null }
                         </div>
                       )}
                     </div>
