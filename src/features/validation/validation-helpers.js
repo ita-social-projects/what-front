@@ -90,6 +90,15 @@ export const editLessonValidation = Yup.object().shape({
       .required('This field is required'),
 });
 
+export const StudentsFormDataValidation = Yup.array().of(
+  Yup.object({
+    studentId: Yup.number().moreThan(0).required(),
+    studentMark: Yup.number().nullable(),
+    presence: Yup.boolean().default(false).required(),
+    comment: Yup.string().default(''),
+  })
+);
+
 export const lessonValidation = Yup.object().shape({
   themeName: Yup.string()
     .min(1, 'Too short')

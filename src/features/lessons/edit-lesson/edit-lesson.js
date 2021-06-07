@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { shallowEqual, useSelector } from "react-redux";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { shallowEqual, useSelector } from 'react-redux';
 import {
   editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector,
   fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
-} from "@/models";
-import { useActions, paths } from "@/shared";
+} from '@/models';
+import { useActions, paths } from '@/shared';
 
-import { WithLoading } from "@/components";
-import { editLessonValidation } from "@features/validation/validation-helpers";
-import { addAlert } from "@/features";
-import { Formik, Field, Form, FieldArray } from "formik";
-import { commonHelpers } from "@/utils";
+import { WithLoading } from '@/components';
+import { editLessonValidation, StudentsFormDataValidation } from '@features/validation/validation-helpers';
+import { addAlert } from '@/features';
+import { Formik, Field, Form, FieldArray } from 'formik';
+import { commonHelpers } from '@/utils';
 
-import classNames from "classnames";
-import styles from "./edit-lesson.scss";
+import classNames from 'classnames';
+import styles from './edit-lesson.scss';
 
 export const EditLesson = () => {
   const history = useHistory();
@@ -24,9 +24,10 @@ export const EditLesson = () => {
   const today = new Date().toISOString().substring(0, 19);
 
   const [studentsGroup, setStudentsGroup] = useState(null);
-  const [studentsGroupInput, setStudentsGroupInput] = useState("");
+  const [studentsGroupInput, setStudentsGroupInput] = useState('');
   const [lessonOnEdit, setLessonOEdit] = useState(false);
   const [formData, setFormData] = useState([]);
+  const [formDataError, setFormDataError] = useState(false);
 
   const [
     getGroups,
@@ -83,8 +84,8 @@ export const EditLesson = () => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
 
     lessonOnEdit.lessonVisits.map((student) => {
-      if (student.comment === null) student.comment = "";
-      if (student.studentMark === null) student.studentMark = "";
+      if (student.comment === null) student.comment = '';
+      if (student.studentMark === null) student.studentMark = '';
     });
 
     const studentD = uniqueIds.map((id) => students.find((student) => student.id === id));
@@ -114,7 +115,7 @@ export const EditLesson = () => {
   useEffect(() => {
     if (lessonOnEdit && groups.length) {
       const groupRes = groups?.find((group) => group.id === lessonOnEdit.studentGroupId);
-      setStudentsGroupInput(!groupRes ? "" : groupRes.name);
+      setStudentsGroupInput(!groupRes ? '' : groupRes.name);
       if (groupRes && studentsIsLoaded && !studentsIsLoading) {
         setStudentsGroup(groupRes);
         if (studentsGroup && students) {
@@ -139,7 +140,7 @@ export const EditLesson = () => {
   useEffect(() => {
     if (!editError && editIsLoaded) {
       history.push(paths.LESSONS);
-      dispatchAddAlert("The lesson has been edited successfully", "success");
+      dispatchAddAlert('The lesson has been edited successfully', 'success');
     }
     if (editError && !editIsLoaded) {
       dispatchAddAlert(editError);
@@ -154,38 +155,45 @@ export const EditLesson = () => {
     history.push(paths.LESSONS);
   }, [history]);
 
-  const onSubmit = (values) => {
-    const { lessonDate, themeName } = values;
+  const onSubmit = async (values) => {
+    try {
+      const { lessonDate, themeName } = values;
 
-    const lessonVisits = formData.map((lessonVisit) => {
-      const {
-        presence, studentId, studentMark,
-      } = lessonVisit;
-      return (
-        {
-          comment: "",
-          presence,
-          studentId,
-          studentMark,
-        }
-      );
-    });
-    const theme = commonHelpers.capitalizeTheme(!themeName ? "text" : themeName);
+      const lessonVisits = formData.map((lessonVisit) => {
+        const {
+          presence, studentId, studentMark,
+        } = lessonVisit;
+        return (
+          {
+            comment: '',
+            presence,
+            studentId,
+            studentMark: studentMark || null,
+          }
+        );
+      });
 
-    const lessonObject = {
-      themeName: theme,
-      lessonDate,
-      lessonVisits,
-    };
-    if (lessonObject) {
-      updateLesson(lessonObject, id);
+      await StudentsFormDataValidation.validate(lessonVisits);
+
+      const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
+
+      const lessonObject = {
+        themeName: theme,
+        lessonDate,
+        lessonVisits,
+      };
+      if (lessonObject) {
+        await updateLesson(lessonObject, id);
+      }
+    } catch (err) {
+      setFormDataError(err.errors);
     }
   };
 
   const handlePresenceChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
     formData[arrIndex].presence = !formData[arrIndex].presence;
-    formData[arrIndex].studentMark = "";
+    formData[arrIndex].studentMark = '';
   };
 
   const handleMarkChange = (ev) => {
@@ -200,7 +208,7 @@ export const EditLesson = () => {
 
   return (
     <div className="container">
-      <div className={classNames(styles.page, "mx-auto", "col-12")}>
+      <div className={classNames(styles.page, 'mx-auto', 'col-12')}>
         <div className="d-flex flex-row">
           {groupsError && lessonsError && editError && studentsError && (
             <div className="col-12 alert-danger">
@@ -218,7 +226,7 @@ export const EditLesson = () => {
                 || !lessonOnEdit
                 || !formData.length
               }
-              className={classNames(styles["loader-centered"])}
+              className={classNames(styles['loader-centered'])}
             >
               <Formik
                 initialValues={{
@@ -243,7 +251,7 @@ export const EditLesson = () => {
                           <div className="col-sm-8">
                             <Field
                               type="text"
-                              className={classNames("form-control", { "border-danger": errors.themeName })}
+                              className={classNames('form-control', { 'border-danger': errors.themeName })}
                               name="themeName"
                               id="inputLessonTheme"
                             />
@@ -286,7 +294,7 @@ export const EditLesson = () => {
                       <div className="col-lg-6 mt-2">
                         <FieldArray name="formData">
                           {() => (
-                            <div className={classNames(styles.list, "col-lg-12")}>
+                            <div className={classNames(styles.list, 'col-lg-12')}>
                               <table className="table table-bordered table-hover">
                                 <thead>
                                   <tr>
@@ -315,14 +323,13 @@ export const EditLesson = () => {
                                             name={`formData[${index}].studentMark`}
                                             type="number"
                                             className={classNames(
-                                              "form-control",
+                                              'form-control',
                                               styles.mode,
                                             )}
                                             max="12"
                                             min="0"
                                             data-id={index}
                                             disabled={!formData[index].presence}
-                                            // onChange={handleMarkChange}
                                             onBlur={handleMarkChange}
                                           />
                                         </td>
@@ -343,9 +350,10 @@ export const EditLesson = () => {
                             </div>
                           )}
                         </FieldArray>
+                        { setFormDataError ? <div className={styles.error}>{formDataError}</div> : null }
                       </div>
                     </div>
-                    <div className={classNames(styles.placement, "col-12 ")}>
+                    <div className={classNames(styles.placement, 'col-12 ')}>
                       <button
                         form="form"
                         type="button"
