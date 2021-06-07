@@ -1,0 +1,1 @@
+export { HomeworkTabs } from './homework-tabs.js';

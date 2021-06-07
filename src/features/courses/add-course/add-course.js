@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { useActions, paths } from '@/shared';
 import { createCourse, createdCourseSelector } from '@/models';
 import { addAlert } from '@/features';
-import { Button } from '@/components';
+import { Button, WithLoading } from '@/components';
 import { addCourseValidation } from '@features/validation/validation-helpers.js';
 import styles from './add-course.scss';
 
@@ -44,36 +44,38 @@ export const AddCourse = () => {
               <Form className="px-2 py-4" name="start-group">
                 <h3>Add a course</h3>
                 <hr />
-                <div className="row mb-3">
-                  <div className="col d-flex align-items-center">
-                    <label className="mb-0 font-weight-bolder" htmlFor="name">Course name:</label>
+                <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
+                  <div className="row mb-3">
+                    <div className="col d-flex align-items-center">
+                      <label className="mb-0 font-weight-bolder" htmlFor="name">Course name:</label>
+                    </div>
+                    <div className="col-md-8">
+                      <Field
+                        className={classNames('form-control', { 'border-danger': errors.name })}
+                        type="text"
+                        name="name"
+                        id="name"
+                        placeholder="Course name"
+                      />
+                    </div>
+                    {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
                   </div>
-                  <div className="col-md-8">
-                    <Field
-                      className={classNames('form-control', { 'border-danger': errors.name })}
-                      type="text"
-                      name="name"
-                      id="name"
-                      placeholder="Course name"
-                    />
+                  <div className="d-flex justify-content-between mt-4">
+                    <Link
+                      to="/courses"
+                      className={classNames('btn btn-secondary w-25', styles.button)}
+                    >
+                      Cancel
+                    </Link>
+                    <Button
+                      type="submit"
+                      disabled={!isValid || !dirty || isLoading || errors.name}
+                      className={classNames('w-25', styles.button)}
+                    >
+                      Save
+                    </Button>
                   </div>
-                  {errors.name && <p className={classNames('w-100 text-danger mb-0', styles.error)}>{errors.name}</p>}
-                </div>
-                <div className="d-flex justify-content-between mt-4">
-                  <Link
-                    to="/courses"
-                    className={classNames('btn btn-secondary w-25', styles.button)}
-                  >
-                    Cancel
-                  </Link>
-                  <Button
-                    type="submit"
-                    disabled={!isValid || !dirty || isLoading || errors.name}
-                    className={classNames('w-25', styles.button)}
-                  >
-                    Save
-                  </Button>
-                </div>
+                </WithLoading>
               </Form>
             )}
           </Formik>

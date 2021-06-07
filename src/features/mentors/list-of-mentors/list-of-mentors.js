@@ -45,7 +45,7 @@ export const ListOfMentors = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchMentorValue, setSearchMentorValue] = useState('');
 
-  const [mentorsPerPage] = useState(10);
+  const [mentorsPerPage, setMentorsPerPage] = useState(10);
   const indexOfLastMentor = currentPage * mentorsPerPage;
   const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
 
@@ -198,24 +198,45 @@ export const ListOfMentors = () => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
 
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleMentors(filteredMentorList.slice(start, finish));
+    setMentorsPerPage(newNumber);
+  };
+
+  const paginationComponent = () => {
+    if (filteredMentorList.length < mentorsPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={mentorsPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={mentorsPerPage}
+        totalItems={filteredMentorList.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Mentors</h2>
-        {filteredMentorList.length > mentorsPerPage && !areAllMentorsLoading && !areActiveMentorsLoading
-          ? <span className="col-2 text-right">{filteredMentorList.length} mentors</span> : null}
+        { !areAllMentorsLoading && !areActiveMentorsLoading
+          ? <span className="col-2 text-right">{visibleMentors.length} of {filteredMentorList.length} mentors</span> : null}
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {filteredMentorList.length > mentorsPerPage && !areActiveMentorsLoading && !areAllMentorsLoading
-            && (
-            <Pagination
-              itemsPerPage={mentorsPerPage}
-              totalItems={filteredMentorList.length}
-              paginate={paginate}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              page={currentPage}
-            />
-            )}
+          {paginationComponent()}
         </div>
       </div>
       <div className="row">
@@ -232,7 +253,7 @@ export const ListOfMentors = () => {
             </div>
             {currentUser.role !== 2
               && (
-              <div className="custom-control custom-switch col-2 offset-3">
+              <div className="custom-control custom-switch col-2 offset-1">
                 <input
                   onClick={handleShowDisabled}
                   type="checkbox"
@@ -247,6 +268,25 @@ export const ListOfMentors = () => {
                 </label>
               </div>
               )}
+            <div className="col-2 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
+            </div>
             <div className="col-2 text-right">
               {currentUser.role !== 2
                   && (
@@ -286,6 +326,7 @@ export const ListOfMentors = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );

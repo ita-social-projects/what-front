@@ -12,6 +12,7 @@ import { Button, WithLoading } from '@/components';
 import { addLessonValidation } from '@features/validation/validation-helpers.js';
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
+import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
 import styles from './add-lesson.scss';
@@ -93,10 +94,6 @@ export const AddLesson = () => {
     }
   }, [addError, addIsLoaded, dispatchAddAlert, history]);
 
-  const capitalizeTheme = (str) => str.toLowerCase()
-    .split(/\s+/)
-    .map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
-
   const openStudentDetails = useCallback((id) => {
     history.push(`${paths.STUDENTS_DETAILS}/${id}`);
   }, [history]);
@@ -123,7 +120,7 @@ export const AddLesson = () => {
 
     const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
-    const theme = capitalizeTheme(themeName);
+    const theme = commonHelpers.capitalizeTheme(themeName);
 
     const lessonObject = {
       lessonDate,
@@ -170,9 +167,15 @@ export const AddLesson = () => {
       setClassRegister(true);
       setGroupError(false);
     }
-    if (!studentsGroup) {
-      setGroupError(true);
-    }
+
+    !studentsGroup && setCorrectError('#inputGroupName', setGroupError, 'group name');
+    !mentorInput && setCorrectError('#mentorEmail', setMentorError, 'mentor email');
+  };
+
+  const setCorrectError = (inputSelector, setError, fieldName) => {
+    const value = document.querySelector(inputSelector).value;
+
+    value ? setError(`Invalid ${fieldName}`) : setError('This field is required');
   };
 
   const hideClassRegister = () => {
@@ -185,11 +188,8 @@ export const AddLesson = () => {
     setMentorInput(ev.target.value);
     const mentorData = mentors.find((mentor) => mentor.email === ev.target.value);
 
-    if (mentorData) {
-      setMentorError(false);
-    } else {
-      setMentorError(true);
-    }
+    mentorData ? setMentorError(false)
+      : setCorrectError('#mentorEmail', setMentorError, 'mentor email');
   };
 
   const handleGroupChange = (ev) => {
@@ -201,7 +201,7 @@ export const AddLesson = () => {
       setBtnSave(false);
       setClassRegister(false);
     } else {
-      setGroupError(true);
+      setCorrectError('#inputGroupName', setGroupError, 'group name');
     }
   };
 
@@ -232,16 +232,16 @@ export const AddLesson = () => {
               Server Problems
             </div>
           )}
-          <div className={`${classRegister ? 'col-6' : 'col-12'}`}>
+          <div className='col-12'>
             <h3>Add a Lesson</h3>
             <hr />
             <WithLoading
               isLoading={
-                  lessonsIsLoading
-                  || mentorsIsLoading
-                  || studentsIsLoading
-                  || groupsIsLoading
-                }
+                lessonsIsLoading
+                || mentorsIsLoading
+                || studentsIsLoading
+                || groupsIsLoading
+              }
               className={classNames(styles['loader-centered'])}
             >
               <Formik
@@ -255,178 +255,184 @@ export const AddLesson = () => {
                 onSubmit={onSubmit}
                 validationSchema={addLessonValidation}
               >
-                {({ errors }) => (
-                  <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
-                    <div className="col-12">
-                      <div className="mt-3 form-group row">
-                        <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
-                        <div className="col-sm-8">
-                          <Field
-                            type="text"
-                            className={classNames('form-control', { 'border-danger': errors.themeName })}
-                            name="themeName"
-                            id="inputLessonTheme"
-                            placeholder="Lesson Theme"
-                            required
-                          />
-                          {
-                          errors.themeName
-                            ? <div className={styles.error}>{errors.themeName}</div>
-                            : null
-                        }
-                        </div>
-                      </div>
-                      <div className="form-group row">
-                        <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name:</label>
-                        <div className="col-sm-8 input-group">
-                          <input
-                            name="groupName"
-                            id="inputGroupName"
-                            type="text"
-                            className={classNames('form-control group-input', { 'border-danger': groupError })}
-                            placeholder="Group Name"
-                            onChange={handleGroupChange}
-                            onFocus={hideClassRegister}
-                            list="group-list"
-                            disabled={groupsIsLoading}
-                            required
-                          />
-                          <datalist id="group-list">
-                            {groups.map(({ id, name }) => (
-                              <option key={id}>{name}</option>
-                            ))}
-                          </datalist>
-                        </div>
-                        {
-                            groupError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid group name</div>
-                              : null
-                          }
-                      </div>
-                      <div className="form-group row">
-                        <label className="col-sm-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
-                        <div className="col-md-8">
-                          <Field
-                            className="form-control"
-                            type="datetime-local"
-                            name="lessonDate"
-                            id="choose-date/time"
-                            max={today}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="form-group row">
-                        <label className="col-sm-4 col-form-label" htmlFor="mentorEmail">Mentor Email:</label>
-                        <div className="col-md-8 input-group">
-                          <input
-                            className={classNames('form-control group-input', { 'border-danger': mentorError })}
-                            type="text"
-                            name="mentorEmail"
-                            id="mentorEmail"
-                            list="mentor-list"
-                            placeholder="Mentor Email"
-                            onChange={handleMentorChange}
-                            disabled={mentorsIsLoading}
-                            required
-                          />
-                          <datalist id="mentor-list">
-                            {mentors.map(({ id, firstName, lastName, email }) => (
-                              <option key={id} value={email}>
-                                {`${firstName} ${lastName}`}
-                              </option>
-                            ))}
-                          </datalist>
-                        </div>
-                        {
-                            mentorError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>Invalid mentor email</div>
-                              : null
-                          }
-                      </div>
-                    </div>
-                    { classRegister && formData && (
-                    <div className="col-lg-12">
-                      <FieldArray name="formData">
-                        {() => (
-                          <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
-                            <table className="table table-bordered table-hover">
-                              <thead>
-                                <tr>
-                                  <th scope="col" aria-label="first_col" />
-                                  <th scope="col">Full Student`s Name</th>
-                                  <th scope="col" className="text-center">Mark</th>
-                                  <th scope="col" className="text-center">Presence</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                { formData && formData.length > 0 && (
-                                  formData.map((lessonVisit, index) => (
-                                    <tr key={lessonVisit.studentId}>
-                                      <th scope="row">{ index + 1 }</th>
-                                      <td>
-                                        <p
-                                          className={classNames(styles.link)}
-                                          onClick={() => openStudentDetails(lessonVisit.studentId)}
-                                        >
-                                          { lessonVisit.studentName }
-                                        </p>
-                                      </td>
-                                      <td>
-                                        <Field
-                                          name={`formData[${index}].studentMark`}
-                                          className={classNames(
-                                            'form-control',
-                                            { 'border-danger': markError },
-                                            styles.mode,
-                                          )}
-                                          type="number"
-                                          max="12"
-                                          min="0"
-                                          placeholder=""
-                                          onChange={handleMarkChange}
-                                          data-id={index}
-                                          disabled={!formData[index].presence}
-                                        />
-                                      </td>
-                                      <td>
-                                        <Field
-                                          name={`formData[${index}].presence`}
-                                          className={styles.mode}
-                                          type="checkbox"
-                                          onClick={handlePresenceChange}
-                                          data-id={index}
-                                          checked={formData[index].presence}
-                                        />
-                                      </td>
-                                    </tr>
-                                  ))
-                                )}
-                              </tbody>
-                            </table>
+                {({ errors, touched, setFieldTouched }) => (
+                  <Form id="form" className={classNames(styles.size)}>
+                    <div className='d-flex flex-sm-column flex-lg-row'>
+                      <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
+                        <div className="mt-3 form-group row">
+                          <label htmlFor="inputLessonTheme" className="col-md-4 col-form-label">Lesson Theme:</label>
+                          <div className="col-md-8">
+                            <Field
+                              type="text"
+                              className={classNames('form-control',
+                                { 'border-danger': !!(errors.themeName && touched.themeName) })}
+                              name="themeName"
+                              id="inputLessonTheme"
+                              placeholder="Lesson Theme"
+                              required
+                            />
+                            {
+                              errors.themeName &&
+                              <div className={styles.error}>{errors.themeName}</div>
+                            }
                           </div>
-                        )}
-                      </FieldArray>
+                        </div>
+                        <div className="form-group row">
+                          <label htmlFor="inputGroupName" className="col-md-4 col-form-label">Group Name:</label>
+                          <div className="col-md-8 input-group">
+                            <input
+                              name="groupName"
+                              id="inputGroupName"
+                              type="text"
+                              className={classNames('form-control group-input', { 'border-danger': !!groupError })}
+                              placeholder="Group Name"
+                              onChange={handleGroupChange}
+                              onFocus={hideClassRegister}
+                              list="group-list"
+                              disabled={groupsIsLoading}
+                              required
+                            />
+                            <datalist id="group-list">
+                              {groups.map(({ id, name }) => (
+                                <option key={id}>{name}</option>
+                              ))}
+                            </datalist>
+                          </div>
+                          {
+                            groupError
+                              ? <div className={classNames('col-8 offset-4', styles.error)}>{groupError}</div>
+                              : null
+                          }
+                        </div>
+                        <div className="form-group row">
+                          <label className="col-md-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
+                          <div className="col-md-8">
+                            <Field
+                              className="form-control"
+                              type="datetime-local"
+                              name="lessonDate"
+                              id="choose-date/time"
+                              max={today}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label className="col-md-4 col-form-label" htmlFor="mentorEmail">Mentor Email:</label>
+                          <div className="col-md-8 input-group">
+                            <input
+                              className={classNames('form-control group-input', { 'border-danger': !!mentorError })}
+                              type="text"
+                              name="mentorEmail"
+                              id="mentorEmail"
+                              list="mentor-list"
+                              placeholder="Mentor Email"
+                              onChange={handleMentorChange}
+                              disabled={mentorsIsLoading}
+                              required
+                            />
+                            <datalist id="mentor-list">
+                              {mentors.map(({ id, firstName, lastName, email }) => (
+                                <option key={id} value={email}>
+                                  {`${firstName} ${lastName}`}
+                                </option>
+                              ))}
+                            </datalist>
+                          </div>
+                          {
+                            mentorError
+                              ? <div className={classNames('col-8 offset-4', styles.error)}>{mentorError}</div>
+                              : null
+                          }
+                        </div>
+                      </div>
+                      {classRegister && formData && (
+                        <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
+                          <FieldArray name="formData">
+                            {() => (
+                              <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
+                                <table className="table table-bordered table-hover">
+                                  <thead>
+                                  <tr>
+                                    <th scope="col" aria-label="first_col" />
+                                    <th scope="col">Full Student`s Name</th>
+                                    <th scope="col" className="text-center">Mark</th>
+                                    <th scope="col" className="text-center">Presence</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  {formData && formData.length > 0 && (
+                                    formData.map((lessonVisit, index) => (
+                                      <tr key={lessonVisit.studentId}>
+                                        <th scope="row">{ index + 1 }</th>
+                                        <td>
+                                          <p
+                                            className={classNames(styles.link)}
+                                            onClick={() => openStudentDetails(lessonVisit.studentId)}
+                                          >
+                                            { lessonVisit.studentName }
+                                          </p>
+                                        </td>
+                                        <td>
+                                          <Field
+                                            name={`formData[${index}].studentMark`}
+                                            className={classNames(
+                                              'form-control',
+                                              { 'border-danger': markError },
+                                              styles.mode,
+                                            )}
+                                            type="number"
+                                            max="12"
+                                            min="0"
+                                            placeholder=""
+                                            onChange={handleMarkChange}
+                                            data-id={index}
+                                            disabled={!formData[index].presence}
+                                          />
+                                        </td>
+                                        <td>
+                                          <Field
+                                            name={`formData[${index}].presence`}
+                                            className={styles.mode}
+                                            type="checkbox"
+                                            onClick={handlePresenceChange}
+                                            data-id={index}
+                                            checked={formData[index].presence}
+                                          />
+                                        </td>
+                                      </tr>
+                                    ))
+                                  )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            )}
+                          </FieldArray>
+                        </div>
+                      )}
                     </div>
-                    )}
+                    <div className='col-12 d-flex justify-content-between'>
+                      <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
+                      {btnSave
+                        ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
+                        : (
+                          <Button
+                            className="btn btn-success btn-lg"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              setFieldTouched();
+                              openClassRegister();
+                            }}
+                          >
+                            Class Register
+                          </Button>
+                        )}
+                    </div>
                   </Form>
                 )}
               </Formik>
             </WithLoading>
           </div>
-        </div>
-        <div className={classNames(styles.placement, 'col-12')}>
-          <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
-          {btnSave
-            ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
-            : (
-              <Button
-                className="btn btn-success btn-lg"
-                onClick={openClassRegister}
-              >
-                Class Register
-              </Button>
-            )}
         </div>
       </div>
     </div>

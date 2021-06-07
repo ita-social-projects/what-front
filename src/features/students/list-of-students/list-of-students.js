@@ -51,7 +51,7 @@ export const ListOfStudents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchFieldValue, setSearchFieldValue] = useState('');
 
-  const studentsPerPage = 10;
+  const [studentsPerPage, setStudentsPerPage] = useState(10);
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
@@ -82,6 +82,10 @@ export const ListOfStudents = () => {
     }
     return { ...category, sortedByAscending: false };
   });
+
+  const downloadStudents = () => {
+    history.push(paths.STUDENTS_BY_GROUP_ID);
+  };
 
   useEffect(() => {
     dispatchLoadActiveStudents();
@@ -161,6 +165,13 @@ export const ListOfStudents = () => {
     history.push(paths.UNASSIGNED_USERS);
   };
 
+  const changeCountVisibleItems = (newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleStudents(students.slice(start, finish));
+    setStudentsPerPage(newNumber);
+  };
+
   const paginate = (pageNumber) => {
     if (currentPage !== pageNumber) {
       setCurrentPage(pageNumber);
@@ -209,26 +220,44 @@ export const ListOfStudents = () => {
     return studentsRows;
   };
 
+  const paginationComponent = () => {
+    if (students.length < studentsPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={studentsPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={studentsPerPage}
+        totalItems={students.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Students</h2>
-        <div className="col-2 text-right">{
-          students.length > studentsPerPage && !areActiveStudentsLoading && !areAllStudentsLoading
-          && `${students.length} students`
+        <div className="col-2 text-right">
+          {
+           !areActiveStudentsLoading && !areAllStudentsLoading
+          && `${visibleStudents.length} of ${students.length} students`
         }
         </div>
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {students.length > studentsPerPage && !areActiveStudentsLoading && !areAllStudentsLoading
+          {!areActiveStudentsLoading && !areAllStudentsLoading
           && (
-            <Pagination
-              itemsPerPage={studentsPerPage}
-              totalItems={students.length}
-              paginate={paginate}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              page={currentPage}
-            />
+            paginationComponent()
           )}
         </div>
       </div>
@@ -248,7 +277,7 @@ export const ListOfStudents = () => {
                 placeholder="student's name"
               />
             </div>
-            <div className="col-2 offset-3 custom-control custom-switch text-right">
+            <div className="col-2 custom-control custom-switch text-right">
               <input
                 value={isShowDisabled}
                 type="checkbox"
@@ -263,11 +292,33 @@ export const ListOfStudents = () => {
                 Disabled students
               </label>
             </div>
-            <div className="col-2 text-right">
-              {[3, 4].includes(currentUser.role) && (
-                <Button onClick={handleAddStudent}><span>Add a student</span></Button>
-              )}
+            <div className="col-1 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
             </div>
+              {[3, 4].includes(currentUser.role) && (
+                <div className="col-4 text-right">
+                <Button onClick={downloadStudents} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
+                  Upload student('s)
+                </Button>
+                <Button onClick={handleAddStudent}><span>Add a student</span></Button>
+              </div>
+              )}
           </div>
           <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
             <table className="table table-hover">
@@ -297,6 +348,7 @@ export const ListOfStudents = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );

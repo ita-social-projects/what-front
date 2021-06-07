@@ -10,10 +10,11 @@ import { WithLoading } from '@/components';
 import { lessonValidation } from "@features/validation/validation-helpers";
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
+import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
 import styles from './edit-lesson.scss';
-
+import { GroupDetails } from '@/features/groups';
 
 export const EditLesson = () => {
   const history = useHistory();
@@ -111,7 +112,7 @@ export const EditLesson = () => {
   useEffect(() => {
     if (lessonOnEdit && groups.length) {
       const groupRes = groups?.find((group) => group.id === lessonOnEdit.studentGroupId);
-      setStudentsGroupInput(groupRes.name || '');
+      setStudentsGroupInput(!groupRes ? '' : groupRes.name);
       if (groupRes && studentsIsLoaded && !studentsIsLoading) {
         setStudentsGroup(groupRes);
         if (studentsGroup && students) {
@@ -143,10 +144,6 @@ export const EditLesson = () => {
     }
   }, [dispatchAddAlert, editError, editIsLoaded, history]);
 
-  const capitalizeTheme = (str) => str.toLowerCase()
-    .split(/\s+/)
-    .map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
-
   const openStudentDetails = useCallback((studentId) => {
     history.push(`${paths.STUDENTS_DETAILS}/${studentId}`);
   }, [history]);
@@ -171,7 +168,7 @@ export const EditLesson = () => {
       );
     });
 
-    const theme = capitalizeTheme(themeName);
+    const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
 
     const lessonObject = {
       lessonDate: lessonD,

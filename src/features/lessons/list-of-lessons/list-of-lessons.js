@@ -1,101 +1,96 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
-import { currentUserSelector, fetchLessons, lessonsSelector } from '@/models/index.js';
-
+import { currentUserSelector, fetchLessons, lessonsSelector, mentorLessonsSelector, fetchMentorLessons  } from '@/models/index.js';
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
-
 import Icon from '@/icon.js';
-
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
 
 export const ListOfLessons = () => {
   const history = useHistory();
+  const getAllLessons = useActions(fetchLessons);
+  const getMentorsLessons = useActions(fetchMentorLessons);
+
+  const allLessons = useSelector(lessonsSelector, shallowEqual);
+  const mentorsLessons = useSelector(mentorLessonsSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+
+  const { data, isLoading } = (currentUser.role === 2) ? mentorsLessons : allLessons;
+
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [visibleLessonsList, setVisibleLessonsList] = useState([]);
   const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
-  const { data, isLoading } = useSelector(lessonsSelector, shallowEqual);
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-  const getLessons = useActions(fetchLessons);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lessonsPerPage, setLessonsPerPage] = useState(10);
 
-  const lessonsPerPage = 10;
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
 
   useEffect(() => {
-    getLessons();
-  }, [getLessons]);
+    if (currentUser.role === 2) {
+      getMentorsLessons(currentUser.id);
+    } else {
+      getAllLessons();
+    }
+  }, [currentUser, getAllLessons, getMentorsLessons]);
 
-  const transformDateTime = (dateTime) => {
+  function transformDateTime(dateTime) {
     const arr = dateTime.toString().split('T');
     return {
-      date: new Date(arr[0]),
+      date: arr[0],
       time: arr[1],
     };
-  };
+  }
 
   useEffect(() => {
-    setFilteredLessonsList(
-      data.map((lesson, index) => {
-        transformDateTime(lesson.lessonDate);
-        const { date, time } = transformDateTime(lesson.lessonDate);
-        lesson.lessonDate = date;
-        lesson.lessonTime = time;
-        lesson.index = index;
-        return lesson;
-      }),
-    );
-    setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
+    if(data.length !== 0) {
+      const lessonsData = data.map((lesson) => {
+        const {date, time} = transformDateTime(lesson.lessonDate);
+        return {
+          lessonShortDate: date,
+          lessonTime: time,
+          ...lesson,
+        }
+      });
+      setFilteredLessonsList(lessonsData);
+    }
   }, [data]);
 
   useEffect(() => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  const handleSearchTheme = (inputValue) => {
-    setSearchLessonsThemeValue(inputValue);
-  };
-  const handleSearchDate = (event) => {
-    const date = event.target.value;
-    setSearchLessonsDateValue(date);
-  };
+  const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
+
+  const handleSearchDate = (event) => setSearchLessonsDateValue(event.target.value);
 
   useEffect(() => {
-    const lessons = data.filter(
-      (lesson) => {
-        lesson.lessonDate.toLocaleDateString().includes(searchLessonsDateValue);
-      },
-    );
+    const lessons = filteredLessonsList.filter((lesson) => lesson.lessonShortDate === searchLessonsDateValue);
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
   }, [searchLessonsDateValue]);
 
   useEffect(() => {
-    const lessons = data.filter(
+    const lessons = filteredLessonsList.filter(
       (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
     );
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
   }, [searchLessonsThemeValue]);
 
-  const addLesson = () => {
-    history.push(paths.LESSON_ADD);
-  };
-
-  const lessonDetails = useCallback((id) => {
-    history.push(`${paths.LESSON_DETAILS}/${id}`);
-  });
+  const addLesson = useCallback(() => history.push(paths.LESSON_ADD), [history]);
+  const downloadThemes = useCallback(() => history.push(paths.THEMES_DOWNLOAD), [history]);
+  const lessonDetails = useCallback((id) => history.push(`${paths.LESSON_DETAILS}/${id}`), [history]);
 
   const editLesson = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.LESSON_EDIT}/${id}`);
-  });
+  }, [history]);
 
   const handleSortByParam = (key) => {
     if (prevSort === key) {
@@ -121,20 +116,21 @@ export const ListOfLessons = () => {
       setCurrentPage(pageNumber);
     }
   };
-  const nextPage = (pageNumber) => {
+  const nextPage = useCallback((pageNumber) => {
     const totalPages = Math.ceil(filteredLessonsList?.length / lessonsPerPage);
     setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-  };
-  const prevPage = (pageNumber) => {
-    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-  };
+  }, [lessonsPerPage, currentPage]);
 
-  const getLessonsList = () => {
+  const prevPage = useCallback((pageNumber) => {
+    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
+  }, [currentPage]);
+
+  const getLessonsList = useCallback(() => {
     const lessonsList = visibleLessonsList.map((lesson) => (
       <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)} className={styles['table-row']}>
-        <td className="text-center">{lesson.index + 1}</td>
+        <td className="text-center">{lesson.id}</td>
         <td>{lesson.themeName}</td>
-        <td>{lesson.lessonDate.toDateString()}</td>
+        <td>{lesson.lessonShortDate}</td>
         <td>{lesson.lessonTime}</td>
         {currentUser.role !== 3
           ? (
@@ -154,25 +150,50 @@ export const ListOfLessons = () => {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
+  }, [visibleLessonsList, searchLessonsDateValue, searchLessonsThemeValue]);
+
+  const changeCountVisibleItems = useCallback((newNumber) => {
+    const finish = currentPage * newNumber;
+    const start = finish - newNumber;
+    setVisibleLessonsList(filteredLessonsList.slice(start, finish));
+    setLessonsPerPage(newNumber);
+  }, [currentPage, filteredLessonsList]);
+
+  const paginationComponent = () => {
+    if (filteredLessonsList.length < lessonsPerPage) {
+      return (
+        <Pagination
+          itemsPerPage={lessonsPerPage}
+          totalItems={1}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+          page={currentPage}
+        />
+      );
+    }
+    return (
+      <Pagination
+        itemsPerPage={lessonsPerPage}
+        totalItems={filteredLessonsList.length}
+        paginate={paginate}
+        prevPage={prevPage}
+        nextPage={nextPage}
+        page={currentPage}
+      />
+    );
   };
 
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Lessons</h2>
-        {filteredLessonsList.length > lessonsPerPage ? <div className="col-2 text-right">{filteredLessonsList.length} lessons</div> : null}
+        { !isLoading ? (
+          <div className="col-2 text-right"> {visibleLessonsList.length} of {filteredLessonsList.length} lessons
+          </div>
+        ) : null}
         <div className="col-4 d-flex align-items-center justify-content-end">
-          {filteredLessonsList.length > lessonsPerPage && !isLoading
-            && (
-            <Pagination
-              itemsPerPage={lessonsPerPage}
-              totalItems={filteredLessonsList.length}
-              paginate={paginate}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              page={currentPage}
-            />
-            )}
+          {paginationComponent()}
         </div>
       </div>
       <div className="row">
@@ -196,16 +217,36 @@ export const ListOfLessons = () => {
                 onChange={handleSearchDate}
               />
             </div>
-            <div className="col-2 offset-3 text-right">
+            <div className="col-1 d-flex">
+              <label
+                className={classNames(styles['label-for-select'])}
+                htmlFor="change-visible-people"
+              >
+                Rows
+              </label>
+              <select
+                className={classNames('form-control', styles['change-rows'])}
+                id="change-visible-people"
+                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+              >
+                <option>10</option>
+                <option>30</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+              </select>
+            </div>
               {currentUser.role !== 3
               && (
-              <div>
+              <div className="col-4 text-right">
+                <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
+                  Add theme('s)
+                </Button>
                 <Button onClick={addLesson}>
                   <span>Add a lesson</span>
                 </Button>
               </div>
               )}
-            </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
             <table className="table table-hover">
@@ -282,6 +323,7 @@ export const ListOfLessons = () => {
             </table>
           </WithLoading>
         </div>
+        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
       </div>
     </div>
   );

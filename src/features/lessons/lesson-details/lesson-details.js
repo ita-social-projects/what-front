@@ -46,6 +46,7 @@ export const LessonDetails = () => {
   const {
     data: groups,
     isLoading: groupsIsLoading,
+    isLoaded: groupsIsLoaded,
   } = useSelector(loadStudentGroupsSelector, shallowEqual);
 
   const {
@@ -55,10 +56,10 @@ export const LessonDetails = () => {
   } = useSelector(studentsSelector, shallowEqual);
 
   useEffect(() => {
-    loadLessons();
-    fetchStudents();
-    loadGroups();
-    loadMentors();
+    if(!lessonsIsLoaded) loadLessons();
+    if(!studentsIsLoaded) fetchStudents();
+    if(!groupsIsLoaded) loadGroups();
+    if(!mentorsIsLoaded) loadMentors();
   }, [loadLessons, fetchStudents, loadGroups, loadMentors]);
 
   useEffect(() => {
@@ -67,10 +68,16 @@ export const LessonDetails = () => {
       if (!lesson) {
         history.push(paths.NOT_FOUND);
       } else {
-        setLesson(lesson);
+        const {date, time} = transformDateTime(lesson.lessonDate);
+        const lessonsData = {
+            lessonShortDate: date,
+            lessonTime: time,
+            ...lesson,
+          };
+        setLesson(lessonsData);
       }
     }
-  }, [lessonsIsLoaded, lesson]);
+  }, [lessons]);
 
   const transformDateTime = (dateTime) => {
     const arr = dateTime.toString().split('T');
@@ -79,18 +86,6 @@ export const LessonDetails = () => {
       time: arr[1],
     };
   };
-
-  useEffect(() => {
-    setLesson(
-      lessons.map(lesson => {
-        transformDateTime(lesson.lessonDate);
-        const { date, time } = transformDateTime(lesson.lessonDate);
-        lesson.lessonDate = date;
-        lesson.lessonTime = time;
-        return lesson;
-      })
-    );
-  }, [lessons]);
 
   const getFormData = () => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
@@ -206,7 +201,7 @@ export const LessonDetails = () => {
                       <span>Lesson Date: </span>
                     </div>
                     <div className="col-sm-6">
-                      {lesson?.lessonDate}
+                      {lesson?.lessonShortDate}
                     </div>
                   </div>
                   <div className="row">
