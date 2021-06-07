@@ -8,13 +8,12 @@ import {
 import { useActions, paths } from "@/shared";
 
 import { WithLoading } from "@/components";
-import { lessonValidation } from "@features/validation/validation-helpers";
+import { editLessonValidation } from "@features/validation/validation-helpers";
 import { addAlert } from "@/features";
 import { Formik, Field, Form, FieldArray } from "formik";
 import { commonHelpers } from "@/utils";
 
 import classNames from "classnames";
-import { GroupDetails } from "@/features/groups";
 import styles from "./edit-lesson.scss";
 
 export const EditLesson = () => {
@@ -156,8 +155,8 @@ export const EditLesson = () => {
   }, [history]);
 
   const onSubmit = (values) => {
-    const { lessonD, themeName } = values;
-    console.log(values);
+    const { lessonDate, themeName } = values;
+
     const lessonVisits = formData.map((lessonVisit) => {
       const {
         presence, studentId, studentMark,
@@ -171,15 +170,13 @@ export const EditLesson = () => {
         }
       );
     });
-
     const theme = commonHelpers.capitalizeTheme(!themeName ? "text" : themeName);
 
     const lessonObject = {
-      lessonDate: lessonD,
       themeName: theme,
+      lessonDate,
       lessonVisits,
     };
-
     if (lessonObject) {
       updateLesson(lessonObject, id);
     }
@@ -196,10 +193,8 @@ export const EditLesson = () => {
     const mark = Number(ev.target.value);
     if (mark > 0 && mark < 13) {
       formData[arrIndex].studentMark = mark;
-      setMarkError(false);
     } else {
-      formData[arrIndex].studentMark = 0; // 0
-      setMarkError(true);
+      formData[arrIndex].studentMark = 0;
     }
   };
 
@@ -229,11 +224,11 @@ export const EditLesson = () => {
                 initialValues={{
                   themeName: lessonOnEdit?.themeName,
                   groupName: groups?.find((group) => group.id === lessonOnEdit.studentGroupId)?.name,
-                  lessonD: lessonOnEdit?.lessonDate,
+                  lessonDate: lessonOnEdit?.lessonDate,
                   formData,
                 }}
                 onSubmit={onSubmit}
-                validationSchema={lessonValidation}
+                validationSchema={editLessonValidation}
               >
                 {({ errors }) => (
                   <Form id="form" className={classNames(styles.size)}>
@@ -280,7 +275,7 @@ export const EditLesson = () => {
                             <Field
                               className="form-control"
                               type="datetime-local"
-                              name="lessonD"
+                              name="lessonDate"
                               id="choose-date/time"
                               max={today}
                               required
