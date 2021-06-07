@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
-import { paths } from '@/shared/index.js';
-import { mentorIdSelector, currentUserSelector,
+import { paths, useActions } from '@/shared/index.js';
+import { mentorIdSelector, fetchMentorById, fetchActiveMentors, currentUserSelector,
   mentorCoursesSelector, mentorGroupsSelector } from '@/models/index.js';
 import { WithLoading } from '@/components/index.js';
 import { Badge } from 'react-bootstrap';
 import classNames from 'classnames';
 
-export const MentorDetails = () => {
+export const MentorDetails = ({ id }) => {
   const history = useHistory();
   const {
     data: mentor,
@@ -34,11 +34,19 @@ export const MentorDetails = () => {
 
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
+  const [
+    dispatchLoadMentors,
+  ] = useActions([fetchMentorById, fetchActiveMentors]); 
+
   useEffect(() => {
     if (mentorError && mentorCoursesError && mentorGroupsError) {
       history.push(paths.NOT_FOUND);
     }
   }, [mentorError, mentorCoursesError, mentorGroupsError, history]);
+
+  useEffect(() => {
+    dispatchLoadMentors(id);
+  }, [dispatchLoadMentors, id]);
 
   return (
     <div className="container">
