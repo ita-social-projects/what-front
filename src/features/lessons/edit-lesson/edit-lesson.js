@@ -10,6 +10,7 @@ import { WithLoading } from '@/components';
 import { lessonValidation } from "@features/validation/validation-helpers";
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
+import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
 import styles from './edit-lesson.scss';
@@ -143,10 +144,6 @@ export const EditLesson = () => {
     }
   }, [dispatchAddAlert, editError, editIsLoaded, history]);
 
-  const capitalizeTheme = (str) => str.toLowerCase()
-    .split(/\s+/)
-    .map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
-
   const openStudentDetails = useCallback((studentId) => {
     history.push(`${paths.STUDENTS_DETAILS}/${studentId}`);
   }, [history]);
@@ -171,7 +168,7 @@ export const EditLesson = () => {
       );
     });
 
-    const theme = capitalizeTheme(!themeName ? 'text' : themeName);
+    const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
 
     const lessonObject = {
       lessonDate: lessonD,
