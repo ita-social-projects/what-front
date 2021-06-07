@@ -5,10 +5,8 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared/index.js';
 import { mentorIdSelector, fetchMentorById, fetchActiveMentors, currentUserSelector,
   mentorCoursesSelector, mentorGroupsSelector } from '@/models/index.js';
-
 import { WithLoading } from '@/components/index.js';
 import { Badge } from 'react-bootstrap';
-
 import classNames from 'classnames';
 
 export const MentorDetails = ({ id }) => {
@@ -38,7 +36,7 @@ export const MentorDetails = ({ id }) => {
 
   const [
     dispatchLoadMentors,
-  ] = useActions([fetchMentorById, fetchActiveMentors]);
+  ] = useActions([fetchMentorById, fetchActiveMentors]); 
 
   useEffect(() => {
     if (mentorError && mentorCoursesError && mentorGroupsError) {
@@ -59,8 +57,7 @@ export const MentorDetails = ({ id }) => {
           <div className="px-2 py-4">
             <h3>Mentor Details</h3>
             <hr />
-            <WithLoading isLoading={mentorIsLoading || !mentorIsLoaded ||
-                mentorCoursesAreLoading || !mentorCoursesAreLoaded || mentorGroupsAreLoading || !mentorGroupsAreLoaded}
+            <WithLoading isLoading={mentorIsLoading || !mentorIsLoaded}
               className="d-block mx-auto m-0"
             >
               <div className="row">
@@ -80,24 +77,33 @@ export const MentorDetails = ({ id }) => {
               <hr />
             <div className="row">
               <div className="col-12 col-md-6 font-weight-bolder"><span>Group('s): </span></div>
-              <div className="col-12 col-md-6 d-flex flex-wrap lead">
-                {mentorGroups
-                  .map(({ id, name }) => (
-                    <div className="pr-2" key={id}>
-                      <Badge pill variant="info">
-                        <Link
-                          to={`${paths.GROUPS_DETAILS}/${id}`}
-                          className="text-decoration-none text-light"
-                        >{name}
-                        </Link>
-                      </Badge>
-                    </div>
-                  ))}
-              </div>
+              <WithLoading
+                isLoading={mentorGroupsAreLoading || !mentorGroupsAreLoaded}
+                className="d-block mx-auto m-0"
+              >
+                <div className="col-12 col-md-6 d-flex flex-wrap lead">
+                  {mentorGroups
+                    .map(({ id, name }) => (
+                      <div className="pr-2" key={id}>
+                        <Badge pill variant="info">
+                          <Link
+                            to={`${paths.GROUPS_DETAILS}/${id}`}
+                            className="text-decoration-none text-light"
+                          >{name}
+                          </Link>
+                        </Badge>
+                      </div>
+                    ))}
+                </div>
+              </WithLoading>
             </div>
             <hr/>
             <div className="row">
               <div className="col-12 col-md-6 font-weight-bolder"><span>Course('s): </span></div>
+              <WithLoading
+                isLoading={mentorCoursesAreLoading || !mentorCoursesAreLoaded}
+                className="d-block mx-auto m-0"
+              >
                 <div className="col-12 col-md-6 d-flex flex-wrap lead">
                   {mentorCourses
                     .map(({ id, name }) => (
@@ -111,6 +117,7 @@ export const MentorDetails = ({ id }) => {
                       </div>
                     ))}
                 </div>
+                </WithLoading>
               </div>
             </WithLoading>
           </div>

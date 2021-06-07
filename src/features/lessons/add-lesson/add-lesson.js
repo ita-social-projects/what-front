@@ -240,7 +240,7 @@ export const AddLesson = () => {
               Server Problems
             </div>
           )}
-          <div className="col-12">
+          <div className='col-12'>
             <h3>Add a Lesson</h3>
             <hr />
             <WithLoading
