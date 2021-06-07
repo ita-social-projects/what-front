@@ -183,7 +183,7 @@ function* fetchingMentorsGroupsWatcher() {
 }
 
 function* fetchingMentorsCoursesWatcher() {
-  yield takeLatest(types.FETCH_MENTOR_GROUPS, fetchAsyncMentorsCourses);
+  yield takeLatest(types.FETCH_MENTOR_COURSES, fetchAsyncMentorsCourses);
 }
 function* fetchAsyncMentorFilteredLessonsWatcher() {
   yield takeLatest(types.FETCHING_MENTORS_FILTER_LESSONS, fetchAsyncMentorFilteredLessons);
