@@ -317,7 +317,7 @@ export const AddLesson = () => {
                               type="datetime-local"
                               name="lessonDate"
                               id="choose-date/time"
-                              max={commonHelpers.transformDateTime(2)}
+                              max={commonHelpers.transformDateTime(1)}
                               required
                             />
                           </div>

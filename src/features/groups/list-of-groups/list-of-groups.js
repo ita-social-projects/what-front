@@ -134,9 +134,9 @@ export const ListOfGroups = () => {
           <td className="text-center">{index + 1}</td>
           <td>{name}</td>
           <td>{studentIds.length}</td>
-          <td>{commonHelpers.transformDateTime(1, startDate)}
+          <td>{commonHelpers.transformDateTime(0, startDate).date}
           </td>
-          <td>{commonHelpers.transformDateTime(1, finishDate)}
+          <td>{commonHelpers.transformDateTime(0, finishDate).date}
           </td>
           <td
             className="text-center"

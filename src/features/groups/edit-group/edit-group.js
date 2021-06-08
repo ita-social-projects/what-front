@@ -133,8 +133,8 @@ export const EditGroup = ({
       id: groupId,
       name,
       courseId,
-      startDate: commonHelpers.transformDateTime(2, startDate),
-      finishDate: commonHelpers.transformDateTime(2, finishDate),
+      startDate: commonHelpers.transformDateTime(0, startDate).date,
+      finishDate: commonHelpers.transformDateTime(0, finishDate).date,
       studentIds: [...new Set(groupStudents.map(({ id }) => id))],
       mentorIds: [...new Set(groupMentors.map(({ id }) => id))],
     };
@@ -160,8 +160,8 @@ export const EditGroup = ({
             <Formik
               initialValues={{
                 name: group.name,
-                startDate: commonHelpers.transformDateTime(3, group.startDate),
-                finishDate: commonHelpers.transformDateTime(3, group.finishDate),
+                startDate: commonHelpers.transformDateTime(2, group.startDate),
+                finishDate: commonHelpers.transformDateTime(2, group.finishDate),
                 courseId: group.courseId,
                 mentor: '',
                 student: '',
