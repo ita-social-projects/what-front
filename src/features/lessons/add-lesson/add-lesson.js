@@ -15,6 +15,7 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
+import { studentsFormDataValidation } from '@features/validation/validation-helpers';
 import styles from './add-lesson.scss';
 
 export const AddLesson = () => {
@@ -68,7 +69,7 @@ export const AddLesson = () => {
     if (!mentorsIsLoaded && !mentorError) {
       getMentors();
     }
-  }, [mentorsError, mentorsIsLoaded, getMentors]);
+  }, [mentorsError, mentorsIsLoaded, getMentors, mentorError]);
 
   useEffect(() => {
     if (!groupsIsLoaded && !groupsError) {
@@ -100,36 +101,42 @@ export const AddLesson = () => {
     history.push(paths.LESSONS);
   }, [history]);
 
-  const onSubmit = (values) => {
-    const { lessonDate, themeName } = values;
-    const lessonVisits = formData.map((lessonVisit) => {
-      const {
-        presence, studentId, studentMark,
-      } = lessonVisit;
-      return (
-        {
-          comment: '',
-          presence,
-          studentId,
-          studentMark,
-        }
-      );
-    });
+  const onSubmit = async (values) => {
+    try {
+      const { lessonDate, themeName } = values;
+      const lessonVisits = formData.map((lessonVisit) => {
+        const {
+          presence, studentId, studentMark,
+        } = lessonVisit;
+        return (
+          {
+            comment: '',
+            presence,
+            studentId,
+            studentMark: studentMark || null,
+          }
+        );
+      });
 
-    const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
+      await studentsFormDataValidation.validate(lessonVisits);
 
-    const theme = commonHelpers.capitalizeTheme(themeName);
+      const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
-    const lessonObject = {
-      lessonDate,
-      themeName: theme,
-      lessonVisits,
-      studentGroupId: studentsGroup.id,
-      mentorId: mentorData.id,
-    };
+      const theme = commonHelpers.capitalizeTheme(themeName);
 
-    if (!mentorsError && lessonObject) {
-      createLesson(lessonObject);
+      const lessonObject = {
+        lessonDate,
+        themeName: theme,
+        lessonVisits,
+        studentGroupId: studentsGroup.id,
+        mentorId: mentorData.id,
+      };
+
+      if (!mentorsError && lessonObject) {
+        await createLesson(lessonObject);
+      }
+    } catch (err) {
+      dispatchAddAlert(err.errors);
     }
   };
 
@@ -171,7 +178,7 @@ export const AddLesson = () => {
   };
 
   const setCorrectError = (inputSelector, setError, fieldName) => {
-    const value = document.querySelector(inputSelector).value;
+    const { value } = document.querySelector(inputSelector);
 
     value ? setError(`Invalid ${fieldName}`) : setError('This field is required');
   };
@@ -255,7 +262,7 @@ export const AddLesson = () => {
               >
                 {({ errors, touched, setFieldTouched }) => (
                   <Form id="form" className={classNames(styles.size)}>
-                    <div className='d-flex flex-sm-column flex-lg-row'>
+                    <div className="d-flex flex-sm-column flex-lg-row">
                       <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
                         <div className="mt-3 form-group row">
                           <label htmlFor="inputLessonTheme" className="col-md-4 col-form-label">Lesson Theme:</label>
@@ -270,8 +277,8 @@ export const AddLesson = () => {
                               required
                             />
                             {
-                              errors.themeName &&
-                              <div className={styles.error}>{errors.themeName}</div>
+                              errors.themeName
+                              && <div className={styles.error}>{errors.themeName}</div>
                             }
                           </div>
                         </div>
@@ -351,56 +358,56 @@ export const AddLesson = () => {
                               <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
                                 <table className="table table-bordered table-hover">
                                   <thead>
-                                  <tr>
-                                    <th scope="col" aria-label="first_col" />
-                                    <th scope="col">Full Student`s Name</th>
-                                    <th scope="col" className="text-center">Mark</th>
-                                    <th scope="col" className="text-center">Presence</th>
-                                  </tr>
+                                    <tr>
+                                      <th scope="col" aria-label="first_col" />
+                                      <th scope="col">Full Student`s Name</th>
+                                      <th scope="col" className="text-center">Mark</th>
+                                      <th scope="col" className="text-center">Presence</th>
+                                    </tr>
                                   </thead>
                                   <tbody>
-                                  {formData && formData.length > 0 && (
-                                    formData.map((lessonVisit, index) => (
-                                      <tr key={lessonVisit.studentId}>
-                                        <th scope="row">{ index + 1 }</th>
-                                        <td>
-                                          <p
-                                            className={classNames(styles.link)}
-                                            onClick={() => openStudentDetails(lessonVisit.studentId)}
-                                          >
-                                            { lessonVisit.studentName }
-                                          </p>
-                                        </td>
-                                        <td>
-                                          <Field
-                                            name={`formData[${index}].studentMark`}
-                                            className={classNames(
-                                              'form-control',
-                                              { 'border-danger': markError },
-                                              styles.mode,
-                                            )}
-                                            type="number"
-                                            max="12"
-                                            min="0"
-                                            placeholder=""
-                                            onChange={handleMarkChange}
-                                            data-id={index}
-                                            disabled={!formData[index].presence}
-                                          />
-                                        </td>
-                                        <td>
-                                          <Field
-                                            name={`formData[${index}].presence`}
-                                            className={styles.mode}
-                                            type="checkbox"
-                                            onClick={handlePresenceChange}
-                                            data-id={index}
-                                            checked={formData[index].presence}
-                                          />
-                                        </td>
-                                      </tr>
-                                    ))
-                                  )}
+                                    {formData && formData.length > 0 && (
+                                      formData.map((lessonVisit, index) => (
+                                        <tr key={lessonVisit.studentId}>
+                                          <th scope="row">{ index + 1 }</th>
+                                          <td>
+                                            <p
+                                              className={classNames(styles.link)}
+                                              onClick={() => openStudentDetails(lessonVisit.studentId)}
+                                            >
+                                              { lessonVisit.studentName }
+                                            </p>
+                                          </td>
+                                          <td>
+                                            <Field
+                                              name={`formData[${index}].studentMark`}
+                                              className={classNames(
+                                                'form-control',
+                                                { 'border-danger': markError },
+                                                styles.mode,
+                                              )}
+                                              type="number"
+                                              max="12"
+                                              min="0"
+                                              placeholder=""
+                                              onChange={handleMarkChange}
+                                              data-id={index}
+                                              disabled={!formData[index].presence}
+                                            />
+                                          </td>
+                                          <td>
+                                            <Field
+                                              name={`formData[${index}].presence`}
+                                              className={styles.mode}
+                                              type="checkbox"
+                                              onClick={handlePresenceChange}
+                                              data-id={index}
+                                              checked={formData[index].presence}
+                                            />
+                                          </td>
+                                        </tr>
+                                      ))
+                                    )}
                                   </tbody>
                                 </table>
                               </div>
@@ -409,7 +416,7 @@ export const AddLesson = () => {
                         </div>
                       )}
                     </div>
-                    <div className='col-12 d-flex justify-content-between'>
+                    <div className="col-12 d-flex justify-content-between">
                       <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
                       {btnSave
                         ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
