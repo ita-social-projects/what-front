@@ -15,7 +15,7 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
-import { StudentsFormDataValidation } from '@features/validation/validation-helpers';
+import { studentsFormDataValidation } from '@features/validation/validation-helpers';
 import styles from './add-lesson.scss';
 
 export const AddLesson = () => {
@@ -120,7 +120,7 @@ export const AddLesson = () => {
         );
       });
 
-      await StudentsFormDataValidation.validate(lessonVisits);
+      await studentsFormDataValidation.validate(lessonVisits);
 
       const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 

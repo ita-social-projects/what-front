@@ -8,7 +8,7 @@ import {
 import { useActions, paths } from '@/shared';
 
 import { WithLoading } from '@/components';
-import { editLessonValidation, StudentsFormDataValidation } from '@features/validation/validation-helpers';
+import { editLessonValidation, studentsFormDataValidation } from '@features/validation/validation-helpers';
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
 import { commonHelpers } from '@/utils';
@@ -171,7 +171,7 @@ export const EditLesson = () => {
         );
       });
 
-      await StudentsFormDataValidation.validate(lessonVisits);
+      await studentsFormDataValidation.validate(lessonVisits);
 
       const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
 

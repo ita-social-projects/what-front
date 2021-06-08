@@ -90,7 +90,7 @@ export const editLessonValidation = Yup.object().shape({
       .required('This field is required'),
 });
 
-export const StudentsFormDataValidation = Yup.array().of(
+export const studentsFormDataValidation = Yup.array().of(
   Yup.object({
     studentId: Yup.number().moreThan(0).required(),
     studentMark: Yup.number().nullable(),
