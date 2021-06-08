@@ -19,6 +19,11 @@ export const createAttachments = (id) => ({
   payload: { id },
 });
 
+export const deleteAttachment = (id) => ({
+  type: types.DELETE_ATTACHMENT,
+  payload: { id },
+});
+
 function* fetchAsyncAttachments() {
   try {
     yield put({ type: types.FETCHING_ATTACHMENTS_STARTED });
@@ -51,6 +56,17 @@ function* createAsyncAttachments() {
   }
 }
 
+function* deleteAsyncAttachment({ payload }) {
+  try {
+    yield put({ type: types.DELETING_ATTACHMENT_STARTED });
+    const attachmentId = payload.id;
+    const data = yield call(ApiService.remove, `/attachments​/${attachmentId}`);
+    yield put({ type: types.DELETING_ATTACHMENT_SUCCESS, payload: { data } });
+  } catch (error) {
+    yield put({ type: types.DELETING_ATTACHMENT_FAILED, payload: { error } });
+  }
+}
+
 function* fetchingAttachmentsWatcher() {
   yield takeLatest(types.FETCH_ATTACHMENTS, fetchAsyncAttachments);
 }
@@ -63,11 +79,15 @@ function* creatingAttachmentsWatcher() {
   yield takeEvery(types.CREATE_ATTACHMENTS, createAsyncAttachments);
 }
 
+function* deletingAttachmentsWatcher() {
+  yield takeEvery(types.DELETE_ATTACHMENT, deleteAsyncAttachment);
+}
+
 export function* attachmentsWatcher() {
   yield all([
     fork(fetchingAttachmentsWatcher),
     fork(fetchingAttachmentByIdWatcher),
     fork(creatingAttachmentsWatcher),
-
+    fork(deletingAttachmentsWatcher)
   ]);
 }
