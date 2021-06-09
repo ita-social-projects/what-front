@@ -18,10 +18,7 @@ import styles from './edit-lesson.scss';
 
 export const EditLesson = () => {
   const history = useHistory();
-
   const { id } = useParams();
-
-  const today = new Date().toISOString().substring(0, 19);
 
   const [studentsGroup, setStudentsGroup] = useState(null);
   const [studentsGroupInput, setStudentsGroupInput] = useState('');
@@ -169,15 +166,14 @@ export const EditLesson = () => {
           }
         );
       });
-
       const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
+      const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
 
       const lessonObject = {
         themeName: theme,
-        lessonDate,
+        lessonDate: formalizedDate,
         lessonVisits,
       };
-
       if (lessonObject) {
         updateLesson(lessonObject, id);
       }
@@ -225,7 +221,7 @@ export const EditLesson = () => {
                 initialValues={{
                   themeName: lessonOnEdit?.themeName,
                   groupName: groups?.find((group) => group.id === lessonOnEdit.studentGroupId)?.name,
-                  lessonDate: lessonOnEdit?.lessonDate,
+                  lessonDate: commonHelpers.transformDateTime({ dateTime: lessonOnEdit?.lessonDate }).formInitialValue,
                   formData,
                 }}
                 onSubmit={onSubmit}
@@ -278,7 +274,7 @@ export const EditLesson = () => {
                               type="datetime-local"
                               name="lessonDate"
                               id="choose-date/time"
-                              max={today}
+                              max={commonHelpers.transformDateTime({}).formInitialValue }
                               required
                             />
                           </div>

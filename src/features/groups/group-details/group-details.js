@@ -9,6 +9,7 @@ import {
   studentGroupByIdStateShape, studentsStateShape, mentorsStateShape, coursesStateShape,
 } from '@/features/shared/index.js';
 import styles from './group-details.scss';
+import {commonHelpers} from "@/utils";
 
 export const GroupDetails = ({
   studentGroupData, studentsData, mentorsData, coursesData,
@@ -51,9 +52,9 @@ export const GroupDetails = ({
                   Group: {group.name}
                 </h2>
                 <p className="m-0">
-                  {new Date(group.startDate).toLocaleDateString()}
+                  { commonHelpers.transformDateTime({ isDayTime:false, dateTime: group.startDate }).dotDate}
                   &nbsp;-&nbsp;
-                  {new Date(group.finishDate).toLocaleDateString()}
+                  { commonHelpers.transformDateTime({ isDayTime:false, dateTime: group.finishDate }).dotDate}
                 </p>
               </div>
               <div className="pt-3">

@@ -20,8 +20,6 @@ import styles from './add-lesson.scss';
 export const AddLesson = () => {
   const history = useHistory();
 
-  const today = new Date().toISOString().substring(0, 19);
-
   const [markError, setMarkError] = useState(false);
   const [mentorError, setMentorError] = useState(false);
   const [groupError, setGroupError] = useState(false);
@@ -121,9 +119,10 @@ export const AddLesson = () => {
       const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
       const theme = commonHelpers.capitalizeTheme(themeName);
+      const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
 
       const lessonObject = {
-        lessonDate,
+        lessonDate: formalizedDate,
         themeName: theme,
         lessonVisits,
         studentGroupId: studentsGroup.id,
@@ -257,7 +256,7 @@ export const AddLesson = () => {
               >
                 {({ errors, touched, setFieldTouched }) => (
                   <Form id="form" className={classNames(styles.size)}>
-                    <div className="d-flex flex-sm-column flex-lg-row">
+                    <div className='d-flex flex-sm-column flex-lg-row'>
                       <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
                         <div className="mt-3 form-group row">
                           <label htmlFor="inputLessonTheme" className="col-md-4 col-form-label">Lesson Theme:</label>
@@ -312,7 +311,7 @@ export const AddLesson = () => {
                               type="datetime-local"
                               name="lessonDate"
                               id="choose-date/time"
-                              max={today}
+                              max={ commonHelpers.transformDateTime({}).formInitialValue }
                               required
                             />
                           </div>
@@ -411,7 +410,7 @@ export const AddLesson = () => {
                         </div>
                       )}
                     </div>
-                    <div className="col-12 d-flex justify-content-between">
+                    <div className='col-12 d-flex justify-content-between'>
                       <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
                       {btnSave
                         ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
