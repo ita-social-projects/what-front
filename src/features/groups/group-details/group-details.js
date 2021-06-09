@@ -52,9 +52,9 @@ export const GroupDetails = ({
                   Group: {group.name}
                 </h2>
                 <p className="m-0">
-                  { commonHelpers.transformDateTime({ isDayTime:false, dateTime: group.startDate }).dotDate}
+                  { commonHelpers.transformDateTime({ isDayTime:false, dateTime: group.startDate }).date}
                   &nbsp;-&nbsp;
-                  { commonHelpers.transformDateTime({ isDayTime:false, dateTime: group.finishDate }).dotDate}
+                  { commonHelpers.transformDateTime({ isDayTime:false, dateTime: group.finishDate }).date}
                 </p>
               </div>
               <div className="pt-3">
