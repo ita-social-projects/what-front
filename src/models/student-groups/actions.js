@@ -91,11 +91,34 @@ function* watchAddingStudentGroup() {
   yield takeEvery(actionTypes.ADD_STUDENT_GROUP, addStudentGroupAsync);
 }
 
+export const loadHWStudentGroupsById = ( id ) => ({
+  type: actionTypes.LOAD_HW_STUDENT_GROUP_BY_ID,
+  payload: { id },
+})
+
+function* loadHWStudentGroupsByIdAsync({ payload }) {
+  try {
+    yield put({ type: actionTypes.LOADING_HW_STUDENT_GROUP_BY_ID_STARTED });
+
+    const groupId = payload.id;
+    const group = yield call(ApiService.load, `/student_groups/${groupId}/homeworks`);
+
+    yield put({ type: actionTypes.LOADING_HW_STUDENT_GROUP_BY_ID_SUCCEED, payload: group });
+  } catch (error) {
+    yield put({ type: actionTypes.LOADING_HW_STUDENT_GROUP_BY_ID_FAILED, payload: { error } });
+  }
+}
+
+function* watchLoadingHWStudentGroupsById() {
+  yield takeEvery(actionTypes.LOAD_HW_STUDENT_GROUP_BY_ID, loadHWStudentGroupsByIdAsync);
+}
+
 export function* studentGroupsWatcher() {
   yield all([
     fork(watchLoadingStudentGroups),
     fork(watchLoadingStudentGroupById),
     fork(watchEditingStudentGroups),
     fork(watchAddingStudentGroup),
+    fork(watchLoadingHWStudentGroupsById)
   ]);
 }
