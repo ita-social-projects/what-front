@@ -88,16 +88,14 @@ export const editLessonValidation = Yup.object().shape({
       .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid group name')
       .max(50, 'Too long')
       .required('This field is required'),
+  formData: Yup.array().of(
+      Yup.object({
+        studentId: Yup.number().moreThan(0).required(),
+        studentMark: Yup.number().nullable(),
+        presence: Yup.boolean().default(false).required(),
+        comment: Yup.string().default(''),
+      })),
 });
-
-export const studentsFormDataValidation = Yup.array().of(
-  Yup.object({
-    studentId: Yup.number().moreThan(0).required(),
-    studentMark: Yup.number().nullable(),
-    presence: Yup.boolean().default(false).required(),
-    comment: Yup.string().default(''),
-  })
-);
 
 export const lessonValidation = Yup.object().shape({
   themeName: Yup.string()

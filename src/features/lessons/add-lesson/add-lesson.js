@@ -15,7 +15,6 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
-import { studentsFormDataValidation } from '@features/validation/validation-helpers';
 import styles from './add-lesson.scss';
 
 export const AddLesson = () => {
@@ -103,8 +102,7 @@ export const AddLesson = () => {
     history.push(paths.LESSONS);
   }, [history]);
 
-  const onSubmit = async (values) => {
-    try {
+  const onSubmit = (values) => {
       const { lessonDate, themeName } = values;
       const lessonVisits = formData.map((lessonVisit) => {
         const {
@@ -120,8 +118,6 @@ export const AddLesson = () => {
         );
       });
 
-      await studentsFormDataValidation.validate(lessonVisits);
-
       const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
       const theme = commonHelpers.capitalizeTheme(themeName);
@@ -135,11 +131,8 @@ export const AddLesson = () => {
       };
 
       if (!mentorsError && lessonObject) {
-        await createLesson(lessonObject);
+        createLesson(lessonObject);
       }
-    } catch (err) {
-      dispatchAddAlert(err.errors);
-    }
   };
 
   const getFormData = () => {
