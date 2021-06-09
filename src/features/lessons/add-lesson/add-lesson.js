@@ -123,9 +123,10 @@ export const AddLesson = () => {
       const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
       const theme = commonHelpers.capitalizeTheme(themeName);
+      const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
 
       const lessonObject = {
-        lessonDate,
+        lessonDate: formalizedDate,
         themeName: theme,
         lessonVisits,
         studentGroupId: studentsGroup.id,
@@ -317,7 +318,7 @@ export const AddLesson = () => {
                               type="datetime-local"
                               name="lessonDate"
                               id="choose-date/time"
-                              max={commonHelpers.transformDateTime(1)}
+                              max={ commonHelpers.transformDateTime({}).formInitialValue }
                               required
                             />
                           </div>

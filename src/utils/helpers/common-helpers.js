@@ -1,40 +1,32 @@
 export const commonHelpers = {
 
   capitalizeTheme: (str) => str.toLowerCase()
-    .split(/\s+/)
-    .map((word) => word[0].toUpperCase() + word.substring(1)).join(' '),
+      .split(/\s+/)
+      .map((word) => word[0].toUpperCase() + word.substring(1)).join(' '),
 
-  transformDateTime: ( index = 0 , dateTime ) => {
-    const date = dateTime ? new Date(dateTime) : new Date();
+  transformDateTime: ({ isDayTime=true, isRequest=false, dateTime }) => {
+    // transform received from server dateTime into iso format to transform it into local format for rendering
+    let formalizedDate;
     // let DateOptions = { year: 'numeric', month: 'short', day: '2-digit', weekday: 'long'};
-    let dateOptions = {  year: 'numeric', month: '2-digit', day: '2-digit'};
+    let dateOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
     let timeOptions = { hour: '2-digit', minute: '2-digit' };
 
-    const dateTimeObject = {
-      date: date.toLocaleDateString('en-GB', dateOptions).toString().replaceAll('/', '-'), // DD-MM-YYYY
-      time: date.toLocaleTimeString('en-GB', timeOptions), // HH:mm
+    if (isDayTime) {
+      formalizedDate = dateTime ? new Date(`${dateTime}Z`) : new Date();
+    } else {
+      formalizedDate = dateTime ? new Date(dateTime) : new Date();
+    }
+    let date =  formalizedDate.toLocaleDateString('en-GB', dateOptions).toString().replaceAll('/', '-');
+    let time = formalizedDate.toLocaleTimeString('en-GB', timeOptions);
+    let reverseDate = date.split('-').reverse().join('-');
+
+    return  {
+      date: date, // DD-MM-YYYY
+      time: time, // HH:mm
+      reverseDate: reverseDate, // YYYY-MM-DD
+      formDateTimeForRequest: isRequest && new Date(dateTime).toISOString(), // 2015-07-20T10:10:10
+      formInitialValue: isDayTime ? `${reverseDate}T${time}` : `${reverseDate}`, // 2015-07-20T00:00:00
+      dotDate: formalizedDate.toLocaleDateString() // DD.MM.YYYY format
     };
-    const reverseDate = dateTimeObject.date.split('-').reverse().join('-'); // YYYY-MM-DD
-//
-    // provides data-time obj for lists
-    if(index === 0) return dateTimeObject;
-
-    // format for 1. date-time format as initial value for Formik 2. dispatch (post/put requests)
-    if(index === 1) return `${reverseDate}T${dateTimeObject.time}`; // 2015-07-20T00:00:00
-
-    // date format as initial value for Formik
-    if(index === 2) return reverseDate;
-
-    // transform server iso format into local
-    if(index === 3) return new Date(`${dateTime}Z`).toLocaleTimeString();
-
-    if(index === 4) {
-      return date.toLocaleDateString(); // DD.MM.YYYY
-    }
-    if(index === 5) {
-      return date.toLocaleTimeString()
-    }
   },
-
-
 };

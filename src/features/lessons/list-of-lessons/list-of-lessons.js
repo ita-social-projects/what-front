@@ -42,7 +42,7 @@ export const ListOfLessons = () => {
   useEffect(() => {
     if(data.length !== 0) {
       const lessonsData = data.map((lesson) => {
-        const {date, time} = commonHelpers.transformDateTime(0, lesson.lessonDate);
+        const {date, time} = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
         return {
           lessonShortDate: date,
           lessonTime: time,
@@ -52,13 +52,6 @@ export const ListOfLessons = () => {
       setFilteredLessonsList(lessonsData);
     }
   }, [data]);
-
-  if(data.length !== 0) {
-    let res = data[0].lessonDate;
-    let q = new Date(`2015-07-20T23:00:00Z`).toLocaleString();
-    console.log(`2015-07-20T00:00:00Z`, q)
-    // console.log(new Date(`${res}Z`).toLocaleTimeString());
-  }
 
   useEffect(() => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));

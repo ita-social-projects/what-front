@@ -83,7 +83,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
   };
 
   const handleSetToday = () => {
-    setInputDateValue(commonHelpers.transformDateTime(3));
+    setInputDateValue(commonHelpers.transformDateTime({ isDayTime: false }).reverseDate);
   };
 
   const handleEditSchedule = (id) => {

@@ -126,6 +126,7 @@ export const ListOfGroups = () => {
 
     setFilteredGroupsList(searchedGroups.map((mentor, index) => ({ index, ...mentor })));
   }, [searchGroupValue]);
+  commonHelpers.transformDateTime({isDayTime:false });
 
   const getGroupList = () => {
     const groupList = visibleGroups
@@ -134,9 +135,9 @@ export const ListOfGroups = () => {
           <td className="text-center">{index + 1}</td>
           <td>{name}</td>
           <td>{studentIds.length}</td>
-          <td>{commonHelpers.transformDateTime(0, startDate).date}
+          <td>{commonHelpers.transformDateTime({ isDayTime:false, dateTime: startDate }).date}
           </td>
-          <td>{commonHelpers.transformDateTime(0, finishDate).date}
+          <td>{commonHelpers.transformDateTime({ isDayTime:false, dateTime:finishDate }).date}
           </td>
           <td
             className="text-center"

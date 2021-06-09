@@ -171,10 +171,11 @@ export const EditLesson = () => {
       await studentsFormDataValidation.validate(lessonVisits);
 
       const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
-      // console.log(commonHelpers.transformDateTime(2))
+      const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
+
       const lessonObject = {
         themeName: theme,
-        lessonDate: new Date(lessonDate).toISOString(),
+        lessonDate: formalizedDate,
         lessonVisits,
       };
       if (lessonObject) {
@@ -227,7 +228,7 @@ export const EditLesson = () => {
                 initialValues={{
                   themeName: lessonOnEdit?.themeName,
                   groupName: groups?.find((group) => group.id === lessonOnEdit.studentGroupId)?.name,
-                  lessonDate: commonHelpers.transformDateTime(1, lessonOnEdit?.lessonDate),
+                  lessonDate: commonHelpers.transformDateTime({ dateTime: lessonOnEdit?.lessonDate }).formInitialValue,
                   formData,
                 }}
                 onSubmit={onSubmit}
@@ -280,7 +281,7 @@ export const EditLesson = () => {
                               type="datetime-local"
                               name="lessonDate"
                               id="choose-date/time"
-                              max={commonHelpers.transformDateTime(1)}
+                              max={ commonHelpers.transformDateTime({}).formInitialValue }
                               required
                             />
                           </div>

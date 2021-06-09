@@ -35,7 +35,7 @@ export const StudentLessons = () => {
   useEffect(() => {
     if(data.length !== 0) {
       const lessonsData = data.map((lesson) => {
-        const {date, time} = commonHelpers.transformDateTime(0, lesson.lessonDate);
+        const {date, time} = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
         return {
           lessonShortDate: date,
           lessonTime: time,

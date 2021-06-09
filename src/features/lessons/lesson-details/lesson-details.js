@@ -69,7 +69,7 @@ export const LessonDetails = () => {
       if (!lesson) {
         history.push(paths.NOT_FOUND);
       } else {
-        const {date, time} = commonHelpers.transformDateTime(0, lesson.lessonDate);
+        const {date, time} = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
         const lessonsData = {
             lessonShortDate: date,
             lessonTime: time,

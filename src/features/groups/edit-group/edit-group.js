@@ -15,7 +15,7 @@ import { addAlert } from '@/features';
 import { paths, useActions } from '@/shared';
 import { WithLoading, Button } from '@/components/index.js';
 import { editStudentGroup, editStudentGroupSelector } from '@/models';
-import Icon from '@/icon.js';
+
 import { editGroupValidation } from '@features/validation/validation-helpers.js';
 import styles from './edit-groups.scss';
 import {commonHelpers} from "@/utils";
@@ -133,8 +133,8 @@ export const EditGroup = ({
       id: groupId,
       name,
       courseId,
-      startDate: commonHelpers.transformDateTime(0, startDate).date,
-      finishDate: commonHelpers.transformDateTime(0, finishDate).date,
+      startDate: commonHelpers.transformDateTime({ isDayTime: false, dateTime: startDate }).formInitialValue,
+      finishDate: commonHelpers.transformDateTime({ isDayTime: false, dateTime: finishDate }).formInitialValue,
       studentIds: [...new Set(groupStudents.map(({ id }) => id))],
       mentorIds: [...new Set(groupMentors.map(({ id }) => id))],
     };
@@ -160,8 +160,8 @@ export const EditGroup = ({
             <Formik
               initialValues={{
                 name: group.name,
-                startDate: commonHelpers.transformDateTime(2, group.startDate),
-                finishDate: commonHelpers.transformDateTime(2, group.finishDate),
+                startDate: commonHelpers.transformDateTime({ isDayTime: false, dateTime: group.startDate }).formInitialValue,
+                finishDate: commonHelpers.transformDateTime({ isDayTime: false, dateTime: group.finishDate }).formInitialValue,
                 courseId: group.courseId,
                 mentor: '',
                 student: '',

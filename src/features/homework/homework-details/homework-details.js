@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { WithLoading } from '@/components/index.js';
 
@@ -42,12 +42,12 @@ export const HomeworkDetails = () => {
               <hr />
               <div className="row">
                 <span className="col-12 col-md-6 font-weight-bolder">Deadline date:</span>
-                <span className="col-12 col-md-6">{commonHelpers.transformDateTime(0, homework?.dueDate).date}</span>
+                <span className="col-12 col-md-6">{ commonHelpers.transformDateTime({ dateTime: homework?.dueDate }).date}</span>
               </div>
               <hr />
               <div className="row">
                 <span className="col-12 col-md-6 font-weight-bolder">Deadline time</span>
-                <span className="col-12 col-md-6">{commonHelpers.transformDateTime(0, homework?.dueDate).time}</span>
+                <span className="col-12 col-md-6">{commonHelpers.transformDateTime({ dateTime: homework?.dueDate }).time}</span>
               </div>
               <hr />
               <div className="row">
