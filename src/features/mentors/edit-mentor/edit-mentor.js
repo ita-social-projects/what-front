@@ -74,6 +74,7 @@ export const EditMentor = ({ id }) => {
   const [loadCourses] = useActions([fetchCourses]);
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
   const [toShowModal, setShowModal] = useState(false);
+  const [formIsChanged, setFormIsChanged] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -140,6 +141,7 @@ export const EditMentor = ({ id }) => {
           ...groups,
           groupObject,
         ];
+        checkEquality(mentorGroups, res);
         setGroups(res);
       } else {
         setErrorGroup('Invalid group name');
@@ -158,6 +160,7 @@ export const EditMentor = ({ id }) => {
           ...courses,
           courseObject,
         ];
+        checkEquality(mentorCourses, res);
         setCourses(res);
       } else {
         setErrorCourse('Invalid course name');
@@ -169,6 +172,7 @@ export const EditMentor = ({ id }) => {
     setErrorGroup('');
     const element = e.target.closest('li');
     const groupsList = groups.filter((el) => el.name !== element.dataset.groupname);
+    checkEquality(mentorGroups, groupsList);
     setGroups(groupsList);
   };
 
@@ -176,6 +180,7 @@ export const EditMentor = ({ id }) => {
     setErrorCourse('');
     const element = e.target.closest('li');
     const coursesList = courses.filter((el) => el.name !== element.dataset.coursename);
+    checkEquality(mentorCourses, coursesList);
     setCourses(coursesList);
   };
 
@@ -208,6 +213,15 @@ export const EditMentor = ({ id }) => {
     setGroups(mentorGroups);
     setCourses(mentorCourses);
   };
+
+  const checkEquality = (prev, current) => {
+    const prevSet = new Set(prev.map((el) => el.id));
+    const currSet = new Set(current.map((el) => el.id));
+    const areSetsEqual = () => {
+      return prevSet.size === currSet.size && [...prevSet].every(value => currSet.has(value))
+    };
+    setFormIsChanged(!areSetsEqual());
+  }
 
   return (
     <div className="container">
@@ -402,7 +416,7 @@ export const EditMentor = ({ id }) => {
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
                         <button
-                          disabled={!dirty}
+                          disabled={!formIsChanged && !dirty}
                           className={classNames('w-100 btn btn-secondary', styles.button)}
                           type="reset"
                           onClick={resetInput}
@@ -413,7 +427,7 @@ export const EditMentor = ({ id }) => {
                         <button
                           className={classNames('w-100 btn ', styles.button, styles.submit)}
                           type="submit"
-                          disabled={!isValid || !dirty || editedIsLoading || deletedIsLoading
+                          disabled={!isValid || !formIsChanged && !dirty || editedIsLoading || deletedIsLoading
                                 || errors.firstName || errors.lastName || errors.email}
                         >Save
                         </button>

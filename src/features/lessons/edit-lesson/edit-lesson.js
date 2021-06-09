@@ -8,7 +8,7 @@ import {
 import { useActions, paths } from '@/shared';
 
 import { WithLoading } from '@/components';
-import { editLessonValidation, studentsFormDataValidation } from '@features/validation/validation-helpers';
+import { editLessonValidation } from '@features/validation/validation-helpers';
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
 import { commonHelpers } from '@/utils';
@@ -151,9 +151,8 @@ export const EditLesson = () => {
     history.push(paths.LESSONS);
   }, [history]);
 
-  const onSubmit = async (values) => {
-    try {
-      const { lessonDate, themeName } = values;
+  const onSubmit = (values) => {
+      const { lessonDate, themeName, formData } = values;
       const lessonVisits = formData.map((lessonVisit) => {
         const {
           presence, studentId, studentMark,
@@ -167,9 +166,6 @@ export const EditLesson = () => {
           }
         );
       });
-
-      await studentsFormDataValidation.validate(lessonVisits);
-
       const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
       const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
 
@@ -179,11 +175,8 @@ export const EditLesson = () => {
         lessonVisits,
       };
       if (lessonObject) {
-        await updateLesson(lessonObject, id);
+        updateLesson(lessonObject, id);
       }
-    } catch (err) {
-      dispatchAddAlert(err.errors);
-    }
   };
 
   const handlePresenceChange = (ev) => {
@@ -281,7 +274,7 @@ export const EditLesson = () => {
                               type="datetime-local"
                               name="lessonDate"
                               id="choose-date/time"
-                              max={ commonHelpers.transformDateTime({}).formInitialValue }
+                              max={commonHelpers.transformDateTime({}).formInitialValue }
                               required
                             />
                           </div>

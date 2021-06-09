@@ -15,7 +15,6 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
-import { studentsFormDataValidation } from '@features/validation/validation-helpers';
 import styles from './add-lesson.scss';
 
 export const AddLesson = () => {
@@ -101,8 +100,7 @@ export const AddLesson = () => {
     history.push(paths.LESSONS);
   }, [history]);
 
-  const onSubmit = async (values) => {
-    try {
+  const onSubmit = (values) => {
       const { lessonDate, themeName } = values;
       const lessonVisits = formData.map((lessonVisit) => {
         const {
@@ -118,8 +116,6 @@ export const AddLesson = () => {
         );
       });
 
-      await studentsFormDataValidation.validate(lessonVisits);
-
       const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
       const theme = commonHelpers.capitalizeTheme(themeName);
@@ -134,11 +130,8 @@ export const AddLesson = () => {
       };
 
       if (!mentorsError && lessonObject) {
-        await createLesson(lessonObject);
+        createLesson(lessonObject);
       }
-    } catch (err) {
-      dispatchAddAlert(err.errors);
-    }
   };
 
   const getFormData = () => {
@@ -263,7 +256,7 @@ export const AddLesson = () => {
               >
                 {({ errors, touched, setFieldTouched }) => (
                   <Form id="form" className={classNames(styles.size)}>
-                    <div className="d-flex flex-sm-column flex-lg-row">
+                    <div className='d-flex flex-sm-column flex-lg-row'>
                       <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
                         <div className="mt-3 form-group row">
                           <label htmlFor="inputLessonTheme" className="col-md-4 col-form-label">Lesson Theme:</label>
@@ -417,7 +410,7 @@ export const AddLesson = () => {
                         </div>
                       )}
                     </div>
-                    <div className="col-12 d-flex justify-content-between">
+                    <div className='col-12 d-flex justify-content-between'>
                       <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
                       {btnSave
                         ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
