@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
-import { editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector,
+import {
+  editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector,
   fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
 } from '@/models';
 import { useActions, paths } from '@/shared';
 
 import { WithLoading } from '@/components';
-import { lessonValidation } from "@features/validation/validation-helpers";
+import { editLessonValidation } from '@features/validation/validation-helpers';
 import { addAlert } from '@/features';
 import { Formik, Field, Form, FieldArray } from 'formik';
 import { commonHelpers } from '@/utils';
 
 import classNames from 'classnames';
 import styles from './edit-lesson.scss';
-import { GroupDetails } from '@/features/groups';
 
 export const EditLesson = () => {
   const history = useHistory();
@@ -82,9 +82,12 @@ export const EditLesson = () => {
   const getFormData = () => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
 
-    const studentD = uniqueIds.map(
-      (id) => students.find((student) => student.id === id),
-    );
+    lessonOnEdit.lessonVisits.map((student) => {
+      if (student.comment === null) student.comment = '';
+      if (student.studentMark === null) student.studentMark = '';
+    });
+
+    const studentD = uniqueIds.map((id) => students.find((student) => student.id === id));
 
     const studentsData = studentD.map((student) => (
       {
@@ -105,7 +108,6 @@ export const EditLesson = () => {
         ...lessonOnEdit.lessonVisits[index],
         ...student,
       }));
-
     setFormData(resultLessonVisits);
   };
 
@@ -153,38 +155,38 @@ export const EditLesson = () => {
   }, [history]);
 
   const onSubmit = (values) => {
-    const { lessonD, themeName } = values;
-    const lessonVisits = formData.map((lessonVisit) => {
-      const {
-        presence, studentId, studentMark,
-      } = lessonVisit;
-      return (
-        {
-          comment: '',
-          presence,
-          studentId,
-          studentMark,
-        }
-      );
-    });
+      const { lessonDate, themeName, formData } = values;
+      const lessonVisits = formData.map((lessonVisit) => {
+        const {
+          presence, studentId, studentMark,
+        } = lessonVisit;
+        return (
+          {
+            comment: '',
+            presence,
+            studentId,
+            studentMark: studentMark || null,
+          }
+        );
+      });
 
-    const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
+      const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
 
-    const lessonObject = {
-      lessonDate: lessonD,
-      themeName: theme,
-      lessonVisits,
-    };
+      const lessonObject = {
+        themeName: theme,
+        lessonDate,
+        lessonVisits,
+      };
 
-    if (lessonObject) {
-      updateLesson(lessonObject, id);
-    }
+      if (lessonObject) {
+        updateLesson(lessonObject, id);
+      }
   };
 
   const handlePresenceChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
     formData[arrIndex].presence = !formData[arrIndex].presence;
-    formData[arrIndex].studentMark = 0;
+    formData[arrIndex].studentMark = '';
   };
 
   const handleMarkChange = (ev) => {
@@ -202,144 +204,163 @@ export const EditLesson = () => {
       <div className={classNames(styles.page, 'mx-auto', 'col-12')}>
         <div className="d-flex flex-row">
           {groupsError && lessonsError && editError && studentsError && (
-          <div className="col-12 alert-danger">
-            Server Problems
-          </div>
+            <div className="col-12 alert-danger">
+              Server Problems
+            </div>
           )}
-          <WithLoading
-            isLoading={
-            lessonsIsLoading
-            || studentsIsLoading
-            || groupsIsLoading
-            || !lessonOnEdit
-            || !formData.length
-          }
-            className={classNames(styles['loader-centered'])}
-          >
-            <div className="col-6">
-              <h3>Edit a Lesson</h3>
-              <hr />
+          <div className="col-12">
+            <h3>Edit a Lesson</h3>
+            <hr />
+            <WithLoading
+              isLoading={
+                lessonsIsLoading
+                || studentsIsLoading
+                || groupsIsLoading
+                || !lessonOnEdit
+                || !formData.length
+              }
+              className={classNames(styles['loader-centered'])}
+            >
               <Formik
                 initialValues={{
                   themeName: lessonOnEdit?.themeName,
                   groupName: groups?.find((group) => group.id === lessonOnEdit.studentGroupId)?.name,
-                  lessonD: lessonOnEdit?.lessonDate,
+                  lessonDate: lessonOnEdit?.lessonDate,
                   formData,
                 }}
                 onSubmit={onSubmit}
-                validationSchema={lessonValidation}
+                validationSchema={editLessonValidation}
               >
                 {({ errors }) => (
-                  <Form id="form" className={classNames(styles.size, 'd-flex flex-row')}>
-                    <div className="col-12">
-                      <div className="mt-3 form-group row">
-                        <label htmlFor="inputLessonTheme" className="col-sm-4 col-form-label">Lesson Theme:</label>
-                        <div className="col-sm-8">
-                          <Field
-                            type="text"
-                            className={classNames('form-control', { 'border-danger': errors.themeName })}
-                            name="themeName"
-                            id="inputLessonTheme"
-                          />
-                          {
-                              errors.themeName
-                                ? <div className={styles.error}>{errors.themeName}</div>
-                                : null
-                            }
+                  <Form id="form" className={classNames(styles.size)}>
+                    <div className="d-flex flex-sm-column flex-lg-row">
+                      <div className="col-lg-6">
+                        <div className="mt-3 form-group row">
+                          <label
+                            htmlFor="inputLessonTheme"
+                            className="col-sm-4 col-form-label"
+                          >Lesson Theme:
+                          </label>
+                          <div className="col-sm-8">
+                            <Field
+                              type="text"
+                              className={classNames('form-control', { 'border-danger': errors.themeName })}
+                              name="themeName"
+                              id="inputLessonTheme"
+                            />
+                            { errors.themeName ? <div className={styles.error}>{errors.themeName}</div> : null }
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label htmlFor="inputGroupName" className="col-md-4 col-form-label">Group
+                            Name:
+                          </label>
+                          <div className="col-sm-8 input-group">
+                            <Field
+                              name="groupName"
+                              id="inputGroupName"
+                              type="text"
+                              className="form-control group-input"
+                              value={studentsGroupInput}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label
+                            className="col-md-4 col-form-label"
+                            htmlFor="choose-date/time"
+                          >Lesson Date/Time:
+                          </label>
+                          <div className="col-md-8">
+                            <Field
+                              className="form-control"
+                              type="datetime-local"
+                              name="lessonDate"
+                              id="choose-date/time"
+                              max={today}
+                              required
+                            />
+                          </div>
                         </div>
                       </div>
-                      <div className="form-group row">
-                        <label htmlFor="inputGroupName" className="col-sm-4 col-form-label">Group Name:</label>
-                        <div className="col-sm-8 input-group">
-                          <Field
-                            name="groupName"
-                            id="inputGroupName"
-                            type="text"
-                            className="form-control group-input"
-                            value={studentsGroupInput}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="form-group row">
-                        <label className="col-sm-4 col-form-label" htmlFor="choose-date/time">Lesson Date/Time:</label>
-                        <div className="col-md-8">
-                          <Field
-                            className="form-control"
-                            type="datetime-local"
-                            name="lessonD"
-                            id="choose-date/time"
-                            max={today}
-                            required
-                          />
-                        </div>
+                      <div className="col-lg-6 mt-2">
+                        <FieldArray name="formData">
+                          {() => (
+                            <div className={classNames(styles.list, 'col-lg-12')}>
+                              <table className="table table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <th scope="col" aria-label="first_col" />
+                                    <th scope="col">Full Student`s Name</th>
+                                    <th scope="col" className="text-center">Mark</th>
+                                    <th scope="col" className="text-center">Presence
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {formData && formData.length > 0 && (
+                                    formData.map((lessonVisit, index) => (
+                                      <tr key={lessonVisit.studentId}>
+                                        <th scope="row">{index + 1}</th>
+                                        <td>
+                                          <p
+                                            className={classNames(styles.link)}
+                                            onClick={() => openStudentDetails(lessonVisit.studentId)}
+                                          >
+                                            {lessonVisit.studentName}
+                                          </p>
+                                        </td>
+                                        <td>
+                                          <Field
+                                            name={`formData[${index}].studentMark`}
+                                            type="number"
+                                            className={classNames(
+                                              'form-control',
+                                              styles.mode,
+                                            )}
+                                            max="12"
+                                            min="0"
+                                            data-id={index}
+                                            disabled={!formData[index].presence}
+                                            onBlur={handleMarkChange}
+                                          />
+                                        </td>
+                                        <td>
+                                          <Field
+                                            name={`formData[${index}].presence`}
+                                            className={styles.mode}
+                                            type="checkbox"
+                                            onClick={handlePresenceChange}
+                                            data-id={index}
+                                          />
+                                        </td>
+                                      </tr>
+                                    ))
+                                  )}
+                                </tbody>
+                              </table>
+                            </div>
+                          )}
+                        </FieldArray>
                       </div>
                     </div>
-                    <div className="col-lg-12 mt-2">
-                      <FieldArray name="formData">
-                        {() => (
-                          <div className={classNames(styles.list, 'col-lg-12')}>
-                            <table className="table table-bordered table-hover">
-                              <thead>
-                                <tr>
-                                  <th scope="col" aria-label="first_col" />
-                                  <th scope="col">Full Student`s Name</th>
-                                  <th scope="col" className="text-center">Mark</th>
-                                  <th scope="col" className="text-center">Presence</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                { formData && formData.length > 0 && (
-                                  formData.map((lessonVisit, index) => (
-                                    <tr key={lessonVisit.studentId}>
-                                      <th scope="row">{ index + 1 }</th>
-                                      <td>
-                                        <p
-                                          className={classNames(styles.link)}
-                                          onClick={() => openStudentDetails(lessonVisit.studentId)}
-                                        >
-                                          { lessonVisit.studentName }
-                                        </p>
-                                      </td>
-                                      <td>
-                                        <Field
-                                          name={`formData[${index}].studentMark`}
-                                          type="number"
-                                          max="12"
-                                          min="0"
-                                          data-id={index}
-                                          disabled={!formData[index].presence}
-                                          onBlur={handleMarkChange}
-                                        />
-                                      </td>
-                                      <td>
-                                        <Field
-                                          name={`formData[${index}].presence`}
-                                          className={styles.mode}
-                                          type="checkbox"
-                                          onClick={handlePresenceChange}
-                                          data-id={index}
-                                          checked={formData[index].presence}
-                                        />
-                                      </td>
-                                    </tr>
-                                  ))
-                                )}
-                              </tbody>
-                            </table>
-                          </div>
-                        )}
-                      </FieldArray>
+                    <div className={classNames(styles.placement, 'col-12 ')}>
+                      <button
+                        form="form"
+                        type="button"
+                        className="btn btn-secondary btn-lg"
+                        onClick={handleCancel}
+                      >Cancel
+                      </button>
+                      <button form="form" type="submit" className="btn btn-success btn-lg">Save
+                      </button>
                     </div>
                   </Form>
                 )}
               </Formik>
-            </div>
-          </WithLoading>
-        </div>
-        <div className={classNames(styles.placement, 'col-12')}>
-          <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
-          <button form="form" type="submit" className="btn btn-info btn-lg">Save</button>
+            </WithLoading>
+          </div>
         </div>
       </div>
     </div>
