@@ -71,6 +71,8 @@ export const StudentLessons = () => {
 
 
   const lessonDetails = useCallback((id) => {
+    // history.push(`${paths.MY_PROFILE}`);
+    console.log(`${paths.LESSON_DETAILS_BY_LESSON_ID}/${id}`);
     history.push(`${paths.LESSON_DETAILS}/${id}`);
   }, [history]);
 

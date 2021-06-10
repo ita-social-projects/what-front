@@ -11,7 +11,7 @@ import {
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
   DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
-  DownloadStudents, DownloadGroups, HomeworkAdd, StudentLessons
+  DownloadStudents, DownloadGroups, HomeworkAdd, StudentLessons, StudentLessonDetails,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs, HomeworkTabs } from '@/screens';
@@ -19,6 +19,10 @@ import styles from './layout.scss';
 
 export const Layout = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+  const lessonComponent = (role) => {
+    console.log(role);
+    // return role !== '1' ? <LessonDetails/> : <StudentLessonDetails />;
+  };
 
   return (
     <>
@@ -38,7 +42,17 @@ export const Layout = () => {
           <ProtectedRoute roles={[4]} exact path={`${paths.SECRETARY_EDIT}/:id`} render={() => <SecretariesTabs index={1} />} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.LESSONS} component={ListOfLessons} />
           <ProtectedRoute roles={[2, 4]} exact path={paths.LESSON_ADD} component={AddLesson} />
-          <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.LESSON_DETAILS}/:id`} component={LessonDetails} />
+
+
+          {/*<ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.LESSON_DETAILS}/:id`} component={LessonDetails} />*/}
+          <ProtectedRoute roles={[1]} exact path={`${paths.LESSON_DETAILS}/:id`} >
+            <StudentLessonDetails />
+          </ProtectedRoute>
+          {/*<ProtectedRoute roles={[1, 2, 3, 4]} exact path={`${paths.LESSON_DETAILS}/:id`} render={() => context.role = '1' ? lessonComponent(context)} />*/}
+          {/*  <StudentLessonDetails/>*/}
+          {/*</ProtectedRoute>*/}
+
+
           <ProtectedRoute roles={[2, 4]} exact path={`${paths.LESSON_EDIT}/:id`} component={EditLesson} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUPS} component={ListOfGroups} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUP_ADD} component={StartGroup} />
