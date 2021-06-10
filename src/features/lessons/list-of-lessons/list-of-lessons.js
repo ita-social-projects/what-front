@@ -1,10 +1,11 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
 import { currentUserSelector, fetchLessons, lessonsSelector, mentorLessonsSelector, fetchMentorLessons  } from '@/models/index.js';
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
+import { commonHelpers } from "@/utils";
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
 
@@ -20,49 +21,20 @@ export const ListOfLessons = () => {
   const { data, isLoading } = (currentUser.role === 2) ? mentorsLessons : allLessons;
 
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
+  const [rawLessonsList, setRawLessonsList] = useState([]);
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [visibleLessonsList, setVisibleLessonsList] = useState([]);
-  const [filterStartDate, setFilterStartDate] = useState('');
-  const [filterEndDate, setFilterEndDate] = useState('');
-  // const [searchLessonsDateValue, setSearchLessonsDateValue] = useState({
-  //   startDate: '',
-  //   endDate: ''
-  // });
+  const [filterStartDate, setFilterStartDate] = useState();
+  const [filterEndDate, setFilterEndDate] = useState();
+  const [startDateFilterBorder, setStartFilterDateBigger] = useState({
+    error: false
+  });
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
   const [currentPage, setCurrentPage] = useState(1);
   const [lessonsPerPage, setLessonsPerPage] = useState(10);
-
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
-
-// =======================================
-// вынести в отдельный блок вычисление дат
-// =======================================
-
-  const startDateDom = document.querySelector('.start-date-field');
-  const endDateDom = document.querySelector('.end-date-field');
-
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  let currentDay = currentDate.getDate();
-  currentDay = currentDay < 10 ? '0' + currentDay : currentDay;
-  let currentMonth = currentDate.getMonth() + 1;
-  currentMonth = currentMonth < 10 ? '0' + currentMonth : currentMonth;
-  const currentDateString = `${currentYear}-${currentMonth}-${currentDay}`;
-  const halfYearPastDate = currentDate;
-  const halfYearDays = 182.5;
-  halfYearPastDate.setDate(halfYearPastDate.getDate() - halfYearDays);
-  const halfYearPastYear = halfYearPastDate.getFullYear();
-  let halfYearPastDay = halfYearPastDate.getDate();
-  halfYearPastDay = halfYearPastDay < 10 ? '0' + halfYearPastDay : halfYearPastDay;
-  let halfYearPastMonth = halfYearPastDate.getMonth() + 1;
-  halfYearPastMonth = halfYearPastMonth < 10 ? '0' + halfYearPastMonth : halfYearPastMonth;
-  const halfYearPastDateString = `${halfYearPastYear}-${halfYearPastMonth}-${halfYearPastDay}`;
-
-// =======================================
-// =======================================
-// =======================================
 
   useEffect(() => {
     if (currentUser.role === 2) {
@@ -72,24 +44,17 @@ export const ListOfLessons = () => {
     }
   }, [currentUser, getAllLessons, getMentorsLessons]);
 
-  function transformDateTime(dateTime) {
-    const arr = dateTime.toString().split('T');
-    return {
-      date: arr[0],
-      time: arr[1],
-    };
-  }
-
   useEffect(() => {
     if(data.length !== 0) {
       const lessonsData = data.map((lesson) => {
-        const {date, time} = transformDateTime(lesson.lessonDate);
+        const {date, time} = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
         return {
           lessonShortDate: date,
           lessonTime: time,
           ...lesson,
         }
       });
+      setRawLessonsList(lessonsData);
       setFilteredLessonsList(lessonsData);
     }
   }, [data]);
@@ -98,53 +63,58 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
+  function getYearMonthDayFormat(inputFormat) {
+    function pad(s) { return (s < 10) ? '0' + s : s; }
+    const d = new Date(inputFormat)
+    return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate(), ].join('-')
+  }
+
+  function getMonthDayYearFormat(inputFormat) {
+    function pad(s) { return (s < 10) ? '0' + s : s; }
+    const d = new Date(inputFormat)
+    return [pad(d.getMonth()+1), pad(d.getDate()), d.getFullYear()].join('-')
+  }
+
+  const currentDateString = getYearMonthDayFormat(new Date());
+  const halfYearDays = 182.5;
+  const halfYearPastDate = new Date();
+  halfYearPastDate.setDate(halfYearPastDate.getDate() - halfYearDays);
+  const halfYearPastDateString = getYearMonthDayFormat(halfYearPastDate);
+
+  useEffect(() => {
+    setFilterStartDate(halfYearPastDateString);
+    setFilterEndDate(currentDateString);
+  }, []);
+
   const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
 
-
-
-
   const onDateFilterClick = () => {
+    const startTime = new Date(getMonthDayYearFormat(filterStartDate));
+    const endTime = new Date(getMonthDayYearFormat(filterEndDate));
 
-    const startTime = new Date(filterStartDate).getTime();
-    const endTime = new Date(filterEndDate).getTime();
+    if (startTime > endTime) {
+      setStartFilterDateBigger({
+        error: true
+      });
+      return;
+    }
+    setStartFilterDateBigger(false);
 
-console.log(filteredLessonsList);
-
-    const lessons = data.filter((lesson, i) => {
-      const lessonTime = new Date(lesson.lessonShortDate).getTime();
-
-console.log(startTime, endTime, lessonTime, lesson);
+    const lessons = rawLessonsList.filter((lesson) => {
+      const lessonTime = new Date(getMonthDayYearFormat(lesson.lessonDate));
 
       if (lessonTime >= startTime && lessonTime <= endTime) {
         return true;
       }
       return false;
     });
-console.log(lessons);
 
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
   }
 
-  // useEffect(() => {
-  //   const startTime = new Date(searchLessonsDateValue.startDate);
-  //   const endTime = new Date(searchLessonsDateValue.endDate);
-
-  //   const lessons = filteredLessonsList.filter((lesson, i) => {
-  //     const lessonTime = new Date(lesson.lessonShortDate);
-
-  //     if (lessonTime >= startTime && lessonTime <= endTime) {
-  //       return true;
-  //     }
-  //     return false;
-  //   });
-
-  //   setFilteredLessonsList(lessons);
-  //   setCurrentPage(1);
-  // }, [searchLessonsDateValue]);
-
   useEffect(() => {
-    const lessons = filteredLessonsList.filter(
+    const lessons = rawLessonsList.filter(
       (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
     );
     setFilteredLessonsList(lessons);
@@ -309,8 +279,6 @@ console.log(lessons);
               )}
           </div>
           <div className="row align-items-center justify-content-end mb-3">
-
-{/*стартовая дата*/}
             <div className="col-5 d-flex">
               <input
                 className={classNames(styles.date, 'form-control start-date-field mr-2')}
@@ -319,10 +287,8 @@ console.log(lessons);
                 name="lesson_date"
                 required
                 onChange={(event) => setFilterStartDate(event.target.value)}
+                style={{borderColor: startDateFilterBorder.error ? 'red' : ''}}
               />
-
-{/*финишная дата*/}
-
               <input
                 className={classNames(styles.date, 'form-control end-date-field')}
                 type="date"
@@ -333,10 +299,7 @@ console.log(lessons);
               />
             </div>
             <div className="col-2 text-right">
-              <Button onClick={onDateFilterClick}>
-                {/*onClick={() => setSearchLessonsDateValue(
-                  {startDate: filterStartDate, endDate: filterEndDateDom})*/}
-              
+              <Button onClick={() => onDateFilterClick()}>
                 <span>Filter by period</span>
               </Button>
             </div>
