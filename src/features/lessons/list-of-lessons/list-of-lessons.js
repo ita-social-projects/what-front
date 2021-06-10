@@ -47,7 +47,7 @@ export const ListOfLessons = () => {
   useEffect(() => {
     if(data.length !== 0) {
       const lessonsData = data.map((lesson) => {
-        const {date, time} = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
+        const { date, time } = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
         return {
           lessonShortDate: date,
           lessonTime: time,
@@ -76,13 +76,13 @@ export const ListOfLessons = () => {
   }
 
   const currentDateString = getYearMonthDayFormat(new Date());
-  const halfYearDays = 182.5;
-  const halfYearPastDate = new Date();
-  halfYearPastDate.setDate(halfYearPastDate.getDate() - halfYearDays);
-  const halfYearPastDateString = getYearMonthDayFormat(halfYearPastDate);
+  const halfMonthDays = 15;
+  const halfMonthPastDate = new Date();
+  halfMonthPastDate.setDate(halfMonthPastDate.getDate() - halfMonthDays);
+  const halfMonthPastDateString = getYearMonthDayFormat(halfMonthPastDate);
 
   useEffect(() => {
-    setFilterStartDate(halfYearPastDateString);
+    setFilterStartDate(halfMonthPastDate);
     setFilterEndDate(currentDateString);
   }, []);
 
@@ -283,7 +283,7 @@ export const ListOfLessons = () => {
               <input
                 className={classNames(styles.date, 'form-control start-date-field mr-2')}
                 type="date"
-                defaultValue={halfYearPastDateString}
+                defaultValue={halfMonthPastDateString}
                 name="lesson_date"
                 required
                 onChange={(event) => setFilterStartDate(event.target.value)}
