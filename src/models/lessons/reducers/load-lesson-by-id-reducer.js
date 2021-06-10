@@ -20,7 +20,7 @@ export const loadLessonByIdReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         isLoaded: true,
-        data: { ...state.data, ...action.payload },
+        data: action.payload.data,
       };
     case actionTypes.LOADING_LESSON_BY_ID_FAILED:
       return {

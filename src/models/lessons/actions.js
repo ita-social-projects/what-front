@@ -63,7 +63,7 @@ function* fetchLessonsByStudentIdWatcher() {
 
 // fetch lesson by id
 export const fetchLessonById = (id) => ({
-  type: actionsTypes.LOAD_LESSONS_BY_STUDENT_ID,
+  type: actionsTypes.LOAD_LESSON_BY_ID,
   payload: { id },
 });
 
