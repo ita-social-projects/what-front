@@ -22,7 +22,12 @@ export const ListOfLessons = () => {
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [visibleLessonsList, setVisibleLessonsList] = useState([]);
-  const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
+  const [filterStartDate, setFilterStartDate] = useState('');
+  const [filterEndDate, setFilterEndDate] = useState('');
+  // const [searchLessonsDateValue, setSearchLessonsDateValue] = useState({
+  //   startDate: '',
+  //   endDate: ''
+  // });
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +35,34 @@ export const ListOfLessons = () => {
 
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
+
+// =======================================
+// вынести в отдельный блок вычисление дат
+// =======================================
+
+  const startDateDom = document.querySelector('.start-date-field');
+  const endDateDom = document.querySelector('.end-date-field');
+
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  let currentDay = currentDate.getDate();
+  currentDay = currentDay < 10 ? '0' + currentDay : currentDay;
+  let currentMonth = currentDate.getMonth() + 1;
+  currentMonth = currentMonth < 10 ? '0' + currentMonth : currentMonth;
+  const currentDateString = `${currentYear}-${currentMonth}-${currentDay}`;
+  const halfYearPastDate = currentDate;
+  const halfYearDays = 182.5;
+  halfYearPastDate.setDate(halfYearPastDate.getDate() - halfYearDays);
+  const halfYearPastYear = halfYearPastDate.getFullYear();
+  let halfYearPastDay = halfYearPastDate.getDate();
+  halfYearPastDay = halfYearPastDay < 10 ? '0' + halfYearPastDay : halfYearPastDay;
+  let halfYearPastMonth = halfYearPastDate.getMonth() + 1;
+  halfYearPastMonth = halfYearPastMonth < 10 ? '0' + halfYearPastMonth : halfYearPastMonth;
+  const halfYearPastDateString = `${halfYearPastYear}-${halfYearPastMonth}-${halfYearPastDay}`;
+
+// =======================================
+// =======================================
+// =======================================
 
   useEffect(() => {
     if (currentUser.role === 2) {
@@ -67,13 +100,48 @@ export const ListOfLessons = () => {
 
   const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
 
-  const handleSearchDate = (event) => setSearchLessonsDateValue(event.target.value);
 
-  useEffect(() => {
-    const lessons = filteredLessonsList.filter((lesson) => lesson.lessonShortDate === searchLessonsDateValue);
+
+
+  const onDateFilterClick = () => {
+
+    const startTime = new Date(filterStartDate).getTime();
+    const endTime = new Date(filterEndDate).getTime();
+
+console.log(filteredLessonsList);
+
+    const lessons = data.filter((lesson, i) => {
+      const lessonTime = new Date(lesson.lessonShortDate).getTime();
+
+console.log(startTime, endTime, lessonTime, lesson);
+
+      if (lessonTime >= startTime && lessonTime <= endTime) {
+        return true;
+      }
+      return false;
+    });
+console.log(lessons);
+
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
-  }, [searchLessonsDateValue]);
+  }
+
+  // useEffect(() => {
+  //   const startTime = new Date(searchLessonsDateValue.startDate);
+  //   const endTime = new Date(searchLessonsDateValue.endDate);
+
+  //   const lessons = filteredLessonsList.filter((lesson, i) => {
+  //     const lessonTime = new Date(lesson.lessonShortDate);
+
+  //     if (lessonTime >= startTime && lessonTime <= endTime) {
+  //       return true;
+  //     }
+  //     return false;
+  //   });
+
+  //   setFilteredLessonsList(lessons);
+  //   setCurrentPage(1);
+  // }, [searchLessonsDateValue]);
 
   useEffect(() => {
     const lessons = filteredLessonsList.filter(
@@ -146,11 +214,13 @@ export const ListOfLessons = () => {
       </tr>
     ));
 
-    if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
+    if ((!lessonsList.length && filterStartDate) && 
+        (!lessonsList.length && filterEndDate) || 
+        !lessonsList.length && searchLessonsThemeValue) {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
-  }, [visibleLessonsList, searchLessonsDateValue, searchLessonsThemeValue]);
+  }, [visibleLessonsList, filterStartDate, filterEndDate, searchLessonsThemeValue]);
 
   const changeCountVisibleItems = useCallback((newNumber) => {
     const finish = currentPage * newNumber;
@@ -198,8 +268,8 @@ export const ListOfLessons = () => {
       </div>
       <div className="row">
         <div className="col-12 card shadow p-3 mb-5 bg-white">
-          <div className="row align-items-center mt-2 mb-3">
-            <div className="col-2">
+          <div className="row align-items-center justify-content-between mt-2 mb-3">
+            <div className="col-3">
               <div className="btn-group">
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
@@ -208,16 +278,7 @@ export const ListOfLessons = () => {
             <div className="col-3">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
-            <div className="col-2">
-              <input
-                className={classNames(styles.date, 'form-control')}
-                type="date"
-                name="lesson_date"
-                required
-                onChange={handleSearchDate}
-              />
-            </div>
-            <div className="col-1 d-flex">
+            <div className="col-2 d-flex">
               <label
                 className={classNames(styles['label-for-select'])}
                 htmlFor="change-visible-people"
@@ -236,18 +297,51 @@ export const ListOfLessons = () => {
                 <option>100</option>
               </select>
             </div>
-              {currentUser.role !== 3
-              && (
-              <div className="col-4 text-right">
-                <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
-                  Add theme('s)
-                </Button>
-                <Button onClick={addLesson}>
-                  <span>Add a lesson</span>
-                </Button>
-              </div>
+              {currentUser.role !== 3 && (
+                <div className="col-4 text-right">
+                  <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning mr-3', styles['left-add-btn'])}>
+                    Add theme('s)
+                  </Button>
+                  <Button onClick={addLesson}>
+                    <span>Add a lesson</span>
+                  </Button>
+                </div>
               )}
           </div>
+          <div className="row align-items-center justify-content-end mb-3">
+
+{/*стартовая дата*/}
+            <div className="col-5 d-flex">
+              <input
+                className={classNames(styles.date, 'form-control start-date-field mr-2')}
+                type="date"
+                defaultValue={halfYearPastDateString}
+                name="lesson_date"
+                required
+                onChange={(event) => setFilterStartDate(event.target.value)}
+              />
+
+{/*финишная дата*/}
+
+              <input
+                className={classNames(styles.date, 'form-control end-date-field')}
+                type="date"
+                defaultValue={currentDateString}
+                name="lesson_date"
+                required
+                onChange={(event) => setFilterEndDate(event.target.value)}
+              />
+            </div>
+            <div className="col-2 text-right">
+              <Button onClick={onDateFilterClick}>
+                {/*onClick={() => setSearchLessonsDateValue(
+                  {startDate: filterStartDate, endDate: filterEndDateDom})*/}
+              
+                <span>Filter by period</span>
+              </Button>
+            </div>
+          </div>
+
           <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
             <table className="table table-hover">
               <thead>
