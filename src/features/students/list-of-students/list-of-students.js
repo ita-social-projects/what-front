@@ -50,6 +50,7 @@ export const ListOfStudents = () => {
   const [isShowDisabled, setIsShowDisabled] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchFieldValue, setSearchFieldValue] = useState('');
+  const [showBlocks, setShowBlocks] = useState(false);
 
   const [studentsPerPage, setStudentsPerPage] = useState(10);
   const indexOfLastStudent = currentPage * studentsPerPage;
@@ -306,8 +307,18 @@ export const ListOfStudents = () => {
           <div className="row align-items-center d-flex justify-content-between mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3">
@@ -332,25 +343,27 @@ export const ListOfStudents = () => {
                 Disabled students
               </label>
             </div>
-            <div className="col-1 d-flex">
-              <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
-              >
-                Rows
-              </label>
-              <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
-              >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
-              </select>
-            </div>
+            {!showBlocks &&
+              <div className="col-1 d-flex">
+                <label
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
+                >
+                  Rows
+                </label>
+                <select
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                >
+                  <option>10</option>
+                  <option>30</option>
+                  <option>50</option>
+                  <option>75</option>
+                  <option>100</option>
+                </select>
+              </div>
+            }
               {[3, 4].includes(currentUser.role) && (
                 <div className="col-4 text-right">
                 <Button onClick={downloadStudents} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
@@ -362,7 +375,7 @@ export const ListOfStudents = () => {
           </div>
           <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
             {
-              true ?
+              showBlocks ?
                 <div className="container d-flex flex-wrap">
                   {getStudentsBlocks()}
                 </div>
