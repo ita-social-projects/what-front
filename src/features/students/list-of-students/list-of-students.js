@@ -303,7 +303,7 @@ export const ListOfStudents = () => {
       </div>
       <div className="row">
         <div className="col-12 card shadow p-3 mb-5 bg-white">
-          <div className="row align-items-center mt-2 mb-3">
+          <div className="row align-items-center d-flex justify-content-between mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
