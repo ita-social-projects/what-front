@@ -52,7 +52,7 @@ export const ListOfStudents = () => {
   const [searchFieldValue, setSearchFieldValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
 
-  const [studentsPerPage, setStudentsPerPage] = useState(10);
+  const [studentsPerPage, setStudentsPerPage] = useState(9);
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
@@ -356,11 +356,11 @@ export const ListOfStudents = () => {
                   id="change-visible-people"
                   onChange={(event) => { changeCountVisibleItems(event.target.value); }}
                 >
-                  <option>10</option>
-                  <option>30</option>
-                  <option>50</option>
-                  <option>75</option>
-                  <option>100</option>
+                  <option>9</option>
+                  <option>27</option>
+                  <option>45</option>
+                  <option>72</option>
+                  <option>99</option>
                 </select>
               </div>
             }
