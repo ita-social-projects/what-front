@@ -220,6 +220,46 @@ export const ListOfStudents = () => {
     return studentsRows;
   };
 
+  const getStudentsBlocks = () => {
+    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
+      <div className="card" style={{
+        width: '31%',
+        margin: '1%',
+        cursor: 'pointer'
+      }} onClick={() => handleDetails(id)}>
+        <div className="card-body d-flex justify-content-between">
+          <div>{index + 1}</div>
+          <div>
+            <div>
+              {firstName}
+            </div>
+            <div>
+              {lastName}
+            </div>
+            <div>
+              {email}
+            </div>
+          </div>
+          <Icon icon="Edit"
+                onClick={(event) => handleEdit(event, id)}
+                className={styles.scale}
+                color="#2E3440"
+                size={30}/>
+        </div>
+      </div>
+    ));
+
+    if (allStudentsError || activeStudentsError) {
+      return <div className="container-fluid text-center">Loading has been failed</div>;
+    }
+
+    if (!visibleStudents.length && searchFieldValue) {
+      return <div className="container-fluid text-center">Student is not found</div>;
+    }
+
+    return studentsRows;
+  };
+
   const paginationComponent = () => {
     if (students.length < studentsPerPage) {
       return (
@@ -321,14 +361,19 @@ export const ListOfStudents = () => {
               )}
           </div>
           <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
-            <table className="table table-hover">
+            {
+              true ?
+                <div className="container d-flex flex-wrap">
+                  {getStudentsBlocks()}
+                </div>
+              : <table className="table table-hover">
               <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      key={id}
-                      className={styles['table-head']}
-                    >
+              <tr>
+                {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                  <th
+                    key={id}
+                    className={styles['table-head']}
+                  >
                       <span
                         onClick={handleSortByParam}
                         data-sorting-param={name}
@@ -337,15 +382,17 @@ export const ListOfStudents = () => {
                       >
                         {tableHead}
                       </span>
-                    </th>
-                  ))}
-                  <th className="text-center">Edit</th>
-                </tr>
+                  </th>
+                ))}
+                <th className="text-center">Edit</th>
+              </tr>
               </thead>
               <tbody>
                 {getStudentsRows()}
               </tbody>
             </table>
+            }
+
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
