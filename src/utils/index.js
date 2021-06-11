@@ -1,1 +1,1 @@
-export { Cookie, commonHelpers, formatDate } from './helpers/index.js';
+export { Cookie, commonHelpers } from './helpers/index.js';
