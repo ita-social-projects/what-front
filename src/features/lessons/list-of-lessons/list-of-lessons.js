@@ -63,23 +63,17 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  function getYearMonthDayFormat(inputFormat) {
-    function pad(s) { return (s < 10) ? '0' + s : s; }
-    const d = new Date(inputFormat)
-    return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate(), ].join('-')
-  }
-
-  function getMonthDayYearFormat(inputFormat) {
-    function pad(s) { return (s < 10) ? '0' + s : s; }
-    const d = new Date(inputFormat)
-    return [pad(d.getMonth()+1), pad(d.getDate()), d.getFullYear()].join('-')
-  }
-
-  const currentDateString = getYearMonthDayFormat(new Date());
+  const currentDateString = commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: new Date() 
+    }).reverseDate;
   const halfMonthDays = 15;
   const halfMonthPastDate = new Date();
   halfMonthPastDate.setDate(halfMonthPastDate.getDate() - halfMonthDays);
-  const halfMonthPastDateString = getYearMonthDayFormat(halfMonthPastDate);
+  const halfMonthPastDateString = commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: halfMonthPastDate 
+    }).reverseDate;
 
   useEffect(() => {
     setFilterStartDate(halfMonthPastDate);
@@ -89,8 +83,14 @@ export const ListOfLessons = () => {
   const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
 
   const onDateFilterClick = () => {
-    const startTime = new Date(getMonthDayYearFormat(filterStartDate));
-    const endTime = new Date(getMonthDayYearFormat(filterEndDate));
+    const startTime = new Date(commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: filterStartDate 
+    }).reverseDate);
+    const endTime = new Date(commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: filterEndDate 
+    }).reverseDate);
 
     if (startTime > endTime) {
       setStartFilterDateBigger({
@@ -101,7 +101,10 @@ export const ListOfLessons = () => {
     setStartFilterDateBigger(false);
 
     const lessons = rawLessonsList.filter((lesson) => {
-      const lessonTime = new Date(getMonthDayYearFormat(lesson.lessonDate));
+      const lessonTime = new Date(commonHelpers.transformDateTime({ 
+        isDayTime: false, 
+        dateTime: lesson.lessonDate 
+      }).reverseDate);
 
       if (lessonTime >= startTime && lessonTime <= endTime) {
         return true;
