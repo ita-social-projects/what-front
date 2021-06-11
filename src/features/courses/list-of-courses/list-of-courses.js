@@ -82,12 +82,12 @@ export const ListOfCourses = () => {
 
   const courseDetails = useCallback((id) => {
     history.push(`${paths.COURSE_DETAILS}/${id}`);
-  });
+  }, [history]);
 
   const courseEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.COURSE_EDIT}/${id}`);
-  });
+  }, [history]);
 
   const handleSortByParam = (event) => {
     const { sortingParam, sortedByAscending } = event.target.dataset;

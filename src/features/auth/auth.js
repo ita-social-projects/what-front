@@ -31,7 +31,8 @@ export const Auth = () => {
   }, [history, jwt]);
 
   const submitHandler = (values) => {
-    dispatchLogIn(values);
+    const {email, password} = values;
+    dispatchLogIn({ email: email.trim(), password});
   };
 
   useEffect(() => {

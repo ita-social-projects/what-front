@@ -7,6 +7,7 @@ import { Search, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
 import classNames from 'classnames';
 import styles from '../list-of-lessons/list-of-lessons.scss';
+import {commonHelpers} from "@/utils";
 
 export const StudentLessons = () => {
   const history = useHistory();
@@ -26,25 +27,15 @@ export const StudentLessons = () => {
   const { id } = useParams();
 
 
-
   useEffect(() => {
     fetchStudentLessons(id);
   }, [fetchStudentLessons, id]);
 
-  console.log();
-
-  const transformDateTime = (dateTime) => {
-    const arr = dateTime.toString().split('T');
-    return {
-      date: arr[0],
-      time: arr[1],
-    };
-  };
 
   useEffect(() => {
     if(data.length !== 0) {
       const lessonsData = data.map((lesson) => {
-        const {date, time} = transformDateTime(lesson.lessonDate);
+        const {date, time} = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
         return {
           lessonShortDate: date,
           lessonTime: time,
