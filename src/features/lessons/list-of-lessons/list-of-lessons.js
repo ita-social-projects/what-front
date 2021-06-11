@@ -26,7 +26,7 @@ export const ListOfLessons = () => {
   const [visibleLessonsList, setVisibleLessonsList] = useState([]);
   const [filterStartDate, setFilterStartDate] = useState();
   const [filterEndDate, setFilterEndDate] = useState();
-  const [startDateFilterBorder, setStartFilterDateBigger] = useState({
+  const [startDateFilterBorder, setStartDateFilterBorder] = useState({
     error: false
   });
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
@@ -93,12 +93,12 @@ export const ListOfLessons = () => {
     }).reverseDate);
 
     if (startTime > endTime) {
-      setStartFilterDateBigger({
+      setStartDateFilterBorder({
         error: true
       });
       return;
     }
-    setStartFilterDateBigger(false);
+    setStartDateFilterBorder(false);
 
     const lessons = rawLessonsList.filter((lesson) => {
       const lessonTime = new Date(commonHelpers.transformDateTime({ 
