@@ -1,21 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { paths, useActions } from '@/shared';
 import { shallowEqual, useSelector } from 'react-redux';
 import {
-  fetchMentors,
-  loadStudentGroupById,
-  loadStudentGroupByIdSelector,
-  fetchLessonById,
-  lessonByIdSelector,
-  studentLessonsSelector,
-  mentorIdSelector,
-  fetchMentorById,
-  fetchLessonsByStudentId,
-  currentUserSelector,
+    studentLessonsSelector,
+    fetchLessonsByStudentId,
+    currentUserSelector,
 } from '@/models';
 import { commonHelpers } from '@/utils';
-import { Badge } from 'react-bootstrap';
 import { WithLoading } from '@/components';
 import classNames from 'classnames';
 import Icon from '@/icon';
@@ -24,19 +16,8 @@ import styles from './student-lesson-details.scss';
 export const StudentLessonDetails = () => {
   const history = useHistory();
   const { id } = useParams();
-
-  const [studentsGroup, setStudentsGroup] = useState({});
   const [lessonData, setLessonData] = useState('');
-
-  const {
-    currentUser,
-  } = useSelector(currentUserSelector, shallowEqual);
-
-  const {
-    data: lessonById,
-    isLoading: lessonByIdIsLoading,
-    isLoaded: lessonByIdIsLoaded,
-  } = useSelector(lessonByIdSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const {
     data: lessons,
@@ -44,36 +25,11 @@ export const StudentLessonDetails = () => {
     isLoaded: lessonsIsLoaded,
   } = useSelector(studentLessonsSelector, shallowEqual);
 
-  const {
-    data: group,
-    isLoading: groupIsLoading,
-    isLoaded: groupIsLoaded,
-  } = useSelector(loadStudentGroupByIdSelector, shallowEqual);
-
-  const {
-    data: mentor,
-    isLoading: mentorIsLoading,
-    isLoaded: mentorIsLoaded,
-  } = useSelector(mentorIdSelector, shallowEqual);
-
-  const [
-    fetchStudentLessons,
-    loadLessonById,
-    loadGroupById] = useActions([fetchLessonsByStudentId, fetchLessonById, loadStudentGroupById]);
-    // loadMentorById, fetchMentorById,
+  const fetchStudentLessons = useActions(fetchLessonsByStudentId);
 
   useEffect(() => {
-    if (!lessonByIdIsLoaded) loadLessonById(id); // to get groupId & mentorId
     if (!lessonsIsLoaded) fetchStudentLessons(currentUser.id);
-  }, [lessonByIdIsLoaded, lessonsIsLoaded]);
-
-  useEffect(() => {
-      if(!groupIsLoaded && lessonData) {
-          loadGroupById(+lessonData.studentGroupId);
-      }
-  }, [groupIsLoaded, lessonData]);
-
-  console.log('groupById', group);
+  }, [lessonsIsLoaded]);
 
   useEffect(() => {
     if (lessonsIsLoaded) {
@@ -92,9 +48,7 @@ export const StudentLessonDetails = () => {
     }
   }, [lessons, lessonsIsLoaded]);
 
-  const handleCancel = useCallback(() => {
-    history.push(`${paths.LESSON_BY_STUDENT_ID}/${currentUser.id}`);
-  }, [history]);
+  const handleCancel = useCallback(() => history.push(paths.LESSONS), [history]);
 
   return (
     <div className="container">
@@ -103,8 +57,7 @@ export const StudentLessonDetails = () => {
         <hr />
         <div className="col-12 d-flex flex-lg-row flex-md-column flex-sm-column">
           <WithLoading
-            isLoading={lessonsIsLoading || lessonByIdIsLoading
-                        || !lessons || !lessonById}
+            isLoading={lessonsIsLoading || !lessons}
             className={styles['loader-centered']}
           >
             <div className="col-lg-5 col-md-8 col-sm-12 mb-2">
@@ -145,8 +98,8 @@ export const StudentLessonDetails = () => {
                             ? <Icon icon="Present" /> : <Icon icon="Absent" />}
                           </span>
                       </td>
-                    <td scope="col" className="text-center font-weight-bolder">{lessonData.mark}</td>
-                    <td scope="col" className="text-center">fsdffffdfsfsfsdffffffff ffffff ff ffff fffffffffff ffff fffffff ffff fffffff ffffffffff fffff fff fffffffff dgdfgdfgdfgdfgdfg {lessonData.comment}</td>
+                    <td scope="col" className="text-center">{lessonData.mark}</td>
+                    <td scope="col" className="text-center">{lessonData.comment}</td>
                   </tr>
                 </tbody>
               </table>

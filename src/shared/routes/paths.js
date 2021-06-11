@@ -38,8 +38,6 @@ export const paths = {
   LESSON_ADD: '/lessons/add',
   LESSON_DETAILS: '/lessons',
   LESSON_EDIT: '/lessons/edit',
-  LESSON_BY_STUDENT_ID: '/lessons/students', // /lessons/students
-  LESSON_DETAILS_BY_LESSON_ID: '/lessons', // lessons/students/lesson
 
   THEMES_DOWNLOAD: '/imports/themes',
 

@@ -32,11 +32,11 @@ export const ListOfLessons = () => {
   const indexOfFirst = indexOfLast - lessonsPerPage;
 
   useEffect(() => {
-    if (currentUser.role === 2) {
-      getMentorsLessons(currentUser.id);
-    } else {
-      getAllLessons();
-    }
+      if (currentUser.role === 2) {
+        getMentorsLessons(currentUser.id);
+      } else {
+        getAllLessons();
+      }
   }, [currentUser, getAllLessons, getMentorsLessons]);
 
   useEffect(() => {

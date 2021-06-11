@@ -153,8 +153,6 @@ function* editLessonAsync(editData) {
   }
 }
 
-
-
 export function* editLessonWatcher() {
   yield takeEvery(actionsTypes.EDIT_LESSON, editLessonAsync);
 }
