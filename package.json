@@ -7,7 +7,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js"
+    "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
+    "test": "jest --collectCoverage"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,10 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "@testing-library/jest-dom": "5.13.0",
+    "@testing-library/react": "^11.2.7",
     "autoprefixer": "^10.0.1",
+    "babel-jest": "^27.0.2",
     "babel-loader": "^8.1.0",
     "babel-plugin-react-css-modules": "^5.2.6",
     "clean-webpack-plugin": "^3.0.0",
@@ -69,6 +73,7 @@
     "bootstrap": "^4.5.3",
     "classnames": "^2.2.6",
     "formik": "^2.2.1",
+    "jest": "^27.0.4",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
@@ -86,5 +91,40 @@
     "last 1 version",
     "> 1%",
     "IE 10"
-  ]
+  ],
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,}"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 85,
+        "functions": 85,
+        "lines": 85,
+        "statements": 85
+      }
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest-setup.js"
+    ],
+    "testEnvironment": "jsdom",
+    "moduleDirectories": [
+      ".",
+      "src",
+      "src/utils",
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "@/(.*)$": "<rootDir>/src/$1",
+      "^@utils(.*)$": ["<rootDir>/src/utils/$1"],
+      "^@assets(.*)$": ["<rootDir>/src/assets/$1"],
+      "^@styles(.*)$": ["<rootDir>/src/styles/$1"],
+      "^@shared(.*)$": ["<rootDir>/src/shared/$1"],
+      "^@models(.*)$": ["<rootDir>/src/models/$1"],
+      "^@screens(.*)$": ["<rootDir>/src/screens/$1"],
+      "^@features(.*)$": ["<rootDir>/src/features/$1"],
+      "^@components(.*)$": ["<rootDir>/src/components/$1"],
+      "^.+\\.(css|less|scss)$": "babel-jest"
+    }
+  }
 }
