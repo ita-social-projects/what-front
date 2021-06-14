@@ -21,9 +21,14 @@ export const ListOfLessons = () => {
   const { data, isLoading } = (currentUser.role === 2) ? mentorsLessons : allLessons;
 
   const [searchLessonsThemeValue, setSearchLessonsThemeValue] = useState('');
+  const [rawLessonsList, setRawLessonsList] = useState([]);
   const [filteredLessonsList, setFilteredLessonsList] = useState([]);
   const [visibleLessonsList, setVisibleLessonsList] = useState([]);
-  const [searchLessonsDateValue, setSearchLessonsDateValue] = useState('');
+  const [filterStartDate, setFilterStartDate] = useState();
+  const [filterEndDate, setFilterEndDate] = useState();
+  const [startDateFilterBorder, setStartDateFilterBorder] = useState({
+    error: false
+  });
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,13 +47,14 @@ export const ListOfLessons = () => {
   useEffect(() => {
     if(data.length !== 0) {
       const lessonsData = data.map((lesson) => {
-        const {date, time} = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
+        const { date, time } = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
         return {
           lessonShortDate: date,
           lessonTime: time,
           ...lesson,
         }
       });
+      setRawLessonsList(lessonsData);
       setFilteredLessonsList(lessonsData);
     }
   }, [data]);
@@ -57,18 +63,61 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
+  const currentDateString = commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: new Date() 
+    }).reverseDate;
+  const halfMonthDays = 15;
+  const halfMonthPastDate = new Date();
+  halfMonthPastDate.setDate(halfMonthPastDate.getDate() - halfMonthDays);
+  const halfMonthPastDateString = commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: halfMonthPastDate 
+    }).reverseDate;
+
+  useEffect(() => {
+    setFilterStartDate(halfMonthPastDate);
+    setFilterEndDate(currentDateString);
+  }, []);
+
   const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
 
-  const handleSearchDate = (event) => setSearchLessonsDateValue(event.target.value);
+  const onDateFilterClick = () => {
+    const startTime = new Date(commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: filterStartDate 
+    }).reverseDate);
+    const endTime = new Date(commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: filterEndDate 
+    }).reverseDate);
 
-  useEffect(() => {
-    const lessons = filteredLessonsList.filter((lesson) => lesson.lessonShortDate === searchLessonsDateValue);
+    if (startTime > endTime) {
+      setStartDateFilterBorder({
+        error: true
+      });
+      return;
+    }
+    setStartDateFilterBorder(false);
+
+    const lessons = rawLessonsList.filter((lesson) => {
+      const lessonTime = new Date(commonHelpers.transformDateTime({ 
+        isDayTime: false, 
+        dateTime: lesson.lessonDate 
+      }).reverseDate);
+
+      if (lessonTime >= startTime && lessonTime <= endTime) {
+        return true;
+      }
+      return false;
+    });
+
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
-  }, [searchLessonsDateValue]);
+  }
 
   useEffect(() => {
-    const lessons = filteredLessonsList.filter(
+    const lessons = rawLessonsList.filter(
       (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
     );
     setFilteredLessonsList(lessons);
@@ -138,11 +187,13 @@ export const ListOfLessons = () => {
       </tr>
     ));
 
-    if (!lessonsList.length && searchLessonsDateValue || !lessonsList.length && searchLessonsThemeValue) {
+    if ((!lessonsList.length && filterStartDate) && 
+        (!lessonsList.length && filterEndDate) || 
+        !lessonsList.length && searchLessonsThemeValue) {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
-  }, [visibleLessonsList, searchLessonsDateValue, searchLessonsThemeValue]);
+  }, [visibleLessonsList, filterStartDate, filterEndDate, searchLessonsThemeValue]);
 
   const changeCountVisibleItems = useCallback((newNumber) => {
     const finish = currentPage * newNumber;
@@ -190,8 +241,8 @@ export const ListOfLessons = () => {
       </div>
       <div className="row">
         <div className="col-12 card shadow p-3 mb-5 bg-white">
-          <div className="row align-items-center mt-2 mb-3">
-            <div className="col-2">
+          <div className="row align-items-center justify-content-between mt-2 mb-3">
+            <div className="col-3">
               <div className="btn-group">
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
@@ -200,16 +251,7 @@ export const ListOfLessons = () => {
             <div className="col-3">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
-            <div className="col-2">
-              <input
-                className={classNames(styles.date, 'form-control')}
-                type="date"
-                name="lesson_date"
-                required
-                onChange={handleSearchDate}
-              />
-            </div>
-            <div className="col-1 d-flex">
+            <div className="col-2 d-flex">
               <label
                 className={classNames(styles['label-for-select'])}
                 htmlFor="change-visible-people"
@@ -228,18 +270,44 @@ export const ListOfLessons = () => {
                 <option>100</option>
               </select>
             </div>
-              {currentUser.role !== 3
-              && (
-              <div className="col-4 text-right">
-                <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
-                  Add theme('s)
-                </Button>
-                <Button onClick={addLesson}>
-                  <span>Add a lesson</span>
-                </Button>
-              </div>
+              {currentUser.role !== 3 && (
+                <div className="col-4 text-right">
+                  <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning mr-3', styles['left-add-btn'])}>
+                    Add theme('s)
+                  </Button>
+                  <Button onClick={addLesson}>
+                    <span>Add a lesson</span>
+                  </Button>
+                </div>
               )}
           </div>
+          <div className="row align-items-center justify-content-end mb-3">
+            <div className="col-5 d-flex">
+              <input
+                className={classNames(styles.date, 'form-control start-date-field mr-2')}
+                type="date"
+                defaultValue={halfMonthPastDateString}
+                name="lesson_date"
+                required
+                onChange={(event) => setFilterStartDate(event.target.value)}
+                style={{borderColor: startDateFilterBorder.error ? 'red' : ''}}
+              />
+              <input
+                className={classNames(styles.date, 'form-control end-date-field')}
+                type="date"
+                defaultValue={currentDateString}
+                name="lesson_date"
+                required
+                onChange={(event) => setFilterEndDate(event.target.value)}
+              />
+            </div>
+            <div className="col-2 text-right">
+              <Button onClick={() => onDateFilterClick()}>
+                <span>Filter by period</span>
+              </Button>
+            </div>
+          </div>
+
           <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
             <table className="table table-hover">
               <thead>
