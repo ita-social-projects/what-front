@@ -4,4 +4,5 @@ export {
   attachmentsSelector,
   attachmentByIdSelector,
   attachmentsCreatingSelector,
+  attachmentsDeletingSelector
 } from './selectors.js';
