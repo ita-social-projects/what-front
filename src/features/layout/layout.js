@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import { Redirect, Switch } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import classNames from 'classnames';
@@ -11,7 +11,7 @@ import {
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
   DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
-  DownloadStudents, DownloadGroups, HomeworkAdd, StudentLessons
+  DownloadStudents, DownloadGroups, HomeworkAdd, StudentLessons, StudentLessonDetails,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs, HomeworkTabs } from '@/screens';
@@ -19,6 +19,8 @@ import styles from './layout.scss';
 
 export const Layout = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+  const lessonsListComponent = useCallback(() => currentUser.role === 1 ? <StudentLessons /> : <ListOfLessons/>, [currentUser]);
+  const lessonDetailsComponent = useCallback(() => currentUser.role === 1 ? <StudentLessonDetails /> : <LessonDetails/>, [currentUser]);
 
   return (
     <>
@@ -36,9 +38,9 @@ export const Layout = () => {
           <ProtectedRoute roles={[3, 4]} exact path={paths.SECRETARIES} component={ListOfSecretaries} />
           <ProtectedRoute roles={[3, 4]} exact path={`${paths.SECRETARIES_DETAILS}/:id`} render={() => <SecretariesTabs index={0} />} />
           <ProtectedRoute roles={[4]} exact path={`${paths.SECRETARY_EDIT}/:id`} render={() => <SecretariesTabs index={1} />} />
-          <ProtectedRoute roles={[2, 3, 4]} exact path={paths.LESSONS} component={ListOfLessons} />
+          <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.LESSONS} render={lessonsListComponent} />
+          <ProtectedRoute roles={[1, 2, 3, 4]} exact path={`${paths.LESSON_DETAILS}/:id`} render={lessonDetailsComponent} />
           <ProtectedRoute roles={[2, 4]} exact path={paths.LESSON_ADD} component={AddLesson} />
-          <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.LESSON_DETAILS}/:id`} component={LessonDetails} />
           <ProtectedRoute roles={[2, 4]} exact path={`${paths.LESSON_EDIT}/:id`} component={EditLesson} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUPS} component={ListOfGroups} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUP_ADD} component={StartGroup} />
@@ -60,7 +62,6 @@ export const Layout = () => {
           <ProtectedRoute roles={[2]} exact path={paths.HOMEWORK_EDIT} component={() => <HomeworkTabs index={1} />} />
           <ProtectedRoute roles={[2]} exact path={paths.HOMEWORK_ADD} component={() => <HomeworkAdd />} />
           <ProtectedRoute roles={[1]} exact path={paths.SUPPORT} component={Support} />
-          <ProtectedRoute roles={[1]} exact path={`${paths.LESSON_BY_STUDENT_ID}/:id`} component={StudentLessons} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.HOME} render={() => <Redirect to={homepages[currentUser.role]} />} />
           <Redirect to={paths.NOT_FOUND} />
         </Switch>

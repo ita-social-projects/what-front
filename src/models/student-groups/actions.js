@@ -4,6 +4,7 @@ import {
 import { ApiService } from '@shared/api-service/index.js';
 import * as actionTypes from './action-types.js';
 
+//
 export const globalLoadStudentGroups = () => ({
   type: actionTypes.LOAD_STUDENT_GROUPS,
 });
@@ -24,6 +25,7 @@ function* watchLoadingStudentGroups() {
   yield takeLatest(actionTypes.LOAD_STUDENT_GROUPS, loadStudentGroupsAsync);
 }
 
+// fetch student's group by it id
 export const loadStudentGroupById = (id) => ({
   type: actionTypes.LOAD_STUDENT_GROUP_BY_ID,
   payload: { id },
@@ -44,6 +46,11 @@ function* loadStudentGroupByIdAsync({ payload }) {
 function* watchLoadingStudentGroupById() {
   yield takeLatest(actionTypes.LOAD_STUDENT_GROUP_BY_ID, loadStudentGroupByIdAsync);
 }
+
+
+
+
+
 
 export const editStudentGroup = (group) => ({
   type: actionTypes.EDIT_STUDENT_GROUP,
