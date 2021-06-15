@@ -53,7 +53,7 @@ export const ListOfCourses = () => {
         <tr key={course.id} onClick={(event) => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
           <td className="text-center">{course.id}</td>
           <td>{course.name}</td>
-          {currentUser.role !== 2 &&
+          {currentUser.role !== 2 && currentUser.role !== 1 &&
             <td
               className="text-center"
               onClick={(event) => courseEdit(event, course.id)}
@@ -234,7 +234,7 @@ export const ListOfCourses = () => {
                       </span>
                     </th>
                   ))}
-                  {currentUser.role !== 2 && <th className="text-center">Edit</th>}
+                  {currentUser.role !== 2 && currentUser.role !== 1 && <th className="text-center">Edit</th>}
                 </tr>
               </thead>
               <tbody>
