@@ -3,14 +3,14 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
 import { paths, useActions } from '@/shared/index.js';
+import { Formik, Field, Form } from 'formik';
 
 import { Button, Search, WithLoading, Pagination } from '@components/index.js';
 
 import Icon from '@/icon.js';
-import { inputGroupStartDate } from '@features/groups/list-of-groups/redux/actions';
 
 import classNames from 'classnames';
-import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
+import { searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
 import {commonHelpers} from "@/utils";
 
@@ -18,11 +18,12 @@ export const ListOfGroups = () => {
   const history = useHistory();
 
   const studentGroupsState = useSelector(loadStudentGroupsSelector, shallowEqual);
-  const { data: groups, isLoading, isLoaded, error } = studentGroupsState;
+  const { data: groups, isLoading } = studentGroupsState;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [groupsPerPage, setGroupsPerPage] = useState(10);
 
+  const [rawGroupsList, setRawGroupsList] = useState([]);
   const [filteredGroupsList, setFilteredGroupsList] = useState([]);
 
   const [visibleGroups, setVisibleGroups] = useState([]);
@@ -36,7 +37,7 @@ export const ListOfGroups = () => {
   const searchStartDate = useSelector(searchDate, shallowEqual);
 
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
-
+ 
   const INITIAL_CATEGORIES = [
     { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
     { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
@@ -67,11 +68,6 @@ export const ListOfGroups = () => {
   const handleCardDetails = useCallback((id) => {
     history.push(`${paths.GROUPS_DETAILS}/${id}`);
   }, [history]);
-
-  const handleCalendarChange = (event) => {
-    const date = event.target.value;
-    inputGroupStartDate(date);
-  };
 
   const searchGroups = (searchedGroups) => searchedGroups.filter(({ name }) => `${name}`
     .toLowerCase().includes(searchGroupValue.toLowerCase()));
@@ -110,6 +106,7 @@ export const ListOfGroups = () => {
     if (groups.length && !isLoading) {
       let newGroups = groups.map((group, index) => ({ index, ...group }));
       newGroups = newGroups.map((group) => ({ quantity: group.studentIds.length, ...group }));
+      setRawGroupsList(newGroups);
       setFilteredGroupsList(newGroups);
     }
 
@@ -123,10 +120,8 @@ export const ListOfGroups = () => {
 
   useEffect(() => {
     const searchedGroups = searchGroups(groups);
-
     setFilteredGroupsList(searchedGroups.map((mentor, index) => ({ index, ...mentor })));
   }, [searchGroupValue]);
-  commonHelpers.transformDateTime({isDayTime:false });
 
   const getGroupList = () => {
     const groupList = visibleGroups
@@ -186,7 +181,7 @@ export const ListOfGroups = () => {
     const finish = currentPage * newNumber;
     const start = finish - newNumber;
     setVisibleGroups(filteredGroupsList.slice(start, finish));
-    setGroupsPerPage(newNumber);
+    setGroupsPerPage(+newNumber);
   };
 
   const downloadGroups = () => {
@@ -217,24 +212,92 @@ export const ListOfGroups = () => {
     );
   };
 
+  const filterDateComponent = () => {
+    const initialStartDate = () => `${new Date().getFullYear()}-01-01`;
+    const initialFinishDate = () => `${commonHelpers.transformDateTime({}).reverseDate}`;
+
+    const filterByDate = ({ startDate, finishDate }) => {
+      const newArray = rawGroupsList
+        .filter((group) => (new Date(group.startDate.slice(0, 10)) >= new Date(startDate)) && (new Date(group.finishDate.slice(0, 10)) <= new Date(finishDate))
+      );
+      setFilteredGroupsList(newArray);
+      const finish = currentPage * groupsPerPage;
+      const start = finish - groupsPerPage;
+      setVisibleGroups(newArray.slice(start, finish));
+    };
+
+    return (
+      <Formik
+        initialValues={{
+          startDate: initialStartDate(),
+          finishDate: initialFinishDate(),
+        }}
+        onSubmit={filterByDate}
+        >
+        {({ errors }) => (
+          <Form name="start-group" className="row d-flex">
+              <div className="col-5">
+                <Field
+                  className={classNames('form-control', { 'border-danger': errors.startDate })}
+                  type="date"
+                  name="startDate"
+                  id="startDate"
+                  required
+                />
+                {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
+              </div>
+              <div className="col-5">
+                <Field
+                  className={classNames('form-control', { 'border-danger': errors.finishDate })}
+                  type="date"
+                  name="finishDate"
+                  id="finishDate"
+                  required
+                />
+                {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
+            </div>
+            <div className="col-2 text-right">
+              <Button type="submit">
+                Filter
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    )
+  };
+
   return (
-    <div className="container">
+    <div className={classNames('container ', styles.block)}>
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Groups</h2>
-        <div className="col-2 text-right">
-          {
-            !isLoading
-            && `${visibleGroups.length} of ${filteredGroupsList.length} students`
-          }
-        </div>
-        <div className="col-4 d-flex align-items-center justify-content-end">
-          {paginationComponent()}
+        <div className="row ">
+          <div className="col-4">
+            {
+              !isLoading
+              && `${visibleGroups.length} of ${filteredGroupsList.length} groups`
+            }
+          </div>
+          <div className={classNames('col-6 ', styles.paginate)}>{paginationComponent()}</div>
+          <div className={classNames('col-1 ', styles['change-rows'])}>
+            <select
+              className={classNames('form-control', styles['change-rows'])}
+              id="change-visible-people"
+              onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+            >
+              <option>10</option>
+              <option>30</option>
+              <option>50</option>
+              <option>75</option>
+              <option>100</option>
+            </select>
+          </div>
         </div>
       </div>
       <div className="row">
         <div className="col-12 card shadow p-3 mb-5 bg-white">
           <div className="row align-items-center mt-2 mb-3">
-            <div className="col-2">
+            <div className={classNames('col-2', styles['change-view'])}>
               <div className="btn-group">
                 <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
                 <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
@@ -242,16 +305,6 @@ export const ListOfGroups = () => {
             </div>
             <div className="col-3 ">
               <Search onSearch={handleSearch} placeholder="Group's name" />
-            </div>
-            <div className="col-2">
-              <input
-                className={classNames('form-control ', styles['calendar-input'])}
-                type="date"
-                name="group_date"
-                required
-                onChange={handleCalendarChange}
-                placeholder="Start Date"
-              />
             </div>
             <div className="col-1 d-flex">
               <label
@@ -272,7 +325,7 @@ export const ListOfGroups = () => {
                 <option>100</option>
               </select>
             </div>
-            <div className="col-4 text-right">
+            <div className={classNames('col-4 offset-2 btn-group text-group', styles['.upload-add-btn'])}>
               <Button
                 onClick={downloadGroups}
                 type="button"
@@ -283,6 +336,11 @@ export const ListOfGroups = () => {
                 <span>Add a group</span>
               </Button>
             </div>
+          </div>
+          <div className="row align-items-center justify-content-end mb-3">
+          <div className="col-6 offset-4">
+            {filterDateComponent()}
+          </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto">
             <table className="table table-hover mb-0">
