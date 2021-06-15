@@ -1,0 +1,20 @@
+@import '../../../styles/main';
+
+.page {
+  @include pageWindow();
+  padding: 30px;
+  font-size: 16px;
+}
+
+.link:hover{
+  cursor:pointer;
+  text-decoration: underline;
+}
+
+.loader-centered {
+  display: block !important;
+  margin: 0 auto;
+}
+.bg_colour{
+  background-color: map-get($colors, accent-color);
+}

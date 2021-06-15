@@ -48,7 +48,7 @@ export const Sidebar = () => {
       { id: 0, title: 'Courses', link: paths.COURSES, active: false },
       { id: 1, title: 'Schedule', link: paths.SCHEDULE, active: false },
       { id: 2, title: 'Support', link: paths.SUPPORT, active: false },
-      { id: 3, title: 'Lessons', link: `${paths.LESSON_BY_STUDENT_ID}/${currentUser.id}`, active: true}
+      { id: 3, title: 'Lessons', link: paths.LESSONS, active: true}
     ],
   };
 

@@ -50,8 +50,9 @@ export const ListOfStudents = () => {
   const [isShowDisabled, setIsShowDisabled] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchFieldValue, setSearchFieldValue] = useState('');
+  const [showBlocks, setShowBlocks] = useState(false);
 
-  const [studentsPerPage, setStudentsPerPage] = useState(10);
+  const [studentsPerPage, setStudentsPerPage] = useState(9);
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
@@ -220,6 +221,46 @@ export const ListOfStudents = () => {
     return studentsRows;
   };
 
+  const getStudentsBlocks = () => {
+    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
+      <div className="card" style={{
+        width: '31%',
+        margin: '1%',
+        cursor: 'pointer'
+      }} onClick={() => handleDetails(id)}>
+        <div className="card-body d-flex justify-content-between">
+          <div>{index + 1}</div>
+          <div>
+            <div>
+              {firstName}
+            </div>
+            <div>
+              {lastName}
+            </div>
+            <div>
+              {email}
+            </div>
+          </div>
+          <Icon icon="Edit"
+                onClick={(event) => handleEdit(event, id)}
+                className={styles.scale}
+                color="#2E3440"
+                size={30}/>
+        </div>
+      </div>
+    ));
+
+    if (allStudentsError || activeStudentsError) {
+      return <div className="container-fluid text-center">Loading has been failed</div>;
+    }
+
+    if (!visibleStudents.length && searchFieldValue) {
+      return <div className="container-fluid text-center">Student is not found</div>;
+    }
+
+    return studentsRows;
+  };
+
   const paginationComponent = () => {
     if (students.length < studentsPerPage) {
       return (
@@ -263,11 +304,21 @@ export const ListOfStudents = () => {
       </div>
       <div className="row">
         <div className="col-12 card shadow p-3 mb-5 bg-white">
-          <div className="row align-items-center mt-2 mb-3">
+          <div className="row align-items-center d-flex justify-content-between mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3">
@@ -292,25 +343,27 @@ export const ListOfStudents = () => {
                 Disabled students
               </label>
             </div>
-            <div className="col-1 d-flex">
-              <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
-              >
-                Rows
-              </label>
-              <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
-              >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
-              </select>
-            </div>
+            {!showBlocks &&
+              <div className="col-1 d-flex">
+                <label
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
+                >
+                  Rows
+                </label>
+                <select
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                >
+                  <option>9</option>
+                  <option>27</option>
+                  <option>45</option>
+                  <option>72</option>
+                  <option>99</option>
+                </select>
+              </div>
+            }
               {[3, 4].includes(currentUser.role) && (
                 <div className="col-4 text-right">
                 <Button onClick={downloadStudents} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
@@ -321,14 +374,19 @@ export const ListOfStudents = () => {
               )}
           </div>
           <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
-            <table className="table table-hover">
+            {
+              showBlocks ?
+                <div className="container d-flex flex-wrap">
+                  {getStudentsBlocks()}
+                </div>
+              : <table className="table table-hover">
               <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      key={id}
-                      className={styles['table-head']}
-                    >
+              <tr>
+                {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
+                  <th
+                    key={id}
+                    className={styles['table-head']}
+                  >
                       <span
                         onClick={handleSortByParam}
                         data-sorting-param={name}
@@ -337,15 +395,17 @@ export const ListOfStudents = () => {
                       >
                         {tableHead}
                       </span>
-                    </th>
-                  ))}
-                  <th className="text-center">Edit</th>
-                </tr>
+                  </th>
+                ))}
+                <th className="text-center">Edit</th>
+              </tr>
               </thead>
               <tbody>
                 {getStudentsRows()}
               </tbody>
             </table>
+            }
+
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

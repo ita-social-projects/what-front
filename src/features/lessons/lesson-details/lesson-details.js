@@ -2,9 +2,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { paths, useActions } from '@/shared';
 import { shallowEqual, useSelector } from 'react-redux';
-import { studentsSelector, fetchMentors, fetchLessons,
-  globalLoadStudentGroups, lessonsSelector, loadStudents,
-  loadStudentGroupsSelector, mentorsSelector,
+import {
+  studentsSelector,
+  fetchMentors,
+  fetchLessons,
+  globalLoadStudentGroups,
+  lessonsSelector,
+  loadStudents,
+  loadStudentGroupsSelector,
+  mentorsSelector,
 } from '@/models';
 import {commonHelpers} from "@/utils";
 import { Badge } from 'react-bootstrap';
