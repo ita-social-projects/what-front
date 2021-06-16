@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
 import { fetchLessonsByStudentId, studentLessonsSelector} from '@/models/index.js';
@@ -7,6 +7,8 @@ import { Search, WithLoading, Pagination } from '@/components/index.js';
 import Icon from '@/icon.js';
 import classNames from 'classnames';
 import styles from '../list-of-lessons/list-of-lessons.scss';
+import {commonHelpers} from "@/utils";
+import {currentUserSelector} from "@/models/index";
 
 export const StudentLessons = () => {
   const history = useHistory();
@@ -18,33 +20,22 @@ export const StudentLessons = () => {
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
   const { data, isLoading } = useSelector(studentLessonsSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const fetchStudentLessons = useActions(fetchLessonsByStudentId);
 
   const lessonsPerPage = 10;
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
-  const { id } = useParams();
-
-
 
   useEffect(() => {
-    fetchStudentLessons(id);
-  }, [fetchStudentLessons, id]);
+      fetchStudentLessons(currentUser.id);
+  }, [fetchStudentLessons, currentUser]);
 
-  console.log();
-
-  const transformDateTime = (dateTime) => {
-    const arr = dateTime.toString().split('T');
-    return {
-      date: arr[0],
-      time: arr[1],
-    };
-  };
 
   useEffect(() => {
     if(data.length !== 0) {
       const lessonsData = data.map((lesson) => {
-        const {date, time} = transformDateTime(lesson.lessonDate);
+        const {date, time} = commonHelpers.transformDateTime({ dateTime: lesson.lessonDate });
         return {
           lessonShortDate: date,
           lessonTime: time,

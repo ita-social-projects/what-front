@@ -66,12 +66,35 @@ export const editGroupValidation = Yup.object().shape({
 export const addLessonValidation = Yup.object().shape({
   themeName: Yup.string()
     .min(1, 'Too short')
-    .max(200, 'Too long')
+    .max(100, 'Too long')
     .matches('^[a-zA-Zа-яА-ЯЇїІіЄєҐґ0-9][a-zA-Zа-яА-ЯЇїІіЄєҐґ 0-9]*$', 'Invalid lesson theme')
     .required('This field is required'),
   lessonDate: Yup.string()
     .max(new Date(), 'The lesson cannot start in the future')
     .required('This field is required'),
+});
+
+export const editLessonValidation = Yup.object().shape({
+  themeName: Yup.string()
+    .min(1, 'Too short')
+    .max(100, 'Too long')
+    .matches('^[a-zA-Zа-яА-ЯЇїІіЄєҐґ0-9][a-zA-Zа-яА-ЯЇїІіЄєҐґ 0-9]*$', 'Invalid lesson theme')
+    .required('This field is required'),
+  lessonDate: Yup.string()
+    .max(new Date(), 'The lesson cannot start in the future')
+    .required('This field is required'),
+  groupName: Yup.string()
+      .min(1, 'Too short')
+      .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid group name')
+      .max(50, 'Too long')
+      .required('This field is required'),
+  formData: Yup.array().of(
+      Yup.object({
+        studentId: Yup.number().moreThan(0).required(),
+        studentMark: Yup.number().nullable(),
+        presence: Yup.boolean().default(false).required(),
+        comment: Yup.string().default(''),
+      })),
 });
 
 export const lessonValidation = Yup.object().shape({

@@ -31,7 +31,8 @@ export const Auth = () => {
   }, [history, jwt]);
 
   const submitHandler = (values) => {
-    dispatchLogIn(values);
+    const {email, password} = values;
+    dispatchLogIn({ email: email.trim(), password});
   };
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export const Auth = () => {
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-xl-6 col-md-8 col-sm-10 col-12">
-            <div className={classNames(styles.form, 'card, shadow')}>
+            <div className={classNames(styles.form, 'card', 'shadow')}>
               <Formik
                 initialValues={{
                   email: '',

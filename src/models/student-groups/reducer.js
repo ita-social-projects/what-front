@@ -4,6 +4,7 @@ import {
   editStudentGroupReducer,
   loadStudentGroupByIdReducer,
   loadStudentGroupsReducer,
+  loadHomeworksStudGroupsByIdReducer
 } from './reducers/index.js';
 
 export const studentGroupsReducer = combineReducers({
@@ -11,4 +12,5 @@ export const studentGroupsReducer = combineReducers({
   editStudentGroup: editStudentGroupReducer,
   loadStudentGroupById: loadStudentGroupByIdReducer,
   loadStudentGroups: loadStudentGroupsReducer,
+  loadHWStudentGroupsById: loadHomeworksStudGroupsByIdReducer
 });
