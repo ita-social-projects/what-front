@@ -9,6 +9,7 @@ import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
+import { Table } from '@components/table';
 
 export const ListOfCourses = () => {
   const history = useHistory();
@@ -23,8 +24,7 @@ export const ListOfCourses = () => {
   const [filteredCourses, setFilteredCourses] = useState([]);
 
   const [sortingCategories, setSortingCategories] = useState([
-    { id: 0, name: 'id', sortedByAscending: false, tableHead: '#' },
-    { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Title' },
+    { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
   const { data, isLoading } = useSelector(coursesSelector, shallowEqual); // array of courses ,true/false
@@ -50,9 +50,8 @@ export const ListOfCourses = () => {
   const coursesList = () => {
     const courses = visibleCourses
       .map((course) => (
-        <tr key={course.id} onClick={(event) => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
-          <td className="text-center">{course.id}</td>
-          <td>{course.name}</td>
+        <tr key={course.id} onClick={() => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
+          <td className="text-left">{course.name}</td>
           {currentUser.role !== 2 &&
             <td
               className="text-center"
@@ -76,6 +75,13 @@ export const ListOfCourses = () => {
     setVisibleCourses(data.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
   };
 
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
+
   const addCourse = () => {
     history.push(paths.COURSE_ADD);
   };
@@ -89,24 +95,9 @@ export const ListOfCourses = () => {
     history.push(`${paths.COURSE_EDIT}/${id}`);
   }, [history]);
 
-  const handleSortByParam = (event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    const sortedCourses = [...filteredCourses].sort((prevCourse, currentCourse) => {
-      if (prevCourse[sortingParam] > currentCourse[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedCourses = data;
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredCourses(sortedCourses);
     setVisibleCourses(sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse));
   };
@@ -216,31 +207,12 @@ export const ListOfCourses = () => {
             </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      key={id}
-                      className={styles['table-head']}
-                    >
-                      <span
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        onClick={handleSortByParam}
-                        className={classNames({ [styles.rotate]: !sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                    </th>
-                  ))}
-                  {currentUser.role !== 2 && <th className="text-center">Edit</th>}
-                </tr>
-              </thead>
-              <tbody>
-                { coursesList() }
-              </tbody>
-            </table>
+            <Table sortingCategories={sortingCategories}
+                   currentUser={currentUser}
+                   list={coursesList}
+                   onClick={handleSortByParam}
+                   data={filteredCourses}
+            />
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

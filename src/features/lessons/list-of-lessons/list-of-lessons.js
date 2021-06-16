@@ -8,6 +8,7 @@ import Icon from '@/icon.js';
 import { commonHelpers } from "@/utils";
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
+import { Table } from '@components/table';
 
 export const ListOfLessons = () => {
   const history = useHistory();
@@ -29,8 +30,13 @@ export const ListOfLessons = () => {
   const [startDateFilterBorder, setStartDateFilterBorder] = useState({
     error: false
   });
-  const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
-  const [prevSort, setPrevSort] = useState('id');
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'themeName', sortedByAscending: false, tableHead: 'themeName' },
+    { id: 1, name: 'lessonDate', sortedByAscending: false, tableHead: 'lessonDate' },
+    { id: 2, name: 'lessonTime', sortedByAscending: false, tableHead: 'lessonTime' },
+  ];
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
   const [currentPage, setCurrentPage] = useState(1);
   const [lessonsPerPage, setLessonsPerPage] = useState(10);
   const indexOfLast = currentPage * lessonsPerPage;
@@ -63,16 +69,16 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  const currentDateString = commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: new Date() 
+  const currentDateString = commonHelpers.transformDateTime({
+      isDayTime: false,
+      dateTime: new Date()
     }).reverseDate;
   const halfMonthDays = 15;
   const halfMonthPastDate = new Date();
   halfMonthPastDate.setDate(halfMonthPastDate.getDate() - halfMonthDays);
-  const halfMonthPastDateString = commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: halfMonthPastDate 
+  const halfMonthPastDateString = commonHelpers.transformDateTime({
+      isDayTime: false,
+      dateTime: halfMonthPastDate
     }).reverseDate;
 
   useEffect(() => {
@@ -83,13 +89,13 @@ export const ListOfLessons = () => {
   const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
 
   const onDateFilterClick = () => {
-    const startTime = new Date(commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: filterStartDate 
+    const startTime = new Date(commonHelpers.transformDateTime({
+      isDayTime: false,
+      dateTime: filterStartDate
     }).reverseDate);
-    const endTime = new Date(commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: filterEndDate 
+    const endTime = new Date(commonHelpers.transformDateTime({
+      isDayTime: false,
+      dateTime: filterEndDate
     }).reverseDate);
 
     if (startTime > endTime) {
@@ -101,9 +107,9 @@ export const ListOfLessons = () => {
     setStartDateFilterBorder(false);
 
     const lessons = rawLessonsList.filter((lesson) => {
-      const lessonTime = new Date(commonHelpers.transformDateTime({ 
-        isDayTime: false, 
-        dateTime: lesson.lessonDate 
+      const lessonTime = new Date(commonHelpers.transformDateTime({
+        isDayTime: false,
+        dateTime: lesson.lessonDate
       }).reverseDate);
 
       if (lessonTime >= startTime && lessonTime <= endTime) {
@@ -133,21 +139,16 @@ export const ListOfLessons = () => {
     history.push(`${paths.LESSON_EDIT}/${id}`);
   }, [history]);
 
-  const handleSortByParam = (key) => {
-    if (prevSort === key) {
-      descendingSorts[key] = !descendingSorts[key];
-      setDescendingSorts(descendingSorts);
-    } else {
-      setDescendingSorts({ id: false, themeName: false, lessonDate: false, lessonTime: false });
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
     }
-    setPrevSort(key);
+    return { ...category, sortedByAscending: false };
+  });
 
-    const sortedLessons = [...filteredLessonsList].sort((a, b) => {
-      if (descendingSorts[key]) {
-        return a[key] <= b[key] ? -1 : 1;
-      }
-      return b[key] <= a[key] ? -1 : 1;
-    });
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedLessons = data;
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredLessonsList(sortedLessons);
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   };
@@ -169,8 +170,7 @@ export const ListOfLessons = () => {
   const getLessonsList = useCallback(() => {
     const lessonsList = visibleLessonsList.map((lesson) => (
       <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)} className={styles['table-row']}>
-        <td className="text-center">{lesson.id}</td>
-        <td>{lesson.themeName}</td>
+        <td className={"text-left"}>{lesson.themeName}</td>
         <td>{lesson.lessonShortDate}</td>
         <td>{lesson.lessonTime}</td>
         {currentUser.role !== 3
@@ -187,8 +187,8 @@ export const ListOfLessons = () => {
       </tr>
     ));
 
-    if ((!lessonsList.length && filterStartDate) && 
-        (!lessonsList.length && filterEndDate) || 
+    if ((!lessonsList.length && filterStartDate) &&
+        (!lessonsList.length && filterEndDate) ||
         !lessonsList.length && searchLessonsThemeValue) {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
@@ -309,78 +309,12 @@ export const ListOfLessons = () => {
           </div>
 
           <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className={classNames(styles['table-head'], `${descendingSorts.id ? classNames(styles.descending) : ''}`, 'text-center', 'align-middle')}
-                    onClick={() => handleSortByParam('id')}
-                  >
-                    <button
-                      className={classNames(styles['button-sort'], 'px-0')}
-                    >
-                      <span className="font-weight-bolder">#</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    className={classNames(styles['table-head'], `${descendingSorts.themeName ? classNames(styles.descending) : ''}`)}
-                    onClick={() => handleSortByParam('themeName')}
-                  >
-                    <button
-                      className={classNames(styles['button-sort'], 'px-0')}
-                    >
-                      <span className="font-weight-bolder">Theme Name</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    className={classNames(styles['table-head'], `${descendingSorts.lessonDate ? classNames(styles.descending) : ''}`)}
-                    onClick={() => handleSortByParam('lessonDate')}
-                  >
-                    <button
-                      className={classNames(styles['button-sort'], 'px-0')}
-                    >
-                      <span className="font-weight-bolder">Date</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    className={classNames(styles['table-head'], `${descendingSorts.lessonTime ? classNames(styles.descending) : ''}`)}
-                    onClick={() => handleSortByParam('lessonTime')}
-                  >
-                    <button
-                      className={classNames(styles['button-sort'], 'px-0')}
-                    >
-                      <span className="font-weight-bolder">Time</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
-                    </button>
-                  </th>
-                  {currentUser.role !== 3 ? <th scope="col" className="text-center">Edit</th> : null}
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  getLessonsList()
-                }
-              </tbody>
-            </table>
+            <Table sortingCategories={sortingCategories}
+                   currentUser={currentUser}
+                   list={getLessonsList}
+                   onClick={handleSortByParam}
+                   data={filteredLessonsList}
+            />
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

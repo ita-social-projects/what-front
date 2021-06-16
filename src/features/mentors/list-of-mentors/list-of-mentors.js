@@ -11,6 +11,7 @@ import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-mentors.scss';
+import { Table } from '@components/table';
 
 export const ListOfMentors = () => {
   const {
@@ -34,10 +35,9 @@ export const ListOfMentors = () => {
   const [visibleMentors, setVisibleMentors] = useState([]);
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+    { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
@@ -57,18 +57,6 @@ export const ListOfMentors = () => {
 
   const searchMentors = (searchedMentors, value) => searchedMentors.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
     .toLowerCase().includes(value.toLowerCase()));
-
-  const getSortedByParam = (data, activeCategory) => {
-    const { sortingParam, sortedByAscending } = activeCategory;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    return [...data].sort((prevItem, currentItem) => {
-      if (prevItem[sortingParam] > currentItem[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-  };
 
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
@@ -121,10 +109,9 @@ export const ListOfMentors = () => {
 
   const mentorList = () => {
     const mentors = visibleMentors
-      .map(({ id, index, firstName, lastName, email }) => (
+      .map(({ id, firstName, lastName, email }) => (
         <tr onClick={() => mentorDetails(id)} key={id} className={styles['table-rows']} data-mentor-id={id}>
-          <td className="text-center">{index + 1}</td>
-          <td>{firstName}</td>
+          <td className="text-left">{firstName}</td>
           <td>{lastName}</td>
           <td>{email}</td>
           {currentUser.role !== 2
@@ -146,14 +133,12 @@ export const ListOfMentors = () => {
     return mentors;
   };
 
-  const handleSortByParam = useCallback((event) => {
-    const categoryParams = event.target.dataset;
-    const sortedMentors = getSortedByParam(filteredMentorList, categoryParams);
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedMentors = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredMentorList(sortedMentors);
     setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
-  }, [sortingCategories, filteredMentorList]);
+  };
 
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
@@ -297,33 +282,12 @@ export const ListOfMentors = () => {
             </div>
           </div>
           <WithLoading isLoading={areActiveMentorsLoading || areAllMentorsLoading} className="d-block mx-auto m-0">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      key={id}
-                      className={styles['table-head']}
-                    >
-                      <span
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        onClick={handleSortByParam}
-                        className={classNames({ [styles.rotate]: !sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                    </th>
-                  ))}
-                  {currentUser.role !== 2 ? <th scope="col" className="text-center">Edit</th> : null}
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  mentorList()
-                }
-              </tbody>
-            </table>
+            <Table sortingCategories={sortingCategories}
+                   currentUser={currentUser}
+                   list={mentorList}
+                   onClick={handleSortByParam}
+                   data={filteredMentorList}
+            />
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

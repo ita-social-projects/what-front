@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
@@ -12,6 +12,7 @@ import { WithLoading, Pagination, Search, Button } from '@/components';
 import { addAlert } from '@/features';
 import Icon from '@/icon';
 import styles from './list-of-students.scss';
+import { Table } from '@components/table';
 
 export const ListOfStudents = () => {
   const {
@@ -40,10 +41,9 @@ export const ListOfStudents = () => {
   const [visibleStudents, setVisibleStudents] = useState([]);
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+    { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
@@ -64,18 +64,6 @@ export const ListOfStudents = () => {
 
   const searchStudents = (searchedStudents, value) => searchedStudents.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
     .toLowerCase().includes(value.toLowerCase()));
-
-  const getSortedByParam = (data, activeCategory) => {
-    const { sortingParam, sortedByAscending } = activeCategory;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    return [...data].sort((prevItem, currentItem) => {
-      if (prevItem[sortingParam] > currentItem[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-  };
 
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
@@ -130,14 +118,12 @@ export const ListOfStudents = () => {
     setCurrentPage(1);
   }, [searchFieldValue, isShowDisabled]);
 
-  const handleSortByParam = useCallback((event) => {
-    const categoryParams = event.target.dataset;
-    const sortedStudents = getSortedByParam(students, categoryParams);
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedStudents = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setStudents(sortedStudents);
     setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
-  }, [sortingCategories, students]);
+  };
 
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
@@ -190,15 +176,14 @@ export const ListOfStudents = () => {
   };
 
   const getStudentsRows = () => {
-    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
+    const studentsRows = visibleStudents.map(({ id, firstName, lastName, email }) => (
       <tr
         key={id}
         onClick={() => handleDetails(id)}
         data-student-id={id}
         className={styles['table-row']}
       >
-        <td className="text-center">{index + 1}</td>
-        <td>{firstName}</td>
+        <td className="text-left">{firstName}</td>
         <td>{lastName}</td>
         <td>{email}</td>
         <td
@@ -222,14 +207,13 @@ export const ListOfStudents = () => {
   };
 
   const getStudentsBlocks = () => {
-    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
+    const studentsRows = visibleStudents.map(({ id, firstName, lastName, email }) => (
       <div className="card" style={{
         width: '31%',
         margin: '1%',
         cursor: 'pointer'
       }} onClick={() => handleDetails(id)}>
         <div className="card-body d-flex justify-content-between">
-          <div>{index + 1}</div>
           <div>
             <div>
               {firstName}
@@ -379,31 +363,13 @@ export const ListOfStudents = () => {
                 <div className="container d-flex flex-wrap">
                   {getStudentsBlocks()}
                 </div>
-              : <table className="table table-hover">
-              <thead>
-              <tr>
-                {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                  <th
-                    key={id}
-                    className={styles['table-head']}
-                  >
-                      <span
-                        onClick={handleSortByParam}
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        className={classNames(styles.category, { [styles['category-sorted']]: !sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                  </th>
-                ))}
-                <th className="text-center">Edit</th>
-              </tr>
-              </thead>
-              <tbody>
-                {getStudentsRows()}
-              </tbody>
-            </table>
+              : <Table
+                      sortingCategories={sortingCategories}
+                      currentUser={currentUser}
+                      list={getStudentsRows}
+                      onClick={handleSortByParam}
+                      data={students}
+                />
             }
 
           </WithLoading>
