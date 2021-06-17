@@ -2,8 +2,13 @@ import React from 'react';
 import styles from './list.scss';
 import Icon from '../../icon.js';
 
-const getRows = (data, handleDetails, handleEdit, editRestriction = false) =>
-    data.map(({id, index, firstName, lastName, email}) =>
+//todo add restriction for block view
+//todo add special param 'fieldsToShow' and check if it has true then show the field
+
+const getRows = (data, handleDetails, handleEdit, editRestriction = false) =>{
+    console.log(data);
+
+    return data.map(({id, index, firstName, lastName, email}) =>
         <tr key={id}
             onClick={() => handleDetails(id)}
             className={styles['table-row']}
@@ -20,7 +25,7 @@ const getRows = (data, handleDetails, handleEdit, editRestriction = false) =>
                 <td></td>
             }
         </tr>
-    );
+    );}
 
 const getBlocks = (data, handleDetails, handleEdit) =>
     data.map(({id, index, firstName, lastName, email}) =>
