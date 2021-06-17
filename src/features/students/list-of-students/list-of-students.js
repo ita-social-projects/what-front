@@ -12,6 +12,7 @@ import { WithLoading, Pagination, Search, Button } from '@/components';
 import { addAlert } from '@/features';
 import Icon from '@/icon';
 import styles from './list-of-students.scss';
+import {List} from "@components/list";
 
 export const ListOfStudents = () => {
   const {
@@ -377,7 +378,20 @@ export const ListOfStudents = () => {
             {
               showBlocks ?
                 <div className="container d-flex flex-wrap">
-                  {getStudentsBlocks()}
+                  <List listType={'block'}
+                        data={visibleStudents}
+                        handleDetails={handleDetails}
+                        handleEdit={handleEdit}
+                        errors={
+                          [{
+                            message: 'Loading has been failed',
+                            check: [!!allStudentsError, !!activeStudentsError]
+                          },
+                            {
+                              message: 'Student is not found',
+                              check: [!visibleStudents.length, !!searchFieldValue]
+                            }]
+                        } />
                 </div>
               : <table className="table table-hover">
               <thead>
@@ -401,7 +415,20 @@ export const ListOfStudents = () => {
               </tr>
               </thead>
               <tbody>
-                {getStudentsRows()}
+                <List listType='list'
+                      data={visibleStudents}
+                      handleDetails={handleDetails}
+                      handleEdit={handleEdit}
+                      errors={
+                        [{
+                          message: 'Loading has been failed',
+                          check: [!!allStudentsError, !!activeStudentsError]
+                        },
+                        {
+                          message: 'Student is not found',
+                          check: [!visibleStudents.length, !!searchFieldValue]
+                        }]
+                      } />
               </tbody>
             </table>
             }
