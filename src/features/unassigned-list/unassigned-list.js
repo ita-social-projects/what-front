@@ -243,7 +243,7 @@ export const UnAssignedList = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Unassigmed Users</h2>
         <div className="col-3 text-right">{
@@ -255,8 +255,8 @@ export const UnAssignedList = () => {
           {paginationComponent()}
         </div>
       </div>
-      <div className="row">
-        <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
+      <div className="row mr-0">
+        <div className="card col-12 shadow p-3 mb-5 bg-white rounded ml-2 mr-2">
           <div className="row align-items-center px-3 py-2 mb-2">
             <div className="col-4">
               <Search

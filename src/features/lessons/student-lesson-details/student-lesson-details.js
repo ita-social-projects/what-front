@@ -51,7 +51,7 @@ export const StudentLessonDetails = () => {
   const handleCancel = useCallback(() => history.push(paths.LESSONS), [history]);
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className={classNames(styles.page, 'col-12')}>
         <h3>Lesson details</h3>
         <hr />
