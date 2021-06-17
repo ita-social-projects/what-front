@@ -3,7 +3,6 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
 import { paths, useActions } from '@/shared/index.js';
-// import { Formik, Field, Form } from 'formik';
 
 import { Button, Search, WithLoading, Pagination, DoubleDateFilter } from '@components/index.js';
 
@@ -52,13 +51,32 @@ export const ListOfGroups = () => {
     fetchListOfGroups();
   }, [fetchListOfGroups]);
 
+  useEffect(() => {
+    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
+  }, [currentPage, filteredGroupsList]);
+
+  useEffect(() => {
+    if (groups.length && !isLoading) {
+      let newGroups = groups.map((group, index) => ({ index, quantity: group.studentIds.length, ...group }));
+      setRawGroupsList(newGroups);
+      setFilteredGroupsList(newGroups);
+    }
+
+    setSortingCategories(INITIAL_CATEGORIES);
+    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
+  }, [groups, isLoading]);
+
+  useEffect(() => {
+    const searchedGroups = rawGroupsList.filter(
+      (group) => group.name.toLowerCase().includes(searchGroupValue.toLowerCase()));
+
+    setFilteredGroupsList(searchedGroups);
+    setCurrentPage(1);
+  }, [searchGroupValue]);
+
   const handleAddGroup = useCallback(() => {
     history.push(paths.GROUP_ADD);
   }, [history]);
-
-  const handleSearch = (inputValue) => {
-    setSearchGroupValue(inputValue);
-  };
 
   const handleCardEdit = useCallback((id, event) => {
     event.stopPropagation();
@@ -69,8 +87,9 @@ export const ListOfGroups = () => {
     history.push(`${paths.GROUPS_DETAILS}/${id}`);
   }, [history]);
 
-  const searchGroups = (searchedGroups) => searchedGroups.filter(({ name }) => `${name}`
-    .toLowerCase().includes(searchGroupValue.toLowerCase()));
+  const handleSearch = (inputValue) => {
+    setSearchGroupValue(inputValue);
+  };
 
   const getSortedByParam = (data, activeCategory) => {
     const { sortingParam, sortedByAscending } = activeCategory;
@@ -97,27 +116,6 @@ export const ListOfGroups = () => {
   });
 
   const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
-
-  useEffect(() => {
-    if (groups.length && !isLoading) {
-      let newGroups = groups.map((group, index) => ({ index, ...group }));
-      newGroups = newGroups.map((group) => ({ quantity: group.studentIds.length, ...group }));
-      setRawGroupsList(newGroups);
-      setFilteredGroupsList(newGroups);
-    }
-
-    setSortingCategories(INITIAL_CATEGORIES);
-    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
-  }, [groups, isLoading]);
-
-  useEffect(() => {
-    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
-  }, [currentPage, filteredGroupsList]);
-
-  useEffect(() => {
-    const searchedGroups = searchGroups(groups);
-    setFilteredGroupsList(searchedGroups.map((mentor, index) => ({ index, ...mentor })));
-  }, [searchGroupValue]);
 
   const getGroupList = () => {
     const groupList = visibleGroups
@@ -207,61 +205,6 @@ export const ListOfGroups = () => {
       />
     );
   };
-
-  // const filterDateComponent = () => {
-  //   const initialStartDate = () => `${new Date().getFullYear()}-01-01`;
-  //   const initialFinishDate = () => `${commonHelpers.transformDateTime({}).reverseDate}`;
-
-  //   const filterByDate = ({ startDate, finishDate }) => {
-  //     const newArray = rawGroupsList
-  //       .filter((group) => (new Date(group.startDate.slice(0, 10)) >= new Date(startDate)) && (new Date(group.finishDate.slice(0, 10)) <= new Date(finishDate))
-  //     );
-  //     setFilteredGroupsList(newArray);
-  //     const finish = currentPage * groupsPerPage;
-  //     const start = finish - groupsPerPage;
-  //     setVisibleGroups(newArray.slice(start, finish));
-  //   };
-
-  //   return (
-  //     <Formik
-  //       initialValues={{
-  //         startDate: initialStartDate(),
-  //         finishDate: initialFinishDate(),
-  //       }}
-  //       onSubmit={filterByDate}
-  //       >
-  //       {({ errors }) => (
-  //         <Form name="start-group" className="row d-flex">
-  //             <div className="col-5">
-  //               <Field
-  //                 className={classNames('form-control', { 'border-danger': errors.startDate })}
-  //                 type="date"
-  //                 name="startDate"
-  //                 id="startDate"
-  //                 required
-  //               />
-  //               {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
-  //             </div>
-  //             <div className="col-5">
-  //               <Field
-  //                 className={classNames('form-control', { 'border-danger': errors.finishDate })}
-  //                 type="date"
-  //                 name="finishDate"
-  //                 id="finishDate"
-  //                 required
-  //               />
-  //               {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
-  //           </div>
-  //           <div className="col-2 text-right">
-  //             <Button type="submit">
-  //               Filter
-  //             </Button>
-  //           </div>
-  //         </Form>
-  //       )}
-  //     </Formik>
-  //   )
-  // };
 
   return (
     <div className={classNames('container ', styles.block)}>

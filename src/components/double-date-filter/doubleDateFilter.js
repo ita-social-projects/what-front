@@ -7,18 +7,38 @@ import { commonHelpers } from "@/utils";
 import { Button } from '@components/index.js';
 
 export const DoubleDateFilter = (props) => {
-  const { rawItemsList, setFilteredItemsList, setCurrentPage } = props;
+  const { rawItemsList, setFilteredItemsList, setCurrentPage, component } = props;
+  let initialStartDate = `${new Date().getFullYear()}-01-01`;
+  let initialFinishDate = `${commonHelpers.transformDateTime({}).reverseDate}`;
+  let rawList;
 
-  const initialStartDate = () => `${new Date().getFullYear()}-01-01`;
-  const initialFinishDate = () => `${commonHelpers.transformDateTime({}).reverseDate}`;
+  switch(component){
+    case 'lessons': {
+      rawList = rawItemsList.map(item => {
+        const lessonDate = commonHelpers.transformDateTime({dateTime: item.lessonDate}).formInitialValue;
+        return item = {...item, 
+          startDate: lessonDate, 
+          finishDate: lessonDate};
+      });
+      const d = new Date();
+      d.setDate(d.getDate() - 15);
+      initialStartDate = `${commonHelpers.transformDateTime({dateTime:d}).reverseDate}`;
+      break;
+    }
+    default: {
+      rawList = rawItemsList;
+      break;
+    }
+  }
+
 
   const validate = ({ startDate, finishDate }) => startDate > finishDate && {startDate: ' ', finishDate: ' '};
 
   const filterByDate = ({ startDate, finishDate }) => {
-    const newArray = rawItemsList
-      .filter((group) => {
-        return (new Date(group.startDate.slice(0, 10)) >= new Date(startDate)) 
-        && (new Date(group.finishDate.slice(0, 10)) <= new Date(finishDate))
+    const newArray = rawList
+      .filter((item) => {
+        return (new Date(item.startDate.slice(0, 10)) >= new Date(startDate)) 
+        && (new Date(item.finishDate.slice(0, 10)) <= new Date(finishDate))
       }
     );
 
@@ -29,8 +49,8 @@ export const DoubleDateFilter = (props) => {
   return (
     <Formik
       initialValues={{
-        startDate: initialStartDate(),
-        finishDate: initialFinishDate(),
+        startDate: initialStartDate,
+        finishDate: initialFinishDate,
       }}
       validate={validate}
       onSubmit={filterByDate}
@@ -43,9 +63,7 @@ export const DoubleDateFilter = (props) => {
                 type="date"
                 name="startDate"
                 id="startDate"
-                required
               />
-              {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
             </div>
             <div className="col-5">
               <Field
@@ -53,9 +71,7 @@ export const DoubleDateFilter = (props) => {
                 type="date"
                 name="finishDate"
                 id="finishDate"
-                required
               />
-              {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
           </div>
           <div className="col-2 text-right">
             <Button type="submit">
@@ -71,5 +87,6 @@ export const DoubleDateFilter = (props) => {
 DoubleDateFilter.propTypes = {
   rawItemsList: propTypes.array.isRequired,
   setFilteredItemsList: propTypes.func.isRequired,
-  setCurrentPage: propTypes.func.isRequired
+  setCurrentPage: propTypes.func.isRequired,
+  component: propTypes.string
 };
