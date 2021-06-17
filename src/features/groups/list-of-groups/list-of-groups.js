@@ -3,16 +3,16 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
 import { paths, useActions } from '@/shared/index.js';
-import { Formik, Field, Form } from 'formik';
+// import { Formik, Field, Form } from 'formik';
 
-import { Button, Search, WithLoading, Pagination } from '@components/index.js';
+import { Button, Search, WithLoading, Pagination, DoubleDateFilter } from '@components/index.js';
 
 import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import { searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
-import {commonHelpers} from "@/utils";
+import { commonHelpers } from "@/utils";
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -97,10 +97,6 @@ export const ListOfGroups = () => {
   });
 
   const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
-
-  useEffect(() => {
-    setCurrentPage(currentPage);
-  }, [currentPage]);
 
   useEffect(() => {
     if (groups.length && !isLoading) {
@@ -212,60 +208,60 @@ export const ListOfGroups = () => {
     );
   };
 
-  const filterDateComponent = () => {
-    const initialStartDate = () => `${new Date().getFullYear()}-01-01`;
-    const initialFinishDate = () => `${commonHelpers.transformDateTime({}).reverseDate}`;
+  // const filterDateComponent = () => {
+  //   const initialStartDate = () => `${new Date().getFullYear()}-01-01`;
+  //   const initialFinishDate = () => `${commonHelpers.transformDateTime({}).reverseDate}`;
 
-    const filterByDate = ({ startDate, finishDate }) => {
-      const newArray = rawGroupsList
-        .filter((group) => (new Date(group.startDate.slice(0, 10)) >= new Date(startDate)) && (new Date(group.finishDate.slice(0, 10)) <= new Date(finishDate))
-      );
-      setFilteredGroupsList(newArray);
-      const finish = currentPage * groupsPerPage;
-      const start = finish - groupsPerPage;
-      setVisibleGroups(newArray.slice(start, finish));
-    };
+  //   const filterByDate = ({ startDate, finishDate }) => {
+  //     const newArray = rawGroupsList
+  //       .filter((group) => (new Date(group.startDate.slice(0, 10)) >= new Date(startDate)) && (new Date(group.finishDate.slice(0, 10)) <= new Date(finishDate))
+  //     );
+  //     setFilteredGroupsList(newArray);
+  //     const finish = currentPage * groupsPerPage;
+  //     const start = finish - groupsPerPage;
+  //     setVisibleGroups(newArray.slice(start, finish));
+  //   };
 
-    return (
-      <Formik
-        initialValues={{
-          startDate: initialStartDate(),
-          finishDate: initialFinishDate(),
-        }}
-        onSubmit={filterByDate}
-        >
-        {({ errors }) => (
-          <Form name="start-group" className="row d-flex">
-              <div className="col-5">
-                <Field
-                  className={classNames('form-control', { 'border-danger': errors.startDate })}
-                  type="date"
-                  name="startDate"
-                  id="startDate"
-                  required
-                />
-                {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
-              </div>
-              <div className="col-5">
-                <Field
-                  className={classNames('form-control', { 'border-danger': errors.finishDate })}
-                  type="date"
-                  name="finishDate"
-                  id="finishDate"
-                  required
-                />
-                {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
-            </div>
-            <div className="col-2 text-right">
-              <Button type="submit">
-                Filter
-              </Button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    )
-  };
+  //   return (
+  //     <Formik
+  //       initialValues={{
+  //         startDate: initialStartDate(),
+  //         finishDate: initialFinishDate(),
+  //       }}
+  //       onSubmit={filterByDate}
+  //       >
+  //       {({ errors }) => (
+  //         <Form name="start-group" className="row d-flex">
+  //             <div className="col-5">
+  //               <Field
+  //                 className={classNames('form-control', { 'border-danger': errors.startDate })}
+  //                 type="date"
+  //                 name="startDate"
+  //                 id="startDate"
+  //                 required
+  //               />
+  //               {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
+  //             </div>
+  //             <div className="col-5">
+  //               <Field
+  //                 className={classNames('form-control', { 'border-danger': errors.finishDate })}
+  //                 type="date"
+  //                 name="finishDate"
+  //                 id="finishDate"
+  //                 required
+  //               />
+  //               {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
+  //           </div>
+  //           <div className="col-2 text-right">
+  //             <Button type="submit">
+  //               Filter
+  //             </Button>
+  //           </div>
+  //         </Form>
+  //       )}
+  //     </Formik>
+  //   )
+  // };
 
   return (
     <div className={classNames('container ', styles.block)}>
@@ -339,7 +335,11 @@ export const ListOfGroups = () => {
           </div>
           <div className="row align-items-center justify-content-end mb-3">
           <div className="col-6 offset-4">
-            {filterDateComponent()}
+            {<DoubleDateFilter 
+              rawItemsList={rawGroupsList} 
+              setFilteredItemsList={setFilteredGroupsList} 
+              setCurrentPage={setCurrentPage}
+            />}
           </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto">

@@ -63,58 +63,7 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  const currentDateString = commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: new Date() 
-    }).reverseDate;
-  const halfMonthDays = 15;
-  const halfMonthPastDate = new Date();
-  halfMonthPastDate.setDate(halfMonthPastDate.getDate() - halfMonthDays);
-  const halfMonthPastDateString = commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: halfMonthPastDate 
-    }).reverseDate;
-
-  useEffect(() => {
-    setFilterStartDate(halfMonthPastDate);
-    setFilterEndDate(currentDateString);
-  }, []);
-
   const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
-
-  const onDateFilterClick = () => {
-    const startTime = new Date(commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: filterStartDate 
-    }).reverseDate);
-    const endTime = new Date(commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: filterEndDate 
-    }).reverseDate);
-
-    if (startTime > endTime) {
-      setStartDateFilterBorder({
-        error: true
-      });
-      return;
-    }
-    setStartDateFilterBorder(false);
-
-    const lessons = rawLessonsList.filter((lesson) => {
-      const lessonTime = new Date(commonHelpers.transformDateTime({ 
-        isDayTime: false, 
-        dateTime: lesson.lessonDate 
-      }).reverseDate);
-
-      if (lessonTime >= startTime && lessonTime <= endTime) {
-        return true;
-      }
-      return false;
-    });
-
-    setFilteredLessonsList(lessons);
-    setCurrentPage(1);
-  }
 
   useEffect(() => {
     const lessons = rawLessonsList.filter(
@@ -226,6 +175,62 @@ export const ListOfLessons = () => {
       />
     );
   };
+
+    //Anton************************
+
+  const currentDateString = commonHelpers.transformDateTime({ 
+    isDayTime: false, 
+    dateTime: new Date() 
+  }).reverseDate;
+  const halfMonthDays = 15;
+  const halfMonthPastDate = new Date();
+  halfMonthPastDate.setDate(halfMonthPastDate.getDate() - halfMonthDays);
+  const halfMonthPastDateString = commonHelpers.transformDateTime({ 
+    isDayTime: false, 
+    dateTime: halfMonthPastDate 
+  }).reverseDate;
+
+  useEffect(() => {
+    setFilterStartDate(halfMonthPastDate);
+    setFilterEndDate(currentDateString);
+  }, []);
+
+  const onDateFilterClick = () => {
+    const startTime = new Date(commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: filterStartDate 
+    }).reverseDate);
+    const endTime = new Date(commonHelpers.transformDateTime({ 
+      isDayTime: false, 
+      dateTime: filterEndDate 
+    }).reverseDate);
+
+    if (startTime > endTime) {
+      setStartDateFilterBorder({
+        error: true
+      });
+      return;
+    }
+    setStartDateFilterBorder(false);
+
+    const lessons = rawLessonsList.filter((lesson) => {
+      const lessonTime = new Date(commonHelpers.transformDateTime({ 
+        isDayTime: false, 
+        dateTime: lesson.lessonDate 
+      }).reverseDate);
+
+      if (lessonTime >= startTime && lessonTime <= endTime) {
+        return true;
+      }
+      return false;
+    });
+
+    setFilteredLessonsList(lessons);
+    setCurrentPage(1);
+  }
+
+  /*************************** */
+
 
   return (
     <div className="container">
