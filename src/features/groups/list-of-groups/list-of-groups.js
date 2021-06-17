@@ -10,9 +10,10 @@ import Icon from '@/icon.js';
 import { inputGroupStartDate } from '@features/groups/list-of-groups/redux/actions';
 
 import classNames from 'classnames';
-import { listOfGroupsActions, searchGroup, searchDate } from './redux/index.js';
+import { searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
 import {commonHelpers} from "@/utils";
+import { Table } from '@components/table';
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -38,11 +39,10 @@ export const ListOfGroups = () => {
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
-    { id: 2, name: 'quantity', sortedByAscending: false, tableHead: 'Quantity of students' },
-    { id: 3, name: 'startDate', sortedByAscending: false, tableHead: 'Date of start' },
-    { id: 4, name: 'finishDate', sortedByAscending: false, tableHead: 'Date of finish' },
+    { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
+    { id: 1, name: 'quantity', sortedByAscending: false, tableHead: 'Quantity of students' },
+    { id: 2, name: 'startDate', sortedByAscending: false, tableHead: 'Date of start' },
+    { id: 3, name: 'finishDate', sortedByAscending: false, tableHead: 'Date of finish' },
   ];
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
@@ -75,18 +75,6 @@ export const ListOfGroups = () => {
 
   const searchGroups = (searchedGroups) => searchedGroups.filter(({ name }) => `${name}`
     .toLowerCase().includes(searchGroupValue.toLowerCase()));
-
-  const getSortedByParam = (data, activeCategory) => {
-    const { sortingParam, sortedByAscending } = activeCategory;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    return [...data].sort((prevItem, currentItem) => {
-      if (prevItem[sortingParam] > currentItem[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-  };
 
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
@@ -130,10 +118,9 @@ export const ListOfGroups = () => {
 
   const getGroupList = () => {
     const groupList = visibleGroups
-      .map(({ name, studentIds, startDate, id, index, finishDate}) => (
+      .map(({ name, studentIds, startDate, id, finishDate}) => (
         <tr className={styles['table-item']} onClick={() => handleCardDetails(id)} key={id}>
-          <td className="text-center">{index + 1}</td>
-          <td>{name}</td>
+          <td className={"text-left"}>{name}</td>
           <td>{studentIds.length}</td>
           <td>{commonHelpers.transformDateTime({ isDayTime:false, dateTime: startDate }).date}
           </td>
@@ -173,14 +160,12 @@ export const ListOfGroups = () => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
 
-  const handleSortByParam = useCallback((event) => {
-    const categoryParams = event.target.dataset;
-    const sortedGroups = getSortedByParam(filteredGroupsList, categoryParams);
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedGroups = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredGroupsList(sortedGroups);
     setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
-  }, [sortingCategories, filteredGroupsList]);
+  };
 
   const changeCountVisibleItems = (newNumber) => {
     const finish = currentPage * newNumber;
@@ -285,31 +270,12 @@ export const ListOfGroups = () => {
             </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto">
-            <table className="table table-hover mb-0">
-              <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      className={styles['table-head']}
-                      key={id}
-                    >
-                      <span
-                        onClick={handleSortByParam}
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        className={classNames(styles.category, { [styles['category-sorted']]: sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                    </th>
-                  ))}
-                  <th scope="col" className="text-center">Edit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {getGroupList()}
-              </tbody>
-            </table>
+            <Table sortingCategories={sortingCategories}
+                   list={getGroupList}
+                   onClick={handleSortByParam}
+                   data={filteredGroupsList}
+                   access={ { unruledUser: 1, unassigned: '' } }
+            />
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
