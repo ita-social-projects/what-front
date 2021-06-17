@@ -11,6 +11,7 @@ import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-mentors.scss';
+import {List} from "@components/list";
 
 export const ListOfMentors = () => {
   const {
@@ -173,11 +174,11 @@ export const ListOfMentors = () => {
     history.push(paths.UNASSIGNED_USERS);
   }, [history]);
 
-  const mentorDetails = useCallback((id) => {
+  const handleDetails = useCallback((id) => {
     history.push(`${paths.MENTORS_DETAILS}/${id}`);
   }, [history]);
 
-  const mentorEdit = useCallback((event, id) => {
+  const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.MENTOR_EDIT}/${id}`);
   }, [history]);
@@ -203,6 +204,17 @@ export const ListOfMentors = () => {
     const start = finish - newNumber;
     setVisibleMentors(filteredMentorList.slice(start, finish));
     setMentorsPerPage(newNumber);
+  };
+
+  const listProps = {
+    data: visibleMentors,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Mentor is not found',
+      check: [!visibleMentors.length && !!searchMentorValue]
+    }],
+    editRestriction: currentUser.role == 2
   };
 
   const paginationComponent = () => {
@@ -319,9 +331,7 @@ export const ListOfMentors = () => {
                 </tr>
               </thead>
               <tbody>
-                {
-                  mentorList()
-                }
+                <List listType={'list'} props={listProps}/>
               </tbody>
             </table>
           </WithLoading>
