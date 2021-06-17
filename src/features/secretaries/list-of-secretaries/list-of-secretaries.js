@@ -25,7 +25,7 @@ export const ListOfSecretaries = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage, setSecretariesPerPage] = useState(10);
+  const [secretariesPerPage, setSecretariesPerPage] = useState(9);
 
   const [sortingCategories, setSortingCategories] = useState([
     { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
@@ -403,11 +403,11 @@ export const ListOfSecretaries = () => {
                   changeCountVisibleItems(event.target.value);
                 }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
             {currentUser.role === 4 && (

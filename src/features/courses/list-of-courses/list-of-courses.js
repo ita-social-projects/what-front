@@ -15,7 +15,7 @@ export const ListOfCourses = () => {
 
   const [visibleCourses, setVisibleCourses] = useState([]);
 
-  const [coursesPerPage, setcoursesPerPage] = useState(10);
+  const [coursesPerPage, setcoursesPerPage] = useState(9);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [searchValue, setSearchValue] = useState('');
@@ -200,11 +200,11 @@ export const ListOfCourses = () => {
                 id="change-visible-people"
                 onChange={(event) => { changeCountVisibleItems(event.target.value); }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
             <div className="col-2 offset-3 text-right">

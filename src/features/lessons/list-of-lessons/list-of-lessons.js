@@ -32,7 +32,7 @@ export const ListOfLessons = () => {
   const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
   const [prevSort, setPrevSort] = useState('id');
   const [currentPage, setCurrentPage] = useState(1);
-  const [lessonsPerPage, setLessonsPerPage] = useState(10);
+  const [lessonsPerPage, setLessonsPerPage] = useState(9);
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
 
@@ -263,11 +263,11 @@ export const ListOfLessons = () => {
                 id="change-visible-people"
                 onChange={(event) => { changeCountVisibleItems(event.target.value); }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
               {currentUser.role !== 3 && (

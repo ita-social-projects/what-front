@@ -21,7 +21,7 @@ export const ListOfGroups = () => {
   const { data: groups, isLoading, isLoaded, error } = studentGroupsState;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [groupsPerPage, setGroupsPerPage] = useState(10);
+  const [groupsPerPage, setGroupsPerPage] = useState(9);
 
   const [filteredGroupsList, setFilteredGroupsList] = useState([]);
 
@@ -265,11 +265,11 @@ export const ListOfGroups = () => {
                 id="change-visible-people"
                 onChange={(event) => { changeCountVisibleItems(event.target.value); }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
             <div className="col-4 text-right">

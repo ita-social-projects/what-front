@@ -45,7 +45,7 @@ export const ListOfMentors = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchMentorValue, setSearchMentorValue] = useState('');
 
-  const [mentorsPerPage, setMentorsPerPage] = useState(10);
+  const [mentorsPerPage, setMentorsPerPage] = useState(9);
   const indexOfLastMentor = currentPage * mentorsPerPage;
   const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
 
@@ -280,11 +280,11 @@ export const ListOfMentors = () => {
                 id="change-visible-people"
                 onChange={(event) => { changeCountVisibleItems(event.target.value); }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
             <div className="col-2 text-right">
