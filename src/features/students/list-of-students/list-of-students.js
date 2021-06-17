@@ -191,16 +191,17 @@ export const ListOfStudents = () => {
   };
 
   const listProps = {
-    data: visibleStudents,
-    handleDetails,
-    handleEdit,
-    errors: [{
-      message: 'Loading has been failed',
-      check: [!!allStudentsError, !!activeStudentsError]
-    }, {
-      message: 'Student is not found',
-      check: [!visibleStudents.length, !!searchFieldValue]
-    }]
+      data: visibleStudents,
+      handleDetails,
+      handleEdit,
+      errors: [{
+          message: 'Loading has been failed',
+          check: [!!allStudentsError, !!activeStudentsError]
+      }, {
+          message: 'Student is not found',
+          check: [!visibleStudents.length, !!searchFieldValue]
+      }],
+      editRestriction: false
   };
 
   const paginationComponent = () => {
