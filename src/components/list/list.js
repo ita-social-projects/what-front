@@ -2,6 +2,8 @@ import React from 'react';
 import styles from './list.scss';
 import Icon from '../../icon.js';
 
+//todo fix style's classes, add cursor point for edit btn
+
 const getRows = (data, handleDetails, handleEdit) =>
     data.map(({id, index, firstName, lastName, email} ) =>
         <tr key={id}
@@ -52,7 +54,8 @@ const getBlocks = (data, handleDetails, handleEdit) =>
         </div>
 );
 
-export const List = ({ listType, data, handleDetails, handleEdit, errors }) => {
+export const List = ({listType, props}) => {
+const { data, handleDetails, handleEdit, errors } = props;
 
   const markup = (listType === 'list')
       ? getRows(data, handleDetails, handleEdit)
@@ -73,31 +76,3 @@ export const List = ({ listType, data, handleDetails, handleEdit, errors }) => {
 
   return markup;
 };
-//
-// List.propTypes = {
-//   id: number.isRequired,
-//   title: string,
-//   date: string,
-//   buttonName: string,
-//   iconName: string,
-//   onDetails: func,
-//   onEdit: func,
-//   children: PropTypes.oneOfType([
-//     element,
-//     string,
-//     PropTypes.arrayOf(element),
-//   ]),
-//   className: string,
-// };
-//
-// List.defaultProps = {
-//   id: null,
-//   title: '',
-//   date: '',
-//   children: null,
-//   buttonName: '',
-//   iconName: '',
-//   onDetails: undefined,
-//   onEdit: undefined,
-//   className: '',
-// };

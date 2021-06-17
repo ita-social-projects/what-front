@@ -190,76 +190,17 @@ export const ListOfStudents = () => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
 
-  const getStudentsRows = () => {
-    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
-      <tr
-        key={id}
-        onClick={() => handleDetails(id)}
-        data-student-id={id}
-        className={styles['table-row']}
-      >
-        <td className="text-center">{index + 1}</td>
-        <td>{firstName}</td>
-        <td>{lastName}</td>
-        <td>{email}</td>
-        <td
-          className="text-center"
-          onClick={(event) => handleEdit(event, id)}
-        >
-          <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
-        </td>
-      </tr>
-    ));
-
-    if (allStudentsError || activeStudentsError) {
-      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
-    }
-
-    if (!visibleStudents.length && searchFieldValue) {
-      return <tr><td colSpan="5" className="text-center">Student is not found</td></tr>;
-    }
-
-    return studentsRows;
-  };
-
-  const getStudentsBlocks = () => {
-    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
-      <div className="card" style={{
-        width: '31%',
-        margin: '1%',
-        cursor: 'pointer'
-      }} onClick={() => handleDetails(id)}>
-        <div className="card-body d-flex justify-content-between">
-          <div>{index + 1}</div>
-          <div>
-            <div>
-              {firstName}
-            </div>
-            <div>
-              {lastName}
-            </div>
-            <div>
-              {email}
-            </div>
-          </div>
-          <Icon icon="Edit"
-                onClick={(event) => handleEdit(event, id)}
-                className={styles.scale}
-                color="#2E3440"
-                size={30}/>
-        </div>
-      </div>
-    ));
-
-    if (allStudentsError || activeStudentsError) {
-      return <div className="container-fluid text-center">Loading has been failed</div>;
-    }
-
-    if (!visibleStudents.length && searchFieldValue) {
-      return <div className="container-fluid text-center">Student is not found</div>;
-    }
-
-    return studentsRows;
+  const listProps = {
+    data: visibleStudents,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Loading has been failed',
+      check: [!!allStudentsError, !!activeStudentsError]
+    }, {
+      message: 'Student is not found',
+      check: [!visibleStudents.length, !!searchFieldValue]
+    }]
   };
 
   const paginationComponent = () => {
@@ -378,20 +319,7 @@ export const ListOfStudents = () => {
             {
               showBlocks ?
                 <div className="container d-flex flex-wrap">
-                  <List listType={'block'}
-                        data={visibleStudents}
-                        handleDetails={handleDetails}
-                        handleEdit={handleEdit}
-                        errors={
-                          [{
-                            message: 'Loading has been failed',
-                            check: [!!allStudentsError, !!activeStudentsError]
-                          },
-                            {
-                              message: 'Student is not found',
-                              check: [!visibleStudents.length, !!searchFieldValue]
-                            }]
-                        } />
+                  <List listType={'block'} props={listProps} />
                 </div>
               : <table className="table table-hover">
               <thead>
@@ -415,20 +343,7 @@ export const ListOfStudents = () => {
               </tr>
               </thead>
               <tbody>
-                <List listType='list'
-                      data={visibleStudents}
-                      handleDetails={handleDetails}
-                      handleEdit={handleEdit}
-                      errors={
-                        [{
-                          message: 'Loading has been failed',
-                          check: [!!allStudentsError, !!activeStudentsError]
-                        },
-                        {
-                          message: 'Student is not found',
-                          check: [!visibleStudents.length, !!searchFieldValue]
-                        }]
-                      } />
+                <List listType='list' props={listProps} />
               </tbody>
             </table>
             }
