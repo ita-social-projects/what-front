@@ -212,6 +212,7 @@ export const ListOfCourses = () => {
                    list={coursesList}
                    onClick={handleSortByParam}
                    data={filteredCourses}
+                   access={ { unruledUser: 2, unassigned: '' } }
             />
           </WithLoading>
         </div>

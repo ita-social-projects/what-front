@@ -369,6 +369,7 @@ export const ListOfStudents = () => {
                       list={getStudentsRows}
                       onClick={handleSortByParam}
                       data={students}
+                      access={ { unruledUser: 2, unassigned: '' } }
                 />
             }
 

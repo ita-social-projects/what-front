@@ -287,6 +287,7 @@ export const ListOfMentors = () => {
                    list={mentorList}
                    onClick={handleSortByParam}
                    data={filteredMentorList}
+                   access={ { unruledUser: 2, unassigned: '' } }
             />
           </WithLoading>
         </div>

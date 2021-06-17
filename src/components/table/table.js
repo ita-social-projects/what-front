@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './table.scss';
 
-export const Table = ({ sortingCategories, currentUser, list, onClick, data}) => {
+export const Table = ({ sortingCategories, currentUser, list, onClick, data, access}) => {
 
 
   const handleSortByParam = (event) => onClick(getSortedByParam(data, event.target.dataset), event.target.dataset)
@@ -30,17 +30,24 @@ export const Table = ({ sortingCategories, currentUser, list, onClick, data}) =>
               key={id}
               className={styles['table-head']}
             >
-                        <span
-                          data-sorting-param={name}
-                          data-sorted-by-ascending={Number(sortedByAscending)}
-                          onClick={handleSortByParam}
-                          className={classNames({ [styles.rotate]: !sortedByAscending })}
-                        >
-                          {tableHead}
-                        </span>
+              <span
+                data-sorting-param={name}
+                data-sorted-by-ascending={Number(sortedByAscending)}
+                onClick={handleSortByParam}
+                className={classNames({ [styles.rotate]: !sortedByAscending })}
+              >
+                {tableHead}
+              </span>
             </th>
           ))}
-          { currentUser && currentUser.role !== 2 ? <th scope="col" className="text-center">Edit</th> : null }
+          { currentUser && currentUser.role != 4 ?
+              currentUser.role !== access.unruledUser ?
+                  <th scope="col" className="text-center">Edit</th>
+                      : null
+                        : access.unassigned != 'unassigned' ?
+                          <th scope="col" className="text-center">Edit</th>
+                          : <th className="text-center">Choose role</th>
+          }
         </tr>
       </thead>
       <tbody>
@@ -54,7 +61,8 @@ export const Table = ({ sortingCategories, currentUser, list, onClick, data}) =>
 
 Table.propTypes = {
   sortingCategories: propTypes.array.isRequired,
-  currentUser: propTypes.object,
+  currentUser: propTypes.object.isRequired,
+  access: propTypes.object.isRequired,
   list: propTypes.func.isRequired,
   onClick: propTypes.func.isRequired,
   data: propTypes.array.isRequired,

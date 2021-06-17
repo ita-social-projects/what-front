@@ -274,6 +274,7 @@ export const ListOfGroups = () => {
                    list={getGroupList}
                    onClick={handleSortByParam}
                    data={filteredGroupsList}
+                   access={ { unruledUser: 1, unassigned: '' } }
             />
           </WithLoading>
         </div>

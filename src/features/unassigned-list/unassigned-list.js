@@ -276,6 +276,7 @@ export const UnAssignedList = () => {
                    list={getPersonsRows}
                    onClick={handleSortByParam}
                    data={users}
+                   access={ { unruledUser: 4, unassigned: 'unassigned' } }
             />
           </WithLoading>
         </div>

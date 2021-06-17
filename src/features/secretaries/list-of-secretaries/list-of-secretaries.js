@@ -401,6 +401,7 @@ export const ListOfSecretaries = () => {
                    list={getSecretaries}
                    onClick={handleSortByParam}
                    data={secretaries}
+                   access={ { unruledUser: 4, unassigned: '' } }
             />
           </WithLoading>
         </div>

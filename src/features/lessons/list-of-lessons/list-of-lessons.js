@@ -314,6 +314,7 @@ export const ListOfLessons = () => {
                    list={getLessonsList}
                    onClick={handleSortByParam}
                    data={filteredLessonsList}
+                   access={ { unruledUser: 3, unassigned: '' } }
             />
           </WithLoading>
         </div>
