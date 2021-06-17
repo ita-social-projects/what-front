@@ -1,63 +1,17 @@
 @import '@styles/main';
 
-.table-row {
-  cursor: pointer;
-  transition: all .2s ease-out;
-}
-
 .scale {
   transition: .3s ease;
   padding-top: 3px;
   &:hover {
-    transform: scale(1.4); 
+    transform: scale(1.4);
     padding-top: 5px;
-  }
-}
-
-.table-head {
-  min-width: 150px;
-
-  &:first-of-type {
-    text-align: center;
-    min-width: 0;
-  }
-
-  & span {
-    position: relative;
-    cursor: pointer;
-
-    &:hover {
-      opacity: 0.7;
-      transition: .4s;
-    }
-
-    &::after {
-      content: '';
-      display: block;
-      position: absolute;
-      right: -15px;
-      top: 10px;
-
-      width: 8px;
-      height: 8px;
-
-      border-top: 1px solid #000;
-      border-left: 1px solid #000;
-
-      transform: rotateZ(45deg);
-      transition: .3s;
-    }
-
-    &.rotate::after {
-      top: 7px;
-      transform: rotateZ(225deg);
-    }
   }
 }
 
 .change-rows{
   margin: 0 10px;
-  width: fit-content !important; 
+  width: fit-content !important;
 }
 
 .label-for-select{

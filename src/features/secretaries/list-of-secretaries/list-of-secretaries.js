@@ -17,6 +17,7 @@ import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-secretaries.scss';
+import { Table } from '@components/table';
 
 export const ListOfSecretaries = () => {
   const history = useHistory();
@@ -27,12 +28,13 @@ export const ListOfSecretaries = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [secretariesPerPage, setSecretariesPerPage] = useState(10);
 
-  const [sortingCategories, setSortingCategories] = useState([
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
-  ]);
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+  ];
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
 
   const [visibleSecretaries, setVisibleSecretaries] = useState([]);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
@@ -55,13 +57,6 @@ export const ListOfSecretaries = () => {
 
   const [secretaries, setSecretaries] = useState([]);
 
-  const INITIAL_CATEGORIES = [
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
-  ];
-
   const [searchValue, setSearchValue] = useState('');
   const indexOfLastSecretary = currentPage * secretariesPerPage;
   const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
@@ -78,18 +73,6 @@ export const ListOfSecretaries = () => {
     serchedSecretaries.filter(({ firstName, lastName }) =>
       `${firstName} ${lastName}`.toLowerCase().includes(value.toLowerCase())
     );
-
-  const getSortedByParam = (data, activeCategory) => {
-    const { sortingParam, sortedByAscending } = activeCategory;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    return [...data].sort((prevItem, currentItem) => {
-      if (prevItem[sortingParam] > currentItem[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-  };
 
   const changeActiveCategory = (categories, activeCategoryName) =>
     categories.map((category) => {
@@ -168,21 +151,12 @@ export const ListOfSecretaries = () => {
     setCurrentPage(1);
   }, [searchValue, isShowDisabled]);
 
-  const handleSortByParam = useCallback(
-    (event) => {
-      const categoryParams = event.target.dataset;
-      const sortedSecretaries = getSortedByParam(secretaries, categoryParams);
-
-      setSortingCategories(
-        changeActiveCategory(sortingCategories, categoryParams.sortingParam)
-      );
-      setSecretaries(sortedSecretaries);
-      setVisibleSecretaries(
-        secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary)
-      );
-    },
-    [sortingCategories, secretaries]
-  );
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedSecretaries = data;
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setSecretaries(sortedSecretaries);
+    setVisibleSecretaries(secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary));
+  };
 
   const resetSortingCategory = useCallback(() => {
     setSortingCategories(
@@ -249,15 +223,14 @@ export const ListOfSecretaries = () => {
 
   const getSecretaries = () => {
     const secretariesRows = visibleSecretaries.map(
-      ({ id, firstName, lastName, email, index }) => (
+      ({ id, firstName, lastName, email }) => (
         <tr
           key={id}
           onClick={() => handleSecretariesDetails(id)}
           className={styles['table-row']}
           data-secretary-id={id}
         >
-          <td className="text-center">{index + 1}</td>
-          <td>{firstName}</td>
+          <td className={"text-left"}>{firstName}</td>
           <td>{lastName}</td>
           <td>{email}</td>
           {currentUser.role === 4 && (
@@ -423,34 +396,13 @@ export const ListOfSecretaries = () => {
             className="d-block mx-auto my-3"
             variant="info"
           >
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  {sortingCategories.map(
-                    ({ id, name, tableHead, sortedByAscending }) => (
-                      <th key={id} className={styles['table-head']}>
-                        <span
-                          data-sorting-param={name}
-                          data-sorted-by-ascending={Number(sortedByAscending)}
-                          onClick={handleSortByParam}
-                          className={classNames({
-                            [styles.rotate]: sortedByAscending,
-                          })}
-                        >
-                          {tableHead}
-                        </span>
-                      </th>
-                    )
-                  )}
-                  {currentUser.role === 4 && (
-                    <th scope="col" className="text-center">
-                      Edit
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>{getSecretaries()}</tbody>
-            </table>
+            <Table sortingCategories={sortingCategories}
+                   currentUser={currentUser}
+                   list={getSecretaries}
+                   onClick={handleSortByParam}
+                   data={secretaries}
+                   access={ { unruledUser: 4, unassigned: '' } }
+            />
           </WithLoading>
         </div>
         <div
