@@ -1,14 +1,5 @@
 @import "../../../styles/main";
 
-.scale {
-  transition: .3s ease;
-  padding-top: 3px;
-  &:hover {
-    transform: scale(1.4); 
-    padding-top: 5px;
-  }
-}
-
 .switch, .table-row {
   cursor: pointer;
   transition: all .2s ease-out;

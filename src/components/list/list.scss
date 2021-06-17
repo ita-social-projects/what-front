@@ -1,66 +1,9 @@
-//@import '../../styles/main';
-//
-//.card-component {
-//  @include card();
-//  padding: 15px;
-//  margin: 15px;
-//  transition: all ease .5s;
-//}
-//
-//.card-component:hover {
-//  @include card();
-//  transform: scale(1.1);
-//  cursor: pointer;
-//}
-//
-//.content {
-//  display: flex;
-//  flex-direction: row;
-//  justify-content: space-between;
-//  align-items: flex-end;
-//}
-//
-//.card-title {
-//  width:95%;
-//  font-size: 20px;
-//}
-//
-//.card-content {
-//  width:95%;
-//  font-size: 18px;
-//  padding-top: 10px;
-//  margin: 0;
-//}
-//
-//.card-date {
-//  font-size: 14px;
-//  text-decoration: underline;
-//  color: map-get($colors, textAccentN1-color);
-//  margin-bottom: 0;
-//}
-//
-//.card-head {
-//  padding-top: 5px;
-//  display: flex;
-//  flex-flow: row wrap;
-//  justify-content: space-between;
-//  align-items: baseline;
-//}
-//
-//.card-title {
-//  width:80%;
-//  height: 50%;
-//}
-//
-//.card-icon:hover {
-//  transform: scale(1.2);
-//}
-//
-//.card-btn {
-//  padding-top:5px;
-//}
-//
-//.card-icon {
-//  position: absolute;
-//  right: 4%;
-//}
+.scale {
+  transition: .3s ease;
+  padding-top: 3px;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.4);
+    padding-top: 5px;
+  }
+}
