@@ -4,6 +4,8 @@ import Icon from '../../icon.js';
 
 //todo add restriction for block view
 //todo add special param 'fieldsToShow' and check if it has true then show the field
+//todo check new component Table
+//todo add sort
 
 const getRows = (data, handleDetails, handleEdit, editRestriction = false) =>{
     console.log(data);
