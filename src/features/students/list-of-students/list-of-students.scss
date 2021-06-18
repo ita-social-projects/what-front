@@ -5,15 +5,6 @@
   transition: all .2s ease-out;
 }
 
-.table-head {
-  min-width: 150px;
-
-  &:first-of-type {
-    text-align: center;
-    min-width: 0;
-  }
-}
-
 .category {
   cursor: pointer;
   position: relative;
@@ -63,7 +54,7 @@
 
 .change-rows{
   margin: 0 10px;
-  width: fit-content !important; 
+  width: fit-content !important;
 }
 
 .label-for-select{

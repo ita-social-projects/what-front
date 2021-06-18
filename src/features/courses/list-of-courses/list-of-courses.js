@@ -25,8 +25,7 @@ export const ListOfCourses = () => {
   const [filteredCourses, setFilteredCourses] = useState([]);
 
   const [sortingCategories, setSortingCategories] = useState([
-    { id: 0, name: 'id', sortedByAscending: false, tableHead: '#' },
-    { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Title' },
+    { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
   const { data, isLoading } = useSelector(coursesSelector, shallowEqual); // array of courses ,true/false
@@ -52,9 +51,8 @@ export const ListOfCourses = () => {
   const coursesList = () => {
     const courses = visibleCourses
       .map((course) => (
-        <tr key={course.id} onClick={(event) => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
-          <td className="text-center">{course.id}</td>
-          <td>{course.name}</td>
+        <tr key={course.id} onClick={() => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
+          <td className="text-left">{course.name}</td>
           {currentUser.role !== 2 &&
             <td
               className="text-center"
@@ -78,7 +76,12 @@ export const ListOfCourses = () => {
     setVisibleCourses(data.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
   };
 
-
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
 
   const addCourse = () => {
     history.push(paths.COURSE_ADD);
@@ -93,24 +96,9 @@ export const ListOfCourses = () => {
     history.push(`${paths.COURSE_EDIT}/${id}`);
   }, [history]);
 
-  const handleSortByParam = (event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    const sortedCourses = [...filteredCourses].sort((prevCourse, currentCourse) => {
-      if (prevCourse[sortingParam] > currentCourse[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedCourses = data;
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredCourses(sortedCourses);
     setVisibleCourses(sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse));
   };
