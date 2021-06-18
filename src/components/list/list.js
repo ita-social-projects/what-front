@@ -42,6 +42,6 @@ export const List = ({listType, props, children: custom}) => {
     const errorsMessage = getErrorMessage(props.errors);
 
     return errorsMessage ? errorsMessage
-        : (listType === 'list') ? Blocks(props, custom)
-            : Rows(props, custom);
+        : (listType === 'list') ? Rows(props, custom)
+            : Blocks(props, custom);
 };

@@ -1,6 +1,6 @@
-import styles from "@components/list/list.scss";
 import {commonHelpers} from "@/utils";
 import Icon from "@/icon";
+import styles from "@components/list/list.scss";
 import React from "react";
 
 /**
@@ -31,33 +31,42 @@ export const Blocks = ({data, handleDetails, handleEdit, access = true, fieldsTo
                   startDate,
                   finishDate
               }) =>
-        {
-            return <tr key={id}
-                       onClick={handleDetails? () => handleDetails(id): null}
-                       className={styles['table-row']}
-            >
-                {fieldsToShow.includes('index') && index && <td className="text-center">{index + 1}</td>}
-                {fieldsToShow.includes('firstName') && firstName && <td>{firstName}</td>}
-                {fieldsToShow.includes('name') && name && <td>{name}</td>}
-                {fieldsToShow.includes('studentIds') && studentIds && <td>{studentIds.length}</td>}
-                {fieldsToShow.includes('startDate') && startDate &&
-                <td>{commonHelpers.transformDateTime({isDayTime: false, dateTime: startDate}).date}
-                </td>
+        <div className="card"
+             style={{
+                 width: '31%',
+                 margin: '1%',
+                 cursor: 'pointer'
+             }}
+             onClick={handleDetails ? () => handleDetails(id) : null}
+             key={id}>
+            <div className="card-body d-flex justify-content-between">
+                {fieldsToShow.includes('index') && index && <div>{index + 1}</div>}
+                <div>
+                    {fieldsToShow.includes('firstName') && firstName && <div>{firstName}</div>}
+                    {fieldsToShow.includes('name') && name && <div>{name}</div>}
+                    {fieldsToShow.includes('studentIds') && studentIds && <div>Quantity of students: {studentIds.length}</div>}
+                    {fieldsToShow.includes('startDate') && startDate &&
+                    <div>Start: {commonHelpers.transformDateTime({isDayTime: false, dateTime: startDate}).date}
+                    </div>
+                    }
+                    {fieldsToShow.includes('finishDate') && finishDate &&
+                    <div>Finish: {commonHelpers.transformDateTime({isDayTime: false, dateTime: finishDate}).date}
+                    </div>
+                    }
+                    {fieldsToShow.includes('themeName') && themeName && <div>{themeName}</div>}
+                    {fieldsToShow.includes('lessonShortDate') && lessonShortDate && <div>{lessonShortDate}</div>}
+                    {fieldsToShow.includes('lessonTime') && lessonTime && <div>{lessonTime}</div>}
+                    {fieldsToShow.includes('lastName') && lastName && <div>{lastName}</div>}
+                    {fieldsToShow.includes('email') && email && <div>{email}</div>}
+                    {fieldsToShow.includes('custom') && custom && <div>{custom}</div>}
+                </div>
+                {fieldsToShow.includes('edit') && access
+                && <Icon icon="Edit"
+                         onClick={handleEdit ? (event) => handleEdit(event, id) : null}
+                         className={styles.scale}
+                         color="#2E3440"
+                         size={30}/>
                 }
-                {fieldsToShow.includes('finishDate') && finishDate &&
-                <td>{commonHelpers.transformDateTime({isDayTime: false, dateTime: finishDate}).date}
-                </td>
-                }
-                {fieldsToShow.includes('themeName') && themeName && <td>{themeName}</td>}
-                {fieldsToShow.includes('lessonShortDate') && lessonShortDate && <td>{lessonShortDate}</td>}
-                {fieldsToShow.includes('lessonTime') && lessonTime && <td>{lessonTime}</td>}
-                {fieldsToShow.includes('lastName') && lastName && <td>{lastName}</td>}
-                {fieldsToShow.includes('email') && email && <td>{email}</td>}
-                {fieldsToShow.includes('edit') && access &&
-                (<td className="text-center"
-                     onClick={handleEdit ? (event) => handleEdit(event, id) : null}>
-                    <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30}/>
-                </td>)}
-                {fieldsToShow.includes('custom') && custom && <td>{custom}</td>}
-            </tr>}
+            </div>
+        </div>
     );
