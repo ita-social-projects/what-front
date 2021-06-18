@@ -2,8 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import {
-  editLessonSelector, studentsSelector, loadStudentGroupsSelector, lessonsSelector,
-  fetchLessons, globalLoadStudentGroups, loadStudents, editLesson,
+  editLessonSelector,
+  studentsSelector,
+  loadStudents,
+  editLesson,
+  lessonByIdSelector,
+  fetchLessonById,
+  loadStudentGroupById, loadStudentGroupByIdSelector,
 } from '@/models';
 import { useActions, paths } from '@/shared';
 
@@ -20,25 +25,25 @@ export const EditLesson = () => {
   const history = useHistory();
   const { id } = useParams();
 
-  const [studentsGroup, setStudentsGroup] = useState(null);
+  // const [studentsGroup, setStudentsGroup] = useState(null);
   const [studentsGroupInput, setStudentsGroupInput] = useState('');
-  const [lessonOnEdit, setLessonOEdit] = useState(false);
+  // const [lessonOnEdit, setLessonOEdit] = useState(false);
   const [formData, setFormData] = useState([]);
 
   const [
-    getGroups,
+    loadLessonById,
+    getGroup,
     getStudents,
-    loadLessons,
     updateLesson,
     dispatchAddAlert,
-  ] = useActions([globalLoadStudentGroups, loadStudents, fetchLessons, editLesson, addAlert]);
+  ] = useActions([fetchLessonById, loadStudentGroupById, loadStudents, editLesson, addAlert]);
 
   const {
-    data: groups,
-    isLoading: groupsIsLoading,
-    isLoaded: groupsIsLoaded,
-    error: groupsError,
-  } = useSelector(loadStudentGroupsSelector, shallowEqual);
+    data: group,
+    isLoading: groupIsLoading,
+    isLoaded: groupIsLoaded,
+    error: groupError,
+  } = useSelector(loadStudentGroupByIdSelector, shallowEqual);
 
   const {
     data: students,
@@ -48,11 +53,11 @@ export const EditLesson = () => {
   } = useSelector(studentsSelector, shallowEqual);
 
   const {
-    data: lessons,
-    isLoading: lessonsIsLoading,
-    isLoaded: lessonsIsLoaded,
-    error: lessonsError,
-  } = useSelector(lessonsSelector, shallowEqual);
+    data: lesson,
+    isLoading: lessonIsLoading,
+    isLoaded: lessonIsLoaded,
+    error: lessonError,
+  } = useSelector(lessonByIdSelector, shallowEqual);
 
   const {
     isLoaded: editIsLoaded,
@@ -60,26 +65,36 @@ export const EditLesson = () => {
   } = useSelector(editLessonSelector, shallowEqual);
 
   useEffect(() => {
-    if (!lessonsIsLoaded && !lessonsError) {
-      loadLessons();
+    if (!lessonIsLoaded && !lessonError) {
+      console.log('id', id);
+      loadLessonById(id);
     }
-  }, [lessonsIsLoaded, lessonsError, loadLessons]);
+  }, [lessonIsLoaded, lessonError, loadLessonById]);
 
   useEffect(() => {
-    if (lessonsIsLoaded) {
-      const lessonRes = lessons.find((lesson) => lesson.id === Number(id));
-      if (!lessonRes) {
-        history.push(paths.NOT_FOUND);
-      } else {
-        setLessonOEdit(lessonRes);
-      }
+    if (lessonIsLoaded && !lessonError) {
+      console.log('lesson.studentGroupId', lesson.studentGroupId);
+      console.log('lesson', lesson);
+      getGroup(lesson.studentGroupId)
     }
-  }, [lessonsIsLoaded, lessonOnEdit, studentsGroup]);
+  }, [lessonIsLoaded, lessonError, getGroup]);
+
+  useEffect(() => {
+    if (!studentsIsLoaded && !studentsError && groupIsLoaded) {
+      getStudents();
+    }
+  }, [studentsError, studentsIsLoaded, getStudents]);
+
+  useEffect(() => {
+      if (Object.keys(lesson).length === 0) {
+        history.push(paths.NOT_FOUND);
+      }
+  }, [lesson]);
 
   const getFormData = () => {
-    const uniqueIds = [...new Set(studentsGroup.studentIds)];
+    const uniqueIds = [...new Set(group.studentIds)];
 
-    lessonOnEdit.lessonVisits.map((student) => {
+    lesson.lessonVisits.map((student) => {
       if (student.comment === null) student.comment = '';
       if (student.studentMark === null) student.studentMark = '';
     });
@@ -102,36 +117,21 @@ export const EditLesson = () => {
       }
     })
       .map((student, index) => ({
-        ...lessonOnEdit.lessonVisits[index],
+        ...lesson.lessonVisits[index],
         ...student,
       }));
     setFormData(resultLessonVisits);
   };
 
   useEffect(() => {
-    if (lessonOnEdit && groups.length) {
-      const groupRes = groups?.find((group) => group.id === lessonOnEdit.studentGroupId);
-      setStudentsGroupInput(!groupRes ? '' : groupRes.name);
-      if (groupRes && studentsIsLoaded && !studentsIsLoading) {
-        setStudentsGroup(groupRes);
-        if (studentsGroup && students) {
+    if (lesson && group && students.length !== 0) {
+      // const groupRes = groups?.find((group) => group.id === lesson.studentGroupId);
+      setStudentsGroupInput(!group ? '' : group.name);
           getFormData();
-        }
-      }
     }
-  }, [groups, students, studentsIsLoaded, studentsIsLoading, lessonOnEdit, studentsGroup]);
+  }, [group, students, lesson]);
 
-  useEffect(() => {
-    if (!groupsIsLoaded && !groupsError) {
-      getGroups();
-    }
-  }, [groupsError, groupsIsLoaded, getGroups]);
 
-  useEffect(() => {
-    if (!studentsIsLoaded && !studentsError) {
-      getStudents();
-    }
-  }, [studentsError, studentsIsLoaded, getStudents]);
 
   useEffect(() => {
     if (!editError && editIsLoaded) {
@@ -168,6 +168,7 @@ export const EditLesson = () => {
       });
       const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
       const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
+    console.log('formalizedDate', formalizedDate);
 
       const lessonObject = {
         themeName: theme,
@@ -175,7 +176,7 @@ export const EditLesson = () => {
         lessonVisits,
       };
       if (lessonObject) {
-        updateLesson(lessonObject, id);
+        // updateLesson(lessonObject, id);
       }
   };
 
@@ -196,10 +197,10 @@ export const EditLesson = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container" >
       <div className={classNames(styles.page, 'mx-auto', 'col-12')}>
         <div className="d-flex flex-row">
-          {groupsError && lessonsError && editError && studentsError && (
+          {groupError && lessonError && editError && studentsError && (
             <div className="col-12 alert-danger">
               Server Problems
             </div>
@@ -209,19 +210,19 @@ export const EditLesson = () => {
             <hr />
             <WithLoading
               isLoading={
-                lessonsIsLoading
+                lessonIsLoading
                 || studentsIsLoading
-                || groupsIsLoading
-                || !lessonOnEdit
+                || groupIsLoading
+                || !lesson
                 || !formData.length
               }
               className={classNames(styles['loader-centered'])}
             >
               <Formik
                 initialValues={{
-                  themeName: lessonOnEdit?.themeName,
-                  groupName: groups?.find((group) => group.id === lessonOnEdit.studentGroupId)?.name,
-                  lessonDate: commonHelpers.transformDateTime({ dateTime: lessonOnEdit?.lessonDate }).formInitialValue,
+                  themeName: lesson.themeName,
+                  groupName: group.name,
+                  lessonDate: commonHelpers.transformDateTime({ dateTime: lesson.lessonDate }).formInitialValue,
                   formData,
                 }}
                 onSubmit={onSubmit}
@@ -257,7 +258,7 @@ export const EditLesson = () => {
                               id="inputGroupName"
                               type="text"
                               className="form-control group-input"
-                              value={studentsGroupInput}
+                              value={group.name}
                               disabled
                             />
                           </div>
@@ -343,13 +344,19 @@ export const EditLesson = () => {
                     </div>
                     <div className={classNames(styles.placement, 'col-12 ')}>
                       <button
+                        data-testid='cancelBtn'
                         form="form"
                         type="button"
                         className="btn btn-secondary btn-lg"
                         onClick={handleCancel}
                       >Cancel
                       </button>
-                      <button form="form" type="submit" className="btn btn-success btn-lg">Save
+                      <button
+                          data-testid='submitBtn'
+                          form="form"
+                          type="submit"
+                          className="btn btn-success btn-lg"
+                      >Save
                       </button>
                     </div>
                   </Form>
