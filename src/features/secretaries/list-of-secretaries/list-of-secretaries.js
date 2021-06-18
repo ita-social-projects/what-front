@@ -423,44 +423,15 @@ export const ListOfSecretaries = () => {
                     <List listType={'block'} props={listProps} />
                   </div>
                   :
-                  <table className="table table-hover">
-                    <thead>
-                    <tr>
-                      {sortingCategories.map(
-                          ({ id, name, tableHead, sortedByAscending }) => (
-                              <th key={id} className={styles['table-head']}>
-                        <span
-                            data-sorting-param={name}
-                            data-sorted-by-ascending={Number(sortedByAscending)}
-                            onClick={handleSortByParam}
-                            className={classNames({
-                              [styles.rotate]: sortedByAscending,
-                            })}
-                        >
-                          {tableHead}
-                        </span>
-                              </th>
-                          )
-                      )}
-                      {currentUser.role === 4 && (
-                          <th scope="col" className="text-center">
-                            Edit
-                          </th>
-                      )}
-                    </tr>
-                    </thead>
-                    <tbody>
-                      <List listType={'list'} props={listProps} />
-                    </tbody>
-                  </table>
+                  <Table sortingCategories={sortingCategories}
+                         currentUser={currentUser}
+                         onClick={handleSortByParam}
+                         data={secretaries}
+                         access={{unruledUser: 4, unassigned: ''}}
+                  >
+                    <List listType={'list'} props={listProps}/>
+                  </Table>
             }
-            {/*<Table sortingCategories={sortingCategories}*/}
-            {/*       currentUser={currentUser}*/}
-            {/*       list={getSecretaries}*/}
-            {/*       onClick={handleSortByParam}*/}
-            {/*       data={secretaries}*/}
-            {/*       access={ { unruledUser: 4, unassigned: '' } }*/}
-            {/*/>*/}
           </WithLoading>
         </div>
         <div
