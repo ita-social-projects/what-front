@@ -51,9 +51,10 @@ export const DownloadGroups = () => {
   }, [downloadingError, isDownloadingLoaded]);
 
   const onSubmit = (values) => {
+    const defaultVal = values.courseId;
     const formData = new FormData();
 		formData.append('File', values.groups);
-    downloadGroups(values.courseId, formData);
+    downloadGroups(defaultVal === '' ? courses[0].id : defaultVal, formData);
   };
   
   return (
