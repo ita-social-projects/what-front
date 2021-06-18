@@ -15,6 +15,7 @@ import styles from './list-of-groups.scss';
 import {commonHelpers} from "@/utils";
 import { Table } from '@components/table';
 import {List} from "@components/list";
+import {currentUserSelector} from "@models/index";
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -31,6 +32,7 @@ export const ListOfGroups = () => {
 
   const [searchGroupValue, setSearchGroupValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const indexOfLastGroup = currentPage * groupsPerPage;
   const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
@@ -61,7 +63,7 @@ export const ListOfGroups = () => {
     setSearchGroupValue(inputValue);
   };
 
-  const handleEdit = useCallback((id, event) => {
+  const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.GROUP_EDIT}/${id}`);
   }, [history]);
@@ -301,34 +303,17 @@ export const ListOfGroups = () => {
             {
               showBlocks ?
                   <div className="container d-flex flex-wrap">
-                    <List listType={'block'} props={listProps} />
+                    <List listType={'block'} props={listProps}/>
                   </div>
                   :
-                  <table className="table table-hover mb-0">
-                    <thead>
-                    <tr>
-                      {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                          <th
-                              className={styles['table-head']}
-                              key={id}
-                          >
-                      <span
-                          onClick={handleSortByParam}
-                          data-sorting-param={name}
-                          data-sorted-by-ascending={Number(sortedByAscending)}
-                          className={classNames(styles.category, { [styles['category-sorted']]: sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                          </th>
-                      ))}
-                      <th scope="col" className="text-center">Edit</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      <List listType={'list'} props={listProps} />
-                    </tbody>
-                  </table>
+                  <Table sortingCategories={sortingCategories}
+                         onClick={handleSortByParam}
+                         currentUser={currentUser}
+                         data={filteredGroupsList}
+                         access={{unruledUser: 1, unassigned: ''}}
+                  >
+                    <List listType={'list'} props={listProps}/>
+                  </Table>
             }
           </WithLoading>
         </div>

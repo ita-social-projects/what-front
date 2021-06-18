@@ -13,6 +13,7 @@ import { addAlert } from '@/features';
 import Icon from '@/icon';
 import styles from './list-of-students.scss';
 import {List} from "@components/list";
+import {Table} from "@components/table";
 
 export const ListOfStudents = () => {
   const {
@@ -305,34 +306,19 @@ export const ListOfStudents = () => {
           <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
             {
               showBlocks ?
-                <div className="container d-flex flex-wrap">
-                  <List listType={'block'} props={listProps} />
-                </div>
-              : <table className="table table-hover">
-              <thead>
-              <tr>
-                {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                  <th
-                    key={id}
-                    className={styles['table-head']}
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps}/>
+                  </div>
+                  :
+                  <Table
+                      sortingCategories={sortingCategories}
+                      currentUser={currentUser}
+                      onClick={handleSortByParam}
+                      data={students}
+                      access={{unruledUser: 2, unassigned: ''}}
                   >
-                      <span
-                        onClick={handleSortByParam}
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        className={classNames(styles.category, { [styles['category-sorted']]: !sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                  </th>
-                ))}
-                <th className="text-center">Edit</th>
-              </tr>
-              </thead>
-              <tbody>
-                <List listType='list' props={listProps} />
-              </tbody>
-            </table>
+                    <List listType='list' props={listProps}/>
+                  </Table>
             }
 
           </WithLoading>

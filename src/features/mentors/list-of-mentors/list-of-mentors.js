@@ -12,6 +12,7 @@ import Icon from '@/icon.js';
 import classNames from 'classnames';
 import styles from './list-of-mentors.scss';
 import {List} from "@components/list";
+import { Table } from '@components/table';
 export const ListOfMentors = () => {
   const {
     data: allMentors,
@@ -304,7 +305,7 @@ export const ListOfMentors = () => {
                   <Button onClick={addMentor}>
                     <span>Add a mentor</span>
                   </Button>
-                  )}
+              )}
             </div>
           </div>
           <WithLoading isLoading={areActiveMentorsLoading || areAllMentorsLoading} className="d-block mx-auto m-0">
@@ -313,31 +314,14 @@ export const ListOfMentors = () => {
                   <List listType={'block'} props={listProps}/>
                 </div>
                 :
-                <table className="table table-hover">
-                  <thead>
-                  <tr>
-                    {sortingCategories.map(({id, name, tableHead, sortedByAscending}) => (
-                        <th
-                            key={id}
-                            className={styles['table-head']}
-                        >
-                      <span
-                          data-sorting-param={name}
-                          data-sorted-by-ascending={Number(sortedByAscending)}
-                          onClick={handleSortByParam}
-                          className={classNames({[styles.rotate]: !sortedByAscending})}
-                      >
-                        {tableHead}
-                      </span>
-                        </th>
-                    ))}
-                    {currentUser.role !== 2 ? <th scope="col" className="text-center">Edit</th> : null}
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <List listType={'list'} props={listProps}/>
-                  </tbody>
-                </table>
+                <Table sortingCategories={sortingCategories}
+                       currentUser={currentUser}
+                       onClick={handleSortByParam}
+                       data={filteredMentorList}
+                       access={{unruledUser: 2, unassigned: ''}}
+                >
+                  <List props={listProps} listType={'list'}/>
+                </Table>
             }
           </WithLoading>
         </div>

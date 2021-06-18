@@ -342,22 +342,19 @@ export const ListOfLessons = () => {
             {
               showBlocks ?
                   <div className="container d-flex flex-wrap">
-                    <List listType={'block'} props={listProps} />
+                    <List listType={'block'} props={listProps}/>
                   </div>
                   :
-                  <table className="table table-hover">
-                    <tbody>
+                  <Table sortingCategories={sortingCategories}
+                         currentUser={currentUser}
+                         onClick={handleSortByParam}
+                         data={filteredLessonsList}
+                         access={{unruledUser: 3, unassigned: ''}}
+                  >
                     <List props={listProps} listType={'list'}/>
-                    </tbody>
-                  </table>
+                  </Table>
             }
-            {/*<Table sortingCategories={sortingCategories}*/}
-            {/*       currentUser={currentUser}*/}
-            {/*       list={getLessonsList}*/}
-            {/*       onClick={handleSortByParam}*/}
-            {/*       data={filteredLessonsList}*/}
-            {/*       access={ { unruledUser: 3, unassigned: '' } }*/}
-            {/*/>*/}
+
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

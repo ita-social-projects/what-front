@@ -10,6 +10,7 @@ import Icon from '@/icon.js';
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
 import {List} from "@components/list";
+import {Table} from "@components/table";
 
 export const ListOfCourses = () => {
   const history = useHistory();
@@ -240,29 +241,14 @@ export const ListOfCourses = () => {
                     <List listType={'block'} props={listProps}/>
                   </div>
                   :
-                  <table className="table table-hover">
-                    <thead>
-                    <tr>
-                      {sortingCategories.map(({id, name, tableHead, sortedByAscending}) => (
-                          <th key={id}
-                              className={styles['table-head']}>
-                      <span
-                          data-sorting-param={name}
-                          data-sorted-by-ascending={Number(sortedByAscending)}
-                          onClick={handleSortByParam}
-                          className={classNames({[styles.rotate]: !sortedByAscending})}
-                      >
-                        {tableHead}
-                      </span>
-                          </th>
-                      ))}
-                      {currentUser.role !== 2 && <th className="text-center">Edit</th>}
-                    </tr>
-                    </thead>
-                    <tbody>
+                  <Table sortingCategories={sortingCategories}
+                         currentUser={currentUser}
+                         onClick={handleSortByParam}
+                         data={filteredCourses}
+                         access={{unruledUser: 2, unassigned: ''}}
+                  >
                     <List listType='list' props={listProps}/>
-                    </tbody>
-                  </table>
+                  </Table>
             }
           </WithLoading>
         </div>
