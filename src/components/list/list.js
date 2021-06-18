@@ -1,11 +1,27 @@
 import React from 'react';
 import styles from './list.scss';
 import Icon from '../../icon.js';
+import {commonHelpers} from "@/utils";
 
 //todo add sort
+//todo fix correct field's name for block view
+//todo add custom field (for Assignment page)
 
 const getRows = ({data, handleDetails, handleEdit, access = true, fieldsToShow}) =>
-    data.map(({id, index, firstName, lastName, email, name, themeName, lessonShortDate, lessonTime}) =>
+    data.map(({
+                  id,
+                  index,
+                  firstName,
+                  lastName,
+                  email,
+                  name,
+                  themeName,
+                  lessonShortDate,
+                  lessonTime,
+                  studentIds,
+                  startDate,
+                  finishDate
+              }) =>
         <tr key={id}
             onClick={() => handleDetails(id)}
             className={styles['table-row']}
@@ -13,14 +29,23 @@ const getRows = ({data, handleDetails, handleEdit, access = true, fieldsToShow})
             {fieldsToShow.includes('index') && index && <td className="text-center">{index + 1}</td>}
             {fieldsToShow.includes('firstName') && firstName && <td>{firstName}</td>}
             {fieldsToShow.includes('name') && name && <td>{name}</td>}
+            {fieldsToShow.includes('studentIds') && studentIds && <td>{studentIds.length}</td>}
+            {fieldsToShow.includes('startDate') && startDate &&
+            <td>{commonHelpers.transformDateTime({isDayTime: false, dateTime: startDate}).date}
+            </td>
+            }
+            {fieldsToShow.includes('finishDate') && finishDate &&
+            <td>{commonHelpers.transformDateTime({isDayTime: false, dateTime: finishDate}).date}
+            </td>
+            }
             {fieldsToShow.includes('themeName') && themeName && <td>{themeName}</td>}
             {fieldsToShow.includes('lessonShortDate') && lessonShortDate && <td>{lessonShortDate}</td>}
             {fieldsToShow.includes('lessonTime') && lessonTime && <td>{lessonTime}</td>}
             {fieldsToShow.includes('lastName') && lastName && <td>{lastName}</td>}
             {fieldsToShow.includes('email') && email && <td>{email}</td>}
-            { fieldsToShow.includes('edit') && access ?
+            {fieldsToShow.includes('edit') && access ?
                 (<td className="text-center"
-                    onClick={(event) => handleEdit(event, id)}>
+                     onClick={(event) => handleEdit(event, id)}>
                     <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30}/>
                 </td>) :
                 <td></td>}
@@ -28,7 +53,20 @@ const getRows = ({data, handleDetails, handleEdit, access = true, fieldsToShow})
     );
 
 const getBlocks = ({data, handleDetails, handleEdit, access = true, fieldsToShow}) =>
-    data.map(({id, index, firstName, lastName, email, name, themeName, lessonShortDate, lessonTime}) =>
+    data.map(({
+                  id,
+                  index,
+                  firstName,
+                  lastName,
+                  email,
+                  name,
+                  themeName,
+                  lessonShortDate,
+                  lessonTime,
+                  studentIds,
+                  startDate,
+                  finishDate
+              }) =>
         <div className="card"
              style={{
                  width: '31%',
@@ -42,6 +80,15 @@ const getBlocks = ({data, handleDetails, handleEdit, access = true, fieldsToShow
                 <div>
                     {fieldsToShow.includes('firstName') && firstName && <div>{firstName}</div>}
                     {fieldsToShow.includes('name') && name && <div>{name}</div>}
+                    {fieldsToShow.includes('studentIds') && studentIds && <div>{studentIds.length}</div>}
+                    {fieldsToShow.includes('startDate') && startDate &&
+                    <div>{commonHelpers.transformDateTime({isDayTime: false, dateTime: startDate}).date}
+                    </div>
+                    }
+                    {fieldsToShow.includes('finishDate') && finishDate &&
+                    <div>{commonHelpers.transformDateTime({isDayTime: false, dateTime: finishDate}).date}
+                    </div>
+                    }
                     {fieldsToShow.includes('themeName') && themeName && <div>{themeName}</div>}
                     {fieldsToShow.includes('lessonShortDate') && lessonShortDate && <div>{lessonShortDate}</div>}
                     {fieldsToShow.includes('lessonTime') && lessonTime && <div>{lessonTime}</div>}
@@ -99,5 +146,5 @@ export const List = ({listType, props}) => {
 
     return errorsMessage ? errorsMessage
         : (listType === 'list') ? getRows(props)
-        : getBlocks(props);
+            : getBlocks(props);
 };
