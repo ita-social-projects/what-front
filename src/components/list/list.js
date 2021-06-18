@@ -2,35 +2,30 @@ import React from 'react';
 import styles from './list.scss';
 import Icon from '../../icon.js';
 
-//todo add restriction for block view
-//todo add special param 'fieldsToShow' and check if it has true then show the field
-//todo check new component Table
 //todo add sort
 
-const getRows = (data, handleDetails, handleEdit, editRestriction = false) =>{
-    console.log(data);
-
-    return data.map(({id, index, firstName, lastName, email}) =>
+const getRows = ({data, handleDetails, handleEdit, access = true, fieldsToShow}) =>
+    data.map(({id, index, firstName, lastName, email, name}) =>
         <tr key={id}
             onClick={() => handleDetails(id)}
             className={styles['table-row']}
         >
-            <td className="text-center">{index + 1}</td>
-            <td>{firstName}</td>
-            <td>{lastName}</td>
-            <td>{email}</td>
-            { !editRestriction ?
+            {fieldsToShow.includes('index') && index && <td className="text-center">{index + 1}</td>}
+            {fieldsToShow.includes('firstName') && firstName && <td>{firstName}</td>}
+            {fieldsToShow.includes('name') && name && <td>{name}</td>}
+            {fieldsToShow.includes('lastName') && lastName && <td>{lastName}</td>}
+            {fieldsToShow.includes('email') && email && <td>{email}</td>}
+            { fieldsToShow.includes('edit') && access ?
                 (<td className="text-center"
                     onClick={(event) => handleEdit(event, id)}>
                     <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30}/>
                 </td>) :
-                <td></td>
-            }
+                <td></td>}
         </tr>
-    );}
+    );
 
-const getBlocks = (data, handleDetails, handleEdit) =>
-    data.map(({id, index, firstName, lastName, email}) =>
+const getBlocks = ({data, handleDetails, handleEdit, access = true, fieldsToShow}) =>
+    data.map(({id, index, firstName, lastName, email, name}) =>
         <div className="card"
              style={{
                  width: '31%',
@@ -40,51 +35,26 @@ const getBlocks = (data, handleDetails, handleEdit) =>
              onClick={() => handleDetails(id)}
              key={id}>
             <div className="card-body d-flex justify-content-between">
-                <div>{index + 1}</div>
+                {fieldsToShow.includes('index') && index && <div>{index + 1}</div>}
                 <div>
-                    <div>
-                        {firstName}
-                    </div>
-                    <div>
-                        {lastName}
-                    </div>
-                    <div>
-                        {email}
-                    </div>
+                    {fieldsToShow.includes('firstName') && firstName && <div>{firstName}</div>}
+                    {fieldsToShow.includes('name') && name && <div>{name}</div>}
+                    {fieldsToShow.includes('lastName') && lastName && <div>{lastName}</div>}
+                    {fieldsToShow.includes('email') && email && <div>{email}</div>}
                 </div>
-                <Icon icon="Edit"
-                      onClick={(event) => handleEdit(event, id)}
-                      className={styles.scale}
-                      color="#2E3440"
-                      size={30}/>
+                {fieldsToShow.includes('edit') && access
+                && <Icon icon="Edit"
+                         onClick={(event) => handleEdit(event, id)}
+                         className={styles.scale}
+                         color="#2E3440"
+                         size={30}/>
+                }
+
             </div>
         </div>
     );
 
-
-/**
- * @param listType may be 'list' or 'block'
- * @param props is an object and has structure:
- * {
-    data: Array<Object{id, index, firstName, lastName, email}>,
-    handleDetails: function,
-    handleEdit: function,
-    errors: Array<Object{message, check: [boolean, ...]}>,
-    editRestriction: boolean
-  }
- * @returns markup in rows (listType === 'list') or in blocks/cards (listType === 'block')
- *
- * errors contains objects with check array (boolean values) and message field when at least one error is true
- * editRestriction contains boolean if user has role with limitation for editing, it is false by default
- */
-
-export const List = ({listType, props}) => {
-    const {data, handleDetails, handleEdit, errors, editRestriction} = props;
-
-    const markup = (listType === 'list')
-        ? getRows(data, handleDetails, handleEdit, editRestriction)
-        : getBlocks(data, handleDetails, handleEdit);
-
+const getErrorMessage = (errors) => {
     const returnError = {isError: false, message: ''};
 
     errors.forEach(error => {
@@ -99,6 +69,29 @@ export const List = ({listType, props}) => {
             <td colSpan="5" className="text-center">{returnError.message}</td>
         </tr>;
     }
+}
 
-    return markup;
+/**
+ * @param listType may be 'list' or 'block'
+ * @param props is an object:
+ * {
+    data: Array<Object{id?, index?, firstName?, lastName?, email?, name?}>,
+    handleDetails: function,
+    handleEdit: function,
+    errors: Array<Object{message, check: [boolean, ...]}>,
+    access: boolean,
+    fieldsToShow: Array<string>
+  }
+ * @returns jsx in rows (listType === 'list') or in blocks/cards (listType === 'block') or error message
+ *
+ * errors contains objects with check array (boolean values) and message field when at least one error is true
+ * editRestriction contains boolean if user has role with limitation for editing, it is false by default
+ */
+
+export const List = ({listType, props}) => {
+    const errorsMessage = getErrorMessage(props.errors);
+
+    return errorsMessage ? errorsMessage
+        : (listType === 'list') ? getRows(props)
+        : getBlocks(props);
 };

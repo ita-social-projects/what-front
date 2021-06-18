@@ -167,7 +167,8 @@ export const ListOfCourses = () => {
       message: 'Course is not found',
       check: [!visibleCourses.length && !!searchValue]
     }],
-    editRestriction: currentUser.role === 2
+    access: currentUser.role !== 2,
+    fieldsToShow: ['name', 'edit']
   };
 
   return (

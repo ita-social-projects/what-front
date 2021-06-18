@@ -198,7 +198,8 @@ export const ListOfMentors = () => {
       message: 'Mentor is not found',
       check: [!visibleMentors.length && !!searchMentorValue]
     }],
-    editRestriction: currentUser.role == 2
+    access: currentUser.role !== 2,
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
   };
 
   const paginationComponent = () => {

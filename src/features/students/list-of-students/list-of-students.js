@@ -186,7 +186,8 @@ export const ListOfStudents = () => {
           message: 'Student is not found',
           check: [!visibleStudents.length, !!searchFieldValue]
       }],
-      editRestriction: false
+      access: true,
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
   };
 
   const paginationComponent = () => {
