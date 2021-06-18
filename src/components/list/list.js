@@ -5,7 +5,7 @@ import Icon from '../../icon.js';
 //todo add sort
 
 const getRows = ({data, handleDetails, handleEdit, access = true, fieldsToShow}) =>
-    data.map(({id, index, firstName, lastName, email, name}) =>
+    data.map(({id, index, firstName, lastName, email, name, themeName, lessonShortDate, lessonTime}) =>
         <tr key={id}
             onClick={() => handleDetails(id)}
             className={styles['table-row']}
@@ -13,6 +13,9 @@ const getRows = ({data, handleDetails, handleEdit, access = true, fieldsToShow})
             {fieldsToShow.includes('index') && index && <td className="text-center">{index + 1}</td>}
             {fieldsToShow.includes('firstName') && firstName && <td>{firstName}</td>}
             {fieldsToShow.includes('name') && name && <td>{name}</td>}
+            {fieldsToShow.includes('themeName') && themeName && <td>{themeName}</td>}
+            {fieldsToShow.includes('lessonShortDate') && lessonShortDate && <td>{lessonShortDate}</td>}
+            {fieldsToShow.includes('lessonTime') && lessonTime && <td>{lessonTime}</td>}
             {fieldsToShow.includes('lastName') && lastName && <td>{lastName}</td>}
             {fieldsToShow.includes('email') && email && <td>{email}</td>}
             { fieldsToShow.includes('edit') && access ?
@@ -25,7 +28,7 @@ const getRows = ({data, handleDetails, handleEdit, access = true, fieldsToShow})
     );
 
 const getBlocks = ({data, handleDetails, handleEdit, access = true, fieldsToShow}) =>
-    data.map(({id, index, firstName, lastName, email, name}) =>
+    data.map(({id, index, firstName, lastName, email, name, themeName, lessonShortDate, lessonTime}) =>
         <div className="card"
              style={{
                  width: '31%',
@@ -39,6 +42,9 @@ const getBlocks = ({data, handleDetails, handleEdit, access = true, fieldsToShow
                 <div>
                     {fieldsToShow.includes('firstName') && firstName && <div>{firstName}</div>}
                     {fieldsToShow.includes('name') && name && <div>{name}</div>}
+                    {fieldsToShow.includes('themeName') && themeName && <div>{themeName}</div>}
+                    {fieldsToShow.includes('lessonShortDate') && lessonShortDate && <div>{lessonShortDate}</div>}
+                    {fieldsToShow.includes('lessonTime') && lessonTime && <div>{lessonTime}</div>}
                     {fieldsToShow.includes('lastName') && lastName && <div>{lastName}</div>}
                     {fieldsToShow.includes('email') && email && <div>{email}</div>}
                 </div>

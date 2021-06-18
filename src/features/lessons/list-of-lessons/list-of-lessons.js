@@ -9,6 +9,7 @@ import { commonHelpers } from "@/utils";
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
 import { Table } from '@components/table';
+import {List} from "@components/list";
 
 export const ListOfLessons = () => {
   const history = useHistory();
@@ -35,6 +36,7 @@ export const ListOfLessons = () => {
     { id: 1, name: 'lessonDate', sortedByAscending: false, tableHead: 'lessonDate' },
     { id: 2, name: 'lessonTime', sortedByAscending: false, tableHead: 'lessonTime' },
   ];
+  const [showBlocks, setShowBlocks] = useState(false);
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
   const [currentPage, setCurrentPage] = useState(1);
@@ -132,9 +134,9 @@ export const ListOfLessons = () => {
 
   const addLesson = useCallback(() => history.push(paths.LESSON_ADD), [history]);
   const downloadThemes = useCallback(() => history.push(paths.THEMES_DOWNLOAD), [history]);
-  const lessonDetails = useCallback((id) => history.push(`${paths.LESSON_DETAILS}/${id}`), [history]);
+  const handleDetails = useCallback((id) => history.push(`${paths.LESSON_DETAILS}/${id}`), [history]);
 
-  const editLesson = useCallback((event, id) => {
+  const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.LESSON_EDIT}/${id}`);
   }, [history]);
@@ -227,6 +229,20 @@ export const ListOfLessons = () => {
     );
   };
 
+  const listProps = {
+    data: visibleLessonsList,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Lesson is not found',
+      check: [(!visibleLessonsList.length && !!filterStartDate) &&
+      (!visibleLessonsList.length && !!filterEndDate) ||
+      !visibleLessonsList.length && !!searchLessonsThemeValue]
+    }],
+    access: currentUser.role !== 3,
+    fieldsToShow: ['themeName', 'lessonShortDate', 'lessonTime', 'edit']
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
@@ -244,24 +260,37 @@ export const ListOfLessons = () => {
           <div className="row align-items-center d-flex justify-content-between mt-2 mb-3 ">
             <div className="col-3">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
+            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => {
+                    changeCountVisibleItems(event.target.value);
+                  }}
               >
                 <option>9</option>
                 <option>27</option>
@@ -270,6 +299,7 @@ export const ListOfLessons = () => {
                 <option>99</option>
               </select>
             </div>
+            }
               {currentUser.role !== 3 && (
                 <div className="col-4 text-right">
                   <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning mr-3', styles['left-add-btn'])}>
@@ -309,13 +339,25 @@ export const ListOfLessons = () => {
           </div>
 
           <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
-            <Table sortingCategories={sortingCategories}
-                   currentUser={currentUser}
-                   list={getLessonsList}
-                   onClick={handleSortByParam}
-                   data={filteredLessonsList}
-                   access={ { unruledUser: 3, unassigned: '' } }
-            />
+            {
+              showBlocks ?
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps} />
+                  </div>
+                  :
+                  <table className="table table-hover">
+                    <tbody>
+                    <List props={listProps} listType={'list'}/>
+                    </tbody>
+                  </table>
+            }
+            {/*<Table sortingCategories={sortingCategories}*/}
+            {/*       currentUser={currentUser}*/}
+            {/*       list={getLessonsList}*/}
+            {/*       onClick={handleSortByParam}*/}
+            {/*       data={filteredLessonsList}*/}
+            {/*       access={ { unruledUser: 3, unassigned: '' } }*/}
+            {/*/>*/}
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
