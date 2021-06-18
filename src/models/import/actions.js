@@ -2,9 +2,12 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import { ApiService } from '@/shared';
 import * as actionTypes from './types.js';
 
-export const sendGroups = (groups) => ({
+export const sendGroups = (id, groups) => ({
   type: actionTypes.SEND_GROUPS,
-  payload: { groups },
+  payload: { 
+    id,
+    groups 
+  },
 });
 
 export const sendStudents = (students, id) => ({
@@ -35,7 +38,9 @@ export function* sendThemesWatcher() {
 function* sendGroupsWorker(data) {
   try {
     yield put({ type: actionTypes.SENDING_GROUPS_STARTED });
-    const groups = yield call(ApiService.create, '/imports/groups', data.payload.groups);
+    const courseId = data.payload.id;
+    const groupsFile = data.payload.groups;
+    const groups = yield call(ApiService.create, `/imports/groups/${courseId}`, groupsFile);
     yield put({ type: actionTypes.SENDING_GROUPS_SUCCESS, payload: { groups } });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
