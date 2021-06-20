@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import {
+  fetchLessons,
+  lessonsSelector,
   editLessonSelector,
   studentsSelector,
   loadStudents,
   editLesson,
-  lessonByIdSelector,
-  fetchLessonById,
-  loadStudentGroupById, loadStudentGroupByIdSelector,
+  loadStudentGroupById,
+  loadStudentGroupByIdSelector,
 } from '@/models';
 import { useActions, paths } from '@/shared';
 
@@ -24,26 +25,22 @@ import styles from './edit-lesson.scss';
 export const EditLesson = () => {
   const history = useHistory();
   const { id } = useParams();
-
-  // const [studentsGroup, setStudentsGroup] = useState(null);
-  const [studentsGroupInput, setStudentsGroupInput] = useState('');
-  // const [lessonOnEdit, setLessonOEdit] = useState(false);
-  const [formData, setFormData] = useState([]);
-
+  const [lessonOnEdit, setLessonOnEdit] = React.useState({});
+  console.log(lessonOnEdit);
   const [
-    loadLessonById,
+    loadLessons, // not getById, cos of mistake in fetch response (lesson.theme === null)
     getGroup,
     getStudents,
     updateLesson,
     dispatchAddAlert,
-  ] = useActions([fetchLessonById, loadStudentGroupById, loadStudents, editLesson, addAlert]);
+  ] = useActions([fetchLessons, loadStudentGroupById, loadStudents, editLesson, addAlert]);
 
   const {
-    data: group,
-    isLoading: groupIsLoading,
-    isLoaded: groupIsLoaded,
-    error: groupError,
-  } = useSelector(loadStudentGroupByIdSelector, shallowEqual);
+    data: lessons,
+    isLoading: lessonsIsLoading,
+    isLoaded: lessonsIsLoaded,
+    error: lessonsError,
+  } = useSelector(lessonsSelector, shallowEqual);
 
   const {
     data: students,
@@ -53,11 +50,11 @@ export const EditLesson = () => {
   } = useSelector(studentsSelector, shallowEqual);
 
   const {
-    data: lesson,
-    isLoading: lessonIsLoading,
-    isLoaded: lessonIsLoaded,
-    error: lessonError,
-  } = useSelector(lessonByIdSelector, shallowEqual);
+    data: group,
+    isLoading: groupIsLoading,
+    isLoaded: groupIsLoaded,
+    error: groupError,
+  } = useSelector(loadStudentGroupByIdSelector, shallowEqual);
 
   const {
     isLoaded: editIsLoaded,
@@ -65,73 +62,34 @@ export const EditLesson = () => {
   } = useSelector(editLessonSelector, shallowEqual);
 
   useEffect(() => {
-    if (!lessonIsLoaded && !lessonError) {
-      console.log('id', id);
-      loadLessonById(id);
-    }
-  }, [lessonIsLoaded, lessonError, loadLessonById]);
-
-  useEffect(() => {
-    if (lessonIsLoaded && !lessonError) {
-      console.log('lesson.studentGroupId', lesson.studentGroupId);
-      console.log('lesson', lesson);
-      getGroup(lesson.studentGroupId)
-    }
-  }, [lessonIsLoaded, lessonError, getGroup]);
-
-  useEffect(() => {
-    if (!studentsIsLoaded && !studentsError && groupIsLoaded) {
+    // if (!lessonsIsLoaded && !lessonsError) {
+      loadLessons();
+    // }
+    if(!studentsIsLoaded && !studentsError) {
       getStudents();
     }
-  }, [studentsError, studentsIsLoaded, getStudents]);
+  }, [loadLessons, studentsIsLoaded, studentsError, getStudents]);
 
   useEffect(() => {
-      if (Object.keys(lesson).length === 0) {
-        history.push(paths.NOT_FOUND);
+    if (lessonsIsLoaded && studentsIsLoaded) {
+      const lesson = lessons.find((lesson) => lesson.id === Number(id));
+      if(lesson) {
+        const lessonOnEdit = JSON.parse(JSON.stringify(lesson));
+        lessonOnEdit.lessonVisits.forEach((student) => {
+          if (student.comment === null) student.comment = '';
+          if (student.studentMark === null) student.studentMark = '';
+          const studentData = students.find((stud) => stud.id === student.studentId);
+          student.studentName = `${studentData.firstName} ${studentData.lastName}`;
+          return student
+        });
+        lessonOnEdit.lessonVisits.sort((a, b) => a.studentName.localeCompare(b.studentName));
+        setLessonOnEdit(lessonOnEdit);
+        getGroup(lesson.studentGroupId);
+      } else {
+      history.push(paths.NOT_FOUND);
       }
-  }, [lesson]);
-
-  const getFormData = () => {
-    const uniqueIds = [...new Set(group.studentIds)];
-
-    lesson.lessonVisits.map((student) => {
-      if (student.comment === null) student.comment = '';
-      if (student.studentMark === null) student.studentMark = '';
-    });
-
-    const studentD = uniqueIds.map((id) => students.find((student) => student.id === id));
-
-    const studentsData = studentD.map((student) => (
-      {
-        studentId: student.id,
-        studentName: `${student.firstName} ${student.lastName}`,
-      }
-    ));
-
-    const resultLessonVisits = studentsData.sort((a, b) => {
-      if (a.studentName < b.studentName) {
-        return -1;
-      }
-      if (a.studentName > b.studentName) {
-        return 1;
-      }
-    })
-      .map((student, index) => ({
-        ...lesson.lessonVisits[index],
-        ...student,
-      }));
-    setFormData(resultLessonVisits);
-  };
-
-  useEffect(() => {
-    if (lesson && group && students.length !== 0) {
-      // const groupRes = groups?.find((group) => group.id === lesson.studentGroupId);
-      setStudentsGroupInput(!group ? '' : group.name);
-          getFormData();
     }
-  }, [group, students, lesson]);
-
-
+  }, [lessonsIsLoaded, studentsIsLoaded, setLessonOnEdit]);
 
   useEffect(() => {
     if (!editError && editIsLoaded) {
@@ -165,10 +123,10 @@ export const EditLesson = () => {
             studentMark: studentMark || null,
           }
         );
-      });
+      }).sort((a, b) => a.studentId - b.studentId);
+
       const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
       const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
-    console.log('formalizedDate', formalizedDate);
 
       const lessonObject = {
         themeName: theme,
@@ -176,31 +134,34 @@ export const EditLesson = () => {
         lessonVisits,
       };
       if (lessonObject) {
-        // updateLesson(lessonObject, id);
+        updateLesson(lessonObject, id);
       }
   };
 
   const handlePresenceChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
-    formData[arrIndex].presence = !formData[arrIndex].presence;
-    formData[arrIndex].studentMark = '';
+    const lessonOnEditChange = {...lessonOnEdit};
+    lessonOnEditChange.lessonVisits[arrIndex].presence = !lessonOnEdit.lessonVisits[arrIndex].presence;
+    lessonOnEditChange.lessonVisits[arrIndex].studentMark = '';
+    setLessonOnEdit(lessonOnEditChange);
   };
 
   const handleMarkChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
-    const mark = Number(ev.target.value);
-    if (mark > 0 && mark < 13) {
-      formData[arrIndex].studentMark = mark;
-    } else {
-      formData[arrIndex].studentMark = 0;
+    let mark = Number(ev.target.value);
+    if (mark < 0 || mark > 12) {
+      mark = 0;
     }
+    const lessonOnEditChange = {...lessonOnEdit};
+    lessonOnEditChange.lessonVisits[arrIndex].studentMark = mark;
+    setLessonOnEdit(lessonOnEditChange);
   };
 
   return (
-    <div className="container" >
+    <div className="container" data-testid='editLessonRenderForm'>
       <div className={classNames(styles.page, 'mx-auto', 'col-12')}>
         <div className="d-flex flex-row">
-          {groupError && lessonError && editError && studentsError && (
+          {groupError && lessonsError && editError && studentsError && (
             <div className="col-12 alert-danger">
               Server Problems
             </div>
@@ -210,26 +171,25 @@ export const EditLesson = () => {
             <hr />
             <WithLoading
               isLoading={
-                lessonIsLoading
+                lessonsIsLoading
                 || studentsIsLoading
                 || groupIsLoading
-                || !lesson
-                || !formData.length
+                || !lessons
               }
               className={classNames(styles['loader-centered'])}
             >
               <Formik
                 initialValues={{
-                  themeName: lesson.themeName,
+                  themeName: lessonOnEdit.themeName,
                   groupName: group.name,
-                  lessonDate: commonHelpers.transformDateTime({ dateTime: lesson.lessonDate }).formInitialValue,
-                  formData,
+                  lessonDate: commonHelpers.transformDateTime({ dateTime: lessonOnEdit.lessonDate }).formInitialValue,
+                  formData: lessonOnEdit.lessonVisits,
                 }}
                 onSubmit={onSubmit}
                 validationSchema={editLessonValidation}
               >
                 {({ errors }) => (
-                  <Form id="form" className={classNames(styles.size)}>
+                  <Form id="form" className={classNames(styles.size)} data-testid='editForm'>
                     <div className="d-flex flex-sm-column flex-lg-row">
                       <div className="col-lg-6">
                         <div className="mt-3 form-group row">
@@ -240,6 +200,7 @@ export const EditLesson = () => {
                           </label>
                           <div className="col-sm-8">
                             <Field
+                              data-testid='themeName'
                               type="text"
                               className={classNames('form-control', { 'border-danger': errors.themeName })}
                               name="themeName"
@@ -254,6 +215,7 @@ export const EditLesson = () => {
                           </label>
                           <div className="col-sm-8 input-group">
                             <Field
+                              data-testid='groupName'
                               name="groupName"
                               id="inputGroupName"
                               type="text"
@@ -271,6 +233,7 @@ export const EditLesson = () => {
                           </label>
                           <div className="col-md-8">
                             <Field
+                              data-testid='lessonDate'
                               className="form-control"
                               type="datetime-local"
                               name="lessonDate"
@@ -282,7 +245,7 @@ export const EditLesson = () => {
                         </div>
                       </div>
                       <div className="col-lg-6 mt-2">
-                        <FieldArray name="formData">
+                        <FieldArray name="formData" data-testid='formData'>
                           {() => (
                             <div className={classNames(styles.list, 'col-lg-12')}>
                               <table className="table table-bordered table-hover">
@@ -296,8 +259,8 @@ export const EditLesson = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {formData && formData.length > 0 && (
-                                    formData.map((lessonVisit, index) => (
+                                  {lessonOnEdit.lessonVisits && lessonOnEdit.lessonVisits.length > 0 && (
+                                      lessonOnEdit.lessonVisits.map((lessonVisit, index) => (
                                       <tr key={lessonVisit.studentId}>
                                         <th scope="row">{index + 1}</th>
                                         <td>
@@ -310,6 +273,7 @@ export const EditLesson = () => {
                                         </td>
                                         <td>
                                           <Field
+                                            data-testid={`formData[${index}].studentMark`}
                                             name={`formData[${index}].studentMark`}
                                             type="number"
                                             className={classNames(
@@ -319,12 +283,13 @@ export const EditLesson = () => {
                                             max="12"
                                             min="0"
                                             data-id={index}
-                                            disabled={!formData[index].presence}
+                                            disabled={!lessonOnEdit.lessonVisits[index].presence}
                                             onBlur={handleMarkChange}
                                           />
                                         </td>
                                         <td>
                                           <Field
+                                            data-testid={`formData[${index}].presence`}
                                             name={`formData[${index}].presence`}
                                             className={styles.mode}
                                             type="checkbox"
