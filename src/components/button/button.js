@@ -6,13 +6,15 @@ import styles from './button.scss';
 
 export const Button = ({
   children,
-  type,
+  type='button',
+  id,
   onClick,
   variant,
   className,
   disabled,
 }) => (
   <button
+    id={id}
     type={type}
     onClick={onClick}
     className={classNames(

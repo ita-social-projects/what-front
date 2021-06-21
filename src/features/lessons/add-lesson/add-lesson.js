@@ -65,12 +65,10 @@ export const AddLesson = () => {
   ] = useActions([fetchActiveMentors, globalLoadStudentGroups, loadStudents, addLesson, addAlert]);
 
   React.useEffect(() => {
-    if (!mentorsIsLoaded && !mentorsError && !groupsIsLoaded && !groupsError && !studentsIsLoaded && !studentsError) {
       getMentors();
       getGroups();
       getStudents();
-    }
-  }, [mentorsError, mentorsIsLoaded, getMentors, groupsError, groupsIsLoaded, getGroups, studentsError, studentsIsLoaded, getStudents]);
+  }, []);
 
   React.useEffect(() => {
     if (!addError && addIsLoaded) {
@@ -91,6 +89,7 @@ export const AddLesson = () => {
   }, [history]);
 
   const onSubmit = (values) => {
+    console.log('values', values);
       const { lessonDate, themeName } = values;
       const lessonVisits = formData.map((lessonVisit) => {
         const {
@@ -109,7 +108,8 @@ export const AddLesson = () => {
       const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
       const theme = commonHelpers.capitalizeTheme(themeName);
-      const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
+      const formalizedDate = commonHelpers.transformDateTime({ isRequest: true, dateTime: lessonDate }).formDateTimeForRequest;
+    console.log('formalizedDate', formalizedDate);
 
       const lessonObject = {
         lessonDate: formalizedDate,
@@ -118,13 +118,12 @@ export const AddLesson = () => {
         studentGroupId: studentsGroup.id,
         mentorId: mentorData.id,
       };
-
       if (!mentorsError && lessonObject) {
         createLesson(lessonObject);
       }
   };
 
-  const getFormData = () => {
+  const getFormData = (studentsGroup, students) => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
 
     const studentD = uniqueIds.map(
@@ -140,37 +139,28 @@ export const AddLesson = () => {
       }
     ));
 
-    const resultLessonVisits = studentsData.map((student) => ({
+    return studentsData.map((student) => ({
       ...student,
       studentMark: 0,
       presence: false,
       comment: '',
     }));
-    setFormData(resultLessonVisits);
   };
 
-  const openClassRegister = () => {
+  const openClassRegister = useCallback(() => {
     if (studentsGroup) {
-      getFormData();
+      setFormData(getFormData(studentsGroup, students));
       setBtnSave(true);
       setClassRegister(true);
       setGroupError(false);
     }
-
     !studentsGroup && setCorrectError('#inputGroupName', setGroupError, 'group name');
     !mentorInput && setCorrectError('#mentorEmail', setMentorError, 'mentor email');
-  };
+  }, [studentsGroup, students, mentorInput, setGroupError, setMentorError, setBtnSave, setClassRegister, setGroupError]);
 
   const setCorrectError = (inputSelector, setError, fieldName) => {
-    const { value } = document.querySelector(inputSelector);
-
+    const {value} = document.querySelector(inputSelector);
     value ? setError(`Invalid ${fieldName}`) : setError('This field is required');
-  };
-
-  const hideClassRegister = () => {
-    setBtnSave(false);
-    setClassRegister(false);
-    setGroupError(false);
   };
 
   const handleMentorChange = (ev) => {
@@ -183,7 +173,6 @@ export const AddLesson = () => {
 
   const handleGroupChange = (ev) => {
     const resultGroup = groups.find((group) => group.name.toUpperCase() === ev.target.value.toUpperCase());
-    setStudentsGroup(null);
     if (resultGroup) {
       setStudentsGroup(resultGroup);
       setGroupError(false);
@@ -196,15 +185,19 @@ export const AddLesson = () => {
 
   const handlePresenceChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
-    formData[arrIndex].presence = !formData[arrIndex].presence;
-    formData[arrIndex].studentMark = 0;
+    const newFormData = JSON.parse(JSON.stringify(formData));
+    newFormData[arrIndex].presence = !newFormData[arrIndex].presence;
+    newFormData[arrIndex].studentMark = 0;
+    setFormData(newFormData);
   };
 
   const handleMarkChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
     const mark = Number(ev.target.value);
     if (mark > 0 && mark < 13) {
-      formData[arrIndex].studentMark = mark;
+      const newFormData = JSON.parse(JSON.stringify(formData));
+      newFormData[arrIndex].studentMark = mark;
+      setFormData(newFormData);
       setMarkError(false);
     } else {
       setMarkError(true);
@@ -276,7 +269,6 @@ export const AddLesson = () => {
                               className={classNames('form-control group-input', { 'border-danger': !!groupError })}
                               placeholder="Group Name"
                               onChange={handleGroupChange}
-                              onFocus={hideClassRegister}
                               list="group-list"
                               disabled={groupsIsLoading}
                               required
@@ -289,7 +281,7 @@ export const AddLesson = () => {
                           </div>
                           {
                             groupError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>{groupError}</div>
+                              ? <div id='group-error' className={classNames('col-8 offset-4', styles.error)}>{groupError}</div>
                               : null
                           }
                         </div>
@@ -300,7 +292,7 @@ export const AddLesson = () => {
                               className="form-control"
                               type="datetime-local"
                               name="lessonDate"
-                              id="choose-date/time"
+                              id="choose-date-time"
                               max={ commonHelpers.transformDateTime({}).formInitialValue }
                               required
                             />
@@ -330,7 +322,7 @@ export const AddLesson = () => {
                           </div>
                           {
                             mentorError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>{mentorError}</div>
+                              ? <div id='mentor-error' className={classNames('col-8 offset-4', styles.error)}>{mentorError}</div>
                               : null
                           }
                         </div>
@@ -340,7 +332,7 @@ export const AddLesson = () => {
                           <FieldArray name="formData">
                             {() => (
                               <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
-                                <table className="table table-bordered table-hover">
+                                <table className="table table-bordered table-hover" data-testid='students-form'>
                                   <thead>
                                     <tr>
                                       <th scope="col" aria-label="first_col" />
@@ -349,14 +341,14 @@ export const AddLesson = () => {
                                       <th scope="col" className="text-center">Presence</th>
                                     </tr>
                                   </thead>
-                                  <tbody>
+                                  <tbody data-testid='students-formData-table'>
                                     {formData && formData.length > 0 && (
                                       formData.map((lessonVisit, index) => (
                                         <tr key={lessonVisit.studentId}>
                                           <th scope="row">{ index + 1 }</th>
                                           <td>
                                             <p
-                                              data-testid='openStudentDetails'
+                                              data-testid={`openStudentDetails-${lessonVisit.studentId}`}
                                               className={classNames(styles.link)}
                                               onClick={() => openStudentDetails(lessonVisit.studentId)}
                                             >
@@ -365,6 +357,7 @@ export const AddLesson = () => {
                                           </td>
                                           <td>
                                             <Field
+                                              data-testid={`formData[${index}].studentMark`}
                                               name={`formData[${index}].studentMark`}
                                               className={classNames(
                                                 'form-control',
@@ -382,6 +375,7 @@ export const AddLesson = () => {
                                           </td>
                                           <td>
                                             <Field
+                                              data-testid={`formData[${index}].presence`}
                                               name={`formData[${index}].presence`}
                                               className={styles.mode}
                                               type="checkbox"
@@ -404,9 +398,10 @@ export const AddLesson = () => {
                     <div className='col-12 d-flex justify-content-between'>
                       <button form="form" data-testid='cancelBtn' type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
                       {btnSave
-                        ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
+                        ? <button id='submit' form="form" type="submit" className="btn btn-success btn-lg">Save</button>
                         : (
                           <Button
+                            id='class-register-btn'
                             className="btn btn-success btn-lg"
                             onClick={(event) => {
                               event.preventDefault();
