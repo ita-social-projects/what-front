@@ -26,7 +26,7 @@ export const EditLesson = () => {
   const history = useHistory();
   const { id } = useParams();
   const [lessonOnEdit, setLessonOnEdit] = React.useState({});
-  console.log(lessonOnEdit);
+
   const [
     loadLessons, // not getById, cos of mistake in fetch response (lesson.theme === null)
     getGroup,
@@ -86,10 +86,10 @@ export const EditLesson = () => {
         setLessonOnEdit(lessonOnEdit);
         getGroup(lesson.studentGroupId);
       } else {
-      history.push(paths.NOT_FOUND);
+        history.push(paths.NOT_FOUND);
       }
     }
-  }, [lessonsIsLoaded, studentsIsLoaded, setLessonOnEdit]);
+  }, [lessonsIsLoaded, studentsIsLoaded, setLessonOnEdit, history]);
 
   useEffect(() => {
     if (!editError && editIsLoaded) {
@@ -179,6 +179,7 @@ export const EditLesson = () => {
               className={classNames(styles['loader-centered'])}
             >
               <Formik
+                data-testid='formik'
                 initialValues={{
                   themeName: lessonOnEdit.themeName,
                   groupName: group.name,
@@ -244,10 +245,10 @@ export const EditLesson = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-lg-6 mt-2">
-                        <FieldArray name="formData" data-testid='formData'>
+                      <div className="col-lg-6 mt-2" >
+                        <FieldArray name="formData">
                           {() => (
-                            <div className={classNames(styles.list, 'col-lg-12')}>
+                            <div className={classNames(styles.list, 'col-lg-12')} data-testid='formData'>
                               <table className="table table-bordered table-hover">
                                 <thead>
                                   <tr>
@@ -265,6 +266,7 @@ export const EditLesson = () => {
                                         <th scope="row">{index + 1}</th>
                                         <td>
                                           <p
+                                            data-testid={lessonVisit.studentId}
                                             className={classNames(styles.link)}
                                             onClick={() => openStudentDetails(lessonVisit.studentId)}
                                           >
