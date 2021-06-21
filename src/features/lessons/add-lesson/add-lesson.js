@@ -20,14 +20,14 @@ import styles from './add-lesson.scss';
 export const AddLesson = () => {
   const history = useHistory();
 
-  const [markError, setMarkError] = useState(false);
-  const [mentorError, setMentorError] = useState(false);
-  const [groupError, setGroupError] = useState(false);
-  const [studentsGroup, setStudentsGroup] = useState(null);
-  const [mentorInput, setMentorInput] = useState('');
-  const [btnSave, setBtnSave] = useState(false);
-  const [classRegister, setClassRegister] = useState(false);
-  const [formData, setFormData] = useState([]);
+  const [markError, setMarkError] = React.useState(false);
+  const [mentorError, setMentorError] = React.useState(false);
+  const [groupError, setGroupError] = React.useState(false);
+  const [studentsGroup, setStudentsGroup] = React.useState(null);
+  const [mentorInput, setMentorInput] = React.useState('');
+  const [btnSave, setBtnSave] = React.useState(false);
+  const [classRegister, setClassRegister] = React.useState(false);
+  const [formData, setFormData] = React.useState([]);
 
   const {
     data: mentors,
@@ -52,7 +52,7 @@ export const AddLesson = () => {
 
   const {
     isLoaded: addIsLoaded,
-    isLoading: lessonsIsLoading,
+    isLoading: lessonIsLoading,
     error: addError,
   } = useSelector(addLessonSelector, shallowEqual);
 
@@ -64,25 +64,15 @@ export const AddLesson = () => {
     dispatchAddAlert,
   ] = useActions([fetchActiveMentors, globalLoadStudentGroups, loadStudents, addLesson, addAlert]);
 
-  useEffect(() => {
-    if (!mentorsIsLoaded && !mentorError) {
+  React.useEffect(() => {
+    if (!mentorsIsLoaded && !mentorsError && !groupsIsLoaded && !groupsError && !studentsIsLoaded && !studentsError) {
       getMentors();
-    }
-  }, [mentorsError, mentorsIsLoaded, getMentors, mentorError]);
-
-  useEffect(() => {
-    if (!groupsIsLoaded && !groupsError) {
       getGroups();
-    }
-  }, [groupsError, groupsIsLoaded, getGroups]);
-
-  useEffect(() => {
-    if (!studentsIsLoaded && !studentsError) {
       getStudents();
     }
-  }, [studentsError, studentsIsLoaded, getStudents]);
+  }, [mentorsError, mentorsIsLoaded, getMentors, groupsError, groupsIsLoaded, getGroups, studentsError, studentsIsLoaded, getStudents]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!addError && addIsLoaded) {
       history.push(paths.LESSONS);
       dispatchAddAlert('The lesson has been added successfully!', 'success');
@@ -236,10 +226,10 @@ export const AddLesson = () => {
             <hr />
             <WithLoading
               isLoading={
-                lessonsIsLoading
-                || mentorsIsLoading
+                mentorsIsLoading
                 || studentsIsLoading
                 || groupsIsLoading
+                || lessonIsLoading
               }
               className={classNames(styles['loader-centered'])}
             >
@@ -256,7 +246,7 @@ export const AddLesson = () => {
               >
                 {({ errors, touched, setFieldTouched }) => (
                   <Form id="form" className={classNames(styles.size)}>
-                    <div className='d-flex flex-sm-column flex-lg-row'>
+                    <div className='d-flex flex-sm-column flex-lg-row' data-testid='addForm'>
                       <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
                         <div className="mt-3 form-group row">
                           <label htmlFor="inputLessonTheme" className="col-md-4 col-form-label">Lesson Theme:</label>
@@ -366,6 +356,7 @@ export const AddLesson = () => {
                                           <th scope="row">{ index + 1 }</th>
                                           <td>
                                             <p
+                                              data-testid='openStudentDetails'
                                               className={classNames(styles.link)}
                                               onClick={() => openStudentDetails(lessonVisit.studentId)}
                                             >
@@ -411,7 +402,7 @@ export const AddLesson = () => {
                       )}
                     </div>
                     <div className='col-12 d-flex justify-content-between'>
-                      <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
+                      <button form="form" data-testid='cancelBtn' type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
                       {btnSave
                         ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
                         : (

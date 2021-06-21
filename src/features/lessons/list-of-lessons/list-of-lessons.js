@@ -275,7 +275,7 @@ export const ListOfLessons = () => {
                   <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning mr-3', styles['left-add-btn'])}>
                     Add theme('s)
                   </Button>
-                  <Button onClick={addLesson}>
+                  <Button onClick={addLesson} type="button">
                     <span>Add a lesson</span>
                   </Button>
                 </div>
