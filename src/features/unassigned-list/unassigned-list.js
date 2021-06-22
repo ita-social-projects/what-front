@@ -190,7 +190,7 @@ export const UnAssignedList = () => {
       return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
     }
 
-    if (!users.length && users) {
+    if (!users.length || search) {
       return <tr><td colSpan="5" className="text-center">No one has been found</td></tr>;
     }
     return personsRows;
@@ -273,11 +273,12 @@ export const UnAssignedList = () => {
           <WithLoading isLoading={!isLoaded} className="d-block mx-auto my-2">
             <Table sortingCategories={sortingCategories}
                    currentUser={currentUser}
-                   list={getPersonsRows}
                    onClick={handleSortByParam}
                    data={users}
                    access={ { unruledUser: 4, unassigned: 'unassigned' } }
-            />
+            >
+              {getPersonsRows()}
+            </Table>
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

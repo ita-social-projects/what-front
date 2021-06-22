@@ -11,8 +11,8 @@ import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-mentors.scss';
+import {List} from "@components/list";
 import { Table } from '@components/table';
-
 export const ListOfMentors = () => {
   const {
     data: allMentors,
@@ -44,8 +44,9 @@ export const ListOfMentors = () => {
   const [isShowDisabled, setIsShowDisabled] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchMentorValue, setSearchMentorValue] = useState('');
+  const [showBlocks, setShowBlocks] = useState(false);
 
-  const [mentorsPerPage, setMentorsPerPage] = useState(10);
+  const [mentorsPerPage, setMentorsPerPage] = useState(9);
   const indexOfLastMentor = currentPage * mentorsPerPage;
   const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
 
@@ -158,11 +159,11 @@ export const ListOfMentors = () => {
     history.push(paths.UNASSIGNED_USERS);
   }, [history]);
 
-  const mentorDetails = useCallback((id) => {
+  const handleDetails = useCallback((id) => {
     history.push(`${paths.MENTORS_DETAILS}/${id}`);
   }, [history]);
 
-  const mentorEdit = useCallback((event, id) => {
+  const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.MENTOR_EDIT}/${id}`);
   }, [history]);
@@ -188,6 +189,18 @@ export const ListOfMentors = () => {
     const start = finish - newNumber;
     setVisibleMentors(filteredMentorList.slice(start, finish));
     setMentorsPerPage(newNumber);
+  };
+
+  const listProps = {
+    data: visibleMentors,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Mentor is not found',
+      check: [!visibleMentors.length && !!searchMentorValue]
+    }],
+    access: currentUser.role !== 2,
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
   };
 
   const paginationComponent = () => {
@@ -226,11 +239,21 @@ export const ListOfMentors = () => {
       </div>
       <div className="row">
         <div className="col-12 card shadow p-3 mb-5 bg-white">
-          <div className="row align-items-center mt-2 mb-3">
+          <div className="row align-items-center mt-2 mb-3 d-flex justify-content-between">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3">
@@ -253,42 +276,53 @@ export const ListOfMentors = () => {
                 </label>
               </div>
               )}
+            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => {
+                    changeCountVisibleItems(event.target.value);
+                  }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
+            }
             <div className="col-2 text-right">
               {currentUser.role !== 2
                   && (
                   <Button onClick={addMentor}>
                     <span>Add a mentor</span>
                   </Button>
-                  )}
+              )}
             </div>
           </div>
           <WithLoading isLoading={areActiveMentorsLoading || areAllMentorsLoading} className="d-block mx-auto m-0">
-            <Table sortingCategories={sortingCategories}
-                   currentUser={currentUser}
-                   list={mentorList}
-                   onClick={handleSortByParam}
-                   data={filteredMentorList}
-                   access={ { unruledUser: 2, unassigned: '' } }
-            />
+            {showBlocks ?
+                <div className="container d-flex flex-wrap">
+                  <List listType={'block'} props={listProps}/>
+                </div>
+                :
+                <Table sortingCategories={sortingCategories}
+                       currentUser={currentUser}
+                       onClick={handleSortByParam}
+                       data={filteredMentorList}
+                       access={{unruledUser: 2, unassigned: ''}}
+                >
+                  <List props={listProps} listType={'list'}/>
+                </Table>
+            }
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
