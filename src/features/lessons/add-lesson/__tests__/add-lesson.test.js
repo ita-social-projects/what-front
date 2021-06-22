@@ -2,10 +2,9 @@ import React from 'react';
 import { paths, useActions } from '@/shared';
 import { Router } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { AddLesson } from '@/features';
 import { commonHelpers } from '@/utils';
-import { waitFor } from '@testing-library/dom';
 import { groupsMock, mentorsMock, studentsMock, formData } from './mocks/mock-data.js';
 import { useStates, useStateMock } from './mocks/mock-useState';
 
