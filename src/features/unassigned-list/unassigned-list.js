@@ -230,10 +230,10 @@ export const UnAssignedList = () => {
   return (
     <div className="container">
       <div className="row justify-content-between align-items-center mb-3">
-        <h2 className="col-6">Unassigmed Users</h2>
+        <h2 className="col-6">Unassigned Users</h2>
         <div className="col-3 text-right">{
            !isLoading
-          && `${usersVisible.length} of ${users.length} unassigmed users `
+          && `${usersVisible.length} of ${users.length} unassigned users `
         }
         </div>
         <div className="col-3 d-flex align-items-center justify-content-end">
