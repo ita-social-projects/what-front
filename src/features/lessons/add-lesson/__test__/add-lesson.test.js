@@ -112,7 +112,7 @@ describe('Render of EditLesson', () => {
     });
 
     it('should mentor email be chosen', () => {
-        React.useState = useStateMock.default2;
+        React.useState = useStateMock.default;
         const { container } = render(<Router history={historyMock}>< AddLesson/></Router>);
         const mentorEmail = container.querySelector('#mentorEmail');
         fireEvent.change(mentorEmail, {target: {value: mentorsMock[0].email}});
@@ -150,7 +150,7 @@ describe('Render of EditLesson', () => {
 
     it("should change present state in formData ", async () => {
         React.useState = useStateMock.renderFormData;
-        const { getByTestId, debug } = render(<Router history={historyMock}>< AddLesson /></Router>);
+        const { getByTestId } = render(<Router history={historyMock}>< AddLesson /></Router>);
         const handlePresenceChange = jest.fn();
         const user1Presence = getByTestId('formData[0].presence');
         await expect(user1Presence.value).toBe('false');
@@ -210,74 +210,76 @@ describe('Render of EditLesson', () => {
         });
        await waitFor(() => {
           fireEvent.click(submitBtn);
-           // onSubmit()
+           onSubmit()
        });
-       expect(onSubmit).toHaveBeenCalledTimes();
+
+       expect(onSubmit).toHaveBeenCalled();
        expect(useActionsFns.createLesson).toHaveBeenCalledTimes(1);
     })
 
-    // it('should render students formdata table && redirect to path STUDENTS_DETAILS', async () => {
-    //     React.useState = useStateMock.renderFormData;
-    //     const { getByTestId } = render(<Router history={historyMock}>< AddLesson /></Router>);
-    //     const studentForm = getByTestId('students-formData-table');
-    //     const studentName = getByTestId('openStudentDetails-1');
-    //     expect(studentForm).toBeInTheDocument();
-    //     expect(studentForm.children.length).toBe(2); // amount of students
-    //     await waitFor(() => fireEvent.click(studentName));
-    //     expect(historyMock.push.mock.calls[0][0]).toEqual(`${paths.STUDENTS_DETAILS}/1`)
-    // });
-
-
-    // it('should redirect to URL STUDENTS_DETAILS/1 when click student name', () => {
-    //     React.useState = useStateMock.renderFormData;
-    //     const { getByTestId } = render(<Router history={historyMock}>< AddLesson/></Router>);
-    //     const studentName = getByTestId('openStudentDetails-1');
-    //     fireEvent.click(studentName);
-    //     expect(historyMock.push.mock.calls[0][0]).toEqual(`${paths.STUDENTS_DETAILS}/1`)
-    // })
-
-    // it('should dispatch getMentors, getGroups(), getStudents()', () => {
-    //     mockStudentsSelector = { sLoaded: false, error: '' };
-    //     mockGroupsSelector = { sLoaded: false, error: '' };
-    //     mockMentorsSelector = { sLoaded: false, error: '' };
-    //     useSelector
-    //         .mockReturnValueOnce(mockMentorsSelector)
-    //         .mockReturnValueOnce(mockGroupsSelector)
-    //         .mockReturnValueOnce(mockStudentsSelector);
-    //     useActionsFns.getMentors();
-    //     useActionsFns.getGroups();
-    //     useActionsFns.getStudents();
-    //     expect(useActionsFns.getMentors).toHaveBeenCalledTimes(1);
-    //     expect(useActionsFns.getGroups).toHaveBeenCalledTimes(1);
-    //     expect(useActionsFns.getStudents).toHaveBeenCalledTimes(1);
-    // });
-
-    // it('should dispatch dispatchAddAlert if addError', () => {
-    //     mockEditLessonSelector = { sLoaded: false, error: 'Error'};
-    //     useSelector.mockReturnValueOnce(mockEditLessonSelector);
-    //     useActionsFns.dispatchAddAlert();
-    //     expect(useActionsFns.dispatchAddAlert).toHaveBeenCalledTimes(1);
-    // });
-
-    // it('should group be chosen', () => {
-    //     React.useState = useStateMock.default2;
-    //     const { container } = render(<Router history={historyMock}>< AddLesson/></Router>);
-    //     const inputGroupName = container.querySelector('#inputGroupName');
-    //     const submitBtn = container.querySelector('#submit');
-    //     const studentsForm = container.querySelector('#students-form');
-    //     const groupError = container.querySelector('#group-error');
-    //     fireEvent.focus(inputGroupName);
-    //     fireEvent.change(inputGroupName, {target: {value: '122-18-3'}});
-    //     // expect(useStates.studentsGroup.setStudentsGroup).toHaveBeenCalledWith(groupsMock[0]);
-    //     // expect(useStates.groupError.setGroupError).toHaveBeenCalledWith(false);
-    //     // expect(useStates.btnSave.setBtnSave).toHaveBeenCalledWith(false);
-    //     // expect(useStates.classRegister.setClassRegister).toHaveBeenCalledWith(false);
-    //     expect(groupError).not.toBeInTheDocument(); // groupError === false
-    //     expect(studentsForm).not.toBeInTheDocument(); // classRegister ==== false
-    //     expect(submitBtn).not.toBeInTheDocument(); // btnSave ==== false
-    // });
-
 });
+
+
+// it('should render students formdata table && redirect to path STUDENTS_DETAILS', async () => {
+//     React.useState = useStateMock.renderFormData;
+//     const { getByTestId } = render(<Router history={historyMock}>< AddLesson /></Router>);
+//     const studentForm = getByTestId('students-formData-table');
+//     const studentName = getByTestId('openStudentDetails-1');
+//     expect(studentForm).toBeInTheDocument();
+//     expect(studentForm.children.length).toBe(2); // amount of students
+//     await waitFor(() => fireEvent.click(studentName));
+//     expect(historyMock.push.mock.calls[0][0]).toEqual(`${paths.STUDENTS_DETAILS}/1`)
+// });
+
+
+// it('should redirect to URL STUDENTS_DETAILS/1 when click student name', () => {
+//     React.useState = useStateMock.renderFormData;
+//     const { getByTestId } = render(<Router history={historyMock}>< AddLesson/></Router>);
+//     const studentName = getByTestId('openStudentDetails-1');
+//     fireEvent.click(studentName);
+//     expect(historyMock.push.mock.calls[0][0]).toEqual(`${paths.STUDENTS_DETAILS}/1`)
+// })
+
+// it('should dispatch getMentors, getGroups(), getStudents()', () => {
+//     mockStudentsSelector = { sLoaded: false, error: '' };
+//     mockGroupsSelector = { sLoaded: false, error: '' };
+//     mockMentorsSelector = { sLoaded: false, error: '' };
+//     useSelector
+//         .mockReturnValueOnce(mockMentorsSelector)
+//         .mockReturnValueOnce(mockGroupsSelector)
+//         .mockReturnValueOnce(mockStudentsSelector);
+//     useActionsFns.getMentors();
+//     useActionsFns.getGroups();
+//     useActionsFns.getStudents();
+//     expect(useActionsFns.getMentors).toHaveBeenCalledTimes(1);
+//     expect(useActionsFns.getGroups).toHaveBeenCalledTimes(1);
+//     expect(useActionsFns.getStudents).toHaveBeenCalledTimes(1);
+// });
+
+// it('should dispatch dispatchAddAlert if addError', () => {
+//     mockEditLessonSelector = { sLoaded: false, error: 'Error'};
+//     useSelector.mockReturnValueOnce(mockEditLessonSelector);
+//     useActionsFns.dispatchAddAlert();
+//     expect(useActionsFns.dispatchAddAlert).toHaveBeenCalledTimes(1);
+// });
+
+// it('should group be chosen', () => {
+//     React.useState = useStateMock.default2;
+//     const { container } = render(<Router history={historyMock}>< AddLesson/></Router>);
+//     const inputGroupName = container.querySelector('#inputGroupName');
+//     const submitBtn = container.querySelector('#submit');
+//     const studentsForm = container.querySelector('#students-form');
+//     const groupError = container.querySelector('#group-error');
+//     fireEvent.focus(inputGroupName);
+//     fireEvent.change(inputGroupName, {target: {value: '122-18-3'}});
+//     // expect(useStates.studentsGroup.setStudentsGroup).toHaveBeenCalledWith(groupsMock[0]);
+//     // expect(useStates.groupError.setGroupError).toHaveBeenCalledWith(false);
+//     // expect(useStates.btnSave.setBtnSave).toHaveBeenCalledWith(false);
+//     // expect(useStates.classRegister.setClassRegister).toHaveBeenCalledWith(false);
+//     expect(groupError).not.toBeInTheDocument(); // groupError === false
+//     expect(studentsForm).not.toBeInTheDocument(); // classRegister ==== false
+//     expect(submitBtn).not.toBeInTheDocument(); // btnSave ==== false
+// });
 
 // const inputLessonTheme = container.querySelector('#inputLessonTheme');
 // const inputGroupName = container.querySelector('#inputGroupName');
