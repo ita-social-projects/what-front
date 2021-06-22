@@ -106,6 +106,13 @@ export const ListOfLessons = () => {
       });
       return;
     }
+
+    if (!filterStartDate && !filterEndDate) {
+      setFilteredLessonsList(rawLessonsList);
+      setCurrentPage(1);
+      return;
+    }
+
     setStartDateFilterBorder(false);
 
     const lessons = rawLessonsList.filter((lesson) => {
