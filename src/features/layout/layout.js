@@ -39,8 +39,8 @@ export const Layout = () => {
           <ProtectedRoute roles={[3, 4]} exact path={`${paths.SECRETARIES_DETAILS}/:id`} render={() => <SecretariesTabs index={0} />} />
           <ProtectedRoute roles={[4]} exact path={`${paths.SECRETARY_EDIT}/:id`} render={() => <SecretariesTabs index={1} />} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.LESSONS} render={lessonsListComponent} />
-          <ProtectedRoute roles={[1, 2, 3, 4]} exact path={`${paths.LESSON_DETAILS}/:id`} render={lessonDetailsComponent} />
           <ProtectedRoute roles={[2, 4]} exact path={paths.LESSON_ADD} component={AddLesson} />
+          <ProtectedRoute roles={[1, 2, 3, 4]} exact path={`${paths.LESSON_DETAILS}/:id`} render={lessonDetailsComponent} />
           <ProtectedRoute roles={[2, 4]} exact path={`${paths.LESSON_EDIT}/:id`} component={EditLesson} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUPS} component={ListOfGroups} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.GROUP_ADD} component={StartGroup} />
