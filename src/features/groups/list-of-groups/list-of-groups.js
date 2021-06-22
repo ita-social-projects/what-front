@@ -14,6 +14,8 @@ import { searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
 import {commonHelpers} from "@/utils";
 import { Table } from '@components/table';
+import {List} from "@components/list";
+import {currentUserSelector} from "@models/index";
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -22,13 +24,15 @@ export const ListOfGroups = () => {
   const { data: groups, isLoading, isLoaded, error } = studentGroupsState;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [groupsPerPage, setGroupsPerPage] = useState(10);
+  const [groupsPerPage, setGroupsPerPage] = useState(9);
 
   const [filteredGroupsList, setFilteredGroupsList] = useState([]);
 
   const [visibleGroups, setVisibleGroups] = useState([]);
 
   const [searchGroupValue, setSearchGroupValue] = useState('');
+  const [showBlocks, setShowBlocks] = useState(false);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const indexOfLastGroup = currentPage * groupsPerPage;
   const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
@@ -59,12 +63,12 @@ export const ListOfGroups = () => {
     setSearchGroupValue(inputValue);
   };
 
-  const handleCardEdit = useCallback((id, event) => {
+  const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.GROUP_EDIT}/${id}`);
   }, [history]);
 
-  const handleCardDetails = useCallback((id) => {
+  const handleDetails = useCallback((id) => {
     history.push(`${paths.GROUPS_DETAILS}/${id}`);
   }, [history]);
 
@@ -202,6 +206,18 @@ export const ListOfGroups = () => {
     );
   };
 
+  const listProps = {
+    data: visibleGroups,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Group is not found',
+      check: [!visibleGroups.length && searchGroupName || searchStartDate, !filteredGroupsList.length]
+    }],
+    access: true,
+    fieldsToShow: ['name', 'studentIds', 'startDate', 'finishDate', 'edit']
+  };
+
   return (
     <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
@@ -221,8 +237,18 @@ export const ListOfGroups = () => {
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3 ">
@@ -238,25 +264,29 @@ export const ListOfGroups = () => {
                 placeholder="Start Date"
               />
             </div>
+            {!showBlocks &&
             <div className="col-1 d-flex">
               <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => {
+                    changeCountVisibleItems(event.target.value);
+                  }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
+            }
             <div className="col-4 text-right">
               <Button
                 onClick={downloadGroups}
@@ -270,12 +300,21 @@ export const ListOfGroups = () => {
             </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto">
-            <Table sortingCategories={sortingCategories}
-                   list={getGroupList}
-                   onClick={handleSortByParam}
-                   data={filteredGroupsList}
-                   access={ { unruledUser: 1, unassigned: '' } }
-            />
+            {
+              showBlocks ?
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps}/>
+                  </div>
+                  :
+                  <Table sortingCategories={sortingCategories}
+                         onClick={handleSortByParam}
+                         currentUser={currentUser}
+                         data={filteredGroupsList}
+                         access={{unruledUser: 1, unassigned: ''}}
+                  >
+                    <List listType={'list'} props={listProps}/>
+                  </Table>
+            }
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

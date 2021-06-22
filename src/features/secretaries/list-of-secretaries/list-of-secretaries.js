@@ -18,6 +18,7 @@ import Icon from '@/icon.js';
 import classNames from 'classnames';
 import styles from './list-of-secretaries.scss';
 import { Table } from '@components/table';
+import {List} from "@components/list";
 
 export const ListOfSecretaries = () => {
   const history = useHistory();
@@ -26,7 +27,7 @@ export const ListOfSecretaries = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage, setSecretariesPerPage] = useState(10);
+  const [secretariesPerPage, setSecretariesPerPage] = useState(9);
 
   const INITIAL_CATEGORIES = [
     { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
@@ -60,6 +61,7 @@ export const ListOfSecretaries = () => {
   const [searchValue, setSearchValue] = useState('');
   const indexOfLastSecretary = currentPage * secretariesPerPage;
   const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
+  const [showBlocks, setShowBlocks] = useState(false);
 
   const getDisabledSecretaries = () => {
     const activeSecretariesIds = activeSecretaries.map(({ id }) => id);
@@ -187,14 +189,14 @@ export const ListOfSecretaries = () => {
     history.push(paths.UNASSIGNED_USERS);
   }, [history]);
 
-  const handleSecretariesDetails = useCallback(
+  const handleDetails = useCallback(
     (id) => {
       history.push(`${paths.SECRETARIES_DETAILS}/${id}`);
     },
     [history]
   );
 
-  const handleEditSecretary = useCallback(
+  const handleEdit = useCallback(
     (event, id) => {
       event.stopPropagation();
       history.push(`${paths.SECRETARY_EDIT}/${id}`);
@@ -304,6 +306,21 @@ export const ListOfSecretaries = () => {
     );
   };
 
+  const listProps = {
+    data: visibleSecretaries,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Loading has been failed',
+      check: [!!allSecretariesError || !!activeSecretariesError]
+    }, {
+      message: 'Secretary is not found',
+      check: [!visibleSecretaries.length, !!searchValue]
+    }],
+    access: currentUser.role === 4,
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
+  };
+
   return (
     <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
@@ -327,15 +344,17 @@ export const ListOfSecretaries = () => {
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled>
-                  <Icon icon="List" color="#2E3440" size={25} />
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
                 </button>
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  disabled
-                >
-                  <Icon icon="Card" color="#2E3440" size={25} />
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
                 </button>
               </div>
             </div>
@@ -362,30 +381,32 @@ export const ListOfSecretaries = () => {
                 Disabled Secretaries
               </label>
             </div>
+            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => {
-                  changeCountVisibleItems(event.target.value);
-                }}
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => {
+                    changeCountVisibleItems(event.target.value);
+                  }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
+            }
             {currentUser.role === 4 && (
-              <div className="col-2 text-right">
-                <Button onClick={handleAddSecretary}>
+                <div className="col-2 text-right">
+                  <Button onClick={handleAddSecretary}>
                   <span>Add a secretary</span>
                 </Button>
               </div>
@@ -396,13 +417,21 @@ export const ListOfSecretaries = () => {
             className="d-block mx-auto my-3"
             variant="info"
           >
-            <Table sortingCategories={sortingCategories}
-                   currentUser={currentUser}
-                   list={getSecretaries}
-                   onClick={handleSortByParam}
-                   data={secretaries}
-                   access={ { unruledUser: 4, unassigned: '' } }
-            />
+            {
+              showBlocks ?
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps} />
+                  </div>
+                  :
+                  <Table sortingCategories={sortingCategories}
+                         currentUser={currentUser}
+                         onClick={handleSortByParam}
+                         data={secretaries}
+                         access={{unruledUser: 4, unassigned: ''}}
+                  >
+                    <List listType={'list'} props={listProps}/>
+                  </Table>
+            }
           </WithLoading>
         </div>
         <div
