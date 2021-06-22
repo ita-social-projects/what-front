@@ -251,7 +251,7 @@ export const ListOfLessons = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Lessons</h2>
         { !isLoading ? (
@@ -262,9 +262,9 @@ export const ListOfLessons = () => {
           {paginationComponent()}
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 card shadow p-3 mb-5 bg-white">
-          <div className="row align-items-center d-flex justify-content-between mt-2 mb-3 ">
+      <div className="row mr-0">
+        <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
+          <div className="row align-items-center justify-content-between mt-2 mb-3">
             <div className="col-3">
               <div className="btn-group">
                 <button type="button"

@@ -219,7 +219,7 @@ export const ListOfGroups = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Groups</h2>
         <div className="col-2 text-right">
@@ -232,9 +232,9 @@ export const ListOfGroups = () => {
           {paginationComponent()}
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 card shadow p-3 mb-5 bg-white">
-          <div className="row align-items-center mt-2 mb-3 d-flex justify-content-between">
+      <div className="row mr-0">
+        <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
+          <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
                 <button type="button"

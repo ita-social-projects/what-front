@@ -150,7 +150,7 @@ export const LessonDetails = () => {
   }, [history]);
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className={classNames(styles.page, 'mx-auto', 'col-12')}>
         <div className="d-flex flex-row">
           <WithLoading
