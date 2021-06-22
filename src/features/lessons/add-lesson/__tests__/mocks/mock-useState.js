@@ -1,5 +1,5 @@
 import React from "react";
-import {groupsMock, mentorsMock, formData, formDataMockPresent, formDataMockSubmit} from './mock-data.js';
+import {groupsMock, mentorsMock, formData} from './mock-data.js';
 
 const useStates = {
     markError: {
@@ -36,8 +36,6 @@ const useStates = {
     }
 };
 
-// const useStates = {...useStates};
-
 const useStateMock = {
     default: jest.fn()
         .mockReturnValueOnce([useStates.markError.markError, useStates.markError.setMarkError])
@@ -48,16 +46,6 @@ const useStateMock = {
         .mockReturnValueOnce([useStates.btnSave.btnSave, useStates.btnSave.setBtnSave])
         .mockReturnValueOnce([useStates.classRegister.classRegister, useStates.classRegister.setClassRegister])
         .mockReturnValueOnce([useStates.formData.formData, useStates.formData.setFormData]),
-
-    default2: jest.fn()
-        .mockReturnValueOnce([false, useStates.markError.setMarkError])
-        .mockReturnValueOnce([false, useStates.mentorError.setMentorError])
-        .mockReturnValueOnce([false, useStates.groupError.setGroupError])
-        .mockReturnValueOnce([false, useStates.studentsGroup.setStudentsGroup])
-        .mockReturnValueOnce([false, useStates.mentorInput.setMentorInput])
-        .mockReturnValueOnce([false, useStates.btnSave.setBtnSave])
-        .mockReturnValueOnce([false, useStates.classRegister.setClassRegister])
-        .mockReturnValueOnce([false, useStates.formData.setFormData]),
 
     setFormData: jest.fn()
         .mockReturnValueOnce([useStates.markError.markError, useStates.markError.setMarkError])
@@ -77,7 +65,7 @@ const useStateMock = {
         .mockReturnValueOnce([mentorsMock[0].email, useStates.mentorInput.setMentorInput])
         .mockReturnValueOnce([useStates.btnSave.btnSave, useStates.btnSave.setBtnSave])
         .mockReturnValueOnce([true, useStates.classRegister.setClassRegister])
-        .mockReturnValueOnce([formData, useStates.formData.setFormData]),
+        .mockReturnValueOnce([formData.default, useStates.formData.setFormData]),
 
     changeMark: jest.fn()
         .mockReturnValueOnce([useStates.markError.markError, useStates.markError.setMarkError])
@@ -87,7 +75,7 @@ const useStateMock = {
         .mockReturnValueOnce([mentorsMock[0].email, useStates.mentorInput.setMentorInput])
         .mockReturnValueOnce([useStates.btnSave.btnSave, useStates.btnSave.setBtnSave])
         .mockReturnValueOnce([true, useStates.classRegister.setClassRegister])
-        .mockReturnValueOnce([formDataMockPresent, useStates.formData.setFormData]),
+        .mockReturnValueOnce([formData.formDataMockPresent, useStates.formData.setFormData]),
 
     submit: jest.fn()
         .mockReturnValueOnce([useStates.markError.markError, useStates.markError.setMarkError])
@@ -97,7 +85,7 @@ const useStateMock = {
         .mockReturnValueOnce([mentorsMock[0].email, useStates.mentorInput.setMentorInput])
         .mockReturnValueOnce([true, useStates.btnSave.setBtnSave])
         .mockReturnValueOnce([true, useStates.classRegister.setClassRegister])
-        .mockReturnValueOnce([formDataMockSubmit, useStates.formData.setFormData]),
+        .mockReturnValueOnce([formData.formDataMockSubmit, useStates.formData.setFormData]),
 };
 
 export { useStates, useStateMock };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useActions, paths } from '@/shared';
@@ -64,13 +64,13 @@ export const AddLesson = () => {
     dispatchAddAlert,
   ] = useActions([fetchActiveMentors, globalLoadStudentGroups, loadStudents, addLesson, addAlert]);
 
-  React.useEffect(() => {
+  useEffect(() => {
       getMentors();
       getGroups();
       getStudents();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!addError && addIsLoaded) {
       history.push(paths.LESSONS);
       dispatchAddAlert('The lesson has been added successfully!', 'success');
@@ -89,7 +89,6 @@ export const AddLesson = () => {
   }, [history]);
 
   const onSubmit = (values) => {
-    console.log('values', values);
       const { lessonDate, themeName } = values;
       const lessonVisits = formData.map((lessonVisit) => {
         const {
@@ -109,7 +108,6 @@ export const AddLesson = () => {
 
       const theme = commonHelpers.capitalizeTheme(themeName);
       const formalizedDate = commonHelpers.transformDateTime({ isRequest: true, dateTime: lessonDate }).formDateTimeForRequest;
-    console.log('formalizedDate', formalizedDate);
 
       const lessonObject = {
         lessonDate: formalizedDate,

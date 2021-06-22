@@ -47,15 +47,17 @@ export const studentsMock = [
     }
 ];
 
-export const formData = [
-    {studentId: 1, studentMark: 0, presence: false, comment: "", studentName: "Student Student"},
-    {studentId: 3, studentMark: 0, presence: false, comment: "", studentName: "StudenT StudenT"}
-];
+export const formData = {
+    default: [
+        {studentId: 1, studentMark: 0, presence: false, comment: "", studentName: "Student Student"},
+        {studentId: 3, studentMark: 0, presence: false, comment: "", studentName: "StudenT StudenT"}],
 
-export const formDataMockPresent = [
-    {studentId: 1, studentMark: 0, presence: true, comment: "", studentName: "Student Student"},
-    {studentId: 3, studentMark: 0, presence: true, comment: "", studentName: "StudenT StudenT"}];
+    formDataMockPresent: [
+        {studentId: 1, studentMark: 0, presence: true, comment: "", studentName: "Student Student"},
+        {studentId: 3, studentMark: 0, presence: true, comment: "", studentName: "StudenT StudenT"}],
 
-export const formDataMockSubmit = [
-    {studentId: 1, studentMark: 10, presence: true, comment: "", studentName: "Student Student"},
-    {studentId: 3, studentMark: 0, presence: true, comment: "", studentName: "StudenT StudenT"}];
+    formDataMockSubmit: [
+        {studentId: 1, studentMark: 10, presence: true, comment: "", studentName: "Student Student"},
+        {studentId: 3, studentMark: 0, presence: true, comment: "", studentName: "StudenT StudenT"}]
+};
+
