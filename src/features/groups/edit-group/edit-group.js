@@ -149,7 +149,7 @@ export const EditGroup = ({
   };
 
   return (
-    <div className="w-100">
+    <div className="w-100" data-testid="editGroup">
       <div className="justify-content-center">
         <div className="w-100 card shadow p-4">
           <WithLoading
@@ -176,7 +176,8 @@ export const EditGroup = ({
                   <hr />
                   <div className="row mb-3 align-items-start">
                     <div className="col d-flex align-items-center">
-                      <label className="mt-2" htmlFor="name">Group name:</label>
+                      <label className="mt-2" htmlFor="name">Group name:
+                      </label>
                     </div>
                     <div className="col-md-8">
                       <Field
