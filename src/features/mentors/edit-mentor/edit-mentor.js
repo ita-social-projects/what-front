@@ -36,13 +36,10 @@ export const EditMentor = ({ id }) => {
     error: mentorError,
   } = useSelector(mentorIdSelector, shallowEqual);
 
-  const [dispatchLoadMentors] = useActions([
-    fetchMentorById,
-    fetchActiveMentors,
-  ]);
+  const [dispatchLoadMentors] = useActions([fetchMentorById]);
 
   useEffect(() => {
-    dispatchLoadMentors(id);
+    dispatchMentorById(id);
   }, [dispatchLoadMentors, id]);
 
   const {
@@ -83,10 +80,18 @@ export const EditMentor = ({ id }) => {
     error: deletedIsError,
   } = useSelector(mentorDeletingSelector, shallowEqual);
 
-  const [updateMentor, removeMentor, dispatchAddAlert] = useActions([
+  const [
+    updateMentor,
+    removeMentor,
+    dispatchAddAlert,
+    loadCourses,
+    fetchListOfGroups,
+  ] = useActions([
     editMentor,
     deleteMentor,
     addAlert,
+    fetchCourses,
+    globalLoadStudentGroups,
   ]);
   const [groups, setGroups] = useState(mentorGroups || 0);
   const [courses, setCourses] = useState(mentorCourses || 0);
@@ -94,8 +99,6 @@ export const EditMentor = ({ id }) => {
   const [courseInput, setCourseInputValue] = useState('Type name of a course');
   const [errorGroup, setErrorGroup] = useState(null);
   const [errorCourse, setErrorCourse] = useState(null);
-  const [loadCourses] = useActions([fetchCourses]);
-  const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
   const [toShowModal, setShowModal] = useState(false);
   const [formIsChanged, setFormIsChanged] = useState(false);
 
