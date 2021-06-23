@@ -3,9 +3,19 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@shared/index.js';
 import {
-  mentorIdSelector, mentorEditingSelector, mentorDeletingSelector, mentorGroupsSelector,
-  mentorCoursesSelector, editMentor, deleteMentor, loadStudentGroupsSelector,
-  coursesSelector, fetchCourses, globalLoadStudentGroups,
+  mentorIdSelector,
+  mentorEditingSelector,
+  mentorDeletingSelector,
+  mentorGroupsSelector,
+  mentorCoursesSelector,
+  editMentor,
+  deleteMentor,
+  loadStudentGroupsSelector,
+  coursesSelector,
+  fetchCourses,
+  globalLoadStudentGroups,
+  fetchMentorById,
+  fetchActiveMentors,
 } from '@/models/index.js';
 
 import { WithLoading, Button } from '@components/index.js';
@@ -25,6 +35,15 @@ export const EditMentor = ({ id }) => {
     isLoaded: mentorIsLoaded,
     error: mentorError,
   } = useSelector(mentorIdSelector, shallowEqual);
+
+  const [dispatchLoadMentors] = useActions([
+    fetchMentorById,
+    fetchActiveMentors,
+  ]);
+
+  useEffect(() => {
+    dispatchLoadMentors(id);
+  }, [dispatchLoadMentors, id]);
 
   const {
     data: mentorGroups,
@@ -64,7 +83,11 @@ export const EditMentor = ({ id }) => {
     error: deletedIsError,
   } = useSelector(mentorDeletingSelector, shallowEqual);
 
-  const [updateMentor, removeMentor, dispatchAddAlert] = useActions([editMentor, deleteMentor, addAlert]);
+  const [updateMentor, removeMentor, dispatchAddAlert] = useActions([
+    editMentor,
+    deleteMentor,
+    addAlert,
+  ]);
   const [groups, setGroups] = useState(mentorGroups || 0);
   const [courses, setCourses] = useState(mentorCourses || 0);
   const [groupInput, setGroupInputValue] = useState('Type name of a group');
@@ -137,10 +160,7 @@ export const EditMentor = ({ id }) => {
     } else {
       const groupObject = allGroups.find((el) => el.name === groupInput);
       if (groupObject) {
-        const res = [
-          ...groups,
-          groupObject,
-        ];
+        const res = [...groups, groupObject];
         checkEquality(mentorGroups, res);
         setGroups(res);
       } else {
@@ -156,10 +176,7 @@ export const EditMentor = ({ id }) => {
     } else {
       const courseObject = allCourses.find((el) => el.name === courseInput);
       if (courseObject) {
-        const res = [
-          ...courses,
-          courseObject,
-        ];
+        const res = [...courses, courseObject];
         checkEquality(mentorCourses, res);
         setCourses(res);
       } else {
@@ -171,7 +188,9 @@ export const EditMentor = ({ id }) => {
   const handleGroupDelete = (e) => {
     setErrorGroup('');
     const element = e.target.closest('li');
-    const groupsList = groups.filter((el) => el.name !== element.dataset.groupname);
+    const groupsList = groups.filter(
+      (el) => el.name !== element.dataset.groupname
+    );
     checkEquality(mentorGroups, groupsList);
     setGroups(groupsList);
   };
@@ -179,7 +198,9 @@ export const EditMentor = ({ id }) => {
   const handleCourseDelete = (e) => {
     setErrorCourse('');
     const element = e.target.closest('li');
-    const coursesList = courses.filter((el) => el.name !== element.dataset.coursename);
+    const coursesList = courses.filter(
+      (el) => el.name !== element.dataset.coursename
+    );
     checkEquality(mentorCourses, coursesList);
     setCourses(coursesList);
   };
@@ -218,10 +239,13 @@ export const EditMentor = ({ id }) => {
     const prevSet = new Set(prev.map((el) => el.id));
     const currSet = new Set(current.map((el) => el.id));
     const areSetsEqual = () => {
-      return prevSet.size === currSet.size && [...prevSet].every(value => currSet.has(value))
+      return (
+        prevSet.size === currSet.size &&
+        [...prevSet].every((value) => currSet.has(value))
+      );
     };
     setFormIsChanged(!areSetsEqual());
-  }
+  };
 
   return (
     <div className="container">
@@ -231,9 +255,18 @@ export const EditMentor = ({ id }) => {
             <h3>Mentor Editing</h3>
             <hr />
             <WithLoading
-              isLoading={mentorIsLoading || !mentorIsLoaded || allCoursesAreLoading || !allCoursesAreLoaded
-                || mentorCoursesAreLoading || !mentorCoursesAreLoaded || allGroupsAreLoading || !allGroupsAreLoaded
-                || !mentorGroupsAreLoaded || mentorGroupsAreLoading}
+              isLoading={
+                mentorIsLoading ||
+                !mentorIsLoaded ||
+                allCoursesAreLoading ||
+                !allCoursesAreLoaded ||
+                mentorCoursesAreLoading ||
+                !mentorCoursesAreLoaded ||
+                allGroupsAreLoading ||
+                !allGroupsAreLoaded ||
+                !mentorGroupsAreLoaded ||
+                mentorGroupsAreLoading
+              }
               className={styles['loader-centered']}
             >
               <Formik
@@ -256,12 +289,16 @@ export const EditMentor = ({ id }) => {
                       <div className="col-md-8">
                         <Field
                           type="text"
-                          className={classNames('form-control', { 'border-danger': errors.firstName })}
+                          className={classNames('form-control', {
+                            'border-danger': errors.firstName,
+                          })}
                           name="firstName"
                           id="firstName"
                           value={values.firstName}
                         />
-                        { errors.firstName ? <div className={styles.error}>{errors.firstName}</div> : null }
+                        {errors.firstName ? (
+                          <div className={styles.error}>{errors.firstName}</div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -272,12 +309,16 @@ export const EditMentor = ({ id }) => {
                       <div className="col-md-8">
                         <Field
                           type="text"
-                          className={classNames('form-control', { 'border-danger': errors.lastName })}
+                          className={classNames('form-control', {
+                            'border-danger': errors.lastName,
+                          })}
                           name="lastName"
                           id="lastName"
                           value={values.lastName}
                         />
-                        { errors.lastName ? <div className={styles.error}>{errors.lastName}</div> : null }
+                        {errors.lastName ? (
+                          <div className={styles.error}>{errors.lastName}</div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -288,12 +329,16 @@ export const EditMentor = ({ id }) => {
                       <div className="col-md-8">
                         <Field
                           type="email"
-                          className={classNames('form-control', { 'border-danger': errors.email })}
+                          className={classNames('form-control', {
+                            'border-danger': errors.email,
+                          })}
                           name="email"
                           id="email"
                           value={values.email}
                         />
-                        { errors.email ? <div className={styles.error}>{errors.email}</div> : null }
+                        {errors.email ? (
+                          <div className={styles.error}>{errors.email}</div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -309,7 +354,7 @@ export const EditMentor = ({ id }) => {
                             className={classNames(
                               'form-control col-md-11',
                               styles['group-input'],
-                              { 'border-danger': errorGroup },
+                              { 'border-danger': errorGroup }
                             )}
                             list="group-list"
                             placeholder={groupInput}
@@ -321,10 +366,14 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="info" onClick={handleGroupAdd}>+</Button>
+                            <Button variant="info" onClick={handleGroupAdd}>
+                              +
+                            </Button>
                           </div>
                         </div>
-                        { errorGroup ? <div className={styles.error}>{errorGroup}</div> : null}
+                        {errorGroup ? (
+                          <div className={styles.error}>{errorGroup}</div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -333,17 +382,21 @@ export const EditMentor = ({ id }) => {
                         <ul className="d-flex flex-wrap justify-content-between p-0">
                           {groups.map(({ id, name }) => (
                             <li
-                              className={classNames(styles['list-element'],
-                                'd-flex bg-light border border-outline-secondary rounded')}
+                              className={classNames(
+                                styles['list-element'],
+                                'd-flex bg-light border border-outline-secondary rounded'
+                              )}
                               key={id}
                               data-groupid={id}
                               data-groupname={name}
-                            >{name}
+                            >
+                              {name}
                               <button
                                 className="btn p-0 ml-auto mr-2 text-dark"
                                 type="button"
                                 onClick={handleGroupDelete}
-                              >&#10005;
+                              >
+                                &#10005;
                               </button>
                             </li>
                           ))}
@@ -363,7 +416,7 @@ export const EditMentor = ({ id }) => {
                             className={classNames(
                               'form-control col-md-11',
                               styles.input,
-                              { 'border-danger': errorCourse },
+                              { 'border-danger': errorCourse }
                             )}
                             list="course-list"
                             placeholder={courseInput}
@@ -375,10 +428,14 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="info" onClick={handleCourseAdd}>+</Button>
+                            <Button variant="info" onClick={handleCourseAdd}>
+                              +
+                            </Button>
                           </div>
                         </div>
-                        { errorCourse ? <div className={styles.error}>{errorCourse}</div> : null}
+                        {errorCourse ? (
+                          <div className={styles.error}>{errorCourse}</div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -387,17 +444,21 @@ export const EditMentor = ({ id }) => {
                         <ul className="d-flex flex-wrap justify-content-between p-0">
                           {courses.map(({ id, name }) => (
                             <li
-                              className={classNames(styles['list-element'],
-                                'd-flex bg-light border border-outline-secondary rounded')}
+                              className={classNames(
+                                styles['list-element'],
+                                'd-flex bg-light border border-outline-secondary rounded'
+                              )}
                               key={id}
                               data-courseid={id}
                               data-coursename={name}
-                            >{name}
+                            >
+                              {name}
                               <button
                                 className="btn p-0 ml-auto mr-2 text-dark"
                                 type="button"
                                 onClick={handleCourseDelete}
-                              >&#10005;
+                              >
+                                &#10005;
                               </button>
                             </li>
                           ))}
@@ -408,28 +469,53 @@ export const EditMentor = ({ id }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4">
                         <Button
-                          className={classNames('w-100', styles['disable-button'])}
+                          className={classNames(
+                            'w-100',
+                            styles['disable-button']
+                          )}
                           onClick={handleShowModal}
-                          disabled={!isValid || dirty || editedIsLoading || deletedIsLoading}
-                        >Disable
+                          disabled={
+                            !isValid ||
+                            dirty ||
+                            editedIsLoading ||
+                            deletedIsLoading
+                          }
+                        >
+                          Disable
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
                         <button
                           disabled={!formIsChanged && !dirty}
-                          className={classNames('w-100 btn btn-secondary', styles.button)}
+                          className={classNames(
+                            'w-100 btn btn-secondary',
+                            styles.button
+                          )}
                           type="reset"
                           onClick={resetInput}
-                        >Clear
+                        >
+                          Clear
                         </button>
                       </div>
                       <div className="col-md-3 col-4">
                         <button
-                          className={classNames('w-100 btn ', styles.button, styles.submit)}
+                          className={classNames(
+                            'w-100 btn ',
+                            styles.button,
+                            styles.submit
+                          )}
                           type="submit"
-                          disabled={!isValid || !formIsChanged && !dirty || editedIsLoading || deletedIsLoading
-                                || errors.firstName || errors.lastName || errors.email}
-                        >Save
+                          disabled={
+                            !isValid ||
+                            (!formIsChanged && !dirty) ||
+                            editedIsLoading ||
+                            deletedIsLoading ||
+                            errors.firstName ||
+                            errors.lastName ||
+                            errors.email
+                          }
+                        >
+                          Save
                         </button>
                       </div>
                     </div>
@@ -443,7 +529,8 @@ export const EditMentor = ({ id }) => {
                 submitButtonText="Delete"
                 useRedButton
                 marginLeft
-              >Are you sure you want to fire this mentor?
+              >
+                Are you sure you want to fire this mentor?
               </ModalWindow>
             </WithLoading>
           </div>
