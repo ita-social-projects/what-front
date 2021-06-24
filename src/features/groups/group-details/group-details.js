@@ -38,7 +38,7 @@ export const GroupDetails = ({
   const history = useHistory();
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-center">
         <div className="w-100 card shadow p-4">
           <WithLoading

@@ -56,9 +56,9 @@ export const DownloadStudents = () => {
 
   
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-center">
-        <div className="w-100 card shadow p-4">
+        <div className="w-100 card shadow p-4 ml-2 mr-2">
           <div className="px-2 py-4">
             <h3>Upload Student('s)</h3>
             <hr />

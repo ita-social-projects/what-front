@@ -23,7 +23,7 @@ export const MentorTabs = ({ index }) => {
 
   if (currentUser.role !== 2) {
     return (
-      <Tabs defaultIndex={index} linkBack={paths.MENTORS} className="container w-50">
+      <Tabs defaultIndex={index} linkBack={paths.MENTORS} className="container w-50 pt-5">
         <Tab title="Mentor details">
           <MentorDetails id={Number(id)} />
         </Tab>

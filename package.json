@@ -116,14 +116,30 @@
     ],
     "moduleNameMapper": {
       "@/(.*)$": "<rootDir>/src/$1",
-      "^@utils(.*)$": ["<rootDir>/src/utils/$1"],
-      "^@assets(.*)$": ["<rootDir>/src/assets/$1"],
-      "^@styles(.*)$": ["<rootDir>/src/styles/$1"],
-      "^@shared(.*)$": ["<rootDir>/src/shared/$1"],
-      "^@models(.*)$": ["<rootDir>/src/models/$1"],
-      "^@screens(.*)$": ["<rootDir>/src/screens/$1"],
-      "^@features(.*)$": ["<rootDir>/src/features/$1"],
-      "^@components(.*)$": ["<rootDir>/src/components/$1"],
+      "^@utils(.*)$": [
+        "<rootDir>/src/utils/$1"
+      ],
+      "^@assets(.*)$": [
+        "<rootDir>/src/assets/$1"
+      ],
+      "^@styles(.*)$": [
+        "<rootDir>/src/styles/$1"
+      ],
+      "^@shared(.*)$": [
+        "<rootDir>/src/shared/$1"
+      ],
+      "^@models(.*)$": [
+        "<rootDir>/src/models/$1"
+      ],
+      "^@screens(.*)$": [
+        "<rootDir>/src/screens/$1"
+      ],
+      "^@features(.*)$": [
+        "<rootDir>/src/features/$1"
+      ],
+      "^@components(.*)$": [
+        "<rootDir>/src/components/$1"
+      ],
       "^.+\\.(css|less|scss)$": "babel-jest"
     }
   }

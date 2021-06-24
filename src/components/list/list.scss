@@ -1,0 +1,9 @@
+.scale {
+  transition: .3s ease;
+  padding-top: 3px;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.4);
+    padding-top: 5px;
+  }
+}
