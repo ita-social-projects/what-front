@@ -3,9 +3,7 @@ import propTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './table.scss';
 
-export const Table = ({ sortingCategories, currentUser, list, onClick, data, access}) => {
-
-
+export const Table = ({ sortingCategories, currentUser, onClick, data, access, children: list}) => {
   const handleSortByParam = (event) => onClick(getSortedByParam(data, event.target.dataset), event.target.dataset)
 
   const getSortedByParam = (data, activeCategory) => {
@@ -41,7 +39,7 @@ export const Table = ({ sortingCategories, currentUser, list, onClick, data, acc
             </th>
           ))}
           { currentUser && currentUser.role != 4 ?
-              currentUser.role !== access.unruledUser ?
+              !access.unruledUser.some(el => currentUser.role == el ) ?
                   <th scope="col" className="text-center">Edit</th>
                       : null
                         : access.unassigned != 'unassigned' ?
@@ -51,9 +49,7 @@ export const Table = ({ sortingCategories, currentUser, list, onClick, data, acc
         </tr>
       </thead>
       <tbody>
-        {
-        list()
-        }
+        {list}
       </tbody>
     </table>
   );
@@ -63,7 +59,7 @@ Table.propTypes = {
   sortingCategories: propTypes.array.isRequired,
   currentUser: propTypes.object.isRequired,
   access: propTypes.object.isRequired,
-  list: propTypes.func.isRequired,
+  children: propTypes.node.isRequired,
   onClick: propTypes.func.isRequired,
   data: propTypes.array.isRequired,
 };

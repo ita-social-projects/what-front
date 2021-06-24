@@ -97,9 +97,9 @@ export const Schedule = ({ groupsData, schedulesData }) => {
   }, [history]);
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <WithLoading isLoading={areGroupsLoading || areSchedulesLoading} className="d-block mx-auto">
-        <div className="row mb-4">
+        <div className="row ml-2 mr-2 mb-5">
           <div className="col-3 d-flex justify-content-start pl-0">
             <input
               type="date"

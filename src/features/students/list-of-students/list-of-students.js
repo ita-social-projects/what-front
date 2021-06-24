@@ -12,7 +12,8 @@ import { WithLoading, Pagination, Search, Button } from '@/components';
 import { addAlert } from '@/features';
 import Icon from '@/icon';
 import styles from './list-of-students.scss';
-import { Table } from '@components/table';
+import {List} from "@components/list";
+import {Table} from "@components/table";
 
 export const ListOfStudents = () => {
   const {
@@ -175,74 +176,19 @@ export const ListOfStudents = () => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
 
-  const getStudentsRows = () => {
-    const studentsRows = visibleStudents.map(({ id, firstName, lastName, email }) => (
-      <tr
-        key={id}
-        onClick={() => handleDetails(id)}
-        data-student-id={id}
-        className={styles['table-row']}
-      >
-        <td className="text-left">{firstName}</td>
-        <td>{lastName}</td>
-        <td>{email}</td>
-        <td
-          className="text-center"
-          onClick={(event) => handleEdit(event, id)}
-        >
-          <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
-        </td>
-      </tr>
-    ));
-
-    if (allStudentsError || activeStudentsError) {
-      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
-    }
-
-    if (!visibleStudents.length && searchFieldValue) {
-      return <tr><td colSpan="5" className="text-center">Student is not found</td></tr>;
-    }
-
-    return studentsRows;
-  };
-
-  const getStudentsBlocks = () => {
-    const studentsRows = visibleStudents.map(({ id, firstName, lastName, email }) => (
-      <div className="card" style={{
-        width: '31%',
-        margin: '1%',
-        cursor: 'pointer'
-      }} onClick={() => handleDetails(id)}>
-        <div className="card-body d-flex justify-content-between">
-          <div>
-            <div>
-              {firstName}
-            </div>
-            <div>
-              {lastName}
-            </div>
-            <div>
-              {email}
-            </div>
-          </div>
-          <Icon icon="Edit"
-                onClick={(event) => handleEdit(event, id)}
-                className={styles.scale}
-                color="#2E3440"
-                size={30}/>
-        </div>
-      </div>
-    ));
-
-    if (allStudentsError || activeStudentsError) {
-      return <div className="container-fluid text-center">Loading has been failed</div>;
-    }
-
-    if (!visibleStudents.length && searchFieldValue) {
-      return <div className="container-fluid text-center">Student is not found</div>;
-    }
-
-    return studentsRows;
+  const listProps = {
+      data: visibleStudents,
+      handleDetails,
+      handleEdit,
+      errors: [{
+          message: 'Loading has been failed',
+          check: [!!allStudentsError, !!activeStudentsError]
+      }, {
+          message: 'Student is not found',
+          check: [!visibleStudents.length, !!searchFieldValue]
+      }],
+      access: true,
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
   };
 
   const paginationComponent = () => {
@@ -270,7 +216,7 @@ export const ListOfStudents = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Students</h2>
         <div className="col-2 text-right">
@@ -286,8 +232,8 @@ export const ListOfStudents = () => {
           )}
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 card shadow p-3 mb-5 bg-white">
+      <div className="row mr-0">
+        <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
           <div className="row align-items-center d-flex justify-content-between mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
@@ -360,17 +306,19 @@ export const ListOfStudents = () => {
           <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
             {
               showBlocks ?
-                <div className="container d-flex flex-wrap">
-                  {getStudentsBlocks()}
-                </div>
-              : <Table
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps}/>
+                  </div>
+                  :
+                  <Table
                       sortingCategories={sortingCategories}
                       currentUser={currentUser}
-                      list={getStudentsRows}
                       onClick={handleSortByParam}
                       data={students}
-                      access={ { unruledUser: 2, unassigned: '' } }
-                />
+                      access={{unruledUser: [2], unassigned: ''}}
+                  >
+                    <List listType='list' props={listProps}/>
+                  </Table>
             }
 
           </WithLoading>

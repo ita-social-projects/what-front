@@ -190,7 +190,7 @@ export const UnAssignedList = () => {
       return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
     }
 
-    if (!users.length && users) {
+    if (!users.length || search) {
       return <tr><td colSpan="5" className="text-center">No one has been found</td></tr>;
     }
     return personsRows;
@@ -228,20 +228,20 @@ export const UnAssignedList = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
-        <h2 className="col-6">Unassigmed Users</h2>
+        <h2 className="col-6">Unassigned Users</h2>
         <div className="col-3 text-right">{
            !isLoading
-          && `${usersVisible.length} of ${users.length} unassigmed users `
+          && `${usersVisible.length} of ${users.length} unassigned users `
         }
         </div>
         <div className="col-3 d-flex align-items-center justify-content-end">
           {paginationComponent()}
         </div>
       </div>
-      <div className="row">
-        <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
+      <div className="row mr-0">
+        <div className="card col-12 shadow p-3 mb-5 bg-white rounded ml-2 mr-2">
           <div className="row align-items-center px-3 py-2 mb-2">
             <div className="col-4">
               <Search
@@ -273,11 +273,12 @@ export const UnAssignedList = () => {
           <WithLoading isLoading={!isLoaded} className="d-block mx-auto my-2">
             <Table sortingCategories={sortingCategories}
                    currentUser={currentUser}
-                   list={getPersonsRows}
                    onClick={handleSortByParam}
                    data={users}
-                   access={ { unruledUser: 4, unassigned: 'unassigned' } }
-            />
+                   access={{unruledUser: [4], unassigned: 'unassigned'}}
+            >
+              {getPersonsRows()}
+            </Table>
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
