@@ -3,6 +3,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
 import { paths, useActions } from '@/shared/index.js';
+import { Formik, Field, Form } from 'formik';
 
 import { Button, Search, WithLoading, Pagination, DoubleDateFilter } from '@components/index.js';
 
@@ -11,7 +12,11 @@ import Icon from '@/icon.js';
 import classNames from 'classnames';
 import { searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
-import { commonHelpers } from "@/utils";
+
+import {commonHelpers} from "@/utils";
+import { Table } from '@components/table';
+import {List} from "@components/list";
+import {currentUserSelector} from "@models/index";
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -20,7 +25,7 @@ export const ListOfGroups = () => {
   const { data: groups, isLoading } = studentGroupsState;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [groupsPerPage, setGroupsPerPage] = useState(10);
+  const [groupsPerPage, setGroupsPerPage] = useState(9);
 
   const [rawGroupsList, setRawGroupsList] = useState([]);
   const [filteredGroupsList, setFilteredGroupsList] = useState([]);
@@ -28,6 +33,8 @@ export const ListOfGroups = () => {
   const [visibleGroups, setVisibleGroups] = useState([]);
 
   const [searchGroupValue, setSearchGroupValue] = useState('');
+  const [showBlocks, setShowBlocks] = useState(false);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const indexOfLastGroup = currentPage * groupsPerPage;
   const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
@@ -38,11 +45,10 @@ export const ListOfGroups = () => {
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
  
   const INITIAL_CATEGORIES = [
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
-    { id: 2, name: 'quantity', sortedByAscending: false, tableHead: 'Quantity of students' },
-    { id: 3, name: 'startDate', sortedByAscending: false, tableHead: 'Date of start' },
-    { id: 4, name: 'finishDate', sortedByAscending: false, tableHead: 'Date of finish' },
+    { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
+    { id: 1, name: 'quantity', sortedByAscending: false, tableHead: 'Quantity of students' },
+    { id: 2, name: 'startDate', sortedByAscending: false, tableHead: 'Date of start' },
+    { id: 3, name: 'finishDate', sortedByAscending: false, tableHead: 'Date of finish' },
   ];
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
@@ -78,31 +84,22 @@ export const ListOfGroups = () => {
     history.push(paths.GROUP_ADD);
   }, [history]);
 
-  const handleCardEdit = useCallback((id, event) => {
-    event.stopPropagation();
-    history.push(`${paths.GROUP_EDIT}/${id}`);
-  }, [history]);
-
-  const handleCardDetails = useCallback((id) => {
-    history.push(`${paths.GROUPS_DETAILS}/${id}`);
-  }, [history]);
-
   const handleSearch = (inputValue) => {
     setSearchGroupValue(inputValue);
   };
 
-  const getSortedByParam = (data, activeCategory) => {
-    const { sortingParam, sortedByAscending } = activeCategory;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
+  const handleEdit = useCallback((event, id) => {
+    event.stopPropagation();
+    history.push(`${paths.GROUP_EDIT}/${id}`);
+  }, [history]);
 
-    return [...data].sort((prevItem, currentItem) => {
-      if (prevItem[sortingParam] > currentItem[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-  };
+  const handleDetails = useCallback((id) => {
+    history.push(`${paths.GROUPS_DETAILS}/${id}`);
+  }, [history]);
 
+  const searchGroups = (searchedGroups) => searchedGroups.filter(({ name }) => `${name}`
+    .toLowerCase().includes(searchGroupValue.toLowerCase()));
+    
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
       return { ...category, sortedByAscending: !category.sortedByAscending };
@@ -119,10 +116,9 @@ export const ListOfGroups = () => {
 
   const getGroupList = () => {
     const groupList = visibleGroups
-      .map(({ name, studentIds, startDate, id, index, finishDate}) => (
+      .map(({ name, studentIds, startDate, id, finishDate}) => (
         <tr className={styles['table-item']} onClick={() => handleCardDetails(id)} key={id}>
-          <td className="text-center">{index + 1}</td>
-          <td>{name}</td>
+          <td className={"text-left"}>{name}</td>
           <td>{studentIds.length}</td>
           <td>{commonHelpers.transformDateTime({ isDayTime:false, dateTime: startDate }).date}
           </td>
@@ -162,14 +158,12 @@ export const ListOfGroups = () => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
 
-  const handleSortByParam = useCallback((event) => {
-    const categoryParams = event.target.dataset;
-    const sortedGroups = getSortedByParam(filteredGroupsList, categoryParams);
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedGroups = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredGroupsList(sortedGroups);
     setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
-  }, [sortingCategories, filteredGroupsList]);
+  };
 
   const changeCountVisibleItems = (newNumber) => {
     const finish = currentPage * newNumber;
@@ -206,6 +200,61 @@ export const ListOfGroups = () => {
     );
   };
 
+  const filterDateComponent = () => {
+    const initialStartDate = () => `${new Date().getFullYear()}-01-01`;
+    const initialFinishDate = () => `${commonHelpers.transformDateTime({}).reverseDate}`;
+
+    const filterByDate = ({ startDate, finishDate }) => {
+      const newArray = rawGroupsList
+        .filter((group) => (new Date(group.startDate.slice(0, 10)) >= new Date(startDate)) && (new Date(group.finishDate.slice(0, 10)) <= new Date(finishDate))
+      );
+      setFilteredGroupsList(newArray);
+      const finish = currentPage * groupsPerPage;
+      const start = finish - groupsPerPage;
+      setVisibleGroups(newArray.slice(start, finish));
+    };
+
+    return (
+      <Formik
+        initialValues={{
+          startDate: initialStartDate(),
+          finishDate: initialFinishDate(),
+        }}
+        onSubmit={filterByDate}
+        >
+        {({ errors }) => (
+          <Form name="start-group" className="row d-flex">
+              <div className="col-5">
+                <Field
+                  className={classNames('form-control', { 'border-danger': errors.startDate })}
+                  type="date"
+                  name="startDate"
+                  id="startDate"
+                  required
+                />
+                {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
+              </div>
+              <div className="col-5">
+                <Field
+                  className={classNames('form-control', { 'border-danger': errors.finishDate })}
+                  type="date"
+                  name="finishDate"
+                  id="finishDate"
+                  required
+                />
+                {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
+            </div>
+            <div className="col-2 text-right">
+              <Button type="submit">
+                Filter
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    )
+  };
+
   return (
     <div className={classNames('container ', styles.block)}>
       <div className="row justify-content-between align-items-center mb-3">
@@ -233,13 +282,23 @@ export const ListOfGroups = () => {
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 card shadow p-3 mb-5 bg-white">
+      <div className="row mr-0">
+        <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
           <div className="row align-items-center mt-2 mb-3">
             <div className={classNames('col-2', styles['change-view'])}>
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3 ">
@@ -247,21 +306,23 @@ export const ListOfGroups = () => {
             </div>
             <div className="col-1 d-flex">
               <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => {
+                    changeCountVisibleItems(event.target.value);
+                  }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
             <div className={classNames('col-4 offset-2 btn-group text-group', styles['.upload-add-btn'])}>
@@ -286,31 +347,21 @@ export const ListOfGroups = () => {
           </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto">
-            <table className="table table-hover mb-0">
-              <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      className={styles['table-head']}
-                      key={id}
-                    >
-                      <span
-                        onClick={handleSortByParam}
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        className={classNames(styles.category, { [styles['category-sorted']]: sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                    </th>
-                  ))}
-                  <th scope="col" className="text-center">Edit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {getGroupList()}
-              </tbody>
-            </table>
+            {
+              showBlocks ?
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps}/>
+                  </div>
+                  :
+                  <Table sortingCategories={sortingCategories}
+                         onClick={handleSortByParam}
+                         currentUser={currentUser}
+                         data={filteredGroupsList}
+                         access={{unruledUser: [1], unassigned: ''}}
+                  >
+                    <List listType={'list'} props={listProps}/>
+                  </Table>
+            }
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
