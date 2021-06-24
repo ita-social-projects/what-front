@@ -74,6 +74,7 @@
     "classnames": "^2.2.6",
     "formik": "^2.2.1",
     "jest": "^27.0.4",
+    "lodash": "^4.17.21",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
@@ -116,14 +117,30 @@
     ],
     "moduleNameMapper": {
       "@/(.*)$": "<rootDir>/src/$1",
-      "^@utils(.*)$": ["<rootDir>/src/utils/$1"],
-      "^@assets(.*)$": ["<rootDir>/src/assets/$1"],
-      "^@styles(.*)$": ["<rootDir>/src/styles/$1"],
-      "^@shared(.*)$": ["<rootDir>/src/shared/$1"],
-      "^@models(.*)$": ["<rootDir>/src/models/$1"],
-      "^@screens(.*)$": ["<rootDir>/src/screens/$1"],
-      "^@features(.*)$": ["<rootDir>/src/features/$1"],
-      "^@components(.*)$": ["<rootDir>/src/components/$1"],
+      "^@utils(.*)$": [
+        "<rootDir>/src/utils/$1"
+      ],
+      "^@assets(.*)$": [
+        "<rootDir>/src/assets/$1"
+      ],
+      "^@styles(.*)$": [
+        "<rootDir>/src/styles/$1"
+      ],
+      "^@shared(.*)$": [
+        "<rootDir>/src/shared/$1"
+      ],
+      "^@models(.*)$": [
+        "<rootDir>/src/models/$1"
+      ],
+      "^@screens(.*)$": [
+        "<rootDir>/src/screens/$1"
+      ],
+      "^@features(.*)$": [
+        "<rootDir>/src/features/$1"
+      ],
+      "^@components(.*)$": [
+        "<rootDir>/src/components/$1"
+      ],
       "^.+\\.(css|less|scss)$": "babel-jest"
     }
   }
