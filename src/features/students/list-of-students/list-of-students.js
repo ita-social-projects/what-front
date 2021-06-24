@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
@@ -12,6 +12,8 @@ import { WithLoading, Pagination, Search, Button } from '@/components';
 import { addAlert } from '@/features';
 import Icon from '@/icon';
 import styles from './list-of-students.scss';
+import {List} from "@components/list";
+import {Table} from "@components/table";
 
 export const ListOfStudents = () => {
   const {
@@ -40,10 +42,9 @@ export const ListOfStudents = () => {
   const [visibleStudents, setVisibleStudents] = useState([]);
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+    { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
@@ -64,18 +65,6 @@ export const ListOfStudents = () => {
 
   const searchStudents = (searchedStudents, value) => searchedStudents.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
     .toLowerCase().includes(value.toLowerCase()));
-
-  const getSortedByParam = (data, activeCategory) => {
-    const { sortingParam, sortedByAscending } = activeCategory;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    return [...data].sort((prevItem, currentItem) => {
-      if (prevItem[sortingParam] > currentItem[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-  };
 
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
@@ -130,14 +119,12 @@ export const ListOfStudents = () => {
     setCurrentPage(1);
   }, [searchFieldValue, isShowDisabled]);
 
-  const handleSortByParam = useCallback((event) => {
-    const categoryParams = event.target.dataset;
-    const sortedStudents = getSortedByParam(students, categoryParams);
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedStudents = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setStudents(sortedStudents);
     setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
-  }, [sortingCategories, students]);
+  };
 
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
@@ -189,76 +176,19 @@ export const ListOfStudents = () => {
     setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
   };
 
-  const getStudentsRows = () => {
-    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
-      <tr
-        key={id}
-        onClick={() => handleDetails(id)}
-        data-student-id={id}
-        className={styles['table-row']}
-      >
-        <td className="text-center">{index + 1}</td>
-        <td>{firstName}</td>
-        <td>{lastName}</td>
-        <td>{email}</td>
-        <td
-          className="text-center"
-          onClick={(event) => handleEdit(event, id)}
-        >
-          <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
-        </td>
-      </tr>
-    ));
-
-    if (allStudentsError || activeStudentsError) {
-      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
-    }
-
-    if (!visibleStudents.length && searchFieldValue) {
-      return <tr><td colSpan="5" className="text-center">Student is not found</td></tr>;
-    }
-
-    return studentsRows;
-  };
-
-  const getStudentsBlocks = () => {
-    const studentsRows = visibleStudents.map(({ id, index, firstName, lastName, email }) => (
-      <div className="card" style={{
-        width: '31%',
-        margin: '1%',
-        cursor: 'pointer'
-      }} onClick={() => handleDetails(id)}>
-        <div className="card-body d-flex justify-content-between">
-          <div>{index + 1}</div>
-          <div>
-            <div>
-              {firstName}
-            </div>
-            <div>
-              {lastName}
-            </div>
-            <div>
-              {email}
-            </div>
-          </div>
-          <Icon icon="Edit"
-                onClick={(event) => handleEdit(event, id)}
-                className={styles.scale}
-                color="#2E3440"
-                size={30}/>
-        </div>
-      </div>
-    ));
-
-    if (allStudentsError || activeStudentsError) {
-      return <div className="container-fluid text-center">Loading has been failed</div>;
-    }
-
-    if (!visibleStudents.length && searchFieldValue) {
-      return <div className="container-fluid text-center">Student is not found</div>;
-    }
-
-    return studentsRows;
+  const listProps = {
+      data: visibleStudents,
+      handleDetails,
+      handleEdit,
+      errors: [{
+          message: 'Loading has been failed',
+          check: [!!allStudentsError, !!activeStudentsError]
+      }, {
+          message: 'Student is not found',
+          check: [!visibleStudents.length, !!searchFieldValue]
+      }],
+      access: true,
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
   };
 
   const paginationComponent = () => {
@@ -286,7 +216,7 @@ export const ListOfStudents = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Students</h2>
         <div className="col-2 text-right">
@@ -302,8 +232,8 @@ export const ListOfStudents = () => {
           )}
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 card shadow p-3 mb-5 bg-white">
+      <div className="row mr-0">
+        <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
           <div className="row align-items-center d-flex justify-content-between mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
@@ -376,34 +306,19 @@ export const ListOfStudents = () => {
           <WithLoading isLoading={areActiveStudentsLoading || areAllStudentsLoading} className="d-block mx-auto my-2">
             {
               showBlocks ?
-                <div className="container d-flex flex-wrap">
-                  {getStudentsBlocks()}
-                </div>
-              : <table className="table table-hover">
-              <thead>
-              <tr>
-                {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                  <th
-                    key={id}
-                    className={styles['table-head']}
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps}/>
+                  </div>
+                  :
+                  <Table
+                      sortingCategories={sortingCategories}
+                      currentUser={currentUser}
+                      onClick={handleSortByParam}
+                      data={students}
+                      access={{unruledUser: [2], unassigned: ''}}
                   >
-                      <span
-                        onClick={handleSortByParam}
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        className={classNames(styles.category, { [styles['category-sorted']]: !sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                  </th>
-                ))}
-                <th className="text-center">Edit</th>
-              </tr>
-              </thead>
-              <tbody>
-                {getStudentsRows()}
-              </tbody>
-            </table>
+                    <List listType='list' props={listProps}/>
+                  </Table>
             }
 
           </WithLoading>

@@ -51,14 +51,17 @@ export const DownloadStudents = () => {
   }, [downloadingError, isDownloadingLoaded]);
 
   const onSubmit = (values) => {
-    downloadStudents(values);
+    const defaultId = values.groupId;
+    const formStudents = new FormData();
+		formStudents.append('File', values.students);
+    downloadStudents(defaultId === '' ? groups[0].id : defaultId, formStudents);
   };
 
   
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-center">
-        <div className="w-100 card shadow p-4">
+        <div className="w-100 card shadow p-4 ml-2 mr-2">
           <div className="px-2 py-4">
             <h3>Upload Student('s)</h3>
             <hr />
