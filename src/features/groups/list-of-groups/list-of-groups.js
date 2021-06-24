@@ -310,7 +310,7 @@ export const ListOfGroups = () => {
                          onClick={handleSortByParam}
                          currentUser={currentUser}
                          data={filteredGroupsList}
-                         access={{unruledUser: 1, unassigned: ''}}
+                         access={{unruledUser: [1], unassigned: ''}}
                   >
                     <List listType={'list'} props={listProps}/>
                   </Table>

@@ -356,7 +356,7 @@ export const ListOfLessons = () => {
                          currentUser={currentUser}
                          onClick={handleSortByParam}
                          data={filteredLessonsList}
-                         access={{unruledUser: 3, unassigned: ''}}
+                         access={{unruledUser: [3], unassigned: ''}}
                   >
                     <List props={listProps} listType={'list'}/>
                   </Table>

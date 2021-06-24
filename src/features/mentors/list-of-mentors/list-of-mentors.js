@@ -318,7 +318,7 @@ export const ListOfMentors = () => {
                        currentUser={currentUser}
                        onClick={handleSortByParam}
                        data={filteredMentorList}
-                       access={{unruledUser: 2, unassigned: ''}}
+                       access={{unruledUser: [2], unassigned: ''}}
                 >
                   <List props={listProps} listType={'list'}/>
                 </Table>
