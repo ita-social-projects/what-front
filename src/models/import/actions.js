@@ -10,11 +10,11 @@ export const sendGroups = (id, groups) => ({
   },
 });
 
-export const sendStudents = (students, id) => ({
+export const sendStudents = (id, students) => ({
   type: actionTypes.SEND_STUDENTS,
   payload: {
-    students,
     id,
+    students
   },
 });
 
