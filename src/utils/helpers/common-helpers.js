@@ -21,7 +21,7 @@ export const commonHelpers = {
     return  {
       date: date, // DD.MM.YYYY
       time: time, // HH:mm
-      reverseDate: reverseDate, // YYYY.MM.DD  preload date input value
+      reverseDate: reverseDate, // YYYY-MM-DD  preload date input value
       formDateTimeForRequest: isRequest && new Date(dateTime).toISOString(), // 2015-07-20T10:10:10
       formInitialValue: isDayTime ? `${reverseDate}T${time}` : `${reverseDate}`, // 2015-07-20T00:00:00
     };
