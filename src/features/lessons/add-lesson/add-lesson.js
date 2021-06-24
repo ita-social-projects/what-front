@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useActions, paths } from '@/shared';
+import cloneDeep from 'lodash.clonedeep';
 import {
   mentorsActiveSelector, studentsSelector, loadStudentGroupsSelector,
   addLessonSelector, fetchActiveMentors, globalLoadStudentGroups,
@@ -183,7 +184,7 @@ export const AddLesson = () => {
 
   const handlePresenceChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
-    const newFormData = JSON.parse(JSON.stringify(formData));
+    const newFormData = cloneDeep(formData);
     newFormData[arrIndex].presence = !newFormData[arrIndex].presence;
     newFormData[arrIndex].studentMark = 0;
     setFormData(newFormData);
@@ -193,7 +194,7 @@ export const AddLesson = () => {
     const arrIndex = ev.target.dataset.id;
     const mark = Number(ev.target.value);
     if (mark > 0 && mark < 13) {
-      const newFormData = JSON.parse(JSON.stringify(formData));
+      const newFormData = cloneDeep(formData);
       newFormData[arrIndex].studentMark = mark;
       setFormData(newFormData);
       setMarkError(false);

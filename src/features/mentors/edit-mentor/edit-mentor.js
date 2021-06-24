@@ -15,14 +15,12 @@ import {
   fetchCourses,
   globalLoadStudentGroups,
   fetchMentorById,
-  fetchActiveMentors,
 } from '@/models/index.js';
 
 import { WithLoading, Button } from '@components/index.js';
 import { editMentorValidation } from '@features/validation/validation-helpers.js';
 import { addAlert, ModalWindow } from '@/features';
 import { Formik, Field, Form } from 'formik';
-import Icon from '@/icon';
 
 import classNames from 'classnames';
 import styles from './edit-mentor.scss';
@@ -36,11 +34,25 @@ export const EditMentor = ({ id }) => {
     error: mentorError,
   } = useSelector(mentorIdSelector, shallowEqual);
 
-  const [dispatchLoadMentors] = useActions([fetchMentorById]);
+  const [
+    dispatchMentorById,
+    updateMentor,
+    removeMentor,
+    dispatchAddAlert,
+    loadCourses,
+    fetchListOfGroups,
+  ] = useActions([
+    fetchMentorById,
+    editMentor,
+    deleteMentor,
+    addAlert,
+    fetchCourses,
+    globalLoadStudentGroups,
+  ]);
 
   useEffect(() => {
     dispatchMentorById(id);
-  }, [dispatchLoadMentors, id]);
+  }, [dispatchMentorById, id]);
 
   const {
     data: mentorGroups,
@@ -80,19 +92,6 @@ export const EditMentor = ({ id }) => {
     error: deletedIsError,
   } = useSelector(mentorDeletingSelector, shallowEqual);
 
-  const [
-    updateMentor,
-    removeMentor,
-    dispatchAddAlert,
-    loadCourses,
-    fetchListOfGroups,
-  ] = useActions([
-    editMentor,
-    deleteMentor,
-    addAlert,
-    fetchCourses,
-    globalLoadStudentGroups,
-  ]);
   const [groups, setGroups] = useState(mentorGroups || 0);
   const [courses, setCourses] = useState(mentorCourses || 0);
   const [groupInput, setGroupInputValue] = useState('Type name of a group');

@@ -17,7 +17,7 @@ describe('Render of EditLesson', () => {
   let mockStudentsSelector;
   let mockGroupsSelector;
   let mockMentorsSelector;
-  let mockEditLessonSelector;
+  let mockAddLessonSelector;
   let useActionsFns;
 
   beforeEach(() => {
@@ -39,7 +39,7 @@ describe('Render of EditLesson', () => {
       isLoaded: true,
       error: '',
     };
-    mockEditLessonSelector = {
+    mockAddLessonSelector = {
       isLoaded: false,
       isLoading: false,
       error: '',
@@ -48,7 +48,7 @@ describe('Render of EditLesson', () => {
       .mockReturnValueOnce(mockMentorsSelector)
       .mockReturnValueOnce(mockGroupsSelector)
       .mockReturnValueOnce(mockStudentsSelector)
-      .mockReturnValue(mockEditLessonSelector);
+      .mockReturnValue(mockAddLessonSelector);
 
     useActionsFns = {
       getMentors: jest.fn(),
@@ -92,7 +92,7 @@ describe('Render of EditLesson', () => {
       isLoading: false,
       error: '',
     };
-    useSelector.mockReturnValueOnce(mockEditLessonSelector);
+    useSelector.mockReturnValueOnce(mockAddLessonSelector);
     render(<Router history={historyMock}><AddLesson /></Router>);
     expect(historyMock.push.mock.calls[0][0]).toEqual(paths.LESSONS);
   });
