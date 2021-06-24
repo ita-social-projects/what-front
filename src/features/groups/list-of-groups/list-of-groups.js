@@ -5,13 +5,14 @@ import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/inde
 import { paths, useActions } from '@/shared/index.js';
 import { Formik, Field, Form } from 'formik';
 
-import { Button, Search, WithLoading, Pagination } from '@components/index.js';
+import { Button, Search, WithLoading, Pagination, DoubleDateFilter } from '@components/index.js';
 
 import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import { searchGroup, searchDate } from './redux/index.js';
 import styles from './list-of-groups.scss';
+
 import {commonHelpers} from "@/utils";
 import { Table } from '@components/table';
 import {List} from "@components/list";
@@ -56,6 +57,29 @@ export const ListOfGroups = () => {
     fetchListOfGroups();
   }, [fetchListOfGroups]);
 
+  useEffect(() => {
+    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
+  }, [currentPage, filteredGroupsList]);
+
+  useEffect(() => {
+    if (groups.length && !isLoading) {
+      let newGroups = groups.map((group, index) => ({ index, quantity: group.studentIds.length, ...group }));
+      setRawGroupsList(newGroups);
+      setFilteredGroupsList(newGroups);
+    }
+
+    setSortingCategories(INITIAL_CATEGORIES);
+    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
+  }, [groups, isLoading]);
+
+  useEffect(() => {
+    const searchedGroups = rawGroupsList.filter(
+      (group) => group.name.toLowerCase().includes(searchGroupValue.toLowerCase()));
+
+    setFilteredGroupsList(searchedGroups);
+    setCurrentPage(1);
+  }, [searchGroupValue]);
+
   const handleAddGroup = useCallback(() => {
     history.push(paths.GROUP_ADD);
   }, [history]);
@@ -75,7 +99,7 @@ export const ListOfGroups = () => {
 
   const searchGroups = (searchedGroups) => searchedGroups.filter(({ name }) => `${name}`
     .toLowerCase().includes(searchGroupValue.toLowerCase()));
-
+    
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
       return { ...category, sortedByAscending: !category.sortedByAscending };
@@ -89,31 +113,6 @@ export const ListOfGroups = () => {
   });
 
   const listByDate = listByName.filter((group) => group.startDate.includes(searchStartDate));
-
-  useEffect(() => {
-    setCurrentPage(currentPage);
-  }, [currentPage]);
-
-  useEffect(() => {
-    if (groups.length && !isLoading) {
-      let newGroups = groups.map((group, index) => ({ index, ...group }));
-      newGroups = newGroups.map((group) => ({ quantity: group.studentIds.length, ...group }));
-      setRawGroupsList(newGroups);
-      setFilteredGroupsList(newGroups);
-    }
-
-    setSortingCategories(INITIAL_CATEGORIES);
-    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
-  }, [groups, isLoading]);
-
-  useEffect(() => {
-    setVisibleGroups(filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup));
-  }, [currentPage, filteredGroupsList]);
-
-  useEffect(() => {
-    const searchedGroups = searchGroups(groups);
-    setFilteredGroupsList(searchedGroups.map((mentor, index) => ({ index, ...mentor })));
-  }, [searchGroupValue]);
 
   const getGroupList = () => {
     const groupList = visibleGroups
@@ -340,7 +339,11 @@ export const ListOfGroups = () => {
           </div>
           <div className="row align-items-center justify-content-end mb-3">
           <div className="col-6 offset-4">
-            {filterDateComponent()}
+            {<DoubleDateFilter 
+              rawItemsList={rawGroupsList} 
+              setFilteredItemsList={setFilteredGroupsList} 
+              setCurrentPage={setCurrentPage}
+            />}
           </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto">
