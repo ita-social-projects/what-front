@@ -25,9 +25,9 @@ export const Layout = () => {
   return (
     <>
       <Header />
-      <Sidebar />
       <AlertBox />
-      <div className={classNames(styles.container, 'pt-5')}>
+      <div className={classNames(styles.container)}>
+        <Sidebar />
         <Switch>
           <ProtectedRoute roles={[2, 3, 4]} exact path={paths.STUDENTS} component={ListOfStudents} />
           <ProtectedRoute roles={[2, 3, 4]} exact path={`${paths.STUDENTS_DETAILS}/:id`} component={() => <StudentsTabs index={0} />} />

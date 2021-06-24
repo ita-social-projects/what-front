@@ -42,7 +42,7 @@ export const GroupsTabs = ({ index }) => {
   }, [group, history]);
 
   return (
-    <Tabs defaultIndex={index} linkBack="/groups" className="container w-50">
+    <Tabs defaultIndex={index} linkBack="/groups" className="container w-50 pt-5">
       <Tab title="Group details">
         <GroupDetails
           id={Number(id)}

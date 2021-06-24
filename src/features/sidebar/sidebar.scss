@@ -112,6 +112,18 @@
   }
 }
 
+@media screen and (min-width: 992px) and (max-width: 1919px) {
+  .sidebar {
+    &__content {
+      position: static;
+    }
+
+    &__links {
+      padding-top: 10px;
+    }
+  }
+}
+
 @media(min-width: 769px) {
   .sidebar__toggler {
     display: none;
