@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useActions, paths } from '@/shared';
+import cloneDeep from 'lodash.clonedeep';
 import {
   mentorsActiveSelector, studentsSelector, loadStudentGroupsSelector,
   addLessonSelector, fetchActiveMentors, globalLoadStudentGroups,
@@ -20,14 +21,14 @@ import styles from './add-lesson.scss';
 export const AddLesson = () => {
   const history = useHistory();
 
-  const [markError, setMarkError] = useState(false);
-  const [mentorError, setMentorError] = useState(false);
-  const [groupError, setGroupError] = useState(false);
-  const [studentsGroup, setStudentsGroup] = useState(null);
-  const [mentorInput, setMentorInput] = useState('');
-  const [btnSave, setBtnSave] = useState(false);
-  const [classRegister, setClassRegister] = useState(false);
-  const [formData, setFormData] = useState([]);
+  const [markError, setMarkError] = React.useState(false);
+  const [mentorError, setMentorError] = React.useState(false);
+  const [groupError, setGroupError] = React.useState(false);
+  const [studentsGroup, setStudentsGroup] = React.useState(null);
+  const [mentorInput, setMentorInput] = React.useState('');
+  const [btnSave, setBtnSave] = React.useState(false);
+  const [classRegister, setClassRegister] = React.useState(false);
+  const [formData, setFormData] = React.useState([]);
 
   const {
     data: mentors,
@@ -52,7 +53,7 @@ export const AddLesson = () => {
 
   const {
     isLoaded: addIsLoaded,
-    isLoading: lessonsIsLoading,
+    isLoading: lessonIsLoading,
     error: addError,
   } = useSelector(addLessonSelector, shallowEqual);
 
@@ -65,22 +66,10 @@ export const AddLesson = () => {
   ] = useActions([fetchActiveMentors, globalLoadStudentGroups, loadStudents, addLesson, addAlert]);
 
   useEffect(() => {
-    if (!mentorsIsLoaded && !mentorError) {
       getMentors();
-    }
-  }, [mentorsError, mentorsIsLoaded, getMentors, mentorError]);
-
-  useEffect(() => {
-    if (!groupsIsLoaded && !groupsError) {
       getGroups();
-    }
-  }, [groupsError, groupsIsLoaded, getGroups]);
-
-  useEffect(() => {
-    if (!studentsIsLoaded && !studentsError) {
       getStudents();
-    }
-  }, [studentsError, studentsIsLoaded, getStudents]);
+  }, []);
 
   useEffect(() => {
     if (!addError && addIsLoaded) {
@@ -119,7 +108,7 @@ export const AddLesson = () => {
       const mentorData = mentors.find((mentor) => mentor.email === mentorInput);
 
       const theme = commonHelpers.capitalizeTheme(themeName);
-      const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
+      const formalizedDate = commonHelpers.transformDateTime({ isRequest: true, dateTime: lessonDate }).formDateTimeForRequest;
 
       const lessonObject = {
         lessonDate: formalizedDate,
@@ -128,13 +117,12 @@ export const AddLesson = () => {
         studentGroupId: studentsGroup.id,
         mentorId: mentorData.id,
       };
-
       if (!mentorsError && lessonObject) {
         createLesson(lessonObject);
       }
   };
 
-  const getFormData = () => {
+  const getFormData = (studentsGroup, students) => {
     const uniqueIds = [...new Set(studentsGroup.studentIds)];
 
     const studentD = uniqueIds.map(
@@ -150,37 +138,28 @@ export const AddLesson = () => {
       }
     ));
 
-    const resultLessonVisits = studentsData.map((student) => ({
+    return studentsData.map((student) => ({
       ...student,
       studentMark: 0,
       presence: false,
       comment: '',
     }));
-    setFormData(resultLessonVisits);
   };
 
-  const openClassRegister = () => {
+  const openClassRegister = useCallback(() => {
     if (studentsGroup) {
-      getFormData();
+      setFormData(getFormData(studentsGroup, students));
       setBtnSave(true);
       setClassRegister(true);
       setGroupError(false);
     }
-
     !studentsGroup && setCorrectError('#inputGroupName', setGroupError, 'group name');
     !mentorInput && setCorrectError('#mentorEmail', setMentorError, 'mentor email');
-  };
+  }, [studentsGroup, students, mentorInput, setGroupError, setMentorError, setBtnSave, setClassRegister, setGroupError]);
 
   const setCorrectError = (inputSelector, setError, fieldName) => {
-    const { value } = document.querySelector(inputSelector);
-
+    const {value} = document.querySelector(inputSelector);
     value ? setError(`Invalid ${fieldName}`) : setError('This field is required');
-  };
-
-  const hideClassRegister = () => {
-    setBtnSave(false);
-    setClassRegister(false);
-    setGroupError(false);
   };
 
   const handleMentorChange = (ev) => {
@@ -193,7 +172,6 @@ export const AddLesson = () => {
 
   const handleGroupChange = (ev) => {
     const resultGroup = groups.find((group) => group.name.toUpperCase() === ev.target.value.toUpperCase());
-    setStudentsGroup(null);
     if (resultGroup) {
       setStudentsGroup(resultGroup);
       setGroupError(false);
@@ -206,15 +184,19 @@ export const AddLesson = () => {
 
   const handlePresenceChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
-    formData[arrIndex].presence = !formData[arrIndex].presence;
-    formData[arrIndex].studentMark = 0;
+    const newFormData = cloneDeep(formData);
+    newFormData[arrIndex].presence = !newFormData[arrIndex].presence;
+    newFormData[arrIndex].studentMark = 0;
+    setFormData(newFormData);
   };
 
   const handleMarkChange = (ev) => {
     const arrIndex = ev.target.dataset.id;
     const mark = Number(ev.target.value);
     if (mark > 0 && mark < 13) {
-      formData[arrIndex].studentMark = mark;
+      const newFormData = cloneDeep(formData);
+      newFormData[arrIndex].studentMark = mark;
+      setFormData(newFormData);
       setMarkError(false);
     } else {
       setMarkError(true);
@@ -236,10 +218,10 @@ export const AddLesson = () => {
             <hr />
             <WithLoading
               isLoading={
-                lessonsIsLoading
-                || mentorsIsLoading
+                mentorsIsLoading
                 || studentsIsLoading
                 || groupsIsLoading
+                || lessonIsLoading
               }
               className={classNames(styles['loader-centered'])}
             >
@@ -256,7 +238,7 @@ export const AddLesson = () => {
               >
                 {({ errors, touched, setFieldTouched }) => (
                   <Form id="form" className={classNames(styles.size)}>
-                    <div className='d-flex flex-sm-column flex-lg-row'>
+                    <div className='d-flex flex-sm-column flex-lg-row' data-testid='addForm'>
                       <div className={classRegister ? 'col-lg-6' : 'col-lg-12'}>
                         <div className="mt-3 form-group row">
                           <label htmlFor="inputLessonTheme" className="col-md-4 col-form-label">Lesson Theme:</label>
@@ -286,7 +268,6 @@ export const AddLesson = () => {
                               className={classNames('form-control group-input', { 'border-danger': !!groupError })}
                               placeholder="Group Name"
                               onChange={handleGroupChange}
-                              onFocus={hideClassRegister}
                               list="group-list"
                               disabled={groupsIsLoading}
                               required
@@ -299,7 +280,7 @@ export const AddLesson = () => {
                           </div>
                           {
                             groupError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>{groupError}</div>
+                              ? <div id='group-error' className={classNames('col-8 offset-4', styles.error)}>{groupError}</div>
                               : null
                           }
                         </div>
@@ -310,7 +291,7 @@ export const AddLesson = () => {
                               className="form-control"
                               type="datetime-local"
                               name="lessonDate"
-                              id="choose-date/time"
+                              id="choose-date-time"
                               max={ commonHelpers.transformDateTime({}).formInitialValue }
                               required
                             />
@@ -340,7 +321,7 @@ export const AddLesson = () => {
                           </div>
                           {
                             mentorError
-                              ? <div className={classNames('col-8 offset-4', styles.error)}>{mentorError}</div>
+                              ? <div id='mentor-error' className={classNames('col-8 offset-4', styles.error)}>{mentorError}</div>
                               : null
                           }
                         </div>
@@ -350,7 +331,7 @@ export const AddLesson = () => {
                           <FieldArray name="formData">
                             {() => (
                               <div className={classNames(styles.list, 'col-lg-12 pt-2')}>
-                                <table className="table table-bordered table-hover">
+                                <table className="table table-bordered table-hover" data-testid='students-form'>
                                   <thead>
                                     <tr>
                                       <th scope="col" aria-label="first_col" />
@@ -359,13 +340,14 @@ export const AddLesson = () => {
                                       <th scope="col" className="text-center">Presence</th>
                                     </tr>
                                   </thead>
-                                  <tbody>
+                                  <tbody data-testid='students-formData-table'>
                                     {formData && formData.length > 0 && (
                                       formData.map((lessonVisit, index) => (
                                         <tr key={lessonVisit.studentId}>
                                           <th scope="row">{ index + 1 }</th>
                                           <td>
                                             <p
+                                              data-testid={`openStudentDetails-${lessonVisit.studentId}`}
                                               className={classNames(styles.link)}
                                               onClick={() => openStudentDetails(lessonVisit.studentId)}
                                             >
@@ -374,6 +356,7 @@ export const AddLesson = () => {
                                           </td>
                                           <td>
                                             <Field
+                                              data-testid={`formData[${index}].studentMark`}
                                               name={`formData[${index}].studentMark`}
                                               className={classNames(
                                                 'form-control',
@@ -391,6 +374,7 @@ export const AddLesson = () => {
                                           </td>
                                           <td>
                                             <Field
+                                              data-testid={`formData[${index}].presence`}
                                               name={`formData[${index}].presence`}
                                               className={styles.mode}
                                               type="checkbox"
@@ -411,11 +395,12 @@ export const AddLesson = () => {
                       )}
                     </div>
                     <div className='col-12 d-flex justify-content-between'>
-                      <button form="form" type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
+                      <button form="form" data-testid='cancelBtn' type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>Cancel</button>
                       {btnSave
-                        ? <button form="form" type="submit" className="btn btn-success btn-lg">Save</button>
+                        ? <button id='submit' form="form" type="submit" className="btn btn-success btn-lg">Save</button>
                         : (
                           <Button
+                            id='class-register-btn'
                             className="btn btn-success btn-lg"
                             onClick={(event) => {
                               event.preventDefault();
