@@ -28,7 +28,7 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
-    "@testing-library/jest-dom": "5.13.0",
+    "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",
     "autoprefixer": "^10.0.1",
     "babel-jest": "^27.0.2",
@@ -48,6 +48,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^4.5.0",
+    "jest": "^27.0.5",
     "mini-css-extract-plugin": "^1.3.1",
     "node-sass": "^5.0.0",
     "postcss": "^8.1.4",
@@ -73,7 +74,6 @@
     "bootstrap": "^4.5.3",
     "classnames": "^2.2.6",
     "formik": "^2.2.1",
-    "jest": "^27.0.4",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
@@ -116,14 +116,30 @@
     ],
     "moduleNameMapper": {
       "@/(.*)$": "<rootDir>/src/$1",
-      "^@utils(.*)$": ["<rootDir>/src/utils/$1"],
-      "^@assets(.*)$": ["<rootDir>/src/assets/$1"],
-      "^@styles(.*)$": ["<rootDir>/src/styles/$1"],
-      "^@shared(.*)$": ["<rootDir>/src/shared/$1"],
-      "^@models(.*)$": ["<rootDir>/src/models/$1"],
-      "^@screens(.*)$": ["<rootDir>/src/screens/$1"],
-      "^@features(.*)$": ["<rootDir>/src/features/$1"],
-      "^@components(.*)$": ["<rootDir>/src/components/$1"],
+      "^@utils(.*)$": [
+        "<rootDir>/src/utils/$1"
+      ],
+      "^@assets(.*)$": [
+        "<rootDir>/src/assets/$1"
+      ],
+      "^@styles(.*)$": [
+        "<rootDir>/src/styles/$1"
+      ],
+      "^@shared(.*)$": [
+        "<rootDir>/src/shared/$1"
+      ],
+      "^@models(.*)$": [
+        "<rootDir>/src/models/$1"
+      ],
+      "^@screens(.*)$": [
+        "<rootDir>/src/screens/$1"
+      ],
+      "^@features(.*)$": [
+        "<rootDir>/src/features/$1"
+      ],
+      "^@components(.*)$": [
+        "<rootDir>/src/components/$1"
+      ],
       "^.+\\.(css|less|scss)$": "babel-jest"
     }
   }
