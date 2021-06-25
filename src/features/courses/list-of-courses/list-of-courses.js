@@ -54,7 +54,7 @@ export const ListOfCourses = () => {
       .map((course) => (
         <tr key={course.id} onClick={() => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
           <td className="text-left">{course.name}</td>
-          {currentUser.role !== 2 &&
+          {(currentUser.role === 3 || currentUser.role === 4) &&
             <td
               className="text-center"
               onClick={(event) => courseEdit(event, course.id)}
@@ -168,7 +168,7 @@ export const ListOfCourses = () => {
       message: 'Course is not found',
       check: [!visibleCourses.length && !!searchValue]
     }],
-    access: currentUser.role !== 2,
+    access: currentUser.role === 3 || currentUser.role === 4,
     fieldsToShow: ['name', 'edit']
   };
 
@@ -245,7 +245,7 @@ export const ListOfCourses = () => {
                          currentUser={currentUser}
                          onClick={handleSortByParam}
                          data={filteredCourses}
-                         access={{unruledUser: 2, unassigned: ''}}
+                         access={{unruledUser: [1, 2], unassigned: ''}}
                   >
                     <List listType='list' props={listProps}/>
                   </Table>

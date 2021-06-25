@@ -1,4 +1,4 @@
-import styles from "@components/list/list.scss";
+import styles from "./rows.scss";
 import {commonHelpers} from "@/utils";
 import Icon from "@/icon";
 import React from "react";

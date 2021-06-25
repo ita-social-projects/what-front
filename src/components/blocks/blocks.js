@@ -1,6 +1,6 @@
 import {commonHelpers} from "@/utils";
 import Icon from "@/icon";
-import styles from "@components/list/list.scss";
+import styles from "./blocks.scss";
 import React from "react";
 
 /**

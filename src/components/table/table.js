@@ -39,7 +39,7 @@ export const Table = ({ sortingCategories, currentUser, onClick, data, access, c
             </th>
           ))}
           { currentUser && currentUser.role != 4 ?
-              currentUser.role !== access.unruledUser ?
+              !access.unruledUser.some(el => currentUser.role == el ) ?
                   <th scope="col" className="text-center">Edit</th>
                       : null
                         : access.unassigned != 'unassigned' ?
