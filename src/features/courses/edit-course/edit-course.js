@@ -97,7 +97,7 @@ export const EditCourse = ({ id, coursesData }) => {
                 validationSchema={editCourseValidation}
               >
                 {({ errors, isValid, dirty, handleReset }) => (
-                  <Form name="start-group">
+                  <Form name="start-group" data-testid='editCourseForm'>
                     <div className="row mb-3">
                       <div className="col d-flex align-items-center">
                         <label className="mb-0 font-weight-bolder" htmlFor="name">Course name:</label>
