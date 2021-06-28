@@ -13,23 +13,17 @@ jest.mock('react-redux', () => ({useSelector: jest.fn()}));
 
 jest.mock('@/shared/hooks', () => ({useActions: jest.fn()}));
 
-describe('Render of EditLesson', () => {
+describe('EditLesson tests', () => {
     let historyMock;
     let data;
-    let isLoading;
-    let isLoaded;
-    let id;
     let mockEditedCourseSelector;
     let mockDeletedCourseSelector;
     let useActionsFns;
 
-    //todo set basic selectors
     beforeEach(() => {
 
         data = editCourseMock;
-        isLoading = false;
-        isLoaded = true;
-        id = 1;
+        data.isLoading = false;
 
         mockEditedCourseSelector = {
             isLoading: false,
@@ -52,23 +46,26 @@ describe('Render of EditLesson', () => {
         historyMock = {push: jest.fn(), location: {}, listen: jest.fn()};
     });
 
-    // it('should loader appear when mentorsIsLoading is false', () => {
-    //     mockMentorsSelector = {
-    //         isLoading: true,
-    //     };
-    //     useSelector.mockReturnValue(mockMentorsSelector);
-    //     const { container } = render(<Router history={historyMock}><AddLesson /></Router>);
-    //     const loader = container.querySelector('.spinner-border');
-    //     expect(loader).toBeInTheDocument();
-    // });
+    it('Loader appears when isLoading in data is true', () => {
+        data.isLoading = true;
+
+        const { container } = render(
+            <Router history={historyMock}>
+                <EditCourse coursesData={data} id={1}/>
+            </Router>
+        );
+        const loader = container.querySelector('.spinner-border');
+        expect(loader).toBeInTheDocument();
+    });
 
     it('should the component be rendered', () => {
-        const {getByTestId} = render(
+        const { getByTestId } = render(
             <Router history={historyMock} >
                 <EditCourse coursesData={data} id={1}/>
             </Router>
         );
-        expect(getByTestId('editCourseForm')).toBeInTheDocument();
+        const form = getByTestId('editCourseForm');
+        expect(form).toBeInTheDocument();
     });
 
     // it('should be redirected to path LESSONS when cancelBtn is clicked', () => {
