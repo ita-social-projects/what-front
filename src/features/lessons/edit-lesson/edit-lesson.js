@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
+import cloneDeep from 'lodash.clonedeep';
 import {
   fetchLessons,
   lessonsSelector,
@@ -62,19 +63,15 @@ export const EditLesson = () => {
   } = useSelector(editLessonSelector, shallowEqual);
 
   useEffect(() => {
-    // if (!lessonsIsLoaded && !lessonsError) {
-      loadLessons();
-    // }
-    if(!studentsIsLoaded && !studentsError) {
       getStudents();
-    }
-  }, [loadLessons, studentsIsLoaded, studentsError, getStudents]);
+      loadLessons();
+  }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (lessonsIsLoaded && studentsIsLoaded) {
       const lesson = lessons.find((lesson) => lesson.id === Number(id));
-      if(lesson) {
-        const lessonOnEdit = JSON.parse(JSON.stringify(lesson));
+      if(lesson !== undefined) {
+        const lessonOnEdit = cloneDeep(lesson);
         lessonOnEdit.lessonVisits.forEach((student) => {
           if (student.comment === null) student.comment = '';
           if (student.studentMark === null) student.studentMark = '';
@@ -110,8 +107,8 @@ export const EditLesson = () => {
   }, [history]);
 
   const onSubmit = (values) => {
-      const { lessonDate, themeName, formData } = values;
-      const lessonVisits = formData.map((lessonVisit) => {
+      const { lessonDate, themeName } = values;
+      const lessonVisits = lessonOnEdit.formData.map((lessonVisit) => {
         const {
           presence, studentId, studentMark,
         } = lessonVisit;
@@ -248,7 +245,7 @@ export const EditLesson = () => {
                       <div className="col-lg-6 mt-2" >
                         <FieldArray name="formData">
                           {() => (
-                            <div className={classNames(styles.list, 'col-lg-12')} data-testid='formData'>
+                            <div className={classNames(styles.list, 'col-lg-12')}>
                               <table className="table table-bordered table-hover">
                                 <thead>
                                   <tr>
@@ -259,7 +256,7 @@ export const EditLesson = () => {
                                     </th>
                                   </tr>
                                 </thead>
-                                <tbody>
+                                <tbody data-testid='formData'>
                                   {lessonOnEdit.lessonVisits && lessonOnEdit.lessonVisits.length > 0 && (
                                       lessonOnEdit.lessonVisits.map((lessonVisit, index) => (
                                       <tr key={lessonVisit.studentId}>
