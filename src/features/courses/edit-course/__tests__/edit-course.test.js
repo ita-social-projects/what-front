@@ -22,14 +22,11 @@ describe('Render of EditLesson', () => {
     let mockEditedCourseSelector;
     let mockDeletedCourseSelector;
     let useActionsFns;
-    let course;
 
     //todo set basic selectors
     beforeEach(() => {
-        course.find = jest.fn();
 
         data = editCourseMock;
-        data.find = jest.fn(() => {return {"name": "123 Testing"}});
         isLoading = false;
         isLoaded = true;
         id = 1;
@@ -71,7 +68,7 @@ describe('Render of EditLesson', () => {
                 <EditCourse coursesData={data} id={1}/>
             </Router>
         );
-        // expect(getByTestId('editCourseForm')).toBeInTheDocument();
+        expect(getByTestId('editCourseForm')).toBeInTheDocument();
     });
 
     // it('should be redirected to path LESSONS when cancelBtn is clicked', () => {
