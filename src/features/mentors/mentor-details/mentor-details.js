@@ -7,7 +7,6 @@ import { mentorIdSelector, fetchMentorById, fetchActiveMentors, currentUserSelec
   mentorCoursesSelector, mentorGroupsSelector } from '@/models/index.js';
 import { WithLoading } from '@/components/index.js';
 import { Badge } from 'react-bootstrap';
-import classNames from 'classnames';
 
 export const MentorDetails = ({ id }) => {
   const history = useHistory();
@@ -49,34 +48,34 @@ export const MentorDetails = ({ id }) => {
   }, [dispatchLoadMentors, id]);
 
   return (
-    <div className="container">
+    <div className="container" data-testid='mentorDetails'>
       <div className="row justify-content-center">
-        <div className={classNames("col-sm-12 card shadow",
-          { "col-md-12": currentUser.role !== 2, "col-md-6": currentUser.role === 2})}
-        >
+        <div className="col-sm-12 card shadow">
           <div className="px-2 py-4">
             <h3>Mentor Details</h3>
             <hr />
+            {/* test */}
             <WithLoading isLoading={mentorIsLoading || !mentorIsLoaded}
               className="d-block mx-auto m-0"
             >
               <div className="row">
                 <span className="col-12 col-md-6 font-weight-bolder">First Name:</span>
-                <span className="col-12 col-md-6">{mentor?.firstName}</span>
+                <span className="col-12 col-md-6" data-testid='firstName'>{mentor?.firstName}</span>
               </div>
               <hr />
               <div className="row">
                 <span className="col-12 col-md-6 font-weight-bolder">Last Name:</span>
-                <span className="col-12 col-md-6 ">{mentor?.lastName}</span>
+                <span className="col-12 col-md-6" data-testid='lastName'>{mentor?.lastName}</span>
               </div>
               <hr />
               <div className="row">
                 <span className="col-12 col-md-6 font-weight-bolder">Email:</span>
-                <span className="col-12 col-md-6">{mentor?.email}</span>
+                <span className="col-12 col-md-6" data-testid='email'>{mentor?.email}</span>
               </div>
               <hr />
             <div className="row">
               <div className="col-12 col-md-6 font-weight-bolder"><span>Group('s): </span></div>
+              {/* test */}
               <WithLoading
                 isLoading={mentorGroupsAreLoading || !mentorGroupsAreLoaded}
                 className="d-block mx-auto m-0"
@@ -88,7 +87,9 @@ export const MentorDetails = ({ id }) => {
                         <Badge pill variant="info">
                           <Link
                             to={`${paths.GROUPS_DETAILS}/${id}`}
-                            className="text-decoration-none text-light"
+                            className="text-decoration-none text-light group-link"
+                            data-testid='groupLink'
+                            data-testgroupidparam={id}
                           >{name}
                           </Link>
                         </Badge>
@@ -100,6 +101,7 @@ export const MentorDetails = ({ id }) => {
             <hr/>
             <div className="row">
               <div className="col-12 col-md-6 font-weight-bolder"><span>Course('s): </span></div>
+              {/* test */}
               <WithLoading
                 isLoading={mentorCoursesAreLoading || !mentorCoursesAreLoaded}
                 className="d-block mx-auto m-0"
@@ -111,7 +113,9 @@ export const MentorDetails = ({ id }) => {
                         <Badge pill variant="info">
                           <Link
                             to={`${paths.COURSE_DETAILS}/${id}`}
-                            className="text-decoration-none text-light"
+                            className="text-decoration-none text-light course-link"
+                            data-testid='courseLink'
+                            data-testcourseidparam={id}
                           >{name}</Link>
                         </Badge>
                       </div>
