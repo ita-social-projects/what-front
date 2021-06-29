@@ -12,7 +12,7 @@ jest.mock('react-redux', () => ({ useSelector: jest.fn() }));
 
 jest.mock('@/shared/hooks', () => ({ useActions: jest.fn() }));
 
-describe('Render of EditLesson', () => {
+describe('Render of AddLesson', () => {
   let historyMock;
   let mockStudentsSelector;
   let mockGroupsSelector;
@@ -87,7 +87,7 @@ describe('Render of EditLesson', () => {
   });
 
   it('should redirect to URL LESSONS when !addError && addIsLoaded', () => {
-    mockEditLessonSelector = {
+    mockAddLessonSelector = {
       isLoaded: true,
       isLoading: false,
       error: '',
