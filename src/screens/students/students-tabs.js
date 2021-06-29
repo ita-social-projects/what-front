@@ -28,7 +28,7 @@ export const StudentsTabs = ({ index }) => {
   }, [fetchGroups, fetchStudentById, fetchStudentGroups, fetchStudentLessons, id]);
 
   return (
-    <Tabs defaultIndex={index} className="container w-50" linkBack="/students">
+    <Tabs defaultIndex={index} className="container w-50 pt-5" linkBack="/students">
       <Tab title="Student details">
         <StudentDetails />
       </Tab>

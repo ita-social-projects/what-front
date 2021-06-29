@@ -3,11 +3,13 @@ import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
 import { currentUserSelector, fetchLessons, lessonsSelector, mentorLessonsSelector, fetchMentorLessons  } from '@/models/index.js';
-import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
+import { Button, Search, WithLoading, Pagination, DoubleDateFilter } from '@/components/index.js';
 import Icon from '@/icon.js';
 import { commonHelpers } from "@/utils";
 import classNames from 'classnames';
 import styles from './list-of-lessons.scss';
+import { Table } from '@components/table';
+import {List} from "@components/list";
 
 export const ListOfLessons = () => {
   const history = useHistory();
@@ -29,10 +31,17 @@ export const ListOfLessons = () => {
   const [startDateFilterBorder, setStartDateFilterBorder] = useState({
     error: false
   });
-  const [descendingSorts, setDescendingSorts] = useState({ id: true, themeName: false, lessonDate: false, lessonTime: false });
-  const [prevSort, setPrevSort] = useState('id');
+  const INITIAL_CATEGORIES = [
+    { id: 0, name: 'themeName', sortedByAscending: false, tableHead: 'themeName' },
+    { id: 1, name: 'lessonDate', sortedByAscending: false, tableHead: 'lessonDate' },
+    { id: 2, name: 'lessonTime', sortedByAscending: false, tableHead: 'lessonTime' },
+  ];
+  const [showBlocks, setShowBlocks] = useState(false);
+
+  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [lessonsPerPage, setLessonsPerPage] = useState(10);
+  const [lessonsPerPage, setLessonsPerPage] = useState(9);
   const indexOfLast = currentPage * lessonsPerPage;
   const indexOfFirst = indexOfLast - lessonsPerPage;
 
@@ -63,91 +72,36 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  const currentDateString = commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: new Date() 
-    }).reverseDate;
-  const halfMonthDays = 15;
-  const halfMonthPastDate = new Date();
-  halfMonthPastDate.setDate(halfMonthPastDate.getDate() - halfMonthDays);
-  const halfMonthPastDateString = commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: halfMonthPastDate 
-    }).reverseDate;
-
-  useEffect(() => {
-    setFilterStartDate(halfMonthPastDate);
-    setFilterEndDate(currentDateString);
-  }, []);
-
-  const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
-
-  const onDateFilterClick = () => {
-    const startTime = new Date(commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: filterStartDate 
-    }).reverseDate);
-    const endTime = new Date(commonHelpers.transformDateTime({ 
-      isDayTime: false, 
-      dateTime: filterEndDate 
-    }).reverseDate);
-
-    if (startTime > endTime) {
-      setStartDateFilterBorder({
-        error: true
-      });
-      return;
-    }
-    setStartDateFilterBorder(false);
-
-    const lessons = rawLessonsList.filter((lesson) => {
-      const lessonTime = new Date(commonHelpers.transformDateTime({ 
-        isDayTime: false, 
-        dateTime: lesson.lessonDate 
-      }).reverseDate);
-
-      if (lessonTime >= startTime && lessonTime <= endTime) {
-        return true;
-      }
-      return false;
-    });
-
-    setFilteredLessonsList(lessons);
-    setCurrentPage(1);
-  }
-
   useEffect(() => {
     const lessons = rawLessonsList.filter(
-      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
-    );
+      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()));
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
   }, [searchLessonsThemeValue]);
 
+  const handleSearchTheme = (inputValue) => {
+    setSearchLessonsThemeValue(inputValue);
+  };
+
   const addLesson = useCallback(() => history.push(paths.LESSON_ADD), [history]);
   const downloadThemes = useCallback(() => history.push(paths.THEMES_DOWNLOAD), [history]);
-  const lessonDetails = useCallback((id) => history.push(`${paths.LESSON_DETAILS}/${id}`), [history]);
+  const handleDetails = useCallback((id) => history.push(`${paths.LESSON_DETAILS}/${id}`), [history]);
 
-  const editLesson = useCallback((event, id) => {
+  const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.LESSON_EDIT}/${id}`);
   }, [history]);
 
-  const handleSortByParam = (key) => {
-    if (prevSort === key) {
-      descendingSorts[key] = !descendingSorts[key];
-      setDescendingSorts(descendingSorts);
-    } else {
-      setDescendingSorts({ id: false, themeName: false, lessonDate: false, lessonTime: false });
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
     }
-    setPrevSort(key);
+    return { ...category, sortedByAscending: false };
+  });
 
-    const sortedLessons = [...filteredLessonsList].sort((a, b) => {
-      if (descendingSorts[key]) {
-        return a[key] <= b[key] ? -1 : 1;
-      }
-      return b[key] <= a[key] ? -1 : 1;
-    });
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedLessons = data;
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredLessonsList(sortedLessons);
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   };
@@ -157,6 +111,7 @@ export const ListOfLessons = () => {
       setCurrentPage(pageNumber);
     }
   };
+  
   const nextPage = useCallback((pageNumber) => {
     const totalPages = Math.ceil(filteredLessonsList?.length / lessonsPerPage);
     setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
@@ -169,8 +124,7 @@ export const ListOfLessons = () => {
   const getLessonsList = useCallback(() => {
     const lessonsList = visibleLessonsList.map((lesson) => (
       <tr id={lesson.id} key={lesson.id} onClick={() => lessonDetails(lesson.id)} className={styles['table-row']}>
-        <td className="text-center">{lesson.id}</td>
-        <td>{lesson.themeName}</td>
+        <td className={"text-left"}>{lesson.themeName}</td>
         <td>{lesson.lessonShortDate}</td>
         <td>{lesson.lessonTime}</td>
         {currentUser.role !== 3
@@ -187,13 +141,12 @@ export const ListOfLessons = () => {
       </tr>
     ));
 
-    if ((!lessonsList.length && filterStartDate) && 
-        (!lessonsList.length && filterEndDate) || 
+    if (!lessonsList.length && !lessonsList.length || 
         !lessonsList.length && searchLessonsThemeValue) {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
-  }, [visibleLessonsList, filterStartDate, filterEndDate, searchLessonsThemeValue]);
+  }, [visibleLessonsList, searchLessonsThemeValue]);
 
   const changeCountVisibleItems = useCallback((newNumber) => {
     const finish = currentPage * newNumber;
@@ -227,8 +180,22 @@ export const ListOfLessons = () => {
     );
   };
 
+  const listProps = {
+    data: visibleLessonsList,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Lesson is not found',
+      check: [(!visibleLessonsList.length && !!filterStartDate) &&
+      (!visibleLessonsList.length && !!filterEndDate) ||
+      !visibleLessonsList.length && !!searchLessonsThemeValue]
+    }],
+    access: currentUser.role !== 3,
+    fieldsToShow: ['themeName', 'lessonShortDate', 'lessonTime', 'edit']
+  };
+
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Lessons</h2>
         { !isLoading ? (
@@ -239,148 +206,88 @@ export const ListOfLessons = () => {
           {paginationComponent()}
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 card shadow p-3 mb-5 bg-white">
+      <div className="row mr-0">
+        <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
           <div className="row align-items-center justify-content-between mt-2 mb-3">
             <div className="col-3">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
+            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => {
+                    changeCountVisibleItems(event.target.value);
+                  }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
+            }
               {currentUser.role !== 3 && (
                 <div className="col-4 text-right">
                   <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning mr-3', styles['left-add-btn'])}>
                     Add theme('s)
                   </Button>
-                  <Button onClick={addLesson}>
+                  <Button onClick={addLesson} type="button">
                     <span>Add a lesson</span>
                   </Button>
                 </div>
               )}
           </div>
           <div className="row align-items-center justify-content-end mb-3">
-            <div className="col-5 d-flex">
-              <input
-                className={classNames(styles.date, 'form-control start-date-field mr-2')}
-                type="date"
-                defaultValue={halfMonthPastDateString}
-                name="lesson_date"
-                required
-                onChange={(event) => setFilterStartDate(event.target.value)}
-                style={{borderColor: startDateFilterBorder.error ? 'red' : ''}}
-              />
-              <input
-                className={classNames(styles.date, 'form-control end-date-field')}
-                type="date"
-                defaultValue={currentDateString}
-                name="lesson_date"
-                required
-                onChange={(event) => setFilterEndDate(event.target.value)}
-              />
-            </div>
-            <div className="col-2 text-right">
-              <Button onClick={() => onDateFilterClick()}>
-                <span>Filter by period</span>
-              </Button>
+            <div className="col-6 offset-4">
+              {<DoubleDateFilter 
+                rawItemsList={rawLessonsList} 
+                setFilteredItemsList={setFilteredLessonsList} 
+                setCurrentPage={setCurrentPage}
+                component={'lessons'}
+              />}
             </div>
           </div>
-
           <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className={classNames(styles['table-head'], `${descendingSorts.id ? classNames(styles.descending) : ''}`, 'text-center', 'align-middle')}
-                    onClick={() => handleSortByParam('id')}
+            {
+              showBlocks ?
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps}/>
+                  </div>
+                  :
+                  <Table sortingCategories={sortingCategories}
+                         currentUser={currentUser}
+                         onClick={handleSortByParam}
+                         data={filteredLessonsList}
+                         access={{unruledUser: [3], unassigned: ''}}
                   >
-                    <button
-                      className={classNames(styles['button-sort'], 'px-0')}
-                    >
-                      <span className="font-weight-bolder">#</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    className={classNames(styles['table-head'], `${descendingSorts.themeName ? classNames(styles.descending) : ''}`)}
-                    onClick={() => handleSortByParam('themeName')}
-                  >
-                    <button
-                      className={classNames(styles['button-sort'], 'px-0')}
-                    >
-                      <span className="font-weight-bolder">Theme Name</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    className={classNames(styles['table-head'], `${descendingSorts.lessonDate ? classNames(styles.descending) : ''}`)}
-                    onClick={() => handleSortByParam('lessonDate')}
-                  >
-                    <button
-                      className={classNames(styles['button-sort'], 'px-0')}
-                    >
-                      <span className="font-weight-bolder">Date</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
-                    </button>
-                  </th>
-                  <th
-                    scope="col"
-                    className={classNames(styles['table-head'], `${descendingSorts.lessonTime ? classNames(styles.descending) : ''}`)}
-                    onClick={() => handleSortByParam('lessonTime')}
-                  >
-                    <button
-                      className={classNames(styles['button-sort'], 'px-0')}
-                    >
-                      <span className="font-weight-bolder">Time</span>
-                      <span className="pl-2">
-                        <Icon className={classNames(styles['arrow-down'])} icon="DropDown" color="#2E3440" size={25} />
-                        <Icon className={classNames(styles['arrow-up'])} icon="DropUp" color="#2E3440" size={25} />
-                      </span>
-                    </button>
-                  </th>
-                  {currentUser.role !== 3 ? <th scope="col" className="text-center">Edit</th> : null}
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  getLessonsList()
-                }
-              </tbody>
-            </table>
+                    <List props={listProps} listType={'list'}/>
+                  </Table>
+            }
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
