@@ -3,10 +3,10 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { globalLoadStudentGroups, loadStudentGroupsSelector } from '@models/index.js';
 import { paths, useActions } from '@/shared/index.js';
-import { Formik, Field, Form } from 'formik';
 
 import { Button, Search, WithLoading, Pagination, DoubleDateFilter } from '@components/index.js';
 
+import { inputGroupStartDate } from '@features/groups/list-of-groups/redux/actions';
 import Icon from '@/icon.js';
 
 import classNames from 'classnames';
@@ -97,8 +97,10 @@ export const ListOfGroups = () => {
     history.push(`${paths.GROUPS_DETAILS}/${id}`);
   }, [history]);
 
-  const searchGroups = (searchedGroups) => searchedGroups.filter(({ name }) => `${name}`
-    .toLowerCase().includes(searchGroupValue.toLowerCase()));
+  const handleCalendarChange = (event) => {
+    const date = event.target.value;
+    inputGroupStartDate(date);
+  };
     
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
@@ -200,86 +202,30 @@ export const ListOfGroups = () => {
     );
   };
 
-  const filterDateComponent = () => {
-    const initialStartDate = () => `${new Date().getFullYear()}-01-01`;
-    const initialFinishDate = () => `${commonHelpers.transformDateTime({}).reverseDate}`;
-
-    const filterByDate = ({ startDate, finishDate }) => {
-      const newArray = rawGroupsList
-        .filter((group) => (new Date(group.startDate.slice(0, 10)) >= new Date(startDate)) && (new Date(group.finishDate.slice(0, 10)) <= new Date(finishDate))
-      );
-      setFilteredGroupsList(newArray);
-      const finish = currentPage * groupsPerPage;
-      const start = finish - groupsPerPage;
-      setVisibleGroups(newArray.slice(start, finish));
-    };
-
-    return (
-      <Formik
-        initialValues={{
-          startDate: initialStartDate(),
-          finishDate: initialFinishDate(),
-        }}
-        onSubmit={filterByDate}
-        >
-        {({ errors }) => (
-          <Form name="start-group" className="row d-flex">
-              <div className="col-5">
-                <Field
-                  className={classNames('form-control', { 'border-danger': errors.startDate })}
-                  type="date"
-                  name="startDate"
-                  id="startDate"
-                  required
-                />
-                {errors.startDate && <p className="text-danger mb-0">{errors.startDate}</p>}
-              </div>
-              <div className="col-5">
-                <Field
-                  className={classNames('form-control', { 'border-danger': errors.finishDate })}
-                  type="date"
-                  name="finishDate"
-                  id="finishDate"
-                  required
-                />
-                {errors.finishDate && <p className="text-danger mb-0">{errors.finishDate}</p>}
-            </div>
-            <div className="col-2 text-right">
-              <Button type="submit">
-                Filter
-              </Button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    )
-  };
+  const listProps = {
+    data: visibleGroups,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Group is not found',
+      check: [!visibleGroups.length && searchGroupName || searchStartDate, !filteredGroupsList.length]
+    }],
+    access: true,
+    fieldsToShow: ['name', 'studentIds', 'startDate', 'finishDate', 'edit']
+  }
 
   return (
-    <div className={classNames('container ', styles.block)}>
+    <div className={classNames('container pt-5', styles.block)}>
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Groups</h2>
-        <div className="row ">
-          <div className="col-4">
-            {
-              !isLoading
-              && `${visibleGroups.length} of ${filteredGroupsList.length} groups`
-            }
-          </div>
-          <div className={classNames('col-6 ', styles.paginate)}>{paginationComponent()}</div>
-          <div className={classNames('col-1 ', styles['change-rows'])}>
-            <select
-              className={classNames('form-control', styles['change-rows'])}
-              id="change-visible-people"
-              onChange={(event) => { changeCountVisibleItems(event.target.value); }}
-            >
-              <option>10</option>
-              <option>30</option>
-              <option>50</option>
-              <option>75</option>
-              <option>100</option>
-            </select>
-          </div>
+        <div className="col-2 text-right">
+          {
+            !isLoading
+            && `${visibleGroups.length} of ${filteredGroupsList.length} students`
+          }
+        </div>
+        <div className="col-4 d-flex align-items-center justify-content-end">
+          {paginationComponent()}
         </div>
       </div>
       <div className="row mr-0">
@@ -304,6 +250,17 @@ export const ListOfGroups = () => {
             <div className="col-3 ">
               <Search onSearch={handleSearch} placeholder="Group's name" />
             </div>
+            <div className="col-2">
+              <input
+                className={classNames('form-control ', styles['calendar-input'])}
+                type="date"
+                name="group_date"
+                required
+                onChange={handleCalendarChange}
+                placeholder="Start Date"
+              />
+            </div>
+            {!showBlocks &&
             <div className="col-1 d-flex">
               <label
                   className={classNames(styles['label-for-select'])}
@@ -325,7 +282,8 @@ export const ListOfGroups = () => {
                 <option>99</option>
               </select>
             </div>
-            <div className={classNames('col-4 offset-2 btn-group text-group', styles['.upload-add-btn'])}>
+            }
+            <div className="col-4 text-right">
               <Button
                 onClick={downloadGroups}
                 type="button"
