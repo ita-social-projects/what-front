@@ -84,7 +84,7 @@ export const EditSecretarysDetails = ({ id }) => {
   };
 
   return (
-    <div className="container">
+    <div className="container" data-testid="editSecretarysDetails">
       <div className="row justify-content-center">
         <div className="col-md-12 col-sm-8 card shadow">
           <div className="px-2 py-4">
