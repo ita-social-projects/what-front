@@ -95,6 +95,7 @@ export const AddCourse = () => {
                       Cancel
                     </Link>
                     <Button
+                      id="addCourseSubmit"
                       type="submit"
                       disabled={!isValid || !dirty || isLoading || errors.name}
                       className={classNames('w-25', styles.button)}

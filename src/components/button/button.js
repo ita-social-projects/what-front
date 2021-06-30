@@ -33,6 +33,7 @@ Button.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  id: PropTypes.string,
   type: PropTypes.string,
   onClick: PropTypes.func,
   className: PropTypes.string,
