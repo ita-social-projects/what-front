@@ -12,3 +12,24 @@ export const mockMentorGroups = [
 export const mockMentorCourses = [
   {id: 1, name: "123 Testing"}
 ];
+
+export const mockMentorIdSelector = {
+  data: mockMentorId,
+  isLoading: false,
+  isLoaded: true,
+  error: ''
+};
+
+export const mockMentorGroupsSelector = {
+  data: mockMentorGroups,
+  isLoading: false,
+  isLoaded: true,
+  error: ''
+};
+
+export const mockMentorCoursesSelector = {
+  data: mockMentorCourses,
+  isLoading: false,
+  isLoaded: true,
+  error: ''
+};

@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { number } from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared/index.js';
-import { mentorIdSelector, fetchMentorById, fetchActiveMentors, currentUserSelector,
+import { mentorIdSelector, fetchMentorById, fetchActiveMentors, 
   mentorCoursesSelector, mentorGroupsSelector } from '@/models/index.js';
 import { WithLoading } from '@/components/index.js';
 import { Badge } from 'react-bootstrap';
@@ -30,8 +30,6 @@ export const MentorDetails = ({ id }) => {
     isLoaded: mentorCoursesAreLoaded,
     error: mentorCoursesError
   } = useSelector(mentorCoursesSelector, shallowEqual);
-
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
   const [
     dispatchLoadMentors,
