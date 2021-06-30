@@ -1,4 +1,4 @@
-export const secretarysMock = [
+export const SecretarysMock = [
     {
         avatarUrl: null,
         email: "secretary@gmail.com",

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { render, fireEvent } from '@testing-library/react';
+import { paths, useActions } from '@/shared';
+import { render } from '@testing-library/react';
 import { EditSecretarysDetails } from '../';
-import { secretarysMock } from './mock/mock-data.js';
+import { SecretarysMock } from './__mock__/mock-data.js';
 
 
 jest.mock('react-redux', () => ({
@@ -14,46 +15,53 @@ jest.mock('@/shared/hooks', () => ({
   useActions: jest.fn()
 }));
 
+const props = {
+    id: 1
+};
 
-
-describe('EditSecretarysDetails', () => {
+describe('Edit Secretarys Details', () => {
     let mockSecretariesSelector;
-    // let mockUpdatedSecretarySelector;
-    // let mockDeletedSecretarySelector;
+    let mockUpdatedSecretarySelector;
+    let mockDeletedSecretarySelector;
+    let useActionsFns;
     let historyMock;
     
-    const props = {
-        id: 1
-    };
   beforeEach(() => {
     mockSecretariesSelector = {
-        data: secretarysMock,
+        data: SecretarysMock,
         isLoading: false,
         isLoaded: true,
-        error: '',
+        error: ''
     };
-    // mockUpdatedSecretarySelector = {
-    //     isLoaded: false,
-    //     isLoading: false,
-    //     error: ''
-    // };
-    // mockDeletedSecretarySelector = {
-    //     isLoaded: false,
-    //     isLoading: false,
-    //     error: ''
-    // };
+    mockUpdatedSecretarySelector = {
+        isLoaded: false,
+        isLoading: false,
+        error: ''
+    };
+    mockDeletedSecretarySelector = {
+        isLoaded: false,
+        isLoading: false,
+        error: ''
+    };
     
     useSelector
         .mockReturnValueOnce(mockSecretariesSelector)
-        // .mockReturnValueOnce(mockUpdatedSecretarySelector)
-        // .mockReturnValueOnce(mockDeletedSecretarySelector)
+        .mockReturnValueOnce(mockUpdatedSecretarySelector)
+        .mockReturnValueOnce(mockDeletedSecretarySelector);
+
+    useActionsFns = {
+        updateSecretary: jest.fn(),
+        deleteSecretary: jest.fn()
+    };
+
+    useActions.mockReturnValue([useActionsFns.updateSecretary, useActionsFns.deleteSecretary]);
+
     historyMock = { push: jest.fn(), location: {}, listen: jest.fn() };
+
   });
 
   it('should render edit secretarys details', () => {
-    const { getByTestId } = render(<Router history={historyMock}>
-            <EditSecretarysDetails { ...props } />
-        </Router>);
+    const { getByTestId } = render(<Router history={historyMock}><EditSecretarysDetails {...props} /></Router>)
     expect(getByTestId('editSecretarysDetails')).toBeInTheDocument();
   });
 });
