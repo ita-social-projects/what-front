@@ -1,7 +1,9 @@
-import { commonHelpers } from '@/utils';
-import Icon from '@/icon';
-import styles from './block.scss';
-import React from 'react';
+
+import {commonHelpers} from "@/utils";
+import Icon from "@/icon";
+import styles from "./blocks.scss";
+import React from "react";
+
 
 /**
  *

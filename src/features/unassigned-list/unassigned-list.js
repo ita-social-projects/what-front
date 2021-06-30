@@ -275,7 +275,7 @@ export const UnAssignedList = () => {
                    currentUser={currentUser}
                    onClick={handleSortByParam}
                    data={users}
-                   access={ { unruledUser: 4, unassigned: 'unassigned' } }
+                   access={{unruledUser: [4], unassigned: 'unassigned'}}
             >
               {getPersonsRows()}
             </Table>

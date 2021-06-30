@@ -1,7 +1,9 @@
-import styles from './row.scss';
-import { commonHelpers } from '@/utils';
-import Icon from '@/icon';
-import React from 'react';
+
+import styles from "./rows.scss";
+import {commonHelpers} from "@/utils";
+import Icon from "@/icon";
+import React from "react";
+
 
 /**
  *

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
 import { currentUserSelector, fetchLessons, lessonsSelector, mentorLessonsSelector, fetchMentorLessons  } from '@/models/index.js';
-import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
+import { Button, Search, WithLoading, Pagination, DoubleDateFilter } from '@/components/index.js';
 import Icon from '@/icon.js';
 import { commonHelpers } from "@/utils";
 import classNames from 'classnames';
@@ -39,6 +39,7 @@ export const ListOfLessons = () => {
   const [showBlocks, setShowBlocks] = useState(false);
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [lessonsPerPage, setLessonsPerPage] = useState(9);
   const indexOfLast = currentPage * lessonsPerPage;
@@ -71,73 +72,16 @@ export const ListOfLessons = () => {
     setVisibleLessonsList(filteredLessonsList.slice(indexOfFirst, indexOfLast));
   }, [currentPage, filteredLessonsList]);
 
-  const currentDateString = commonHelpers.transformDateTime({
-      isDayTime: false,
-      dateTime: new Date()
-    }).reverseDate;
-  const halfMonthDays = 15;
-  const halfMonthPastDate = new Date();
-  halfMonthPastDate.setDate(halfMonthPastDate.getDate() - halfMonthDays);
-  const halfMonthPastDateString = commonHelpers.transformDateTime({
-      isDayTime: false,
-      dateTime: halfMonthPastDate
-    }).reverseDate;
-
-  useEffect(() => {
-    setFilterStartDate(halfMonthPastDate);
-    setFilterEndDate(currentDateString);
-  }, []);
-
-  const handleSearchTheme = (inputValue) => setSearchLessonsThemeValue(inputValue);
-
-  const onDateFilterClick = () => {
-    const startTime = new Date(commonHelpers.transformDateTime({
-      isDayTime: false,
-      dateTime: filterStartDate
-    }).reverseDate);
-    const endTime = new Date(commonHelpers.transformDateTime({
-      isDayTime: false,
-      dateTime: filterEndDate
-    }).reverseDate);
-
-    if (startTime > endTime) {
-      setStartDateFilterBorder({
-        error: true
-      });
-      return;
-    }
-
-    if (!filterStartDate && !filterEndDate) {
-      setFilteredLessonsList(rawLessonsList);
-      setCurrentPage(1);
-      return;
-    }
-
-    setStartDateFilterBorder(false);
-
-    const lessons = rawLessonsList.filter((lesson) => {
-      const lessonTime = new Date(commonHelpers.transformDateTime({
-        isDayTime: false,
-        dateTime: lesson.lessonDate
-      }).reverseDate);
-
-      if (lessonTime >= startTime && lessonTime <= endTime) {
-        return true;
-      }
-      return false;
-    });
-
-    setFilteredLessonsList(lessons);
-    setCurrentPage(1);
-  }
-
   useEffect(() => {
     const lessons = rawLessonsList.filter(
-      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()),
-    );
+      (lesson) => lesson.themeName.toUpperCase().includes(searchLessonsThemeValue.toUpperCase()));
     setFilteredLessonsList(lessons);
     setCurrentPage(1);
   }, [searchLessonsThemeValue]);
+
+  const handleSearchTheme = (inputValue) => {
+    setSearchLessonsThemeValue(inputValue);
+  };
 
   const addLesson = useCallback(() => history.push(paths.LESSON_ADD), [history]);
   const downloadThemes = useCallback(() => history.push(paths.THEMES_DOWNLOAD), [history]);
@@ -167,6 +111,7 @@ export const ListOfLessons = () => {
       setCurrentPage(pageNumber);
     }
   };
+  
   const nextPage = useCallback((pageNumber) => {
     const totalPages = Math.ceil(filteredLessonsList?.length / lessonsPerPage);
     setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
@@ -196,13 +141,12 @@ export const ListOfLessons = () => {
       </tr>
     ));
 
-    if ((!lessonsList.length && filterStartDate) &&
-        (!lessonsList.length && filterEndDate) ||
+    if (!lessonsList.length && !lessonsList.length || 
         !lessonsList.length && searchLessonsThemeValue) {
       return <tr><td colSpan="5" className="text-center">Lesson is not found</td></tr>;
     }
     return lessonsList;
-  }, [visibleLessonsList, filterStartDate, filterEndDate, searchLessonsThemeValue]);
+  }, [visibleLessonsList, searchLessonsThemeValue]);
 
   const changeCountVisibleItems = useCallback((newNumber) => {
     const finish = currentPage * newNumber;
@@ -312,39 +256,22 @@ export const ListOfLessons = () => {
                   <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning mr-3', styles['left-add-btn'])}>
                     Add theme('s)
                   </Button>
-                  <Button onClick={addLesson}>
+                  <Button onClick={addLesson} type="button">
                     <span>Add a lesson</span>
                   </Button>
                 </div>
               )}
           </div>
           <div className="row align-items-center justify-content-end mb-3">
-            <div className="col-5 d-flex">
-              <input
-                className={classNames(styles.date, 'form-control start-date-field mr-2')}
-                type="date"
-                defaultValue={halfMonthPastDateString}
-                name="lesson_date"
-                required
-                onChange={(event) => setFilterStartDate(event.target.value)}
-                style={{borderColor: startDateFilterBorder.error ? 'red' : ''}}
-              />
-              <input
-                className={classNames(styles.date, 'form-control end-date-field')}
-                type="date"
-                defaultValue={currentDateString}
-                name="lesson_date"
-                required
-                onChange={(event) => setFilterEndDate(event.target.value)}
-              />
-            </div>
-            <div className="col-2 text-right">
-              <Button onClick={() => onDateFilterClick()}>
-                <span>Filter by period</span>
-              </Button>
+            <div className="col-6 offset-4">
+              {<DoubleDateFilter 
+                rawItemsList={rawLessonsList} 
+                setFilteredItemsList={setFilteredLessonsList} 
+                setCurrentPage={setCurrentPage}
+                component={'lessons'}
+              />}
             </div>
           </div>
-
           <WithLoading isLoading={isLoading} className="d-block mx-auto mt-3">
             {
               showBlocks ?
@@ -356,12 +283,11 @@ export const ListOfLessons = () => {
                          currentUser={currentUser}
                          onClick={handleSortByParam}
                          data={filteredLessonsList}
-                         access={{unruledUser: 3, unassigned: ''}}
+                         access={{unruledUser: [3], unassigned: ''}}
                   >
                     <List props={listProps} listType={'list'}/>
                   </Table>
             }
-
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
