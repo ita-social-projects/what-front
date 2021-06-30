@@ -7,6 +7,7 @@ import styles from './button.scss';
 export const Button = ({
   children,
   type='button',
+  id,
   onClick,
   variant,
   className,
