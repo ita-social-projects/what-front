@@ -14,6 +14,7 @@ export const Button = ({
   disabled,
 }) => (
   <button
+    id={id}
     type={type}
     onClick={onClick}
     className={classNames(
