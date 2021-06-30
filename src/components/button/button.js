@@ -7,14 +7,12 @@ import styles from './button.scss';
 export const Button = ({
   children,
   type='button',
-  id,
   onClick,
   variant,
   className,
   disabled,
 }) => (
   <button
-    id={id}
     type={type}
     onClick={onClick}
     className={classNames(
@@ -35,7 +33,6 @@ Button.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  id: PropTypes.string,
   type: PropTypes.string,
   onClick: PropTypes.func,
   className: PropTypes.string,
