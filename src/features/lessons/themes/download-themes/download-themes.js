@@ -22,7 +22,9 @@ export const DownloadThemes = () => {
   const [fileName, setFileName] = useState('');
   
   const onSubmit = (values) => {
-    downloadThemes(values);
+    const formThemes = new FormData();
+		formThemes.append('File', values.themes);
+    downloadThemes(formThemes);
   };
   
   return (
@@ -30,9 +32,7 @@ export const DownloadThemes = () => {
       <div className="row justify-content-center">
         <div className="col-md-6 col-sm-8 card shadow">
           <Formik
-            initialValues={
-              {file: ""}
-            }
+            initialValues={{}}
             onSubmit={onSubmit}
           >
             {({ values, errors, dirty, setFieldValue }) => (

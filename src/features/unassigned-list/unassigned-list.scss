@@ -1,11 +1,8 @@
 @import '../../styles/main';
 
-
-
 .add-role{
     display: flex;
 }
-
 
 .btn{
     height: fit-content;
@@ -24,11 +21,11 @@
     cursor: pointer;
     position: relative;
     transition: opacity .3s;
-  
+
     &:hover {
       opacity: .7;
     }
-  
+
     &::after {
       content: '';
       display: block;
@@ -42,7 +39,7 @@
       transform: rotateZ(45deg);
       transition: .3s;
     }
-  
+
     &-sorted {
       &::after {
         transform: rotateZ(225deg);
@@ -53,16 +50,15 @@
 
   .change-rows{
     margin: 0 10px;
-    width: fit-content !important; 
+    width: fit-content !important;
   }
-  
+
   .label-for-select{
     padding: .375rem .75rem;
     margin-bottom: 0 !important;
   }
-  
+
   .paginate{
     margin: auto !important;
   }
-  
-  
+

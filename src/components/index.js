@@ -6,3 +6,4 @@ export { Search } from './search/index.js';
 export { WithLoading } from './with-loading/index.js';
 export { ProtectedRoute } from './protected-route/index.js';
 export { Pagination } from './pagination/index.js';
+export { DoubleDateFilter } from './double-date-filter/index.js';

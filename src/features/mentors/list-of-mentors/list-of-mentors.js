@@ -11,7 +11,8 @@ import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-mentors.scss';
-
+import {List} from "@components/list";
+import { Table } from '@components/table';
 export const ListOfMentors = () => {
   const {
     data: allMentors,
@@ -34,18 +35,18 @@ export const ListOfMentors = () => {
   const [visibleMentors, setVisibleMentors] = useState([]);
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+    { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
   const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchMentorValue, setSearchMentorValue] = useState('');
+  const [showBlocks, setShowBlocks] = useState(false);
 
-  const [mentorsPerPage, setMentorsPerPage] = useState(10);
+  const [mentorsPerPage, setMentorsPerPage] = useState(9);
   const indexOfLastMentor = currentPage * mentorsPerPage;
   const indexOfFirstMentor = indexOfLastMentor - mentorsPerPage;
 
@@ -57,18 +58,6 @@ export const ListOfMentors = () => {
 
   const searchMentors = (searchedMentors, value) => searchedMentors.filter(({ firstName, lastName }) => `${firstName} ${lastName}`
     .toLowerCase().includes(value.toLowerCase()));
-
-  const getSortedByParam = (data, activeCategory) => {
-    const { sortingParam, sortedByAscending } = activeCategory;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    return [...data].sort((prevItem, currentItem) => {
-      if (prevItem[sortingParam] > currentItem[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-  };
 
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
@@ -121,10 +110,9 @@ export const ListOfMentors = () => {
 
   const mentorList = () => {
     const mentors = visibleMentors
-      .map(({ id, index, firstName, lastName, email }) => (
+      .map(({ id, firstName, lastName, email }) => (
         <tr onClick={() => mentorDetails(id)} key={id} className={styles['table-rows']} data-mentor-id={id}>
-          <td className="text-center">{index + 1}</td>
-          <td>{firstName}</td>
+          <td className="text-left">{firstName}</td>
           <td>{lastName}</td>
           <td>{email}</td>
           {currentUser.role !== 2
@@ -146,14 +134,12 @@ export const ListOfMentors = () => {
     return mentors;
   };
 
-  const handleSortByParam = useCallback((event) => {
-    const categoryParams = event.target.dataset;
-    const sortedMentors = getSortedByParam(filteredMentorList, categoryParams);
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedMentors = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredMentorList(sortedMentors);
     setVisibleMentors(filteredMentorList.slice(indexOfFirstMentor, indexOfLastMentor));
-  }, [sortingCategories, filteredMentorList]);
+  };
 
   const handleShowDisabled = (event) => {
     setIsShowDisabled(!isShowDisabled);
@@ -173,11 +159,11 @@ export const ListOfMentors = () => {
     history.push(paths.UNASSIGNED_USERS);
   }, [history]);
 
-  const mentorDetails = useCallback((id) => {
+  const handleDetails = useCallback((id) => {
     history.push(`${paths.MENTORS_DETAILS}/${id}`);
   }, [history]);
 
-  const mentorEdit = useCallback((event, id) => {
+  const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.MENTOR_EDIT}/${id}`);
   }, [history]);
@@ -205,6 +191,18 @@ export const ListOfMentors = () => {
     setMentorsPerPage(newNumber);
   };
 
+  const listProps = {
+    data: visibleMentors,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Mentor is not found',
+      check: [!visibleMentors.length && !!searchMentorValue]
+    }],
+    access: currentUser.role !== 2,
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
+  };
+
   const paginationComponent = () => {
     if (filteredMentorList.length < mentorsPerPage) {
       return (
@@ -230,7 +228,7 @@ export const ListOfMentors = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Mentors</h2>
         { !areAllMentorsLoading && !areActiveMentorsLoading
@@ -239,13 +237,23 @@ export const ListOfMentors = () => {
           {paginationComponent()}
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 card shadow p-3 mb-5 bg-white">
+      <div className="row mr-0">
+        <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3">
@@ -268,62 +276,53 @@ export const ListOfMentors = () => {
                 </label>
               </div>
               )}
+            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => {
+                    changeCountVisibleItems(event.target.value);
+                  }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
+            }
             <div className="col-2 text-right">
               {currentUser.role !== 2
                   && (
                   <Button onClick={addMentor}>
                     <span>Add a mentor</span>
                   </Button>
-                  )}
+              )}
             </div>
           </div>
           <WithLoading isLoading={areActiveMentorsLoading || areAllMentorsLoading} className="d-block mx-auto m-0">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      key={id}
-                      className={styles['table-head']}
-                    >
-                      <span
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        onClick={handleSortByParam}
-                        className={classNames({ [styles.rotate]: !sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                    </th>
-                  ))}
-                  {currentUser.role !== 2 ? <th scope="col" className="text-center">Edit</th> : null}
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  mentorList()
-                }
-              </tbody>
-            </table>
+            {showBlocks ?
+                <div className="container d-flex flex-wrap">
+                  <List listType={'block'} props={listProps}/>
+                </div>
+                :
+                <Table sortingCategories={sortingCategories}
+                       currentUser={currentUser}
+                       onClick={handleSortByParam}
+                       data={filteredMentorList}
+                       access={{unruledUser: [2], unassigned: ''}}
+                >
+                  <List props={listProps} listType={'list'}/>
+                </Table>
+            }
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

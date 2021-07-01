@@ -3,6 +3,18 @@
     padding-left: 64px;
   }
 }
+
+@media screen and (min-width: 992px) and (max-width: 1919px) {
+  .container {
+    display: flex;
+    padding-left: 0px;
+    min-height: 100vh;
+    height: fit-content;
+    margin-top: -75px;
+    padding-top: 74px;
+  }
+}
+
 @media screen and (min-width: 1920px) {
   .container {
     padding-left: 220px;
@@ -12,5 +24,3 @@
 .container {
   position: relative;
 }
-
-
