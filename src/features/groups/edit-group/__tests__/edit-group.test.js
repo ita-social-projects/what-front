@@ -1,11 +1,20 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { render } from '@testing-library/react';
-import { useActions } from '@/shared/hooks';
+import { cleanup, render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { act } from "react-dom/test-utils";
+import { useActions, useState } from '@/shared/hooks';
 import { commonHelpers } from '@/utils';
-
-import { EditGroup } from '../';
+import { id,
+	initialValues,
+	studentGroupData,
+	studentsData,
+	mentorsData,
+	coursesData,
+	formValues,
+	studentGroupDataLoading } from './mocks/mock-data';
+import { useStates, useStateMock } from './mocks/mock-useState';
+import { EditGroup, Button, addMentor, addStudent } from '../';
 
 jest.mock('react-redux', () => ({ useSelector: jest.fn() }));
 
@@ -15,6 +24,8 @@ jest.mock('@/shared/hooks', () => ({
 
 describe('Edit group', () => {
 	let mockedState;
+	let historyMock;
+
 	beforeEach(() => {
 		mockedState = {
 			isLoading: false,
@@ -33,95 +44,15 @@ describe('Edit group', () => {
 		]);
 
 		commonHelpers.transformDateTime = jest.fn().mockReturnValue({
-			date: '15.06.2021'
+			formInitialValue: '2022-06-16'
 		});
+
+		historyMock = { push: jest.fn(), location: {}, listen: jest.fn() };
 	});
 
-	it('should render edit-group component', () => {
-		const historyMock = { push: jest.fn(), location: {}, listen: jest.fn() };
-		const id = 1;
-		const initialValues = {
-      name: 'testName',
-      startDate: '2021-05-16T00:00:00',
-      finishDate: '2022-06-16T00:00:00',
-      courseId: 9,
-      mentor: '',
-      student: ''
-    };
-		const studentGroupData = {
-			data: {
-				courseId: 9,
-				finishDate: '2022-06-16T00:00:00',
-				id: 1,
-				mentorsIds: [9],
-				name: '122-18-3',
-				startDate: '2021-05-16T00:00:00',
-				studentIds: [1, 3, 4, 23, 26, 35],
-			},
-			error: '',
-			isLoaded: true,
-			isLoading: false
-		};
-		const studentsData = {
-			data: [
-				{
-					avatarUrl: null,
-					email: 'student@gmail.com',
-					firstName: 'student',
-					id: 1,
-					lastName: 'student'
-				},
-				{
-					avatarUrl: null,
-					email: 'Student@gmail.org',
-					firstName: 'Student',
-					id: 2,
-					lastName: 'Student'
-				}
-			],
-			error: '',
-			isLoaded: true,
-			isLoading: false
-		};
-		const mentorsData = {
-			data: [
-				{
-					avatarUrl: null,
-					email: 'mentor@gmail.com',
-					firstName: 'mentor',
-					id: 1,
-					lastName: 'mentor'
-				},
-				{
-					avatarUrl: null,
-					email: 'Mentor@gmail.org',
-					firstName: 'Mentor',
-					id: 2,
-					lastName: 'Mentor'
-				}
-			],
-			error: '',
-			isLoaded: true,
-			isLoading: false
-		};
-		const coursesData = {
-			data: [
-				{
-					id: 1,
-					isActive: true,
-					name: '123 Testing'
-				},
-				{
-					id: 1,
-					isActive: true,
-					name: '123 Testing'
-				}
-			],
-			error: '',
-			isLoading: false,
-			loaded: true
-		};
+	afterEach(cleanup);
 
+	it('should render edit-group component', () => {
 		const { getByTestId, debug } = render(
 			<Router history={historyMock}>
 				<EditGroup
@@ -138,8 +69,124 @@ describe('Edit group', () => {
 		expect(getByTestId('editGroup')).toBeInTheDocument();
 	});
 
-	// it('submits correct values', () => {
-	// 	const { container } = render(<EditGroup />);
-	// 	const name = 
-	// });	
+  it('should loader appear when studentGroup Loading is true', () => {
+    const { container } = render(
+    	<Router history={historyMock}>
+				<EditGroup
+					id={id}
+					initialValues={initialValues}
+					coursesData={coursesData}
+					mentorsData={mentorsData}
+					studentsData={studentsData}
+					studentGroupData={studentGroupDataLoading}
+				/>
+			</Router>
+		);
+    const loader = container.querySelector('.spinner-border');
+
+    expect(loader).toBeInTheDocument();
+  });
+
+  it('should datalist of mentors = 2', () => {
+    const { container } = render(
+    	<Router history={historyMock}>
+				<EditGroup
+					id={id}
+					initialValues={initialValues}
+					coursesData={coursesData}
+					mentorsData={mentorsData}
+					studentsData={studentsData}
+					studentGroupData={studentGroupData}
+				/>
+			</Router>
+		);
+    const mentorsList = container.querySelector('#mentors-list');
+
+    expect(mentorsList.children.length).toEqual(2);
+  });
+
+  it('should datalist of students = 2', () => {
+    const { container } = render(
+    	<Router history={historyMock}>
+				<EditGroup
+					id={id}
+					initialValues={initialValues}
+					coursesData={coursesData}
+					mentorsData={mentorsData}
+					studentsData={studentsData}
+					studentGroupData={studentGroupData}
+				/>
+			</Router>
+		);
+    const studentsList = container.querySelector('#students-list');
+
+    expect(studentsList.children.length).toEqual(2);
+  });
+
+
+	it('should call addMentor and addStudent 1 time', async () => {
+    const { container, getByTestId } = render(
+    	<Router history={historyMock}>
+				<EditGroup
+					id={id}
+					initialValues={initialValues}
+					coursesData={coursesData}
+					mentorsData={mentorsData}
+					studentsData={studentsData}
+					studentGroupData={studentGroupData}
+				/>
+			</Router>
+		);
+		const addMentor = jest.fn();
+  	const addStudent = jest.fn();
+		const addMentorBtn = container.querySelector('#add-mentor-btn');
+		const addStudentBtn = container.querySelector('#add-student-btn');
+
+	  await waitFor(() => {
+	    fireEvent.click(addMentorBtn);
+	    addMentor();
+	  });
+	  expect(addMentor).toHaveBeenCalledTimes(1);
+
+	  await waitFor(() => {
+	    fireEvent.click(addStudentBtn);
+	    addStudent();
+	  });
+	  expect(addStudent).toHaveBeenCalledTimes(1);
+	});
+
+  it('should submit Form', async () => {
+    const { container } = render(
+    	<Router history={historyMock}>
+				<EditGroup
+					id={id}
+					initialValues={initialValues}
+					coursesData={coursesData}
+					mentorsData={mentorsData}
+					studentsData={studentsData}
+					studentGroupData={studentGroupData}
+				/>
+			</Router>
+		);
+    const inputGroupName = container.querySelector('#group-name');
+    const inputCourseName = container.querySelector('#course-name');
+    const inputStartDate = container.querySelector('#start-date');
+    const inputFinishDate = container.querySelector('#finish-date');
+    const submitBtn = container.querySelector('#submit');
+    const handleSubmit = jest.fn();
+
+    expect(submitBtn).toBeInTheDocument();
+    await waitFor(() => {
+      fireEvent.change(inputGroupName, { target: { value: formValues.groupName } });
+      fireEvent.change(inputCourseName, { target: { value: coursesData.data[1] } });
+      fireEvent.change(inputStartDate, { target: { value: formValues.startDate } });
+      fireEvent.change(inputFinishDate, { target: { value: formValues.finishDate } });
+    });
+    React.useState = useStateMock.submit;
+    await waitFor(() => {
+      fireEvent.click(submitBtn);
+      handleSubmit();
+    });
+    expect(handleSubmit).toHaveBeenCalledTimes(1);
+  });
 });

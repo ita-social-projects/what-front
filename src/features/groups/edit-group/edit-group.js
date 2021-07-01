@@ -149,12 +149,14 @@ export const EditGroup = ({
   };
 
   return (
-    <div className="w-100" data-testid="editGroup">
+    <div className="w-100">
       <div className="justify-content-center">
         <div className="w-100 card shadow p-4">
           <WithLoading
-            isLoading={isGroupLoading || !isGroupLoaded || areMentorsLoading || !areMentorsLoaded
-          || areCoursesLoading || !areCoursesLoaded || areStudentsLoading || !areStudentsLoaded}
+            isLoading={isGroupLoading ||
+              areMentorsLoading ||
+              areCoursesLoading ||
+              areStudentsLoading}
             className={styles['loader-centered']}
           >
             <Formik
@@ -171,7 +173,7 @@ export const EditGroup = ({
               validateOnMount={false}
             >
               {({ values, errors, setFieldValue, isValid, dirty }) => (
-                <Form className="px-2 py-4" name="start-group">
+                <Form className="px-2 py-4" name="start-group" data-testid="editGroup">
                   <h3>Group Editing</h3>
                   <hr />
                   <div className="row mb-3 align-items-start">
@@ -184,7 +186,7 @@ export const EditGroup = ({
                         className={classNames('form-control', { 'border-danger': errors.name })}
                         type="text"
                         name="name"
-                        id="name"
+                        id="group-name"
                         placeholder="group name"
                       />
                       {errors.name && <p className="w-100 text-danger mb-0">{errors.name}</p>}
@@ -196,10 +198,10 @@ export const EditGroup = ({
                     </div>
                     <div className="col-md-8">
                       <Field
+                        id="course-name"
                         as="select"
                         className={classNames('custom-select')}
                         name="courseId"
-                        id="course"
                       >
                         <option value={group.courseId} key={group.courseId}>
                           { courses.find((course) => course.id === group.courseId)?.name }
@@ -247,7 +249,7 @@ export const EditGroup = ({
                       <label className="mt-2" htmlFor="mentor">Mentors:</label>
                     </div>
                     <div className="col-md-8">
-                      <div className="d-flex">
+                      <div className="d-flex" data-testid="mentor-field-wrapper">
                         <Field
                           className="form-control f"
                           type="text"
@@ -264,6 +266,7 @@ export const EditGroup = ({
                           }
                         </datalist>
                         <Button
+                          id="add-mentor-btn"
                           variant="info"
                           onClick={() => addMentor(values.mentor, () => setFieldValue('mentor', ''))}
                           disabled={!dirty}
@@ -278,6 +281,7 @@ export const EditGroup = ({
                             groupMentors.map(({ id, firstName, lastName }) => (
                               <li
                                 key={id}
+                                id="chosenMentorName"
                                 className={classNames(
                                   'd-flex bg-light border border-outline-secondary rounded',
                                   styles['datalist-item'],
@@ -303,7 +307,7 @@ export const EditGroup = ({
                       <label className="mt-2" htmlFor="finish-date">Students:</label>
                     </div>
                     <div className="col-md-8">
-                      <div className="d-flex">
+                      <div className="d-flex" data-testid="students-field-wrapper">
                         <Field
                           className="form-control f"
                           type="text"
@@ -320,6 +324,7 @@ export const EditGroup = ({
                           }
                         </datalist>
                         <Button
+                          id="add-student-btn"
                           variant="info"
                           onClick={() => addStudent(values.student, () => setFieldValue('student', ''))}
                           disabled={!dirty}
@@ -358,7 +363,7 @@ export const EditGroup = ({
                     <Button type="reset" variant="secondary" className={classNames('w-25', styles['clear-button'])} disabled={ (!dirty &&  prevGroupMentors !== groupMentors && prevGroupStudents !== groupStudents) || isEditing} onClick={handleReset}>
                       Clear
                     </Button>
-                    <Button type="submit" className="btn btn-secondary w-25" disabled={!isValid || (!dirty &&  prevGroupMentors !== groupMentors && prevGroupStudents !== groupStudents) || isEditing}>
+                    <Button id="submit" type="submit" className="btn btn-secondary w-25 buttonConfirm" disabled={!isValid || (!dirty &&  prevGroupMentors !== groupMentors && prevGroupStudents !== groupStudents) || isEditing}>
                       Confirm
                     </Button>
                   </div>
