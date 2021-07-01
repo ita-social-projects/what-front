@@ -41,6 +41,7 @@ export const EditSecretarysDetails = ({ id }) => {
   const [fireSecretary] = useActions([deleteSecretary]);
 
   const secretary = data.find((user) => user.id === id);
+
   const history = useHistory();
 
   const [toShowModal, setShowModal] = useState(false);
@@ -81,7 +82,7 @@ export const EditSecretarysDetails = ({ id }) => {
   const handleDelete = () => {
     handleCloseModal();
     fireSecretary(id);
-  };
+  }; 
 
   return (
     <div className="container" data-testid="editSecretarysDetails">
@@ -111,6 +112,7 @@ export const EditSecretarysDetails = ({ id }) => {
                         </div>
                         <div className="col-md-8">
                           <Field
+                            data-testid="firstName"
                             type="text"
                             className={classNames('form-control', { 'border-danger': errors.firstName })}
                             name="firstName"
@@ -127,6 +129,7 @@ export const EditSecretarysDetails = ({ id }) => {
                         </div>
                         <div className="col-md-8">
                           <Field
+                            data-testid="lastName"
                             type="text"
                             className={classNames('form-control', { 'border-danger': errors.lastName })}
                             name="lastName"
@@ -143,6 +146,7 @@ export const EditSecretarysDetails = ({ id }) => {
                         </div>
                         <div className="col-md-8">
                           <Field
+                            data-testid="email"
                             type="email"
                             className={classNames('form-control', { 'border-danger': errors.email })}
                             name="email"
@@ -177,6 +181,7 @@ export const EditSecretarysDetails = ({ id }) => {
                         </div>
                         <div className="col-md-3 col-4 px-1">
                           <Button
+                            data-testid="submitBtn"
                             type="submit"
                             className="w-100"
                             variant="info"

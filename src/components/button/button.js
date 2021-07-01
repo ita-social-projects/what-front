@@ -12,6 +12,7 @@ export const Button = ({
   variant,
   className,
   disabled,
+  ...rest
 }) => (
   <button
     id={id}
@@ -25,6 +26,7 @@ export const Button = ({
       className,
     )}
     disabled={disabled}
+    {...rest}
   >
     {children}
   </button>
