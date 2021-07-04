@@ -284,8 +284,8 @@ export const EditMentor = ({ id }) => {
               >
                 {({ values, errors, isValid, dirty }) => (
                   <Form>
-                    <div className="row m-0 pt-3">
-                      <div className="col-md-4 font-weight-bolder">
+                    <div className="row m-0 pt-3" data-testid='editForm'>
+                      <div className="col-md-4 font-weight-bolder" >
                         <label htmlFor="firstName">First Name:</label>
                       </div>
                       <div className="col-md-8">
@@ -368,7 +368,7 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="info" onClick={handleGroupAdd}>
+                            <Button id="addGroup" variant="info" onClick={handleGroupAdd}>
                               +
                             </Button>
                           </div>
@@ -381,7 +381,7 @@ export const EditMentor = ({ id }) => {
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-8 offset-md-4">
-                        <ul className="d-flex flex-wrap justify-content-between p-0">
+                        <ul className="d-flex flex-wrap justify-content-between p-0" data-testid='li-groups'>
                           {groups.map(({ id, name }) => (
                             <li
                               className={classNames(
@@ -391,10 +391,11 @@ export const EditMentor = ({ id }) => {
                               key={id}
                               data-groupid={id}
                               data-groupname={name}
+                              data-testid={id}
                             >
                               {name}
                               <button
-                                className="btn p-0 ml-auto mr-2 text-dark"
+                                className="btn p-0 ml-auto mr-2 text-dark delGroup"
                                 type="button"
                                 onClick={handleGroupDelete}
                               >
@@ -430,7 +431,7 @@ export const EditMentor = ({ id }) => {
                             ))}
                           </datalist>
                           <div className="input-group-append">
-                            <Button variant="info" onClick={handleCourseAdd}>
+                            <Button id="addCourse" variant="info" onClick={handleCourseAdd}>
                               +
                             </Button>
                           </div>
@@ -443,7 +444,7 @@ export const EditMentor = ({ id }) => {
 
                     <div className="row m-0 pt-3">
                       <div className="col-md-8 offset-md-4">
-                        <ul className="d-flex flex-wrap justify-content-between p-0">
+                        <ul className="d-flex flex-wrap justify-content-between p-0" data-testid='li-courses'>
                           {courses.map(({ id, name }) => (
                             <li
                               className={classNames(
@@ -453,10 +454,11 @@ export const EditMentor = ({ id }) => {
                               key={id}
                               data-courseid={id}
                               data-coursename={name}
+                              data-testid={id}
                             >
                               {name}
                               <button
-                                className="btn p-0 ml-auto mr-2 text-dark"
+                                className="btn p-0 ml-auto mr-2 text-dark delCourse"
                                 type="button"
                                 onClick={handleCourseDelete}
                               >
@@ -472,7 +474,7 @@ export const EditMentor = ({ id }) => {
                       <div className="col-md-3 col-4">
                         <Button
                           className={classNames(
-                            'w-100',
+                            'w-100 disableBtn',
                             styles['disable-button']
                           )}
                           onClick={handleShowModal}
@@ -493,6 +495,7 @@ export const EditMentor = ({ id }) => {
                             'w-100 btn btn-secondary',
                             styles.button
                           )}
+                          id="resetBtn"
                           type="reset"
                           onClick={resetInput}
                         >
@@ -502,7 +505,7 @@ export const EditMentor = ({ id }) => {
                       <div className="col-md-3 col-4">
                         <button
                           className={classNames(
-                            'w-100 btn ',
+                            'w-100 btn submit',
                             styles.button,
                             styles.submit
                           )}
