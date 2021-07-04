@@ -44,7 +44,7 @@ export const EditSecretarysDetails = ({ id }) => {
 
   const history = useHistory();
 
-  const [toShowModal, setShowModal] = useState(false);
+  const [toShowModal, setShowModal] = React.useState(false);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -160,6 +160,7 @@ export const EditSecretarysDetails = ({ id }) => {
                       <div className="row m-0 pt-3 px-2">
                         <div className="col-md-3 col-4 px-1">
                           <Button
+                            data-testid="openModalBtn"
                             type="button"
                             className="w-100"
                             variant="dark"
@@ -197,6 +198,7 @@ export const EditSecretarysDetails = ({ id }) => {
                 )}
               </Formik>
               <ModalWindow
+                data-testid="deleteBtn"
                 toShow={toShowModal}
                 onSubmit={handleDelete}
                 onClose={handleCloseModal}

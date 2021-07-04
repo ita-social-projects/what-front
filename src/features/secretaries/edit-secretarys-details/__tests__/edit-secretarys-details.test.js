@@ -23,10 +23,12 @@ describe('Edit Secretarys Details', () => {
   let mockUpdatedSecretarySelector;
   let mockDeletedSecretarySelector;
   let useActionsFns;
-  // let useStateMock;
+  let mockUseState;
+  let secretary;
   let historyMock;
     
   beforeEach(() => {
+
     mockSecretariesSelector = {
       data: SecretarysMock,
       isLoading: false,
@@ -49,22 +51,31 @@ describe('Edit Secretarys Details', () => {
       deleteSecretary: jest.fn()
     };
 
-    // useStateMock = {
-    //   setShowModal: jest.fn()
-    // }
+    mockUseState = {
+      toShowModal: false,
+      setShowModal: jest.fn()
+    };
+
+    secretary = {
+      avatarUrl: null,
+      email: 'secretary@gmail.com',
+      firstName: 'secretary',
+      id: 1,
+      lastName: 'secretary'
+    };
 
     historyMock = { push: jest.fn(), location: {}, listen: jest.fn() };
     
     useSelector
       .mockReturnValueOnce(mockSecretariesSelector)
       .mockReturnValue(mockUpdatedSecretarySelector)
-      .mockReturnValue(mockDeletedSecretarySelector);
-
-    
-    //React.useState = jest.fn()
-    //  .mockReturnValueOnce([useStateMock.setShowModal]);
+      .mockReturnValue(mockDeletedSecretarySelector)
+      .mockReturnValueOnce(secretary);
 
     useActions.mockReturnValue([useActionsFns.updateSecretary, useActionsFns.deleteSecretary]);
+
+    React.useState = jest.fn()
+      .mockReturnValue([mockUseState.toShowModal, mockUseState.setShowModal]);
   });
 
   it('should loader appear when isSecretariesLoaded is false', () => {
@@ -72,7 +83,7 @@ describe('Edit Secretarys Details', () => {
     //   isLoading: true
     // };
     // useSelector.mockReturnValue(mockSecretariesSelector);
-    const { container, debug } = render(
+    const { container } = render(
       <Router history={historyMock}>
         <EditSecretarysDetails
           {...props}
@@ -81,7 +92,6 @@ describe('Edit Secretarys Details', () => {
       );
     
     const loader = container.querySelector('.spinner-border');
-    debug()
     expect(loader).not.toBeInTheDocument();
   });
 
@@ -138,5 +148,42 @@ describe('Edit Secretarys Details', () => {
     });
 
     expect(useActionsFns.updateSecretary).toHaveBeenCalledWith(props.id, formValues);
+  });
+
+  it('should change state variable, when the button "Lay off" is clicked', async () => {
+    const { getByTestId } = render(
+      <Router history={historyMock}>
+        <EditSecretarysDetails
+          {...props}
+        />
+      </Router>
+    );
+
+    const handleShowModal = jest.fn();
+
+    const openModalBtn = getByTestId('openModalBtn');
+
+    await waitFor(() => {
+      fireEvent.click(openModalBtn);
+      handleShowModal();
+    });
+
+    expect(handleShowModal).toHaveBeenCalled();
+    expect(mockUseState.setShowModal).toHaveBeenCalledWith(true);
+  });
+
+  it('when the button "Lay off" is clicked, should open modal window', () => {
+    // React.useState = jest.fn().mockReturnValue([true, mockUseState.setShowModal]);
+    const { debug } = render(
+      <Router history={historyMock}>
+        <EditSecretarysDetails
+          {...props}
+        />
+      </Router>
+    );
+
+    const handleDelete = jest.fn();
+
+    debug()
   });
 });
