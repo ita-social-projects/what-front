@@ -9,22 +9,24 @@ import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
+import {List} from "@components/list";
+import {Table} from "@components/table";
 
 export const ListOfCourses = () => {
   const history = useHistory();
 
   const [visibleCourses, setVisibleCourses] = useState([]);
 
-  const [coursesPerPage, setcoursesPerPage] = useState(10);
+  const [coursesPerPage, setcoursesPerPage] = useState(9);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [searchValue, setSearchValue] = useState('');
+  const [showBlocks, setShowBlocks] = useState(false);
 
   const [filteredCourses, setFilteredCourses] = useState([]);
 
   const [sortingCategories, setSortingCategories] = useState([
-    { id: 0, name: 'id', sortedByAscending: false, tableHead: '#' },
-    { id: 1, name: 'name', sortedByAscending: false, tableHead: 'Title' },
+    { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
   const { data, isLoading } = useSelector(coursesSelector, shallowEqual); // array of courses ,true/false
@@ -50,10 +52,9 @@ export const ListOfCourses = () => {
   const coursesList = () => {
     const courses = visibleCourses
       .map((course) => (
-        <tr key={course.id} onClick={(event) => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
-          <td className="text-center">{course.id}</td>
-          <td>{course.name}</td>
-          {currentUser.role !== 2 &&
+        <tr key={course.id} onClick={() => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
+          <td className="text-left">{course.name}</td>
+          {(currentUser.role === 3 || currentUser.role === 4) &&
             <td
               className="text-center"
               onClick={(event) => courseEdit(event, course.id)}
@@ -76,37 +77,29 @@ export const ListOfCourses = () => {
     setVisibleCourses(data.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
   };
 
+  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
+    if (category.name === activeCategoryName) {
+      return { ...category, sortedByAscending: !category.sortedByAscending };
+    }
+    return { ...category, sortedByAscending: false };
+  });
+
   const addCourse = () => {
     history.push(paths.COURSE_ADD);
   };
 
-  const courseDetails = useCallback((id) => {
+  const handleDetails = useCallback((id) => {
     history.push(`${paths.COURSE_DETAILS}/${id}`);
   }, [history]);
 
-  const courseEdit = useCallback((event, id) => {
+  const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
     history.push(`${paths.COURSE_EDIT}/${id}`);
   }, [history]);
 
-  const handleSortByParam = (event) => {
-    const { sortingParam, sortedByAscending } = event.target.dataset;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    const sortedCourses = [...filteredCourses].sort((prevCourse, currentCourse) => {
-      if (prevCourse[sortingParam] > currentCourse[sortingParam]) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-
-    setSortingCategories(sortingCategories.map((category) => {
-      if (category.name === sortingParam) {
-        return { ...category, sortedByAscending: !category.sortedByAscending };
-      }
-      return { ...category, sortedByAscending: false };
-    }));
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedCourses = data;
+    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredCourses(sortedCourses);
     setVisibleCourses(sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse));
   };
@@ -167,8 +160,20 @@ export const ListOfCourses = () => {
     );
   };
 
+  const listProps = {
+    data: visibleCourses,
+    handleDetails,
+    handleEdit,
+    errors: [{
+      message: 'Course is not found',
+      check: [!visibleCourses.length && !!searchValue]
+    }],
+    access: currentUser.role === 3 || currentUser.role === 4,
+    fieldsToShow: ['name', 'edit']
+  };
+
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Courses</h2>
         <span className="col-2 text-right">{visibleCourses.length} of {filteredCourses.length} courses</span>
@@ -176,37 +181,51 @@ export const ListOfCourses = () => {
           {paginationComponent()}
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 card shadow p-3 mb-5 bg-white">
+      <div className="row mr-0">
+        <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button" className="btn btn-secondary" disabled><Icon icon="List" color="#2E3440" size={25} /></button>
-                <button type="button" className="btn btn-outline-secondary" disabled><Icon icon="Card" color="#2E3440" size={25} /></button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={!showBlocks}
+                        onClick={() => setShowBlocks(false)}>
+                  <Icon icon="List" color="#2E3440" size={25}/>
+                </button>
+                <button type="button"
+                        className="btn btn-secondary"
+                        disabled={showBlocks}
+                        onClick={() => setShowBlocks(true)}>
+                  <Icon icon="Card" color="#2E3440" size={25}/>
+                </button>
               </div>
             </div>
             <div className="col-3">
               <Search onSearch={handleSearch} placeholder="Course`s title" />
             </div>
+            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
+                  className={classNames(styles['label-for-select'])}
+                  htmlFor="change-visible-people"
               >
                 Rows
               </label>
               <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
+                  className={classNames('form-control', styles['change-rows'])}
+                  id="change-visible-people"
+                  onChange={(event) => {
+                    changeCountVisibleItems(event.target.value);
+                  }}
               >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
               </select>
             </div>
+            }
             <div className="col-2 offset-3 text-right">
               {[3, 4].includes(currentUser.role) && (
               <Button onClick={addCourse}>
@@ -216,31 +235,21 @@ export const ListOfCourses = () => {
             </div>
           </div>
           <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      key={id}
-                      className={styles['table-head']}
-                    >
-                      <span
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        onClick={handleSortByParam}
-                        className={classNames({ [styles.rotate]: !sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                    </th>
-                  ))}
-                  {currentUser.role !== 2 && <th className="text-center">Edit</th>}
-                </tr>
-              </thead>
-              <tbody>
-                { coursesList() }
-              </tbody>
-            </table>
+            {
+              showBlocks ?
+                  <div className="container d-flex flex-wrap">
+                    <List listType={'block'} props={listProps}/>
+                  </div>
+                  :
+                  <Table sortingCategories={sortingCategories}
+                         currentUser={currentUser}
+                         onClick={handleSortByParam}
+                         data={filteredCourses}
+                         access={{unruledUser: [1, 2], unassigned: ''}}
+                  >
+                    <List listType='list' props={listProps}/>
+                  </Table>
+            }
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>

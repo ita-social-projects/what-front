@@ -21,7 +21,7 @@ export const SecretariesTabs = ({ index }) => {
 
   if (currentUser.role === 4) {
     return (
-      <Tabs defaultIndex={index} className="container col-lg-6 col-md-8 col-sm-12" linkBack={paths.SECRETARIES}>
+      <Tabs defaultIndex={index} className="container col-lg-6 col-md-8 col-sm-12 pt-5" linkBack={paths.SECRETARIES}>
         <Tab title="Secretary's details" index={0}>
           <SecretarysDetails id={Number(id)} />
         </Tab>

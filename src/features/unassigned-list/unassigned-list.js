@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useActions } from '@/shared/index.js';
@@ -11,6 +11,7 @@ import { addAlert } from '@/features';
 import Icon from '@/icon.js';
 import classNames from 'classnames';
 import styles from './unassigned-list.scss';
+import { Table } from '@components/table';
 
 export const UnAssignedList = () => {
   const { currentUser } = useSelector(currentUserSelector);
@@ -38,10 +39,9 @@ export const UnAssignedList = () => {
   ];
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: 'index', sortedByAscending: true, tableHead: '#' },
-    { id: 1, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
-    { id: 2, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
-    { id: 3, name: 'email', sortedByAscending: false, tableHead: 'Email' },
+    { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,18 +73,6 @@ export const UnAssignedList = () => {
   useEffect(() => {
     setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
   }, [indexOfFirstUser, indexOfLastUser, users]);
-
-  const getSortedByParam = (array, activeCategory) => {
-    const { sortingParam, sortedByAscending } = activeCategory;
-    const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
-
-    return [...array].sort((prevItem, currentItem) => {
-      if (prevItem[sortingParam].toUpperCase() > currentItem[sortingParam].toUpperCase()) {
-        return sortingCoefficient * -1;
-      }
-      return sortingCoefficient;
-    });
-  };
 
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
     if (category.name === activeCategoryName) {
@@ -141,14 +129,12 @@ export const UnAssignedList = () => {
     setSearch(inputValue);
   };
 
-  const handleSortByParam = useCallback((event) => {
-    const categoryParams = event.target.dataset;
-    const sortedUsers = getSortedByParam(users, categoryParams);
-
+  const handleSortByParam = (data, categoryParams) => {
+    const sortedUsers = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setUsers(sortedUsers);
     setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
-  }, [indexOfFirstUser, indexOfLastUser, sortingCategories, users]);
+  };
 
   const options = () => {
     switch (currentUserRole) {
@@ -170,13 +156,12 @@ export const UnAssignedList = () => {
     }
   };
   const getPersonsRows = () => {
-    const personsRows = usersVisible.map(({ id, index, firstName, lastName, email }) => (
+    const personsRows = usersVisible.map(({ id, firstName, lastName, email }) => (
       <tr
         key={id}
         data-person-id={id}
         className={styles['table-row']}
       >
-        <td>{index + 1}</td>
         <td>{firstName}</td>
         <td>{lastName}</td>
         <td>{email}</td>
@@ -205,7 +190,7 @@ export const UnAssignedList = () => {
       return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
     }
 
-    if (!users.length && users) {
+    if (!users.length || search) {
       return <tr><td colSpan="5" className="text-center">No one has been found</td></tr>;
     }
     return personsRows;
@@ -243,20 +228,20 @@ export const UnAssignedList = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
-        <h2 className="col-6">Unassigmed Users</h2>
+        <h2 className="col-6">Unassigned Users</h2>
         <div className="col-3 text-right">{
            !isLoading
-          && `${usersVisible.length} of ${users.length} unassigmed users `
+          && `${usersVisible.length} of ${users.length} unassigned users `
         }
         </div>
         <div className="col-3 d-flex align-items-center justify-content-end">
           {paginationComponent()}
         </div>
       </div>
-      <div className="row">
-        <div className="card col-12 shadow p-3 mb-5 bg-white rounded">
+      <div className="row mr-0">
+        <div className="card col-12 shadow p-3 mb-5 bg-white rounded ml-2 mr-2">
           <div className="row align-items-center px-3 py-2 mb-2">
             <div className="col-4">
               <Search
@@ -286,31 +271,14 @@ export const UnAssignedList = () => {
             </div>
           </div>
           <WithLoading isLoading={!isLoaded} className="d-block mx-auto my-2">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-                    <th
-                      key={id}
-                      className={styles['table-head']}
-                    >
-                      <span
-                        onClick={handleSortByParam}
-                        data-sorting-param={name}
-                        data-sorted-by-ascending={Number(sortedByAscending)}
-                        className={classNames(styles.category, { [styles['category-sorted']]: !sortedByAscending })}
-                      >
-                        {tableHead}
-                      </span>
-                    </th>
-                  ))}
-                  <th className="text-center">Choose role</th>
-                </tr>
-              </thead>
-              <tbody>
-                {getPersonsRows()}
-              </tbody>
-            </table>
+            <Table sortingCategories={sortingCategories}
+                   currentUser={currentUser}
+                   onClick={handleSortByParam}
+                   data={users}
+                   access={{unruledUser: [4], unassigned: 'unassigned'}}
+            >
+              {getPersonsRows()}
+            </Table>
           </WithLoading>
         </div>
         <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
