@@ -2,9 +2,9 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
-import { fireEvent, getByTestId, render, waitFor } from '@testing-library/react';
+import { fireEvent, getByTestId, render, waitFor, cleanup } from '@testing-library/react';
 import { EditSecretarysDetails } from '../';
-import { SecretarysMock } from './__mock__/mock-data.js';
+import { SecretarysMock, currentSecretary} from './__mock__/mock-data.js';
 
 jest.mock('react-redux', () => ({
   useSelector: jest.fn()
@@ -16,7 +16,7 @@ jest.mock('@/shared/hooks', () => ({
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  // useParams: jest.fn().mockReturnValue({ id: 1 }),
+  useParams: jest.fn().mockReturnValue({ id: 1 }),
 }));
 
 const props = {
@@ -32,7 +32,6 @@ describe('Edit Secretarys Details', () => {
   let historyMock;
     
   beforeEach(() => {
-
     mockSecretariesSelector = {
       data: SecretarysMock,
       isLoading: false,
@@ -74,33 +73,15 @@ describe('Edit Secretarys Details', () => {
       .mockReturnValue([mockUseState.toShowModal, mockUseState.setShowModal]);
   });
 
-  // it('should redirect to URL NOT_FOUND if secretaryError ', () => {
-  //   // mockSecretariesSelector = {
-  //   //   data: [],
-  //   //   isLoaded: true
-  //   // };
-  //   // useSelector.mockReturnValue(mockSecretariesSelector);
-
-  //   render(
-  //     <Router history={historyMock}>
-  //       <EditSecretarysDetails
-  //         {...props}
-  //       />
-  //     </Router>);
-  //   expect(historyMock.push.mock.calls[0][0]).toEqual(paths.NOT_FOUND);
-  // });
-
-  // it('should loader appear when isSecretariesLoaded is false', () => {
-  //   // const mockLocal = { isLoading: true, isLoaded: false };
-  //   // mockSecretariesSelector = {
-  //   //   isLoading: mockLocal,
-  //   // };
-  //   // useSelector.mockReturnValue(mockSecretariesSelector);
+  // it('should loader appear when isSecretariesLoading is true', () => {
+   
+  //   const mockLocal = { ...mockSecretariesSelector, isLoading: true };
+  //   console.log(mockSecretariesSelector, 'mockSecretariesSelector');
+  //   useSelector
+  //     .mockReturnValueOnce(mockLocal);
   //   const { container, debug } = render(
   //     <Router history={historyMock}>
-  //       <EditSecretarysDetails
-  //         {...props}
-  //       />
+  //       <EditSecretarysDetails {...props} />
   //     </Router>
   //     );
   //   debug()
@@ -176,18 +157,6 @@ describe('Edit Secretarys Details', () => {
     expect(useActionsFns.dispatchAddAlert).toHaveBeenCalledWith('The secretary has been successfully edited', 'success');
   });
 
-  // it('should redirect to path "/secretaries" when secretaryUpdateError && !isUpdateLoaded', () => {
-  //   mockUpdatedSecretarySelector = {
-  //     isLoaded: false,
-  //     isLoading: true,
-  //     error: ''
-  //   };
-  //   // useSelector
-  //   //   .mockReturnValueOnce(mockUpdatedSecretarySelector);
-  //   render(<Router history={historyMock}><EditSecretarysDetails {...props} /></Router>);
-  //   expect(useActionsFns.dispatchAddAlert).toHaveBeenCalledWith(mockUpdatedSecretarySelector.error);
-  // });
-
   it('should change state variable, when the button "Lay off" is clicked', async () => {
     const { getByTestId } = render(
       <Router history={historyMock}>
@@ -210,28 +179,6 @@ describe('Edit Secretarys Details', () => {
     expect(mockUseState.setShowModal).toHaveBeenCalledWith(true);
   });
 
-  // it('should open modal window and delete secretarys', async () => {
-  //   // React.useState = jest.fn().mockReturnValue([true, mockUseState.setShowModal]);
-  //   const { debug } = render(
-  //     <Router history={historyMock}>
-  //       <EditSecretarysDetails
-  //         {...props}
-  //       />
-  //     </Router>
-  //   );
-  //   const handleDelete = jest.fn();
-  //   // const del = getByTestId('deleteBtn');
- 
-  //   // await waitFor(() => {
-  //   //   fireEvent.click(del);
-  //   //   handleDelete();
-  //   // });
-    
-  //   // expect(useActionsFns.deleteSecretary).toHaveBeenCalledWith(props.id);
-
-  //   debug()
-  // });
-
   it('should redirect to path "/secretaries" when !secretaryDeleteError && isDeleteLoaded', () => {
     mockDeletedSecretarySelector = {
       isLoaded: true,
@@ -242,5 +189,10 @@ describe('Edit Secretarys Details', () => {
       .mockReturnValueOnce(mockDeletedSecretarySelector);
     render(<Router history={historyMock}><EditSecretarysDetails {...props} /></Router>);
     expect(historyMock.push.mock.calls[0][0]).toEqual(paths.SECRETARIES);
+  });
+
+  it('should be unmounted "Edit secretarys details", when component is removed', () => {
+    const { unmount } = render(<Router history={historyMock}><EditSecretarysDetails {...props} /></Router>)
+    unmount()
   });
 });
