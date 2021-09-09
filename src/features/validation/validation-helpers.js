@@ -16,7 +16,7 @@ export const registrationValidation = Yup.object().shape({
   lastName: Yup.string()
     .min(2, 'Too short')
     .matches('^([A-Za-zА-Яа-яёЁ][ \'-]?)+[A-Za-zА-Яа-яёЁ]+$', 'Invalid last name')
-    .max(50, 'Too longs')
+    .max(50, 'Too long')
     .required('This field is required'),
   email: Yup.string()
     .email('Invalid email address')
