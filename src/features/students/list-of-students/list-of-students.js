@@ -185,7 +185,7 @@ export const ListOfStudents = () => {
           check: [!!allStudentsError, !!activeStudentsError]
       }, {
           message: 'Student is not found',
-          check: [!visibleStudents.length, !!searchFieldValue]
+          check: [!visibleStudents.length && !!searchFieldValue]
       }],
       access: true,
     fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
