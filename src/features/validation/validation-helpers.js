@@ -26,7 +26,7 @@ export const registrationValidation = Yup.object().shape({
     .max(16, 'Password must contain 16 characters maximum')
     .matches(
       /^(?=.*[a-z])(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()_+=-]).*$/,
-      'Must contain at least one uppercase, one lowercase, one number and one special symbol',
+      'Password must contain at least one uppercase, one lowercase, one number and one special symbol (!@#$%^&*()_+-=)',
     )
     .required('This field is required'),
   confirmPassword: Yup.string()
