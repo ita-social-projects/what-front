@@ -93,7 +93,7 @@ export const Auth = () => {
                     {requestError && <p className="text-center text-danger mt-2">{requestError}</p>}
                     <div className="d-flex justify-content-between mt-3">
                       <div className="text-center">
-                        <p><Link to={paths.FORGOT_PASSWORD} className={styles['form-link']}>Fogot Password?</Link></p>
+                        <p><Link to={paths.FORGOT_PASSWORD} className={styles['form-link']}>Forgot Password?</Link></p>
                       </div>
                       <div className="text-right">
                         <p>Don&apos;t have an account? <Link to={paths.REGISTRATION} className={styles['form-link']}>Registration</Link></p>
