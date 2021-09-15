@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
-    "test": "jest --collectCoverage"
+    "test": "jest --collectCoverage",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
