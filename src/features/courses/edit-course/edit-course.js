@@ -122,15 +122,6 @@ export const EditCourse = ({ id, coursesData }) => {
                         >Delete
                         </Button>
                       </div>
-                      <div className="col-md-3 offset-md-3 col-4">
-                        <Button
-                          type="reset"
-                          disabled={!isValid || !dirty || isEditedLoading || errors.name}
-                          className={classNames('w-100', styles['clear-button'])}
-                          onClick={handleReset}
-                        >Clear
-                        </Button>
-                      </div>
                       <div className="col-md-3 col-4 pr-0">
                         <Button
                           type="submit"
