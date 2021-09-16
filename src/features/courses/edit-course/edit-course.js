@@ -122,7 +122,7 @@ export const EditCourse = ({ id, coursesData }) => {
                         >Delete
                         </Button>
                       </div>
-                      <div className="col-md-3 col-4 pr-0">
+                      <div className="col-md-3 offset-md-6 pr-0">
                         <Button
                           type="submit"
                           disabled={!isValid || !dirty || isEditedLoading || errors.name}
