@@ -85,8 +85,8 @@ export const editLessonValidation = Yup.object().shape({
     .required('This field is required'),
   groupName: Yup.string()
       .min(1, 'Too short')
-      .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid group name')
-      .max(50, 'Too long')
+      .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+([ _-]+[0-9]+[\/ _-]?[0-9]+)?$', 'Invalid group name')
+      .max(100, 'Too long')
       .required('This field is required'),
   formData: Yup.array().of(
       Yup.object({
