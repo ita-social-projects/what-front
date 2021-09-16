@@ -33,4 +33,18 @@ export const mockLoadStudentsGroupSelector = {
 export const mockCurrentStudentGroupsSelector = {
   data: mockStudentGroups,
   isLoading: false,
+  isLoaded: false,
+  error: '',
+};
+
+export const mockEditStudentSelector = {
+  isLoading: false,
+  isLoaded: false,
+  error: '',
+};
+
+export const mockRemoveStudentSelector = {
+  isLoading: false,
+  isLoaded: false,
+  error: '',
 };

@@ -3,12 +3,17 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { paths, useActions } from '@/shared';
 import { useSelector } from 'react-redux';
+import {createMemoryHistory} from 'history'
 
 import {
   mockCurrentStudentSelector,
   mockLoadStudentsGroupSelector,
   mockCurrentStudentGroupsSelector,
+  mockEditStudentSelector,
+  mockRemoveStudentSelector,
 } from './mock-data.js';
+
+import { useStates, useStateMock } from './mock-state.js';
 
 import { EditStudentsDetails } from '../edit-students-details.js';
 
@@ -21,7 +26,7 @@ describe('edit-student-details component', () => {
   let historyMock;
   let useActionsFns;
 
-  const doBefore = () => {
+  const doBefor = () => {
     useSelector
       .mockReturnValue(mockCurrentStudentSelector)
       .mockReturnValue(mockLoadStudentsGroupSelector)
@@ -52,7 +57,7 @@ describe('edit-student-details component', () => {
   };
 
   describe('test loader', () => {
-    beforeEach(doBefore);
+    beforeEach(doBefor);
 
     it('should show loader while areStudentGroupsLoading is true', () => {
       const mockLocalCurrentStudentSelector = {
@@ -60,10 +65,7 @@ describe('edit-student-details component', () => {
         isLoading: true,
       };
 
-      useSelector
-        .mockReturnValueOnce(mockLocalCurrentStudentSelector)
-        .mockReturnValueOnce(mockLoadStudentsGroupSelector)
-        .mockReturnValueOnce(mockCurrentStudentGroupsSelector);
+      useSelector.mockReturnValueOnce(mockLocalCurrentStudentSelector);
 
       const { container } = render(
         <Router history={historyMock}>
@@ -81,10 +83,7 @@ describe('edit-student-details component', () => {
         isLoading: true,
       };
 
-      useSelector
-        .mockReturnValueOnce(mockCurrentStudentSelector)
-        .mockReturnValueOnce(mockAreGroupsLoading)
-        .mockReturnValueOnce(mockCurrentStudentGroupsSelector);
+      useSelector.mockReturnValueOnce(mockAreGroupsLoading);
 
       const { container } = render(
         <Router history={historyMock}>
@@ -101,10 +100,7 @@ describe('edit-student-details component', () => {
         isLoading: true,
       };
 
-      useSelector
-        .mockReturnValueOnce(mockCurrentStudentSelector)
-        .mockReturnValueOnce(mockLoadStudentsGroupSelector)
-        .mockReturnValueOnce(mockLocalCurentStudentGroupsSelector);
+      useSelector.mockReturnValueOnce(mockLocalCurentStudentGroupsSelector);
 
       const { container } = render(
         <Router history={historyMock}>
@@ -118,11 +114,67 @@ describe('edit-student-details component', () => {
   });
 
   describe('test content', () => {
-    beforeEach(doBefore);
+    beforeEach(() => {
+      mockCurrentStudentSelector.isLoading = false;
+      mockCurrentStudentSelector.isLoaded = true;
 
-    it('should render correct data in correct place', () => {
-      render(<EditStudentsDetails id={id} />);
-      screen.debug();
+      mockLoadStudentsGroupSelector.isLoading = false;
+      mockLoadStudentsGroupSelector.isLoaded = true;
+
+      mockCurrentStudentGroupsSelector.isLoading = false;
+      mockCurrentStudentGroupsSelector.isLoaded = true;
+
+      doBefor();
+    });
+
+    it('the component EditStudentsDetails should be rendered', () => {
+      const { getByLabelText } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+      const firstName = getByLabelText(/first name:/i);
+      expect(firstName).toBeInTheDocument();
+    });
+
+    it('redirects to /404 if studentError && studentGroupsError', () => {
+      mockCurrentStudentSelector.error = 'error';
+      mockCurrentStudentGroupsSelector.error = 'error';
+
+      render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      expect(historyMock.push).toHaveBeenCalledWith(paths.NOT_FOUND);
+    });
+
+    it('redirects to /students if !isEditedError && isEditedLoaded', () => {
+      mockCurrentStudentSelector.error = '';
+      mockCurrentStudentGroupsSelector.error = '';
+      mockEditStudentSelector.isLoaded = true;
+
+      render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      expect(historyMock.push).toHaveBeenCalledWith(paths.STUDENTS);
+    });
+
+    it('redirects to /students if !isRemovedError && isRemovedLoaded', () => {
+      mockEditStudentSelector.isLoaded = false;
+      mockRemoveStudentSelector.isLoaded = true;
+
+      render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      expect(historyMock.push).toHaveBeenCalledWith(paths.STUDENTS);
     });
   });
 });
