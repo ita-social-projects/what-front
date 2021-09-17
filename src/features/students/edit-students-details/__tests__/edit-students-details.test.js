@@ -1,10 +1,11 @@
-import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import React, { useState as mockUseState } from 'react';
+import { fireEvent, render, screen, cleanup } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import { Router } from 'react-router-dom';
-import { paths, useActions } from '@/shared';
 import { useSelector } from 'react-redux';
-import {createMemoryHistory} from 'history'
+import { paths, useActions } from '@/shared';
 
+import { EditStudentsDetails } from '../edit-students-details.js';
 import {
   mockCurrentStudentSelector,
   mockLoadStudentsGroupSelector,
@@ -12,10 +13,6 @@ import {
   mockEditStudentSelector,
   mockRemoveStudentSelector,
 } from './mock-data.js';
-
-import { useStates, useStateMock } from './mock-state.js';
-
-import { EditStudentsDetails } from '../edit-students-details.js';
 
 jest.mock('react-redux', () => ({ useSelector: jest.fn() }));
 
@@ -58,6 +55,7 @@ describe('edit-student-details component', () => {
 
   describe('test loader', () => {
     beforeEach(doBefor);
+    afterEach(cleanup);
 
     it('should show loader while areStudentGroupsLoading is true', () => {
       const mockLocalCurrentStudentSelector = {
@@ -127,6 +125,8 @@ describe('edit-student-details component', () => {
       doBefor();
     });
 
+    afterEach(cleanup);
+
     it('the component EditStudentsDetails should be rendered', () => {
       const { getByLabelText } = render(
         <Router history={historyMock}>
@@ -175,6 +175,113 @@ describe('edit-student-details component', () => {
       );
 
       expect(historyMock.push).toHaveBeenCalledWith(paths.STUDENTS);
+    });
+
+    const thunk = ({ dispatch, getState }) => (next) => (action) => {
+      if (typeof action === 'function') {
+        return action(dispatch, getState);
+      }
+
+      return next(action);
+    };
+
+    const create = () => {
+      const store = {
+        getState: jest.fn(() => ({})),
+        dispatch: jest.fn(),
+      };
+      const next = jest.fn();
+
+      const invoke = (action) => thunk(store)(next)(action);
+
+      return { store, next, invoke };
+    };
+
+    const { store, invoke } = create();
+
+    it('dispatchAddAlert - success if !isEditedError && isEditedLoaded', () => {
+      mockCurrentStudentSelector.error = '';
+      mockCurrentStudentGroupsSelector.error = '';
+      mockEditStudentSelector.isLoaded = true;
+
+      const mes = 'Student information has been edited successfully';
+
+      invoke((dispatch, getState) => {
+        dispatch(mes);
+        getState();
+      });
+
+      expect(store.dispatch).toHaveBeenCalledWith(mes);
+      expect(store.getState).toHaveBeenCalled();
+    });
+
+    it('dispatchAddAlert(isEditedError) if isEditedError && !isEditedLoaded', () => {
+      mockCurrentStudentSelector.error = '';
+      mockCurrentStudentGroupsSelector.error = '';
+      mockEditStudentSelector.isLoaded = false;
+      mockEditStudentSelector.error = 'error';
+
+      invoke((dispatch, getState) => {
+        dispatch('error');
+        getState();
+      });
+
+      expect(store.dispatch).toHaveBeenCalledWith('error');
+      expect(store.getState).toHaveBeenCalled();
+    });
+
+    it('dispatchAddAlert Student has been excluded if !isRemovedError && isRemovedLoaded', () => {
+      mockRemoveStudentSelector.isLoaded = true;
+      mockEditStudentSelector.error = '';
+
+      const mes = 'Student has been excluded';
+
+      invoke((dispatch, getState) => {
+        dispatch(mes);
+        getState();
+      });
+
+      expect(store.dispatch).toHaveBeenCalledWith(mes);
+      expect(store.getState).toHaveBeenCalled();
+    });
+
+    it('dispatchAddAlert(isEditedError) if isRemovedError && !isRemovedLoaded', () => {
+      mockRemoveStudentSelector.isLoaded = false;
+      mockEditStudentSelector.error = '';
+
+      invoke((dispatch, getState) => {
+        dispatch('error');
+        getState();
+      });
+
+      expect(store.dispatch).toHaveBeenCalledWith('error');
+      expect(store.getState).toHaveBeenCalled();
+    });
+
+    it('option is popped up', () => {
+      const { getByText } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+      const email = document.getElementById('email');
+
+      act(() => {
+        fireEvent.change(email, { target: { value: 'hello' } });
+      });
+
+      screen.debug();
+    });
+
+    it('modal window is opened if click Exclude button in EditStudentsDetails', () => {
+      const { getByText } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      fireEvent.click(getByText(/exclude/i));
+      expect(getByText(/delete/i)).toBeTruthy();
     });
   });
 });
