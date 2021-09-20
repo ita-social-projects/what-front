@@ -3,6 +3,8 @@ import { render, waitFor, fireEvent } from '@testing-library/react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { useActions } from '@/shared/index.js';
+import { registration } from '@models/index.js';
 import { Registration } from '../registration.js';
 
 jest.mock('react-redux', () => ({ useSelector: jest.fn().mockReturnValue({
@@ -10,65 +12,60 @@ jest.mock('react-redux', () => ({ useSelector: jest.fn().mockReturnValue({
   error: '',
   isLoaded: true,
 }) }));
-jest.mock('@/shared/hooks', () => ({ useActions: jest.fn() }));
+jest.mock('@/shared/hooks', () => ({ useActions: jest.fn().mockReturnValue(jest.fn()) }));
 
 describe('Registration', () => {
-  it('should render component', () => {
-    const { container } = render(<Router><Registration /></Router>);
-
-    expect(container).toBeInTheDocument();
-  });
-
-  it('should check elements accessibility', async () => {
-    const { getByPlaceholderText } = render(<Router><Registration /></Router>);
-
-    const firstName = getByPlaceholderText('First name');
-    const lastName = getByPlaceholderText('Last name');
-    const email = getByPlaceholderText('Email');
-    const password = getByPlaceholderText('Password');
-    const confirmPassword = getByPlaceholderText('Confirm password');
-
-    expect(firstName).toBeInTheDocument();
-    expect(lastName).toBeInTheDocument();
-    expect(email).toBeInTheDocument();
-    expect(password).toBeInTheDocument();
-    expect(confirmPassword).toBeInTheDocument();
-
-    firstName.focus();
-    await waitFor(() => {
-      expect(firstName).toHaveFocus();
-    });
-
-    lastName.focus();
-    await waitFor(() => {
-      expect(lastName).toHaveFocus();
-    });
-
-    email.focus();
-    await waitFor(() => {
-      expect(email).toHaveFocus();
-    });
-
-    password.focus();
-    await waitFor(() => {
-      expect(password).toHaveFocus();
-    });
-
-    confirmPassword.focus();
-    await waitFor(() => {
-      expect(confirmPassword).toHaveFocus();
-    });
-  });
-
-  it('should submit form correctly', async () => {
-    const formValues = {
+  let formValues;
+  beforeEach(() => {
+    formValues = {
       firstName: 'John',
       lastName: 'Smith',
       email: 'testemail@gmail.com',
-      password: 'testpassword123',
-      confirmPassword: 'testpassword123',
+      password: 'Testpassw!ord123',
+      confirmPassword: 'Testpassw!ord123',
     };
+  });
 
+  it('should render component', () => {
+    const { container } = render(<Router><Registration /></Router>);
+    const formContainer = container.getElementsByClassName('container');
+
+    expect(formContainer).toMatchSnapshot();
+  });
+
+  it('should validate the form', async () => {
+    const {
+      getByText,
+      getAllByText,
+    } = render(<Router><Registration /></Router>);
+
+    const FORM_FIELDS_AMOUNT = 5;
+    const submitButton = getByText('Sign up');
+
+    await waitFor(() => {
+      fireEvent.click(submitButton);
+    });
+
+    const errors = getAllByText('This field is required');
+
+    expect(errors).toHaveLength(FORM_FIELDS_AMOUNT);
+    expect(errors).toMatchSnapshot();
+  });
+
+  it('should handle error receiving', () => {
+    useSelector.mockReturnValue({
+      isLoading: false,
+      error: 'Something went wrong',
+      isLoaded: true,
+    });
+
+    const { getByText } = render(<Router><Registration /></Router>);
+
+    const error = getByText('Something went wrong');
+    expect(error).toBeInTheDocument();
+  });
+
+  it('should submit the form with correct schema', async () => {
     const { getByPlaceholderText, getByText } = render(<Router><Registration /></Router>);
 
     const firstName = getByPlaceholderText('First name');
@@ -77,6 +74,8 @@ describe('Registration', () => {
     const password = getByPlaceholderText('Password');
     const confirmPassword = getByPlaceholderText('Confirm password');
     const submitButton = getByText('Sign up');
+
+    const signUp = useActions(registration);
 
     fireEvent.change(firstName, {
       target: {
@@ -108,19 +107,11 @@ describe('Registration', () => {
       },
     });
 
-    expect(firstName).toHaveValue(formValues.firstName);
-    expect(lastName).toHaveValue(formValues.lastName);
-    expect(email).toHaveValue(formValues.email);
-    expect(password).toHaveValue(formValues.password);
-    expect(confirmPassword).toHaveValue(formValues.confirmPassword);
-    expect(password.value).toMatch(confirmPassword.value);
-
     await waitFor(() => {
       fireEvent.click(submitButton);
     });
 
-    const submitHandler = jest.fn();
-    submitHandler({
+    signUp({
       firstName: firstName.value,
       lastName: lastName.value,
       email: email.value,
@@ -128,19 +119,6 @@ describe('Registration', () => {
       confirmPassword: confirmPassword.value,
     });
 
-    expect(submitHandler).toHaveBeenCalledWith(formValues);
-  });
-
-  it('should handle error receiving', () => {
-    useSelector.mockReturnValue({
-      isLoading: false,
-      error: 'Something went wrong',
-      isLoaded: true,
-    });
-
-    const { getByText } = render(<Router><Registration /></Router>);
-
-    const error = getByText('Something went wrong');
-    expect(error).toBeInTheDocument();
+    expect(signUp).toHaveBeenCalledWith(formValues);
   });
 });
