@@ -4,6 +4,7 @@ import { act } from 'react-dom/test-utils';
 import { Router } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
+import { Formik, Form, Field } from 'formik';
 
 import { EditStudentsDetails } from '../edit-students-details.js';
 import {
@@ -12,6 +13,8 @@ import {
   mockCurrentStudentGroupsSelector,
   mockEditStudentSelector,
   mockRemoveStudentSelector,
+  useStates,
+  useStateMock,
 } from './mock-data.js';
 
 jest.mock('react-redux', () => ({ useSelector: jest.fn() }));
@@ -258,21 +261,6 @@ describe('edit-student-details component', () => {
       expect(store.getState).toHaveBeenCalled();
     });
 
-    it('option is popped up', () => {
-      const { getByText } = render(
-        <Router history={historyMock}>
-          <EditStudentsDetails id={id} />
-        </Router>
-      );
-      const email = document.getElementById('email');
-
-      act(() => {
-        fireEvent.change(email, { target: { value: 'hello' } });
-      });
-
-      screen.debug();
-    });
-
     it('modal window is opened if click Exclude button in EditStudentsDetails', () => {
       const { getByText } = render(
         <Router history={historyMock}>
@@ -281,7 +269,41 @@ describe('edit-student-details component', () => {
       );
 
       fireEvent.click(getByText(/exclude/i));
+
       expect(getByText(/delete/i)).toBeTruthy();
+    });
+
+    it('shouldn\'t add student group if group isn\'t from datalist', async () => {
+      React.useState = useStateMock.default;
+      const { getByText } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      const groupsInput = document.getElementById('groupsInput');
+
+      act(() => {
+        fireEvent.change(
+          groupsInput, { target: { value: 'Dnp-2021' } },
+        );
+      });
+
+      fireEvent.click(getByText('+'));
+      expect(getByText('Invalid group name')).toBeInTheDocument();
+    });
+
+    it('should delete group if click X', () => {
+      React.useState = useStateMock.default;
+      const { getAllByText } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      fireEvent.click(getAllByText('X')[0]);
+
+      expect(getAllByText('X').length).toBe(2);
     });
   });
 });

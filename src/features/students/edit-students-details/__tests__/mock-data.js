@@ -1,8 +1,8 @@
 const mockStudentsSelector = {
   email: 'student@gmail.com',
-  firstName: 'student',
+  firstName: 'StudentName',
   id: 1,
-  lastName: 'student',
+  lastName: 'StudentSurname',
 };
 
 const mockLoadStudentsGroup = [
@@ -48,3 +48,27 @@ export const mockRemoveStudentSelector = {
   isLoaded: false,
   error: '',
 };
+
+const useStates = {
+  groups: {
+    groups: mockStudentGroups || 0,
+    setGroups: jest.fn(),
+  },
+  studGroups: {
+    initialGroups: mockLoadStudentsGroup || 0,
+    setInitialGroups: jest.fn(),
+  },
+  errorGroup: {
+    mentorInput: null,
+    setErrorGroup: jest.fn(),
+  },
+};
+
+const useStateMock = {
+  default: jest.fn()
+    .mockReturnValue([useStates.groups.groups, useStates.groups.setGroups])
+    .mockReturnValue([useStates.studGroups.initialGroups, useStates.studGroups.setInitialGroups])
+    .mockReturnValue([useStates.errorGroup.errorGroup, useStates.errorGroup.setErrorGroup]),
+};
+
+export { useStates, useStateMock };
