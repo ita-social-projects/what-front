@@ -1,4 +1,3 @@
-//  student
 const mockStudentsSelector = {
   email: 'student@gmail.com',
   firstName: 'Vova',
@@ -6,7 +5,6 @@ const mockStudentsSelector = {
   lastName: 'Zenin',
 };
 
-// this info should be in datalist-option
 const mockLoadStudentGroups = [
   {
     id: 212,
@@ -42,7 +40,6 @@ const mockLoadStudentGroups = [
   },
 ];
 
-// we've alrtedy had in student
 const mockStudentGroups = [
   { id: 2, name: 'DP-18' },
   { id: 14, name: 'DP-20' },
@@ -81,26 +78,8 @@ export const mockRemoveStudentSelector = {
   error: '',
 };
 
-// const useStates = {
-//   groups: {
-//     groups: mockStudentGroups || 0,
-//     setGroups: jest.fn(),
-//   },
-//   studGroups: {
-//     initialGroups: mockLoadStudentsGroup || 0,
-//     setInitialGroups: jest.fn(),
-//   },
-//   errorGroup: {
-//     mentorInput: null,
-//     setErrorGroup: jest.fn(),
-//   },
-// };
-
-// const useStateMock = {
-//   default: jest.fn()
-//     .mockReturnValue([useStates.groups.groups, useStates.groups.setGroups])
-//     .mockReturnValue([useStates.studGroups.initialGroups, useStates.studGroups.setInitialGroups])
-//     .mockReturnValue([useStates.errorGroup.errorGroup, useStates.errorGroup.setErrorGroup]),
-// };
-
-// export { useStates, useStateMock };
+export const useActionsFns = {
+  updateStudent: jest.fn(),
+  deleteStudent: jest.fn(),
+  dispatchAddAlert: jest.fn(),
+};

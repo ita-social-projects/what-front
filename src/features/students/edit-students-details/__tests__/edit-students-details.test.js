@@ -1,10 +1,8 @@
-import React, { useState as mockUseState } from 'react';
-import { fireEvent, render, screen, cleanup } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import React from 'react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { paths, useActions } from '@/shared';
-import { Formik, Form, Field } from 'formik';
 
 import { EditStudentsDetails } from '../edit-students-details.js';
 import {
@@ -13,7 +11,16 @@ import {
   mockCurrentStudentGroupsSelector,
   mockEditStudentSelector,
   mockRemoveStudentSelector,
+  useActionsFns,
 } from './mock-data.js';
+
+useActions.mockReturnValue(
+  [
+    useActionsFns.updateStudent,
+    useActionsFns.deleteStudent,
+    useActionsFns.dispatchAddAlert,
+  ],
+);
 
 jest.mock('react-redux', () => ({ useSelector: jest.fn() }));
 
@@ -22,14 +29,8 @@ jest.mock('@/shared/hooks', () => ({ useActions: jest.fn() }));
 describe('edit-student-details component', () => {
   let id;
   let historyMock;
-  let useActionsFns;
 
   const doBefor = () => {
-    useSelector
-      .mockReturnValue(mockCurrentStudentSelector)
-      .mockReturnValue(mockLoadStudentGroupsSelector)
-      .mockReturnValue(mockCurrentStudentGroupsSelector);
-
     historyMock = {
       push: jest.fn(),
       location: {},
@@ -37,33 +38,21 @@ describe('edit-student-details component', () => {
       createHref: jest.fn(),
     };
 
-    useActionsFns = {
-      updateStudent: jest.fn(),
-      deleteStudent: jest.fn(),
-      dispatchAddAlert: jest.fn(),
-    };
-
-    useActions.mockReturnValue(
-      [
-        useActionsFns.updateStudent,
-        useActionsFns.deleteStudent,
-        useActionsFns.dispatchAddAlert,
-      ],
-    );
+    useSelector
+      .mockReturnValue(mockCurrentStudentSelector)
+      .mockReturnValue(mockLoadStudentGroupsSelector)
+      .mockReturnValue(mockCurrentStudentGroupsSelector);
 
     id = 1;
   };
 
   describe('test loader', () => {
     beforeEach(doBefor);
-    afterEach(cleanup);
 
     it('should show loader while isStudentLoading && areGroupsLoading', () => {
-      mockCurrentStudentSelector.isLoading = true;
-      mockLoadStudentGroupsSelector.isLoading = true;
-
-      useSelector.mockReturnValue(mockCurrentStudentSelector);
-      useSelector.mockReturnValue(mockLoadStudentGroupsSelector);
+      useSelector
+        .mockReturnValue({ ...mockCurrentStudentSelector, isLoading: true })
+        .mockReturnValue({ ...mockLoadStudentGroupsSelector, isLoading: true });
 
       const { container } = render(
         <Router history={historyMock}>
@@ -71,28 +60,26 @@ describe('edit-student-details component', () => {
         </Router>
       );
 
-      const loader = container.querySelector('.spinner-border');
-
-      expect(loader).toBeInTheDocument();
+      expect(container.querySelector('.spinner-border')).toBeInTheDocument();
     });
 
-    it('should show loader while areGroupsLoading is true', () => {
-      mockLoadStudentGroupsSelector.isLoading = true;
-      useSelector.mockReturnValue(mockLoadStudentGroupsSelector);
+    it('should show loader while isStudentLoading && !areGroupsLoading', () => {
+      useSelector.mockReturnValue({ ...mockCurrentStudentSelector, isLoading: true });
+      useSelector.mockReturnValue({ ...mockLoadStudentGroupsSelector, isLoading: false });
 
       const { container } = render(
         <Router history={historyMock}>
           <EditStudentsDetails id={id} />
         </Router>
       );
-      const loader = container.querySelector('.spinner-border');
 
-      expect(loader).toBeInTheDocument();
+      expect(container.querySelector('.spinner-border')).toBeInTheDocument();
     });
 
-    it('should show loader while areGroupsLoading is true', () => {
-      mockCurrentStudentGroupsSelector.isLoading = true;
-      useSelector.mockReturnValue(mockCurrentStudentGroupsSelector);
+    it('should show loader while !isStudentLoaded && areGroupsLoading', () => {
+      useSelector
+        .mockReturnValue({ ...mockCurrentStudentSelector, isLoaded: false })
+        .mockReturnValue({ ...mockCurrentStudentGroupsSelector, isLoading: true });
 
       const { container } = render(
         <Router history={historyMock}>
@@ -100,203 +87,266 @@ describe('edit-student-details component', () => {
         </Router>
       );
 
-      const loader = container.querySelector('.spinner-border');
-      expect(loader).toBeInTheDocument();
+      expect(container.querySelector('.spinner-border')).toBeInTheDocument();
+    });
+
+    it('should show loader while !isStudentLoaded && !areGroupsLoading', () => {
+      useSelector
+        .mockReturnValue({ ...mockCurrentStudentSelector, isLoaded: false })
+        .mockReturnValue({ ...mockCurrentStudentGroupsSelector, isLoading: false });
+
+      const { container } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      expect(container.querySelector('.spinner-border')).toBeInTheDocument();
     });
   });
 
-  // describe('test content', () => {
-  //   beforeEach(() => {
-  //     mockCurrentStudentSelector.isLoading = false;
-  //     mockCurrentStudentSelector.isLoaded = true;
+  describe('test content', () => {
+    beforeEach(() => {
+      useSelector
+        .mockReturnValue({ ...mockCurrentStudentSelector, isLoading: false, isLoaded: true })
+        .mockReturnValue({ ...mockLoadStudentGroupsSelector, isLoading: false, isLoaded: true })
+        .mockReturnValue({ ...mockCurrentStudentGroupsSelector, isLoading: false, isLoaded: true });
+    });
 
-  //     mockLoadStudentsGroupSelector.isLoading = false;
-  //     mockLoadStudentsGroupSelector.isLoaded = true;
+    it('the component EditStudentsDetails should be rendered', () => {
+      const { getByRole } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
 
-  //     mockCurrentStudentGroupsSelector.isLoading = false;
-  //     mockCurrentStudentGroupsSelector.isLoaded = true;
+      expect(getByRole('textbox', { name: 'First Name:' })).toBeInTheDocument();
+      expect(getByRole('textbox', { name: 'Last Name:' })).toBeInTheDocument();
+      expect(getByRole('textbox', { name: 'Email:' })).toBeInTheDocument();
+      expect(getByRole('combobox', { name: 'Group(`s):' })).toBeInTheDocument();
+    });
 
-  //     doBefor();
-  //   });
+    it('redirects to /404 if studentError && studentGroupsError', () => {
+      useSelector
+        .mockReturnValue({ ...mockCurrentStudentSelector, error: 'error' })
+        .mockReturnValue({ ...mockCurrentStudentGroupsSelector, error: 'error' });
 
-  //   afterEach(cleanup);
+      render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
 
-  //   it('the component EditStudentsDetails should be rendered', () => {
-  //     const { getByText } = render(
-  //       <Router history={historyMock}>
-  //         <EditStudentsDetails id={id} />
-  //       </Router>
-  //     );
+      expect(historyMock.push).toHaveBeenCalledWith(paths.NOT_FOUND);
+    });
 
-  //     const firstName = getByText(/Vova/i);
-  //     expect(firstName).toBeInTheDocument();
-  //   });
+    it('redirects to /students if !isEditedError && isEditedLoaded', () => {
+      useSelector
+        .mockReturnValue({ ...mockEditStudentSelector, isLoaded: true, error: '' })
+        .mockReturnValue({ ...mockCurrentStudentSelector, error: '' });
 
-  //   it('redirects to /404 if studentError && studentGroupsError', () => {
-  //     mockCurrentStudentSelector.error = 'error';
-  //     mockCurrentStudentGroupsSelector.error = 'error';
+      render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
 
-  //     render(
-  //       <Router history={historyMock}>
-  //         <EditStudentsDetails id={id} />
-  //       </Router>
-  //     );
+      expect(historyMock.push).toHaveBeenCalledWith(paths.STUDENTS);
+    });
 
-  //     expect(historyMock.push).toHaveBeenCalledWith(paths.NOT_FOUND);
-  //   });
+    it('redirects to /students if !isRemovedError && isRemovedLoaded', () => {
+      useSelector
+        .mockReturnValue({ ...mockRemoveStudentSelector, isLoaded: true })
+        .mockReturnValue({ ...mockEditStudentSelector, isLoaded: false });
 
-  //   it('redirects to /students if !isEditedError && isEditedLoaded', () => {
-  //     mockCurrentStudentSelector.error = '';
-  //     mockCurrentStudentGroupsSelector.error = '';
-  //     mockEditStudentSelector.isLoaded = true;
+      render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
 
-  //     render(
-  //       <Router history={historyMock}>
-  //         <EditStudentsDetails id={id} />
-  //       </Router>
-  //     );
+      expect(historyMock.push).toHaveBeenCalledWith(paths.STUDENTS);
+    });
 
-  //     expect(historyMock.push).toHaveBeenCalledWith(paths.STUDENTS);
-  //   });
+    const thunk = ({ dispatch, getState }) => (next) => (action) => {
+      if (typeof action === 'function') {
+        return action(dispatch, getState);
+      }
 
-  //   it('redirects to /students if !isRemovedError && isRemovedLoaded', () => {
-  //     mockEditStudentSelector.isLoaded = false;
-  //     mockRemoveStudentSelector.isLoaded = true;
+      return next(action);
+    };
 
-  //     render(
-  //       <Router history={historyMock}>
-  //         <EditStudentsDetails id={id} />
-  //       </Router>
-  //     );
+    const create = () => {
+      const store = {
+        getState: jest.fn(() => ({})),
+        dispatch: jest.fn(),
+      };
 
-  //     expect(historyMock.push).toHaveBeenCalledWith(paths.STUDENTS);
-  //   });
+      const next = jest.fn();
 
-  //   const thunk = ({ dispatch, getState }) => (next) => (action) => {
-  //     if (typeof action === 'function') {
-  //       return action(dispatch, getState);
-  //     }
+      const invoke = (action) => thunk(store)(next)(action);
 
-  //     return next(action);
-  //   };
+      return { store, next, invoke };
+    };
 
-  //   const create = () => {
-  //     const store = {
-  //       getState: jest.fn(() => ({})),
-  //       dispatch: jest.fn(),
-  //     };
-  //     const next = jest.fn();
+    const { store, invoke } = create();
 
-  //     const invoke = (action) => thunk(store)(next)(action);
+    it('dispatchAddAlert - success if !isEditedError && isEditedLoaded', () => {
+      useSelector
+        .mockReturnValue({ ...mockEditStudentSelector, isLoaded: true })
 
-  //     return { store, next, invoke };
-  //   };
+      const mes = 'Student information has been edited successfully';
 
-  //   const { store, invoke } = create();
+      invoke((dispatch, getState) => {
+        dispatch(mes);
+        getState();
+      });
 
-  //   it('dispatchAddAlert - success if !isEditedError && isEditedLoaded', () => {
-  //     mockCurrentStudentSelector.error = '';
-  //     mockCurrentStudentGroupsSelector.error = '';
-  //     mockEditStudentSelector.isLoaded = true;
+      expect(store.dispatch).toHaveBeenCalledWith(mes);
+      expect(store.getState).toHaveBeenCalled();
+    });
 
-  //     const mes = 'Student information has been edited successfully';
+    it('dispatchAddAlert(isEditedError) if isEditedError && !isEditedLoaded', () => {
+      useSelector
+        .mockReturnValue({ ...mockEditStudentSelector, isLoaded: false, error: 'error' });
 
-  //     invoke((dispatch, getState) => {
-  //       dispatch(mes);
-  //       getState();
-  //     });
+      const mes = 'error';
 
-  //     expect(store.dispatch).toHaveBeenCalledWith(mes);
-  //     expect(store.getState).toHaveBeenCalled();
-  //   });
+      invoke((dispatch, getState) => {
+        dispatch(mes);
+        getState();
+      });
 
-  //   it('dispatchAddAlert(isEditedError) if isEditedError && !isEditedLoaded', () => {
-  //     mockCurrentStudentSelector.error = '';
-  //     mockCurrentStudentGroupsSelector.error = '';
-  //     mockEditStudentSelector.isLoaded = false;
-  //     mockEditStudentSelector.error = 'error';
+      expect(store.dispatch).toHaveBeenCalledWith(mes);
+      expect(store.getState).toHaveBeenCalled();
+    });
 
-  //     invoke((dispatch, getState) => {
-  //       dispatch('error');
-  //       getState();
-  //     });
+    it('dispatchAddAlert Student has been excluded if !isRemovedError && isRemovedLoaded', () => {
+      useSelector.mockReturnValue({ ...mockRemoveStudentSelector, isLoaded: true });
 
-  //     expect(store.dispatch).toHaveBeenCalledWith('error');
-  //     expect(store.getState).toHaveBeenCalled();
-  //   });
+      const mes = 'Student has been excluded';
 
-  //   it('dispatchAddAlert Student has been excluded if !isRemovedError && isRemovedLoaded', () => {
-  //     mockRemoveStudentSelector.isLoaded = true;
-  //     mockEditStudentSelector.error = '';
+      invoke((dispatch, getState) => {
+        dispatch(mes);
+        getState();
+      });
 
-  //     const mes = 'Student has been excluded';
+      expect(store.dispatch).toHaveBeenCalledWith(mes);
+      expect(store.getState).toHaveBeenCalled();
+    });
 
-  //     invoke((dispatch, getState) => {
-  //       dispatch(mes);
-  //       getState();
-  //     });
+    it('dispatchAddAlert(isEditedError) if isRemovedError && !isRemovedLoaded', () => {
+      useSelector.mockReturnValue({ ...mockRemoveStudentSelector, isLoaded: false });
 
-  //     expect(store.dispatch).toHaveBeenCalledWith(mes);
-  //     expect(store.getState).toHaveBeenCalled();
-  //   });
+      const mes = 'error';
+      invoke((dispatch, getState) => {
+        dispatch(mes);
+        getState();
+      });
 
-  //   it('dispatchAddAlert(isEditedError) if isRemovedError && !isRemovedLoaded', () => {
-  //     mockRemoveStudentSelector.isLoaded = false;
-  //     mockEditStudentSelector.error = '';
+      expect(store.dispatch).toHaveBeenCalledWith(mes);
+      expect(store.getState).toHaveBeenCalled();
+    });
 
-  //     invoke((dispatch, getState) => {
-  //       dispatch('error');
-  //       getState();
-  //     });
+    it('modal window is opened if click Exclude button in EditStudentsDetails', () => {
+      const { getByRole } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
 
-  //     expect(store.dispatch).toHaveBeenCalledWith('error');
-  //     expect(store.getState).toHaveBeenCalled();
-  //   });
+      fireEvent.click(getByRole('button', { name: 'Exclude' }));
 
-  //   it('modal window is opened if click Exclude button in EditStudentsDetails', () => {
-  //     const { getByText } = render(
-  //       <Router history={historyMock}>
-  //         <EditStudentsDetails id={id} />
-  //       </Router>
-  //     );
+      expect(getByRole('button', { name: 'Delete' })).toBeTruthy();
+      expect(getByRole('button', { name: 'Cancel' })).toBeTruthy();
+    });
 
-  //     screen.debug()
-  //     fireEvent.click(getByText(/exclude/i));
+    it('shouldn\'t add student group if group isn\'t from datalist', async () => {
+      const { getByRole, getByText } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
 
-  //     expect(getByText(/delete/i)).toBeTruthy();
-  //   });
+      const groupsInput = getByRole('combobox');
 
-    // it('shouldn\'t add student group if group isn\'t from datalist', async () => {
-    //   React.useState = useStateMock.default;
-    //   const { getByText } = render(
-    //     <Router history={historyMock}>
-    //       <EditStudentsDetails id={id} />
-    //     </Router>
-    //   );
+      fireEvent.change(groupsInput, { target: { value: 'Dnp-2021' } });
 
-    //   const groupsInput = document.getElementById('groupsInput');
+      fireEvent.click(getByRole('button', { name: '+' }));
 
-    //   act(() => {
-    //     fireEvent.change(
-    //       groupsInput, { target: { value: 'Dnp-2021' } },
-    //     );
-    //   });
+      await waitFor(() => {
+        expect(getByText('Invalid group name')).toBeInTheDocument();
+      });
+    });
 
-    //   fireEvent.click(getByText('+'));
-    //   expect(getByText('Invalid group name')).toBeInTheDocument();
-    // });
+    it('should delete group if click X', () => {
+      const NUM_OF_X_AFTER_DELETE = 1;
 
-    // it('should delete group if click X', () => {
-    //   React.useState = useStateMock.default;
-    //   const { getAllByText } = render(
-    //     <Router history={historyMock}>
-    //       <EditStudentsDetails id={id} />
-    //     </Router>
-    //   );
+      const { getAllByText } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
 
-    //   fireEvent.click(getAllByText('X')[0]);
+      fireEvent.click(getAllByText('X')[0]);
 
-    //   expect(getAllByText('X').length).toBe(2);
-    // });
-  // });
+      expect(getAllByText('X').length).toBe(NUM_OF_X_AFTER_DELETE);
+    });
+
+    it('should be delete student', () => {
+      const { getByRole } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      fireEvent.click(getByRole('button', { name: 'Exclude' }));
+
+      fireEvent.click(getByRole('button', { name: 'Delete' }));
+
+      invoke((dispatch, getState) => {
+        dispatch(id);
+        getState();
+      });
+
+      expect(store.dispatch).toHaveBeenCalledWith(id);
+      expect(store.getState).toHaveBeenCalled();
+    });
+
+    it('should save edited student', () => {
+      const { getByRole } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      const save = getByRole('button', { name: 'Save' });
+
+      fireEvent.click(save);
+
+      invoke((dispatch, getState) => {
+        dispatch(id, mockCurrentStudentSelector.data);
+        getState();
+      });
+
+      expect(store.dispatch).toHaveBeenCalledWith(id, mockCurrentStudentSelector.data);
+      expect(store.getState).toHaveBeenCalled();
+    });
+
+    it('shouldn`t save student if some field is uncorrect', async () => {
+      const { getByRole } = render(
+        <Router history={historyMock}>
+          <EditStudentsDetails id={id} />
+        </Router>
+      );
+
+      const groupsInput = getByRole('combobox');
+
+      fireEvent.change(groupsInput, { target: { value: '' } });
+
+      await waitFor(() => {
+        expect(getByRole('button', { name: 'Save' })).toBeDisabled();
+      });
+    });
+  });
 });
