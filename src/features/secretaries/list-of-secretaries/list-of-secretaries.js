@@ -381,7 +381,6 @@ export const ListOfSecretaries = () => {
                 Disabled Secretaries
               </label>
             </div>
-            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
                   className={classNames(styles['label-for-select'])}
@@ -403,7 +402,6 @@ export const ListOfSecretaries = () => {
                 <option>99</option>
               </select>
             </div>
-            }
             {currentUser.role === 4 && (
                 <div className="col-2 text-right">
                   <Button onClick={handleAddSecretary}>
