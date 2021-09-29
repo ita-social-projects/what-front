@@ -203,7 +203,6 @@ export const ListOfCourses = () => {
             <div className="col-3">
               <Search onSearch={handleSearch} placeholder="Course`s title" />
             </div>
-            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
                   className={classNames(styles['label-for-select'])}
@@ -225,7 +224,6 @@ export const ListOfCourses = () => {
                 <option>99</option>
               </select>
             </div>
-            }
             <div className="col-2 offset-3 text-right">
               {[3, 4].includes(currentUser.role) && (
               <Button onClick={addCourse}>
