@@ -228,7 +228,6 @@ export const ListOfLessons = () => {
             <div className="col-3">
               <Search onSearch={handleSearchTheme} className={classNames(styles.text)} placeholder="Theme's name" />
             </div>
-            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
                   className={classNames(styles['label-for-select'])}
@@ -250,7 +249,6 @@ export const ListOfLessons = () => {
                 <option>99</option>
               </select>
             </div>
-            }
               {currentUser.role !== 3 && (
                 <div className="col-4 text-right">
                   <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning mr-3', styles['left-add-btn'])}>
