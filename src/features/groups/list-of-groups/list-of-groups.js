@@ -179,19 +179,9 @@ export const ListOfGroups = () => {
   };
 
   const paginationComponent = () => {
-    if (filteredGroupsList.length < groupsPerPage) {
+    if (filteredGroupsList.length > groupsPerPage) {
       return (
         <Pagination
-          itemsPerPage={groupsPerPage}
-          totalItems={1}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-        />
-      );
-    }
-    return (
-      <Pagination
         itemsPerPage={groupsPerPage}
         totalItems={filteredGroupsList.length}
         paginate={paginate}
@@ -199,7 +189,8 @@ export const ListOfGroups = () => {
         nextPage={nextPage}
         page={currentPage}
       />
-    );
+      );
+    }
   };
 
   const listProps = {
