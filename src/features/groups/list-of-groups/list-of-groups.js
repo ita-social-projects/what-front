@@ -260,7 +260,6 @@ export const ListOfGroups = () => {
                 placeholder="Start Date"
               />
             </div>
-            {!showBlocks &&
             <div className="col-1 d-flex">
               <label
                   className={classNames(styles['label-for-select'])}
@@ -282,7 +281,6 @@ export const ListOfGroups = () => {
                 <option>99</option>
               </select>
             </div>
-            }
             <div className="col-4 text-right">
               <Button
                 onClick={downloadGroups}
