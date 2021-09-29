@@ -192,27 +192,18 @@ export const ListOfStudents = () => {
   };
 
   const paginationComponent = () => {
-    if (students.length < studentsPerPage) {
+    if (students.length > studentsPerPage) {
       return (
         <Pagination
           itemsPerPage={studentsPerPage}
-          totalItems={1}
+          totalItems={students.length}
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}
-        />
+          page={currentPage}
+      />
       );
     }
-    return (
-      <Pagination
-        itemsPerPage={studentsPerPage}
-        totalItems={students.length}
-        paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        page={currentPage}
-      />
-    );
   };
 
   return (
