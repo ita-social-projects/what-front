@@ -273,7 +273,6 @@ export const ListOfStudents = () => {
                 Disabled students
               </label>
             </div>
-            {!showBlocks &&
               <div className="col-1 d-flex">
                 <label
                   className={classNames(styles['label-for-select'])}
@@ -293,7 +292,6 @@ export const ListOfStudents = () => {
                   <option>99</option>
                 </select>
               </div>
-            }
               {[3, 4].includes(currentUser.role) && (
                 <div className="col-4 text-right">
                 <Button onClick={downloadStudents} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
