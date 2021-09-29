@@ -276,7 +276,6 @@ export const ListOfMentors = () => {
                 </label>
               </div>
               )}
-            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
                   className={classNames(styles['label-for-select'])}
@@ -298,7 +297,6 @@ export const ListOfMentors = () => {
                 <option>99</option>
               </select>
             </div>
-            }
             <div className="col-2 text-right">
               {currentUser.role !== 2
                   && (
