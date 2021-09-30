@@ -58,7 +58,7 @@ function* deleteScheduleWatcher() {
 function* fetchSchedulesWorker() {
   try {
     yield put({ type: actionTypes.LOADING_SCHEDULES_STARTED });
-    const schedules = yield call(ApiService.load, '/schedules');
+    const schedules = yield call(ApiService.load, '/schedules/event-occurrences');
     yield put({ type: actionTypes.LOADING_SCHEDULES_SUCCESS, payload: { schedules } });
   } catch (error) {
     yield put({ type: actionTypes.LOADING_SCHEDULES_FAILED, payload: { error } });
@@ -68,7 +68,7 @@ function* fetchSchedulesWorker() {
 function* fetchSchedulesByGroupIdWorker(data) {
   try {
     yield put({ type: actionTypes.LOADING_SCHEDULES_BY_GROUPID_STARTED });
-    const schedules = yield call(ApiService.load, `/schedules/${data.payload.id}/groupSchedule`);
+    const schedules = yield call(ApiService.load, `/schedules/${data.payload.id}`);
     yield put({ type: actionTypes.LOADING_SCHEDULES_BY_GROUPID_SUCCESS, payload: { schedules } });
   } catch (error) {
     yield put({ type: actionTypes.LOADING_SCHEDULES_BY_GROUPID_FAILED, payload: { error } });
@@ -89,7 +89,7 @@ function* createScheduleWorker(data) {
 function* editScheduleWorker(data) {
   try {
     yield put({ type: actionTypes.EDITING_SCHEDULE_STARTED });
-    const schedule = yield call(ApiService.update, `/schedules/${data.payload.id}`, data.payload.schedule);
+    const schedule = yield call(ApiService.update, `/schedules/eventOccurrences/${data.payload.id}`, data.payload.schedule);
     yield put({ type: actionTypes.EDITING_SCHEDULE_SUCCESS, payload: { schedule } });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
