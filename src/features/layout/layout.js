@@ -10,7 +10,7 @@ import {
   ListOfLessons, ListOfGroups, ListOfCourses,
   AddLesson, AddCourse, EditLesson, LessonDetails,
   UnAssignedList, Support, MyProfile, ChangePassword,
-  DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
+  DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, EditSchedule, StartGroup, Sidebar,
   DownloadStudents, DownloadGroups, HomeworkAdd, StudentLessons, StudentLessonDetails,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
@@ -53,6 +53,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.MY_PROFILE} component={MyProfile} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.SCHEDULE} component={AllSchedules} />
           <ProtectedRoute roles={[3, 4]} exact path={`${paths.SCHEDULE_BY_GROUP_ID}/:id`} component={ScheduleGroup} />
+          <ProtectedRoute roles={[4, 8]} exact path={`${paths.SCHEDULE_EDIT}/:id`} component={EditSchedule} />
           <ProtectedRoute roles={[1, 2, 3, 4]} exact path={paths.CHANGE_PASSWORD} component={ChangePassword} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
           <ProtectedRoute roles={[3, 4]} exact path={paths.GROUPS_DOWNLOAD} component={DownloadGroups} />

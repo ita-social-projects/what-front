@@ -1,0 +1,53 @@
+@import '../../../styles/main.scss';
+
+
+
+.page {
+  @include pageWindow();
+  padding: 30px;
+  font-size: 16px;
+}
+
+table{
+  border: 1px !important;
+}
+
+.size {
+  width: 100%;
+}
+
+.mode {
+  display: block;
+  margin: auto !important;
+}
+
+a {
+  color: map-get($colors, textMain-color);
+}
+
+.placement {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.error{
+  padding-top:5px;
+  color:red;
+}
+
+.loader-centered {
+  display: block !important;
+  margin: 0 auto;
+}
+
+.link:hover{
+  cursor:pointer;
+  text-decoration: underline;
+}
+
+.list{
+  margin-bottom: 20px;
+  overflow-y: scroll;
+  height: 400px;
+}
