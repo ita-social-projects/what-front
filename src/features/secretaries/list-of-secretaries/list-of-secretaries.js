@@ -386,7 +386,12 @@ export const ListOfSecretaries = () => {
                   className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
               >
-                Rows
+                {
+                  showBlocks ?
+                    <span>Blocks</span>
+                    :
+                    <span>Rows</span>
+                } 
               </label>
               <select
                   className={classNames('form-control', styles['change-rows'])}
