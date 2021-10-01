@@ -1,9 +1,9 @@
-import React from 'react';
-import propTypes from 'prop-types';
+import React from "react";
+import propTypes from "prop-types";
 import classNames from "classnames";
 import styles from "./rows-option.scss";
 
-export const RowsOption = ({ id, onChange }) => {
+export const RowsOption = ({ id, onChange, optionsValues }) => {
   return (
     <select
       className={classNames("form-control", styles["change-rows"])}
@@ -12,16 +12,15 @@ export const RowsOption = ({ id, onChange }) => {
         onChange(event.target.value);
       }}
     >
-      <option>10</option>
-      <option>30</option>
-      <option>50</option>
-      <option>75</option>
-      <option>100</option>
+      {optionsValues.map((option) => {
+        return <option key={option}>{option}</option>;
+      })}
     </select>
   );
 };
 
 RowsOption.propTypes = {
-  onChange: propTypes.func.isRequired
+  onChange: propTypes.func.isRequired,
+  id: propTypes.string,
+  optionsValues: propTypes.array.isRequired,
 };
-
