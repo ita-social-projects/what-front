@@ -57,8 +57,8 @@ export const Schedule = () => {
         const currentDay = new Date(firstDayOfWeek.getTime() + index * DAY_IN_MILLIS);
 
         const lessons = schedules
-          .filter((schedule) => schedule.dayNumber === index || schedule.repeatRate === 1)
-          .sort((lesson, nextLesson) => (nextLesson.lessonStart < lesson.lessonStart ? 1 : -1));
+          // .filter((schedule) => schedule.dayNumber === index || schedule.repeatRate === 1)
+          // .sort((lesson, nextLesson) => (nextLesson.lessonStart < lesson.lessonStart ? 1 : -1));
 
         return {
           id: index,

@@ -48,8 +48,8 @@ export const Schedule = ({ groupsData, schedulesData }) => {
         const currentDay = new Date(firstDayOfWeek.getTime() + index * DAY_IN_MILLIS);
 
         const lessons = schedules
-          .filter((schedule) => schedule.dayNumber === index || schedule.repeatRate === 1)
-          .sort((lesson, nextLesson) => (nextLesson.lessonStart < lesson.lessonStart ? 1 : -1));
+          // .filter((schedule) => schedule.dayNumber === index || schedule.repeatRate === 1)
+          // .sort((lesson, nextLesson) => (nextLesson.lessonStart < lesson.lessonStart ? 1 : -1));
 
         return {
           id: index,
@@ -169,7 +169,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                         )}
                         className={classNames({ [styles['future-lesson']]: !isToday && !isPast })}
                       >
-                        {lessonStart.substring(0, 5)} - {lessonEnd.substring(0, 5)}
+                        {/* {lessonStart.substring(0, 5)} - {lessonEnd.substring(0, 5)} */}
                       </Badge>
                       {[3, 4].includes(currentUser.role) ? (
                         <button
