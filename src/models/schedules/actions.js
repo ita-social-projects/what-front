@@ -89,7 +89,7 @@ function* createScheduleWorker(data) {
 function* editScheduleWorker(data) {
   try {
     yield put({ type: actionTypes.EDITING_SCHEDULE_STARTED });
-    const schedule = yield call(ApiService.update, `/schedules/${data.payload.id}`, data.payload.schedule);
+    const schedule = yield call(ApiService.update, `/schedules/eventOccurrences/${data.payload.id}`, data.payload.schedule);
     yield put({ type: actionTypes.EDITING_SCHEDULE_SUCCESS, payload: { schedule } });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
