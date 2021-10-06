@@ -137,19 +137,9 @@ export const ListOfCourses = () => {
   };
 
   const paginationComponent = () => {
-    if (data.length < coursesPerPage) {
+    if (data.length > coursesPerPage) {
       return (
         <Pagination
-          itemsPerPage={coursesPerPage}
-          totalItems={1}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-        />
-      );
-    }
-    return (
-      <Pagination
         itemsPerPage={coursesPerPage}
         totalItems={data.length}
         paginate={paginate}
@@ -157,7 +147,8 @@ export const ListOfCourses = () => {
         nextPage={nextPage}
         page={currentPage}
       />
-    );
+      );
+    }
   };
 
   const listProps = {
