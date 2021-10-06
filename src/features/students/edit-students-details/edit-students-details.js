@@ -291,7 +291,7 @@ export const EditStudentsDetails = ({ id }) => {
                           className={classNames('w-100 btn btn-secondary', styles.button)}
                           type="reset"
                           onClick={resetInput}
-                        >Clear
+                        >Reset
                         </button>
                       </div>
                       <div className="col-md-3 col-4">

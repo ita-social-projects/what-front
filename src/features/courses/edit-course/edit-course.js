@@ -128,7 +128,7 @@ export const EditCourse = ({ id, coursesData }) => {
                           disabled={!isValid || !dirty || isEditedLoading || errors.name}
                           className={classNames('w-100', styles['clear-button'])}
                           onClick={handleReset}
-                        >Clear
+                        >Reset
                         </Button>
                       </div>
                       <div className="col-md-3 col-4 pr-0">

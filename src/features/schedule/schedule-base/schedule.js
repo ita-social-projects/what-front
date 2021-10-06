@@ -83,7 +83,9 @@ export const Schedule = ({ groupsData, schedulesData }) => {
   };
 
   const handleSetToday = () => {
-    setInputDateValue(commonHelpers.transformDateTime({ isDayTime: false }).reverseDate);
+    const today = commonHelpers.transformDateTime({ isDayTime: false }).reverseDate;
+    setChosenDate(new Date(today));
+    setInputDateValue(today);
   };
 
   const handleEditSchedule = (id) => {
@@ -150,7 +152,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                 <h5 className="text-center">{date}</h5>
               </hgroup>
               <ul className={styles['lessons-list']}>
-                { lessons.map(({ id: lessonId, studentGroupId, eventFinish, eventStart }) => (
+                { lessons.map(({ id: lessonId, studentGroupId, eventStart, eventFinish, lessonEnd, lessonStart }) => (
                   <li key={lessonId} className={styles['lessons-list__item']}>
                     <p
                       className={styles['lessons-list__group-name']}
