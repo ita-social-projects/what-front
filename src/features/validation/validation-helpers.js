@@ -37,7 +37,7 @@ export const registrationValidation = Yup.object().shape({
 export const addCourseValidation = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Too short')
-    .matches('^([A-Za-zА-Яа-яёЁ0-9.#/]([ &_-]|, |: )?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid course name')
+    .matches('^([a-zA-Z0-9.#+/]([ &_-]|, |: )?)+[a-zA-Z0-9]+$', 'Invalid course name')
     .max(50, 'Too long')
     .required('This field is required'),
 });
