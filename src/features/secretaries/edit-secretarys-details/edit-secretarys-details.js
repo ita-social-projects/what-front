@@ -172,7 +172,7 @@ export const EditSecretarysDetails = ({ id }) => {
                             disabled={!dirty}
                             variant="secondary"
                           >
-                            Clear
+                            Reset
                           </Button>
                         </div>
                         <div className="col-md-3 col-4 px-1">

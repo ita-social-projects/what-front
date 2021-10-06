@@ -37,7 +37,7 @@ export const registrationValidation = Yup.object().shape({
 export const addCourseValidation = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Too short')
-    .matches('^([A-Za-zА-Яа-яёЁ0-9.#/]([ &_-]|, |: )?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid course name')
+    .matches('^([a-zA-Z0-9.#+/]([ &_-]|, |: )?)+[a-zA-Z0-9]+$', 'Invalid course name')
     .max(50, 'Too long')
     .required('This field is required'),
 });
@@ -85,8 +85,8 @@ export const editLessonValidation = Yup.object().shape({
     .required('This field is required'),
   groupName: Yup.string()
       .min(1, 'Too short')
-      .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+[A-Za-zА-Яа-яёЁ0-9]+$', 'Invalid group name')
-      .max(50, 'Too long')
+      .matches('^([A-Za-zА-Яа-яёЁ0-9][ _-]?)+([ _-]+[0-9]+[\/ _-]?[0-9]+)?$', 'Invalid group name')
+      .max(100, 'Too long')
       .required('This field is required'),
   formData: Yup.array().of(
       Yup.object({
@@ -124,7 +124,7 @@ export const editSecretaryValidation = Yup.object().shape({
   lastName: Yup.string()
     .min(2, 'Too short')
     .matches('^([A-Za-zА-Яа-яёЁ][ \'-]?)+[A-Za-zА-Яа-яёЁ]+$', 'Invalid last name')
-    .max(50, 'Too longs')
+    .max(50, 'Too long')
     .required('This field is required'),
   email: Yup.string()
     .email('Invalid email address')
@@ -140,7 +140,7 @@ export const editMentorValidation = Yup.object().shape({
   lastName: Yup.string()
     .min(2, 'Too short')
     .matches('^([A-Za-zА-Яа-яёЁ][ \'-]?)+[A-Za-zА-Яа-яёЁ]+$', 'Invalid last name')
-    .max(50, 'Too longs')
+    .max(50, 'Too long')
     .required('This field is required'),
   email: Yup.string()
     .email('Invalid email address')
@@ -156,7 +156,7 @@ export const editStudentValidation = Yup.object().shape({
   lastName: Yup.string()
     .min(2, 'Too short')
     .matches('^([A-Za-zА-Яа-яёЁ][ \'-]?)+[A-Za-zА-Яа-яёЁ]+$', 'Invalid last name')
-    .max(50, 'Too longs')
+    .max(50, 'Too long')
     .required('This field is required'),
   email: Yup.string()
     .email('Invalid email address')

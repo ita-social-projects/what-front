@@ -283,27 +283,18 @@ export const ListOfSecretaries = () => {
   };
 
   const paginationComponent = () => {
-    if (secretaries.length < secretariesPerPage) {
+    if (secretaries.length > secretariesPerPage) {
       return (
         <Pagination
           itemsPerPage={secretariesPerPage}
-          totalItems={1}
+          totalItems={secretaries.length}
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}
-        />
+          page={currentPage}
+      />
       );
     }
-    return (
-      <Pagination
-        itemsPerPage={secretariesPerPage}
-        totalItems={secretaries.length}
-        paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        page={currentPage}
-      />
-    );
   };
 
   const listProps = {

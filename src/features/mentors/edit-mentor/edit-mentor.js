@@ -499,7 +499,7 @@ export const EditMentor = ({ id }) => {
                           type="reset"
                           onClick={resetInput}
                         >
-                          Clear
+                          Reset
                         </button>
                       </div>
                       <div className="col-md-3 col-4">
