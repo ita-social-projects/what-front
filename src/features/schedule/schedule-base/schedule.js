@@ -47,7 +47,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
       const weekDays = weekDayNames.map((day, index) => {
         const currentDay = new Date(firstDayOfWeek.getTime() + index * DAY_IN_MILLIS);
 
-        const lessons = schedules
+        const lessons = schedules.filter((schedule) => schedule.studentGroupId)
           // .filter((schedule) => schedule.dayNumber === index || schedule.repeatRate === 1)
           // .sort((lesson, nextLesson) => (nextLesson.lessonStart < lesson.lessonStart ? 1 : -1));
 
@@ -150,7 +150,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                 <h5 className="text-center">{date}</h5>
               </hgroup>
               <ul className={styles['lessons-list']}>
-                { lessons.map(({ id: lessonId, studentGroupId, lessonEnd, lessonStart }) => (
+                { lessons.map(({ id: lessonId, studentGroupId, eventFinish, eventStart }) => (
                   <li key={lessonId} className={styles['lessons-list__item']}>
                     <p
                       className={styles['lessons-list__group-name']}
@@ -170,6 +170,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                         className={classNames({ [styles['future-lesson']]: !isToday && !isPast })}
                       >
                         {/* {lessonStart.substring(0, 5)} - {lessonEnd.substring(0, 5)} */}
+                        {new Date(eventStart).toLocaleTimeString()} - {new Date(eventFinish).toLocaleTimeString()}
                       </Badge>
                       {[3, 4].includes(currentUser.role) ? (
                         <button
@@ -194,5 +195,5 @@ export const Schedule = ({ groupsData, schedulesData }) => {
 
 Schedule.propTypes = {
   groupsData: shape(studentGroupsStateShape).isRequired,
-  schedulesData: shape(scheduleStateShape).isRequired,
+  // schedulesData: shape(scheduleStateShape).isRequired,
 };

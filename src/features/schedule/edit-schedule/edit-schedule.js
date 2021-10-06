@@ -1,22 +1,27 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-
 import { paths, useActions } from "@/shared";
-import { addAlert } from "@/features";
 import {
-  fetchSchedulesByGroupId,
   schedulesByGroupIdSelector,
-  editSchedule,
   editedScheduleSelector,
-  deleteSchedule,
   deletedScheduleSelector,
-  loadStudentGroupById,
   loadStudentGroupByIdSelector,
+  themesSelector,
+  mentorsSelector,
+  fetchSchedulesByGroupId,
+  editSchedule,
+  deleteSchedule,
+  loadStudentGroupById,
+  fetchThemes,
+  fetchMentors
 } from "@/models";
 
 import { WithLoading, Button } from "@/components";
+import { editScheduleValidation } from "@/features/validation/validation-helpers";
+import { addAlert, ModalWindow } from "@/features";
 import { Formik, Field, Form } from "formik";
+
 import classNames from "classnames";
 import styles from "./edit-schedule.scss";
 import { commonHelpers } from "@/utils";
@@ -24,20 +29,39 @@ import { commonHelpers } from "@/utils";
 export const EditSchedule = () => {
   const history = useHistory();
   const { id } = useParams();
-  const [toShowModal, setToShowModal] = useState(false);
 
-  const [dispatchFetchScheduleById, dispatchFetchScheduleByGroup] = useActions([
+  const [
+    dispatchScheduleById,
+    dispatchStudentGroupById,
+    dispatchThemes,
+    dispatchMentors,
+    updateSchedule,
+    dispatchAddAlert,
+    removeSchedule
+  ] = useActions([
     fetchSchedulesByGroupId,
     loadStudentGroupById,
+    fetchThemes,
+    fetchMentors,
+    editSchedule,
+    addAlert,
+    deleteSchedule
   ]);
 
   const schedulesData = useSelector(schedulesByGroupIdSelector, shallowEqual);
   const groupData = useSelector(loadStudentGroupByIdSelector, shallowEqual);
+  const themesData = useSelector(themesSelector, shallowEqual);
+  const mentorsData = useSelector(mentorsSelector, shallowEqual);
 
   useEffect(() => {
-    dispatchFetchScheduleById(id);
-    dispatchFetchScheduleByGroup(id);
-  }, [dispatchFetchScheduleByGroup, dispatchFetchScheduleById, id]);
+    dispatchScheduleById(id);
+    dispatchStudentGroupById(id);
+  }, [dispatchScheduleById, dispatchStudentGroupById, id]);
+
+  useEffect(() => {
+    dispatchThemes();
+    dispatchMentors();
+  }, [dispatchThemes, dispatchMentors])
 
   const {
     data: schedules,
@@ -54,6 +78,20 @@ export const EditSchedule = () => {
   } = groupData;
 
   const {
+    data: themes,
+    isLoading: isThemesLoading,
+    isLoaded: isThemesLoaded,
+    error: themesError,
+  } = themesData;
+
+  const {
+    data: mentors,
+    isLoading: isMentorsLoading,
+    isLoaded: isMentorsLoaded,
+    error: mentorsError,
+  } = mentorsData;
+
+  const {
     isLoading: isEditedLoading,
     isLoaded: isEditedLoaded,
     error: editingError,
@@ -64,38 +102,6 @@ export const EditSchedule = () => {
     isLoaded: isDeletedLoaded,
     error: isDeletedError,
   } = useSelector(deletedScheduleSelector, shallowEqual);
-
-  const [updateSchedule, dispatchAddAlert, removeSchedule] = useActions([
-    editSchedule,
-    addAlert,
-    deleteSchedule,
-  ]);
-
-  useEffect(() => {
-    if (!schedules && isScheduleLoaded) {
-      history.push(paths.NOT_FOUND);
-    }
-  }, [schedules, isScheduleLoaded, history]);
-
-  useEffect(() => {
-    if (!editingError && isEditedLoaded && !isEditedLoading) {
-      history.push(paths.SCHEDULE);
-      dispatchAddAlert("The schedule has been successfully edited", "success");
-    }
-    if (editingError && !isEditedLoaded && !isEditedLoading) {
-      dispatchAddAlert(editingError);
-    }
-  }, [dispatchAddAlert, history, editingError, isEditedLoading, isGroupLoaded]);
-
-  useEffect(() => {
-    if (!isDeletedError && isDeletedLoaded && !isDeletedLoading) {
-      history.push(paths.SCHEDULE);
-      dispatchAddAlert("The schedule has been successfully deleted", "success");
-    }
-    if (isDeletedError && !isDeletedLoaded && !isDeletedLoading) {
-      dispatchAddAlert(isDeletedError);
-    }
-  }, [isDeletedError, isDeletedLoaded, history]);
 
   const typeRepeatingAppointments = [
     { id: 0, name: "Daily" },
@@ -120,13 +126,43 @@ export const EditSchedule = () => {
     { id: 3, name: "third" },
     { id: 4, name: "fourth" },
   ];
-  // const interval
 
-  const [weekDays, setWeekDays] = useState([]);
-  const [dayInputError, setDayInputError] = useState("");
-  const [interval, setInterval] = useState("1");
+    const [weekDays, setWeekDays] = useState([]);
+    const [dayInputError, setDayInputError] = useState("");
+    const [interval, setInterval] = useState(1);
+    const [toShowModal, setToShowModal] = useState(false);
 
-  const prevWeekDays = usePrevious(weekDays);
+  
+    const handleShowModal = () => setToShowModal(true);
+    const handleCloseModal = () => setToShowModal(false);
+    const prevWeekDays = usePrevious(weekDays);
+
+  useEffect(() => {
+    if (!schedules && isScheduleLoaded) {
+      history.push(paths.NOT_FOUND);
+    }
+  }, [schedules, isScheduleLoaded, history]);
+
+  useEffect(() => {
+    if (!editingError && isEditedLoaded && !isEditedLoading) {
+      history.push(paths.SCHEDULE);
+      dispatchAddAlert("The schedule has been successfully edited", "success");
+    }
+    if (editingError && !isEditedLoaded && !isEditedLoading) {
+      dispatchAddAlert(editingError);
+    }
+  }, [dispatchAddAlert, history, editingError, isEditedLoading, isGroupLoaded, isThemesLoaded, isMentorsLoaded]);
+
+  useEffect(() => {
+    if (!isDeletedError && isDeletedLoaded && !isDeletedLoading) {
+      history.push(paths.SCHEDULE);
+      dispatchAddAlert("The schedule has been successfully deleted", "success");
+    }
+    if (isDeletedError && !isDeletedLoaded && !isDeletedLoading) {
+      dispatchAddAlert(isDeletedError);
+    }
+  }, [isDeletedError, isDeletedLoaded, history]);
+
 
   function usePrevious(value) {
     const ref = useRef();
@@ -134,7 +170,7 @@ export const EditSchedule = () => {
       ref.current = value;
     });
     return ref.current;
-  }
+  };
 
   const addDayOfWeek = (dayNames, clearField) => {
     const day = daysOfWeek.find(({ name }) => name === dayNames);
@@ -154,53 +190,104 @@ export const EditSchedule = () => {
     [weekDays]
   );
 
+
+const filterThemesByEventsId = (themesData, schedulesEvents) => {
+   let result = [];
+   result = themesData.filter(el => {
+      return schedulesEvents.find(element => element.themeId === el.id);
+   });
+   return result;
+  } 
+
+const filteredThemes = filterThemesByEventsId(themes, schedules.events);
+const filteredMentors = mentors.filter(({id}) => group.mentorIds.includes(id));
+
+
+  const onSubmit = ({
+    eventStart,
+    eventFinish,
+    typeRepeating,
+    index,
+    themeId,
+    mentorId,
+  }) => {
+    const editingScheduleData = {
+      pattern: {
+        type: Number(typeRepeating),
+        interval: Number(interval),
+        daysOfWeek: [...new Set(weekDays.map(({ id }) => id))],
+        index: index !== undefined ? Number(index) : 1,
+        dates: null,
+      },
+      range: {
+        startDate: eventStart,
+        finishDate: eventFinish,
+      },
+      context: {
+        groupID: group.id,
+        themeID: themeId !== undefined ? Number(themeId) : filteredThemes[0].id,
+        mentorID: mentorId !== undefined ? Number(mentorId) : filteredMentors[0].id
+      },
+    };
+    // console.log(editingScheduleData);
+    updateSchedule(editingScheduleData, id)
+  };
+
   // const handleCancel = useCallback(() => {
-  //     history.push(paths.SCHEDULE);
+  //   history.push(paths.SCHEDULE);
   // }, [history]);
 
-  // const onSubmit = (values) => {
-  //     updateSchedule(values, id)
-  // }
+  const handleReset = () => {
+    setInterval(1);
+    setWeekDays([]);
+  }
 
-  // const handleShowModal = () => setToShowModal(true);
-  // const handleCloseModal = () => setToShowModal(false);
-
-  // const handleDelete = () => {
-  //     handleCloseModal();
-  //     removeSchedule(id);
-  // };
+  const handleDelete = () => {
+    handleCloseModal();
+    removeSchedule(id);
+  };
 
   return (
     <div className="container" data-testid="editScheduleRenderForm">
       <div className={classNames(styles.page, "mx-auto", "col-12")}>
         <div className="d-flex flex-row">
-          {groupError && scheduleError && editingError && isDeletedError && (
+          {groupError && scheduleError && themesError && mentorsError && editingError && isDeletedError && (
             <div className="col-12 alert-danger">Server Problems</div>
           )}
           <div className="col-12">
             <h3>Edit Schedule</h3>
             <hr />
             <WithLoading
-              isLoading={isScheduleLoading || isGroupLoading || !schedules}
+              isLoading={isScheduleLoading || isGroupLoading || isThemesLoading || isMentorsLoading || !schedules}
               className={classNames(styles["loader-centered"])}
             >
               <Formik
                 data-testid="formik"
                 initialValues={{
-                  groupeName: group.name,
+                  groupName: group.name,
                   eventStart: commonHelpers.transformDateTime({
                     dateTime: schedules.eventStart,
-                  }).formInitialValue,
+                    }).formInitialValue,
                   eventFinish: commonHelpers.transformDateTime({
                     dateTime: schedules.eventFinish,
-                  }).formInitialValue,
-                  typeRepeating: typeRepeatingAppointments.id,
-                  weekDay: daysOfWeek.id,
+                    }).formInitialValue,
+                  typeRepeating: schedules.pattern,
+                  weekDay: weekDays,
+                  interval,
+                  index: indexWeekDay.id,
+                  themeId: filteredThemes.id,
+                  mentorId: filteredMentors.id
                 }}
-                // onSubmit = {onSubmit}
-                // validationSchema={editScheduleValidation}
+                onSubmit={onSubmit}
+                validationSchema={editScheduleValidation}
               >
-                {({ values, errors, setFieldValue, isValid, dirty }) => (
+                {({
+                  values,
+                  errors,
+                  setFieldValue,
+                  isValid,
+                  dirty,
+                }) => (
                   <Form
                     id="form"
                     className={classNames(styles.size)}
@@ -220,10 +307,55 @@ export const EditSchedule = () => {
                               data-testid="groupName"
                               type="text"
                               name="groupName"
-                              className="form-control group-input"
+                              className={classNames('form-control', { 'border-danger': errors.groupName })}
                               value={group.name}
                               disabled
                             />
+                            {errors.groupName && <p className="w-100 text-danger mb-0">{errors.groupName}</p>}
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col d-flex align-items-center">
+                            <label className="mb-0" htmlFor="themeId">
+                              Theme:
+                            </label>
+                          </div>
+                          <div className="col-md-8">
+                            <Field
+                              id="themeId"
+                              as="select"
+                              className={classNames("custom-select")}
+                              name="themeId"
+                            >
+                              {filteredThemes
+                                .map((theme) => (
+                                  <option value={theme.id} key={theme.id}>
+                                    {theme.name}
+                                  </option>
+                                ))}
+                            </Field>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col d-flex align-items-center">
+                            <label className="mb-0" htmlFor="mentorId">
+                              Mentor:
+                            </label>
+                          </div>
+                          <div className="col-md-8">
+                            <Field
+                              id="mentorId"
+                              as="select"
+                              className={classNames("custom-select")}
+                              name="mentorId"
+                            >
+                              {filteredMentors
+                                .map((mentor) => (
+                                  <option value={mentor.id} key={mentor.id}>
+                                    {mentor.firstName} {mentor.lastName}
+                                  </option>
+                                ))}
+                            </Field>
                           </div>
                         </div>
                         <div className="form-group row">
@@ -236,16 +368,14 @@ export const EditSchedule = () => {
                           <div className="col-md-8">
                             <Field
                               data-testid="eventStart"
-                              className="form-control"
+                              className={classNames('form-control', { 'border-danger': errors.eventStart })}
                               type="datetime-local"
                               name="eventStart"
                               id="choose-date-start/time"
-                              max={
-                                commonHelpers.transformDateTime({})
-                                  .formInitialValue
-                              }
+                              max={values.eventFinish}
                               required
                             />
+                            {errors.eventStart && <p className="text-danger mb-0">{errors.eventStart}</p>}
                           </div>
                         </div>
                         <div className="form-group row">
@@ -258,16 +388,13 @@ export const EditSchedule = () => {
                           <div className="col-md-8">
                             <Field
                               data-testid="eventFinish"
-                              className="form-control"
+                              className={classNames('form-control', { 'border-danger': errors.eventFinish })}
                               type="datetime-local"
                               name="eventFinish"
                               id="choose-date-finish/time"
-                              max={
-                                commonHelpers.transformDateTime({})
-                                  .formInitialValue
-                              }
                               required
                             />
+                            {errors.eventFinish && <p className="text-danger mb-0">{errors.eventFinish}</p>}
                           </div>
                         </div>
                         <div className="row mb-3">
@@ -283,11 +410,23 @@ export const EditSchedule = () => {
                               className={classNames("custom-select")}
                               name="typeRepeating"
                             >
-                              {typeRepeatingAppointments.map((type) => (
-                                <option value={type.id} key={type.id}>
-                                  {type.name}
-                                </option>
-                              ))}
+                              <option
+                                value={schedules.pattern}
+                                key={schedules.pattern}
+                              >
+                                {
+                                  typeRepeatingAppointments.find(
+                                    (type) => type.id === schedules.pattern
+                                  )?.name
+                                }
+                              </option>
+                              {typeRepeatingAppointments
+                                .filter((type) => type.id !== schedules.pattern)
+                                .map((type) => (
+                                  <option value={type.id} key={type.id}>
+                                    {type.name}
+                                  </option>
+                                ))}
                             </Field>
                           </div>
                         </div>
@@ -300,7 +439,7 @@ export const EditSchedule = () => {
                           </label>
                           <div className="col-sm-8 input-group">
                             <Field
-                              data-testid="groupName"
+                              data-testid="interval"
                               type="number"
                               name="interval"
                               className="form-control"
@@ -308,13 +447,11 @@ export const EditSchedule = () => {
                               onChange={(e) => setInterval(e.target.value)}
                               min="1"
                               max={
-                                values.typeRepeating === "1"
+                                values.typeRepeating === "0"
+                                  ? "360"
+                                  : values.typeRepeating === "1"
                                   ? "4"
-                                  : values.typeRepeating === "2"
-                                  ? "12"
-                                  : values.typeRepeating === "3"
-                                  ? "12"
-                                  : "360"
+                                  : "12"
                               }
                             />
                           </div>
@@ -322,24 +459,22 @@ export const EditSchedule = () => {
 
                         <div className="row mb-3">
                           <div className="col d-flex align-items-start">
-                            <label className="mt-2" htmlFor="mentor">
+                            <label className="mt-2" htmlFor="weekDay">
                               Day of Week:
                             </label>
                           </div>
                           <div className="col-md-8">
-                            <div
-                              className="d-flex"
-                              data-testid="mentor-field-wrapper"
-                            >
+                            <div className="d-flex" data-testid="weekDay">
                               <Field
                                 className="form-control f"
                                 type="text"
                                 name="weekDay"
+                                placeholder="Select day('s) of week"
                                 list="weekDays-list"
                               />
                               <datalist id="weekDays-list">
                                 {daysOfWeek.map(({ id, name }) => (
-                                  <option key={id} value={`${name}`} />
+                                  <option key={id} value={name} />
                                 ))}
                               </datalist>
                               <Button
@@ -388,11 +523,96 @@ export const EditSchedule = () => {
                             </div>
                           </div>
                         </div>
+                        {(values.typeRepeating === 3 ||
+                          values.typeRepeating === "3") && (
+                          <div className="row mb-3">
+                            <div className="col d-flex align-items-center">
+                              <label className="mb-0" htmlFor="index">
+                                Index:
+                              </label>
+                            </div>
+                            <div className="col-md-8">
+                              <Field
+                                id="indexWeek"
+                                as="select"
+                                className={classNames("custom-select")}
+                                name="index"
+                              >
+                                {indexWeekDay.map((index) => (
+                                  <option value={index.id} key={index.id}>
+                                    {index.name}
+                                  </option>
+                                ))}
+                              </Field>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="row m-0 pt-3">
+                      <div className="col-md-3 col-4 pl-0">
+                        <Button
+                          className={classNames(styles["exclude-btn"], "w-100")}
+                          onClick={handleShowModal}
+                          disabled={
+                            !isValid ||
+                            dirty ||
+                            isEditedLoading ||
+                            isDeletedLoading
+                          }
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                      <div className="col-md-3 offset-md-3 col-4">
+                        <Button
+                          type="reset"
+                          onClick={handleReset}
+                          className={classNames(
+                            "w-100",
+                            styles["clear-button"]
+                          )}
+                          disabled={
+                            (!dirty && prevWeekDays !== weekDays) ||
+                            isScheduleLoading
+                          }
+                        >
+                          Clear
+                        </Button>
+                      </div>
+                      <div className="col-md-3 col-4 pr-0">
+                        <Button
+                          type="submit"
+                          className="btn btn-secondary w-100 buttonConfirm"
+                          disabled={
+                            !isValid ||
+                            (!dirty && prevWeekDays !== weekDays) ||
+                            isScheduleLoading ||
+                            isEditedLoading ||
+                            isDeletedLoading ||
+                            errors.groupName ||
+                            errors.eventStart ||
+                            errors.eventFinish
+                          }
+                        >
+                          Save
+                        </Button>
                       </div>
                     </div>
                   </Form>
                 )}
               </Formik>
+              <ModalWindow
+                toShow={toShowModal}
+                onSubmit={handleDelete}
+                onClose={handleCloseModal}
+                submitButtonText="Delete"
+                useRedButton
+                marginLeft
+              >
+                Are you sure you want to exclude this schedule?
+              </ModalWindow>
             </WithLoading>
           </div>
         </div>

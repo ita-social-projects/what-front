@@ -10,7 +10,7 @@ export const commonHelpers = {
     let timeOptions = { hour: '2-digit', minute: '2-digit' };
 
     if (isDayTime) {
-      formalizedDate = dateTime ? new Date(`${dateTime}Z`) : new Date();
+      formalizedDate = dateTime ? new Date(`${dateTime}`) : new Date();
     } else {
       formalizedDate = dateTime ? new Date(dateTime) : new Date();
     }
