@@ -136,7 +136,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
               <Icon icon="Arrow" className={styles.arrow} />
             </button>
           </div>
-          {[3, 4].includes(currentUser.role) ? (
+          {[8, 4].includes(currentUser.role) ? (
             <div className="col-3 d-flex justify-content-end pr-0">
               <Button variant="info" onClick={handleAddSchedule}>
                 Add schedule
@@ -174,7 +174,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                         {/* {lessonStart.substring(0, 5)} - {lessonEnd.substring(0, 5)} */}
                         {new Date(eventStart).toLocaleTimeString()} - {new Date(eventFinish).toLocaleTimeString()}
                       </Badge>
-                      {[3, 4].includes(currentUser.role) ? (
+                      {[8, 4].includes(currentUser.role) ? (
                         <button
                           type="button"
                           className={styles['edit-button']}
