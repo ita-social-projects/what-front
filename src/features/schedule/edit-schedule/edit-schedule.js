@@ -21,6 +21,7 @@ import { WithLoading, Button } from "@/components";
 import { editScheduleValidation } from "@/features/validation/validation-helpers";
 import { addAlert, ModalWindow } from "@/features";
 import { Formik, Field, Form } from "formik";
+import { helpersData } from "./helpers-data";
 
 import classNames from "classnames";
 import styles from "./edit-schedule.scss";
@@ -50,18 +51,10 @@ export const EditSchedule = () => {
 
   const schedulesData = useSelector(schedulesByGroupIdSelector, shallowEqual);
   const groupData = useSelector(loadStudentGroupByIdSelector, shallowEqual);
+  const groupId = schedulesData.data.studentGroupId;
   const themesData = useSelector(themesSelector, shallowEqual);
   const mentorsData = useSelector(mentorsSelector, shallowEqual);
 
-  useEffect(() => {
-    dispatchScheduleById(id);
-    dispatchStudentGroupById(id);
-  }, [dispatchScheduleById, dispatchStudentGroupById, id]);
-
-  useEffect(() => {
-    dispatchThemes();
-    dispatchMentors();
-  }, [dispatchThemes, dispatchMentors])
 
   const {
     data: schedules,
@@ -103,29 +96,20 @@ export const EditSchedule = () => {
     error: isDeletedError,
   } = useSelector(deletedScheduleSelector, shallowEqual);
 
-  const typeRepeatingAppointments = [
-    { id: 0, name: "Daily" },
-    { id: 1, name: "Weekly" },
-    { id: 2, name: "Absolute monthly" },
-    { id: 3, name: "Relative monthly" },
-  ];
+  useEffect(() => {
+    dispatchScheduleById(id);
+  }, [dispatchScheduleById, id]);
 
-  const daysOfWeek = [
-    { id: 1, name: "Monday" },
-    { id: 2, name: "Tuesday" },
-    { id: 3, name: "Wednesday" },
-    { id: 4, name: "Thursday" },
-    { id: 5, name: "Friday" },
-    { id: 6, name: "Saturday" },
-    { id: 7, name: "Sunday" },
-  ];
+  useEffect(() => {
+    dispatchStudentGroupById(groupId);
+  }, [groupId, schedulesData])
 
-  const indexWeekDay = [
-    { id: 1, name: "first" },
-    { id: 2, name: "second" },
-    { id: 3, name: "third" },
-    { id: 4, name: "fourth" },
-  ];
+  useEffect(() => {
+    dispatchThemes();
+    dispatchMentors();
+  }, [])
+
+    const {typeRepeatingAppointments, daysOfWeek, indexWeekDay} = helpersData;
 
     const [weekDays, setWeekDays] = useState([]);
     const [dayInputError, setDayInputError] = useState("");
@@ -137,13 +121,13 @@ export const EditSchedule = () => {
   
     const handleShowModal = () => setToShowModal(true);
     const handleCloseModal = () => setToShowModal(false);
-    const prevWeekDays = usePrevious(weekDays);
+    
 
   useEffect(() => {
-    if (!schedules && !group && isScheduleLoaded) {
+    if (!schedules && !group && isScheduleLoaded && isGroupLoaded && isMentorsLoaded && isThemesLoaded) {
       history.push(paths.NOT_FOUND);
     }
-  }, [schedules, isScheduleLoaded, history]);
+  }, [schedules, isScheduleLoaded, isGroupLoaded, isMentorsLoaded, isThemesLoaded, history]);
 
   useEffect(() => {
     if (!editingError && isEditedLoaded && !isEditedLoading) {
@@ -153,7 +137,7 @@ export const EditSchedule = () => {
     if (editingError && !isEditedLoaded && !isEditedLoading) {
       dispatchAddAlert(editingError);
     }
-  }, [dispatchAddAlert, history, editingError, isEditedLoading, isGroupLoaded, isThemesLoaded, isMentorsLoaded]);
+  }, [dispatchAddAlert, history, editingError, isEditedLoading]);
 
   useEffect(() => {
     if (!isDeletedError && isDeletedLoaded && !isDeletedLoading) {
@@ -173,6 +157,8 @@ export const EditSchedule = () => {
     });
     return ref.current;
   };
+
+  const prevWeekDays = usePrevious(weekDays);
 
   const addDayOfWeek = (dayNames, clearField) => {
     const day = daysOfWeek.find(({ name }) => name === dayNames);
@@ -209,7 +195,7 @@ useEffect(() => {
     setFilteredThemes(filterThemesByEventsId(themes, schedules.events));
     setFilteredMentors(mentors.filter(({id}) => group.mentorIds.includes(id)));
   }
-}, [schedules,group]);
+}, []);
 
 
 
@@ -239,8 +225,8 @@ useEffect(() => {
         mentorID: mentorId !== undefined ? Number(mentorId) : filteredMentors[0].id
       },
     };
-    // console.log(editingScheduleData);
-    updateSchedule(editingScheduleData, id)
+    console.log(editingScheduleData);
+    // updateSchedule(editingScheduleData, id)
   };
 
   // const handleCancel = useCallback(() => {
@@ -318,7 +304,7 @@ useEffect(() => {
                               type="text"
                               name="groupName"
                               className={classNames('form-control', { 'border-danger': errors.groupName })}
-                              value={group.name}
+                              value={group?.name}
                               disabled
                             />
                             {errors.groupName && <p className="w-100 text-danger mb-0">{errors.groupName}</p>}
@@ -421,8 +407,8 @@ useEffect(() => {
                               name="typeRepeating"
                             >
                               <option
-                                value={schedules.pattern}
-                                key={schedules.pattern}
+                                value={schedules?.pattern}
+                                key={schedules?.pattern}
                               >
                                 {
                                   typeRepeatingAppointments.find(
