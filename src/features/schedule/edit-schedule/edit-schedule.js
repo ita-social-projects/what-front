@@ -193,14 +193,16 @@ export const EditSchedule = () => {
 
 const filterThemesByEventsId = (themesData, schedulesEvents) => {
    let result = [];
+if(themesData && schedulesEvents){
    result = themesData.filter(el => {
       return schedulesEvents.find(element => element.themeId === el.id);
    });
+}
    return result;
   } 
 
 const filteredThemes = filterThemesByEventsId(themes, schedules.events);
-const filteredMentors = mentors.filter(({id}) => group.mentorIds.includes(id));
+const filteredMentors = (group && group.mentorIds) ? mentors.filter(({id}) => group.mentorIds.includes(id)) : [];
 
 
   const onSubmit = ({
