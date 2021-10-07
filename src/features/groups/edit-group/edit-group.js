@@ -361,7 +361,7 @@ export const EditGroup = ({
                   </div>
                   <div className="row justify-content-around mt-4">
                     <Button type="reset" variant="secondary" className={classNames('w-25', styles['clear-button'])} disabled={ (!dirty &&  prevGroupMentors !== groupMentors && prevGroupStudents !== groupStudents) || isEditing} onClick={handleReset}>
-                      Clear
+                      Reset
                     </Button>
                     <Button id="submit" type="submit" className="btn btn-secondary w-25 buttonConfirm" disabled={!isValid || (!dirty &&  prevGroupMentors !== groupMentors && prevGroupStudents !== groupStudents) || isEditing}>
                       Confirm

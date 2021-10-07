@@ -83,7 +83,9 @@ export const Schedule = ({ groupsData, schedulesData }) => {
   };
 
   const handleSetToday = () => {
-    setInputDateValue(commonHelpers.transformDateTime({ isDayTime: false }).reverseDate);
+    const today = commonHelpers.transformDateTime({ isDayTime: false }).reverseDate;
+    setChosenDate(new Date(today));
+    setInputDateValue(today);
   };
 
   const handleEditSchedule = (id) => {
@@ -134,7 +136,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
               <Icon icon="Arrow" className={styles.arrow} />
             </button>
           </div>
-          {[3, 4].includes(currentUser.role) ? (
+          {[8, 4].includes(currentUser.role) ? (
             <div className="col-3 d-flex justify-content-end pr-0">
               <Button variant="info" onClick={handleAddSchedule}>
                 Add schedule
@@ -150,7 +152,7 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                 <h5 className="text-center">{date}</h5>
               </hgroup>
               <ul className={styles['lessons-list']}>
-                { lessons.map(({ id: lessonId, studentGroupId, lessonEnd, lessonStart }) => (
+                { lessons.map(({ id: lessonId, studentGroupId, eventStart, eventFinish, lessonEnd, lessonStart }) => (
                   <li key={lessonId} className={styles['lessons-list__item']}>
                     <p
                       className={styles['lessons-list__group-name']}
@@ -169,9 +171,10 @@ export const Schedule = ({ groupsData, schedulesData }) => {
                         )}
                         className={classNames({ [styles['future-lesson']]: !isToday && !isPast })}
                       >
-                        {lessonStart.substring(0, 5)} - {lessonEnd.substring(0, 5)}
+                        {/* {lessonStart.substring(0, 5)} - {lessonEnd.substring(0, 5)} */}
+                        {new Date(eventStart).toLocaleTimeString()} - {new Date(eventFinish).toLocaleTimeString()}
                       </Badge>
-                      {[3, 4].includes(currentUser.role) ? (
+                      {[8, 4].includes(currentUser.role) ? (
                         <button
                           type="button"
                           className={styles['edit-button']}

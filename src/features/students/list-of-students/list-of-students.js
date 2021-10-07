@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, shallowEqual } from "react-redux";
-import { useHistory } from "react-router-dom";
-import classNames from "classnames";
+import React, { useEffect, useState } from 'react';
+import { useSelector, shallowEqual } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import classNames from 'classnames';
 
-import { paths, useActions } from "@/shared";
+import { paths, useActions } from '@/shared';
 import {
   loadStudents,
   loadActiveStudents,
   studentsSelector,
   activeStudentsSelector,
   currentUserSelector,
-} from "@/models";
-import { WithLoading, Pagination, Search, Button } from "@/components";
-import { addAlert } from "@/features";
-import Icon from "@/icon";
-import styles from "./list-of-students.scss";
-import { List } from "@components/list";
-import { Table } from "@components/table";
+} from '@/models';
+import { WithLoading, Pagination, Search, Button } from '@/components';
+import { addAlert } from '@/features';
+import Icon from '@/icon';
+import styles from './list-of-students.scss';
+import { List } from '@components/list';
+import { Table } from '@components/table';
 
 export const ListOfStudents = () => {
   const {
@@ -42,16 +42,16 @@ export const ListOfStudents = () => {
   const [visibleStudents, setVisibleStudents] = useState([]);
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: "firstName", sortedByAscending: false, tableHead: "Name" },
-    { id: 1, name: "lastName", sortedByAscending: false, tableHead: "Surname" },
-    { id: 2, name: "email", sortedByAscending: false, tableHead: "Email" },
+    { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
+    { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
+    { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
   const [sortingCategories, setSortingCategories] =
     useState(INITIAL_CATEGORIES);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchFieldValue, setSearchFieldValue] = useState("");
+  const [searchFieldValue, setSearchFieldValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
 
   const [studentsPerPage, setStudentsPerPage] = useState(9);
@@ -204,40 +204,31 @@ export const ListOfStudents = () => {
     handleEdit,
     errors: [
       {
-        message: "Loading has been failed",
+        message: 'Loading has been failed',
         check: [!!allStudentsError, !!activeStudentsError],
       },
       {
-        message: "Student is not found",
-        check: [!visibleStudents.length, !!searchFieldValue],
+        message: 'Student is not found',
+        check: [!visibleStudents.length && !!searchFieldValue],
       },
     ],
     access: true,
-    fieldsToShow: ["firstName", "lastName", "email", "edit"],
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit'],
   };
 
   const paginationComponent = () => {
-    if (students.length < studentsPerPage) {
+    if (students.length > studentsPerPage) {
       return (
         <Pagination
           itemsPerPage={studentsPerPage}
-          totalItems={1}
+          totalItems={students.length}
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}
+          page={currentPage}
         />
       );
     }
-    return (
-      <Pagination
-        itemsPerPage={studentsPerPage}
-        totalItems={students.length}
-        paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        page={currentPage}
-      />
-    );
   };
 
   return (
@@ -290,16 +281,16 @@ export const ListOfStudents = () => {
                 value={isShowDisabled}
                 type="checkbox"
                 className={classNames(
-                  "custom-control-input",
-                  styles["custom-control-input"]
+                  'custom-control-input',
+                  styles['custom-control-input']
                 )}
                 id="show-disabled-check"
                 onChange={handleShowDisabled}
               />
               <label
                 className={classNames(
-                  "custom-control-label",
-                  styles["custom-control-label"]
+                  'custom-control-label',
+                  styles['custom-control-label']
                 )}
                 htmlFor="show-disabled-check"
               >
@@ -307,15 +298,15 @@ export const ListOfStudents = () => {
               </label>
             </div>
             {!showBlocks && (
-              <div className="col-1 d-flex">
+              <div className="col-2 d-flex">
                 <label
-                  className={classNames(styles["label-for-select"])}
+                  className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
                 >
                   Rows
                 </label>
                 <select
-                  className={classNames("form-control", styles["change-rows"])}
+                  className={classNames('form-control', styles['change-rows'])}
                   id="change-visible-people"
                   onChange={(event) => {
                     changeCountVisibleItems(event.target.value);
@@ -329,14 +320,14 @@ export const ListOfStudents = () => {
                 </select>
               </div>
             )}
-            {[3, 4].includes(currentUser.role) && (
+            {[8, 4].includes(currentUser.role) && (
               <div className="col-4 text-right">
                 <Button
                   onClick={downloadStudents}
                   type="button"
                   className={classNames(
-                    "btn btn-warning ",
-                    styles["left-add-btn"]
+                    'btn btn-warning ',
+                    styles['left-add-btn']
                   )}
                 >
                   Upload student('s)
@@ -353,14 +344,7 @@ export const ListOfStudents = () => {
           >
             {showBlocks ? (
               <div className="container d-flex flex-wrap">
-                <Table
-                  sortingCategories={sortingCategories}
-                  currentUser={currentUser}
-                  onClick={handleSortByParam}
-                  data={students}
-                  access={{ unruledUser: [2], unassigned: "" }}
-                ></Table>
-                <List listType={"block"} props={listProps} />
+                <List listType={'block'} props={listProps} />
               </div>
             ) : (
               <Table
@@ -368,7 +352,7 @@ export const ListOfStudents = () => {
                 currentUser={currentUser}
                 onClick={handleSortByParam}
                 data={students}
-                access={{ unruledUser: [2], unassigned: "" }}
+                access={{ unruledUser: [2], unassigned: '' }}
               >
                 <List listType="list" props={listProps} />
               </Table>
@@ -377,7 +361,7 @@ export const ListOfStudents = () => {
         </div>
         <div
           className={classNames(
-            "row justify-content-between align-items-center mb-3",
+            'row justify-content-between align-items-center mb-3',
             styles.paginate
           )}
         >

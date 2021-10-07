@@ -18,7 +18,7 @@ export const CoursesTabs = ({ index }) => {
     loadCourses();
   }, [loadCourses]);
 
-  if (currentUser.role === 3 || currentUser.role === 4) {
+  if (currentUser.role === 8 || currentUser.role === 4) {
     return (
       <Tabs defaultIndex={index} className="container w-50 pt-5" linkBack={paths.COURSES}>
         <Tab title="Course details">
