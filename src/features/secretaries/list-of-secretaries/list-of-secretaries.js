@@ -418,7 +418,7 @@ export const ListOfSecretaries = () => {
                          currentUser={currentUser}
                          onClick={handleSortByParam}
                          data={secretaries}
-                         access={{unruledUser: [4], unassigned: ''}}
+                         access={{unruledUser: [4, 8], unassigned: ''}}
                   >
                     <List listType={'list'} props={listProps}/>
                   </Table>

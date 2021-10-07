@@ -317,16 +317,9 @@ export const ListOfStudents = () => {
                 </select>
               </div>
             )}
-            {[3, 4].includes(currentUser.role) && (
-              <div className="col-12 text-right pt-2">
-                <Button
-                  onClick={downloadStudents}
-                  type="button"
-                  className={classNames(
-                    "btn mr-2 btn-warning ",
-                    styles["left-add-btn"]
-                  )}
-                >
+              {[8, 4].includes(currentUser.role) && (
+                <div className="col-4 text-right">
+                <Button onClick={downloadStudents} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
                   Upload student('s)
                 </Button>
                 <Button onClick={handleAddStudent}>
