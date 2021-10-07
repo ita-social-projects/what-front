@@ -130,6 +130,8 @@ export const EditSchedule = () => {
     const [weekDays, setWeekDays] = useState([]);
     const [dayInputError, setDayInputError] = useState("");
     const [interval, setInterval] = useState(1);
+    const [filteredThemes, setFilteredThemes] = useState([]);
+    const [filteredMentors, setFilteredMentors] = useState([]);
     const [toShowModal, setToShowModal] = useState(false);
 
   
@@ -138,7 +140,7 @@ export const EditSchedule = () => {
     const prevWeekDays = usePrevious(weekDays);
 
   useEffect(() => {
-    if (!schedules && isScheduleLoaded) {
+    if (!schedules && !group && isScheduleLoaded) {
       history.push(paths.NOT_FOUND);
     }
   }, [schedules, isScheduleLoaded, history]);
@@ -199,10 +201,16 @@ if(themesData && schedulesEvents){
    });
 }
    return result;
-  } 
+  };
 
-const filteredThemes = filterThemesByEventsId(themes, schedules.events);
-const filteredMentors = (group && group.mentorIds) ? mentors.filter(({id}) => group.mentorIds.includes(id)) : [];
+
+useEffect(() => {
+  if(schedules && group && schedules.events && group.mentorIds){
+    setFilteredThemes(filterThemesByEventsId(themes, schedules.events));
+    setFilteredMentors(mentors.filter(({id}) => group.mentorIds.includes(id)));
+  }
+}, [schedules,group]);
+
 
 
   const onSubmit = ({
@@ -266,14 +274,14 @@ const filteredMentors = (group && group.mentorIds) ? mentors.filter(({id}) => gr
               <Formik
                 data-testid="formik"
                 initialValues={{
-                  groupName: group.name,
+                  groupName: group?.name,
                   eventStart: commonHelpers.transformDateTime({
-                    dateTime: schedules.eventStart,
+                    dateTime: schedules?.eventStart,
                     }).formInitialValue,
                   eventFinish: commonHelpers.transformDateTime({
-                    dateTime: schedules.eventFinish,
+                    dateTime: schedules?.eventFinish,
                     }).formInitialValue,
-                  typeRepeating: schedules.pattern,
+                  typeRepeating: schedules?.pattern,
                   weekDay: weekDays,
                   interval,
                   index: indexWeekDay.id,
