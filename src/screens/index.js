@@ -5,3 +5,4 @@ export * from './courses';
 export * from './groups';
 export * from './secretaries';
 export * from './homework';
+export * from './schedules';
