@@ -108,9 +108,9 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
   };
 
   useEffect(() => {
-    if(schedules && group && schedules.events && group[0].mentorIds){
+    if(schedules && group && schedules.events && group.mentorIds){
       setFilteredThemes(filterThemesByEventsId(themes, schedules.events));
-      setFilteredMentors(mentors.filter(({id}) => group[0].mentorIds.includes(id)));
+      setFilteredMentors(mentors.filter(({id}) => group.mentorIds.includes(id)));
     }
   }, [themes, schedules, group, mentors]);
 
@@ -164,7 +164,7 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
         finishDate: eventFinish,
       },
       context: {
-        groupID: group[0].id,
+        groupID: group.id,
         themeID: themeId !== undefined ? Number(themeId) : filteredThemes[0].id,
         mentorID: mentorId !== undefined ? Number(mentorId) : filteredMentors[0].id
       },
@@ -204,7 +204,7 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
               <Formik
                 data-testid="formik"
                 initialValues={{
-                  groupName: group[0]?.name,
+                  groupName: group?.name,
                   themeId: filteredThemes.id,
                   mentorId: filteredMentors.id,
                   eventStart: commonHelpers.transformDateTime({
@@ -225,8 +225,10 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
                   <Form
                     id="form"
                     className={classNames(styles.size)}
+                    className='px-2'
                     data-testid="editForm"
                     >
+                      
                     <div className="row mb-3">
                         <div className="col d-flex align-items-center">
                           <label className="mt-2 font-weight-bolder" htmlFor="groupName">
@@ -239,7 +241,7 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
                               type="text"
                               name="groupName"
                               className={classNames('form-control', { 'border-danger': errors.groupName })}
-                              value={group[0]?.name}
+                              value={group?.name}
                               disabled
                             />
                             {errors.groupName && <p className="w-100 text-danger mb-0">{errors.groupName}</p>}

@@ -4,9 +4,10 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { number } from 'prop-types';
 
 import { paths, useActions } from '@/shared';
-import { Tabs } from '@/components';
+import { Tabs, Tab } from '@/components';
 import { EditSchedule } from '@/features';
 import {
+  currentUserSelector,
   schedulesByGroupIdSelector,
   loadStudentGroupsSelector,
   themesSelector,
@@ -19,6 +20,7 @@ import {
 
 export const SchedulesTabs = ({ index }) => {
   const { id } = useParams();
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const schedule = useSelector(schedulesByGroupIdSelector, shallowEqual);
   const groups = useSelector(loadStudentGroupsSelector, shallowEqual);
   const mentors = useSelector(mentorsSelector, shallowEqual);
@@ -42,15 +44,18 @@ export const SchedulesTabs = ({ index }) => {
     }
   }, [schedule, history]);
 
+  const studentGroupData = groups.data.filter(group => group.id === schedule.data.studentGroupId)[0]
   const group = {
-      data: groups.data.filter(group => group.id === schedule.data.studentGroupId),
+      data: studentGroupData,
       isLoading: false,
       isLoaded: true,
       error: ''
-    }
+    };
 
+  if (currentUser.role === 8 || currentUser.role === 4) {
   return (
-    <Tabs defaultIndex={index} linkBack={paths.SCHEDULE} className="container w-60 pt-6">
+    <Tabs linkBack={paths.SCHEDULE} className="container w-60 pt-6">
+      <Tab title = "Edit Schedule"  isActive/>
         <EditSchedule 
           id = {Number(id)}
           schedulesData = {schedule}
@@ -60,7 +65,7 @@ export const SchedulesTabs = ({ index }) => {
         />
     </Tabs>
   );
-
+  }
 };
 
 SchedulesTabs.propTypes = {
