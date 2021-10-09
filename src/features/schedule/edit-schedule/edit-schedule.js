@@ -188,9 +188,8 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
   };
 
   return (
-    <div className="container" data-testid="editScheduleRenderForm">
-      <div className="row justify-content-center">
-        <div className={classNames(styles.page, "mx-auto", "col-10")}>
+    <div className="container " data-testid="editScheduleRenderForm">
+        <div className={classNames(styles.page)}>
           {groupError && scheduleError && themesError && mentorsError && editingError && isDeletedError && (
             <div className="col-12 alert-danger">Server Problems</div>
           )}
@@ -378,7 +377,7 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
                                 values.typeRepeating === "0"
                                   ? "360"
                                   : values.typeRepeating === "1"
-                                  ? "4"
+                                  ? "48"
                                   : "12"
                               }
                             />
@@ -425,7 +424,7 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
                                     id="chosenWeekDay"
                                     className={classNames(
                                       "d-flex bg-light border border-outline-secondary rounded",
-                                      styles["datalist-item"]
+                                      styles['list-element']
                                     )}
                                   >
                                     {name}
@@ -529,6 +528,5 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
           </div>
         </div>
       </div>
-    </div>
   );
 };

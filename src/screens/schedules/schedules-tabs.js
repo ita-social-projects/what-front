@@ -54,7 +54,7 @@ export const SchedulesTabs = ({ index }) => {
 
   if (currentUser.role === 8 || currentUser.role === 4) {
   return (
-    <Tabs linkBack={paths.SCHEDULE} className="container w-60 pt-6">
+    <Tabs linkBack={paths.SCHEDULE} className="container w-30 pt-3">
       <Tab title = "Edit Schedule"  isActive/>
         <EditSchedule 
           id = {Number(id)}
