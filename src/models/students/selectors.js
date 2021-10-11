@@ -5,3 +5,4 @@ export const currentStudentGroupsSelector = (state) => state.models.students.stu
 export const editStudentSelector = (state) => state.models.students.editStudent;
 export const addStudentSelector = (state) => state.models.students.addStudent;
 export const removeStudentSelector = (state) => state.models.students.removeStudent;
+export const reactivateStudentSelector = (state) => state.models.students.reactivateStudent;
