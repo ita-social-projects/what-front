@@ -487,7 +487,7 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
                           type="reset"
                           onClick={ handleReset }
                           className={ classNames(styles["clear-button"],"w-100" ) }
-                          disabled={ (!dirty && prevWeekDays !== weekDays) || isScheduleLoading }
+                          disabled={ !dirty || !isValid || (!dirty && prevWeekDays !== weekDays) || isScheduleLoading }
                         >
                           Clear
                         </Button>
@@ -498,6 +498,7 @@ export const EditSchedule = ({id, schedulesData, groupData, themesData, mentorsD
                           className="btn btn-secondary w-100 buttonConfirm"
                           disabled={
                             !isValid ||
+                            !dirty ||
                             (!dirty && prevWeekDays !== weekDays) ||
                             isScheduleLoading ||
                             isEditedLoading ||
