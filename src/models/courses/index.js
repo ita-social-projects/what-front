@@ -1,3 +1,3 @@
 export { coursesReducer } from './reducer.js';
-export { coursesWatcher, fetchCourses, createCourse, editCourse, deleteCourse } from './actions.js';
-export { coursesSelector, createdCourseSelector, editedCourseSelector, deletedCourseSelector } from './selectors.js';
+export { coursesWatcher, fetchActiveCourses, fetchNotActiveCourses, createCourse, editCourse, deleteCourse, reactivateCourse } from './actions.js';
+export { coursesActiveSelector, coursesNotActiveSelector, createdCourseSelector, editedCourseSelector, reactivatedCourseSelector } from './selectors.js';

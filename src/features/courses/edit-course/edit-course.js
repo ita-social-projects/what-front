@@ -7,7 +7,16 @@ import { shape, number } from 'prop-types';
 
 import { paths, useActions } from '@/shared';
 import { addAlert } from '@/features';
-import { deleteCourse, deletedCourseSelector, editCourse, editedCourseSelector } from '@/models';
+import { 
+  deleteCourse, 
+  deletedCourseSelector, 
+  editCourse, 
+  editedCourseSelector, 
+  reactivateCourse,
+  reactivatedCourseSelector,
+  fetchActiveCourses, 
+  coursesActiveSelector
+} from '@/models';
 import { Button, WithLoading } from '@/components';
 import { ModalWindow } from '@/features/modal-window';
 import { coursesStateShape } from '@/features/shared';
@@ -25,6 +34,10 @@ export const EditCourse = ({ id, coursesData }) => {
   } = coursesData;
 
   const {
+    data: activeCourses,
+  } = useSelector(coursesActiveSelector, shallowEqual);
+
+  const {
     isLoading: isEditedLoading,
     loaded: isEditedLoaded,
     error: editingError,
@@ -36,9 +49,22 @@ export const EditCourse = ({ id, coursesData }) => {
     error: isDeletedError,
   } = useSelector(deletedCourseSelector, shallowEqual);
 
-  const [updateCourse, dispatchAddAlert, removeCourse] = useActions([editCourse, addAlert, deleteCourse]);
+  const {
+    isLoading: isReactivatedLoading,
+    isLoaded: isReactivatedLoaded,
+    error: isReactivatedError,
+  } = useSelector(reactivatedCourseSelector, shallowEqual);
+
+  const [
+    updateCourse, 
+    dispatchAddAlert, 
+    removeCourse, 
+    restoreCourse,
+    loadAllActiveCourses
+  ] = useActions([editCourse, addAlert, deleteCourse, reactivateCourse, fetchActiveCourses]);
 
   const course = data.find((course) => course.id == id);
+  const isCourseEnable = activeCourses.map(({ id }) => id).includes(id);
 
   useEffect(() => {
     if (!course && isCourseLoaded) {
@@ -57,14 +83,25 @@ export const EditCourse = ({ id, coursesData }) => {
   }, [dispatchAddAlert, history, editingError, isEditedLoaded, isEditedLoading]);
 
   useEffect(() => {
-    if (!isDeletedError && isDeletedLoaded && !isDeletedLoading) {
-      history.push(paths.COURSES);
-      dispatchAddAlert('The course has been successfully deleted', 'success');
+    if(isCourseEnable){
+      if (!isDeletedError && isDeletedLoaded && !isDeletedLoading) {
+        history.push(paths.COURSES);
+        dispatchAddAlert('The course has been successfully deleted', 'success');
+      }
+      if (isDeletedError && !isDeletedLoaded && !isDeletedLoading) {
+        dispatchAddAlert(isDeletedError);
+      }
     }
-    if (isDeletedError && !isDeletedLoaded && !isDeletedLoading) {
-      dispatchAddAlert(isDeletedError);
+    else{
+      if (!isReactivatedError && isReactivatedLoaded && !isReactivatedLoading) {
+        history.push(paths.COURSES);
+        dispatchAddAlert('The course has been successfully reactivated', 'success');
+      }
+      if (isReactivatedError && !isReactivatedLoaded && !isReactivatedLoading) {
+        dispatchAddAlert(isReactivatedError);
+      }
     }
-  }, [isDeletedError, isDeletedLoaded, history]);
+  }, [isDeletedError, isDeletedLoaded, history, isReactivatedError, isReactivatedLoaded]);
 
   const onSubmit = (values) => {
     updateCourse(values, id);
@@ -76,6 +113,11 @@ export const EditCourse = ({ id, coursesData }) => {
   const handleDelete = () => {
     handleCloseModal();
     removeCourse(id);
+  };
+
+  const handleReactivate = () => {
+    handleCloseModal();
+    restoreCourse();
   };
 
   return (
@@ -116,7 +158,7 @@ export const EditCourse = ({ id, coursesData }) => {
                     <div className="row m-0 pt-3">
                       <div className="col-md-3 col-4 pl-0">
                         <Button
-                          disabled={!isValid || dirty || isDeletedLoading}
+                          disabled={!isValid || dirty || isDeletedLoading || isReactivatedLoading}
                           className={classNames('w-100', styles['remove-button'])}
                           onClick={handleShowModal}
                         >Delete
@@ -143,16 +185,30 @@ export const EditCourse = ({ id, coursesData }) => {
                   </Form>
                 )}
               </Formik>
-              <ModalWindow
-                toShow={toShowModal}
-                onSubmit={handleDelete}
-                onClose={handleCloseModal}
-                submitButtonText="Delete"
-                useRedButton
-                marginLeft
-              >
-                Are you sure you want to delete this course?
-              </ModalWindow>
+              {
+                isCourseEnable?
+                  <ModalWindow
+                    toShow={toShowModal}
+                    onSubmit={handleDelete}
+                    onClose={handleCloseModal}
+                    submitButtonText="Lay off"
+                    useRedButton
+                    marginLeft
+                  >
+                    Are you sure you want to lay off this secretary?
+                  </ModalWindow>
+                :
+                  <ModalWindow
+                    toShow={toShowModal}
+                    onSubmit={handleReactivate}
+                    onClose={handleCloseModal}
+                    submitButtonText="Reinstate"
+                    useRedButton
+                    marginLeft
+                  >
+                    Are you sure you want to reinstate this secretary?
+                   </ModalWindow>
+                }
             </WithLoading>
           </div>
         </div>

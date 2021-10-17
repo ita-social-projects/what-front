@@ -4,18 +4,22 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { number } from 'prop-types';
 
 import { useActions, paths } from '@/shared';
-import { currentUserSelector, fetchCourses, coursesSelector } from '@/models';
+import { currentUserSelector, fetchActiveCourses, coursesSelector } from '@/models';
 import { Tab, Tabs } from '@/components';
 import { CourseDetails, EditCourse } from '@/features';
 
 export const CoursesTabs = ({ index }) => {
   const { id } = useParams();
-  const loadCourses = useActions(fetchCourses);
+  const loadCourses = useActions(fetchActiveCourses);
+  const isCourseEnable = loadCourses.map(({ id }) => id).includes(id);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const coursesData = useSelector(coursesSelector, shallowEqual);
 
   useEffect(() => {
-    loadCourses();
+    if(isCourseEnable){
+     loadCourses(); 
+    }
+    
   }, [loadCourses]);
 
   if (currentUser.role === 8 || currentUser.role === 4) {
