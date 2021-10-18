@@ -32,4 +32,6 @@ export class ApiService {
   static update = (url, data) => ApiService.sendRequest(`${BASE_URL}${url}`, 'PUT', data);
 
   static remove = (url, data) => ApiService.sendRequest(`${BASE_URL}${url}`, 'DELETE', data);
+
+  static patch = (url, data) => ApiService.sendRequest(`${BASE_URL}${url}`, 'PATCH', data);
 }

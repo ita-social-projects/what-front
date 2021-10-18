@@ -9,14 +9,14 @@ import { EditGroup, GroupDetails } from '../../features/index.js';
 import {
   loadStudentGroupByIdSelector, loadStudentGroupById, activeStudentsSelector,
   loadActiveStudents, fetchActiveMentors, mentorsActiveSelector,
-  coursesSelector, fetchCourses,
+  coursesActiveSelector, fetchActiveCourses,
 } from '../../models/index.js';
 
 export const GroupsTabs = ({ index }) => {
   const { id } = useParams();
   const group = useSelector(loadStudentGroupByIdSelector, shallowEqual);
   const mentors = useSelector(mentorsActiveSelector, shallowEqual);
-  const courses = useSelector(coursesSelector, shallowEqual);
+  const courses = useSelector(coursesActiveSelector, shallowEqual);
   const students = useSelector(activeStudentsSelector, shallowEqual);
 
   const [
@@ -24,7 +24,7 @@ export const GroupsTabs = ({ index }) => {
     dispatchLoadStudents,
     dispatchLoadMentors,
     dispatchLoadCourses,
-  ] = useActions([loadStudentGroupById, loadActiveStudents, fetchActiveMentors, fetchCourses]);
+  ] = useActions([loadStudentGroupById, loadActiveStudents, fetchActiveMentors, fetchActiveCourses]);
 
   useEffect(() => {
     dispatchLoadGroup(id);

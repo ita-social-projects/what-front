@@ -117,7 +117,7 @@ export const EditCourse = ({ id, coursesData }) => {
 
   const handleReactivate = () => {
     handleCloseModal();
-    restoreCourse();
+    restoreCourse(id);
   };
 
   return (
@@ -161,7 +161,13 @@ export const EditCourse = ({ id, coursesData }) => {
                           disabled={!isValid || dirty || isDeletedLoading || isReactivatedLoading}
                           className={classNames('w-100', styles['remove-button'])}
                           onClick={handleShowModal}
-                        >Delete
+                        >
+                          {
+                            isCourseEnable ?
+                              <span>Disable</span>
+                              :
+                              <span>Reactivate</span>
+                          } 
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
@@ -191,22 +197,22 @@ export const EditCourse = ({ id, coursesData }) => {
                     toShow={toShowModal}
                     onSubmit={handleDelete}
                     onClose={handleCloseModal}
-                    submitButtonText="Lay off"
+                    submitButtonText="Disable"
                     useRedButton
                     marginLeft
                   >
-                    Are you sure you want to lay off this secretary?
+                    Are you sure you want to disable this course?
                   </ModalWindow>
                 :
                   <ModalWindow
                     toShow={toShowModal}
                     onSubmit={handleReactivate}
                     onClose={handleCloseModal}
-                    submitButtonText="Reinstate"
+                    submitButtonText="Reactivate"
                     useRedButton
                     marginLeft
                   >
-                    Are you sure you want to reinstate this secretary?
+                    Are you sure you want to reactivate this course?
                    </ModalWindow>
                 }
             </WithLoading>

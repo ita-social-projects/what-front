@@ -11,8 +11,8 @@ import {
   editMentor,
   deleteMentor,
   loadStudentGroupsSelector,
-  coursesSelector,
-  fetchCourses,
+  coursesActiveSelector,
+  fetchActiveCourses,
   globalLoadStudentGroups,
   fetchMentorById,
 } from '@/models/index.js';
@@ -46,7 +46,7 @@ export const EditMentor = ({ id }) => {
     editMentor,
     deleteMentor,
     addAlert,
-    fetchCourses,
+    fetchActiveCourses,
     globalLoadStudentGroups,
   ]);
 
@@ -78,7 +78,7 @@ export const EditMentor = ({ id }) => {
     data: allCourses,
     isLoading: allCoursesAreLoading,
     loaded: allCoursesAreLoaded,
-  } = useSelector(coursesSelector, shallowEqual);
+  } = useSelector(coursesActiveSelector, shallowEqual);
 
   const {
     isLoading: editedIsLoading,
