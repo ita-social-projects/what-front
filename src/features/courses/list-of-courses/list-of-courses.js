@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
 import { fetchCourses, coursesSelector, currentUserSelector } from '@/models/index.js';
@@ -14,11 +15,13 @@ import {Table} from "@components/table";
 
 export const ListOfCourses = () => {
   const history = useHistory();
+  const pagPage = useLocation();
+  const paginationPage = pagPage.state ? pagPage.state.paginationPage.paginationPage : 1;
 
   const [visibleCourses, setVisibleCourses] = useState([]);
 
   const [coursesPerPage, setcoursesPerPage] = useState(9);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(paginationPage);
 
   const [searchValue, setSearchValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
@@ -89,14 +92,14 @@ export const ListOfCourses = () => {
   };
 
   const handleDetails = useCallback((id) => {
-    history.push(`${paths.COURSE_DETAILS}/${id}`);
-  }, [history]);
+    history.push({pathname: `${paths.COURSE_DETAILS}/${id}`, state: {currentPage} });
+  }, [history, currentPage]);
 
   const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
-    history.push(`${paths.COURSE_EDIT}/${id}`);
-  }, [history]);
-
+    history.push({pathname: `${paths.COURSE_EDIT}/${id}`,state: {currentPage} });
+  }, [history, currentPage]);
+  
   const handleSortByParam = (data, categoryParams) => {
     const sortedCourses = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
