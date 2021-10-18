@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import {
   allStudentsReducer, activeStudentsReducer, currentStudentReducer,
   currentStudentGroupReducer, editStudentReducer, addStudentReducer,
-  removeStudentReducer,
+  removeStudentReducer, reactivateStudentReducer
 } from './reducers/index.js';
 
 export const studentsReducer = combineReducers({
@@ -13,4 +13,5 @@ export const studentsReducer = combineReducers({
   editStudent: editStudentReducer,
   addStudent: addStudentReducer,
   removeStudent: removeStudentReducer,
+  reactivateStudent: reactivateStudentReducer,
 });

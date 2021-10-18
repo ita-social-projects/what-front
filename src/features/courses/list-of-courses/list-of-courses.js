@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
 import { fetchCourses, coursesSelector, currentUserSelector } from '@/models/index.js';
@@ -14,11 +15,13 @@ import {Table} from "@components/table";
 
 export const ListOfCourses = () => {
   const history = useHistory();
+  const pagPage = useLocation();
+  const paginationPage = pagPage.state ? pagPage.state.paginationPage.paginationPage : 1;
 
   const [visibleCourses, setVisibleCourses] = useState([]);
 
   const [coursesPerPage, setcoursesPerPage] = useState(9);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(paginationPage);
 
   const [searchValue, setSearchValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
@@ -54,7 +57,7 @@ export const ListOfCourses = () => {
       .map((course) => (
         <tr key={course.id} onClick={() => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
           <td className="text-left">{course.name}</td>
-          {(currentUser.role === 3 || currentUser.role === 4) &&
+          {(currentUser.role === 8 || currentUser.role === 4) &&
             <td
               className="text-center"
               onClick={(event) => courseEdit(event, course.id)}
@@ -89,14 +92,14 @@ export const ListOfCourses = () => {
   };
 
   const handleDetails = useCallback((id) => {
-    history.push(`${paths.COURSE_DETAILS}/${id}`);
-  }, [history]);
+    history.push({pathname: `${paths.COURSE_DETAILS}/${id}`, state: {currentPage} });
+  }, [history, currentPage]);
 
   const handleEdit = useCallback((event, id) => {
     event.stopPropagation();
-    history.push(`${paths.COURSE_EDIT}/${id}`);
-  }, [history]);
-
+    history.push({pathname: `${paths.COURSE_EDIT}/${id}`,state: {currentPage} });
+  }, [history, currentPage]);
+  
   const handleSortByParam = (data, categoryParams) => {
     const sortedCourses = data;
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
@@ -137,19 +140,9 @@ export const ListOfCourses = () => {
   };
 
   const paginationComponent = () => {
-    if (data.length < coursesPerPage) {
+    if (data.length > coursesPerPage) {
       return (
         <Pagination
-          itemsPerPage={coursesPerPage}
-          totalItems={1}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-        />
-      );
-    }
-    return (
-      <Pagination
         itemsPerPage={coursesPerPage}
         totalItems={data.length}
         paginate={paginate}
@@ -157,7 +150,8 @@ export const ListOfCourses = () => {
         nextPage={nextPage}
         page={currentPage}
       />
-    );
+      );
+    }
   };
 
   const listProps = {
@@ -168,7 +162,7 @@ export const ListOfCourses = () => {
       message: 'Course is not found',
       check: [!visibleCourses.length && !!searchValue]
     }],
-    access: currentUser.role === 3 || currentUser.role === 4,
+    access: currentUser.role === 8 || currentUser.role === 4,
     fieldsToShow: ['name', 'edit']
   };
 
@@ -227,7 +221,7 @@ export const ListOfCourses = () => {
             </div>
             }
             <div className="col-2 offset-3 text-right">
-              {[3, 4].includes(currentUser.role) && (
+              {[8, 4].includes(currentUser.role) && (
               <Button onClick={addCourse}>
                 <span>Add a course</span>
               </Button>

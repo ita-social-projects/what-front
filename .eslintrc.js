@@ -9,6 +9,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'airbnb',
     'airbnb/hooks',
+    'prettier',
   ],
   parser: '@babel/eslint-parser',
   parserOptions: {
@@ -22,6 +23,7 @@ module.exports = {
     'babel',
     'react',
     'react-hooks',
+    'prettier',
   ],
   rules: {
     semi: ['error', 'always'],

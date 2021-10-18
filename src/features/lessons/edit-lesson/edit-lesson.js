@@ -108,7 +108,7 @@ export const EditLesson = () => {
 
   const onSubmit = (values) => {
       const { lessonDate, themeName } = values;
-      const lessonVisits = lessonOnEdit.formData.map((lessonVisit) => {
+      const lessonVisits = values.formData.map((lessonVisit) => {
         const {
           presence, studentId, studentMark,
         } = lessonVisit;
@@ -121,7 +121,6 @@ export const EditLesson = () => {
           }
         );
       }).sort((a, b) => a.studentId - b.studentId);
-
       const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
       const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
 
@@ -294,6 +293,7 @@ export const EditLesson = () => {
                                             type="checkbox"
                                             onClick={handlePresenceChange}
                                             data-id={index}
+                                            checked = {lessonOnEdit.lessonVisits[index].presence}
                                           />
                                         </td>
                                       </tr>

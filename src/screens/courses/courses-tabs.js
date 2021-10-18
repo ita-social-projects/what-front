@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { number } from 'prop-types';
 
@@ -10,6 +10,7 @@ import { CourseDetails, EditCourse } from '@/features';
 
 export const CoursesTabs = ({ index }) => {
   const { id } = useParams();
+  const page = useLocation();
   const loadCourses = useActions(fetchCourses);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const coursesData = useSelector(coursesSelector, shallowEqual);
@@ -18,9 +19,9 @@ export const CoursesTabs = ({ index }) => {
     loadCourses();
   }, [loadCourses]);
 
-  if (currentUser.role === 3 || currentUser.role === 4) {
+  if (currentUser.role === 8 || currentUser.role === 4) {
     return (
-      <Tabs defaultIndex={index} className="container w-50 pt-5" linkBack={paths.COURSES}>
+      <Tabs defaultIndex={index} className="container w-50 pt-5" linkBack={paths.COURSES} paginationPage={{paginationPage: page.state.currentPage}}>
         <Tab title="Course details">
           <CourseDetails
             id={Number(id)}

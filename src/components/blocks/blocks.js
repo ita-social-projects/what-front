@@ -95,13 +95,16 @@ export const Blocks = (
             {fieldsToShow.includes('custom') && custom && <div>{custom}</div>}
           </div>
           {fieldsToShow.includes('edit') && access && (
-            <Icon
-              icon="Edit"
+            <div
               onClick={handleEdit ? (event) => handleEdit(event, id) : null}
-              className={styles.scale}
-              color="#2E3440"
-              size={30}
-            />
+            >
+              <Icon
+                icon="Edit"              
+                className={styles.scale}
+                color="#2E3440"
+                size={30}
+              />
+            </div>
           )}
         </div>
       </div>
