@@ -8,3 +8,4 @@ export const mentorFiltredLessonsSelector = (state) => state.models.mentors.ment
 export const mentorEditingSelector = (state) => state.models.mentors.mentorEditing;
 export const mentorAddingSelector = (state) => state.models.mentors.mentorAdding;
 export const mentorDeletingSelector = (state) => state.models.mentors.mentorDeleting;
+export const mentorReactivatingSelector = (state) => state.models.mentors.mentorReactivating;

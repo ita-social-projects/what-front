@@ -8,3 +8,4 @@ export { filteredMentorLessonsReducer } from './mentor-filter-lessons.js';
 export { mentorAddingReducer } from './mentor-add.js';
 export { mentorEditingReducer } from './mentor-edit.js';
 export { mentorDeletingReducer } from './mentor-delete.js';
+export { mentorReactivatingReducer } from './mentor-reactivate.js';
