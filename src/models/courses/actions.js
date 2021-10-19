@@ -99,7 +99,7 @@ function* deleteCourseWorker(data) {
 function* reactivateCourseWorker(data) {
   try {
     yield put({ type: actionTypes.REACTIVATING_COURSE_STARTED });
-    yield call(ApiService.patch, `/courses/${data.payload.id}`);
+    yield call(ApiService.reactivate, `/courses/${data.payload.id}`);
     yield put({ type: actionTypes.REACTIVATING_COURSE_SUCCESS });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {

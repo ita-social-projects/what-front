@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { number } from 'prop-types';
 
@@ -9,6 +9,7 @@ import { Tab, Tabs } from '@/components';
 import { CourseDetails, EditCourse } from '@/features';
 
 export const CoursesTabs = ({ index }) => {
+  const page = useLocation();
   const { id } = useParams();
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const loadActiveCourses = useActions(fetchActiveCourses);
@@ -26,7 +27,7 @@ export const CoursesTabs = ({ index }) => {
     loadNotActiveCourses();
   }, [loadNotActiveCourses]);
 
-  if (currentUser.role === 3 || currentUser.role === 4) {
+  if (currentUser.role === 8 || currentUser.role === 4) {
     if(isCourseEnable){
       return (
         <Tabs defaultIndex={index} className="container w-50 pt-5" linkBack={paths.COURSES}>

@@ -33,5 +33,5 @@ export class ApiService {
 
   static remove = (url, data) => ApiService.sendRequest(`${BASE_URL}${url}`, 'DELETE', data);
 
-  static patch = (url, data) => ApiService.sendRequest(`${BASE_URL}${url}`, 'PATCH', data);
+  static reactivate = (url, data) => ApiService.sendRequest(`${BASE_URL}${url}`, 'PATCH', data);
 }
