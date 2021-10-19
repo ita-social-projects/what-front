@@ -46,7 +46,7 @@ describe('Sidebar', () => {
     expect(history.location.pathname).toBe(paths.LESSONS);
   });
 
-  it('should navigate to lessons page', () => {
+  it('schedule should not be displayed', () => {
     useSelector.mockReturnValue({ currentUser: { role: 2 } });
     const { queryByText } = render(
       <Router>
