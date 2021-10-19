@@ -9,5 +9,6 @@ export {
   mentorLessonsSelector,
   mentorAddingSelector,
   mentorDeletingSelector,
+  mentorReactivatingSelector,
   mentorEditingSelector,
 } from './selectors.js';

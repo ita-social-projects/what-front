@@ -1,0 +1,140 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`My Profile should render component 1`] = `
+HTMLCollection [
+  <div
+    class="container card shadow col-10"
+  >
+    <div
+      class="container pb-2"
+    >
+      <h3
+        class="pt-3"
+      >
+        My Profile
+      </h3>
+      <hr />
+      <div
+        class="row mt-3"
+      >
+        <div
+          class="col-sm-4 font-weight-bold pb-1"
+        >
+          First Name:
+        </div>
+        <div
+          class="col-sm-8"
+        />
+      </div>
+      <hr />
+      <div
+        class="row mt-3"
+      >
+        <div
+          class="col-sm-4 font-weight-bold pb-1"
+        >
+          Last Name:
+        </div>
+        <div
+          class="col-sm-8"
+        />
+      </div>
+      <hr />
+      <div
+        class="row mt-3"
+      >
+        <div
+          class="col-sm-4 font-weight-bold pb-1"
+        >
+          Email address:
+        </div>
+        <div
+          class="col-sm-8"
+        />
+      </div>
+      <hr />
+      <div
+        class="row mb-2"
+      >
+        <div
+          class="col-sm-6 offset-sm-6 d-flex justify-content-end"
+        >
+          <button
+            class="btn undefined"
+            type="button"
+          >
+            <span>
+              Change password
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>,
+  <div
+    class="container pb-2"
+  >
+    <h3
+      class="pt-3"
+    >
+      My Profile
+    </h3>
+    <hr />
+    <div
+      class="row mt-3"
+    >
+      <div
+        class="col-sm-4 font-weight-bold pb-1"
+      >
+        First Name:
+      </div>
+      <div
+        class="col-sm-8"
+      />
+    </div>
+    <hr />
+    <div
+      class="row mt-3"
+    >
+      <div
+        class="col-sm-4 font-weight-bold pb-1"
+      >
+        Last Name:
+      </div>
+      <div
+        class="col-sm-8"
+      />
+    </div>
+    <hr />
+    <div
+      class="row mt-3"
+    >
+      <div
+        class="col-sm-4 font-weight-bold pb-1"
+      >
+        Email address:
+      </div>
+      <div
+        class="col-sm-8"
+      />
+    </div>
+    <hr />
+    <div
+      class="row mb-2"
+    >
+      <div
+        class="col-sm-6 offset-sm-6 d-flex justify-content-end"
+      >
+        <button
+          class="btn undefined"
+          type="button"
+        >
+          <span>
+            Change password
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>,
+]
+`;

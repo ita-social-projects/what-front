@@ -5,3 +5,4 @@ export { currentStudentGroupReducer } from './current-student-groups-reducer.js'
 export { editStudentReducer } from './edit-student-reducer.js';
 export { addStudentReducer } from './add-student-reducer.js';
 export { removeStudentReducer } from './remove-student-reducer.js';
+export { reactivateStudentReducer } from './reactivate-student-reducer.js';

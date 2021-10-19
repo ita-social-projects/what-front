@@ -3,18 +3,22 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@shared/index.js';
 import {
+  mentorsActiveSelector,
   mentorIdSelector,
   mentorEditingSelector,
   mentorDeletingSelector,
+  mentorReactivatingSelector,
   mentorGroupsSelector,
   mentorCoursesSelector,
   editMentor,
   deleteMentor,
+  reactivateMentor,
   loadStudentGroupsSelector,
   coursesActiveSelector,
   fetchActiveCourses,
   globalLoadStudentGroups,
   fetchMentorById,
+  fetchActiveMentors
 } from '@/models/index.js';
 
 import { WithLoading, Button } from '@components/index.js';
@@ -33,18 +37,25 @@ export const EditMentor = ({ id }) => {
     isLoaded: mentorIsLoaded,
     error: mentorError,
   } = useSelector(mentorIdSelector, shallowEqual);
+  const {
+    data: activeMentors,
+  } = useSelector(mentorsActiveSelector, shallowEqual);
 
   const [
+    loadActiveMentors,
     dispatchMentorById,
     updateMentor,
     removeMentor,
+    restoreMentor,
     dispatchAddAlert,
     loadCourses,
     fetchListOfGroups,
   ] = useActions([
+    fetchActiveMentors,
     fetchMentorById,
     editMentor,
     deleteMentor,
+    reactivateMentor,
     addAlert,
     fetchActiveCourses,
     globalLoadStudentGroups,
@@ -54,6 +65,12 @@ export const EditMentor = ({ id }) => {
     dispatchMentorById(id);
   }, [dispatchMentorById, id]);
 
+  useEffect(() => {
+    loadActiveMentors();
+  }, [loadActiveMentors]);
+
+  const isMentorEnable = activeMentors.map(({ id }) => id).includes(id);
+  
   const {
     data: mentorGroups,
     isLoading: mentorGroupsAreLoading,
@@ -91,6 +108,12 @@ export const EditMentor = ({ id }) => {
     isLoaded: deletedIsLoaded,
     error: deletedIsError,
   } = useSelector(mentorDeletingSelector, shallowEqual);
+
+  const {
+    isLoading: reactivatedIsLoading,
+    isLoaded: reactivatedIsLoaded,
+    error: reactivatedIsError,
+  } = useSelector(mentorReactivatingSelector, shallowEqual);
 
   const [groups, setGroups] = useState(mentorGroups || 0);
   const [courses, setCourses] = useState(mentorCourses || 0);
@@ -134,14 +157,25 @@ export const EditMentor = ({ id }) => {
   }, [dispatchAddAlert, editedIsError, editedIsLoaded, history]);
 
   useEffect(() => {
-    if (!deletedIsError && deletedIsLoaded) {
-      history.push(paths.MENTORS);
-      dispatchAddAlert('Mentor has been fired', 'success');
+    if(isMentorEnable){
+      if (!deletedIsError && deletedIsLoaded) {
+        history.push(paths.MENTORS);
+        dispatchAddAlert('Mentor has been fired', 'success');
+      }
+      if (deletedIsError && !deletedIsLoaded) {
+        dispatchAddAlert(deletedIsError);
+      }
     }
-    if (deletedIsError && !deletedIsLoaded) {
-      dispatchAddAlert(deletedIsError);
+    else{
+      if (!reactivatedIsError && reactivatedIsLoaded) {
+        history.push(paths.MENTORS);
+        dispatchAddAlert('Mentor has been reinstate', 'success');
+      }
+      if (reactivatedIsError && !reactivatedIsLoaded) {
+        dispatchAddAlert(reactivatedIsError);
+      }
     }
-  }, [deletedIsError, deletedIsLoaded, dispatchAddAlert, history]);
+  }, [deletedIsError, deletedIsLoaded, reactivatedIsError, reactivatedIsLoaded, dispatchAddAlert, history]);
 
   const handleGroupInputChange = (e) => {
     setErrorGroup('');
@@ -230,6 +264,11 @@ export const EditMentor = ({ id }) => {
   const onFire = () => {
     handleCloseModal();
     removeMentor(id);
+  };
+
+  const onReactivate = () => {
+    handleCloseModal();
+    restoreMentor(id);
   };
 
   const resetInput = () => {
@@ -482,10 +521,16 @@ export const EditMentor = ({ id }) => {
                             !isValid ||
                             dirty ||
                             editedIsLoading ||
-                            deletedIsLoading
+                            deletedIsLoading ||
+                            reactivatedIsLoading
                           }
                         >
-                          Disable
+                          {
+                            isMentorEnable ?
+                              <span>Lay off</span>
+                              :
+                              <span>Reinstate</span>
+                          } 
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
@@ -515,6 +560,7 @@ export const EditMentor = ({ id }) => {
                             (!formIsChanged && !dirty) ||
                             editedIsLoading ||
                             deletedIsLoading ||
+                            reactivatedIsLoading ||
                             errors.firstName ||
                             errors.lastName ||
                             errors.email
@@ -527,16 +573,30 @@ export const EditMentor = ({ id }) => {
                   </Form>
                 )}
               </Formik>
-              <ModalWindow
-                toShow={toShowModal}
-                onSubmit={onFire}
-                onClose={handleCloseModal}
-                submitButtonText="Delete"
-                useRedButton
-                marginLeft
-              >
-                Are you sure you want to fire this mentor?
-              </ModalWindow>
+              {
+                isMentorEnable ?
+                  <ModalWindow
+                    toShow={toShowModal}
+                    onSubmit={onFire}
+                    onClose={handleCloseModal}
+                    submitButtonText="Lay off"
+                    useRedButton
+                    marginLeft
+                  >
+                    Are you sure you want to lay off this mentor?
+                  </ModalWindow>
+                :
+                  <ModalWindow
+                    toShow={toShowModal}
+                    onSubmit={onReactivate}
+                    onClose={handleCloseModal}
+                    submitButtonText="Reinstate"
+                    useRedButton
+                    marginLeft
+                  >
+                    Are you sure you want to reinstate this mentor?
+                   </ModalWindow>
+                }
             </WithLoading>
           </div>
         </div>

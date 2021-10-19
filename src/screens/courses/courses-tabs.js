@@ -64,7 +64,6 @@ export const CoursesTabs = ({ index }) => {
         </Tabs>
       );
     }
-    
   } else {
     if(isCourseEnable){
       return <CourseDetails id={Number(id)} coursesData={coursesActiveData} />

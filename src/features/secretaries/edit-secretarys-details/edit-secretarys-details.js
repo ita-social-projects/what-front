@@ -7,6 +7,8 @@ import { paths, useActions } from '@/shared';
 import {
   updatedSecretarySelector, deletedSecretarySelector,
   updateSecretary, deleteSecretary, secretariesSelector,
+  reactivatedSecretarySelector, reactivateSecretary,
+  fetchActiveSecretaries, activeSecretariesSelector
 } from '@models/index.js';
 
 import { Button, WithLoading } from '@/components/index.js';
@@ -26,6 +28,10 @@ export const EditSecretarysDetails = ({ id }) => {
   } = useSelector(secretariesSelector, shallowEqual);
 
   const {
+    data: activeSecretary,
+  } = useSelector(activeSecretariesSelector, shallowEqual);
+
+  const {
     isLoading: isUpdateLoading,
     isLoaded: isUpdateLoaded,
     error: secretaryUpdateError,
@@ -37,10 +43,25 @@ export const EditSecretarysDetails = ({ id }) => {
     error: secretaryDeleteError,
   } = useSelector(deletedSecretarySelector, shallowEqual);
 
+  const {
+    isLoading: isReactivateLoading,
+    isLoaded: isReactivateLoaded,
+    error: secretaryReactivateError,
+  } = useSelector(reactivatedSecretarySelector, shallowEqual);
+
   const [editSecretary, dispatchAddAlert] = useActions([updateSecretary, addAlert]);
-  const [fireSecretary] = useActions([deleteSecretary]);
+  const [
+    fireSecretary, 
+    reinstateSecretary, 
+    loadAllActiveSecretarys
+  ] = useActions([deleteSecretary, reactivateSecretary, fetchActiveSecretaries]);
+
+  useEffect(() => {
+    loadAllActiveSecretarys();
+  }, [loadAllActiveSecretarys]);
 
   const secretary = data.find((user) => user.id === id);
+  const isSecretaryEnable = activeSecretary.map(({ id }) => id).includes(id);
   const history = useHistory();
 
   const [toShowModal, setShowModal] = useState(false);
@@ -65,14 +86,26 @@ export const EditSecretarysDetails = ({ id }) => {
   }, [secretaryUpdateError, isUpdateLoaded, history, dispatchAddAlert]);
 
   useEffect(() => {
-    if (!secretaryDeleteError && isDeleteLoaded) {
-      history.push(paths.SECRETARIES);
-      dispatchAddAlert('The secretary has been fired', 'success');
+    if(isSecretaryEnable){
+      if (!secretaryDeleteError && isDeleteLoaded) {
+        history.push(paths.SECRETARIES);
+        dispatchAddAlert('The secretary has been fired', 'success');
+      }
+      if (secretaryDeleteError && !isDeleteLoaded) {
+        dispatchAddAlert(secretaryDeleteError);
+      }
     }
-    if (secretaryDeleteError && !isDeleteLoaded) {
-      dispatchAddAlert(secretaryDeleteError);
+    else{
+      if (!secretaryReactivateError && isReactivateLoaded) {
+        history.push(paths.SECRETARIES);
+        dispatchAddAlert('The secretary has been reinstate', 'success');
+      }
+      if (secretaryReactivateError && !isReactivateLoaded) {
+        dispatchAddAlert(secretaryReactivateError);
+      }
     }
-  }, [secretaryDeleteError, isDeleteLoaded, history, dispatchAddAlert]);
+    
+  }, [secretaryDeleteError, isDeleteLoaded, history, dispatchAddAlert, isReactivateLoaded, secretaryReactivateError]);
 
   const onSubmit = (values) => {
     editSecretary(id, values);
@@ -81,6 +114,11 @@ export const EditSecretarysDetails = ({ id }) => {
   const handleDelete = () => {
     handleCloseModal();
     fireSecretary(id);
+  };
+
+  const handleReactivate = () => {
+    handleCloseModal();
+    reinstateSecretary(id);
   };
 
   return (
@@ -160,9 +198,14 @@ export const EditSecretarysDetails = ({ id }) => {
                             className="w-100"
                             variant="dark"
                             onClick={handleShowModal}
-                            disabled={!isValid || dirty || isDeleteLoading || isUpdateLoading}
+                            disabled={!isValid || dirty || isDeleteLoading || isUpdateLoading || isReactivateLoading}
                           >
-                            Lay off
+                            {
+                            isSecretaryEnable ?
+                              <span>Lay off</span>
+                              :
+                              <span>Reinstate</span>
+                          }
                           </Button>
                         </div>
                         <div className="col-md-3 offset-md-3 col-4 px-1">
@@ -180,7 +223,7 @@ export const EditSecretarysDetails = ({ id }) => {
                             type="submit"
                             className="w-100"
                             variant="info"
-                            disabled={!isValid || !dirty || isUpdateLoading || isDeleteLoading
+                            disabled={!isValid || !dirty || isUpdateLoading || isDeleteLoading || isReactivateLoading
                               || errors.firstName || errors.lastName || errors.email}
                           >
                             Save
@@ -191,16 +234,30 @@ export const EditSecretarysDetails = ({ id }) => {
                   </Form>
                 )}
               </Formik>
-              <ModalWindow
-                toShow={toShowModal}
-                onSubmit={handleDelete}
-                onClose={handleCloseModal}
-                submitButtonText="Delete"
-                useRedButton
-                marginLeft
-              >
-                Are you sure you want to fire this secretary?
-              </ModalWindow>
+              {
+                isSecretaryEnable?
+                  <ModalWindow
+                    toShow={toShowModal}
+                    onSubmit={handleDelete}
+                    onClose={handleCloseModal}
+                    submitButtonText="Lay off"
+                    useRedButton
+                    marginLeft
+                  >
+                    Are you sure you want to lay off this secretary?
+                  </ModalWindow>
+                :
+                  <ModalWindow
+                    toShow={toShowModal}
+                    onSubmit={handleReactivate}
+                    onClose={handleCloseModal}
+                    submitButtonText="Reinstate"
+                    useRedButton
+                    marginLeft
+                  >
+                    Are you sure you want to reinstate this secretary?
+                   </ModalWindow>
+                }
             </WithLoading>
           </div>
         </div>
