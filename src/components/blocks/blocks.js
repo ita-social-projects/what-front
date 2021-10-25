@@ -1,9 +1,9 @@
 
-import {commonHelpers} from "@/utils";
+import { commonHelpers } from "@/utils";
 import Icon from "@/icon";
 import styles from "./blocks.scss";
 import React from "react";
-
+import { Button } from '@/components/index.js';
 
 /**
  *
@@ -42,9 +42,7 @@ export const Blocks = (
         style={{
           width: '31%',
           margin: '1%',
-          cursor: 'pointer',
         }}
-        onClick={handleDetails ? () => handleDetails(id) : null}
         key={id}
       >
         <div className="card-body d-flex justify-content-between">
@@ -93,13 +91,17 @@ export const Blocks = (
             )}
             {fieldsToShow.includes('email') && email && <div>{email}</div>}
             {fieldsToShow.includes('custom') && custom && <div>{custom}</div>}
+
+            <Button onClick={handleDetails ? () => handleDetails(id) : null} className={styles.btnDetails}>
+              <span>Details</span>
+            </Button>
           </div>
           {fieldsToShow.includes('edit') && access && (
             <div
               onClick={handleEdit ? (event) => handleEdit(event, id) : null}
             >
               <Icon
-                icon="Edit"              
+                icon="Edit"
                 className={styles.scale}
                 color="#2E3440"
                 size={30}
