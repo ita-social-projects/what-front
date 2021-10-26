@@ -135,7 +135,8 @@ export const ListOfCourses = () => {
   const changeCountVisibleItems = (newNumber) => {
     const finish = currentPage * newNumber;
     const start = finish - newNumber;
-    setVisibleCourses(data.slice(start, finish));
+    const visibleCoursesList = newNumber > data.length ? data : data.slice(start, finish)
+    setVisibleCourses(visibleCoursesList);
     setcoursesPerPage(newNumber);
   };
 
@@ -216,7 +217,7 @@ export const ListOfCourses = () => {
                 <option>27</option>
                 <option>45</option>
                 <option>72</option>
-                <option>99</option>
+                <option>230</option>
               </select>
             </div>
             }
