@@ -11,7 +11,13 @@ import {
   activeStudentsSelector,
   currentUserSelector,
 } from '@/models';
-import { WithLoading, Pagination, Search, Button } from '@/components';
+import {
+  WithLoading,
+  Pagination,
+  Search,
+  Button,
+  RowsOption,
+} from '@/components';
 import { addAlert } from '@/features';
 import Icon from '@/icon';
 import styles from './list-of-students.scss';
@@ -305,19 +311,11 @@ export const ListOfStudents = () => {
                 >
                   Rows
                 </label>
-                <select
-                  className={classNames('form-control', styles['change-rows'])}
-                  id="change-visible-people"
-                  onChange={(event) => {
-                    changeCountVisibleItems(event.target.value);
-                  }}
-                >
-                  <option>9</option>
-                  <option>27</option>
-                  <option>45</option>
-                  <option>72</option>
-                  <option>99</option>
-                </select>
+                <RowsOption
+                  id={'change-visible-people'}
+                  onChange={changeCountVisibleItems}
+                  optionsValues={[9, 27, 45, 72, 99]}
+                />
               </div>
             )}
             {[8, 4].includes(currentUser.role) && (

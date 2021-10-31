@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { shallowEqual, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   globalLoadStudentGroups,
   loadStudentGroupsSelector,
-} from "@models/index.js";
-import { paths, useActions } from "@/shared/index.js";
+} from '@models/index.js';
+import { paths, useActions } from '@/shared/index.js';
 
 import {
   Button,
@@ -13,19 +13,20 @@ import {
   WithLoading,
   Pagination,
   DoubleDateFilter,
-} from "@components/index.js";
+  RowsOption,
+} from '@components/index.js';
 
-import { inputGroupStartDate } from "@features/groups/list-of-groups/redux/actions";
-import Icon from "@/icon.js";
+import { inputGroupStartDate } from '@features/groups/list-of-groups/redux/actions';
+import Icon from '@/icon.js';
 
-import classNames from "classnames";
-import { searchGroup, searchDate } from "./redux/index.js";
-import styles from "./list-of-groups.scss";
+import classNames from 'classnames';
+import { searchGroup, searchDate } from './redux/index.js';
+import styles from './list-of-groups.scss';
 
-import { commonHelpers } from "@/utils";
-import { Table } from "@components/table";
-import { List } from "@components/list";
-import { currentUserSelector } from "@models/index";
+import { commonHelpers } from '@/utils';
+import { Table } from '@components/table';
+import { List } from '@components/list';
+import { currentUserSelector } from '@models/index';
 
 export const ListOfGroups = () => {
   const history = useHistory();
@@ -44,7 +45,7 @@ export const ListOfGroups = () => {
 
   const [visibleGroups, setVisibleGroups] = useState([]);
 
-  const [searchGroupValue, setSearchGroupValue] = useState("");
+  const [searchGroupValue, setSearchGroupValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
@@ -57,24 +58,24 @@ export const ListOfGroups = () => {
   const [fetchListOfGroups] = useActions([globalLoadStudentGroups]);
 
   const INITIAL_CATEGORIES = [
-    { id: 0, name: "name", sortedByAscending: false, tableHead: "Group Name" },
+    { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Group Name' },
     {
       id: 1,
-      name: "quantity",
+      name: 'quantity',
       sortedByAscending: false,
-      tableHead: "Quantity of students",
+      tableHead: 'Quantity of students',
     },
     {
       id: 2,
-      name: "startDate",
+      name: 'startDate',
       sortedByAscending: false,
-      tableHead: "Date of start",
+      tableHead: 'Date of start',
     },
     {
       id: 3,
-      name: "finishDate",
+      name: 'finishDate',
       sortedByAscending: false,
-      tableHead: "Date of finish",
+      tableHead: 'Date of finish',
     },
   ];
 
@@ -166,11 +167,11 @@ export const ListOfGroups = () => {
     const groupList = visibleGroups.map(
       ({ name, studentIds, startDate, id, finishDate }) => (
         <tr
-          className={styles["table-item"]}
+          className={styles['table-item']}
           onClick={() => handleCardDetails(id)}
           key={id}
         >
-          <td className={"text-left"}>{name}</td>
+          <td className={'text-left'}>{name}</td>
           <td>{studentIds.length}</td>
           <td>
             {
@@ -258,13 +259,13 @@ export const ListOfGroups = () => {
     if (filteredGroupsList.length > groupsPerPage) {
       return (
         <Pagination
-        itemsPerPage={groupsPerPage}
-        totalItems={filteredGroupsList.length}
-        paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        page={currentPage}
-      />
+          itemsPerPage={groupsPerPage}
+          totalItems={filteredGroupsList.length}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+          page={currentPage}
+        />
       );
     }
   };
@@ -275,7 +276,7 @@ export const ListOfGroups = () => {
     handleEdit,
     errors: [
       {
-        message: "Group is not found",
+        message: 'Group is not found',
         check: [
           (!visibleGroups.length && searchGroupName) || searchStartDate,
           !filteredGroupsList.length,
@@ -283,11 +284,11 @@ export const ListOfGroups = () => {
       },
     ],
     access: true,
-    fieldsToShow: ["name", "studentIds", "startDate", "finishDate", "edit"],
+    fieldsToShow: ['name', 'studentIds', 'startDate', 'finishDate', 'edit'],
   };
 
   return (
-    <div className={classNames("container pt-5", styles.block)}>
+    <div className={classNames('container pt-5', styles.block)}>
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Groups</h2>
         <div className="col-2 text-right">
@@ -301,7 +302,7 @@ export const ListOfGroups = () => {
       <div className="row mr-0">
         <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
           <div className="row align-items-center mt-2 mb-3">
-            <div className={classNames("col-2", styles["change-view"])}>
+            <div className={classNames('col-2', styles['change-view'])}>
               <div className="btn-group">
                 <button
                   type="button"
@@ -327,8 +328,8 @@ export const ListOfGroups = () => {
             <div className="col-2">
               <input
                 className={classNames(
-                  "form-control ",
-                  styles["calendar-input"]
+                  'form-control ',
+                  styles['calendar-input']
                 )}
                 type="date"
                 name="group_date"
@@ -340,24 +341,16 @@ export const ListOfGroups = () => {
             {
               <div className="col-2 d-flex">
                 <label
-                  className={classNames(styles["label-for-select"])}
+                  className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
                 >
                   Rows
                 </label>
-                <select
-                  className={classNames("form-control", styles["change-rows"])}
-                  id="change-visible-people"
-                  onChange={(event) => {
-                    changeCountVisibleItems(event.target.value);
-                  }}
-                >
-                  <option>9</option>
-                  <option>27</option>
-                  <option>45</option>
-                  <option>72</option>
-                  <option>99</option>
-                </select>
+                <RowsOption
+                  id={'change-visible-people'}
+                  onChange={changeCountVisibleItems}
+                  optionsValues={[9, 27, 45, 72, 99]}
+                />
               </div>
             }
             <div className="col-3 text-right">
@@ -365,8 +358,8 @@ export const ListOfGroups = () => {
                 onClick={downloadGroups}
                 type="button"
                 className={classNames(
-                  "btn m-0 btn-warning ",
-                  styles["left-add-btn"]
+                  'btn m-0 btn-warning ',
+                  styles['left-add-btn']
                 )}
               >
                 Upload Group('s)
@@ -374,8 +367,8 @@ export const ListOfGroups = () => {
               <Button
                 onClick={handleAddGroup}
                 className={classNames(
-                  "btn m-0 mt-2 btn-warning ",
-                  styles["left-add-btn"]
+                  'btn m-0 mt-2 btn-warning ',
+                  styles['left-add-btn']
                 )}
               >
                 <span>Add a group</span>
@@ -396,7 +389,7 @@ export const ListOfGroups = () => {
           <WithLoading isLoading={isLoading} className="d-block mx-auto">
             {showBlocks ? (
               <div className="container d-flex flex-wrap">
-                <List listType={"block"} props={listProps} />
+                <List listType={'block'} props={listProps} />
               </div>
             ) : (
               <Table
@@ -404,16 +397,16 @@ export const ListOfGroups = () => {
                 onClick={handleSortByParam}
                 currentUser={currentUser}
                 data={filteredGroupsList}
-                access={{ unruledUser: [1], unassigned: "" }}
+                access={{ unruledUser: [1], unassigned: '' }}
               >
-                <List listType={"list"} props={listProps} />
+                <List listType={'list'} props={listProps} />
               </Table>
             )}
           </WithLoading>
         </div>
         <div
           className={classNames(
-            "row justify-content-between align-items-center mb-3",
+            'row justify-content-between align-items-center mb-3',
             styles.paginate
           )}
         >

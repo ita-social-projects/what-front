@@ -3,10 +3,20 @@ import { useSelector } from 'react-redux';
 
 import { useActions } from '@/shared/index.js';
 import {
-  newUserSelector, currentUserSelector, addMentor,
-  createSecretary, addStudent, fetchUnAssignedUserList,
+  newUserSelector,
+  currentUserSelector,
+  addMentor,
+  createSecretary,
+  addStudent,
+  fetchUnAssignedUserList,
 } from '@/models/index.js';
-import { Search, Button, Pagination, WithLoading } from '@/components';
+import {
+  Search,
+  Button,
+  Pagination,
+  WithLoading,
+  RowsOption,
+} from '@/components';
 import { addAlert } from '@/features';
 import Icon from '@/icon.js';
 import classNames from 'classnames';
@@ -20,12 +30,8 @@ export const UnAssignedList = () => {
 
   const [getUnAssignedUserList] = useActions([fetchUnAssignedUserList]);
 
-  const [
-    addStudentRole,
-    addSecretaryRole,
-    addMentorRole,
-    dispatchAddAlert,
-  ] = useActions([addStudent, createSecretary, addMentor, addAlert]);
+  const [addStudentRole, addSecretaryRole, addMentorRole, dispatchAddAlert] =
+    useActions([addStudent, createSecretary, addMentor, addAlert]);
 
   const [search, setSearch] = useState('');
 
@@ -49,7 +55,8 @@ export const UnAssignedList = () => {
   const [usersPerPage, setUserPerPage] = useState(10);
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+  const [sortingCategories, setSortingCategories] =
+    useState(INITIAL_CATEGORIES);
 
   useEffect(() => {
     getUnAssignedUserList();
@@ -57,16 +64,28 @@ export const UnAssignedList = () => {
 
   useEffect(() => {
     if (isLoading || isLoaded) {
-      setUsers(data?.map((user, index) => ({ id: user.id, index, role: 1, ...user })));
+      setUsers(
+        data?.map((user, index) => ({ id: user.id, index, role: 1, ...user }))
+      );
     }
   }, [isLoaded, data, isLoading]);
 
   useEffect(() => {
     if (isLoaded || !isLoading) {
-      const results = data?.filter((user) => (
-        (user.firstName.concat(user.lastName)).toUpperCase())
-        .includes(search.toUpperCase()));
-      setUsers(results?.map((user, index) => ({ id: user.id, index, role: 1, ...user })));
+      const results = data?.filter((user) =>
+        user.firstName
+          .concat(user.lastName)
+          .toUpperCase()
+          .includes(search.toUpperCase())
+      );
+      setUsers(
+        results?.map((user, index) => ({
+          id: user.id,
+          index,
+          role: 1,
+          ...user,
+        }))
+      );
     }
   }, [isLoaded, data, search, isLoading]);
 
@@ -74,12 +93,13 @@ export const UnAssignedList = () => {
     setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
   }, [indexOfFirstUser, indexOfLastUser, users]);
 
-  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
-    if (category.name === activeCategoryName) {
-      return { ...category, sortedByAscending: !category.sortedByAscending };
-    }
-    return { ...category, sortedByAscending: false };
-  });
+  const changeActiveCategory = (categories, activeCategoryName) =>
+    categories.map((category) => {
+      if (category.name === activeCategoryName) {
+        return { ...category, sortedByAscending: !category.sortedByAscending };
+      }
+      return { ...category, sortedByAscending: false };
+    });
 
   const paginate = (pageNumber) => {
     if (currentPage !== pageNumber) {
@@ -98,7 +118,9 @@ export const UnAssignedList = () => {
   };
 
   const changeRole = (id, value) => {
-    const newState = users.map((user) => (user.id === id ? ({ ...user, role: Number(value) }) : user));
+    const newState = users.map((user) =>
+      user.id === id ? { ...user, role: Number(value) } : user
+    );
     setUsers(newState);
   };
 
@@ -106,21 +128,33 @@ export const UnAssignedList = () => {
     const { role } = users.find((user) => user.id === id);
     if (role !== 0) {
       const newState = users.filter((user) => user.id !== id);
-      setUsers(newState?.map((user, index) => ({ id: user.id, index, ...user })));
+      setUsers(
+        newState?.map((user, index) => ({ id: user.id, index, ...user }))
+      );
       switch (role) {
         case 1:
           addStudentRole(id);
-          dispatchAddAlert('The user has been successfully assigned as a student', 'success');
+          dispatchAddAlert(
+            'The user has been successfully assigned as a student',
+            'success'
+          );
           break;
         case 2:
           addMentorRole(id);
-          dispatchAddAlert('The user has been successfully assigned as a mentor', 'success');
+          dispatchAddAlert(
+            'The user has been successfully assigned as a mentor',
+            'success'
+          );
           break;
         case 3:
           addSecretaryRole(id);
-          dispatchAddAlert('The user has been successfully assigned as a secretary', 'success');
+          dispatchAddAlert(
+            'The user has been successfully assigned as a secretary',
+            'success'
+          );
           break;
-        default: break;
+        default:
+          break;
       }
     }
   };
@@ -131,7 +165,9 @@ export const UnAssignedList = () => {
 
   const handleSortByParam = (data, categoryParams) => {
     const sortedUsers = data;
-    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setSortingCategories(
+      changeActiveCategory(sortingCategories, categoryParams.sortingParam)
+    );
     setUsers(sortedUsers);
     setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
   };
@@ -152,46 +188,57 @@ export const UnAssignedList = () => {
             {role.name}
           </option>
         ));
-      default: return {};
+      default:
+        return {};
     }
   };
   const getPersonsRows = () => {
-    const personsRows = usersVisible.map(({ id, firstName, lastName, email }) => (
-      <tr
-        key={id}
-        data-person-id={id}
-        className={styles['table-row']}
-      >
-        <td>{firstName}</td>
-        <td>{lastName}</td>
-        <td>{email}</td>
-        <td
-          className="d-flex justify-content-center"
-        >
-          <div className={styles['add-role']}>
-            <select
-              className={styles.select}
-              onChange={(event) => { changeRole(id, event.target.value); }}
-            >
-              {options()}
-            </select>
-            <Button
-              className={styles.btn}
-              onClick={() => handleButtonClick(id)}
-            >
-              Add role
-            </Button>
-          </div>
-        </td>
-      </tr>
-    ));
+    const personsRows = usersVisible.map(
+      ({ id, firstName, lastName, email }) => (
+        <tr key={id} data-person-id={id} className={styles['table-row']}>
+          <td>{firstName}</td>
+          <td>{lastName}</td>
+          <td>{email}</td>
+          <td className="d-flex justify-content-center">
+            <div className={styles['add-role']}>
+              <select
+                className={styles.select}
+                onChange={(event) => {
+                  changeRole(id, event.target.value);
+                }}
+              >
+                {options()}
+              </select>
+              <Button
+                className={styles.btn}
+                onClick={() => handleButtonClick(id)}
+              >
+                Add role
+              </Button>
+            </div>
+          </td>
+        </tr>
+      )
+    );
 
     if (error) {
-      return <tr><td colSpan="5" className="text-center">Loading has been failed</td></tr>;
+      return (
+        <tr>
+          <td colSpan="5" className="text-center">
+            Loading has been failed
+          </td>
+        </tr>
+      );
     }
 
     if (!users.length || search) {
-      return <tr><td colSpan="5" className="text-center">No one has been found</td></tr>;
+      return (
+        <tr>
+          <td colSpan="5" className="text-center">
+            No one has been found
+          </td>
+        </tr>
+      );
     }
     return personsRows;
   };
@@ -231,10 +278,9 @@ export const UnAssignedList = () => {
     <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Unassigned Users</h2>
-        <div className="col-3 text-right">{
-           !isLoading
-          && `${usersVisible.length} of ${users.length} unassigned users `
-        }
+        <div className="col-3 text-right">
+          {!isLoading &&
+            `${usersVisible.length} of ${users.length} unassigned users `}
         </div>
         <div className="col-3 d-flex align-items-center justify-content-end">
           {paginationComponent()}
@@ -257,31 +303,33 @@ export const UnAssignedList = () => {
               >
                 Rows
               </label>
-              <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => { changeCountVisibleItems(event.target.value); }}
-              >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
-              </select>
+              <RowsOption
+                id={'change-visible-people'}
+                onChange={changeCountVisibleItems}
+                optionsValues={[9, 27, 45, 72, 99]}
+              />
             </div>
           </div>
           <WithLoading isLoading={!isLoaded} className="d-block mx-auto my-2">
-            <Table sortingCategories={sortingCategories}
-                   currentUser={currentUser}
-                   onClick={handleSortByParam}
-                   data={users}
-                   access={{unruledUser: [4], unassigned: 'unassigned'}}
+            <Table
+              sortingCategories={sortingCategories}
+              currentUser={currentUser}
+              onClick={handleSortByParam}
+              data={users}
+              access={{ unruledUser: [4], unassigned: 'unassigned' }}
             >
               {getPersonsRows()}
             </Table>
           </WithLoading>
         </div>
-        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
+        <div
+          className={classNames(
+            'row justify-content-between align-items-center mb-3',
+            styles.paginate
+          )}
+        >
+          {paginationComponent()}
+        </div>
       </div>
     </div>
   );
