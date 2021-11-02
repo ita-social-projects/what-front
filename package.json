@@ -38,6 +38,7 @@
     "@testing-library/dom": "^8.10.1",
     "@testing-library/jest-dom": "5.13.0",
     "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.0.1",
     "babel-jest": "^27.0.2",
     "babel-loader": "^8.1.0",
