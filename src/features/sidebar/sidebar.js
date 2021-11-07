@@ -25,6 +25,7 @@ export const Sidebar = () => {
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
       { id: 7, title: 'Assignment', link: paths.UNASSIGNED_USERS, active: false },
+      { id: 8, title: 'Homework', link: paths.HOMEWORK, active: false },
     ],
     4: [
       { id: 0, title: 'Students', link: paths.STUDENTS, active: true },
@@ -35,6 +36,7 @@ export const Sidebar = () => {
       { id: 5, title: 'Courses', link: paths.COURSES, active: false },
       { id: 6, title: 'Schedule', link: paths.SCHEDULE, active: false },
       { id: 7, title: 'Assignment', link: paths.UNASSIGNED_USERS, active: false },
+      { id: 8, title: 'Homework', link: paths.HOMEWORK, active: false },
     ],
     2: [
       { id: 0, title: 'Students', link: paths.STUDENTS, active: false },
