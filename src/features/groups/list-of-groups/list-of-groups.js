@@ -337,30 +337,34 @@ export const ListOfGroups = () => {
                 placeholder="Start Date"
               />
             </div>
-            {
-              <div className="col-2 d-flex">
-                <label
-                  className={classNames(styles["label-for-select"])}
+            <div className="col-1 d-flex">
+              <label
+                  className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
-                >
-                  Rows
-                </label>
-                <select
-                  className={classNames("form-control", styles["change-rows"])}
+              >
+                {
+                  showBlocks ?
+                    <span>Blocks</span>
+                    :
+                    <span>Rows</span>
+                }
+                
+              </label>
+              <select
+                  className={classNames('form-control', styles['change-rows'])}
                   id="change-visible-people"
                   onChange={(event) => {
                     changeCountVisibleItems(event.target.value);
                   }}
-                >
-                  <option>9</option>
-                  <option>27</option>
-                  <option>45</option>
-                  <option>72</option>
-                  <option>99</option>
-                </select>
-              </div>
-            }
-            <div className="col-3 text-right">
+              >
+                <option>9</option>
+                <option>27</option>
+                <option>45</option>
+                <option>72</option>
+                <option>99</option>
+              </select>
+            </div>
+            <div className="col-4 text-right">
               <Button
                 onClick={downloadGroups}
                 type="button"

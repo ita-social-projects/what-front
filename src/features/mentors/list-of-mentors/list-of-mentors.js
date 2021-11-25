@@ -267,13 +267,17 @@ export const ListOfMentors = () => {
                 </label>
               </div>
               )}
-            {!showBlocks &&
             <div className="col-2 d-flex">
               <label
                   className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
               >
-                Rows
+                {
+                  showBlocks ?
+                    <span>Blocks</span>
+                    :
+                    <span>Rows</span>
+                } 
               </label>
               <select
                   className={classNames('form-control', styles['change-rows'])}
@@ -289,7 +293,6 @@ export const ListOfMentors = () => {
                 <option>99</option>
               </select>
             </div>
-            }
             <div className="col-2 text-right">
               {currentUser.role !== 2
                   && (

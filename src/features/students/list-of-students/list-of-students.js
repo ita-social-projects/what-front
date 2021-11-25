@@ -297,13 +297,17 @@ export const ListOfStudents = () => {
                 Disabled students
               </label>
             </div>
-            {!showBlocks && (
-              <div className="col-2 d-flex">
+              <div className="col-1 d-flex">
                 <label
                   className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
                 >
-                  Rows
+                  {
+                  showBlocks ?
+                    <span>Blocks</span>
+                    :
+                    <span>Rows</span>
+                } 
                 </label>
                 <select
                   className={classNames('form-control', styles['change-rows'])}
@@ -319,17 +323,9 @@ export const ListOfStudents = () => {
                   <option>99</option>
                 </select>
               </div>
-            )}
-            {[8, 4].includes(currentUser.role) && (
-              <div className="col-12 mt-1 text-right">
-                <Button
-                  onClick={downloadStudents}
-                  type="button"
-                  className={classNames(
-                    'btn btn-warning ',
-                    styles['left-add-btn']
-                  )}
-                >
+              {[8, 4].includes(currentUser.role) && (
+                <div className="col-4 text-right">
+                <Button onClick={downloadStudents} type="button" className={classNames('btn btn-warning ', styles['left-add-btn'])}>
                   Upload student('s)
                 </Button>
                 <Button onClick={handleAddStudent}>

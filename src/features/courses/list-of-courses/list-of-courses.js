@@ -278,7 +278,12 @@ export const ListOfCourses = () => {
                   className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
               >
-                Rows
+                {
+                  showBlocks ?
+                    <span>Blocks</span>
+                    :
+                    <span>Rows</span>
+                } 
               </label>
               <select
                   className={classNames('form-control', styles['change-rows'])}
@@ -294,8 +299,7 @@ export const ListOfCourses = () => {
                 <option>99</option>
               </select>
             </div>
-            }
-            <div className="col-2 text-right">
+            <div className="col-2 offset-3 text-right">
               {[8, 4].includes(currentUser.role) && (
               <Button onClick={addCourse}>
                 <span>Add a course</span>
