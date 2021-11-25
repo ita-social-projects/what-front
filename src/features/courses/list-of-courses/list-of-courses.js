@@ -3,7 +3,13 @@ import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
-import { fetchCourses, coursesSelector, currentUserSelector } from '@/models/index.js';
+import { 
+  fetchActiveCourses, 
+  coursesActiveSelector, 
+  fetchNotActiveCourses, 
+  coursesNotActiveSelector, 
+  currentUserSelector 
+} from '@/models/index.js';
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 
 import Icon from '@/icon.js';
@@ -32,21 +38,61 @@ export const ListOfCourses = () => {
     { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
-  const { data, isLoading } = useSelector(coursesSelector, shallowEqual); // array of courses ,true/false
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual); // role of user
+  const {
+    data: activeCourses,
+    isLoading: areActiveCoursesLoading,
+  } = useSelector(coursesActiveSelector, shallowEqual);
 
-  const [loadCourses] = useActions([fetchCourses]); // loading courses
+  const {
+    data: notActiveCourses,
+    isLoading: areNotActiveCoursesLoading,
+  } = useSelector(coursesNotActiveSelector, shallowEqual);
+
+    const { currentUser } = useSelector(currentUserSelector, shallowEqual); // role of user
+
+  const [loadActiveCourses, loadNotActiveCourses] = useActions([fetchActiveCourses, fetchNotActiveCourses]); // loading courses
+
+  const [courses, setCourses] = useState([]);
+
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
 
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
 
   useEffect(() => {
-    loadCourses();
-  }, [loadCourses]);
+    loadActiveCourses();
+  }, [loadActiveCourses]);
 
   useEffect(() => {
-    setFilteredCourses(data);
-  }, [data]);
+    loadNotActiveCourses();
+  }, [loadNotActiveCourses]);
+
+  useEffect(() => {
+    if (isShowDisabled && notActiveCourses.length && !areNotActiveCoursesLoading) {
+      setCourses(notActiveCourses);
+    }
+    if (
+      !isShowDisabled &&
+      activeCourses.length &&
+      !areActiveCoursesLoading
+    ) {
+      setCourses(activeCourses);
+    }
+    setVisibleCourses(
+      courses.slice(indexOfFirstCourse, indexOfLastCourse)
+    );
+  }, [
+    activeCourses,
+    areActiveCoursesLoading,
+    notActiveCourses,
+    areNotActiveCoursesLoading,
+    isShowDisabled,
+  ]);
+
+  useEffect(() => {
+    setFilteredCourses(courses);
+  }, [courses]);
+
 
   useEffect(() => {
     setVisibleCourses(filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse));
@@ -77,7 +123,7 @@ export const ListOfCourses = () => {
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
-    setVisibleCourses(data.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
+    setVisibleCourses(activeCourses.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
   };
 
   const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
@@ -105,6 +151,15 @@ export const ListOfCourses = () => {
     setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
     setFilteredCourses(sortedCourses);
     setVisibleCourses(sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse));
+  };
+
+  const handleShowDisabled = (event) => {
+    setIsShowDisabled(!isShowDisabled);
+    if (event.target.checked) {
+      loadNotActiveCourses();
+    } else {
+      loadActiveCourses();
+    }
   };
 
   const paginate = (pageNumber) => {
@@ -135,16 +190,16 @@ export const ListOfCourses = () => {
   const changeCountVisibleItems = (newNumber) => {
     const finish = currentPage * newNumber;
     const start = finish - newNumber;
-    setVisibleCourses(data.slice(start, finish));
+    setVisibleCourses(courses.slice(start, finish));
     setcoursesPerPage(newNumber);
   };
 
   const paginationComponent = () => {
-    if (data.length > coursesPerPage) {
+    if (activeCourses.length > coursesPerPage) {
       return (
         <Pagination
         itemsPerPage={coursesPerPage}
-        totalItems={data.length}
+        totalItems={courses.length}
         paginate={paginate}
         prevPage={prevPage}
         nextPage={nextPage}
@@ -194,8 +249,28 @@ export const ListOfCourses = () => {
                 </button>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <Search onSearch={handleSearch} placeholder="Course`s title" />
+            </div>
+            <div className="col-3 offset-1 custom-control custom-switch text-right">
+              <input
+                type="checkbox"
+                onClick={handleShowDisabled}
+                className={classNames(
+                  'custom-control-input',
+                  styles['custom-control-input']
+                )}
+                id="switchDisabled"
+              />
+              <label
+                className={classNames(
+                  'custom-control-label',
+                  styles['custom-control-label']
+                )}
+                htmlFor="switchDisabled"
+              > 
+                Disabled Courses
+              </label>
             </div>
             {!showBlocks &&
             <div className="col-2 d-flex">
@@ -220,7 +295,7 @@ export const ListOfCourses = () => {
               </select>
             </div>
             }
-            <div className="col-2 offset-3 text-right">
+            <div className="col-2 text-right">
               {[8, 4].includes(currentUser.role) && (
               <Button onClick={addCourse}>
                 <span>Add a course</span>
@@ -228,7 +303,7 @@ export const ListOfCourses = () => {
               )}
             </div>
           </div>
-          <WithLoading isLoading={isLoading} className="d-block mx-auto m-0">
+          <WithLoading isLoading={areActiveCoursesLoading || areNotActiveCoursesLoading} className="d-block mx-auto m-0">
             {
               showBlocks ?
                   <div className="container d-flex flex-wrap">
