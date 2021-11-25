@@ -204,27 +204,18 @@ export const ListOfMentors = () => {
   };
 
   const paginationComponent = () => {
-    if (filteredMentorList.length < mentorsPerPage) {
+    if (filteredMentorList.length > mentorsPerPage) {
       return (
         <Pagination
           itemsPerPage={mentorsPerPage}
-          totalItems={1}
+          totalItems={filteredMentorList.length}
           paginate={paginate}
           prevPage={prevPage}
           nextPage={nextPage}
-        />
+          page={currentPage}
+      />
       );
     }
-    return (
-      <Pagination
-        itemsPerPage={mentorsPerPage}
-        totalItems={filteredMentorList.length}
-        paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        page={currentPage}
-      />
-    );
   };
 
   return (

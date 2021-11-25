@@ -18,7 +18,7 @@ const arrow = (
   </svg>
 );
 
-export const Tabs = ({ className, children, defaultIndex, linkBack }) => {
+export const Tabs = ({ className, children, defaultIndex, linkBack, paginationPage }) => {
   const [tabs, setTabs] = useState({
     activeTabIndex: defaultIndex,
   });
@@ -53,7 +53,11 @@ export const Tabs = ({ className, children, defaultIndex, linkBack }) => {
         {
           <Link
             className="nav-item nav-link d-flex align-items-center"
-            to={linkBack}
+            to={{
+              pathname: linkBack,
+              state: {
+                  paginationPage
+              }}}
           >
             {arrow}
           </Link>
@@ -70,6 +74,7 @@ Tabs.propTypes = {
   defaultIndex: propTypes.number,
   children: propTypes.node.isRequired,
   linkBack: propTypes.string.isRequired,
+  paginationPage: propTypes.object.isRequired,
 };
 
 Tabs.defaultProps = {

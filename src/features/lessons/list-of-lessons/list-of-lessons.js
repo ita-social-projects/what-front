@@ -127,7 +127,7 @@ export const ListOfLessons = () => {
         <td className={"text-left"}>{lesson.themeName}</td>
         <td>{lesson.lessonShortDate}</td>
         <td>{lesson.lessonTime}</td>
-        {currentUser.role !== 3
+        {currentUser.role !== 8
           ? (
             <td
               className="text-center"
@@ -190,7 +190,7 @@ export const ListOfLessons = () => {
       (!visibleLessonsList.length && !!filterEndDate) ||
       !visibleLessonsList.length && !!searchLessonsThemeValue]
     }],
-    access: currentUser.role !== 3,
+    access: currentUser.role !== 8,
     fieldsToShow: ['themeName', 'lessonShortDate', 'lessonTime', 'edit']
   };
 
@@ -254,7 +254,7 @@ export const ListOfLessons = () => {
                 <option>99</option>
               </select>
             </div>
-              {currentUser.role !== 3 && (
+              {currentUser.role !== 8 && (
                 <div className="col-4 text-right">
                   <Button onClick={downloadThemes} type="button" className={classNames('btn btn-warning mr-3', styles['left-add-btn'])}>
                     Add theme('s)
@@ -286,7 +286,7 @@ export const ListOfLessons = () => {
                          currentUser={currentUser}
                          onClick={handleSortByParam}
                          data={filteredLessonsList}
-                         access={{unruledUser: [3], unassigned: ''}}
+                         access={{unruledUser: [8], unassigned: ''}}
                   >
                     <List props={listProps} listType={'list'}/>
                   </Table>

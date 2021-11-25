@@ -7,15 +7,15 @@ const INITIAL_STATE = {
   error: '',
 }; 
 
-export const allCoursesReducer = (state = INITIAL_STATE, action) => {
+export const notActiveCourseReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case actionTypes.LOADING_COURSES_STARTED:
+    case actionTypes.LOADING_NOT_ACTIVE_COURSES_STARTED:
       return {
         ...state,
         isLoading: true,
         error: '',
       };
-    case actionTypes.LOADING_COURSES_SUCCESS:
+    case actionTypes.LOADING_NOT_ACTIVE_COURSES_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -23,7 +23,7 @@ export const allCoursesReducer = (state = INITIAL_STATE, action) => {
         data: action.payload.courses,
         error: '',
       };
-    case actionTypes.LOADING_COURSES_FAILED:
+    case actionTypes.LOADING_NOT_ACTIVE_COURSES_FAILED:
       return {
         ...state,
         isLoading: false,

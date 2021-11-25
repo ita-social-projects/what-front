@@ -26,7 +26,7 @@ export const SecretarysDetails = ({ id }) => {
     <div className="container">
       <div className="row justify-content-center">
         <div className={classNames('col-sm-12 card shadow',
-          { 'col-md-12': currentUser.role === 4, 'col-md-6': currentUser.role === 3 })}
+          { 'col-md-12': currentUser.role === 4, 'col-md-6': currentUser.role === 8 })}
         >
           <div className="px-2 py-4">
             <h3>Secretary&apos;s details</h3>
