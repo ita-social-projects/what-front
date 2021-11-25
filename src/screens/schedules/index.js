@@ -1,0 +1,1 @@
+export { SchedulesTabs } from './schedules-tabs'

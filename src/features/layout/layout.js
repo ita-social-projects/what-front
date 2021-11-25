@@ -14,7 +14,7 @@ import {
   DownloadStudents, DownloadGroups, HomeworkAdd, StudentLessons, StudentLessonDetails,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
-import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs, HomeworkTabs } from '@/screens';
+import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs, HomeworkTabs, SchedulesTabs} from '@/screens';
 import styles from './layout.scss';
 import { ListOfHomework } from '../homework/list-of-homework';
 
@@ -58,6 +58,7 @@ export const Layout = () => {
           <ProtectedRoute roles={[1, 2, 4, 8]} exact path={paths.MY_PROFILE} component={MyProfile} />
           <ProtectedRoute roles={[4, 8]} exact path={paths.SCHEDULE} component={AllSchedules} />
           <ProtectedRoute roles={[4, 8]} exact path={`${paths.SCHEDULE_BY_GROUP_ID}/:id`} component={ScheduleGroup} />
+          <ProtectedRoute roles={[4, 8]} exact path={`${paths.SCHEDULE_EDIT}/:id`} component={() => <SchedulesTabs index={1} />} />
           <ProtectedRoute roles={[1, 2, 4, 8]} exact path={paths.CHANGE_PASSWORD} component={ChangePassword} />
           <ProtectedRoute roles={[4, 8]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />
           <ProtectedRoute roles={[4, 8]} exact path={paths.GROUPS_DOWNLOAD} component={DownloadGroups} />
