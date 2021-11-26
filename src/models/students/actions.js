@@ -38,6 +38,11 @@ export const removeStudent = (id) => ({
   payload: { id },
 });
 
+export const reactivateStudent = (id) => ({
+  type: actionTypes.REACTIVATE_STUDENT,
+  payload: { id },
+});
+
 function* loadStudentsAsync() {
   try {
     yield put({ type: actionTypes.LOADING_STUDENTS_STARTED });
@@ -118,15 +123,25 @@ function* editStudentAsync({ payload }) {
 function* removeStudentAsync({ payload }) {
   try {
     yield put({ type: actionTypes.REMOVING_STUDENT_STARTED });
-
     const studentId = payload.id;
-
     yield call(ApiService.remove, `/students/${studentId}`);
-
     yield put({ type: actionTypes.REMOVING_STUDENT_SUCCEED, payload: { id: studentId } });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.REMOVING_STUDENT_FAILED, payload: { error } });
+    yield put({ type: actionTypes.CLEAR_ERROR });
+  }
+}
+
+function* reactivateStudentAsync({ payload }) {
+  try {
+    yield put({ type: actionTypes.REACTIVATING_STUDENT_STARTED });
+    const studentId = payload.id;
+    yield call(ApiService.reactivate, `/students/${studentId}`);
+    yield put({ type: actionTypes.REACTIVATING_STUDENT_SUCCEED, payload: { id: studentId } });
+    yield put({ type: actionTypes.CLEAR_LOADED });
+  } catch (error) {
+    yield put({ type: actionTypes.REACTIVATING_STUDENT_FAILED, payload: { error } });
     yield put({ type: actionTypes.CLEAR_ERROR });
   }
 }
@@ -159,6 +174,10 @@ function* watchRemovingStudent() {
   yield takeEvery(actionTypes.REMOVE_STUDENT, removeStudentAsync);
 }
 
+function* watchReactivatingStudent() {
+  yield takeEvery(actionTypes.REACTIVATE_STUDENT, reactivateStudentAsync);
+}
+
 export function* studentsWatcher() {
   yield all([
     fork(watchLoadingStudents),
@@ -168,5 +187,6 @@ export function* studentsWatcher() {
     fork(watchAddingStudent),
     fork(watchEditingStudent),
     fork(watchRemovingStudent),
+    fork(watchReactivatingStudent),
   ]);
 }

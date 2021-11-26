@@ -1,35 +1,36 @@
-import * as actionTypes from '../types.js';
+import * as actionTypes from '../types';
 
 const INITIAL_STATE = {
-  data: [],
+  data: {},
   isLoading: false,
   loaded: false,
   error: '',
-}; 
+};
 
-export const allCoursesReducer = (state = INITIAL_STATE, action) => {
+export const updateHomeworkReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case actionTypes.LOADING_COURSES_STARTED:
+    case actionTypes.UPDATING_HOMEWORK_STARTED:
       return {
         ...state,
         isLoading: true,
         error: '',
       };
-    case actionTypes.LOADING_COURSES_SUCCESS:
+    case actionTypes.UPDATING_HOMEWORK_SUCCESS:
       return {
         ...state,
         isLoading: false,
         loaded: true,
-        data: action.payload.courses,
+        data: action.payload.homework,
         error: '',
       };
-    case actionTypes.LOADING_COURSES_FAILED:
+    case actionTypes.UPDATING_HOMEWORK_FAILED:
       return {
         ...state,
         isLoading: false,
         loaded: false,
         error: action.payload.error,
       };
-    default: return state;
+    default:
+      return state;
   }
-}
+};

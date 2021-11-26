@@ -4,7 +4,7 @@ import {
 import { ApiService } from '../../shared/api-service/api-service.js';
 import * as actions from './action-types.js';
 import {
-  FETCH_SECRETARIES, FETCH_ACTIVE_SECRETARIES, CREATE_SECRETARY, DELETE_SECRETARY, UPDATE_SECRETARY,
+  FETCH_SECRETARIES, FETCH_ACTIVE_SECRETARIES, CREATE_SECRETARY, DELETE_SECRETARY, UPDATE_SECRETARY, REACTIVATE_SECRETARY
 } from './action-types.js';
 
 export const fetchSecretaries = () => ({ type: actions.FETCH_SECRETARIES });
@@ -105,12 +105,34 @@ function* deleteSecretaryWatcher() {
   yield takeEvery(DELETE_SECRETARY, deleteSecretaryWorker);
 }
 
+export const reactivateSecretary = (id) => ({
+  type: actions.REACTIVATE_SECRETARY,
+  payload: { id },
+});
+
+function* reactivateSecretaryWorker({ payload }) {
+  try {
+    yield put({ type: actions.SECRETARY_REACTIVATING_STARTED });
+    yield call(ApiService.reactivate, `/secretaries/${payload.id}`);
+    yield put({ type: actions.SECRETARY_REACTIVATING_SUCCESS });
+    yield put({ type: actions.CLEAR_LOADED });
+  } catch (error) {
+    yield put({ type: actions.SECRETARY_REACTIVATING_FAILED, payload: { error } });
+    yield put({ type: actions.CLEAR_ERROR });
+  }
+}
+
+function* reactivateSecretaryWatcher() {
+  yield takeEvery(REACTIVATE_SECRETARY, reactivateSecretaryWorker);
+}
+
 export function* secretariesWatcher() {
   yield all([
     fork(fetchSecretariesWatcher),
     fork(fetchActiveSecretariesWatcher),
     fork(createSecretaryWatcher),
     fork(updateSecretaryWatcher),
-    fork(deleteSecretaryWatcher),
+    fork(reactivateSecretaryWatcher),
+    fork(deleteSecretaryWatcher)
   ]);
 }

@@ -12,8 +12,8 @@ import {
   activeStudentsSelector,
   fetchActiveMentors,
   loadActiveStudents,
-  fetchCourses,
-  coursesSelector,
+  fetchActiveCourses,
+  coursesActiveSelector,
   addStudentGroup,
   addStudentGroupSelector,
 } from '@/models/index.js';
@@ -41,9 +41,9 @@ export const StartGroup = () => {
   const {
     data: courses,
     isLoading: coursesIsLoading,
-  } = useSelector(coursesSelector, shallowEqual);
+  } = useSelector(coursesActiveSelector, shallowEqual);
 
-  const [loadCourses] = useActions([fetchCourses]);
+  const [loadCourses] = useActions([fetchActiveCourses]);
 
   const {
     data: mentorsData,

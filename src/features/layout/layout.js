@@ -12,10 +12,12 @@ import {
   UnAssignedList, Support, MyProfile, ChangePassword,
   DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
   DownloadStudents, DownloadGroups, HomeworkAdd, StudentLessons, StudentLessonDetails,
+  AddSchedule,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs, HomeworkTabs } from '@/screens';
 import styles from './layout.scss';
+import { ListOfHomework } from '../homework/list-of-homework';
 
 export const Layout = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
@@ -50,8 +52,13 @@ export const Layout = () => {
           <ProtectedRoute roles={[4, 8]} exact path={paths.COURSE_ADD} component={AddCourse} />
           <ProtectedRoute roles={[1, 2, 4, 8]} exact path={`${paths.COURSE_DETAILS}/:id`} component={() => <CoursesTabs index={0} />} />
           <ProtectedRoute roles={[4, 8]} exact path={`${paths.COURSE_EDIT}/:id`} component={() => <CoursesTabs index={1} />} />
+          <ProtectedRoute roles={[1, 2, 4, 8]} exact path={paths.HOMEWORK} component={ListOfHomework} />
+          <ProtectedRoute roles={[4, 8]} exact path={paths.HOMEWORK_ADD} component={HomeworkAdd} />
+          <ProtectedRoute roles={[1, 2, 4, 8]} exact path={`${paths.HOMEWORK_DETAILS}/:id`} component={() => <HomeworkTabs index={0} />} />
+          <ProtectedRoute roles={[4, 8]} exact path={`${paths.HOMEWORK_EDIT}/:id`} component={() => <HomeworkTabs index={1} />} />
           <ProtectedRoute roles={[1, 2, 4, 8]} exact path={paths.MY_PROFILE} component={MyProfile} />
           <ProtectedRoute roles={[4, 8]} exact path={paths.SCHEDULE} component={AllSchedules} />
+          <ProtectedRoute roles={[4, 8]} exact path={paths.SCHEDULE_ADD} component={AddSchedule} />
           <ProtectedRoute roles={[4, 8]} exact path={`${paths.SCHEDULE_BY_GROUP_ID}/:id`} component={ScheduleGroup} />
           <ProtectedRoute roles={[1, 2, 4, 8]} exact path={paths.CHANGE_PASSWORD} component={ChangePassword} />
           <ProtectedRoute roles={[4, 8]} exact path={paths.UNASSIGNED_USERS} component={UnAssignedList} />

@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
-import { allCoursesReducer, createCourseReducer, editCourseReducer, deleteCourseReducer } from './reducers';
+import { activeCourseReducer, notActiveCourseReducer, createCourseReducer, editCourseReducer, deleteCourseReducer, reactivateCourseReducer } from './reducers';
 
 export const coursesReducer = combineReducers({
-  courses: allCoursesReducer,
+  coursesActive: activeCourseReducer,
+  coursesNotActive: notActiveCourseReducer,
   editedCourse: editCourseReducer,
   createdCourse: createCourseReducer,
   deletedCourse: deleteCourseReducer,
+  reactivatedCourse: reactivateCourseReducer,
 })

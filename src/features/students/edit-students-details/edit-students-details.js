@@ -6,7 +6,8 @@ import { Formik, Form, Field } from 'formik';
 
 import { WithLoading } from '@/components';
 import { currentStudentSelector, loadStudentGroupsSelector, editStudentSelector,
-  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent } from '@/models';
+  removeStudentSelector, currentStudentGroupsSelector, editStudent, removeStudent, activeStudentsSelector,
+  reactivateStudent, reactivateStudentSelector, loadActiveStudents} from '@/models';
 import { Button } from '@components/index.js';
 import Icon from '@/icon.js';
 import { paths, useActions } from '@/shared';
@@ -22,6 +23,10 @@ export const EditStudentsDetails = ({ id }) => {
     isLoaded: isStudentLoaded,
     error: studentError,
   } = useSelector(currentStudentSelector, shallowEqual);
+
+  const {
+    data: activeStudents,
+  } = useSelector(activeStudentsSelector, shallowEqual);
 
   const {
     data: allGroups,
@@ -48,16 +53,29 @@ export const EditStudentsDetails = ({ id }) => {
     error: isRemovedError,
   } = useSelector(removeStudentSelector, shallowEqual);
 
+  const {
+    isLoading: isReactivatedLoading,
+    isLoaded: isReactivatedLoaded,
+    error: isReactivatedError,
+  } = useSelector(reactivateStudentSelector, shallowEqual);
+
   const [
     updateStudent,
     deleteStudent,
     dispatchAddAlert,
-  ] = useActions([editStudent, removeStudent, addAlert]);
+    loadAllActiveStudents,
+    recoverStudent
+  ] = useActions([editStudent, removeStudent, addAlert, loadActiveStudents, reactivateStudent]);
+
+  useEffect(() => {
+    loadAllActiveStudents();
+  }, [loadAllActiveStudents]);
 
   const [groups, setGroups] = useState([]);
   const [initialGroups, setInitialGroups] = useState(studentGroups);
   const [error, setError] = useState(null);
   const [toShowModal, setShowModal] = useState(false);
+  const isStudentEnable = activeStudents.map(({ id }) => id).includes(Number(id));
 
   useEffect(() => {
     if (studentError && studentGroupsError) {
@@ -76,14 +94,25 @@ export const EditStudentsDetails = ({ id }) => {
   }, [dispatchAddAlert, history, isEditedError, isEditedLoaded]);
 
   useEffect(() => {
-    if (!isRemovedError && isRemovedLoaded) {
-      history.push(paths.STUDENTS);
-      dispatchAddAlert('Student has been excluded', 'success');
+    if(isStudentEnable){
+      if (!isRemovedError && isRemovedLoaded) {
+        history.push(paths.STUDENTS);
+        dispatchAddAlert('Student has been excluded', 'success');
+      }
+      if (isRemovedError && !isRemovedLoaded) {
+        dispatchAddAlert(isRemovedError);
+      }
     }
-    if (isRemovedError && !isRemovedLoaded) {
-      dispatchAddAlert(isRemovedError);
+    else {
+      if (!isReactivatedError && isReactivatedLoaded) {
+        history.push(paths.STUDENTS);
+        dispatchAddAlert('Student has been recover', 'success');
+      }
+      if (isReactivatedError && !isReactivatedLoaded) {
+        dispatchAddAlert(isReactivatedError);
+      }
     }
-  }, [dispatchAddAlert, history, isRemovedError, isRemovedLoaded]);
+  }, [dispatchAddAlert, history, isRemovedError, isRemovedLoaded, isReactivatedError, isReactivatedLoaded]);
 
   useEffect(() => {
     setGroups(studentGroups);
@@ -97,6 +126,11 @@ export const EditStudentsDetails = ({ id }) => {
     deleteStudent(id);
   };
 
+  const handleReactivate = () => {
+    handleCloseModal();
+    recoverStudent(id);
+  };
+  
   const handleGroupAdd = (groupsInfo, clearField) => {
     
     const checkName = groups.find(({name}) => name === groupsInfo);
@@ -281,8 +315,14 @@ export const EditStudentsDetails = ({ id }) => {
                         <Button
                           className={classNames(styles['exclude-btn'], 'w-100')}
                           onClick={handleShowModal}
-                          disabled={!isValid || dirty || isEditedLoading || isRemovedLoading}
-                        >Exclude
+                          disabled={!isValid || dirty || isEditedLoading || isRemovedLoading || isReactivatedLoading}
+                        >
+                          {
+                            isStudentEnable ?
+                              <span>Exclude</span>
+                              :
+                              <span>Recover</span>
+                          }
                         </Button>
                       </div>
                       <div className="col-md-3 offset-md-3 col-4">
@@ -298,7 +338,7 @@ export const EditStudentsDetails = ({ id }) => {
                         <button
                           className={classNames('w-100 btn btn-info', styles.button)}
                           type="submit"
-                          disabled={!isValid || (!dirty &&  initialGroups === groups) || isEditedLoading || isRemovedLoading || errors.firstName || errors.lastName || errors.email}
+                          disabled={!isValid || (!dirty &&  initialGroups === groups) || isEditedLoading || isRemovedLoading || isReactivatedLoading || errors.firstName || errors.lastName || errors.email}
                         >Save
                         </button>
                       </div>
@@ -306,15 +346,30 @@ export const EditStudentsDetails = ({ id }) => {
                   </Form>
                 )}
               </Formik>
-              <ModalWindow
-                toShow={toShowModal}
-                onSubmit={handleExclude}
-                onClose={handleCloseModal}
-                submitButtonText="Delete"
-                useRedButton
-                marginLeft
-              >Are you sure you want to exclude this student?
-              </ModalWindow>
+              {
+                isStudentEnable ?
+                  <ModalWindow
+                    toShow={toShowModal}
+                    onSubmit={handleExclude}
+                    onClose={handleCloseModal}
+                    submitButtonText="Exclude"
+                    useRedButton
+                    marginLeft
+                  >
+                    Are you sure you want to exclude this student?
+                  </ModalWindow>
+                :
+                  <ModalWindow
+                    toShow={toShowModal}
+                    onSubmit={handleReactivate}
+                    onClose={handleCloseModal}
+                    submitButtonText="Recover"
+                    useRedButton
+                    marginLeft
+                  >
+                    Are you sure you want to recover this student?
+                   </ModalWindow>
+                }
             </WithLoading>
           </div>
         </div>

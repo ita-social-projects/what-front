@@ -8,6 +8,7 @@ import {
   dashboardWatcher, attachmentsWatcher,
  importWatcher,
 } from './models/index.js';
+import { homeworkWatcher } from './models/homework/actions.js';
 
 export function* rootSaga() {
   yield all([
@@ -25,5 +26,6 @@ export function* rootSaga() {
     fork(dashboardWatcher),
     fork(attachmentsWatcher),
     fork(importWatcher),
+    fork(homeworkWatcher)
   ]);
 }
