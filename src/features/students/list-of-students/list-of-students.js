@@ -321,7 +321,7 @@ export const ListOfStudents = () => {
               </div>
             )}
             {[8, 4].includes(currentUser.role) && (
-              <div className="col-12 mt-1 text-right">
+              <div className="col-4 text-right">
                 <Button
                   onClick={downloadStudents}
                   type="button"
