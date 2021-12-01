@@ -10,3 +10,4 @@ export * from './student-groups/index.js';
 export * from './dashboard/index.js';
 export * from './attachments/index.js';
 export * from './import/index.js';
+export * from './homework/index.js';

@@ -12,11 +12,14 @@ import {
   UnAssignedList, Support, MyProfile, ChangePassword,
   DownloadThemes, Header, AlertBox, AllSchedules, ScheduleGroup, StartGroup, Sidebar,
   DownloadStudents, DownloadGroups, HomeworkAdd, StudentLessons, StudentLessonDetails,
+  AddSchedule,
 } from '@/features';
 import { ProtectedRoute } from '@/components';
 import { CoursesTabs, GroupsTabs, MentorTabs, SecretariesTabs, StudentsTabs, HomeworkTabs } from '@/screens';
 import styles from './layout.scss';
 import { STUD, MENTOR, ADMIN, SCRTARY } from './roles';
+import { ListOfHomework } from '../homework/list-of-homework';
+
 
 export const Layout = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
