@@ -2,11 +2,19 @@ import { all, fork } from 'redux-saga/effects';
 
 import { watchFetchCounter, watchAddAlert } from '@/features';
 import {
-  mentorsWatcher, themesWatcher, coursesWatcher,
-  schedulesWatcher, studentsWatcher, lessonsWatcher,
-  authWatcher, secretariesWatcher, studentGroupsWatcher,
-  dashboardWatcher, attachmentsWatcher,
- importWatcher,
+  mentorsWatcher,
+  themesWatcher,
+  coursesWatcher,
+  schedulesWatcher,
+  studentsWatcher,
+  lessonsWatcher,
+  authWatcher,
+  secretariesWatcher,
+  studentGroupsWatcher,
+  dashboardWatcher,
+  attachmentsWatcher,
+  importWatcher,
+  eventWatcher,
 } from './models/index.js';
 import { homeworkWatcher } from './models/homework/actions.js';
 
@@ -26,6 +34,7 @@ export function* rootSaga() {
     fork(dashboardWatcher),
     fork(attachmentsWatcher),
     fork(importWatcher),
-    fork(homeworkWatcher)
+    fork(homeworkWatcher),
+    fork(eventWatcher),
   ]);
 }
