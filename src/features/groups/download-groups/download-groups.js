@@ -4,8 +4,8 @@ import {Link, useHistory} from 'react-router-dom';
 import {paths, useActions} from '@/shared';
 import {WithLoading} from '@/components/index.js';
 import {
-  importGroupsSelector, coursesSelector,
- sendGroups, fetchCourses,
+  importGroupsSelector, coursesActiveSelector,
+ sendGroups, fetchActiveCourses,
 } from '@/models';
 import { Button } from '@/components';
 import classNames from 'classnames';
@@ -21,9 +21,9 @@ export const DownloadGroups = () => {
     data: courses,
     isLoading: areLoading,
     isLoaded: areLoaded,
-  } = useSelector(coursesSelector, shallowEqual);
+  } = useSelector(coursesActiveSelector, shallowEqual);
 
-  const [loadCourses] = useActions([fetchCourses]);
+  const [loadCourses] = useActions([fetchActiveCourses]);
 
    useEffect(() => {
     loadCourses();
