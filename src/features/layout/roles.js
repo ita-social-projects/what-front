@@ -1,0 +1,1 @@
+export const [STUD, MENTOR, ADMIN, SCRTARY] = [1, 2, 4, 8];

@@ -19,6 +19,7 @@ import {
   attachmentsReducer,
   importReducer,
   homeworkReducer,
+  exportReducer
 } from './models/index.js';
 
 export const rootReducer = combineReducers({
@@ -41,5 +42,6 @@ export const rootReducer = combineReducers({
     attachments: attachmentsReducer,
     import: importReducer,
     homework: homeworkReducer,
+    export: exportReducer,
   }),
 });
