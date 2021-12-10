@@ -20,6 +20,7 @@ import {
   importReducer,
   homeworkReducer,
   eventReducer,
+  exportReducer
 } from './models/index.js';
 
 export const rootReducer = combineReducers({
@@ -43,5 +44,6 @@ export const rootReducer = combineReducers({
     import: importReducer,
     homework: homeworkReducer,
     events: eventReducer,
+    export: exportReducer,
   }),
 });

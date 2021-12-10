@@ -12,3 +12,4 @@ export * from './attachments/index.js';
 export * from './import/index.js';
 export * from './homework/index.js';
 export * from './events/index.js';
+export * from './export/index.js';

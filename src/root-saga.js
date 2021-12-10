@@ -15,6 +15,7 @@ import {
   attachmentsWatcher,
   importWatcher,
   eventWatcher,
+  exportWatcher
 } from './models/index.js';
 import { homeworkWatcher } from './models/homework/actions.js';
 
@@ -36,5 +37,6 @@ export function* rootSaga() {
     fork(importWatcher),
     fork(homeworkWatcher),
     fork(eventWatcher),
+    fork(exportWatcher)
   ]);
 }
