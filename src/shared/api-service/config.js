@@ -1,1 +1,2 @@
-export const BASE_URL = 'https://charliebackendapi2.azurewebsites.net/api/v2';
+export const BASE_URL =
+  'https://charliebackendapihosting.azurewebsites.net/api/v2';
