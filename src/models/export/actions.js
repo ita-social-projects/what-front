@@ -2,14 +2,14 @@ import { all, fork, put, call, takeEvery } from 'redux-saga/effects';
 import { ApiService } from '../../shared/api-service';
 import * as actionTypes from './types';
 
-export const createStudentsClassbook = (studentsClassbookData) => ({
+export const exportStudentsClassbook = (studentsClassbookData) => ({
   type: actionTypes.CREATE_STUDENTS_CLASSBOOK,
   payload: {
     studentsClassbookData,
   },
 });
 
-export const createStudentClassbook = (studentClassbook, id) => ({
+export const exportStudentClassbook = (studentClassbook, id) => ({
   type: actionTypes.CREATE_STUDENT_CLASSBOOK,
   payload: {
     studentClassbook,
@@ -17,14 +17,14 @@ export const createStudentClassbook = (studentClassbook, id) => ({
   },
 });
 
-export const createStudentsResults = (studentsResults) => ({
+export const exportStudentsResults = (studentsResults) => ({
   type: actionTypes.CREATE_STUDENTS_RESULTS,
   payload: {
     studentsResults,
   },
 });
 
-export const createStudentResults = (studentResults, id) => ({
+export const exportStudentResults = (studentResults, id) => ({
   type: actionTypes.CREATE_STUDENT_RESULTS,
   payload: {
     studentResults,
@@ -32,7 +32,7 @@ export const createStudentResults = (studentResults, id) => ({
   },
 });
 
-export const createStudentGroupResults = (studentGroupResults, id) => ({
+export const exportStudentGroupResults = (studentGroupResults, id) => ({
   type: actionTypes.CREATE_STUDENT_GROUP_RESULTS,
   payload: {
     studentGroupResults,
@@ -40,7 +40,7 @@ export const createStudentGroupResults = (studentGroupResults, id) => ({
   },
 });
 
-function* createStudentsClassbookWorker(data) {
+function* exportStudentsClassbookWorker(data) {
   try {
     yield put({ type: actionTypes.CREATING_STUDENTS_CLASSBOOK_STARTED });
     const studentsClassbook = yield call(ApiService.create, '/exports/studentsClassbook', data.payload.studentsClassbookData);
@@ -57,7 +57,7 @@ function* createStudentsClassbookWorker(data) {
   }
 }
 
-function* createStudentsResultsWorker(data) {
+function* exportStudentsResultsWorker(data) {
   try {
     yield put({ type: actionTypes.CREATING_STUDENTS_RESULTS_STARTED });
     const studentsResults = yield call(ApiService.create, '/exports/studentsResults', data.payload.studentsResults);
@@ -74,7 +74,7 @@ function* createStudentsResultsWorker(data) {
   }
 }
 
-function* createStudentClassbookWorker(data) {
+function* exportStudentClassbookWorker(data) {
   try {
     yield put({ type: actionTypes.CREATING_STUDENT_CLASSBOOK_STARTED });
     yield call(ApiService.create, `/exports/studentClassbook/${data.payload.id}`, data.payload.studentsResults);
@@ -88,7 +88,7 @@ function* createStudentClassbookWorker(data) {
   }
 }
 
-function* createStudentResultsWorker(data) {
+function* exportStudentResultsWorker(data) {
   try {
     yield put({ type: actionTypes.CREATING_STUDENT_RESULTS_STARTED });
     yield call(ApiService.create, `/exports/studentResults/${data.payload.id}`, data.payload.studentResults);
@@ -102,7 +102,7 @@ function* createStudentResultsWorker(data) {
   }
 }
 
-function* createStudentGroupResultsWorker(data) {
+function* exportStudentGroupResultsWorker(data) {
   try {
     yield put({ type: actionTypes.CREATING_STUDENT_GROUP_RESULTS_STARTED });
     yield call(ApiService.create, `/exports/studentGroupResults/${data.payload.id}`, data.payload.studentGroupResults);
@@ -116,32 +116,32 @@ function* createStudentGroupResultsWorker(data) {
   }
 }
 
-function* createStudentsClassbookWatcher() {
-  yield takeEvery(actionTypes.CREATE_STUDENTS_CLASSBOOK, createStudentsClassbookWorker);
+function* exportStudentsClassbookWatcher() {
+  yield takeEvery(actionTypes.CREATE_STUDENTS_CLASSBOOK, exportStudentsClassbookWorker);
 }
 
-function* createStudentClassbookWatcher() {
-  yield takeEvery(actionTypes.CREATE_STUDENT_CLASSBOOK, createStudentClassbookWorker);
+function* exportStudentClassbookWatcher() {
+  yield takeEvery(actionTypes.CREATE_STUDENT_CLASSBOOK, exportStudentClassbookWorker);
 }
 
-function* createStudentsResultsWatcher() {
-  yield takeEvery(actionTypes.CREATE_STUDENTS_RESULTS, createStudentsResultsWorker);
+function* exportStudentsResultsWatcher() {
+  yield takeEvery(actionTypes.CREATE_STUDENTS_RESULTS, exportStudentsResultsWorker);
 }
 
-function* createStudentResultsWatcher() {
-  yield takeEvery(actionTypes.CREATE_STUDENT_RESULTS, createStudentResultsWorker);
+function* exportStudentResultsWatcher() {
+  yield takeEvery(actionTypes.CREATE_STUDENT_RESULTS, exportStudentResultsWorker);
 }
 
-function* createStudentGroupResultsWatcher() {
-  yield takeEvery(actionTypes.CREATE_STUDENT_GROUP_RESULTS, createStudentGroupResultsWorker);
+function* exportStudentGroupResultsWatcher() {
+  yield takeEvery(actionTypes.CREATE_STUDENT_GROUP_RESULTS, exportStudentGroupResultsWorker);
 }
 
 export function* exportWatcher() {
   yield all([
-    fork(createStudentsClassbookWatcher),
-    fork(createStudentClassbookWatcher),
-    fork(createStudentsResultsWatcher),
-    fork(createStudentResultsWatcher),
-    fork(createStudentGroupResultsWatcher),
+    fork(exportStudentsClassbookWatcher),
+    fork(exportStudentClassbookWatcher),
+    fork(exportStudentsResultsWatcher),
+    fork(exportStudentResultsWatcher),
+    fork(exportStudentGroupResultsWatcher),
   ]);
 }
