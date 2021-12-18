@@ -3,11 +3,18 @@ import propTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './table.scss';
 
-export const Table = ({ sortingCategories, currentUser, onClick, data, access, children: list}) => {
-  const handleSortByParam = (event) => onClick(getSortedByParam(data, event.target.dataset), event.target.dataset)
+export const Table = ({
+  sortingCategories,
+  currentUser,
+  onClick,
+  data,
+  access,
+  children: list,
+}) => {
+  const handleSortByParam = (event) =>
+    onClick(getSortedByParam(data, event.target.dataset), event.target.dataset);
 
   const getSortedByParam = (data, activeCategory) => {
-
     const { sortingParam, sortedByAscending } = activeCategory;
     const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
 
@@ -23,34 +30,38 @@ export const Table = ({ sortingCategories, currentUser, onClick, data, access, c
     <table className="table table-hover">
       <thead>
         <tr>
-          {sortingCategories.map(({ id, name, tableHead, sortedByAscending }) => (
-            <th
-              key={id}
-              className={styles['table-head']}
-            >
-              <span
-                data-sorting-param={name}
-                data-sorted-by-ascending={Number(sortedByAscending)}
-                onClick={handleSortByParam}
-                className={classNames({ [styles.rotate]: !sortedByAscending })}
-              >
-                {tableHead}
-              </span>
+          {sortingCategories.map(
+            ({ id, name, tableHead, sortedByAscending }) => (
+              <th key={id} className={styles['table-head']}>
+                <span
+                  data-sorting-param={name}
+                  data-sorted-by-ascending={Number(sortedByAscending)}
+                  onClick={handleSortByParam}
+                  className={classNames({
+                    [styles.rotate]: !sortedByAscending,
+                  })}
+                >
+                  {tableHead}
+                </span>
+              </th>
+            )
+          )}
+          {currentUser && currentUser.role != 4 ? (
+            !access.unruledUser.some((el) => currentUser.role == el) ? (
+              <th scope="col" className="text-center">
+                Edit
+              </th>
+            ) : null
+          ) : access.unassigned != 'unassigned' ? (
+            <th scope="col" className="text-center">
+              Edit
             </th>
-          ))}
-          { currentUser && currentUser.role != 4 ?
-              !access.unruledUser.some(el => currentUser.role == el ) ?
-                  <th scope="col" className="text-center">Edit</th>
-                      : null
-                        : access.unassigned != 'unassigned' ?
-                          <th scope="col" className="text-center">Edit</th>
-                          : <th className="text-center">Choose role</th>
-          }
+          ) : (
+            <th className="text-center">Choose role</th>
+          )}
         </tr>
       </thead>
-      <tbody>
-        {list}
-      </tbody>
+      <tbody className={styles['table-body']}>{list}</tbody>
     </table>
   );
 };

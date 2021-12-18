@@ -162,9 +162,9 @@ export const UnAssignedList = () => {
         data-person-id={id}
         className={styles['table-row']}
       >
-        <td>{firstName}</td>
-        <td>{lastName}</td>
-        <td>{email}</td>
+        <td className={styles['table-data']}>{firstName}</td>
+        <td className={styles['table-data']}>{lastName}</td>
+        <td className={styles['table-data']}>{email}</td>
         <td
           className="d-flex justify-content-center"
         >

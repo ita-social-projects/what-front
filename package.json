@@ -10,7 +10,8 @@
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
     "test": "jest --collectCoverage",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -35,9 +36,10 @@
     "@storybook/addon-essentials": "^6.3.8",
     "@storybook/addon-links": "^6.3.8",
     "@storybook/react": "^6.3.8",
-    "@testing-library/dom": "^8.0.0",
+    "@testing-library/dom": "^8.10.1",
     "@testing-library/jest-dom": "5.13.0",
     "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.0.1",
     "babel-jest": "^27.0.2",
     "babel-loader": "^8.1.0",

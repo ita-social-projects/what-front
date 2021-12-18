@@ -1,64 +1,67 @@
 @import '../../styles/main';
 
-.add-role{
-    display: flex;
+.add-role {
+  display: flex;
 }
 
-.btn{
-    height: fit-content;
-    width: max-content;
-    height: min-content;
-    margin:10px;
+.btn {
+  height: fit-content;
+  width: max-content;
+  height: min-content;
+  margin: 10px;
 }
 
-.select{
-    height: fit-content;
-    margin:10px;
-    padding: 7px;
+.select {
+  height: fit-content;
+  margin: 10px;
+  padding: 7px;
 }
 
 .category {
-    cursor: pointer;
-    position: relative;
-    transition: opacity .3s;
+  cursor: pointer;
+  position: relative;
+  transition: opacity 0.3s;
 
-    &:hover {
-      opacity: .7;
-    }
+  &:hover {
+    opacity: 0.7;
+  }
 
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    width: 8px;
+    height: 8px;
+    transform: rotateZ(45deg);
+    transition: 0.3s;
+  }
+
+  &-sorted {
     &::after {
-      content: '';
-      display: block;
-      position: absolute;
-      right: -15px;
-      top: 10px;
-      border-top: 1px solid #000;
-      border-left: 1px solid #000;
-      width: 8px;
-      height: 8px;
-      transform: rotateZ(45deg);
-      transition: .3s;
-    }
-
-    &-sorted {
-      &::after {
-        transform: rotateZ(225deg);
-        top: 7px;
-      }
+      transform: rotateZ(225deg);
+      top: 7px;
     }
   }
+}
 
-  .change-rows{
-    margin: 0 10px;
-    width: fit-content !important;
-  }
+.change-rows {
+  margin: 0 10px;
+  width: fit-content !important;
+}
 
-  .label-for-select{
-    padding: .375rem .75rem;
-    margin-bottom: 0 !important;
-  }
+.label-for-select {
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 0 !important;
+}
 
-  .paginate{
-    margin: auto !important;
-  }
+.paginate {
+  margin: auto !important;
+}
 
+.table-data {
+  max-width: 280px;
+}

@@ -1,3 +1,4 @@
+import { oneOf } from 'prop-types';
 import * as Yup from 'yup';
 
 export const authValidation = Yup.object().shape({
@@ -67,7 +68,7 @@ export const addLessonValidation = Yup.object().shape({
   themeName: Yup.string()
     .min(1, 'Too short')
     .max(100, 'Too long')
-    .matches('^[a-zA-Zа-яА-ЯЇїІіЄєҐґ0-9][a-zA-Zа-яА-ЯЇїІіЄєҐґ 0-9]*$', 'Invalid lesson theme')
+    .matches('^[a-zA-Zа-яА-ЯЇїІіЄєҐґ0-9.][a-zA-Zа-яА-ЯЇїІіЄєҐґ 0-9#+]*$', 'Invalid lesson theme')
     .required('This field is required'),
   lessonDate: Yup.string()
     .max(new Date(), 'The lesson cannot start in the future')
@@ -200,5 +201,45 @@ export const resetPasswordValidation = Yup.object().shape({
     .required('This field is required'),
   confirmNewPassword: Yup.string()
     .oneOf([Yup.ref('newPassword'), null], 'You should confirm your password')
+    .required('This field is required'),
+});
+
+export const addScheduleValidation = Yup.object().shape({
+  patternType: Yup.string()
+    .required('This field is required'),
+
+  interval: Yup.string()
+    .required('This field is required'),
+
+  daysOfWeek: Yup.array().when('patternType', {
+    is: (val) => /week/g.test(val),
+    then: Yup.array().of(Yup.string()).min(1, 'Should be choosen at least one day'),
+  }),
+
+  dates: Yup.string().when('patternType', {
+    is: (val) => val === 'on the same day of the month',
+    then: Yup.string().required('This field is required'),
+  }),
+
+  index: Yup.string().when('patternType', {
+    is: (val) => /example/g.test(val),
+    then: Yup.string().required('This field is required'),
+  }),
+
+  startDate: Yup.date()
+    .min(new Date(), 'Schedule`s start date can`t be in the past')
+    .required('This field is required'),
+
+  finishDate: Yup.date()
+    .min(Yup.ref('startDate'), 'Schedule`s finish date can`t be earlier start date')
+    .required('This field is required'),
+
+  group: Yup.string()
+    .required('This field is required'),
+
+  theme: Yup.string()
+    .required('This field is required'),
+
+  mentor: Yup.string()
     .required('This field is required'),
 });

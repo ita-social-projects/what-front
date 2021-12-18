@@ -14,8 +14,8 @@ import {
   deleteMentor,
   reactivateMentor,
   loadStudentGroupsSelector,
-  coursesSelector,
-  fetchCourses,
+  coursesActiveSelector,
+  fetchActiveCourses,
   globalLoadStudentGroups,
   fetchMentorById,
   fetchActiveMentors
@@ -57,7 +57,7 @@ export const EditMentor = ({ id }) => {
     deleteMentor,
     reactivateMentor,
     addAlert,
-    fetchCourses,
+    fetchActiveCourses,
     globalLoadStudentGroups,
   ]);
 
@@ -95,7 +95,7 @@ export const EditMentor = ({ id }) => {
     data: allCourses,
     isLoading: allCoursesAreLoading,
     loaded: allCoursesAreLoaded,
-  } = useSelector(coursesSelector, shallowEqual);
+  } = useSelector(coursesActiveSelector, shallowEqual);
 
   const {
     isLoading: editedIsLoading,

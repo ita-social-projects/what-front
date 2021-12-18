@@ -46,6 +46,7 @@ export const paths = {
   SCHEDULE_EDIT: '/schedule/edit',
   SCHEDULE_ADD: '/schedule/add',
 
+  HOMEWORK: '/homework',
   HOMEWORK_DETAILS: '/homework/details',
   HOMEWORK_ADD: '/homework/add',
   HOMEWORK_EDIT: '/homework/edit',
