@@ -18,6 +18,7 @@ import {
   exportWatcher
 } from './models/index.js';
 import { homeworkWatcher } from './models/homework/actions.js';
+import { homeworkStudentWatcher } from './models/homework-student/actions.js';
 
 export function* rootSaga() {
   yield all([
@@ -37,6 +38,7 @@ export function* rootSaga() {
     fork(importWatcher),
     fork(homeworkWatcher),
     fork(eventWatcher),
+    fork(homeworkStudentWatcher),
     fork(exportWatcher)
   ]);
 }
