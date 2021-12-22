@@ -9,6 +9,18 @@
   }
 }
 
+.custom-control-input:focus~
+.custom-control-label::before {
+  border-color: map-get($colors, accent-color) !important;
+  box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;
+}
+
+.custom-control-input:checked~
+.custom-control-label::before {
+  border-color: map-get($colors, accent-color) !important;
+  background-color: map-get($colors, accent-color) !important;
+}
+
 .change-rows{
   margin: 0 10px;
   width: fit-content !important;

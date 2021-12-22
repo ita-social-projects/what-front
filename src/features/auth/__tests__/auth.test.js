@@ -1,67 +1,97 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import { useActions } from '@/shared/hooks';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Auth } from '../';
 
-jest.mock('react-redux', () => ({ useSelector: jest.fn() }));
+import { useActions } from '@/shared/index.js';
+import { login } from '@models/index.js';
+import { Auth } from '../auth.js';
+
+jest.mock('react-redux', () => ({ useSelector: jest.fn().mockReturnValue({
+  isLoading: false,
+  error: '',
+  loaded: true,
+}) }));
 
 jest.mock('@/shared/hooks', () => ({
-    useActions: jest.fn(),
+  useActions: jest.fn().mockReturnValue(jest.fn()),
 }));
 
+describe('Auth', () => {
+  let formValues;
+  beforeEach(() => {
+    formValues = {
+      email: 'testmail@gmail.com',
+      password: 'Testpassw!ord123',
+    };
+  });
 
-describe('App', () => {
-    let mockedState;
-    beforeEach(() => {
-        mockedState = {
-            isLoading: false,
-            error: '',
-            loaded: true,
-            currentUser: undefined,
-        };
-        useSelector.mockReturnValue(mockedState);
+  it('should render component', () => {
+    const { container } = render(<Router><Auth /></Router>);
+    const authContainer = container.getElementsByClassName('container');
+
+    expect(authContainer).toMatchSnapshot();
+  });
+
+  it('should validate the form', async () => {
+    const { getByText, getAllByText } = render(<Router><Auth /></Router>);
+
+    const FORM_FIELD_AMOUNT = 2;
+    const submitButton = getByText('Sign in');
+
+    await waitFor(() => {
+      fireEvent.click(submitButton);
     });
 
-    it('should render auth component', () => {
-        const { container } = render(<Router><Auth /></Router>);
-        const authWrapper = container.querySelector('.container');
-        const authCard = container.querySelector('.card');
+    const errors = getAllByText('This field is required');
 
-        expect(authWrapper).toBeInTheDocument();
-        expect(authCard).toBeInTheDocument();
+    expect(errors).toHaveLength(FORM_FIELD_AMOUNT);
+    expect(errors).toMatchSnapshot();
+  });
+
+  it('should handle error receiving', () => {
+    useSelector.mockReturnValue({
+      isLoading: false,
+      error: 'Something went wrong',
+      loaded: true,
     });
 
-    it('should submit form correctly', async () => {
-        const formValues = {
-            email: 'testemail@gmail.com',
-            password: 'testpassword123'
-        };
-        const submitHandler = jest.fn();
-        useActions.mockReturnValue(submitHandler);
+    const { getByText } = render(<Router><Auth /></Router>);
 
-        const { container } = render(<Router><Auth /></Router>);
+    const error = getByText('Something went wrong');
+    expect(error).toBeInTheDocument();
+  });
 
-        const email = container.querySelector('#email');
-        const password = container.querySelector('#password');
-        const submitButton = container.querySelector('button[type="submit"]');
+  it('should submit the form with correct schema', async () => {
+    const { getByPlaceholderText, getByText } = render(<Router><Auth /></Router>);
 
-        fireEvent.change(email, {
-            target: {
-                value: formValues.email,
-            },
-        });
-        fireEvent.change(password, {
-            target: {
-                value: formValues.password,
-            },
-        });
+    const email = getByPlaceholderText('Email address');
+    const password = getByPlaceholderText('Password');
+    const submitButton = getByText('Sign in');
 
-        await waitFor(() => {
-            fireEvent.click(submitButton);
-        });
+    const signIn = useActions(login);
 
-        expect(submitHandler).toHaveBeenCalledWith(formValues);
-    })
+    fireEvent.change(email, {
+      target: {
+        value: formValues.email,
+      },
+    });
+
+    fireEvent.change(password, {
+      target: {
+        value: formValues.password,
+      },
+    });
+
+    await waitFor(() => {
+      fireEvent.click(submitButton);
+    });
+
+    signIn({
+      email: email.value,
+      password: password.value,
+    });
+
+    expect(signIn).toHaveBeenCalledWith(formValues);
+  });
 });

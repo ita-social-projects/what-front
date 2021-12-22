@@ -1,0 +1,15 @@
+@import '../../../styles/main';
+
+.button {
+  @include button();
+}
+
+.error {
+  padding-top: 5px;
+  color: red;
+}
+
+.loader-centered {
+  display: block !important;
+  margin: 20px auto;
+}

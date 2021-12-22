@@ -1,0 +1,559 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test add-schedule component add-schedule component should be rendered 1`] = `
+<div
+  data-testid="add-schedule"
+>
+  <form
+    action="#"
+  >
+    <label
+      class="row m-0 pt-3 d-flex"
+      for="patternType"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Recurrence pattern:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <select
+          class="w-100"
+          data-testid="patternType"
+          id="patternType"
+          name="patternType"
+        >
+          <option
+            label="Select a recurrence type"
+            value=""
+          />
+          <option
+            label="daily"
+            value="daily"
+          />
+          <option
+            label="weekly"
+            value="weekly"
+          />
+          <option
+            label="on the same day of the month"
+            value="on the same day of the month"
+          />
+          <option
+            label="on the same day of the week in the month (example: \\"every second Wednesday of the month\\")"
+            value="on the same day of the week in the month (example: \\"every second Wednesday of the month\\")"
+          />
+        </select>
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      for="interval"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Interval between each occurrence:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <select
+          class="w-100"
+          data-testid="interval"
+          id="interval"
+          name="interval"
+        >
+          <option
+            label="Select an interval"
+            value=""
+          />
+        </select>
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      for="dayOfWeek"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Days of week:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <span
+          class="pr-3"
+        >
+          <input
+            class="mr-1"
+            disabled=""
+            name="daysOfWeek"
+            type="checkbox"
+            value="Monday"
+          />
+          <span>
+            Monday
+          </span>
+        </span>
+        <span
+          class="pr-3"
+        >
+          <input
+            class="mr-1"
+            disabled=""
+            name="daysOfWeek"
+            type="checkbox"
+            value="Tuesday"
+          />
+          <span>
+            Tuesday
+          </span>
+        </span>
+        <span
+          class="pr-3"
+        >
+          <input
+            class="mr-1"
+            disabled=""
+            name="daysOfWeek"
+            type="checkbox"
+            value="Wednesday"
+          />
+          <span>
+            Wednesday
+          </span>
+        </span>
+        <span
+          class="pr-3"
+        >
+          <input
+            class="mr-1"
+            disabled=""
+            name="daysOfWeek"
+            type="checkbox"
+            value="Thursday"
+          />
+          <span>
+            Thursday
+          </span>
+        </span>
+        <span
+          class="pr-3"
+        >
+          <input
+            class="mr-1"
+            disabled=""
+            name="daysOfWeek"
+            type="checkbox"
+            value="Friday"
+          />
+          <span>
+            Friday
+          </span>
+        </span>
+        <span
+          class="pr-3"
+        >
+          <input
+            class="mr-1"
+            disabled=""
+            name="daysOfWeek"
+            type="checkbox"
+            value="Saturday"
+          />
+          <span>
+            Saturday
+          </span>
+        </span>
+        <span
+          class="pr-3"
+        >
+          <input
+            class="mr-1"
+            disabled=""
+            name="daysOfWeek"
+            type="checkbox"
+            value="Sunday"
+          />
+          <span>
+            Sunday
+          </span>
+        </span>
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      data-testid="dates"
+      for="dates"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Day of month:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <select
+          class="w-100"
+          disabled=""
+          id="dates"
+          name="dates"
+        >
+          <option
+            label="Select a day"
+            value=""
+          />
+          <option
+            label="1"
+            value="1"
+          />
+          <option
+            label="2"
+            value="2"
+          />
+          <option
+            label="3"
+            value="3"
+          />
+          <option
+            label="4"
+            value="4"
+          />
+          <option
+            label="5"
+            value="5"
+          />
+          <option
+            label="6"
+            value="6"
+          />
+          <option
+            label="7"
+            value="7"
+          />
+          <option
+            label="8"
+            value="8"
+          />
+          <option
+            label="9"
+            value="9"
+          />
+          <option
+            label="10"
+            value="10"
+          />
+          <option
+            label="11"
+            value="11"
+          />
+          <option
+            label="12"
+            value="12"
+          />
+          <option
+            label="13"
+            value="13"
+          />
+          <option
+            label="14"
+            value="14"
+          />
+          <option
+            label="15"
+            value="15"
+          />
+          <option
+            label="16"
+            value="16"
+          />
+          <option
+            label="17"
+            value="17"
+          />
+          <option
+            label="18"
+            value="18"
+          />
+          <option
+            label="19"
+            value="19"
+          />
+          <option
+            label="20"
+            value="20"
+          />
+          <option
+            label="21"
+            value="21"
+          />
+          <option
+            label="22"
+            value="22"
+          />
+          <option
+            label="23"
+            value="23"
+          />
+          <option
+            label="24"
+            value="24"
+          />
+          <option
+            label="25"
+            value="25"
+          />
+          <option
+            label="26"
+            value="26"
+          />
+          <option
+            label="27"
+            value="27"
+          />
+          <option
+            label="28"
+            value="28"
+          />
+          <option
+            label="29"
+            value="29"
+          />
+          <option
+            label="30"
+            value="30"
+          />
+          <option
+            label="31"
+            value="31"
+          />
+        </select>
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      data-testid="index"
+      for="index"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Instance of the allowed days the event occurs:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <select
+          class="w-100"
+          disabled=""
+          id="index"
+          name="index"
+        >
+          <option
+            label="Select in what days of week the event occurs"
+            value=""
+          />
+          <option
+            label="first"
+            value="first"
+          />
+          <option
+            label="second"
+            value="second"
+          />
+          <option
+            label="third"
+            value="third"
+          />
+          <option
+            label="fourth"
+            value="fourth"
+          />
+          <option
+            label="fifth"
+            value="fifth"
+          />
+          <option
+            label="sixth"
+            value="sixth"
+          />
+          <option
+            label="last"
+            value="last"
+          />
+        </select>
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      data-testid="startDate"
+      for="startDate"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Start date:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <input
+          class="w-100"
+          id="startDate"
+          name="startDate"
+          type="datetime-local"
+          value=""
+        />
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      data-testid="finishDate"
+      for="finishDate"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        End date:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <input
+          class="w-100"
+          id="finishDate"
+          name="finishDate"
+          type="datetime-local"
+          value=""
+        />
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      data-testid="group"
+      for="group"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Groups:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <select
+          class="w-100"
+          id="group"
+          name="group"
+        >
+          <option
+            label="Select group"
+            value=""
+          />
+          <option
+            label="SX-13"
+            value="SX-13"
+          />
+          <option
+            label="SX-15"
+            value="SX-15"
+          />
+        </select>
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      data-testid="theme"
+      for="theme"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Themes:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <select
+          class="w-100"
+          id="theme"
+          name="theme"
+        >
+          <option
+            label="Select theme"
+            value=""
+          />
+          <option
+            label="3D Printing"
+            value="3D Printing"
+          />
+          <option
+            label="Animation"
+            value="Animation"
+          />
+          <option
+            label="Buffer Overflow Exploits and Defenses"
+            value="Buffer Overflow Exploits and Defenses"
+          />
+        </select>
+      </div>
+    </label>
+    <label
+      class="row m-0 pt-3 d-flex"
+      data-testid="mentor"
+      for="mentor"
+    >
+      <p
+        class="col-md-4 font-weight-bolder"
+      >
+        Mentors:
+      </p>
+      <div
+        class="col-md-8"
+      >
+        <select
+          class="w-100"
+          id="mentor"
+          name="mentor"
+        >
+          <option
+            label="Select mentor"
+            value=""
+          />
+          <option
+            label="Elizabeth Hill"
+            value="Elizabeth Hill"
+          />
+          <option
+            label="Barbara Harris"
+            value="Barbara Harris"
+          />
+          <option
+            label="Susan Clark"
+            value="Susan Clark"
+          />
+        </select>
+      </div>
+    </label>
+    <div
+      class="row m-0 pt-3"
+    >
+      <div
+        class="col-md-3 col-4"
+      >
+        <button
+          class="btn undefined"
+          type="submit"
+        >
+          Add Schedule
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+`;

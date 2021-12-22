@@ -46,6 +46,7 @@ export const paths = {
   SCHEDULE_EDIT: '/schedule/edit',
   SCHEDULE_ADD: '/schedule/add',
 
+  HOMEWORK: '/homework',
   HOMEWORK_DETAILS: '/homework/details',
   HOMEWORK_ADD: '/homework/add',
   HOMEWORK_EDIT: '/homework/edit',
@@ -61,6 +62,6 @@ export const paths = {
 export const homepages = {
   1: paths.COURSES, // student homepage
   2: paths.LESSONS, // mentor homepage
-  3: paths.MENTORS, // secretary
   4: paths.STUDENTS, // admin homepage
+  8: paths.MENTORS, // secretary homepage
 };

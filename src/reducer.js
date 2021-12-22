@@ -1,10 +1,25 @@
 import { combineReducers } from 'redux';
-import { counterReducer, listOfGroupsReducer, alertReducer } from './features/index.js';
 import {
-  mentorsReducer, themesReducer, coursesReducer,
-  schedulesReducer, studentsReducer, lessonsReducer,
-  accountReducer, secretariesReducer, studentGroupsReducer, dashboardReducer,
-  attachmentsReducer, importReducer,
+  counterReducer,
+  listOfGroupsReducer,
+  alertReducer,
+} from './features/index.js';
+
+import {
+  mentorsReducer,
+  themesReducer,
+  coursesReducer,
+  schedulesReducer,
+  studentsReducer,
+  lessonsReducer,
+  accountReducer,
+  secretariesReducer,
+  studentGroupsReducer,
+  dashboardReducer,
+  attachmentsReducer,
+  importReducer,
+  homeworkReducer,
+  exportReducer
 } from './models/index.js';
 
 export const rootReducer = combineReducers({
@@ -26,5 +41,7 @@ export const rootReducer = combineReducers({
     dashboard: dashboardReducer,
     attachments: attachmentsReducer,
     import: importReducer,
+    homework: homeworkReducer,
+    export: exportReducer,
   }),
 });

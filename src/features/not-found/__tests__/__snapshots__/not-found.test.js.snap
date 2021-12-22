@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NotFound renders NotFound component 1`] = `
+HTMLCollection [
+  <div
+    class="container"
+  >
+    <div
+      class="text-center"
+    >
+      <div
+        class="col-7"
+      >
+        <h1
+          class=""
+        >
+          404
+        </h1>
+        <p
+          class=""
+        >
+           This page is missing
+        </p>
+        <button
+          class="btn undefined mt-4"
+          type="button"
+        >
+          HOME
+        </button>
+      </div>
+    </div>
+  </div>,
+]
+`;

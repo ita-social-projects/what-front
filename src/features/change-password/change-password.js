@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paths, useActions } from '@/shared';
-import { changePasswordSelector, currentUserSelector, newPassword } from '@/models';
+import {
+  changePasswordSelector,
+  currentUserSelector,
+  newPassword,
+} from '@/models';
 
 import { Button, WithLoading } from '@/components';
 import { addAlert, ModalWindow } from '@/features';
@@ -27,7 +31,10 @@ export const ChangePassword = () => {
     error: changePasswordError,
   } = useSelector(changePasswordSelector, shallowEqual);
 
-  const [setNewPassword, dispatchAddAlert] = useActions([newPassword, addAlert]);
+  const [setNewPassword, dispatchAddAlert] = useActions([
+    newPassword,
+    addAlert,
+  ]);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -64,7 +71,10 @@ export const ChangePassword = () => {
         <div className="container pb-2">
           <h3 className="pt-3">Change Password</h3>
           <hr />
-          <WithLoading isLoading={isChangePasswordLoading && !isChangePasswordLoaded} className="d-block mx-auto">
+          <WithLoading
+            isLoading={isChangePasswordLoading && !isChangePasswordLoaded}
+            className="d-block mx-auto"
+          >
             <Formik
               initialValues={{
                 email: currentUser?.email,
@@ -80,7 +90,9 @@ export const ChangePassword = () => {
                   <div className="container px-0">
                     <div className="row m-0">
                       <div className="col-md-4 pt-1 px-0">
-                        <label htmlFor="email" className="font-weight-bold">Email address:</label>
+                        <label htmlFor="email" className="font-weight-bold">
+                          Email address:
+                        </label>
                       </div>
                       <div className="col-md-8 px-0">
                         <Field
@@ -90,60 +102,100 @@ export const ChangePassword = () => {
                           id="email"
                           value={values?.email}
                           disabled
+                          placeholder="Email address"
                         />
                       </div>
                     </div>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 pt-1 px-0">
-                        <label htmlFor="currentPassword" className="font-weight-bold">Current password:</label>
+                        <label
+                          htmlFor="currentPassword"
+                          className="font-weight-bold"
+                        >
+                          Current password:
+                        </label>
                       </div>
                       <div className="col-md-8 px-0">
                         <Field
                           type="password"
-                          className={className('form-control', { 'border-danger': errors.currentPassword })}
+                          className={className('form-control', {
+                            'border-danger': errors.currentPassword,
+                          })}
                           name="currentPassword"
                           id="currentPassword"
                           placeholder="Current password"
                         />
-                        {touched.currentPassword && errors.currentPassword && <div className="text-danger mt-3">{errors?.currentPassword}</div>}
+                        {touched.currentPassword && errors.currentPassword && (
+                          <div className="text-danger mt-3">
+                            {errors?.currentPassword}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 pt-1 px-0">
-                        <label htmlFor="newPassword" className="font-weight-bold">New password:</label>
+                        <label
+                          htmlFor="newPassword"
+                          className="font-weight-bold"
+                        >
+                          New password:
+                        </label>
                       </div>
                       <div className="col-md-8 px-0">
                         <Field
                           type="password"
-                          className={className('form-control', { 'border-danger': errors.newPassword })}
+                          className={className('form-control', {
+                            'border-danger': errors.newPassword,
+                          })}
                           name="newPassword"
                           id="newPassword"
                           placeholder="New password"
                         />
-                        {touched.newPassword && errors.newPassword && <div className="text-danger mt-3">{errors?.newPassword}</div>}
+                        {touched.newPassword && errors.newPassword && (
+                          <div className="text-danger mt-3">
+                            {errors?.newPassword}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="row m-0 pt-3">
                       <div className="col-md-4 pt-1 px-0">
-                        <label htmlFor="confirmNewPassword" className="font-weight-bold">Confirm password:</label>
+                        <label
+                          htmlFor="confirmNewPassword"
+                          className="font-weight-bold"
+                        >
+                          Confirm password:
+                        </label>
                       </div>
                       <div className="col-md-8 px-0">
                         <Field
                           type="password"
-                          className={className('form-control', { 'border-danger': errors.confirmNewPassword })}
+                          className={className('form-control', {
+                            'border-danger': errors.confirmNewPassword,
+                          })}
                           name="confirmNewPassword"
                           id="confirmNewPassword"
                           placeholder="Confirm password"
                         />
-                        {touched.confirmNewPassword && errors.confirmNewPassword && <div className="text-danger mt-3">{errors?.confirmNewPassword}</div>}
+                        {touched.confirmNewPassword &&
+                          errors.confirmNewPassword && (
+                            <div className="text-danger mt-3">
+                              {errors?.confirmNewPassword}
+                            </div>
+                          )}
                       </div>
                     </div>
                     <div className="row m-0 py-3">
                       <div className="col-md-3 col-sm-4 col-6 pl-0 pr-1">
                         <Button
                           type="button"
-                          className={className(styles['cancel-button'], 'w-100')}
-                          onClick={() => { history.goBack(); }}
+                          className={className(
+                            styles['cancel-button'],
+                            'w-100'
+                          )}
+                          onClick={() => {
+                            history.goBack();
+                          }}
                         >
                           Cancel
                         </Button>
@@ -152,9 +204,14 @@ export const ChangePassword = () => {
                         <Button
                           type="submit"
                           className=" w-100"
-                          disabled={!isValid || !dirty || isChangePasswordLoading
-                          || errors.currentPassword || errors.newPassword
-                          || errors.confirmNewPassword}
+                          disabled={
+                            !isValid ||
+                            !dirty ||
+                            isChangePasswordLoading ||
+                            errors.currentPassword ||
+                            errors.newPassword ||
+                            errors.confirmNewPassword
+                          }
                         >
                           Save
                         </Button>
@@ -169,7 +226,8 @@ export const ChangePassword = () => {
               onSubmit={handleConfirm}
               onClose={handleCloseModal}
               marginLeft
-            >Are you sure you want to change password?
+            >
+              Are you sure you want to change password?
             </ModalWindow>
           </WithLoading>
         </div>
