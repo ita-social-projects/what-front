@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render of CourseDetails Should the component be rendered. 1`] = `
+HTMLCollection [
+  <div
+    class="container"
+  >
+    <div
+      class="row justify-content-center"
+    >
+      <div
+        class="col-sm-12 card shadow col-md-12"
+      >
+        <div
+          class="px-2 py-4"
+        >
+          <h3>
+            Course Details
+          </h3>
+          <hr />
+          <div
+            class="row"
+          >
+            <div
+              class="col-12 col-md-6 font-weight-bolder"
+            >
+              <span>
+                Course name: 
+              </span>
+            </div>
+            <div
+              class="col-12 col-md-6"
+            >
+              <span />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
+]
+`;

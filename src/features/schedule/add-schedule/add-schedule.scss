@@ -1,4 +1,4 @@
-@import "../../../styles/main";
+@import '../../../styles/main';
 
 .button {
   @include button();
@@ -12,8 +12,4 @@
 .loader-centered {
   display: block !important;
   margin: 20px auto;
-}
-
-label {
-  height: 70px;
 }
