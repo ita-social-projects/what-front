@@ -321,7 +321,7 @@ export const ListOfGroups = () => {
                 </button>
               </div>
             </div>
-            <div className="col-3 ">
+            <div className={classNames("col-3", styles["blabla"])}>
               <Search onSearch={handleSearch} placeholder="Group's name" />
             </div>
             <div className="col-2">
@@ -360,7 +360,7 @@ export const ListOfGroups = () => {
                 </select>
               </div>
             }
-            <div className="col-3 text-right">
+            <div className={classNames("col-4 text-right", styles["buttons-block"])}>
               <Button
                 onClick={downloadGroups}
                 type="button"
@@ -374,7 +374,7 @@ export const ListOfGroups = () => {
               <Button
                 onClick={handleAddGroup}
                 className={classNames(
-                  "btn m-0 mt-2 btn-warning ",
+                  "btn m-0 ml-2 btn-warning ",
                   styles["left-add-btn"]
                 )}
               >
