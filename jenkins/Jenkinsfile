@@ -6,6 +6,31 @@ pipeline {
 				sh 'ls'
 			}
 		}
+
+		stage("Stage npm install") {
+			steps {
+				sh 'npm install'
+			}
+		}
+
+		stage("build & SonarQube analysis") {
+			steps {
+				withSonarQubeEnv('SonarQubeScannerName') {
+					sh '''sonar-scanner -Dsonar.sources=.'''
+				}
+			}
+		}
+
+		stage("Quality Gate") {
+			steps {
+				timeout(time: 1, unit: 'HOURS') {
+					waitForQualityGate abortPipeline: true
+				}
+			}
+		}
+  	}
+}
+
 		// stage('Clone repository') {
 		// 	steps {
 		// 	  checkout([$class: 'GitSCM', branches: [[name: '*/fakemaster']],
@@ -14,11 +39,7 @@ pipeline {
 		// 	  userRemoteConfigs: [[url: 'https://github.com/anmorgul/what-front.git']]])
 		// 	}
 		// }
-		stage("Stage npm install") {
-			steps {
-				sh 'npm install'
-			}
-		}
+
 		// stage("Stage eslint + test") {
 		// 	parallel {
 		// 		stage("Stage eslint") {
@@ -58,17 +79,6 @@ pipeline {
 		// 	}
 		// }
 
-
-
-		stage("build & SonarQube analysis") {
-			steps {
-				withSonarQubeEnv('SonarQubeScannerName') {
-					sh '''sonar-scanner -Dsonar.sources=.'''
-
-				}
-			}
-		}
-
 // mvn sonar:sonar \
 //   -Dsonar.projectKey=jenkins_what_front \
 //   -Dsonar.host.url=http://sonarqube:9000 \
@@ -79,17 +89,3 @@ pipeline {
 //   -Dsonar.sources=. \
 //   -Dsonar.host.url=http://sonarqube:9000 \
 //   -Dsonar.login=4b85add06702e6fc9856c4fcef21116486fd2804
-
-
-		stage("Quality Gate") {
-			steps {
-				timeout(time: 1, unit: 'HOURS') {
-					waitForQualityGate abortPipeline: true
-				}
-			}
-		}
-
-
-
-  	}
-}
