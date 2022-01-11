@@ -19,24 +19,24 @@ pipeline {
 				sh 'npm install'
 			}
 		}
-		stage("Stage eslint + test") {
-			parallel {
-				stage("Stage eslint") {
-					steps {
-					catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-						sh 'npx eslint .'
-						}
-						}
-					}
-				stage("Stage test") {
-					steps {
-					catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-						sh 'npm run test'
-						}
-					}
-				}
-				}
-			}
+		// stage("Stage eslint + test") {
+		// 	parallel {
+		// 		stage("Stage eslint") {
+		// 			steps {
+		// 			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+		// 				sh 'npx eslint .'
+		// 				}
+		// 				}
+		// 			}
+		// 		stage("Stage test") {
+		// 			steps {
+		// 			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+		// 				sh 'npm run test'
+		// 				}
+		// 			}
+		// 		}
+		// 		}
+		// 	}
 		stage("Stage build") {
 			steps {
 				sh 'npm run build'
@@ -57,5 +57,37 @@ pipeline {
 		// 		'''
 		// 	}
 		// }
+
+
+
+		stage("build & SonarQube analysis") {
+			steps {
+				withSonarQubeEnv('My SonarQube Server') {
+				sh 'sonar-scanner -Dsonar.sources=.'
+
+// mvn sonar:sonar \
+//   -Dsonar.projectKey=jenkins_what_front \
+//   -Dsonar.host.url=http://sonarqube:9000 \
+//   -Dsonar.login=4b85add06702e6fc9856c4fcef21116486fd2804
+
+// sonar-scanner \
+//   -Dsonar.projectKey=jenkins_what_front \
+//   -Dsonar.sources=. \
+//   -Dsonar.host.url=http://sonarqube:9000 \
+//   -Dsonar.login=4b85add06702e6fc9856c4fcef21116486fd2804
+
+
+				}
+			}
+		}
+		stage("Quality Gate") {
+			steps {
+				timeout(time: 1, unit: 'HOURS') {
+				waitForQualityGate abortPipeline: true
+			}
+		}
+
+
+
   	}
 }
