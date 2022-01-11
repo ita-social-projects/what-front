@@ -37,11 +37,11 @@ pipeline {
 		// 		}
 		// 		}
 		// 	}
-		stage("Stage build") {
-			steps {
-				sh 'npm run build'
-			}
-		}
+		// stage("Stage build") {
+		// 	steps {
+		// 		sh 'npm run build'
+		// 	}
+		// }
 		// stage("sonar") {
 		// 	steps {
 		// 		sh 'ls'
