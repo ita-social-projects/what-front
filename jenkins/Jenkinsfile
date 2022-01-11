@@ -63,7 +63,11 @@ pipeline {
 		stage("build & SonarQube analysis") {
 			steps {
 				withSonarQubeEnv('SonarQubeScannerName') {
-				sh 'sonar-scanner -Dsonar.sources=.'
+					sh '''sonar-scanner -Dsonar.sources=.'''
+
+				}
+			}
+		}
 
 // mvn sonar:sonar \
 //   -Dsonar.projectKey=jenkins_what_front \
@@ -77,9 +81,6 @@ pipeline {
 //   -Dsonar.login=4b85add06702e6fc9856c4fcef21116486fd2804
 
 
-				}
-			}
-		}
 		stage("Quality Gate") {
 			steps {
 				timeout(time: 1, unit: 'HOURS') {
