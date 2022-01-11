@@ -62,7 +62,7 @@ pipeline {
 
 		stage("build & SonarQube analysis") {
 			steps {
-				withSonarQubeEnv('My SonarQube Server') {
+				withSonarQubeEnv('SonarQubeScannerName') {
 				sh 'sonar-scanner -Dsonar.sources=.'
 
 // mvn sonar:sonar \
