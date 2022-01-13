@@ -10,13 +10,7 @@ pipeline {
 		stage("Stage npm install") {
 			steps {
 				sh 'npm install'
-				if {expression { env.BRANCH_NAME == 'fakedev' }} {
-					sh '''
-						#!/bin/bash
-						echo Deploying in fakedev....
-						'''
-				}
-				sh 'echo env.BRANCH_NAME'
+				println ${env.BRANCH_NAME}
 			}
 		}
 
