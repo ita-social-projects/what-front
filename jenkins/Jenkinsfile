@@ -37,10 +37,10 @@ pipeline {
 				sh 'ls'
 				sh '''
 				/home/jenkinsnode/sonar-scanner/bin/sonar-scanner \
-				-Dsonar.projectKey=pk1 \
+				-Dsonar.projectKey=jenkins_what_front \
 				-Dsonar.sources=. \
 				-Dsonar.host.url=http://192.168.1.74:9000 \
-				-Dsonar.login=c888f7168cd9b36349de2ac44912718063162546
+				-Dsonar.login=b8b95ddb266ce3bf89791fac824fa293166db85b
 				'''
 			}
 		}
