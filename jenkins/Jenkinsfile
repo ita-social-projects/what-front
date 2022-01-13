@@ -10,7 +10,7 @@ pipeline {
 		stage("Stage npm install") {
 			steps {
 				sh 'npm install'
-				println ${env.BRANCH_NAME}
+				println "${env.BRANCH_NAME}"
 			}
 		}
 
