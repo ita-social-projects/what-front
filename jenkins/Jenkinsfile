@@ -36,7 +36,7 @@ pipeline {
 				// sh 'unzip -f sonar-scanner-cli-4.6.2.2472.zip'
 				sh 'ls'
 				sh '''
-				/home/jenkinsnode/sonar-scanner/bin/sonar-scanner-4.6.2.2472/bin/sonar-scanner \
+				/home/jenkinsnode/sonar-scanner/bin/sonar-scanner \
 				-Dsonar.projectKey=pk1 \
 				-Dsonar.sources=. \
 				-Dsonar.host.url=http://192.168.1.128:9000 \
