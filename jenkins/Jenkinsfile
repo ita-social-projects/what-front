@@ -24,6 +24,17 @@ pipeline {
 		// 		}
 		// }
 
+		stage('SCM') {
+			git 'https://github.com/foo/bar.git'
+		}
+		stage('SonarQube analysis') {
+			def scannerHome = tool 'SonarScanner 4.0';
+			withSonarQubeEnv('My SonarQube Server') { // If you have configured more than one global server connection, you can specify its name
+				sh "${scannerHome}/bin/sonar-scanner"
+			}
+		}
+
+
 		stage("build & SonarQube analysis") {
 			// steps {
 			// 	withSonarQubeEnv('SonarQubeScannerName') {
@@ -40,7 +51,7 @@ pipeline {
 				-Dsonar.host.url=http://192.168.1.128:9000 \
 				-Dsonar.login=admin \
 				-Dsonar.sources=./ \
-				-sonar.password=adminSonarPassword \
+				-Dsonar.password=adminSonarPassword \
 				-Dsonar.qualitygate.wait=true \
 				-Dsonar.qualitygate.timeout=3000 \
 				'''
