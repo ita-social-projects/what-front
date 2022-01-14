@@ -7,12 +7,12 @@ pipeline {
 			}
 		}
 
-		stage("Stage npm install") {
-			steps {
-				sh 'npm install'
-				println "${env.BRANCH_NAME}"
-			}
-		}
+		// stage("Stage npm install") {
+		// 	steps {
+		// 		sh 'npm install'
+		// 		println "${env.BRANCH_NAME}"
+		// 	}
+		// }
 
 		// stage('Deploy Master') {
 		// 	when {expression { env.BRANCH_NAME == 'master' }}
@@ -32,6 +32,13 @@ pipeline {
 				def scannerHome = tool 'SonarQubeScannerName';
 			}
 			steps {
+				sh 'pwd'
+				sh 'ls /home'
+				sh 'ls /home/jenkinsnode'
+				sh 'ls /home/jenkinsnode/tools'
+				sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/'
+				sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScannerName'
+				sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScannerName/sonar-scanner-cli-4.6.2.2472'
 				sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScannerName/sonar-scanner-cli-4.6.2.2472/bin'
 				withSonarQubeEnv('SonarQube9000') { // If you have configured more than one global server connection, you can specify its name
 					sh "${scannerHome}/bin/sonar-scanner"
