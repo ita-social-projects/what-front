@@ -37,13 +37,13 @@ pipeline {
 				sh '''
 				/home/jenkinsnode/sonar-scanner/bin/sonar-scanner -X \
 				-Dsonar.projectKey=jenkins_what_front \
-				-Dsonar.sources=./ \
 				-Dsonar.host.url=http://192.168.1.128:9000 \
 				-Dsonar.login=b8b95ddb266ce3bf89791fac824fa293166db85b
 				-Dsonar.qualitygate.wait=true
 				-Dsonar.qualitygate.timeout=3000
 				-sonar.password=adminSonarPassword
 				'''
+				// -Dsonar.sources=/ \
 			}
 		}
 
