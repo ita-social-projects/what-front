@@ -27,14 +27,14 @@ pipeline {
 		// stage('SCM') {
 		// 	git 'https://github.com/foo/bar.git'
 		// }
-		stage('SonarQube analysis') {
-			steps {
-				def scannerHome = tool 'SonarQubeScannerName';
-				withSonarQubeEnv('SonarQube9000') { // If you have configured more than one global server connection, you can specify its name
-					sh "${scannerHome}/bin/sonar-scanner"
-				}
-			}
-		}
+		// stage('SonarQube analysis') {
+		// 	steps {
+		// 		def scannerHome = tool 'SonarQubeScannerName';
+		// 		withSonarQubeEnv('SonarQube9000') { // If you have configured more than one global server connection, you can specify its name
+		// 			sh "${scannerHome}/bin/sonar-scanner"
+		// 		}
+		// 	}
+		// }
 
 
 		stage("build & SonarQube analysis") {
@@ -50,7 +50,7 @@ pipeline {
 				sh '''
 				/home/jenkinsnode/sonar-scanner/bin/sonar-scanner -X \
 				-Dsonar.projectKey=jenkins_what_front \
-				-Dsonar.host.url=http://192.168.1.128:9000 \
+				-Dsonar.host.url=http://192.168.1.74:9000 \
 				-Dsonar.login=admin \
 				-Dsonar.sources=./ \
 				-Dsonar.password=adminSonarPassword \
