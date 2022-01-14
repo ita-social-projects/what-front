@@ -34,7 +34,6 @@ pipeline {
 				sh 'ls'
 				// sh '''wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472.zip'''
 				// sh 'unzip -f sonar-scanner-cli-4.6.2.2472.zip'
-				sh 'ls'
 				sh '''
 				/home/jenkinsnode/sonar-scanner/bin/sonar-scanner \
 				-Dsonar.projectKey=jenkins_what_front \
