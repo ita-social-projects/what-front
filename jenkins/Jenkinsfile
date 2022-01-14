@@ -41,7 +41,7 @@ pipeline {
 				// sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScannerName/sonar-scanner-4.6.2.2472'
 				// sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScannerName/sonar-scanner-4.6.2.2472/bin'
 				withSonarQubeEnv('SonarQube9000') { // If you have configured more than one global server connection, you can specify its name
-					sh "${scannerHome}/bin/sonar-scanner  -Dsonar.projectKey=66c6d51eb60150c34139d8552ba6e3afb1be3df4"
+					sh "${scannerHome}/bin/sonar-scanner  -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4"
 				}
 			}
 		}
