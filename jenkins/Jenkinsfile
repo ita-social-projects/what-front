@@ -7,14 +7,54 @@ pipeline {
 				sh 'ls'
 			}
 		}
-
-		// stage("Stage npm install") {
-		// 	steps {
-		// 		sh 'npm install'
-		// 		println "${env.BRANCH_NAME}"
-		// 	}
-		// }
-
+		stage("Stage npm install") {
+			steps {
+				sh 'npm install'
+				println "${env.BRANCH_NAME}"
+			}
+		}
+		stage("Stage eslint + test") {
+			parallel {
+				stage("Stage eslint") {
+					steps {
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+								sh 'npx eslint .'
+							}
+						}
+					}
+				stage("Stage test") {
+					steps {
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+								sh 'npm run test'
+							}
+						}
+					}
+				}
+			}
+		stage("Stage build") {
+			steps {
+				sh 'npm run build'
+			}
+		}
+		stage('SonarQube analysis') {
+			environment {
+				def scannerHome = tool 'SonarQubeScannerMaven';
+			}
+			steps {
+				withSonarQubeEnv('SonarQube9000') {
+					sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${sonartoken}"
+				}
+				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
+				// -Dsonar.projectKey=${sonartoken}
+			}
+		}
+		stage("Quality Gate") {
+			steps {
+				timeout(time: 1, unit: 'HOURS') {
+					waitForQualityGate abortPipeline: true
+				}
+			}
+		}
 		// stage('Deploy Master') {
 		// 	when {expression { env.BRANCH_NAME == 'master' }}
 		// 		steps {
@@ -24,123 +64,5 @@ pipeline {
         //                            '''
 		// 		}
 		// }
-
-		// stage('SCM') {
-		// 	git 'https://github.com/foo/bar.git'
-		// }
-		stage('SonarQube analysis') {
-			environment {
-				def scannerHome = tool 'SonarQubeScannerMaven';
-			}
-			steps {
-				// sh 'pwd'
-				// sh 'ls /home'
-				// sh 'ls /home/jenkinsnode'
-				// sh 'ls /home/jenkinsnode/tools'
-				// sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/'
-				// sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScannerName'
-				// sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScannerName/sonar-scanner-4.6.2.2472'
-				// sh 'ls /home/jenkinsnode/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScannerName/sonar-scanner-4.6.2.2472/bin'
-				withSonarQubeEnv('SonarQube9000') { // If you have configured more than one global server connection, you can specify its name
-					sh "${scannerHome}/bin/sonar-scanner"
-				}
-				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
-				// -Dsonar.projectKey=p1
-			}
-		}
-
-
-		// stage("build & SonarQube analysis") {
-		// 	// steps {
-		// 	// 	withSonarQubeEnv('SonarQubeScannerName') {
-		// 	// 		sh '''sonar-scanner -Dsonar.sources=.'''
-		// 	// 	}
-		// 	// }
-		// 	steps {
-		// 		sh 'ls'
-		// 		// sh '''wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472.zip'''
-		// 		// sh 'unzip -f sonar-scanner-cli-4.6.2.2472.zip'
-		// 		sh '''
-		// 		/home/jenkinsnode/sonar-scanner/bin/sonar-scanner -X \
-		// 		-Dsonar.projectKey=jenkins_what_front \
-		// 		-Dsonar.host.url=http://192.168.1.74:9000 \
-		// 		-Dsonar.login=admin \
-		// 		-Dsonar.sources=./ \
-		// 		-Dsonar.password=adminSonarPassword \
-		// 		-Dsonar.qualitygate.wait=true \
-		// 		-Dsonar.qualitygate.timeout=3000 \
-		// 		'''
-		// 		// -sonar.password=adminSonarPassword \
-		// 		// -Dsonar.sources=/ \
-		// 		// -Dsonar.login=b8b95ddb266ce3bf89791fac824fa293166db85b \
-		// 	}
-		// }
-
-		stage("Quality Gate") {
-			steps {
-				timeout(time: 1, unit: 'HOURS') {
-					waitForQualityGate abortPipeline: true
-				}
-			}
-		}
   	}
 }
-
-		// stage('Clone repository') {
-		// 	steps {
-		// 	  checkout([$class: 'GitSCM', branches: [[name: '*/fakemaster']],
-		// 	  doGenerateSubmoduleConfigurations: false, extensions: [],
-		// 	  submoduleCfg: [],
-		// 	  userRemoteConfigs: [[url: 'https://github.com/anmorgul/what-front.git']]])
-		// 	}
-		// }
-
-		// stage("Stage eslint + test") {
-		// 	parallel {
-		// 		stage("Stage eslint") {
-		// 			steps {
-		// 			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-		// 				sh 'npx eslint .'
-		// 				}
-		// 				}
-		// 			}
-		// 		stage("Stage test") {
-		// 			steps {
-		// 			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-		// 				sh 'npm run test'
-		// 				}
-		// 			}
-		// 		}
-		// 		}
-		// 	}
-		// stage("Stage build") {
-		// 	steps {
-		// 		sh 'npm run build'
-		// 	}
-		// }
-		// stage("sonar") {
-		// 	steps {
-		// 		sh 'ls'
-		// 		sh '''wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472.zip'''
-		// 		sh 'unzip -f sonar-scanner-cli-4.6.2.2472.zip'
-		// 		sh 'ls'
-		// 		sh '''
-		// 		./sonar-scanner-4.6.2.2472/bin/sonar-scanner \
-		// 		-Dsonar.projectKey=pk1 \
-		// 		-Dsonar.sources=. \
-		// 		-Dsonar.host.url=http://192.168.1.128:9000 \
-		// 		-Dsonar.login=c888f7168cd9b36349de2ac44912718063162546
-		// 		'''
-		// 	}
-		// }
-
-// mvn sonar:sonar \
-//   -Dsonar.projectKey=jenkins_what_front \
-//   -Dsonar.host.url=http://sonarqube:9000 \
-//   -Dsonar.login=4b85add06702e6fc9856c4fcef21116486fd2804
-
-// sonar-scanner \
-//   -Dsonar.projectKey=jenkins_what_front \
-//   -Dsonar.sources=. \
-//   -Dsonar.host.url=http://sonarqube:9000 \
-//   -Dsonar.login=4b85add06702e6fc9856c4fcef21116486fd2804
