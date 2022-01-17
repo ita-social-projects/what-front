@@ -43,7 +43,7 @@ pipeline {
 			steps {
 				withSonarQubeEnv('SonarQube9000') {
 					withCredentials([string(credentialsId: 'sonartoken', variable: 'sonarProjectKey')]) {
-						echo ${sonarProjectKey}
+						echo "${sonarProjectKey}"
 						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${sonarProjectKey}"
 					}
 				}
