@@ -139,13 +139,15 @@ pipeline {
    			}
         }
 		success {
-			echo  TMSG 
+			echo  "success " + TMSG 
 			telegramSend(message: "success " + TMSG, chatId: -1001721361023)
 		}
-		aborted {             
+		aborted {   
+			echo  "aborted " + TMSG           
 			telegramSend(message: "aborted " + TMSG, chatId: -1001721361023)
 		}
 		failure {
+			echo  "failure " + TMSG 
 			telegramSend(message: "failure " + TMSG, chatId: -1001721361023)
 		}
 	}
