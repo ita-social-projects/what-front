@@ -147,6 +147,7 @@ pipeline {
 				}
 			}
 		}
+		//  + '.rc' + BUILD_ID + GIT_COMMIT
 		stage('nexus') {
 			steps {
 				script {
@@ -156,7 +157,7 @@ pipeline {
 						protocol: 'http',
 						nexusUrl: '192.168.1.77:8081',
 						groupId: version.name,
-						version: version.version + '.rc' + BUILD_ID + GIT_COMMIT,
+						version: version.version,
 						repository: 'Raw_hosted_repo',
 						credentialsId: NEXUS_CREDENTIAL_ID,
 						artifacts: [
