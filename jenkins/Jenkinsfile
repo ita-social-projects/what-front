@@ -85,15 +85,15 @@ pipeline {
 		// }
 		stage('ttt') {
             steps {
-				echo "GIT_COMMIT ${GIT_COMMIT}" 
-				echo "GIT_BRANCH ${GIT_BRANCH}"
-				echo "GIT_LOCAL_BRANCH ${GIT_LOCAL_BRANCH}"
-				echo "GIT_PREVIOUS_COMMIT ${GIT_PREVIOUS_COMMIT}"
-				echo "GIT_PREVIOUS_SUCCESSFUL_COMMIT ${GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
-				echo "GIT_URL ${GIT_URL}"
-				echo "GIT_URL_N - ${GIT_URL_N}"
-				echo "GIT_AUTHOR_NAME ${GIT_AUTHOR_NAME}"
-				echo "GIT_COMMITTER_EMAIL ${GIT_COMMITTER_EMAIL}"
+				sh 'echo "GIT_COMMIT ${GIT_COMMIT}"'
+				sh 'echo "GIT_BRANCH ${GIT_BRANCH}"'
+				sh 'echo "GIT_LOCAL_BRANCH ${GIT_LOCAL_BRANCH}"'
+				sh 'echo "GIT_PREVIOUS_COMMIT ${GIT_PREVIOUS_COMMIT}"'
+				sh 'echo "GIT_PREVIOUS_SUCCESSFUL_COMMIT ${GIT_PREVIOUS_SUCCESSFUL_COMMIT}"'
+				sh 'echo "GIT_URL ${GIT_URL}"'
+				sh 'echo "GIT_URL_N - ${GIT_URL_N}"'
+				sh 'echo "GIT_AUTHOR_NAME ${GIT_AUTHOR_NAME}"'
+				sh 'echo "GIT_COMMITTER_EMAIL ${GIT_COMMITTER_EMAIL}"'
 				telegramSend(message: 'Hello World', chatId: 1001721361023)
 				// sh '''
 				// 	curl -s -X POST https://api.telegram.org/bot5057295016:AAFWX5eitw9tKyiPtLB1FWYI3iVvP5Fmt4g/sendMessage -d chat_id='-1001721361023' -d parse_mode=markdown -d text='*${env.JOB_NAME}* : POC *Branch*: ${env.GIT_BRANCH} *Build* : OK *Published* = YES'
@@ -102,9 +102,11 @@ pipeline {
         }
   	}
 	post {
-		success {   
-			echo "success"        
-			telegramSend 'Hello World' 
+		success {
+			steps {   
+				echo "success"        
+				telegramSend 'Hello World'
+			}
 		}
 		aborted {             
             steps {
