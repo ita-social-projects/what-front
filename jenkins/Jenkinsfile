@@ -131,28 +131,21 @@ pipeline {
 
   	}
 	post {
-		success {
+		always {
+        	echo "Stage finished"
 			script {
     			TMSG = "$JOB_NAME $GIT_COMMIT $JOB_DISPLAY_URL"
 				echo  TMSG 
-				// telegramSend(message: TMSG, chatId: -1001721361023)
    			}
-			
-			
+        }
+		success {
 			telegramSend(message: "success " + TMSG, chatId: -1001721361023)
-			// script {
-			// telegramSend(message: 'success2\nJOB_NAME:*${JOB_NAME}* \ngit commit:${GIT_COMMIT}\nresult ${JOB_DISPLAY_URL}', chatId: -1001721361023)
-			// }
 		}
 		aborted {             
-			script {
-				telegramSend(message: 'aborted', chatId: -1001721361023)
-			}
+			telegramSend(message: "aborted " + TMSG, chatId: -1001721361023)
 		}
 		failure {
-			script {
-				telegramSend(message: 'failure', chatId: -1001721361023)
-			}
+			telegramSend(message: "failure " + TMSG, chatId: -1001721361023)
 		}
 	}
 }
