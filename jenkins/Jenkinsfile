@@ -149,7 +149,7 @@ pipeline {
 						artifacts: [
 							[artifactId: BRANCH_NAME,
 							classifier: 'debug',
-							file: 'README.md',
+							file: 'dist',
 							type: 'zip']
 						]
 					);
@@ -167,7 +167,7 @@ pipeline {
         }
 		success {
 			echo  "success " + TMSG 
-			telegramSend(message: "*success*\n" + TMSG, chatId: -1001721361023)
+			telegramSend(message: "*success* " + TMSG, chatId: -1001721361023)
 		}
 		aborted {   
 			echo  "aborted " + TMSG           
