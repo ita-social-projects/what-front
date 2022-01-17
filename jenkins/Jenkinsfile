@@ -133,7 +133,7 @@ pipeline {
 	post {
 		success {
 			script {
-    			TMSG = "success JOB_NAME: $JOB_NAME git commit: $GIT_COMMIT result  $JOB_DISPLAY_URL"
+    			TMSG = "success $JOB_NAME $GIT_COMMIT $JOB_DISPLAY_URL"
 				echo  TMSG 
 				telegramSend(message: TMSG, chatId: -1001721361023)
    			}
