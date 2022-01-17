@@ -139,7 +139,7 @@ pipeline {
 			steps {
 				script {
 					
-					def jsonSlurper = new JsonSlurper()
+					// def jsonSlurper = new JsonSlurper()
 					def version = readFile 'pacage.json'
 					// File fl = new File('pacage.json')
 					// def obj = jsonSlurper.parse(version)
