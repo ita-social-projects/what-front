@@ -149,7 +149,7 @@ pipeline {
 						artifacts: [
 							[artifactId: BRANCH_NAME,
 							classifier: 'debug',
-							file: 'dist',
+							file: 'dist/*',
 							type: 'zip']
 						]
 					);
@@ -163,6 +163,7 @@ pipeline {
 			script {
     			TMSG = "*job name*= $JOB_NAME \n*git commit*= $GIT_COMMIT \n*result*= $JOB_DISPLAY_URL"
 				echo  TMSG 
+				telegramSend(message: "*finished* " + TMSG, chatId: -1001721361023)
    			}
         }
 		success {
