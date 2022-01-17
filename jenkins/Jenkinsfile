@@ -1,3 +1,4 @@
+import groovy.json.JsonSlurper;
 pipeline {
     environment {
         // NEXUS_VERSION = "nexus3"
@@ -137,7 +138,7 @@ pipeline {
 		stage('parse json') {
 			step {
 				script {
-					import groovy.json.JsonSlurper;
+					
 					def jsonSlurper = new JsonSlurper()
 					File fl = new File('/path/to/fils.json')
 					def obj = jsonSlurper.parse(fl)
