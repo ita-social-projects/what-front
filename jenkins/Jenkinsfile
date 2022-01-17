@@ -130,21 +130,23 @@ pipeline {
         // }
 		stage('nexus') {
 			steps {
-				nexusArtifactUploader(
-					nexusVersion: 'nexus3',
-					protocol: 'http',
-					nexusUrl: '192.168.1.77:8081',
-					groupId: 'g1',
-					version: '2',
-					repository: 'Raw_hosted_repo',
-					credentialsId: '9adc495f-ccad-3af1-bc86-42b2ddd0316f',
-					artifacts: [
-						[artifactId: 'nexus-artifact-uploader',
-						classifier: 'debug',
-						file: 'README.md',
-						type: 'zip']
-					]
-				)
+				withCredentials([usernameColonPassword(credentialsId: 'nexus_admin_and_pass', variable: 'NEXUS_CREDENTIALS')]) {
+					nexusArtifactUploader(
+						nexusVersion: 'nexus3',
+						protocol: 'http',
+						nexusUrl: '192.168.1.77:8081',
+						groupId: 'g1',
+						version: '2',
+						repository: 'Raw_hosted_repo',
+						credentialsId: '${NEXUS_CREDENTIALS}',
+						artifacts: [
+							[artifactId: 'nexus-artifact-uploader',
+							classifier: 'debug',
+							file: 'README.md',
+							type: 'zip']
+						]
+					)
+				}
 			}
         }
   	}
