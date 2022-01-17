@@ -143,7 +143,7 @@ pipeline {
 					def version = readJSON file: './package.json'
 					// File fl = new File('pacage.json')
 					// def obj = jsonSlurper.parse(version)
-					// echo version
+					echo version.name
 				}
 			}
 		}
