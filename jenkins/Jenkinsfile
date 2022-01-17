@@ -7,43 +7,44 @@ pipeline {
 				sh 'ls'
 			}
 		}
-		stage("Stage npm install") {
-			steps {
-				sh 'npm install'
-				println "${env.BRANCH_NAME}"
-			}
-		}
-		stage("Stage eslint + test") {
-			parallel {
-				stage("Stage eslint") {
-					steps {
-						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-								sh 'npx eslint .'
-							}
-						}
-					}
-				stage("Stage test") {
-					steps {
-						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-								sh 'npm run test'
-							}
-						}
-					}
-				}
-			}
-		stage("Stage build") {
-			steps {
-				sh 'npm run build'
-			}
-		}
+		// stage("Stage npm install") {
+		// 	steps {
+		// 		sh 'npm install'
+		// 		println "${env.BRANCH_NAME}"
+		// 	}
+		// }
+		// stage("Stage eslint + test") {
+		// 	parallel {
+		// 		stage("Stage eslint") {
+		// 			steps {
+		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+		// 						sh 'npx eslint .'
+		// 					}
+		// 				}
+		// 			}
+		// 		stage("Stage test") {
+		// 			steps {
+		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+		// 						sh 'npm run test'
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// stage("Stage build") {
+		// 	steps {
+		// 		sh 'npm run build'
+		// 	}
+		// }
 		stage('SonarQube analysis') {
 			environment {
 				def scannerHome = tool 'SonarQubeScannerMaven';
 			}
 			steps {
 				withSonarQubeEnv('SonarQube9000') {
-					withCredentials([string(credentialsId: 'sonartoken', variable: 'sonartoken')]) {
-						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${sonartoken}"
+					withCredentials([string(credentialsId: 'sonartoken', variable: 'sonarProjectKey')]) {
+						echo ${sonarProjectKey}
+						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${sonarProjectKey}"
 					}
 				}
 				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
