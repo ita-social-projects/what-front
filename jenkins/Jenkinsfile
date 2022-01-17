@@ -42,10 +42,10 @@ pipeline {
 			}
 			steps {
 				withSonarQubeEnv('SonarQube9000') {
-					withCredentials([string(credentialsId: 'sonartoken', variable: 'sonarProjectKey')]) {
-						echo "${sonarProjectKey}"
-						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${sonarProjectKey}"
-					}
+					// withCredentials([string(credentialsId: 'sonartoken', variable: 'sonarProjectKey')]) {
+					// 	echo "${sonarProjectKey}"
+						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front"
+					// }
 				}
 				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
 				// -Dsonar.projectKey=${sonartoken}
