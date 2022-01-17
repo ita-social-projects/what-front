@@ -128,7 +128,25 @@ pipeline {
 		// 		sh "curl -s -X POST https://api.telegram.org/bot5057295016:AAFWX5eitw9tKyiPtLB1FWYI3iVvP5Fmt4g/sendMessage -d chat_id='-1001721361023' -d parse_mode=markdown -d text='*${JOB_NAME}* : POC *Branch*: ${GIT_BRANCH} *Build* : OK *Published* = YES : result ${JOB_DISPLAY_URL} : git commit ${GIT_COMMIT}'"
         //     }
         // }
-
+		stage('nexus') {
+			steps {
+				nexusArtifactUploader {
+					nexusVersion('nexus2')
+					protocol('http')
+					nexusUrl('192.168.1.77:8081')
+					groupId('g1')
+					version('2')
+					repository('Raw_hosted_repo')
+					credentialsId('9adc495f-ccad-3af1-bc86-42b2ddd0316f')
+					artifact {
+						artifactId('nexus-artifact-uploader')
+						type('zip')
+						classifier('debug')
+						file('README.md')
+					}
+				}
+			}
+        }
   	}
 	post {
 		always {
@@ -152,3 +170,23 @@ pipeline {
 		}
 	}
 }
+
+
+
+    steps {
+		nexusArtifactUploader {
+			nexusVersion('nexus2')
+			protocol('http')
+			nexusUrl('localhost:8080/nexus')
+			groupId('sp.sd')
+			version('2.4')
+			repository('NexusArtifactUploader')
+			credentialsId('44620c50-1589-4617-a677-7563985e46e1')
+			artifact {
+				artifactId('nexus-artifact-uploader')
+				type('jar')
+				classifier('debug')
+				file('nexus-artifact-uploader.jar')
+			}
+		}
+    }
