@@ -85,14 +85,19 @@ pipeline {
 		// }
   	}
 	post {
-		success {            
+		success {   
+			echo "success"        
 			telegramSend 'Hello World'
 		}
 		aborted {             
-		// script here
+            steps {
+				echo "aborted"
+            }
 		}
 		failure {
-		// script here
+            steps {
+				echo "failure"
+            }
 		}
 	}
 }
