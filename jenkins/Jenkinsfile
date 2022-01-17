@@ -134,7 +134,7 @@ pipeline {
 		always {
         	echo "Stage finished"
 			script {
-    			TMSG = "$JOB_NAME \n $GIT_COMMIT \n $JOB_DISPLAY_URL"
+    			TMSG = "job name= $JOB_NAME \ngit commit= $GIT_COMMIT \nresult= $JOB_DISPLAY_URL"
 				echo  TMSG 
    			}
         }
