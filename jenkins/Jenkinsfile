@@ -140,9 +140,9 @@ pipeline {
   	}
 	post {
 		success {
-			echo 'succes'
+			echo '$tmsg'
 			
-			telegramSend(message: 'success $tmsg', chatId: -1001721361023)
+			telegramSend(message: $tmsg, chatId: -1001721361023)
 			// script {
 			// telegramSend(message: 'success2\nJOB_NAME:*${JOB_NAME}* \ngit commit:${GIT_COMMIT}\nresult ${JOB_DISPLAY_URL}', chatId: -1001721361023)
 			// }
