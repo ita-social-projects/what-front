@@ -36,28 +36,28 @@ pipeline {
 		// 		sh 'npm run build'
 		// 	}
 		// }
-		stage('SonarQube analysis') {
-			environment {
-				def scannerHome = tool 'SonarQubeScannerMaven';
-			}
-			steps {
-				withSonarQubeEnv('SonarQube9000') {
-					withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
-						echo "${sonarProjectKey}"
-						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front"
-					}
-				}
-				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
-				// -Dsonar.projectKey=${sonartoken}
-			}
-		}
-		stage("Quality Gate") {
-			steps {
-				timeout(time: 1, unit: 'HOURS') {
-					waitForQualityGate abortPipeline: true
-				}
-			}
-		}
+		// stage('SonarQube analysis') {
+		// 	environment {
+		// 		def scannerHome = tool 'SonarQubeScannerMaven';
+		// 	}
+		// 	steps {
+		// 		withSonarQubeEnv('SonarQube9000') {
+		// 			withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
+		// 				echo "${sonarProjectKey}"
+		// 				sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front"
+		// 			}
+		// 		}
+		// 		// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
+		// 		// -Dsonar.projectKey=${sonartoken}
+		// 	}
+		// }
+		// stage("Quality Gate") {
+		// 	steps {
+		// 		timeout(time: 1, unit: 'HOURS') {
+		// 			waitForQualityGate abortPipeline: true
+		// 		}
+		// 	}
+		// }
 		stage('branch is master') {
             when {
                 branch 'fakemaster'
@@ -83,11 +83,16 @@ pipeline {
         //                            '''
 		// 		}
 		// }
+		stage('ttt') {
+            steps {
+				telegramSend(message: 'Hello World', chatId: '-1721361023')
+            }
+        }
   	}
 	post {
 		success {   
 			echo "success"        
-			telegramSend 'Hello World'
+			telegramSend 'Hello World' 
 		}
 		aborted {             
             steps {
