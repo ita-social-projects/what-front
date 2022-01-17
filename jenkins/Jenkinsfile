@@ -58,6 +58,22 @@ pipeline {
 				}
 			}
 		}
+		stage('branch is master') {
+            when {
+                branch 'fakemaster'
+            }
+            steps {
+				echo "branch fakemaster"
+            }
+        }
+		stage('branch is dev') {
+            when {
+                branch 'fakedev'
+            }
+            steps {
+				echo "branch fakedev"
+            }
+        }
 		// stage('Deploy Master') {
 		// 	when {expression { env.BRANCH_NAME == 'master' }}
 		// 		steps {
@@ -68,4 +84,15 @@ pipeline {
 		// 		}
 		// }
   	}
+	post {
+		success {            
+			telegramSend 'Hello World'
+		}
+		aborted {             
+		// script here
+		}
+		failure {
+		// script here
+		}
+	}
 }
