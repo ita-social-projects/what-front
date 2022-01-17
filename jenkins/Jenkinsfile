@@ -85,7 +85,7 @@ pipeline {
 		// }
 		stage('ttt') {
             steps {
-				telegramSend(message: 'Hello World', chatId: -1001721361023)
+				telegramSend(message: 'Hello World', chatId: 1001721361023)
             }
         }
   	}
