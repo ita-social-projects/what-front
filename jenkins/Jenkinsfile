@@ -139,6 +139,7 @@ pipeline {
    			}
         }
 		success {
+			echo  TMSG 
 			telegramSend(message: "success " + TMSG, chatId: -1001721361023)
 		}
 		aborted {             
