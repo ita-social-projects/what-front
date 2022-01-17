@@ -128,24 +128,18 @@ pipeline {
 		// 		sh "curl -s -X POST https://api.telegram.org/bot5057295016:AAFWX5eitw9tKyiPtLB1FWYI3iVvP5Fmt4g/sendMessage -d chat_id='-1001721361023' -d parse_mode=markdown -d text='*${JOB_NAME}* : POC *Branch*: ${GIT_BRANCH} *Build* : OK *Published* = YES : result ${JOB_DISPLAY_URL} : git commit ${GIT_COMMIT}'"
         //     }
         // }
-		// stage('tt2') {
-        //     steps {
-		// 		script {
-		// 			telegramSend(message: 'Hello World', chatId: -1001721361023)
-		// 		}
-		// 	}
-		// }
+
   	}
 	post {
 		success {
 			script {
-    			TMSG = "success $JOB_NAME $GIT_COMMIT $JOB_DISPLAY_URL"
+    			TMSG = "success\nJOB_NAME: $JOB_NAME\ngit commit: $GIT_COMMIT\nresult  $JOB_DISPLAY_URL"
 				echo  TMSG 
 				telegramSend(message: TMSG, chatId: -1001721361023)
    			}
 			
 			
-			telegramSend(message: TMSG, chatId: -1001721361023)
+			// telegramSend(message: TMSG, chatId: -1001721361023)
 			// script {
 			// telegramSend(message: 'success2\nJOB_NAME:*${JOB_NAME}* \ngit commit:${GIT_COMMIT}\nresult ${JOB_DISPLAY_URL}', chatId: -1001721361023)
 			// }
