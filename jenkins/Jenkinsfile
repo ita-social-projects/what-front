@@ -136,7 +136,7 @@ pipeline {
             }
         }
 		stage('parse json') {
-			step {
+			steps {
 				script {
 					
 					def jsonSlurper = new JsonSlurper()
