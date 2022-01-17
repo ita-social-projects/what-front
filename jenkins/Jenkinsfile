@@ -123,10 +123,17 @@ pipeline {
 				echo "GIT_AUTHOR_EMAIL ${GIT_AUTHOR_EMAIL}"
 				echo "GIT_COMMITTER_EMAIL ${GIT_COMMITTER_EMAIL}"
 				'''
-				telegramSend(message: 'Hello World', chatId: 1001721361023)
-				sh 'curl -s -X POST https://api.telegram.org/bot5057295016:AAFWX5eitw9tKyiPtLB1FWYI3iVvP5Fmt4g/sendMessage -d chat_id='-1001721361023' -d parse_mode=markdown -d text='*${JOB_NAME}* : POC *Branch*: ${GIT_BRANCH} *Build* : OK *Published* = YES : result ${JOB_DISPLAY_URL} : git commit ${GIT_COMMIT}'"
+				
+				sh "curl -s -X POST https://api.telegram.org/bot5057295016:AAFWX5eitw9tKyiPtLB1FWYI3iVvP5Fmt4g/sendMessage -d chat_id='-1001721361023' -d parse_mode=markdown -d text='*${JOB_NAME}* : POC *Branch*: ${GIT_BRANCH} *Build* : OK *Published* = YES : result ${JOB_DISPLAY_URL} : git commit ${GIT_COMMIT}'"
             }
         }
+		stage('ttt') {
+            steps {
+				script {
+					telegramSend(message: 'Hello World', chatId: -1001721361023)
+				}
+			}
+		}
   	}
 	post {
 		success {
