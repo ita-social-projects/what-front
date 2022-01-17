@@ -1,5 +1,11 @@
 pipeline {
-
+    environment {
+        // NEXUS_VERSION = "nexus3"
+        // NEXUS_PROTOCOL = "http"
+        // NEXUS_URL = "you-ip-addr-here:8081"
+        // NEXUS_REPOSITORY = "maven-nexus-repo"
+        NEXUS_CREDENTIAL_ID = "nexus_admin_id"
+    }
 	agent { label 'nodejs'}
 	stages {
 		stage("ls") {
@@ -130,7 +136,8 @@ pipeline {
         // }
 		stage('nexus') {
 			steps {
-				withCredentials([usernameColonPassword(credentialsId: 'nexus_admin_id', variable: 'NEXUS_CREDENTIALS')]) {
+				script {
+				// withCredentials([usernameColonPassword(credentialsId: 'nexus_admin_id', variable: 'NEXUS_CREDENTIALS')]) {
 					nexusArtifactUploader(
 						nexusVersion: 'nexus3',
 						protocol: 'http',
@@ -138,14 +145,14 @@ pipeline {
 						groupId: 'g1',
 						version: '2',
 						repository: 'Raw_hosted_repo',
-						credentialsId: '${NEXUS_CREDENTIALS}',
+						credentialsId: NEXUS_CREDENTIAL_ID,
 						artifacts: [
 							[artifactId: 'nexus-artifact-uploader',
 							classifier: 'debug',
 							file: 'README.md',
 							type: 'zip']
 						]
-					)
+					);
 				}
 			}
         }
