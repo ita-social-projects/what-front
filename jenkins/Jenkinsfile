@@ -87,7 +87,7 @@ pipeline {
             steps {
 				telegramSend(message: 'Hello World', chatId: 1001721361023)
 				sh '''
-					curl -s -X POST https://api.telegram.org/bot5057295016:AAFWX5eitw9tKyiPtLB1FWYI3iVvP5Fmt4g/sendMessage -d chat_id='-1001721361023' -d parse_mode=markdown -d text='some text'
+					curl -s -X POST https://api.telegram.org/bot5057295016:AAFWX5eitw9tKyiPtLB1FWYI3iVvP5Fmt4g/sendMessage -d chat_id='-1001721361023' -d parse_mode=markdown -d text='*${env.JOB_NAME}* : POC *Branch*: ${env.GIT_BRANCH} *Build* : OK *Published* = YES'
 				'''
             }
         }
