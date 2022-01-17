@@ -140,7 +140,7 @@ pipeline {
 				script {
 					
 					def jsonSlurper = new JsonSlurper()
-					File fl = new File('/path/to/fils.json')
+					File fl = new File('pacage.json')
 					def obj = jsonSlurper.parse(fl)
 					echo obj
 				}
