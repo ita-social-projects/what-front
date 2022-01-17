@@ -137,14 +137,14 @@ pipeline {
         }
 		stage('parse json') {
 			steps {
-				script {
+				// script {
 					
 					// def jsonSlurper = new JsonSlurper()
-					def version = readJSON file: 'package.json'
+					def version = readJSON file: './package.json'
 					// File fl = new File('pacage.json')
 					// def obj = jsonSlurper.parse(version)
 					echo version
-				}
+				// }
 			}
 		}
 		stage('nexus') {
