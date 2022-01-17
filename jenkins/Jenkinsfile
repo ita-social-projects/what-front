@@ -140,15 +140,15 @@ pipeline {
         }
 		success {
 			echo  "success " + TMSG 
-			telegramSend(message: "*success*" + TMSG, chatId: -1001721361023)
+			telegramSend(message: "*success*\n" + TMSG, chatId: -1001721361023)
 		}
 		aborted {   
 			echo  "aborted " + TMSG           
-			telegramSend(message: "aborted " + TMSG, chatId: -1001721361023)
+			telegramSend(message: "*aborted* " + TMSG, chatId: -1001721361023)
 		}
 		failure {
 			echo  "failure " + TMSG 
-			telegramSend(message: "failure " + TMSG, chatId: -1001721361023)
+			telegramSend(message: "*failure* " + TMSG, chatId: -1001721361023)
 		}
 	}
 }
