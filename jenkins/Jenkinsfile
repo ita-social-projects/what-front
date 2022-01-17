@@ -1,4 +1,7 @@
 pipeline {
+	environment {
+    	tmsg = 'success $JOB_NAME $GIT_COMMIT $JOB_DISPLAY_URL'
+   	}
 	agent { label 'nodejs'}
 	stages {
 		stage("ls") {
@@ -138,7 +141,7 @@ pipeline {
 	post {
 		success {
 			echo 'succes'
-			tmsg = 'success $JOB_NAME $GIT_COMMIT $JOB_DISPLAY_URL'
+			
 			telegramSend(message: 'success ${tmsg}', chatId: -1001721361023)
 			// script {
 			// telegramSend(message: 'success2\nJOB_NAME:*${JOB_NAME}* \ngit commit:${GIT_COMMIT}\nresult ${JOB_DISPLAY_URL}', chatId: -1001721361023)
