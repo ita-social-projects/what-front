@@ -130,7 +130,7 @@ pipeline {
         // }
 		stage('nexus') {
 			steps {
-				scsript {
+				script {
 					nexusArtifactUploader {
 						nexusVersion('nexus2')
 						protocol('http')
