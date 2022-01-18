@@ -15,17 +15,17 @@ pipeline {
 				sh 'ls'
 			}
 		}
-		// stage("Stage npm install") {
-		// 	steps {
-		// 		sh 'npm install'
-		// 		println "${env.BRANCH_NAME}"
-		// 	}
-		// }
-		// stage("Stage build") {
-		// 	steps {
-		// 		sh 'npm run build'
-		// 	}
-		// }
+		stage("Stage npm install") {
+			steps {
+				sh 'npm install'
+				println "${env.BRANCH_NAME}"
+			}
+		}
+		stage("Stage build") {
+			steps {
+				sh 'npm run build'
+			}
+		}
 		// stage("Stage eslint + test") {
 		// 	parallel {
 		// 		stage("Stage eslint") {
@@ -45,28 +45,28 @@ pipeline {
 		// 		}
 		// 	}
 
-		// stage('SonarQube analysis') {
-		// 	environment {
-		// 		def scannerHome = tool 'SonarQubeScannerMaven';
-		// 	}
-		// 	steps {
-		// 		withSonarQubeEnv('SonarQube9000') {
-		// 			withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
-		// 				echo "${sonarProjectKey}"
-		// 				sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front"
-		// 			}
-		// 		}
-		// 		// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
-		// 		// -Dsonar.projectKey=${sonartoken}
-		// 	}
-		// }
-		// stage("Quality Gate") {
-		// 	steps {
-		// 		timeout(time: 1, unit: 'HOURS') {
-		// 			waitForQualityGate abortPipeline: true
-		// 		}
-		// 	}
-		// }
+		stage('SonarQube analysis') {
+			environment {
+				def scannerHome = tool 'SonarQubeScannerMaven';
+			}
+			steps {
+				withSonarQubeEnv('SonarQube9000') {
+					withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
+						echo "${sonarProjectKey}"
+						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front"
+					}
+				}
+				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
+				// -Dsonar.projectKey=${sonartoken}
+			}
+		}
+		stage("Quality Gate") {
+			steps {
+				timeout(time: 1, unit: 'HOURS') {
+					waitForQualityGate abortPipeline: true
+				}
+			}
+		}
 		stage('branch is master') {
             when {
                 branch 'fakemaster'
@@ -138,7 +138,7 @@ pipeline {
 			steps {
 				script {
 					def version = readJSON file: './package.json'
-					zip zipFile: 'jenkins.zip', archive: false, dir: 'jenkins', overwrite: true
+					zip zipFile: 'dist.zip', archive: false, dir: 'dist', overwrite: true
 					nexusArtifactUploader(
 						nexusVersion: 'nexus3',
 						protocol: 'http',
@@ -150,7 +150,7 @@ pipeline {
 						artifacts: [
 							[artifactId: BRANCH_NAME,
 							classifier: 'debug',
-							file: 'jenkins.zip',
+							file: 'dist.zip',
 							type: 'zip']
 						]
 					);
