@@ -138,6 +138,7 @@ pipeline {
 			steps {
 				script {
 					def version = readJSON file: './package.json'
+					zip zipFile: 'jenkins.zip', archive: false, dir: 'jenkins', overwrite: true
 					nexusArtifactUploader(
 						nexusVersion: 'nexus3',
 						protocol: 'http',
@@ -149,7 +150,7 @@ pipeline {
 						artifacts: [
 							[artifactId: BRANCH_NAME,
 							classifier: 'debug',
-							file: 'package.json',
+							file: 'jenkins.zip',
 							type: 'zip']
 						]
 					);
