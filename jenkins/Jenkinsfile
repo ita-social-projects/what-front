@@ -144,7 +144,7 @@ pipeline {
 						nexusUrl: '192.168.1.76:8081',
 						groupId: version.name,
 						version: version.version+ '-rc' + BUILD_ID + "." + GIT_COMMIT,
-						repository: 'Raw_hosted_repo',
+						repository: 'what_project',
 						credentialsId: NEXUS_CREDENTIAL_ID,
 						artifacts: [
 							[artifactId: BRANCH_NAME,
