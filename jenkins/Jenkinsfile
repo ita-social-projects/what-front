@@ -15,58 +15,58 @@ pipeline {
 				sh 'ls'
 			}
 		}
-		stage("Stage npm install") {
-			steps {
-				sh 'npm install'
-				println "${env.BRANCH_NAME}"
-			}
-		}
-		stage("Stage build") {
-			steps {
-				sh 'npm run build'
-			}
-		}
-		stage("Stage eslint + test") {
-			parallel {
-				stage("Stage eslint") {
-					steps {
-						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-								sh 'npx eslint .'
-							}
-						}
-					}
-				stage("Stage test") {
-					steps {
-						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-								sh 'npm run test'
-							}
-						}
-					}
-				}
-			}
+		// stage("Stage npm install") {
+		// 	steps {
+		// 		sh 'npm install'
+		// 		println "${env.BRANCH_NAME}"
+		// 	}
+		// }
+		// stage("Stage build") {
+		// 	steps {
+		// 		sh 'npm run build'
+		// 	}
+		// }
+		// stage("Stage eslint + test") {
+		// 	parallel {
+		// 		stage("Stage eslint") {
+		// 			steps {
+		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+		// 						sh 'npx eslint .'
+		// 					}
+		// 				}
+		// 			}
+		// 		stage("Stage test") {
+		// 			steps {
+		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+		// 						sh 'npm run test'
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
 
-		stage('SonarQube analysis') {
-			environment {
-				def scannerHome = tool 'SonarQubeScannerMaven';
-			}
-			steps {
-				withSonarQubeEnv('SonarQube9000') {
-					withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
-						echo "${sonarProjectKey}"
-						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front"
-					}
-				}
-				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
-				// -Dsonar.projectKey=${sonartoken}
-			}
-		}
-		stage("Quality Gate") {
-			steps {
-				timeout(time: 1, unit: 'HOURS') {
-					waitForQualityGate abortPipeline: true
-				}
-			}
-		}
+		// stage('SonarQube analysis') {
+		// 	environment {
+		// 		def scannerHome = tool 'SonarQubeScannerMaven';
+		// 	}
+		// 	steps {
+		// 		withSonarQubeEnv('SonarQube9000') {
+		// 			withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
+		// 				echo "${sonarProjectKey}"
+		// 				sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front"
+		// 			}
+		// 		}
+		// 		// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
+		// 		// -Dsonar.projectKey=${sonartoken}
+		// 	}
+		// }
+		// stage("Quality Gate") {
+		// 	steps {
+		// 		timeout(time: 1, unit: 'HOURS') {
+		// 			waitForQualityGate abortPipeline: true
+		// 		}
+		// 	}
+		// }
 		stage('branch is master') {
             when {
                 branch 'fakemaster'
@@ -141,7 +141,7 @@ pipeline {
 					nexusArtifactUploader(
 						nexusVersion: 'nexus3',
 						protocol: 'http',
-						nexusUrl: '192.168.1.77:8081',
+						nexusUrl: '192.168.1.76:8081',
 						groupId: version.name,
 						version: version.version+ '-rc' + BUILD_ID + "." + GIT_COMMIT,
 						repository: 'Raw_hosted_repo',
@@ -149,7 +149,7 @@ pipeline {
 						artifacts: [
 							[artifactId: BRANCH_NAME,
 							classifier: 'debug',
-							file: 'dist/*',
+							file: 'package.json',
 							type: 'zip']
 						]
 					);
