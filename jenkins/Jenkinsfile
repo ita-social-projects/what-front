@@ -198,7 +198,7 @@ pipeline {
 			steps {
 				withCredentials([
 					usernamePassword(credentialsId: 'nexus_admin_id', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER'),
-					sshUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY'),
+					sshUserPrivateKey(credentialsId: 'dev_ssh_key', variable: 'DEV_PRIVATE_KEY'),
 					file(credentialsId: 'ansible_hosts', keyFileVariable: 'ANSIBLE_HOSTS')
 					]) {
 					// script {
