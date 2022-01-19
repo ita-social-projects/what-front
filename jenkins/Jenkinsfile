@@ -26,24 +26,24 @@ pipeline {
 				sh 'npm run build'
 			}
 		}
-		// stage("Stage eslint + test") {
-		// 	parallel {
-		// 		stage("Stage eslint") {
-		// 			steps {
-		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-		// 						sh 'npx eslint .'
-		// 					}
-		// 				}
-		// 			}
-		// 		stage("Stage test") {
-		// 			steps {
-		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-		// 						sh 'npm run test'
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}
+		stage("Stage eslint + test") {
+			parallel {
+				stage("Stage eslint") {
+					steps {
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+								sh 'npx eslint .'
+							}
+						}
+					}
+				stage("Stage test") {
+					steps {
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+								sh 'npm run test'
+							}
+						}
+					}
+				}
+			}
 
 		stage('SonarQube analysis') {
 			environment {
@@ -142,7 +142,7 @@ pipeline {
 					nexusArtifactUploader(
 						nexusVersion: 'nexus3',
 						protocol: 'http',
-						nexusUrl: '192.168.1.76:8081',
+						nexusUrl: '192.168.1.77:8081',
 						groupId: version.name,
 						version: version.version+ '-rc' + BUILD_ID + "." + GIT_COMMIT,
 						repository: 'what_project',
