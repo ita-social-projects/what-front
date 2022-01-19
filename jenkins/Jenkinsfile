@@ -196,7 +196,11 @@ pipeline {
 		}
 		stage('deploy') {
 			steps {
-				withCredentials([usernamePassword(credentialsId: NEXUS_CREDENTIAL_ID, passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
+				withCredentials(
+					[usernamePassword(credentialsId: NEXUS_CREDENTIAL_ID, passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')],
+					[sshUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY')],
+					[fiel(credentialsId: 'ansible_hosts', keyFileVariable: 'ANSIBLE_HOSTS')]
+					) {
 					script {
 						// pom = readMavenPom file: "pom.xml";
 						// filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
@@ -206,10 +210,10 @@ pipeline {
 						echo artifactPath
 						sshcommand = "cd /home/jenkins && curl -u ${NEXUS_USER}:${NEXUS_PASS} -X GET ${artifactPath} && ls > ./qqq3"
 						echo sshcommand
-						sshagent(credentials: ['dev_ssh_key']) {
-							sh ("ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 ${sshcommand}")
-						}
-
+						// sshagent(credentials: ['dev_ssh_key']) {
+						// 	sh ("ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 ${sshcommand}")
+						// }
+						sh 'ansible-playbook jenkins/deploy_dev.yml -i $ANSIBLE_HOSTS --private-key $DEV_PRIVATE_KEY'
 						// echo artifactExists
 					}
 				}
