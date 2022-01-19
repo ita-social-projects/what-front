@@ -6,10 +6,10 @@
       ansible.builtin.debug:
         msg: "Test debug"
 
-- name: Fetch file from nexus
-  get_url:
-    url: '{{ nexus_url }}'
-    dest: /home/jenkins
-    username: '{{ nexus_user }}'
-    password: '{{ nexus_pass }}'
+    - name: Fetch file from nexus
+      get_url:
+        url: '{{ nexus_url }}'
+        dest: /home/jenkins
+        username: '{{ nexus_user }}'
+        password: '{{ nexus_pass }}'
 ...
