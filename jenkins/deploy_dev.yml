@@ -9,7 +9,17 @@
     - name: Fetch file from nexus
       get_url:
         url: '{{ nexus_url }}'
-        dest: /home/jenkins
+        dest: /home/jenkins/d.zip
         username: '{{ nexus_user }}'
         password: '{{ nexus_pass }}'
+      register: output
+
+    - ansible.builtin.debug:
+       var: output 
+
+    - name: Unarchive a file that is already on the remote machine
+      ansible.builtin.unarchive:
+        src: /home/jenkins/d.zip
+        dest: /home/jenkins/tmp
+        remote_src: yes
 ...
