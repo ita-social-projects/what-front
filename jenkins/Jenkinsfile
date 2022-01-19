@@ -187,7 +187,7 @@ pipeline {
 				}
 			}
         }
-		stage {
+		stage('deploy') {
 			steps {
 				script {
 					pom = readMavenPom file: "pom.xml";
