@@ -196,10 +196,11 @@ pipeline {
 		}
 		stage('deploy') {
 			steps {
-				withCredentials([usernamePassword(credentialsId: 'nexus_admin_id', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')],
-					[sshUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY')],
-					[file(credentialsId: 'ansible_hosts', keyFileVariable: 'ANSIBLE_HOSTS')]
-					) {
+				withCredentials([
+					usernamePassword(credentialsId: 'nexus_admin_id', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER'),
+					[shUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY'),
+					file(credentialsId: 'ansible_hosts', keyFileVariable: 'ANSIBLE_HOSTS')
+					]) {
 					// script {
 						// pom = readMavenPom file: "pom.xml";
 						// filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
