@@ -203,13 +203,7 @@ pipeline {
                     artifactPath = "http://192.168.1.77:8081/repository/what_raw_repo/what/fakedev/1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}/fakedev-1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}-debug.zip"
                     artifactExists = fileExists artifactPath;
 					echo artifactPath
-					withCredentials([string(credentialsId: 'dev_ssh_key', variable: 'creds')]) {
-						// def password = creds.key
-						println(creds)
-						// println(password)
-						// def pass = password
-						// writeFile (file: 'id_rsa', text: pass)
-					}
+					(credentials: ['dev_ssh_key-dev']) { sh 'ssh jenkins@192.168.1.76 "ls -l; ps -aux; whoami"' }
 
 					// echo artifactExists
 				}
