@@ -44,7 +44,12 @@ pipeline {
 					}
 				}
 			}
-
+		stage("ls affter build and test") {
+			steps {
+				sh 'pwd'
+				sh 'ls'
+			}
+		}
 		stage('SonarQube analysis') {
 			environment {
 				def scannerHome = tool 'SonarQubeScannerMaven';
@@ -65,6 +70,12 @@ pipeline {
 				timeout(time: 1, unit: 'HOURS') {
 					waitForQualityGate abortPipeline: true
 				}
+			}
+		}
+		stage("ls affter sonar") {
+			steps {
+				sh 'pwd'
+				sh 'ls'
 			}
 		}
 		stage('branch is master') {
@@ -145,7 +156,7 @@ pipeline {
 						nexusUrl: '192.168.1.77:8081',
 						groupId: version.name,
 						version: version.version+ '-rc' + BUILD_ID + "." + GIT_COMMIT,
-						repository: 'what_project',
+						repository: 'what_raw_repo',
 						credentialsId: NEXUS_CREDENTIAL_ID,
 						artifacts: [
 							[artifactId: BRANCH_NAME,
