@@ -196,7 +196,10 @@ pipeline {
 		}
 		stage('deploy') {
 			steps {
-				ansible-playbook(credentialsId: 'dev_ssh_key', playbook: 'jenkins/deploy_dev.yml', inventory: 'jenkins/hosts.ini')
+				ansiblePlaybook(
+					credentialsId: 'dev_ssh_key', 
+					playbook: 'jenkins/deploy_dev.yml', 
+					inventory: 'jenkins/hosts.ini')
 				// withCredentials([
 				// 	usernamePassword(credentialsId: 'nexus_admin_id', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER'),
 				// 	sshUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY'),
