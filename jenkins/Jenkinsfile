@@ -218,26 +218,26 @@ pipeline {
 				sh 'ls'
 			}
 		}
-		stage('artifactExists') {
-            when {
-				expression {
-                	artifactExists
-				}
-            }
-            steps {
-				echo "artifactExists"
-            }
-        }
-		stage('artifactExists false') {
-            when {
-				expression {
-                	artifactExists  == false
-				}
-            }
-            steps {
-				echo "artifactExists false"
-            }
-        }
+		// stage('artifactExists') {
+        //     when {
+		// 		expression {
+        //         	artifactExists
+		// 		}
+        //     }
+        //     steps {
+		// 		echo "artifactExists"
+        //     }
+        // }
+		// stage('artifactExists false') {
+        //     when {
+		// 		expression {
+        //         	artifactExists  == false
+		// 		}
+        //     }
+        //     steps {
+		// 		echo "artifactExists false"
+        //     }
+        // }
   	}
 	post {
 		always {
