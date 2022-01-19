@@ -201,13 +201,13 @@ pipeline {
 					// sshUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY'),
 					// file(credentialsId: 'ansible_hosts', variable: 'ANSIBLE_HOSTS')
 					]) {
-					// script {
+					script {
 						// pom = readMavenPom file: "pom.xml";
 						// filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
 						// echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
 						artifactPath = "http://192.168.1.77:8081/repository/what_raw_repo/what/fakedev/1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}/fakedev-1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}-debug.zip"
 						// // artifactExists = fileExists artifactPath;
-						// echo artifactPath
+						echo artifactPath
 						// sshcommand = "cd /home/jenkins && curl -u ${NEXUS_USER}:${NEXUS_PASS} -X GET ${artifactPath} && ls > ./qqq3"
 						// echo sshcommand
 						// sshagent(credentials: ['dev_ssh_key']) {
@@ -224,7 +224,7 @@ pipeline {
 							])
 						// sh 'ansible --version'
 						// echo artifactExists
-					// }
+					}
 				}
 			}
 		}
