@@ -17,7 +17,7 @@ pipeline {
 						string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
 						]) {
           			sh """
-					  	curl -s -X POST -d '{"chat_id":"${telegram_channel_id}","text":"Build ${displayName} ${projectName} \n\n${buildResult}\n\n${changeLog} \n${absoluteUrl}"}' -H 'Content-Type: application/json' https://api.telegram.org/${telegramToken}/sendMessage
+					  	curl -s -X POST -d '{"chat_id":"${telegram_channel_id}","text":"Build ${JOB_NAME}\n <p>${JOB_DISPLAY_UR}</p> \n\n${NODE_LABELS}\n${GIT_COMMIT}"}' -H 'Content-Type: application/json' https://api.telegram.org/${telegramToken}/sendMessage
 					"""
 				}
 				echo 'pwd:'
