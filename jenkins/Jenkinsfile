@@ -169,7 +169,7 @@ pipeline {
 					def version = readJSON file: './package.json'
 					zip zipFile: 'dist.zip', archive: false, dir: 'jenkins', overwrite: true
 					// zip zipFile: 'dist.zip', archive: false, dir: 'dist', overwrite: true
-					nexusArtifactUploader(
+					qqq = nexusArtifactUploader(
 						nexusVersion: 'nexus3',
 						protocol: 'http',
 						nexusUrl: '192.168.1.77:8081',
@@ -183,6 +183,7 @@ pipeline {
 							file: 'dist.zip',
 							type: 'zip']
 						]
+						echo qqq
 					);
 				}
 			}
