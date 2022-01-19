@@ -21,12 +21,10 @@ pipeline {
 				// 	string(credentialsId: 'telegram_bot_name', variable: 'telegram_bot_name'),
 				// 	string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
 				// 	]) {
-          			sh ("""
-					  curl -s -X POST https://api.telegram.org/bot${telegramToken}/sendMessage \
+          			sh ("curl -s -X POST https://api.telegram.org/bot${telegramToken}/sendMessage \
 					  	-d chat_id=${telegram_channel_id} \
 						-d parse_mode=HTML \
-						-d text="${template_msg}"
-					  """)
+						-d text=${template_msg} ")
 				// }
 				echo 'pwd:'
 				sh 'pwd'
@@ -174,11 +172,11 @@ pipeline {
 						protocol: 'http',
 						nexusUrl: '192.168.1.77:8081',
 						groupId: version.name,
-						version: version.version+ '-rc' + BUILD_ID + "." + GIT_COMMIT,
+						version: version.version+ '-rc' + BUILD_ID + "." + GIT_COMMIT.take(6),
 						repository: 'what_raw_repo',
 						credentialsId: NEXUS_CREDENTIAL_ID,
 						artifacts: [
-							[artifactId: BRANCH_NAME.take(6),
+							[artifactId: BRANCH_NAME,
 							classifier: 'debug',
 							file: 'dist.zip',
 							type: 'zip']
