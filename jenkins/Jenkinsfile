@@ -12,13 +12,16 @@ pipeline {
 		stage("ls") {
 			steps {
 				withCredentials([
-						string(credentialsId: 'telegramToken', variable: 'telegramToken'),
-						string(credentialsId: 'telegram_bot_name', variable: 'telegram_bot_name'),
-						string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
-						]) {
-          			sh """
-						curl -s -X POST https://api.telegram.org/bot${telegramToken}/sendMessage -d chat_id=${telegram_channel_id} -d parse_mode=markdown -d text="Build ${JOB_NAME}\n <p>${JOB_DISPLAY_URL}</p> \n\n${NODE_LABELS}\n${GIT_COMMIT}"}' -H 'Content-Type: application/json'
-					"""
+					string(credentialsId: 'telegramToken', variable: 'telegramToken'),
+					string(credentialsId: 'telegram_bot_name', variable: 'telegram_bot_name'),
+					string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
+					]) {
+          			sh ("""
+					  curl -s -X POST https://api.telegram.org/bot${telegramToken}/sendMessage \
+					  	-d chat_id=${telegram_channel_id} \
+						-d parse_mode=markdown \
+						-d text="Build ${JOB_NAME}\n${JOB_DISPLAY_URL}\n${NODE_LABELS}\n${GIT_COMMIT}"
+					  """)
 				}
 				echo 'pwd:'
 				sh 'pwd'
