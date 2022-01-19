@@ -216,7 +216,7 @@ pipeline {
 						ansiblePlaybook(
 							credentialsId: 'dev_ssh_key', 
 							playbook: 'jenkins/deploy_dev.yml', 
-							inventory: 'jenkins/hosts.ini'
+							inventory: 'jenkins/hosts.ini',
 							extraVars: [
 								nexus_url: artifactPath,
 								nexus_user: NEXUS_USER,
