@@ -11,7 +11,10 @@ pipeline {
 	stages {
 		stage("ls") {
 			steps {
+				telegramSend(message: "started", chatId: -1001721361023)
+				echo 'pwd:'
 				sh 'pwd'
+				echo 'ls:'
 				sh 'ls'
 			}
 		}
@@ -159,7 +162,7 @@ pipeline {
 						repository: 'what_raw_repo',
 						credentialsId: NEXUS_CREDENTIAL_ID,
 						artifacts: [
-							[artifactId: BRANCH_NAME,
+							[artifactId: BRANCH_NAME.take(6),
 							classifier: 'debug',
 							file: 'dist.zip',
 							type: 'zip']
@@ -173,7 +176,7 @@ pipeline {
 		always {
         	echo "Stage finished"
 			script {
-    			TMSG = "*job name*= $JOB_NAME \n*git commit*= $GIT_COMMIT \n*result*= $JOB_DISPLAY_URL"
+    			TMSG = "<p>*job name*= $JOB_NAME</p>\n*git commit*= $GIT_COMMIT \n*result*= $JOB_DISPLAY_URL"
 				echo  TMSG 
 				telegramSend(message: "*finished* " + TMSG, chatId: -1001721361023)
    			}
