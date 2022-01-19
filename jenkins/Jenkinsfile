@@ -21,10 +21,10 @@ pipeline {
 				// 	string(credentialsId: 'telegram_bot_name', variable: 'telegram_bot_name'),
 				// 	string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
 				// 	]) {
-          			sh ("curl -s -X POST https://api.telegram.org/bot${telegramToken}/sendMessage \
+          			sh ("""curl -s -X POST https://api.telegram.org/bot${telegramToken}/sendMessage \
 					  	-d chat_id=${telegram_channel_id} \
 						-d parse_mode=HTML \
-						-d text=${template_msg} ")
+						-d text=${template_msg} """)
 				// }
 				echo 'pwd:'
 				sh 'pwd'
