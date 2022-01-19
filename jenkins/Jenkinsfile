@@ -213,7 +213,7 @@ pipeline {
 						// sshagent(credentials: ['dev_ssh_key']) {
 						// 	sh ("ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 ${sshcommand}")
 						// }
-						sh 'ansible-playbook jenkins/deploy_dev.yml -i jenkins/hosts.yml --private-key $DEV_PRIVATE_KEY'
+						sh 'ansible-playbook jenkins/deploy_dev.yml -i jenkins/hosts.ini --private-key $DEV_PRIVATE_KEY'
 						// sh 'ansible --version'
 						// echo artifactExists
 					// }
