@@ -207,7 +207,9 @@ pipeline {
 		}
 		stage('branch is master') {
             when {
-                artifactExists == true
+				expression {
+                	artifactExists
+				}
             }
             steps {
 				echo "artifactExists"
@@ -215,7 +217,9 @@ pipeline {
         }
 		stage('branch is dev') {
             when {
-                artifactExists  == false
+				expression {
+                	artifactExists  == false
+				}
             }
             steps {
 				echo "artifactExists false"
