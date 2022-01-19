@@ -207,7 +207,7 @@ pipeline {
 						sshcommand = "cd /home/jenkins; curl -u ${NEXUS_USER}:${NEXUS_PASS} -X GET ${artifactPath}; ls > ./qqq"
 						echo sshcommand
 						sshagent(credentials: ['dev_ssh_key']) {
-							sh ("ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 ${sshcommand}")
+							sh ("ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 'ls >qqq2'")
 						}
 
 						// echo artifactExists
