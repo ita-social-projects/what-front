@@ -76,7 +76,7 @@ pipeline {
 				withSonarQubeEnv('SonarQube9000') {
 					withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
 						echo "${sonarProjectKey}"
-						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front sonar.javascript.lcov.reportPaths=coverage/lcov.info"
+						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
 					}
 				}
 				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
