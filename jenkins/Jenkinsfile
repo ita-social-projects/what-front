@@ -196,11 +196,12 @@ pipeline {
 		stage('deploy') {
 			steps {
 				script {
-					pom = readMavenPom file: "pom.xml";
-					filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
-                    artifactPath = filesByGlob[0].path;
+					// pom = readMavenPom file: "pom.xml";
+					// filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    // echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    artifactPath = "http://192.168.1.77:8081/repository/what_raw_repo/what/fakedev/1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}/fakedev-1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}-debug.zip"
                     artifactExists = fileExists artifactPath;
+					echo artifactExists
 				}
 			}
 		}
