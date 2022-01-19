@@ -196,7 +196,7 @@ pipeline {
 		}
 		stage('deploy') {
 			steps {
-				withCredentials([usernamePassword(credentialsId: NEXUS_CREDENTIAL_ID, passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')],
+				withCredentials([usernamePassword(credentialsId: 'nexus_admin_id', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')],
 					[sshUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY')],
 					[file(credentialsId: 'ansible_hosts', keyFileVariable: 'ANSIBLE_HOSTS')]
 					) {
