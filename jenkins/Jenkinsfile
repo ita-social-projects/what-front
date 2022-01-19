@@ -10,7 +10,7 @@ pipeline {
 		telegram_bot_name = credentials('telegram_bot_name')
 		telegram_channel_id = credentials('telegram_channel_id')
 		CDD_APPLICATION_VERSION_NAME = "${env.GIT_BRANCH}"
-		template_msg = "*Build* ${JOB_NAME}\n[inline URL](${JOB_DISPLAY_URL}\n)||${NODE_LABELS}\n_${GIT_COMMIT}_||"
+		template_msg = "*Build* $JOB_NAME"
 		// template_msg = "<p><b>Build</b> ${JOB_NAME}</p><p>${JOB_DISPLAY_URL}</p><p>${NODE_LABELS}</p><p>${GIT_COMMIT}</p>"
     }
 	agent { label 'nodejs'}
