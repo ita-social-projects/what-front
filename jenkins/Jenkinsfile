@@ -204,8 +204,7 @@ pipeline {
                     // artifactExists = fileExists artifactPath;
 					// echo artifactPath
 					sshcommand = 'ls'
-					// sshagent(credentials: ['dev_ssh_key']) {
-					sshagent(['dev_ssh_key']) {
+					sshagent(credentials: ['dev_ssh_key']) {
 						sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 $sshcommand'
 					}
 
