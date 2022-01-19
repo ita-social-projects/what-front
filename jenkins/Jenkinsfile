@@ -15,87 +15,87 @@ pipeline {
     }
 	agent { label 'nodejs'}
 	stages {
-		stage("ls") {
-			steps {
-				withCredentials([
-					string(credentialsId: 'telegramToken', variable: 'telegramToken'),
-					string(credentialsId: 'telegram_bot_name', variable: 'telegram_bot_name'),
-					string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
-					]) {
-          			sh ('curl -s -X POST https://api.telegram.org/bot$telegramToken/sendMessage \
-					  	-d chat_id=$telegram_channel_id \
-						-d parse_mode=markdown \
-						-d text="*Build:*\n${JOB_NAME}\n*Process*:[inline URL](${JOB_DISPLAY_URL})\n*Git commit:*\n${GIT_COMMIT}"')
-				}
-				echo 'pwd:'
-				sh 'pwd'
-				echo 'ls:'
-				sh 'ls'
-			}
-		}
-		stage("Stage npm install") {
-			steps {
-				sh 'npm install'
-				println "${env.BRANCH_NAME}"
-			}
-		}
-		stage("Stage build") {
-			steps {
-				sh 'npm run build'
-			}
-		}
-		stage("Stage eslint + test") {
-			parallel {
-				stage("Stage eslint") {
-					steps {
-						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-								sh 'npx eslint .'
-							}
-						}
-					}
-				stage("Stage test") {
-					steps {
-						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-								sh 'npm run test'
-							}
-						}
-					}
-				}
-			}
-		stage("ls affter build and test") {
-			steps {
-				sh 'pwd'
-				sh 'ls'
-			}
-		}
-		stage('SonarQube analysis') {
-			environment {
-				def scannerHome = tool 'SonarQubeScannerMaven';
-			}
-			steps {
-				withSonarQubeEnv('SonarQube9000') {
-					withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
-						echo "${sonarProjectKey}"
-						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
-					}
-				}
-				// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
-				// -Dsonar.projectKey=${sonartoken}
-			}
-		}
-		stage("Quality Gate") {
-			steps {
-				timeout(time: 1, unit: 'HOURS') {
-					waitForQualityGate abortPipeline: true
-				}
-			}
-		}
-		stage("ls affter sonar") {
-			steps {
-				sh 'pwd'
-				sh 'ls'
-			}
-		}
+		// stage("ls") {
+		// 	steps {
+		// 		withCredentials([
+		// 			string(credentialsId: 'telegramToken', variable: 'telegramToken'),
+		// 			string(credentialsId: 'telegram_bot_name', variable: 'telegram_bot_name'),
+		// 			string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
+		// 			]) {
+        //   			sh ('curl -s -X POST https://api.telegram.org/bot$telegramToken/sendMessage \
+		// 			  	-d chat_id=$telegram_channel_id \
+		// 				-d parse_mode=markdown \
+		// 				-d text="*Build:*\n${JOB_NAME}\n*Process*:[inline URL](${JOB_DISPLAY_URL})\n*Git commit:*\n${GIT_COMMIT}"')
+		// 		}
+		// 		echo 'pwd:'
+		// 		sh 'pwd'
+		// 		echo 'ls:'
+		// 		sh 'ls'
+		// 	}
+		// }
+		// stage("Stage npm install") {
+		// 	steps {
+		// 		sh 'npm install'
+		// 		println "${env.BRANCH_NAME}"
+		// 	}
+		// }
+		// stage("Stage build") {
+		// 	steps {
+		// 		sh 'npm run build'
+		// 	}
+		// }
+		// stage("Stage eslint + test") {
+		// 	parallel {
+		// 		stage("Stage eslint") {
+		// 			steps {
+		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+		// 						sh 'npx eslint .'
+		// 					}
+		// 				}
+		// 			}
+		// 		stage("Stage test") {
+		// 			steps {
+		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+		// 						sh 'npm run test'
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// stage("ls affter build and test") {
+		// 	steps {
+		// 		sh 'pwd'
+		// 		sh 'ls'
+		// 	}
+		// }
+		// stage('SonarQube analysis') {
+		// 	environment {
+		// 		def scannerHome = tool 'SonarQubeScannerMaven';
+		// 	}
+		// 	steps {
+		// 		withSonarQubeEnv('SonarQube9000') {
+		// 			withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
+		// 				echo "${sonarProjectKey}"
+		// 				sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
+		// 			}
+		// 		}
+		// 		// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
+		// 		// -Dsonar.projectKey=${sonartoken}
+		// 	}
+		// }
+		// stage("Quality Gate") {
+		// 	steps {
+		// 		timeout(time: 1, unit: 'HOURS') {
+		// 			waitForQualityGate abortPipeline: true
+		// 		}
+		// 	}
+		// }
+		// stage("ls affter sonar") {
+		// 	steps {
+		// 		sh 'pwd'
+		// 		sh 'ls'
+		// 	}
+		// }
 		stage('branch is master') {
             when {
                 branch 'fakemaster'
@@ -121,53 +121,54 @@ pipeline {
         //                            '''
 		// 		}
 		// }
-		stage('ttt') {
-            steps {
-				sh '''
-				echo "BRANCH_NAME ${BRANCH_NAME}"
-				echo "CHANGE_ID ${CHANGE_ID}"
-				echo "CHANGE_URL ${CHANGE_URL}"
-				echo "CHANGE_TITLE ${CHANGE_TITLE}"
-				echo "CHANGE_AUTHOR ${CHANGE_AUTHOR}"
-				echo "CHANGE_AUTHOR_DISPLAY_NAME ${CHANGE_AUTHOR_DISPLAY_NAME}"
-				echo "CHANGE_AUTHOR_EMAIL ${CHANGE_AUTHOR_EMAIL}"
-				echo "CHANGE_TARGET ${CHANGE_TARGET}"
-				echo "CHANGE_BRANCH ${CHANGE_BRANCH}"
-				echo "CHANGE_FORK ${CHANGE_FORK}"
-				echo "TAG_NAME ${TAG_NAME}"
-				echo "JOB_DISPLAY_URL ${JOB_DISPLAY_URL}"
-				echo "RUN_DISPLAY_URL ${RUN_DISPLAY_URL}"
-				echo "BUILD_NUMBER ${BUILD_NUMBER}"
-				echo "BUILD_ID ${BUILD_ID}"
-				echo "BUILD_DISPLAY_NAME ${BUILD_DISPLAY_NAME}"
-				echo "JOB_NAME ${JOB_NAME}"
-				echo "JOB_BASE_NAME ${JOB_BASE_NAME}"
-				echo "BUILD_TAG ${BUILD_TAG}"
-				echo "EXECUTOR_NUMBER ${EXECUTOR_NUMBER}"
-				echo "NODE_NAME ${NODE_NAME}"
-				echo "NODE_LABELS ${NODE_LABELS}"
+		// stage('ttt') {
+        //     steps {
+		// 		sh '''
+		// 		echo "BRANCH_NAME ${BRANCH_NAME}"
+		// 		echo "CHANGE_ID ${CHANGE_ID}"
+		// 		echo "CHANGE_URL ${CHANGE_URL}"
+		// 		echo "CHANGE_TITLE ${CHANGE_TITLE}"
+		// 		echo "CHANGE_AUTHOR ${CHANGE_AUTHOR}"
+		// 		echo "CHANGE_AUTHOR_DISPLAY_NAME ${CHANGE_AUTHOR_DISPLAY_NAME}"
+		// 		echo "CHANGE_AUTHOR_EMAIL ${CHANGE_AUTHOR_EMAIL}"
+		// 		echo "CHANGE_TARGET ${CHANGE_TARGET}"
+		// 		echo "CHANGE_BRANCH ${CHANGE_BRANCH}"
+		// 		echo "CHANGE_FORK ${CHANGE_FORK}"
+		// 		echo "TAG_NAME ${TAG_NAME}"
+		// 		echo "JOB_DISPLAY_URL ${JOB_DISPLAY_URL}"
+		// 		echo "RUN_DISPLAY_URL ${RUN_DISPLAY_URL}"
+		// 		echo "BUILD_NUMBER ${BUILD_NUMBER}"
+		// 		echo "BUILD_ID ${BUILD_ID}"
+		// 		echo "BUILD_DISPLAY_NAME ${BUILD_DISPLAY_NAME}"
+		// 		echo "JOB_NAME ${JOB_NAME}"
+		// 		echo "JOB_BASE_NAME ${JOB_BASE_NAME}"
+		// 		echo "BUILD_TAG ${BUILD_TAG}"
+		// 		echo "EXECUTOR_NUMBER ${EXECUTOR_NUMBER}"
+		// 		echo "NODE_NAME ${NODE_NAME}"
+		// 		echo "NODE_LABELS ${NODE_LABELS}"
 
 
 
-				echo "GIT_COMMIT ${GIT_COMMIT}"
-				echo "GIT_BRANCH ${GIT_BRANCH}"
-				echo "GIT_LOCAL_BRANCH ${GIT_LOCAL_BRANCH}"
-				echo "GIT_PREVIOUS_COMMIT ${GIT_PREVIOUS_COMMIT}"
-				echo "GIT_PREVIOUS_SUCCESSFUL_COMMIT ${GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
-				echo "GIT_URL ${GIT_URL}"
-				echo "GIT_URL_N - ${GIT_URL_N}"
-				echo "GIT_AUTHOR_NAME ${GIT_AUTHOR_NAME}"
-				echo "GIT_COMMITTER_NAME ${GIT_COMMITTER_NAME}"
-				echo "GIT_AUTHOR_EMAIL ${GIT_AUTHOR_EMAIL}"
-				echo "GIT_COMMITTER_EMAIL ${GIT_COMMITTER_EMAIL}"
-				'''
-            }
+		// 		echo "GIT_COMMIT ${GIT_COMMIT}"
+		// 		echo "GIT_BRANCH ${GIT_BRANCH}"
+		// 		echo "GIT_LOCAL_BRANCH ${GIT_LOCAL_BRANCH}"
+		// 		echo "GIT_PREVIOUS_COMMIT ${GIT_PREVIOUS_COMMIT}"
+		// 		echo "GIT_PREVIOUS_SUCCESSFUL_COMMIT ${GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
+		// 		echo "GIT_URL ${GIT_URL}"
+		// 		echo "GIT_URL_N - ${GIT_URL_N}"
+		// 		echo "GIT_AUTHOR_NAME ${GIT_AUTHOR_NAME}"
+		// 		echo "GIT_COMMITTER_NAME ${GIT_COMMITTER_NAME}"
+		// 		echo "GIT_AUTHOR_EMAIL ${GIT_AUTHOR_EMAIL}"
+		// 		echo "GIT_COMMITTER_EMAIL ${GIT_COMMITTER_EMAIL}"
+		// 		'''
+        //     }
         }
 		stage('nexus') {
 			steps {
 				script {
 					def version = readJSON file: './package.json'
-					zip zipFile: 'dist.zip', archive: false, dir: 'dist', overwrite: true
+					zip zipFile: 'dist.zip', archive: false, dir: 'jenkins', overwrite: true
+					// zip zipFile: 'dist.zip', archive: false, dir: 'dist', overwrite: true
 					nexusArtifactUploader(
 						nexusVersion: 'nexus3',
 						protocol: 'http',
@@ -186,6 +187,17 @@ pipeline {
 				}
 			}
         }
+		stage {
+			step {
+				script {
+					pom = readMavenPom file: "pom.xml";
+					filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    artifactPath = filesByGlob[0].path;
+                    artifactExists = fileExists artifactPath;
+				}
+			}
+		}
   	}
 	post {
 		always {
