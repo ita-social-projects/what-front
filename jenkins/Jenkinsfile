@@ -214,7 +214,7 @@ pipeline {
 						// 	sh ("ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 ${sshcommand}")
 						// }
 						echo DEV_PRIVATE_KEY
-						sh 'ansible-playbook jenkins/deploy_dev.yml -i jenkins/hosts.ini --private-key $DEV_PRIVATE_KEY'
+						ansible-playbook(credentialsId: 'dev_ssh_key', playbook: 'jenkins/deploy_dev.yml', inventory: 'jenkins/hosts.ini')
 						// sh 'ansible --version'
 						// echo artifactExists
 					// }
