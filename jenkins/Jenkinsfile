@@ -6,23 +6,28 @@ pipeline {
         // NEXUS_URL = "you-ip-addr-here:8081"
         // NEXUS_REPOSITORY = "maven-nexus-repo"
         NEXUS_CREDENTIAL_ID = "nexus_admin_id"
+		telegramToken = credentials('telegramToken')
+		telegram_bot_name = credentials('telegram_bot_name')
+		telegram_channel_id = credentials('telegram_channel_id')
+		CDD_APPLICATION_VERSION_NAME = "${env.GIT_BRANCH}"
+		template_msg = "<p><b>Build</b> ${JOB_NAME}</p><p>${JOB_DISPLAY_URL}</p><p>${NODE_LABELS}</p><p>${GIT_COMMIT}</p>"
     }
 	agent { label 'nodejs'}
 	stages {
 		stage("ls") {
 			steps {
-				withCredentials([
-					string(credentialsId: 'telegramToken', variable: 'telegramToken'),
-					string(credentialsId: 'telegram_bot_name', variable: 'telegram_bot_name'),
-					string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
-					]) {
+				// withCredentials([
+				// 	string(credentialsId: 'telegramToken', variable: 'telegramToken'),
+				// 	string(credentialsId: 'telegram_bot_name', variable: 'telegram_bot_name'),
+				// 	string(credentialsId: 'telegram_channel_id', variable: 'telegram_channel_id')
+				// 	]) {
           			sh ("""
 					  curl -s -X POST https://api.telegram.org/bot${telegramToken}/sendMessage \
 					  	-d chat_id=${telegram_channel_id} \
-						-d parse_mode=markdown \
-						-d text="Build ${JOB_NAME}\n${JOB_DISPLAY_URL}\n${NODE_LABELS}\n${GIT_COMMIT}"
+						-d parse_mode=HTML \
+						-d text="${template_msg}"
 					  """)
-				}
+				// }
 				echo 'pwd:'
 				sh 'pwd'
 				echo 'ls:'
