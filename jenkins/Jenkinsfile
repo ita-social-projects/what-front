@@ -25,7 +25,7 @@ pipeline {
           			sh ('curl -s -X POST https://api.telegram.org/bot$telegramToken/sendMessage \
 					  	-d chat_id=$telegram_channel_id \
 						-d parse_mode=markdown \
-						-d text=$template_msg')
+						-d text="Build ${JOB_NAME}"')
 				}
 				echo 'pwd:'
 				sh 'pwd'
