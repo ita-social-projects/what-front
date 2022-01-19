@@ -10,7 +10,7 @@ pipeline {
 		telegram_bot_name = credentials('telegram_bot_name')
 		telegram_channel_id = credentials('telegram_channel_id')
 		CDD_APPLICATION_VERSION_NAME = "${env.GIT_BRANCH}"
-		template_msg = "Build ${JOB_NAME}${JOB_DISPLAY_URL}${NODE_LABELS}${GIT_COMMIT}"
+		template_msg = "*Build ${JOB_NAME}[inline URL](${JOB_DISPLAY_URL})||${NODE_LABELS}\n_${GIT_COMMIT}||"
 		// template_msg = "<p><b>Build</b> ${JOB_NAME}</p><p>${JOB_DISPLAY_URL}</p><p>${NODE_LABELS}</p><p>${GIT_COMMIT}</p>"
     }
 	agent { label 'nodejs'}
@@ -24,7 +24,7 @@ pipeline {
 				// 	]) {
           			sh ('curl -s -X POST https://api.telegram.org/bot$telegramToken/sendMessage \
 					  	-d chat_id=$telegram_channel_id \
-						-d parse_mode=HTML \
+						-d parse_mode=MarkdownV2 \
 						-d text=$template_msg')
 				// }
 				echo 'pwd:'
