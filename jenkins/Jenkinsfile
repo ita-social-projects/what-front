@@ -184,7 +184,7 @@ pipeline {
 							type: 'zip']
 						]
 					);
-					echo qqq
+					echo sh(returnStdout: true, script: 'env')
 				}
 			}
         }
