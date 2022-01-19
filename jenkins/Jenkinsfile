@@ -183,8 +183,8 @@ pipeline {
 							file: 'dist.zip',
 							type: 'zip']
 						]
-						echo qqq
 					);
+					echo qqq
 				}
 			}
         }
