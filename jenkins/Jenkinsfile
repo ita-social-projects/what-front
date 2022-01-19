@@ -203,10 +203,10 @@ pipeline {
                     // artifactPath = "http://192.168.1.77:8081/repository/what_raw_repo/what/fakedev/1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}/fakedev-1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}-debug.zip"
                     // artifactExists = fileExists artifactPath;
 					// echo artifactPath
-					sshagent(credentials: ['dev_ssh_key']) {
-						sh """
-							ssh jenkins@192.168.1.76 'ls'
-						""" 
+					sshcommand = 'ls'
+					// sshagent(credentials: ['dev_ssh_key']) {
+					sshagent(['dev_ssh_key']) {
+						sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 $sshcommand'
 					}
 
 					// echo artifactExists
