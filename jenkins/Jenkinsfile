@@ -199,7 +199,7 @@ pipeline {
 				withCredentials([
 					usernamePassword(credentialsId: 'nexus_admin_id', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER'),
 					sshUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY'),
-					file(credentialsId: 'ansible_hosts', variable: 'ANSIBLE_HOSTS')
+					// file(credentialsId: 'ansible_hosts', variable: 'ANSIBLE_HOSTS')
 					]) {
 					// script {
 						// pom = readMavenPom file: "pom.xml";
