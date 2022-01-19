@@ -187,6 +187,12 @@ pipeline {
 				}
 			}
         }
+		stage("ls affter nexus") {
+			steps {
+				sh 'pwd'
+				sh 'ls'
+			}
+		}
 		stage('deploy') {
 			steps {
 				script {
