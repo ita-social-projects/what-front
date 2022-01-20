@@ -33,17 +33,17 @@ pipeline {
 				sh 'ls'
 			}
 		}
-		// stage("Stage npm install") {
-		// 	steps {
-		// 		sh 'npm install'
-		// 		println "${env.BRANCH_NAME}"
-		// 	}
-		// }
-		// stage("Stage build") {
-		// 	steps {
-		// 		sh 'npm run build'
-		// 	}
-		// }
+		stage("Stage npm install") {
+			steps {
+				sh 'npm install'
+				println "${env.BRANCH_NAME}"
+			}
+		}
+		stage("Stage build") {
+			steps {
+				sh 'npm run build'
+			}
+		}
 		// stage("Stage eslint + test") {
 		// 	parallel {
 		// 		stage("Stage eslint") {
@@ -167,7 +167,7 @@ pipeline {
 			steps {
 				script {
 					def version = readJSON file: './package.json'
-					zip zipFile: 'dist.zip', archive: false, dir: 'jenkins', overwrite: true
+					zip zipFile: 'dist.zip', archive: false, dir: 'dist', overwrite: true
 					// zip zipFile: 'dist.zip', archive: false, dir: 'dist', overwrite: true
 					qqq = nexusArtifactUploader(
 						nexusVersion: 'nexus3',
