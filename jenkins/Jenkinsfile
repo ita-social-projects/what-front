@@ -113,6 +113,7 @@ pipeline {
 									credentialsId: 'dev_ssh_key', 
 									playbook: 'jenkins/deploy_master_dev.yml', 
 									inventory: 'jenkins/hosts.ini',
+									extras: '-vvv',
 									extraVars: [
 										nexus_url: artifactPath,
 										nexus_user: NEXUS_USER,
