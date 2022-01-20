@@ -1,0 +1,27 @@
+---
+- name: "Test playbook run"
+  hosts: dev
+  become: true
+  remote_user: jenkins
+  tasks:
+    - name: "Debug"
+      ansible.builtin.debug:
+        msg: "Test debug"
+
+    - name: Fetch file from nexus
+      get_url:
+        url: '{{ nexus_url }}'
+        dest: /home/jenkins
+        username: '{{ nexus_user }}'
+        password: '{{ nexus_pass }}'
+      register: output
+
+    - ansible.builtin.debug:
+       var: output.dest
+
+    - name: Unarchive a file that is already on the remote machine
+      ansible.builtin.unarchive:
+        src: '{{ output.dest }}'
+        dest: /var/www/html
+        remote_src: yes
+...
