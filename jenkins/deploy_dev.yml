@@ -2,6 +2,7 @@
 - name: "Test playbook run"
   hosts: dev
   become: true
+  remote_user: jenkins
   tasks:
     - name: "Debug"
       ansible.builtin.debug:
