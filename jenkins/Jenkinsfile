@@ -158,20 +158,24 @@ pipeline {
         stage('Tests') {
             parallel {
                 stage('Test 1') {
-					stage('Test 11 12') {
-						steps {
-							echo "Test 11"
-						}
-						steps {
-							echo "Test 12"
+					steps {
+						stage('Test 11 12') {
+							steps {
+								echo "Test 11"
+							}
+							steps {
+								echo "Test 12"
+							}
 						}
 					}
-					stage('Test 21 22') {
-						steps {
-							echo "Test 21"
-						}
-						steps {
-							echo "Test 22"
+					steps {
+						stage('Test 21 22') {
+							steps {
+								echo "Test 21"
+							}
+							steps {
+								echo "Test 22"
+							}
 						}
 					}
 				}
