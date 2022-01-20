@@ -113,7 +113,6 @@ pipeline {
 									credentialsId: 'dev_ssh_key', 
 									playbook: 'jenkins/deploy_master_stage.yml', 
 									inventory: 'jenkins/hosts.ini',
-									
 									extraVars: [
 										nexus_url: artifactPath,
 										nexus_user: NEXUS_USER,
@@ -134,14 +133,13 @@ pipeline {
 							usernamePassword(credentialsId: 'nexus_admin_id', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER'),
 							]) {
 							script {
-								// sh 'ansible-playbook jenkins/deploy_dev.yml -i jenkins/hosts.ini -vvvv' 
 								artifactPath = "http://192.168.1.77:8081/repository/what_raw_repo/what/fakedev/1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}/fakedev-1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}-debug.zip"
 								ansiblePlaybook(
 									credentialsId: 'dev_ssh_key', 
 									playbook: 'jenkins/deploy_dev.yml', 
 									inventory: 'jenkins/hosts.ini',
 									disableHostKeyChecking: true,
-									extras: '-vvv',
+									// extras: '-vvv',
 									extraVars: [
 										nexus_url: artifactPath,
 										nexus_user: NEXUS_USER,
@@ -196,7 +194,6 @@ pipeline {
 									credentialsId: 'dev_ssh_key', 
 									playbook: 'jenkins/deploy_master_prod.yml', 
 									inventory: 'jenkins/hosts.ini',
-									
 									extraVars: [
 										nexus_url: artifactPath,
 										nexus_user: NEXUS_USER,
