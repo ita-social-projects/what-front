@@ -1,17 +1,12 @@
 import groovy.json.JsonSlurper;
 pipeline {
     environment {
-        // NEXUS_VERSION = "nexus3"
-        // NEXUS_PROTOCOL = "http"
-        // NEXUS_URL = "you-ip-addr-here:8081"
-        // NEXUS_REPOSITORY = "maven-nexus-repo"
         NEXUS_CREDENTIAL_ID = "nexus_admin_id"
 		telegramToken = credentials('telegramToken')
 		telegram_bot_name = credentials('telegram_bot_name')
 		telegram_channel_id = credentials('telegram_channel_id')
 		CDD_APPLICATION_VERSION_NAME = "${env.GIT_BRANCH}"
 		template_msg = "*Build* $JOB_NAME"
-		// template_msg = "<p><b>Build</b> ${JOB_NAME}</p><p>${JOB_DISPLAY_URL}</p><p>${NODE_LABELS}</p><p>${GIT_COMMIT}</p>"
     }
 	agent { label 'nodejs'}
 	stages {
@@ -44,131 +39,49 @@ pipeline {
 				sh 'npm run build'
 			}
 		}
-		// stage("Stage eslint + test") {
-		// 	parallel {
-		// 		stage("Stage eslint") {
-		// 			steps {
-		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-		// 						sh 'npx eslint .'
-		// 					}
-		// 				}
-		// 			}
-		// 		stage("Stage test") {
-		// 			steps {
-		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-		// 						sh 'npm run test'
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// stage("ls affter build and test") {
-		// 	steps {
-		// 		sh 'pwd'
-		// 		sh 'ls'
-		// 	}
-		// }
-		// stage('SonarQube analysis') {
-		// 	environment {
-		// 		def scannerHome = tool 'SonarQubeScannerMaven';
-		// 	}
-		// 	steps {
-		// 		withSonarQubeEnv('SonarQube9000') {
-		// 			withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
-		// 				echo "${sonarProjectKey}"
-		// 				sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
-		// 			}
-		// 		}
-		// 		// -Dsonar.login=66c6d51eb60150c34139d8552ba6e3afb1be3df4
-		// 		// -Dsonar.projectKey=${sonartoken}
-		// 	}
-		// }
-		// stage("Quality Gate") {
-		// 	steps {
-		// 		timeout(time: 1, unit: 'HOURS') {
-		// 			waitForQualityGate abortPipeline: true
-		// 		}
-		// 	}
-		// }
-		// stage("ls affter sonar") {
-		// 	steps {
-		// 		sh 'pwd'
-		// 		sh 'ls'
-		// 	}
-		// }
-		stage('branch is master') {
-            when {
-                branch 'fakemaster'
-            }
-            steps {
-				echo "branch fakemaster"
-            }
-        }
-		stage('branch is dev') {
-            when {
-                branch 'fakedev'
-            }
-            steps {
-				echo "branch fakedev"
-            }
-        }
-		// stage('Deploy Master') {
-		// 	when {expression { env.BRANCH_NAME == 'master' }}
-		// 		steps {
-		// 		  sh '''
-        //                            #!/bin/bash
-        //                            echo Deploying in master....
-        //                            '''
-		// 		}
-		// }
-		// stage('ttt') {
-        //     steps {
-		// 		sh '''
-		// 		echo "BRANCH_NAME ${BRANCH_NAME}"
-		// 		echo "CHANGE_ID ${CHANGE_ID}"
-		// 		echo "CHANGE_URL ${CHANGE_URL}"
-		// 		echo "CHANGE_TITLE ${CHANGE_TITLE}"
-		// 		echo "CHANGE_AUTHOR ${CHANGE_AUTHOR}"
-		// 		echo "CHANGE_AUTHOR_DISPLAY_NAME ${CHANGE_AUTHOR_DISPLAY_NAME}"
-		// 		echo "CHANGE_AUTHOR_EMAIL ${CHANGE_AUTHOR_EMAIL}"
-		// 		echo "CHANGE_TARGET ${CHANGE_TARGET}"
-		// 		echo "CHANGE_BRANCH ${CHANGE_BRANCH}"
-		// 		echo "CHANGE_FORK ${CHANGE_FORK}"
-		// 		echo "TAG_NAME ${TAG_NAME}"
-		// 		echo "JOB_DISPLAY_URL ${JOB_DISPLAY_URL}"
-		// 		echo "RUN_DISPLAY_URL ${RUN_DISPLAY_URL}"
-		// 		echo "BUILD_NUMBER ${BUILD_NUMBER}"
-		// 		echo "BUILD_ID ${BUILD_ID}"
-		// 		echo "BUILD_DISPLAY_NAME ${BUILD_DISPLAY_NAME}"
-		// 		echo "JOB_NAME ${JOB_NAME}"
-		// 		echo "JOB_BASE_NAME ${JOB_BASE_NAME}"
-		// 		echo "BUILD_TAG ${BUILD_TAG}"
-		// 		echo "EXECUTOR_NUMBER ${EXECUTOR_NUMBER}"
-		// 		echo "NODE_NAME ${NODE_NAME}"
-		// 		echo "NODE_LABELS ${NODE_LABELS}"
-
-
-
-		// 		echo "GIT_COMMIT ${GIT_COMMIT}"
-		// 		echo "GIT_BRANCH ${GIT_BRANCH}"
-		// 		echo "GIT_LOCAL_BRANCH ${GIT_LOCAL_BRANCH}"
-		// 		echo "GIT_PREVIOUS_COMMIT ${GIT_PREVIOUS_COMMIT}"
-		// 		echo "GIT_PREVIOUS_SUCCESSFUL_COMMIT ${GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
-		// 		echo "GIT_URL ${GIT_URL}"
-		// 		echo "GIT_URL_N - ${GIT_URL_N}"
-		// 		echo "GIT_AUTHOR_NAME ${GIT_AUTHOR_NAME}"
-		// 		echo "GIT_COMMITTER_NAME ${GIT_COMMITTER_NAME}"
-		// 		echo "GIT_AUTHOR_EMAIL ${GIT_AUTHOR_EMAIL}"
-		// 		echo "GIT_COMMITTER_EMAIL ${GIT_COMMITTER_EMAIL}"
-		// 		'''
-        //     }
-        // }
-		stage('nexus') {
+		stage("Stage eslint + test") {
+			parallel {
+				stage("Stage eslint") {
+					steps {
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+								sh 'npx eslint .'
+							}
+						}
+					}
+				stage("Stage test") {
+					steps {
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+								sh 'npm run test'
+							}
+						}
+					}
+				}
+			}
+		stage('SonarQube analysis') {
+			environment {
+				def scannerHome = tool 'SonarQubeScannerMaven';
+			}
+			steps {
+				withSonarQubeEnv('SonarQube9000') {
+					withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
+						echo "${sonarProjectKey}"
+						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
+					}
+				}
+			}
+		}
+		stage("Quality Gate") {
+			steps {
+				timeout(time: 1, unit: 'HOURS') {
+					waitForQualityGate abortPipeline: true
+				}
+			}
+		}
+		stage("to nexus") {
 			steps {
 				script {
 					def version = readJSON file: './package.json'
 					zip zipFile: 'dist.zip', archive: false, dir: 'dist', overwrite: true
-					// zip zipFile: 'dist.zip', archive: false, dir: 'dist', overwrite: true
 					qqq = nexusArtifactUploader(
 						nexusVersion: 'nexus3',
 						protocol: 'http',
@@ -184,35 +97,28 @@ pipeline {
 							type: 'zip']
 						]
 					);
-					echo sh(returnStdout: true, script: 'env')
 				}
 			}
-        }
-		stage("ls affter nexus") {
-			steps {
-				sh 'pwd'
-				sh 'ls'
-			}
 		}
-		stage('deploy') {
+		stage('branch is master') {
+            when {
+                branch 'fakemaster'
+            }
+            steps {
+				echo "branch fakemaster"
+            }
+        }
+		stage('branch is dev') {
+            when {
+                branch 'fakedev'
+            }
 			steps {
+				echo "branch fakedev"
 				withCredentials([
 					usernamePassword(credentialsId: 'nexus_admin_id', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER'),
-					// sshUserPrivateKey(credentialsId: 'dev_ssh_key', keyFileVariable: 'DEV_PRIVATE_KEY'),
-					// file(credentialsId: 'ansible_hosts', variable: 'ANSIBLE_HOSTS')
 					]) {
 					script {
-						// pom = readMavenPom file: "pom.xml";
-						// filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-						// echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
 						artifactPath = "http://192.168.1.77:8081/repository/what_raw_repo/what/fakedev/1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}/fakedev-1.0.0-rc${BUILD_ID}.${GIT_COMMIT.take(6)}-debug.zip"
-						// // artifactExists = fileExists artifactPath;
-						echo artifactPath
-						// sshcommand = "cd /home/jenkins && curl -u ${NEXUS_USER}:${NEXUS_PASS} -X GET ${artifactPath} && ls > ./qqq3"
-						// echo sshcommand
-						// sshagent(credentials: ['dev_ssh_key']) {
-						// 	sh ("ssh -o StrictHostKeyChecking=no jenkins@192.168.1.76 ${sshcommand}")
-						// }
 						ansiblePlaybook(
 							credentialsId: 'dev_ssh_key', 
 							playbook: 'jenkins/deploy_dev.yml', 
@@ -221,39 +127,12 @@ pipeline {
 								nexus_url: artifactPath,
 								nexus_user: NEXUS_USER,
 								nexus_pass: NEXUS_PASS
-							])
-						// sh 'ansible --version'
-						// echo artifactExists
+							]
+						)
 					}
 				}
-			}
-		}
-		stage("ls affter rsa") {
-			steps {
-				sh 'pwd'
-				sh 'ls'
-			}
-		}
-		// stage('artifactExists') {
-        //     when {
-		// 		expression {
-        //         	artifactExists
-		// 		}
-        //     }
-        //     steps {
-		// 		echo "artifactExists"
-        //     }
-        // }
-		// stage('artifactExists false') {
-        //     when {
-		// 		expression {
-        //         	artifactExists  == false
-		// 		}
-        //     }
-        //     steps {
-		// 		echo "artifactExists false"
-        //     }
-        // }
+            }
+        }
   	}
 	post {
 		always {
