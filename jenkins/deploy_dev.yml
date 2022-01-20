@@ -1,6 +1,7 @@
 ---
 - name: "Test playbook run"
   hosts: dev
+  become: true
   tasks:
     - name: "Debug"
       ansible.builtin.debug:
