@@ -35,44 +35,44 @@ pipeline {
 				sh 'npm run build'
 			}
 		}
-		// stage("Stage eslint + test") {
-		// 	parallel {
-		// 		stage("Stage eslint") {
-		// 			steps {
-		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-		// 						sh 'npx eslint .'
-		// 					}
-		// 				}
-		// 			}
-		// 		stage("Stage test") {
-		// 			steps {
-		// 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-		// 						sh 'npm run test'
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// stage('SonarQube analysis') {
-		// 	environment {
-		// 		def scannerHome = tool 'SonarQubeScannerMaven';
-		// 	}
-		// 	steps {
-		// 		withSonarQubeEnv('SonarQube9000') {
-		// 			withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
-		// 				echo "${sonarProjectKey}"
-		// 				sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
-		// 			}
-		// 		}
-		// 	}
-		// }
-		// stage("Quality Gate") {
-		// 	steps {
-		// 		timeout(time: 1, unit: 'HOURS') {
-		// 			waitForQualityGate abortPipeline: true
-		// 		}
-		// 	}
-		// }
+		stage("Stage eslint + test") {
+			parallel {
+				stage("Stage eslint") {
+					steps {
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+								sh 'npx eslint .'
+							}
+						}
+					}
+				stage("Stage test") {
+					steps {
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+								sh 'npm run test'
+							}
+						}
+					}
+				}
+			}
+		stage('SonarQube analysis') {
+			environment {
+				def scannerHome = tool 'SonarQubeScannerMaven';
+			}
+			steps {
+				withSonarQubeEnv('SonarQube9000') {
+					withCredentials([string(credentialsId: 'sonarProjectKey', variable: 'sonarProjectKey')]) {
+						echo "${sonarProjectKey}"
+						sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=jenkins_what_front -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
+					}
+				}
+			}
+		}
+		stage("Quality Gate") {
+			steps {
+				timeout(time: 1, unit: 'HOURS') {
+					waitForQualityGate abortPipeline: true
+				}
+			}
+		}
 		stage("to nexus") {
 			steps {
 				script {
