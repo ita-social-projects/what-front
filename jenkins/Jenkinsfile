@@ -10,7 +10,8 @@ pipeline {
     }
 	agent { label 'nodejs'}
 	stages {
-		stage("ls") {
+
+		stage("Stage npm install") {
 			steps {
 				withCredentials([
 					string(credentialsId: 'telegramToken', variable: 'telegramToken'),
@@ -22,12 +23,7 @@ pipeline {
 						-d parse_mode=markdown \
 						-d text="*Build:*\n${JOB_NAME}\n*Process*:[JOB_DISPLAY](${JOB_DISPLAY_URL})\n${JOB_DISPLAY_URL}\n*Git commit:*\n${GIT_COMMIT}"')
 				}
-			}
-		}
-		stage("Stage npm install") {
-			steps {
 				sh 'npm install'
-				println "${env.BRANCH_NAME}"
 			}
 		}
 		stage("Stage build") {
