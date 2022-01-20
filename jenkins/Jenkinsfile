@@ -19,7 +19,7 @@ pipeline {
 					]) {
           			sh ('curl -s -X POST https://api.telegram.org/bot$telegramToken/sendMessage \
 					  	-d chat_id=$telegram_channel_id \
-						-d parse_mode=MarkdownV2 \
+						-d parse_mode=markdown \
 						-d text="*Build:*\n${JOB_NAME}\n*Process*:[inline URL](${JOB_DISPLAY_URL})\n*Git commit:*\n${GIT_COMMIT}"')
 				}
 			}
