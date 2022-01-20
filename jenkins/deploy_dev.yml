@@ -15,7 +15,7 @@
       register: output
 
     - ansible.builtin.debug:
-       var: output 
+       var: output.dest
 
     - name: Unarchive a file that is already on the remote machine
       ansible.builtin.unarchive:
