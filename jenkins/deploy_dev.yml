@@ -19,7 +19,7 @@
 
     - name: Unarchive a file that is already on the remote machine
       ansible.builtin.unarchive:
-        src: output.dest
+        src: '{{ output.dest }}'
         dest: /var/www/html
         remote_src: yes
 ...
