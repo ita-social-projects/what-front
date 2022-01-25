@@ -76,7 +76,7 @@ export const Header = () => {
             <span
               className={styles['header__account-user--fullname']}
               onClick={toggleDropdown}
-            >{`${currentUser?.fisrtName}`} {`${currentUser?.lastName}`}
+            >{`${currentUser?.firstName}`} {`${currentUser?.lastName}`}
             </span>
           </div>
 
