@@ -18,7 +18,7 @@ import Icon from '@/icon.js';
 import classNames from 'classnames';
 import styles from './list-of-secretaries.scss';
 import { Table } from '@components/table';
-import {List} from "@components/list";
+import { List } from '@components/list';
 
 export const ListOfSecretaries = () => {
   const history = useHistory();
@@ -35,7 +35,9 @@ export const ListOfSecretaries = () => {
     { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
 
-  const [sortingCategories, setSortingCategories] = useState(INITIAL_CATEGORIES);
+  const [sortingCategories, setSortingCategories] = useState(
+    INITIAL_CATEGORIES
+  );
 
   const [visibleSecretaries, setVisibleSecretaries] = useState([]);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
@@ -53,8 +55,11 @@ export const ListOfSecretaries = () => {
 
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
 
-  const [loadActiveSecretaries, loadAllSecretaries, dispatchAddAlert] =
-    useActions([fetchActiveSecretaries, fetchSecretaries, addAlert]);
+  const [
+    loadActiveSecretaries,
+    loadAllSecretaries,
+    dispatchAddAlert,
+  ] = useActions([fetchActiveSecretaries, fetchSecretaries, addAlert]);
 
   const [secretaries, setSecretaries] = useState([]);
 
@@ -155,9 +160,13 @@ export const ListOfSecretaries = () => {
 
   const handleSortByParam = (data, categoryParams) => {
     const sortedSecretaries = data;
-    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setSortingCategories(
+      changeActiveCategory(sortingCategories, categoryParams.sortingParam)
+    );
     setSecretaries(sortedSecretaries);
-    setVisibleSecretaries(secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary));
+    setVisibleSecretaries(
+      secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary)
+    );
   };
 
   const resetSortingCategory = useCallback(() => {
@@ -232,7 +241,7 @@ export const ListOfSecretaries = () => {
           className={styles['table-row']}
           data-secretary-id={id}
         >
-          <td className={"text-left"}>{firstName}</td>
+          <td className={'text-left'}>{firstName}</td>
           <td>{lastName}</td>
           <td>{email}</td>
           {currentUser.role === 4 && (
@@ -292,7 +301,7 @@ export const ListOfSecretaries = () => {
           prevPage={prevPage}
           nextPage={nextPage}
           page={currentPage}
-      />
+        />
       );
     }
   };
@@ -301,15 +310,18 @@ export const ListOfSecretaries = () => {
     data: visibleSecretaries,
     handleDetails,
     handleEdit,
-    errors: [{
-      message: 'Loading has been failed',
-      check: [!!allSecretariesError || !!activeSecretariesError]
-    }, {
-      message: 'Secretary is not found',
-      check: [!visibleSecretaries.length, !!searchValue]
-    }],
+    errors: [
+      {
+        message: 'Loading has been failed',
+        check: [!!allSecretariesError || !!activeSecretariesError],
+      },
+      {
+        message: 'Secretary is not found',
+        check: [!visibleSecretaries.length, !!searchValue],
+      },
+    ],
     access: currentUser.role === 4,
-    fieldsToShow: ['firstName', 'lastName', 'email', 'edit']
+    fieldsToShow: ['firstName', 'lastName', 'email', 'edit'],
   };
 
   return (
@@ -335,17 +347,21 @@ export const ListOfSecretaries = () => {
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button"
-                        className="btn btn-secondary"
-                        disabled={!showBlocks}
-                        onClick={() => setShowBlocks(false)}>
-                  <Icon icon="List" color="#2E3440" size={25}/>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  disabled={!showBlocks}
+                  onClick={() => setShowBlocks(false)}
+                >
+                  <Icon icon="List" color="#2E3440" size={25} />
                 </button>
-                <button type="button"
-                        className="btn btn-secondary"
-                        disabled={showBlocks}
-                        onClick={() => setShowBlocks(true)}>
-                  <Icon icon="Card" color="#2E3440" size={25}/>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  disabled={showBlocks}
+                  onClick={() => setShowBlocks(true)}
+                >
+                  <Icon icon="Card" color="#2E3440" size={25} />
                 </button>
               </div>
             </div>
@@ -372,32 +388,32 @@ export const ListOfSecretaries = () => {
                 Disabled Secretaries
               </label>
             </div>
-            {!showBlocks &&
-            <div className="col-2 d-flex">
-              <label
+            {!showBlocks && (
+              <div className="col-2 d-flex">
+                <label
                   className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
-              >
-                Rows
-              </label>
-              <select
+                >
+                  Rows
+                </label>
+                <select
                   className={classNames('form-control', styles['change-rows'])}
                   id="change-visible-people"
                   onChange={(event) => {
                     changeCountVisibleItems(event.target.value);
                   }}
-              >
-                <option>9</option>
-                <option>27</option>
-                <option>45</option>
-                <option>72</option>
-                <option>99</option>
-              </select>
-            </div>
-            }
+                >
+                  <option>9</option>
+                  <option>27</option>
+                  <option>45</option>
+                  <option>72</option>
+                  <option>99</option>
+                </select>
+              </div>
+            )}
             {currentUser.role === 4 && (
-                <div className="col-2 text-right">
-                  <Button onClick={handleAddSecretary}>
+              <div className="col-2 text-right">
+                <Button onClick={handleAddSecretary}>
                   <span>Add a secretary</span>
                 </Button>
               </div>
@@ -408,21 +424,21 @@ export const ListOfSecretaries = () => {
             className="d-block mx-auto my-3"
             variant="info"
           >
-            {
-              showBlocks ?
-                  <div className="container d-flex flex-wrap">
-                    <List listType={'block'} props={listProps} />
-                  </div>
-                  :
-                  <Table sortingCategories={sortingCategories}
-                         currentUser={currentUser}
-                         onClick={handleSortByParam}
-                         data={secretaries}
-                         access={{unruledUser: [4, 8], unassigned: ''}}
-                  >
-                    <List listType={'list'} props={listProps}/>
-                  </Table>
-            }
+            {showBlocks ? (
+              <div className="container d-flex flex-wrap">
+                <List listType={'block'} props={listProps} />
+              </div>
+            ) : (
+              <Table
+                sortingCategories={sortingCategories}
+                currentUser={currentUser}
+                onClick={handleSortByParam}
+                data={secretaries}
+                access={{ unruledUser: [4, 8], unassigned: '' }}
+              >
+                <List listType={'list'} props={listProps} />
+              </Table>
+            )}
           </WithLoading>
         </div>
         <div

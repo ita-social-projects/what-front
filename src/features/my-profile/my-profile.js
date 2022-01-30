@@ -10,7 +10,6 @@ import styles from './my-profile.scss';
 
 export const MyProfile = () => {
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-
   const history = useHistory();
 
   return (
@@ -21,12 +20,12 @@ export const MyProfile = () => {
           <hr />
           <div className="row mt-3">
             <div className="col-sm-4 font-weight-bold pb-1">First Name:</div>
-            <div className="col-sm-8">{currentUser?.first_name}</div>
+            <div className="col-sm-8">{currentUser?.firstName}</div>
           </div>
           <hr />
           <div className="row mt-3">
             <div className="col-sm-4 font-weight-bold pb-1">Last Name:</div>
-            <div className="col-sm-8">{currentUser?.last_name}</div>
+            <div className="col-sm-8">{currentUser?.lastName}</div>
           </div>
           <hr />
           <div className="row mt-3">
@@ -38,7 +37,7 @@ export const MyProfile = () => {
             <div className="col-sm-6 offset-sm-6 d-flex justify-content-end">
               <Button
                 className={styles.button}
-                onClick={() => (history.push(paths.CHANGE_PASSWORD))}
+                onClick={() => history.push(paths.CHANGE_PASSWORD)}
               >
                 <span>Change password</span>
               </Button>
