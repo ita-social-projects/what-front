@@ -5,7 +5,10 @@ import { Cookie } from '../../utils/index.js';
 export const requestInterceptor = (config) => {
   const requestConfig = { ...config };
 
-  if (requestConfig.url !== `${BASE_URL}/accounts/auth` && requestConfig.url !== `${BASE_URL}/accounts/reg`) {
+  if (
+    requestConfig.url !== `${BASE_URL}/accounts/auth` &&
+    requestConfig.url !== `${BASE_URL}/accounts/reg`
+  ) {
     const token = Cookie.get('jwt');
 
     requestConfig.headers.Authorization = `Bearer ${token}`;
@@ -23,6 +26,7 @@ export const responseInterceptor = (response) => {
   if (authHeader) {
     const token = authHeader.split('Bearer ')[1];
     Cookie.set('jwt', token, 1);
+    response.data.id = Number(JSON.parse(atob(token.split(`.`)[1])).Id);
   }
   return response;
 };
