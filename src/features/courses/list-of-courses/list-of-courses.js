@@ -3,12 +3,12 @@ import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useActions, paths } from '@/shared';
-import { 
-  fetchActiveCourses, 
-  coursesActiveSelector, 
-  fetchNotActiveCourses, 
-  coursesNotActiveSelector, 
-  currentUserSelector 
+import {
+  fetchActiveCourses,
+  coursesActiveSelector,
+  fetchNotActiveCourses,
+  coursesNotActiveSelector,
+  currentUserSelector,
 } from '@/models/index.js';
 import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 
@@ -16,13 +16,15 @@ import Icon from '@/icon.js';
 
 import classNames from 'classnames';
 import styles from './list-of-courses.scss';
-import {List} from "@components/list";
-import {Table} from "@components/table";
+import { List } from '@components/list';
+import { Table } from '@components/table';
 
 export const ListOfCourses = () => {
   const history = useHistory();
   const pagPage = useLocation();
-  const paginationPage = pagPage.state ? pagPage.state.paginationPage.paginationPage : 1;
+  const paginationPage = pagPage.state
+    ? pagPage.state.paginationPage.paginationPage
+    : 1;
 
   const [visibleCourses, setVisibleCourses] = useState([]);
 
@@ -38,19 +40,18 @@ export const ListOfCourses = () => {
     { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
-  const {
-    data: activeCourses,
-    isLoading: areActiveCoursesLoading,
-  } = useSelector(coursesActiveSelector, shallowEqual);
+  const { data: activeCourses, isLoading: areActiveCoursesLoading } =
+    useSelector(coursesActiveSelector, shallowEqual);
 
-  const {
-    data: notActiveCourses,
-    isLoading: areNotActiveCoursesLoading,
-  } = useSelector(coursesNotActiveSelector, shallowEqual);
+  const { data: notActiveCourses, isLoading: areNotActiveCoursesLoading } =
+    useSelector(coursesNotActiveSelector, shallowEqual);
 
-    const { currentUser } = useSelector(currentUserSelector, shallowEqual); // role of user
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual); // role of user
 
-  const [loadActiveCourses, loadNotActiveCourses] = useActions([fetchActiveCourses, fetchNotActiveCourses]); // loading courses
+  const [loadActiveCourses, loadNotActiveCourses] = useActions([
+    fetchActiveCourses,
+    fetchNotActiveCourses,
+  ]); // loading courses
 
   const [courses, setCourses] = useState([]);
 
@@ -68,19 +69,17 @@ export const ListOfCourses = () => {
   }, [loadNotActiveCourses]);
 
   useEffect(() => {
-    if (isShowDisabled && notActiveCourses.length && !areNotActiveCoursesLoading) {
+    if (
+      isShowDisabled &&
+      notActiveCourses.length &&
+      !areNotActiveCoursesLoading
+    ) {
       setCourses(notActiveCourses);
     }
-    if (
-      !isShowDisabled &&
-      activeCourses.length &&
-      !areActiveCoursesLoading
-    ) {
+    if (!isShowDisabled && activeCourses.length && !areActiveCoursesLoading) {
       setCourses(activeCourses);
     }
-    setVisibleCourses(
-      courses.slice(indexOfFirstCourse, indexOfLastCourse)
-    );
+    setVisibleCourses(courses.slice(indexOfFirstCourse, indexOfLastCourse));
   }, [
     activeCourses,
     areActiveCoursesLoading,
@@ -93,27 +92,37 @@ export const ListOfCourses = () => {
     setFilteredCourses(courses);
   }, [courses]);
 
-
   useEffect(() => {
-    setVisibleCourses(filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse));
+    setVisibleCourses(
+      filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
+    );
   }, [currentPage, filteredCourses]);
 
   const coursesList = () => {
-    const courses = visibleCourses
-      .map((course) => (
-        <tr key={course.id} onClick={() => courseDetails(course.id)} className={styles['table-row']} data-student-id={course.id}>
-          <td className="text-left">{course.name}</td>
-          {(currentUser.role === 8 || currentUser.role === 4) &&
-            <td
-              className="text-center"
-              onClick={(event) => courseEdit(event, course.id)}
-              data-student-id={course.id}
-            >
-              <Icon icon="Edit" className={styles.scale} color="#2E3440" size={30} />
-            </td>
-          }
-        </tr>
-      ));
+    const courses = visibleCourses.map((course) => (
+      <tr
+        key={course.id}
+        onClick={() => courseDetails(course.id)}
+        className={styles['table-row']}
+        data-student-id={course.id}
+      >
+        <td className="text-left">{course.name}</td>
+        {(currentUser.role === 8 || currentUser.role === 4) && (
+          <td
+            className="text-center"
+            onClick={(event) => courseEdit(event, course.id)}
+            data-student-id={course.id}
+          >
+            <Icon
+              icon="Edit"
+              className={styles.scale}
+              color="#2E3440"
+              size={30}
+            />
+          </td>
+        )}
+      </tr>
+    ));
 
     if (!courses.length && searchValue) {
       return <h4>Course is not found</h4>;
@@ -123,34 +132,55 @@ export const ListOfCourses = () => {
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
-    setVisibleCourses(activeCourses.filter(({ name }) => name.toLowerCase().includes(inputValue.toLowerCase())));
+    setVisibleCourses(
+      activeCourses.filter(({ name }) =>
+        name.toLowerCase().includes(inputValue.toLowerCase())
+      )
+    );
   };
 
-  const changeActiveCategory = (categories, activeCategoryName) => categories.map((category) => {
-    if (category.name === activeCategoryName) {
-      return { ...category, sortedByAscending: !category.sortedByAscending };
-    }
-    return { ...category, sortedByAscending: false };
-  });
+  const changeActiveCategory = (categories, activeCategoryName) =>
+    categories.map((category) => {
+      if (category.name === activeCategoryName) {
+        return { ...category, sortedByAscending: !category.sortedByAscending };
+      }
+      return { ...category, sortedByAscending: false };
+    });
 
   const addCourse = () => {
     history.push(paths.COURSE_ADD);
   };
 
-  const handleDetails = useCallback((id) => {
-    history.push({pathname: `${paths.COURSE_DETAILS}/${id}`, state: {currentPage} });
-  }, [history, currentPage]);
+  const handleDetails = useCallback(
+    (id) => {
+      history.push({
+        pathname: `${paths.COURSE_DETAILS}/${id}`,
+        state: { currentPage },
+      });
+    },
+    [history, currentPage]
+  );
 
-  const handleEdit = useCallback((event, id) => {
-    event.stopPropagation();
-    history.push({pathname: `${paths.COURSE_EDIT}/${id}`,state: {currentPage} });
-  }, [history, currentPage]);
-  
+  const handleEdit = useCallback(
+    (event, id) => {
+      event.stopPropagation();
+      history.push({
+        pathname: `${paths.COURSE_EDIT}/${id}`,
+        state: { currentPage },
+      });
+    },
+    [history, currentPage]
+  );
+
   const handleSortByParam = (data, categoryParams) => {
     const sortedCourses = data;
-    setSortingCategories(changeActiveCategory(sortingCategories, categoryParams.sortingParam));
+    setSortingCategories(
+      changeActiveCategory(sortingCategories, categoryParams.sortingParam)
+    );
     setFilteredCourses(sortedCourses);
-    setVisibleCourses(sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse));
+    setVisibleCourses(
+      sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse)
+    );
   };
 
   const handleShowDisabled = (event) => {
@@ -198,13 +228,13 @@ export const ListOfCourses = () => {
     if (activeCourses.length > coursesPerPage) {
       return (
         <Pagination
-        itemsPerPage={coursesPerPage}
-        totalItems={courses.length}
-        paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        page={currentPage}
-      />
+          itemsPerPage={coursesPerPage}
+          totalItems={courses.length}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+          page={currentPage}
+        />
       );
     }
   };
@@ -213,19 +243,23 @@ export const ListOfCourses = () => {
     data: visibleCourses,
     handleDetails,
     handleEdit,
-    errors: [{
-      message: 'Course is not found',
-      check: [!visibleCourses.length && !!searchValue]
-    }],
+    errors: [
+      {
+        message: 'Course is not found',
+        check: [!visibleCourses.length && !!searchValue],
+      },
+    ],
     access: currentUser.role === 8 || currentUser.role === 4,
-    fieldsToShow: ['name', 'edit']
+    fieldsToShow: ['name', 'edit'],
   };
 
   return (
     <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Courses</h2>
-        <span className="col-2 text-right">{visibleCourses.length} of {filteredCourses.length} courses</span>
+        <span className="col-2 text-right">
+          {visibleCourses.length} of {filteredCourses.length} courses
+        </span>
         <div className="col-4 d-flex align-items-center justify-content-end">
           {paginationComponent()}
         </div>
@@ -235,21 +269,26 @@ export const ListOfCourses = () => {
           <div className="row align-items-center mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
-                <button type="button"
-                        className="btn btn-secondary"
-                        disabled={!showBlocks}
-                        onClick={() => setShowBlocks(false)}>
-                  <Icon icon="List" color="#2E3440" size={25}/>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  disabled={!showBlocks}
+                  onClick={() => setShowBlocks(false)}
+                >
+                  <Icon icon="List" color="#2E3440" size={25} />
                 </button>
-                <button type="button"
-                        className="btn btn-secondary"
-                        disabled={showBlocks}
-                        onClick={() => setShowBlocks(true)}>
-                  <Icon icon="Card" color="#2E3440" size={25}/>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  disabled={showBlocks}
+                  onClick={() => setShowBlocks(true)}
+                  data-testid="showCardBlocks"
+                >
+                  <Icon icon="Card" color="#2E3440" size={25} />
                 </button>
               </div>
             </div>
-            <div className="col-2">
+            <div className="col-2" data-testid="searchInputWrap">
               <Search onSearch={handleSearch} placeholder="Course`s title" />
             </div>
             <div className="col-3 offset-1 custom-control custom-switch text-right">
@@ -268,60 +307,73 @@ export const ListOfCourses = () => {
                   styles['custom-control-label']
                 )}
                 htmlFor="switchDisabled"
-              > 
+              >
                 Disabled Courses
               </label>
             </div>
-            {!showBlocks &&
-            <div className="col-2 d-flex">
-              <label
+            {!showBlocks && (
+              <div className="col-2 d-flex">
+                <label
                   className={classNames(styles['label-for-select'])}
                   htmlFor="change-visible-people"
-              >
-                Rows
-              </label>
-              <select
+                >
+                  Rows
+                </label>
+                <select
                   className={classNames('form-control', styles['change-rows'])}
                   id="change-visible-people"
                   onChange={(event) => {
                     changeCountVisibleItems(event.target.value);
                   }}
-              >
-                <option>9</option>
-                <option>27</option>
-                <option>45</option>
-                <option>72</option>
-                <option>99</option>
-              </select>
-            </div>
-            }
+                >
+                  <option>9</option>
+                  <option>27</option>
+                  <option>45</option>
+                  <option>72</option>
+                  <option>99</option>
+                </select>
+              </div>
+            )}
             <div className="col-2 text-right">
               {[8, 4].includes(currentUser.role) && (
-              <Button onClick={addCourse}>
-                <span>Add a course</span>
-              </Button>
+                <Button onClick={addCourse}>
+                  <span data-testid="addCourseBtnText">Add a course</span>
+                </Button>
               )}
             </div>
           </div>
-          <WithLoading isLoading={areActiveCoursesLoading || areNotActiveCoursesLoading} className="d-block mx-auto m-0">
-            {
-              showBlocks ?
-                  <div className="container d-flex flex-wrap">
-                    <List listType={'block'} props={listProps}/>
-                  </div>
-                  :
-                  <Table sortingCategories={sortingCategories}
-                         currentUser={currentUser}
-                         onClick={handleSortByParam}
-                         data={filteredCourses}
-                         access={{unruledUser: [1, 2], unassigned: ''}}
-                  >
-                    <List listType='list' props={listProps}/>
-                  </Table>
-            }
+          <WithLoading
+            isLoading={areActiveCoursesLoading || areNotActiveCoursesLoading}
+            className="d-block mx-auto m-0"
+          >
+            {showBlocks ? (
+              <div
+                className="container d-flex flex-wrap"
+                data-testid="cardBlocks"
+              >
+                <List listType={'block'} props={listProps} />
+              </div>
+            ) : (
+              <Table
+                sortingCategories={sortingCategories}
+                currentUser={currentUser}
+                onClick={handleSortByParam}
+                data={filteredCourses}
+                access={{ unruledUser: [1, 2], unassigned: '' }}
+              >
+                <List listType="list" props={listProps} />
+              </Table>
+            )}
           </WithLoading>
         </div>
-        <div className={classNames('row justify-content-between align-items-center mb-3', styles.paginate)}>{paginationComponent()}</div>
+        <div
+          className={classNames(
+            'row justify-content-between align-items-center mb-3',
+            styles.paginate
+          )}
+        >
+          {paginationComponent()}
+        </div>
       </div>
     </div>
   );
