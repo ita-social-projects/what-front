@@ -1,7 +1,7 @@
 @import '../../../styles/main';
 
 .scale {
-  transition: .3s ease;
+  transition: 0.3s ease;
   padding-top: 3px;
   &:hover {
     transform: scale(1.4);
@@ -13,33 +13,16 @@
   cursor: pointer;
 }
 
-.switch-input:focus~
-.switch-label::before {
+.switch-input:focus ~ .switch-label::before {
   border-color: map-get($colors, accent-color) !important;
   box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;
 }
 
-.switch-input:checked~
-.switch-label::before {
+.switch-input:checked ~ .switch-label::before {
   border-color: map-get($colors, accent-color) !important;
   background-color: map-get($colors, accent-color) !important;
 }
 
-
-
-.change-rows{
-  margin: 0 10px;
-  width: fit-content !important;
-}
-
-.label-for-select{
-  padding: .375rem .75rem;
-  margin-bottom: 0 !important;
-}
-
-.paginate{
+.paginate {
   margin: auto !important;
 }
-
-
-
