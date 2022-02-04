@@ -220,7 +220,9 @@ export const ListOfCourses = () => {
   const changeCountVisibleItems = (newNumber) => {
     const finish = currentPage * newNumber;
     const start = finish - newNumber;
-    setVisibleCourses(courses.slice(start, finish));
+    const visibleCoursesList = newNumber > data.length ? data : data.slice(start, finish)
+    
+    setVisibleCourses(visibleCoursesList);
     setcoursesPerPage(newNumber);
   };
 
