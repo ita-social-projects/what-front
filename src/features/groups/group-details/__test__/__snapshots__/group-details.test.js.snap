@@ -1,0 +1,199 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render of GroupDetails Should the component be rendered. 1`] = `
+HTMLCollection [
+  <div
+    class="container pt-5"
+  >
+    <div
+      class="row justify-content-center"
+    >
+      <div
+        class="w-100 card shadow p-4"
+      >
+        <div
+          class="d-flex flex-row text-left justify-content-between"
+        >
+          <div
+            class="d-flex flex-column"
+          >
+            <h2>
+              Group: 
+              Soft Skills for Lecturers - 2021/2
+            </h2>
+            <p
+              class="m-0"
+            >
+               - 
+            </p>
+          </div>
+          <div
+            class="pt-3"
+          >
+            <a>
+              <span>
+                View schedule
+              </span>
+            </a>
+          </div>
+        </div>
+        <hr
+          class="p-0"
+        />
+        <div
+          class="d-flex mb-2"
+        >
+          <h4
+            class="pr-2 mb-2"
+          >
+            Mentors:
+          </h4>
+          <div
+            class="d-flex flex-wrap"
+          >
+            <div
+              class="pr-2 lead"
+            >
+              <span
+                class="badge badge-pill badge-info"
+              >
+                <a
+                  class="text-decoration-none text-light"
+                >
+                  Linda
+                   
+                  Jackson
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="d-flex align-items-center mb-2 lead"
+        >
+          <h4
+            class="mb-2 pr-4"
+          >
+            Course:
+          </h4>
+          <span
+            class="badge badge-pill badge-info"
+          >
+            <a
+              class="text-decoration-none text-white"
+            >
+              Soft Skills for Lecturers
+            </a>
+          </span>
+        </div>
+        <h4
+          class="h4 my-2"
+        >
+          Students:
+        </h4>
+        <div
+          class="table-responsive"
+        >
+          <table
+            class="table table-bordered table-hover"
+          >
+            <thead>
+              <tr>
+                <th>
+                  №
+                </th>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Email
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  1
+                </td>
+                <td>
+                  Richard
+                   
+                  Thomas
+                </td>
+                <td>
+                  richard.thomas@example.com
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  2
+                </td>
+                <td>
+                  Joseph
+                   
+                  Evans
+                </td>
+                <td>
+                  joseph.evans@example.com
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  3
+                </td>
+                <td>
+                  Thomas
+                   
+                  Roberts
+                </td>
+                <td>
+                  thomas.roberts@example.com
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  4
+                </td>
+                <td>
+                  Barbara
+                   
+                  Harris
+                </td>
+                <td>
+                  barbara.harris@example.com
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  5
+                </td>
+                <td>
+                  Susan
+                   
+                  Clark
+                </td>
+                <td>
+                  susan.clark@example.com
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  6
+                </td>
+                <td>
+                  Jessica
+                   
+                  Cooper
+                </td>
+                <td>
+                  jessica.cooper@example.com
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>,
+]
+`;
