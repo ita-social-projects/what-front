@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
+import classNames from 'classnames';
+import { Table } from '@components/table';
 import { useActions } from '@/shared/index.js';
 import {
   newUserSelector,
@@ -13,9 +15,7 @@ import {
 import { Search, Button, Pagination, WithLoading } from '@/components';
 import { addAlert } from '@/features';
 import Icon from '@/icon.js';
-import classNames from 'classnames';
 import styles from './unassigned-list.scss';
-import { Table } from '@components/table';
 
 export const UnAssignedList = () => {
   const { currentUser } = useSelector(currentUserSelector);
@@ -173,9 +173,7 @@ export const UnAssignedList = () => {
 
   const options = () => {
     switch (currentUserRole) {
-      case 2:
-        return <option value={1}>{roles[1]}</option>;
-      case 3:
+      case 8:
         return roles.slice(0, 3).map((role) => (
           <option key={role.id} value={roles.indexOf(role)}>
             {role.name}
@@ -188,7 +186,11 @@ export const UnAssignedList = () => {
           </option>
         ));
       default:
-        return {};
+        return roles.slice(0, 2).map((role) => (
+          <option key={role.id} value={roles.indexOf(role)}>
+            {role.name}
+          </option>
+        ));
     }
   };
   const getPersonsRows = () => {
