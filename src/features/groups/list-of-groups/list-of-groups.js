@@ -22,7 +22,6 @@ import classNames from "classnames";
 import { searchGroup, searchDate } from "./redux/index.js";
 import styles from "./list-of-groups.scss";
 
-import { commonHelpers } from "@/utils";
 import { Table } from "@components/table";
 import { List } from "@components/list";
 import { currentUserSelector } from "@models/index";
@@ -36,9 +35,6 @@ export const ListOfGroups = () => {
   );
   const { data: groups, isLoading } = studentGroupsState;
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [groupsPerPage, setGroupsPerPage] = useState(9);
-
   const [rawGroupsList, setRawGroupsList] = useState([]);
   const [filteredGroupsList, setFilteredGroupsList] = useState([]);
 
@@ -47,9 +43,6 @@ export const ListOfGroups = () => {
   const [searchGroupValue, setSearchGroupValue] = useState("");
   const [showBlocks, setShowBlocks] = useState(false);
   const { currentUser } = useSelector(currentUserSelector, shallowEqual);
-
-  const indexOfLastGroup = currentPage * groupsPerPage;
-  const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
 
   const searchGroupName = useSelector(searchGroup, shallowEqual);
   const searchStartDate = useSelector(searchDate, shallowEqual);
@@ -86,12 +79,6 @@ export const ListOfGroups = () => {
   }, [fetchListOfGroups]);
 
   useEffect(() => {
-    setVisibleGroups(
-      filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup)
-    );
-  }, [currentPage, filteredGroupsList]);
-
-  useEffect(() => {
     if (groups.length && !isLoading) {
       let newGroups = groups.map((group, index) => ({
         index,
@@ -103,18 +90,13 @@ export const ListOfGroups = () => {
     }
 
     setSortingCategories(INITIAL_CATEGORIES);
-    setVisibleGroups(
-      filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup)
-    );
   }, [groups, isLoading]);
 
   useEffect(() => {
     const searchedGroups = rawGroupsList.filter((group) =>
       group.name.toLowerCase().includes(searchGroupValue.toLowerCase())
     );
-
     setFilteredGroupsList(searchedGroups);
-    setCurrentPage(1);
   }, [searchGroupValue]);
 
   const handleAddGroup = useCallback(() => {
@@ -153,120 +135,16 @@ export const ListOfGroups = () => {
       return { ...category, sortedByAscending: false };
     });
 
-  const listByName = groups.filter((group) => {
-    const normalizedName = group.name.toUpperCase();
-    return normalizedName.includes(searchGroupName.toUpperCase());
-  });
-
-  const listByDate = listByName.filter((group) =>
-    group.startDate.includes(searchStartDate)
-  );
-
-  const getGroupList = () => {
-    const groupList = visibleGroups.map(
-      ({ name, studentIds, startDate, id, finishDate }) => (
-        <tr
-          className={styles["table-item"]}
-          onClick={() => handleCardDetails(id)}
-          key={id}
-        >
-          <td className={"text-left"}>{name}</td>
-          <td>{studentIds.length}</td>
-          <td>
-            {
-              commonHelpers.transformDateTime({
-                isDayTime: false,
-                dateTime: startDate,
-              }).date
-            }
-          </td>
-          <td>
-            {
-              commonHelpers.transformDateTime({
-                isDayTime: false,
-                dateTime: finishDate,
-              }).date
-            }
-          </td>
-          <td
-            className="text-center"
-            onClick={(event) => handleCardEdit(id, event)}
-          >
-            <Icon
-              icon="Edit"
-              className={styles.scale}
-              color="#2E3440"
-              size={30}
-            />
-          </td>
-        </tr>
-      )
-    );
-
-    if ((!groupList.length && searchGroupName) || searchStartDate) {
-      return <h4>Group is not found</h4>;
-    }
-    if (!filteredGroupsList.length) {
-      return (
-        <tr>
-          <td className="text-info">Group is not found</td>
-        </tr>
-      );
-    }
-
-    return groupList;
-  };
-
-  const paginate = (pageNumber) => {
-    if (currentPage !== pageNumber) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(listByDate.length / groupsPerPage);
-    setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-  };
-
-  const prevPage = (pageNumber) => {
-    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-  };
-
   const handleSortByParam = (data, categoryParams) => {
     const sortedGroups = data;
     setSortingCategories(
       changeActiveCategory(sortingCategories, categoryParams.sortingParam)
     );
     setFilteredGroupsList(sortedGroups);
-    setVisibleGroups(
-      filteredGroupsList.slice(indexOfFirstGroup, indexOfLastGroup)
-    );
-  };
-
-  const changeCountVisibleItems = (newNumber) => {
-    const finish = currentPage * newNumber;
-    const start = finish - newNumber;
-    setVisibleGroups(filteredGroupsList.slice(start, finish));
-    setGroupsPerPage(+newNumber);
   };
 
   const downloadGroups = () => {
     history.push(paths.GROUPS_DOWNLOAD);
-  };
-
-  const paginationComponent = () => {
-    if (filteredGroupsList.length > groupsPerPage) {
-      return (
-        <Pagination
-        itemsPerPage={groupsPerPage}
-        totalItems={filteredGroupsList.length}
-        paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        page={currentPage}
-      />
-      );
-    }
   };
 
   const listProps = {
@@ -294,13 +172,10 @@ export const ListOfGroups = () => {
           {!isLoading &&
             `${visibleGroups.length} of ${filteredGroupsList.length} students`}
         </div>
-        <div className="col-4 d-flex align-items-center justify-content-end">
-          {paginationComponent()}
-        </div>
       </div>
       <div className="row mr-0">
         <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
-          <div className="row align-items-center mt-2 mb-3">
+          <div className="row align-items-center justify-content-between mt-2 mb-3">
             <div className={classNames("col-2", styles["change-view"])}>
               <div className="btn-group">
                 <button
@@ -337,30 +212,8 @@ export const ListOfGroups = () => {
                 placeholder="Start Date"
               />
             </div>
-            {
-              <div className="col-2 d-flex">
-                <label
-                  className={classNames(styles["label-for-select"])}
-                  htmlFor="change-visible-people"
-                >
-                  Rows
-                </label>
-                <select
-                  className={classNames("form-control", styles["change-rows"])}
-                  id="change-visible-people"
-                  onChange={(event) => {
-                    changeCountVisibleItems(event.target.value);
-                  }}
-                >
-                  <option>9</option>
-                  <option>27</option>
-                  <option>45</option>
-                  <option>72</option>
-                  <option>99</option>
-                </select>
-              </div>
-            }
-            <div className={classNames("col-4 text-right", styles["buttons-block"])}>
+            
+            <div className={classNames("col-4 text-right")}>
               <Button
                 onClick={downloadGroups}
                 type="button"
@@ -388,7 +241,6 @@ export const ListOfGroups = () => {
                 <DoubleDateFilter
                   rawItemsList={rawGroupsList}
                   setFilteredItemsList={setFilteredGroupsList}
-                  setCurrentPage={setCurrentPage}
                 />
               }
             </div>
@@ -417,7 +269,10 @@ export const ListOfGroups = () => {
             styles.paginate
           )}
         >
-          {paginationComponent()}
+          <Pagination
+            items={filteredGroupsList}
+            setVisibleItems={setVisibleGroups}
+          />
         </div>
       </div>
     </div>
