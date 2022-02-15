@@ -23,12 +23,6 @@ import { List } from '@components/list';
 export const ListOfSecretaries = () => {
   const history = useHistory();
 
-  const [search, setSearch] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [secretariesPerPage, setSecretariesPerPage] = useState(9);
-
   const INITIAL_CATEGORIES = [
     { id: 0, name: 'firstName', sortedByAscending: false, tableHead: 'Name' },
     { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
@@ -64,8 +58,6 @@ export const ListOfSecretaries = () => {
   const [secretaries, setSecretaries] = useState([]);
 
   const [searchValue, setSearchValue] = useState('');
-  const indexOfLastSecretary = currentPage * secretariesPerPage;
-  const indexOfFirstSecretary = indexOfLastSecretary - secretariesPerPage;
   const [showBlocks, setShowBlocks] = useState(false);
 
   const getDisabledSecretaries = () => {
@@ -111,9 +103,6 @@ export const ListOfSecretaries = () => {
       );
     }
     setSortingCategories(INITIAL_CATEGORIES);
-    setVisibleSecretaries(
-      secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary)
-    );
   }, [
     activeSecretaries,
     areActiveSecretariesLoading,
@@ -121,12 +110,6 @@ export const ListOfSecretaries = () => {
     areAllSecretariesLoading,
     isShowDisabled,
   ]);
-
-  useEffect(() => {
-    setVisibleSecretaries(
-      secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary)
-    );
-  }, [currentPage, secretaries]);
 
   useEffect(() => {
     if (activeSecretariesError || allSecretariesError) {
@@ -155,7 +138,6 @@ export const ListOfSecretaries = () => {
         searchedSecretaries.map((secretary, index) => ({ index, ...secretary }))
       );
     }
-    setCurrentPage(1);
   }, [searchValue, isShowDisabled]);
 
   const handleSortByParam = (data, categoryParams) => {
@@ -164,9 +146,7 @@ export const ListOfSecretaries = () => {
       changeActiveCategory(sortingCategories, categoryParams.sortingParam)
     );
     setSecretaries(sortedSecretaries);
-    setVisibleSecretaries(
-      secretaries.slice(indexOfFirstSecretary, indexOfLastSecretary)
-    );
+
   };
 
   const resetSortingCategory = useCallback(() => {
@@ -213,98 +193,6 @@ export const ListOfSecretaries = () => {
     [history]
   );
 
-  const paginate = (pageNumber) => {
-    if (currentPage !== pageNumber) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(secretaries?.length / secretariesPerPage);
-    if (currentPage !== totalPages) {
-      setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-    }
-  };
-
-  const prevPage = (pageNumber) => {
-    if (currentPage - 1 !== 0) {
-      setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-    }
-  };
-
-  const getSecretaries = () => {
-    const secretariesRows = visibleSecretaries.map(
-      ({ id, firstName, lastName, email }) => (
-        <tr
-          key={id}
-          onClick={() => handleSecretariesDetails(id)}
-          className={styles['table-row']}
-          data-secretary-id={id}
-        >
-          <td className={'text-left'}>{firstName}</td>
-          <td>{lastName}</td>
-          <td>{email}</td>
-          {currentUser.role === 4 && (
-            <td
-              className="text-center"
-              onClick={(event) => handleEditSecretary(event, id)}
-              data-secretary-id={id}
-            >
-              <Icon
-                icon="Edit"
-                className={styles.scale}
-                color="#2E3440"
-                size={30}
-              />
-            </td>
-          )}
-        </tr>
-      )
-    );
-
-    if (allSecretariesError || activeSecretariesError) {
-      return (
-        <tr>
-          <td colSpan="5" className="text-center">
-            Loading has been failed
-          </td>
-        </tr>
-      );
-    }
-
-    if (!visibleSecretaries.length && searchValue) {
-      return (
-        <tr>
-          <td colSpan="5" className="text-center">
-            Secretary is not found
-          </td>
-        </tr>
-      );
-    }
-    return secretariesRows;
-  };
-
-  const changeCountVisibleItems = (newNumber) => {
-    const finish = currentPage * newNumber;
-    const start = finish - newNumber;
-    setVisibleSecretaries(secretaries.slice(start, finish));
-    setSecretariesPerPage(newNumber);
-  };
-
-  const paginationComponent = () => {
-    if (secretaries.length > secretariesPerPage) {
-      return (
-        <Pagination
-          itemsPerPage={secretariesPerPage}
-          totalItems={secretaries.length}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          page={currentPage}
-        />
-      );
-    }
-  };
 
   const listProps = {
     data: visibleSecretaries,
@@ -333,18 +221,10 @@ export const ListOfSecretaries = () => {
             {visibleSecretaries.length} of {secretaries.length} secretaries
           </span>
         ) : null}
-        <div className="col-4 d-flex align-items-center justify-content-end">
-          {paginationComponent()}
-          {/* <div className="col-2 text-right">{visibleSecretaries.length} of {secretaries.length} secretaries</div>
-        <div className="col-4 d-flex align-items-center justify-content-end">
-          {!areActiveSecretariesLoading
-          && !areAllSecretariesLoading
-          && (paginationComponent())} */}
-        </div>
       </div>
       <div className="row mr-0">
         <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
-          <div className="row align-items-center mt-2 mb-3">
+          <div className="row align-items-center justify-content-between mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
                 <button
@@ -388,29 +268,7 @@ export const ListOfSecretaries = () => {
                 Disabled Secretaries
               </label>
             </div>
-            {!showBlocks && (
-              <div className="col-2 d-flex">
-                <label
-                  className={classNames(styles['label-for-select'])}
-                  htmlFor="change-visible-people"
-                >
-                  Rows
-                </label>
-                <select
-                  className={classNames('form-control', styles['change-rows'])}
-                  id="change-visible-people"
-                  onChange={(event) => {
-                    changeCountVisibleItems(event.target.value);
-                  }}
-                >
-                  <option>9</option>
-                  <option>27</option>
-                  <option>45</option>
-                  <option>72</option>
-                  <option>99</option>
-                </select>
-              </div>
-            )}
+
             {currentUser.role === 4 && (
               <div className="col-2 text-right">
                 <Button onClick={handleAddSecretary}>
@@ -447,7 +305,10 @@ export const ListOfSecretaries = () => {
             styles.paginate
           )}
         >
-          {paginationComponent()}
+          <Pagination
+            items={secretaries}
+            setVisibleItems={setVisibleSecretaries}
+          />
         </div>
       </div>
     </div>
