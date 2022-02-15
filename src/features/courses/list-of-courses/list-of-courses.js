@@ -21,16 +21,8 @@ import { Table } from '@components/table';
 
 export const ListOfCourses = () => {
   const history = useHistory();
-  const pagPage = useLocation();
-  const paginationPage = pagPage.state
-    ? pagPage.state.paginationPage.paginationPage
-    : 1;
 
   const [visibleCourses, setVisibleCourses] = useState([]);
-
-  const [coursesPerPage, setcoursesPerPage] = useState(9);
-  const [currentPage, setCurrentPage] = useState(paginationPage);
-
   const [searchValue, setSearchValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
 
@@ -57,9 +49,6 @@ export const ListOfCourses = () => {
 
   const [isShowDisabled, setIsShowDisabled] = useState(false);
 
-  const indexOfLastCourse = currentPage * coursesPerPage;
-  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-
   useEffect(() => {
     loadActiveCourses();
   }, [loadActiveCourses]);
@@ -79,7 +68,6 @@ export const ListOfCourses = () => {
     if (!isShowDisabled && activeCourses.length && !areActiveCoursesLoading) {
       setCourses(activeCourses);
     }
-    setVisibleCourses(courses.slice(indexOfFirstCourse, indexOfLastCourse));
   }, [
     activeCourses,
     areActiveCoursesLoading,
@@ -91,44 +79,6 @@ export const ListOfCourses = () => {
   useEffect(() => {
     setFilteredCourses(courses);
   }, [courses]);
-
-  useEffect(() => {
-    setVisibleCourses(
-      filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
-    );
-  }, [currentPage, filteredCourses]);
-
-  const coursesList = () => {
-    const courses = visibleCourses.map((course) => (
-      <tr
-        key={course.id}
-        onClick={() => courseDetails(course.id)}
-        className={styles['table-row']}
-        data-student-id={course.id}
-      >
-        <td className="text-left">{course.name}</td>
-        {(currentUser.role === 8 || currentUser.role === 4) && (
-          <td
-            className="text-center"
-            onClick={(event) => courseEdit(event, course.id)}
-            data-student-id={course.id}
-          >
-            <Icon
-              icon="Edit"
-              className={styles.scale}
-              color="#2E3440"
-              size={30}
-            />
-          </td>
-        )}
-      </tr>
-    ));
-
-    if (!courses.length && searchValue) {
-      return <h4>Course is not found</h4>;
-    }
-    return courses;
-  };
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
@@ -154,22 +104,20 @@ export const ListOfCourses = () => {
   const handleDetails = useCallback(
     (id) => {
       history.push({
-        pathname: `${paths.COURSE_DETAILS}/${id}`,
-        state: { currentPage },
+        pathname: `${paths.COURSE_DETAILS}/${id}`
       });
     },
-    [history, currentPage]
+    [history]
   );
 
   const handleEdit = useCallback(
     (event, id) => {
       event.stopPropagation();
       history.push({
-        pathname: `${paths.COURSE_EDIT}/${id}`,
-        state: { currentPage },
+        pathname: `${paths.COURSE_EDIT}/${id}`
       });
     },
-    [history, currentPage]
+    [history]
   );
 
   const handleSortByParam = (data, categoryParams) => {
@@ -178,9 +126,6 @@ export const ListOfCourses = () => {
       changeActiveCategory(sortingCategories, categoryParams.sortingParam)
     );
     setFilteredCourses(sortedCourses);
-    setVisibleCourses(
-      sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse)
-    );
   };
 
   const handleShowDisabled = (event) => {
@@ -191,56 +136,6 @@ export const ListOfCourses = () => {
       loadActiveCourses();
     }
   };
-
-  const paginate = (pageNumber) => {
-    if (currentPage !== pageNumber) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(filteredCourses.length / 10);
-    setCurrentPage((prev) => {
-      if (prev === totalPages) {
-        return prev;
-      }
-      return pageNumber;
-    });
-  };
-
-  const prevPage = (pageNumber) => {
-    setCurrentPage((prev) => {
-      if (prev - 1 === 0) {
-        return prev;
-      }
-      return pageNumber;
-    });
-  };
-
-  const changeCountVisibleItems = (newNumber) => {
-    const finish = currentPage * newNumber;
-    const start = finish - newNumber;
-    const visibleCoursesList = newNumber > data.length ? data : data.slice(start, finish)
-    
-    setVisibleCourses(visibleCoursesList);
-    setcoursesPerPage(newNumber);
-  };
-
-  const paginationComponent = () => {
-    if (activeCourses.length > coursesPerPage) {
-      return (
-        <Pagination
-          itemsPerPage={coursesPerPage}
-          totalItems={courses.length}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          page={currentPage}
-        />
-      );
-    }
-  };
-
   const listProps = {
     data: visibleCourses,
     handleDetails,
@@ -262,13 +157,10 @@ export const ListOfCourses = () => {
         <span className="col-2 text-right">
           {visibleCourses.length} of {filteredCourses.length} courses
         </span>
-        <div className="col-4 d-flex align-items-center justify-content-end">
-          {paginationComponent()}
-        </div>
       </div>
       <div className="row mr-0">
         <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
-          <div className="row align-items-center mt-2 mb-3">
+          <div className="row align-items-center justify-content-between mt-2 mb-3">
             <div className="col-2">
               <div className="btn-group">
                 <button
@@ -313,29 +205,6 @@ export const ListOfCourses = () => {
                 Disabled Courses
               </label>
             </div>
-            {!showBlocks && (
-              <div className="col-2 d-flex">
-                <label
-                  className={classNames(styles['label-for-select'])}
-                  htmlFor="change-visible-people"
-                >
-                  Rows
-                </label>
-                <select
-                  className={classNames('form-control', styles['change-rows'])}
-                  id="change-visible-people"
-                  onChange={(event) => {
-                    changeCountVisibleItems(event.target.value);
-                  }}
-                >
-                  <option>9</option>
-                  <option>27</option>
-                  <option>45</option>
-                  <option>72</option>
-                  <option>99</option>
-                </select>
-              </div>
-            )}
             <div className="col-2 text-right">
               {[8, 4].includes(currentUser.role) && (
                 <Button onClick={addCourse}>
@@ -374,7 +243,10 @@ export const ListOfCourses = () => {
             styles.paginate
           )}
         >
-          {paginationComponent()}
+          <Pagination
+            items={filteredCourses}
+            setVisibleItems={setVisibleCourses}
+          />
         </div>
       </div>
     </div>
