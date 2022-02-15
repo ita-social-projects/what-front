@@ -50,13 +50,9 @@ export const ListOfStudents = () => {
   const [sortingCategories, setSortingCategories] =
     useState(INITIAL_CATEGORIES);
   const [isShowDisabled, setIsShowDisabled] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchFieldValue, setSearchFieldValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
 
-  const [studentsPerPage, setStudentsPerPage] = useState(9);
-  const indexOfLastStudent = currentPage * studentsPerPage;
-  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
   const getDisabledStudents = () => {
     const activeStudentIds = activeStudents.map(({ id }) => id);
@@ -99,7 +95,6 @@ export const ListOfStudents = () => {
       );
     }
     setSortingCategories(INITIAL_CATEGORIES);
-    setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
   }, [
     activeStudents,
     areActiveStudentsLoading,
@@ -107,10 +102,6 @@ export const ListOfStudents = () => {
     areAllStudentsLoading,
     isShowDisabled,
   ]);
-
-  useEffect(() => {
-    setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
-  }, [currentPage, students]);
 
   useEffect(() => {
     if (allStudentsError || activeStudentsError) {
@@ -136,7 +127,6 @@ export const ListOfStudents = () => {
         searchedStudents.map((student, index) => ({ index, ...student }))
       );
     }
-    setCurrentPage(1);
   }, [searchFieldValue, isShowDisabled]);
 
   const handleSortByParam = (data, categoryParams) => {
@@ -145,7 +135,6 @@ export const ListOfStudents = () => {
       changeActiveCategory(sortingCategories, categoryParams.sortingParam)
     );
     setStudents(sortedStudents);
-    setVisibleStudents(students.slice(indexOfFirstStudent, indexOfLastStudent));
   };
 
   const handleShowDisabled = (event) => {
@@ -175,29 +164,6 @@ export const ListOfStudents = () => {
     history.push(paths.UNASSIGNED_USERS);
   };
 
-  const changeCountVisibleItems = (newNumber) => {
-    const finish = currentPage * newNumber;
-    const start = finish - newNumber;
-    setVisibleStudents(students.slice(start, finish));
-    setStudentsPerPage(newNumber);
-  };
-
-  const paginate = (pageNumber) => {
-    if (currentPage !== pageNumber) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(students?.length / studentsPerPage);
-
-    setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-  };
-
-  const prevPage = (pageNumber) => {
-    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-  };
-
   const listProps = {
     data: visibleStudents,
     handleDetails,
@@ -216,20 +182,7 @@ export const ListOfStudents = () => {
     fieldsToShow: ['firstName', 'lastName', 'email', 'edit'],
   };
 
-  const paginationComponent = () => {
-    if (students.length > studentsPerPage) {
-      return (
-        <Pagination
-          itemsPerPage={studentsPerPage}
-          totalItems={students.length}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          page={currentPage}
-        />
-      );
-    }
-  };
+ 
 
   return (
     <div className="container pt-5">
@@ -240,11 +193,7 @@ export const ListOfStudents = () => {
             !areAllStudentsLoading &&
             `${visibleStudents.length} of ${students.length} students`}
         </div>
-        <div className="col-4 d-flex align-items-center justify-content-end">
-          {!areActiveStudentsLoading &&
-            !areAllStudentsLoading &&
-            paginationComponent()}
-        </div>
+        
       </div>
       <div className="row mr-0">
         <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
@@ -297,29 +246,7 @@ export const ListOfStudents = () => {
                 Disabled students
               </label>
             </div>
-            {!showBlocks && (
-              <div className="col-2 d-flex">
-                <label
-                  className={classNames(styles['label-for-select'])}
-                  htmlFor="change-visible-people"
-                >
-                  Rows
-                </label>
-                <select
-                  className={classNames('form-control', styles['change-rows'])}
-                  id="change-visible-people"
-                  onChange={(event) => {
-                    changeCountVisibleItems(event.target.value);
-                  }}
-                >
-                  <option>9</option>
-                  <option>27</option>
-                  <option>45</option>
-                  <option>72</option>
-                  <option>99</option>
-                </select>
-              </div>
-            )}
+            
             {[8, 4].includes(currentUser.role) && (
               <div className={classNames('col-4 text-right', styles['buttons-block'])}>
                 <Button
@@ -365,7 +292,10 @@ export const ListOfStudents = () => {
             styles.paginate
           )}
         >
-          {paginationComponent()}
+          <Pagination
+            items={students}
+            setVisibleItems={setVisibleStudents}
+          />
         </div>
       </div>
     </div>
