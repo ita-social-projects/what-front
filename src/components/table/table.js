@@ -11,9 +11,6 @@ export const Table = ({
   access,
   children: list,
 }) => {
-  const handleSortByParam = (event) =>
-    onClick(getSortedByParam(data, event.target.dataset), event.target.dataset);
-
   const getSortedByParam = (data, activeCategory) => {
     const { sortingParam, sortedByAscending } = activeCategory;
     const sortingCoefficient = Number(sortedByAscending) ? 1 : -1;
@@ -25,6 +22,9 @@ export const Table = ({
       return sortingCoefficient;
     });
   };
+
+  const handleSortByParam = (event) =>
+    onClick(getSortedByParam(data, event.target.dataset), event.target.dataset);
 
   return (
     <table className="table table-hover">

@@ -1,23 +1,28 @@
 import React from 'react';
-import {Blocks} from "@components/blocks";
-import {Rows} from "@components/rows";
+import { Blocks } from '@components/blocks';
+import { Rows } from '@components/rows';
 
 const getErrorMessage = (errors) => {
-    const returnError = {isError: false, message: ''};
+  const returnError = { isError: false, message: '' };
 
-    errors.forEach(error => {
-        if (error.check.includes(true)) {
-            returnError.isError = true;
-            returnError.message = error.message;
-        }
-    });
-
-    if (returnError.isError) {
-        return <tr>
-            <td colSpan="5" className="text-center">{returnError.message}</td>
-        </tr>;
+  errors.forEach((error) => {
+    if (error.check.includes(true)) {
+      returnError.isError = true;
+      returnError.message = error.message;
     }
-}
+  });
+
+  if (returnError.isError) {
+    return (
+      <tr>
+        <td colSpan="5" className="text-center">
+          {returnError.message}
+        </td>
+      </tr>
+    );
+  }
+  return null;
+};
 
 /**
  * @param listType may be 'list' or 'block'
@@ -38,10 +43,11 @@ const getErrorMessage = (errors) => {
  * editRestriction contains boolean if user has role with limitation for editing, it is false by default
  */
 
-export const List = ({listType, props, children: custom}) => {
-    const errorsMessage = getErrorMessage(props.errors);
+export const List = ({ listType, props, children: custom }) => {
+  const errorsMessage = getErrorMessage(props.errors);
 
-    return errorsMessage ? errorsMessage
-        : (listType === 'list') ? Rows(props, custom)
-            : Blocks(props, custom);
+  return (
+    errorsMessage ||
+    (listType === 'list' ? Rows(props, custom) : Blocks(props, custom))
+  );
 };

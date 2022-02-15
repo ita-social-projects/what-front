@@ -2,6 +2,9 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
+import classNames from 'classnames';
+import { List } from '@components/list';
+import { Table } from '@components/table';
 import { useActions, paths } from '@/shared';
 import {
   fetchActiveCourses,
@@ -14,16 +17,13 @@ import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 
 import Icon from '@/icon.js';
 
-import classNames from 'classnames';
 import styles from './list-of-courses.scss';
-import { List } from '@components/list';
-import { Table } from '@components/table';
 
 export const ListOfCourses = () => {
   const history = useHistory();
-  const pagPage = useLocation();
-  const paginationPage = pagPage.state
-    ? pagPage.state.paginationPage.paginationPage
+  const location = useLocation();
+  const paginationPage = location?.state
+    ? location?.state?.paginationPage?.currentPage
     : 1;
 
   const [visibleCourses, setVisibleCourses] = useState([]);
@@ -40,11 +40,15 @@ export const ListOfCourses = () => {
     { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
-  const { data: activeCourses, isLoading: areActiveCoursesLoading } =
-    useSelector(coursesActiveSelector, shallowEqual);
+  const {
+    data: activeCourses,
+    isLoading: areActiveCoursesLoading,
+  } = useSelector(coursesActiveSelector, shallowEqual);
 
-  const { data: notActiveCourses, isLoading: areNotActiveCoursesLoading } =
-    useSelector(coursesNotActiveSelector, shallowEqual);
+  const {
+    data: notActiveCourses,
+    isLoading: areNotActiveCoursesLoading,
+  } = useSelector(coursesNotActiveSelector, shallowEqual);
 
   const { currentUser } = useSelector(currentUserSelector, shallowEqual); // role of user
 
@@ -86,6 +90,9 @@ export const ListOfCourses = () => {
     notActiveCourses,
     areNotActiveCoursesLoading,
     isShowDisabled,
+    courses,
+    indexOfFirstCourse,
+    indexOfLastCourse,
   ]);
 
   useEffect(() => {
@@ -96,43 +103,16 @@ export const ListOfCourses = () => {
     setVisibleCourses(
       filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
     );
-  }, [currentPage, filteredCourses]);
-
-  const coursesList = () => {
-    const courses = visibleCourses.map((course) => (
-      <tr
-        key={course.id}
-        onClick={() => courseDetails(course.id)}
-        className={styles['table-row']}
-        data-student-id={course.id}
-      >
-        <td className="text-left">{course.name}</td>
-        {(currentUser.role === 8 || currentUser.role === 4) && (
-          <td
-            className="text-center"
-            onClick={(event) => courseEdit(event, course.id)}
-            data-student-id={course.id}
-          >
-            <Icon
-              icon="Edit"
-              className={styles.scale}
-              color="#2E3440"
-              size={30}
-            />
-          </td>
-        )}
-      </tr>
-    ));
-
-    if (!courses.length && searchValue) {
-      return <h4>Course is not found</h4>;
-    }
-    return courses;
-  };
+  }, [currentPage, filteredCourses, indexOfFirstCourse, indexOfLastCourse]);
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
     setVisibleCourses(
+      activeCourses.filter(({ name }) =>
+        name.toLowerCase().includes(inputValue.toLowerCase())
+      )
+    );
+    setFilteredCourses(
       activeCourses.filter(({ name }) =>
         name.toLowerCase().includes(inputValue.toLowerCase())
       )
@@ -220,8 +200,11 @@ export const ListOfCourses = () => {
   const changeCountVisibleItems = (newNumber) => {
     const finish = currentPage * newNumber;
     const start = finish - newNumber;
-    const visibleCoursesList = newNumber > data.length ? data : data.slice(start, finish)
-    
+    const visibleCoursesList =
+      newNumber > activeCourses.length
+        ? activeCourses.slice(start, finish)
+        : activeCourses;
+
     setVisibleCourses(visibleCoursesList);
     setcoursesPerPage(newNumber);
   };
@@ -353,7 +336,7 @@ export const ListOfCourses = () => {
                 className="container d-flex flex-wrap"
                 data-testid="cardBlocks"
               >
-                <List listType={'block'} props={listProps} />
+                <List listType="block" props={listProps} />
               </div>
             ) : (
               <Table
