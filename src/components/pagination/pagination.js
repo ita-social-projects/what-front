@@ -9,16 +9,23 @@ export const Pagination = ({ items = [], setVisibleItems = () => {} }) => {
   const totalItems = items.length;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [items]);
 
   useEffect(() => {
+    if(currentPage > totalPages){
+      setCurrentPage(totalPages);
+    }
+  }, [itemsPerPage]);
+
+  useEffect(() => {
     setVisibleItems(items.slice(indexOfFirstItem, indexOfLastItem));
   }, [currentPage, items, itemsPerPage]);
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
   let ellipsisLeft = false;
   let ellipsisRight = false;
 
