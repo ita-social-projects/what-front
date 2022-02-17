@@ -8,6 +8,7 @@ import {
   fetchLessonsByStudentId,
 } from '@/models';
 import { Link } from 'react-router-dom';
+import { StudentDetails } from '@/features/students';
 
 export const StudentsTabs = ({ index }) => {
   const { id } = useParams();
