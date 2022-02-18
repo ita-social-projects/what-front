@@ -8,9 +8,14 @@ import {
   fetchLessonsByStudentId,
 } from '@/models';
 import { Link } from 'react-router-dom';
-import { StudentDetails } from '@/features/students';
+import { Tab, Tabs } from '@/components';
+import { StudentDetails, EditStudentsDetails } from '@/features/students';
+
+import { shallowEqual, useSelector } from 'react-redux';
+import { currentUserSelector } from '@/models';
 
 export const StudentsTabs = ({ index }) => {
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
   const { id } = useParams();
 
   const [
@@ -55,20 +60,37 @@ export const StudentsTabs = ({ index }) => {
   );
 
   return (
-    <section
-      defaultIndex={index}
-      className="container w-50 pt-5"
-      linkBack="/students"
-    >
-      <Link
-        className="nav-item nav-link d-flex align-items-center"
-        to={{
-          pathname: '/students',
-        }}
-      >
-        {arrow}
-      </Link>
-      <StudentDetails />
-    </section>
+    <>
+      {currentUser.role === 2 ? (
+        <section
+          defaultIndex={index}
+          className="container w-50 pt-5"
+          linkBack="/students"
+        >
+          <Link
+            className="nav-item nav-link d-flex align-items-center"
+            to={{
+              pathname: '/students',
+            }}
+          >
+            {arrow}
+          </Link>
+          <StudentDetails />
+        </section>
+      ) : (
+        <Tabs
+          defaultIndex={index}
+          className="container w-50 pt-5"
+          linkBack="/students"
+        >
+          <Tab title="Student details">
+            <StudentDetails />
+          </Tab>
+          <Tab title="Edit student details">
+            <EditStudentsDetails id={id} />
+          </Tab>
+        </Tabs>
+      )}
+    </>
   );
 };
