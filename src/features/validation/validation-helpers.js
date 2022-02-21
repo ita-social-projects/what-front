@@ -91,9 +91,9 @@ export const editLessonValidation = Yup.object().shape({
       .required('This field is required'),
   formData: Yup.array().of(
       Yup.object({
-        studentId: Yup.number().moreThan(0).required(),
+        studentId: Yup.number().moreThan(0),
         studentMark: Yup.number().nullable(),
-        presence: Yup.boolean().default(false).required(),
+        presence: Yup.boolean().default(false),
         comment: Yup.string().default(''),
       })),
 });
