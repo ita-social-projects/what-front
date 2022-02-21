@@ -23,7 +23,7 @@ export const useFetching = () => {
     dispatchFetchActiveMentors,
     dispatchFetchThemes,
     addSchedule,
-  ] = useActions([fetchCourses, fetchActiveMentors, fetchThemes, createSchedule]);
+  ] = useActions([fetchActiveMentors, fetchThemes, createSchedule]);
 
   useEffect(() => {
     dispatchFetchSchedules();
