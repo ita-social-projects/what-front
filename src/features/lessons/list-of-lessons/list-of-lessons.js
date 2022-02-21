@@ -263,4 +263,3 @@ export const ListOfLessons = () => {
     </div>
   );
 };
-// -----------DELETE-------------ALL-------------CODE--------------------
