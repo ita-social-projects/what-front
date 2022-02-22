@@ -1,7 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useLocation } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
+import classNames from 'classnames';
+import { List } from '@components/list';
+import { Table } from '@components/table';
 import { useActions, paths } from '@/shared';
 import {
   fetchActiveCourses,
@@ -14,79 +16,76 @@ import { Button, Search, WithLoading, Pagination } from '@/components/index.js';
 
 import Icon from '@/icon.js';
 
-import classNames from 'classnames';
 import styles from './list-of-courses.scss';
-import { List } from '@components/list';
-import { Table } from '@components/table';
 
 export const ListOfCourses = () => {
   const history = useHistory();
+  // this is needed for future work with redirect by arrow button
+  // const location = useLocation();
+  // const paginationPage = location?.state
+  //   ? location?.state?.paginationPage?.currentPage
+  //   : 1;
+  const [isShowDisabled, setIsShowDisabled] = useState(false);
+  const [filteredCourses, setFilteredCourses] = useState([]);
 
   const [visibleCourses, setVisibleCourses] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
-
-  const [filteredCourses, setFilteredCourses] = useState([]);
-
   const [sortingCategories, setSortingCategories] = useState([
     { id: 0, name: 'name', sortedByAscending: false, tableHead: 'Title' },
   ]);
 
-  const { data: activeCourses, isLoading: areActiveCoursesLoading } =
-    useSelector(coursesActiveSelector, shallowEqual);
+  const { currentUser } = useSelector(currentUserSelector, shallowEqual);
+  const {
+    data: activeCourses,
+    isLoading: areActiveCoursesLoading,
+  } = useSelector(coursesActiveSelector, shallowEqual);
 
-  const { data: notActiveCourses, isLoading: areNotActiveCoursesLoading } =
-    useSelector(coursesNotActiveSelector, shallowEqual);
-
-  const { currentUser } = useSelector(currentUserSelector, shallowEqual); // role of user
+  const {
+    data: notActiveCourses,
+    isLoading: areNotActiveCoursesLoading,
+  } = useSelector(coursesNotActiveSelector, shallowEqual);
 
   const [loadActiveCourses, loadNotActiveCourses] = useActions([
     fetchActiveCourses,
     fetchNotActiveCourses,
-  ]); // loading courses
-
-  const [courses, setCourses] = useState([]);
-
-  const [isShowDisabled, setIsShowDisabled] = useState(false);
-
-  useEffect(() => {
-    loadActiveCourses();
-  }, [loadActiveCourses]);
-
-  useEffect(() => {
-    loadNotActiveCourses();
-  }, [loadNotActiveCourses]);
-
-  useEffect(() => {
-    if (
-      isShowDisabled &&
-      notActiveCourses.length &&
-      !areNotActiveCoursesLoading
-    ) {
-      setCourses(notActiveCourses);
-    }
-    if (!isShowDisabled && activeCourses.length && !areActiveCoursesLoading) {
-      setCourses(activeCourses);
-    }
-  }, [
-    activeCourses,
-    areActiveCoursesLoading,
-    notActiveCourses,
-    areNotActiveCoursesLoading,
-    isShowDisabled,
   ]);
 
+
   useEffect(() => {
-    setFilteredCourses(courses);
-  }, [courses]);
+    if (!isShowDisabled) {
+      loadActiveCourses();
+    }
+  }, [isShowDisabled, loadActiveCourses]);
+
+
+  useEffect(() => {
+    if (activeCourses.length > 0) {
+      setFilteredCourses(activeCourses);
+    }
+  }, [activeCourses]);
+
+  useEffect(() => {
+    if (notActiveCourses.length > 0) {
+      setFilteredCourses(notActiveCourses);
+    }
+  }, [notActiveCourses]);
 
   const handleSearch = (inputValue) => {
     setSearchValue(inputValue);
-    setVisibleCourses(
-      activeCourses.filter(({ name }) =>
-        name.toLowerCase().includes(inputValue.toLowerCase())
-      )
-    );
+    if (!isShowDisabled) {
+      setFilteredCourses(
+        activeCourses.filter(({ name }) =>
+          name.toLowerCase().includes(inputValue.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredCourses(
+        notActiveCourses.filter(({ name }) =>
+          name.toLowerCase().includes(inputValue.toLowerCase())
+        )
+      );
+    }
   };
 
   const changeActiveCategory = (categories, activeCategoryName) =>
@@ -104,7 +103,8 @@ export const ListOfCourses = () => {
   const handleDetails = useCallback(
     (id) => {
       history.push({
-        pathname: `${paths.COURSE_DETAILS}/${id}`
+        pathname: `${paths.COURSE_DETAILS}/${id}`,
+        // state: { currentPage },
       });
     },
     [history]
@@ -114,7 +114,8 @@ export const ListOfCourses = () => {
     (event, id) => {
       event.stopPropagation();
       history.push({
-        pathname: `${paths.COURSE_EDIT}/${id}`
+        pathname: `${paths.COURSE_EDIT}/${id}`,
+        // state: { currentPage },
       });
     },
     [history]
@@ -132,10 +133,9 @@ export const ListOfCourses = () => {
     setIsShowDisabled(!isShowDisabled);
     if (event.target.checked) {
       loadNotActiveCourses();
-    } else {
-      loadActiveCourses();
     }
   };
+
   const listProps = {
     data: visibleCourses,
     handleDetails,
@@ -154,9 +154,11 @@ export const ListOfCourses = () => {
     <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
         <h2 className="col-6">Courses</h2>
-        <span className="col-2 text-right">
-          {visibleCourses.length} of {filteredCourses.length} courses
-        </span>
+        {filteredCourses.length > 0 && (
+          <span className="col-2 text-right">
+            {visibleCourses.length} of {filteredCourses.length} courses
+          </span>
+        )}
       </div>
       <div className="row mr-0">
         <div className="col-12 card shadow p-3 mb-5 bg-white ml-2 mr-2">
@@ -222,14 +224,14 @@ export const ListOfCourses = () => {
                 className="container d-flex flex-wrap"
                 data-testid="cardBlocks"
               >
-                <List listType={'block'} props={listProps} />
+                <List listType="block" props={listProps} />
               </div>
             ) : (
               <Table
                 sortingCategories={sortingCategories}
                 currentUser={currentUser}
                 onClick={handleSortByParam}
-                data={filteredCourses}
+                data={isShowDisabled ? notActiveCourses : activeCourses}
                 access={{ unruledUser: [1, 2], unassigned: '' }}
               >
                 <List listType="list" props={listProps} />
@@ -243,10 +245,12 @@ export const ListOfCourses = () => {
             styles.paginate
           )}
         >
-          <Pagination
-            items={filteredCourses}
-            setVisibleItems={setVisibleCourses}
-          />
+          {filteredCourses.length > 0 && (
+            <Pagination
+              items={filteredCourses}
+              setVisibleItems={setVisibleCourses}
+            />
+          )}
         </div>
       </div>
     </div>
