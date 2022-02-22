@@ -6,7 +6,7 @@ import {
   takeLatest,
   takeEvery,
 } from 'redux-saga/effects';
-import { ApiService } from '../../shared/api-service.js';
+import { ApiService } from '@shared/api-service';
 import * as actionTypes from './types.js';
 
 export const getEvent = (id) => ({

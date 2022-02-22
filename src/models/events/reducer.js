@@ -5,7 +5,7 @@ import {
   updateEventReducer,
   deleteEventReducer,
   connectEventReducer,
-} from './reducers.js';
+} from './reducers';
 
 export const eventReducer = combineReducers({
   getEvent: getEventReducer,
