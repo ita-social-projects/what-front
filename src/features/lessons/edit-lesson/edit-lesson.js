@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
@@ -26,7 +26,7 @@ import styles from './edit-lesson.scss';
 export const EditLesson = () => {
   const history = useHistory();
   const { id } = useParams();
-  const [lessonOnEdit, setLessonOnEdit] = React.useState({});
+  const [lessonOnEdit, setLessonOnEdit] = useState({});
 
   const [
     loadLessons, // not getById, cos of mistake in fetch response (lesson.theme === null)
@@ -67,26 +67,41 @@ export const EditLesson = () => {
       loadLessons();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (lessonsIsLoaded && studentsIsLoaded) {
       const lesson = lessons.find((lesson) => lesson.id === Number(id));
-      if(lesson !== undefined) {
-        const lessonOnEdit = cloneDeep(lesson);
-        lessonOnEdit.lessonVisits.forEach((student) => {
-          if (student.comment === null) student.comment = '';
-          if (student.studentMark === null) student.studentMark = '';
-          const studentData = students.find((stud) => stud.id === student.studentId);
-          student.studentName = `${studentData.firstName} ${studentData.lastName}`;
-          return student
-        });
-        lessonOnEdit.lessonVisits.sort((a, b) => a.studentName.localeCompare(b.studentName));
-        setLessonOnEdit(lessonOnEdit);
+      if (lesson !== undefined) {
+        const lessonToEdit = cloneDeep(lesson);
         getGroup(lesson.studentGroupId);
+        setLessonOnEdit(lessonToEdit);
       } else {
         history.push(paths.NOT_FOUND);
       }
     }
-  }, [lessonsIsLoaded, studentsIsLoaded, setLessonOnEdit, history]);
+  }, [lessonsIsLoaded, studentsIsLoaded]);
+
+  useEffect(() => {
+    if (groupIsLoaded) {
+      const studentsData = group.studentIds.reduce((acc, student) => {
+        const studentObj = students.find((stud) => stud.id === student);
+        if (studentObj.comment === undefined) {
+          studentObj.comment = '';
+        }
+        if (studentObj.studentMark === undefined) {
+          studentObj.studentMark = '';
+        }
+        studentObj.studentName = `${studentObj.firstName} ${studentObj.lastName}`;
+
+        acc.push(studentObj);
+        return acc;
+      }, []);
+
+      studentsData.sort((a, b) => a.studentName.localeCompare(b.studentName));
+
+      const newlessonOnEdit = { ...lessonOnEdit, lessonVisits: studentsData };
+      setLessonOnEdit(newlessonOnEdit);
+    }
+  }, [groupIsLoaded, students]);
 
   useEffect(() => {
     if (!editError && editIsLoaded) {
@@ -108,22 +123,22 @@ export const EditLesson = () => {
 
   const onSubmit = (values) => {
       const { lessonDate, themeName } = values;
-      const lessonVisits = values.formData.map((lessonVisit) => {
-        const {
-          presence, studentId, studentMark,
-        } = lessonVisit;
+      let lessonVisits = group.studentIds.map((item, ind) => {
+
+        const studentMark = values?.formData[ind]?.studentMark ? values.formData[ind].studentMark : null;
+        const presence = values?.formData[ind]?.presence ? values.formData[ind].presence : 'false';
+
         return (
           {
             comment: '',
             presence,
-            studentId,
-            studentMark: studentMark || null,
+            studentId: item,
+            studentMark,
           }
         );
       }).sort((a, b) => a.studentId - b.studentId);
       const theme = commonHelpers.capitalizeTheme(!themeName ? 'text' : themeName);
       const formalizedDate = commonHelpers.transformDateTime({ isRequest:true, dateTime: lessonDate }).formDateTimeForRequest;
-
       const lessonObject = {
         themeName: theme,
         lessonDate: formalizedDate,
@@ -185,7 +200,7 @@ export const EditLesson = () => {
                 onSubmit={onSubmit}
                 validationSchema={editLessonValidation}
               >
-                {({ errors }) => (
+                {({ errors, isSubmitting }) => (
                   <Form id="form" className={classNames(styles.size)} data-testid='editForm'>
                     <div className="d-flex flex-sm-column flex-lg-row">
                       <div className="col-lg-6">
@@ -271,6 +286,7 @@ export const EditLesson = () => {
                                         </td>
                                         <td>
                                           <Field
+                                            key = {`mark-${index}`}
                                             data-testid={`formData[${index}].studentMark`}
                                             name={`formData[${index}].studentMark`}
                                             type="number"
@@ -279,7 +295,7 @@ export const EditLesson = () => {
                                               styles.mode,
                                             )}
                                             max="12"
-                                            min="0"
+                                            min="1"
                                             data-id={index}
                                             disabled={!lessonOnEdit.lessonVisits[index].presence}
                                             onBlur={handleMarkChange}
@@ -287,6 +303,7 @@ export const EditLesson = () => {
                                         </td>
                                         <td>
                                           <Field
+                                            key = {`presence-${index}`}
                                             data-testid={`formData[${index}].presence`}
                                             name={`formData[${index}].presence`}
                                             className={styles.mode}
@@ -320,6 +337,7 @@ export const EditLesson = () => {
                           form="form"
                           type="submit"
                           className="btn btn-success btn-lg"
+                          disabled={isSubmitting}
                       >Save
                       </button>
                     </div>
