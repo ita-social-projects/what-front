@@ -20,15 +20,14 @@ import styles from './list-of-courses.scss';
 
 export const ListOfCourses = () => {
   const history = useHistory();
-
   // this is needed for future work with redirect by arrow button
   // const location = useLocation();
   // const paginationPage = location?.state
   //   ? location?.state?.paginationPage?.currentPage
   //   : 1;
-
   const [isShowDisabled, setIsShowDisabled] = useState(false);
   const [filteredCourses, setFilteredCourses] = useState([]);
+
   const [visibleCourses, setVisibleCourses] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [showBlocks, setShowBlocks] = useState(false);
@@ -52,11 +51,13 @@ export const ListOfCourses = () => {
     fetchNotActiveCourses,
   ]);
 
+
   useEffect(() => {
     if (!isShowDisabled) {
       loadActiveCourses();
     }
   }, [isShowDisabled, loadActiveCourses]);
+
 
   useEffect(() => {
     if (activeCourses.length > 0) {

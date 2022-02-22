@@ -47,12 +47,7 @@ export const UnAssignedList = () => {
     { id: 1, name: 'lastName', sortedByAscending: false, tableHead: 'Surname' },
     { id: 2, name: 'email', sortedByAscending: false, tableHead: 'Email' },
   ];
-
-  const [currentPage, setCurrentPage] = useState(1);
   const [usersVisible, setUsersVisible] = useState([]);
-  const [usersPerPage, setUserPerPage] = useState(10);
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const [sortingCategories, setSortingCategories] = useState(
     INITIAL_CATEGORIES
   );
@@ -88,10 +83,6 @@ export const UnAssignedList = () => {
     }
   }, [isLoaded, data, search, isLoading]);
 
-  useEffect(() => {
-    setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
-  }, [indexOfFirstUser, indexOfLastUser, users]);
-
   const changeActiveCategory = (categories, activeCategoryName) =>
     categories.map((category) => {
       if (category.name === activeCategoryName) {
@@ -99,23 +90,6 @@ export const UnAssignedList = () => {
       }
       return { ...category, sortedByAscending: false };
     });
-
-  const paginate = (pageNumber) => {
-    if (currentPage !== pageNumber) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const nextPage = (pageNumber) => {
-    const totalPages = Math.ceil(users?.length / usersPerPage);
-
-    setCurrentPage(currentPage === totalPages ? currentPage : pageNumber);
-  };
-
-  const prevPage = (pageNumber) => {
-    setCurrentPage(currentPage - 1 === 0 ? currentPage : pageNumber);
-  };
-
   const changeRole = (id, value) => {
     const newState = users.map((user) =>
       user.id === id ? { ...user, role: Number(value) } : user
@@ -168,7 +142,6 @@ export const UnAssignedList = () => {
       changeActiveCategory(sortingCategories, categoryParams.sortingParam)
     );
     setUsers(sortedUsers);
-    setUsersVisible(users.slice(indexOfFirstUser, indexOfLastUser));
   };
 
   const options = () => {
@@ -244,37 +217,6 @@ export const UnAssignedList = () => {
     return personsRows;
   };
 
-  const changeCountVisibleItems = (newNumber) => {
-    const finish = currentPage * newNumber;
-    const start = finish - newNumber;
-    setUsersVisible(users.slice(start, finish));
-    setUserPerPage(newNumber);
-  };
-
-  const paginationComponent = () => {
-    if (users.length < usersPerPage) {
-      return (
-        <Pagination
-          itemsPerPage={usersPerPage}
-          totalItems={1}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-        />
-      );
-    }
-    return (
-      <Pagination
-        itemsPerPage={usersPerPage}
-        totalItems={users.length}
-        paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        page={currentPage}
-      />
-    );
-  };
-
   return (
     <div className="container pt-5">
       <div className="row justify-content-between align-items-center mb-3">
@@ -282,9 +224,6 @@ export const UnAssignedList = () => {
         <div className="col-3 text-right">
           {!isLoading &&
             `${usersVisible.length} of ${users.length} unassigned users `}
-        </div>
-        <div className="col-3 d-flex align-items-center justify-content-end">
-          {paginationComponent()}
         </div>
       </div>
       <div className="row mr-0">
@@ -297,27 +236,7 @@ export const UnAssignedList = () => {
                 placeholder="person's name"
               />
             </div>
-            <div className="col-2 d-flex">
-              <label
-                className={classNames(styles['label-for-select'])}
-                htmlFor="change-visible-people"
-              >
-                Rows
-              </label>
-              <select
-                className={classNames('form-control', styles['change-rows'])}
-                id="change-visible-people"
-                onChange={(event) => {
-                  changeCountVisibleItems(event.target.value);
-                }}
-              >
-                <option>10</option>
-                <option>30</option>
-                <option>50</option>
-                <option>75</option>
-                <option>100</option>
-              </select>
-            </div>
+            
           </div>
           <WithLoading isLoading={!isLoaded} className="d-block mx-auto my-2">
             <Table
@@ -337,7 +256,10 @@ export const UnAssignedList = () => {
             styles.paginate
           )}
         >
-          {paginationComponent()}
+          <Pagination
+            items={users}
+            setVisibleItems={setUsersVisible}
+          />
         </div>
       </div>
     </div>
