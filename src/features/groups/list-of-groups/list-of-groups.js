@@ -292,7 +292,7 @@ export const ListOfGroups = () => {
         <h2 className="col-6">Groups</h2>
         <div className="col-2 text-right">
           {!isLoading &&
-            `${visibleGroups.length} of ${filteredGroupsList.length} students`}
+            `${visibleGroups.length} of ${filteredGroupsList.length} groups`}
         </div>
         <div className="col-4 d-flex align-items-center justify-content-end">
           {paginationComponent()}
