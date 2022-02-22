@@ -5,7 +5,7 @@ import {
   loadStudentGroupsSelector,
   mentorsActiveSelector,
   themesSelector,
-  fetchCourses,
+  fetchActiveCourses,
   fetchActiveMentors,
   fetchThemes,
   createSchedule,
@@ -23,7 +23,7 @@ export const useFetching = () => {
     dispatchFetchActiveMentors,
     dispatchFetchThemes,
     addSchedule,
-  ] = useActions([fetchActiveMentors, fetchThemes, createSchedule]);
+  ] = useActions([fetchActiveCourses, fetchActiveMentors, fetchThemes, createSchedule]);
 
   useEffect(() => {
     dispatchFetchSchedules();
