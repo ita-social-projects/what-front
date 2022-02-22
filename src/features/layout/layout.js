@@ -147,6 +147,11 @@ export const Layout = () => {
             exact path={paths.SCHEDULE}
             component={AllSchedules}
           />
+           <ProtectedRoute
+            roles={[ADMIN, SCRTARY]}
+            exact path={paths.SCHEDULE_ADD}
+            component={AddSchedule}
+          />
           <ProtectedRoute
             roles={[ADMIN, SCRTARY]}
             exact path={`${paths.SCHEDULE_BY_GROUP_ID}/:id`}
