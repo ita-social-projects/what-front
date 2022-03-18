@@ -7,7 +7,7 @@ import { Cookie } from '@/utils';
 export function useFetchMentors() {
   const jwt = Cookie.get('jwt');
   const { get, response, loading, error } = useFetch(
-    'https://charliebackendapihosting.azurewebsites.net/api/v2',
+    'https://whatbackend.azurewebsites.net/api/v2',
     {
       headers: {
         Authorization: `Bearer ${jwt}`,
