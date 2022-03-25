@@ -22,6 +22,9 @@ module.exports = {
   },
   plugins: ['babel', 'react', 'react-hooks', 'prettier'],
   rules: {
+    required: {
+      some: ['nesting', 'id'],
+    },
     semi: ['error', 'always'],
     quotes: ['error', 'single'],
     'linebreak-style': 0,
