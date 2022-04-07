@@ -26,6 +26,11 @@ export const AddCourse = () => {
       history.push(paths.COURSES);
       dispatchAddAlert('The course has been successfully added', 'success');
     }
+    if (error) {
+      dispatchAddAlert(
+        'This course is already taken. Please choose another name'
+      );
+    }
   }, [dispatchAddAlert, error, history, loaded]);
 
   const onSubmit = (values) => {
