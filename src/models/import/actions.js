@@ -4,9 +4,9 @@ import * as actionTypes from './types.js';
 
 export const sendGroups = (id, groups) => ({
   type: actionTypes.SEND_GROUPS,
-  payload: { 
+  payload: {
     id,
-    groups 
+    groups,
   },
 });
 
@@ -14,7 +14,7 @@ export const sendStudents = (id, students) => ({
   type: actionTypes.SEND_STUDENTS,
   payload: {
     id,
-    students
+    students,
   },
 });
 
@@ -40,8 +40,15 @@ function* sendGroupsWorker(data) {
     yield put({ type: actionTypes.SENDING_GROUPS_STARTED });
     const courseId = data.payload.id;
     const groupsFile = data.payload.groups;
-    const groups = yield call(ApiService.create, `/imports/groups/${courseId}`, groupsFile);
-    yield put({ type: actionTypes.SENDING_GROUPS_SUCCESS, payload: { groups } });
+    const groups = yield call(
+      ApiService.create,
+      `/imports/groups/${courseId}`,
+      groupsFile
+    );
+    yield put({
+      type: actionTypes.SENDING_GROUPS_SUCCESS,
+      payload: { groups },
+    });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.SENDING_GROUPS_FAILED, payload: { error } });
@@ -51,19 +58,36 @@ function* sendGroupsWorker(data) {
 function* sendStudentsWorker(data) {
   try {
     yield put({ type: actionTypes.SENDING_STUDENTS_STARTED });
-    const students = yield call(ApiService.create, `/imports/students/${data.payload.id}`, data.payload.students);
-    yield put({ type: actionTypes.SENDING_STUDENTS_SUCCESS, payload: { students } });
+    const students = yield call(
+      ApiService.create,
+      `/imports/students/${data.payload.id}`,
+      data.payload.students
+    );
+    yield put({
+      type: actionTypes.SENDING_STUDENTS_SUCCESS,
+      payload: { students },
+    });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
-    yield put({ type: actionTypes.SENDING_STUDENTS_FAILED, payload: { error } });
+    yield put({
+      type: actionTypes.SENDING_STUDENTS_FAILED,
+      payload: { error },
+    });
   }
 }
 
 function* sendThemesWorker(data) {
   try {
     yield put({ type: actionTypes.SENDING_THEMES_STARTED });
-    const themes = yield call(ApiService.create, '/imports/themes', data.payload.themes);
-    yield put({ type: actionTypes.SENDING_THEMES_SUCCESS, payload: { themes } });
+    const themes = yield call(
+      ApiService.create,
+      '/imports/themes',
+      data.payload.themes
+    );
+    yield put({
+      type: actionTypes.SENDING_THEMES_SUCCESS,
+      payload: { themes },
+    });
     yield put({ type: actionTypes.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: actionTypes.SENDING_THEMES_FAILED, payload: { error } });

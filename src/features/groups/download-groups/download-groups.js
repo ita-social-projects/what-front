@@ -124,7 +124,9 @@ export const DownloadGroups = () => {
                       >
                         Choose File
                       </label>
-                      <span className="font-weight-bolder">{fileName}</span>
+                      <span id="filename" className="font-weight-bolder">
+                        {fileName}
+                      </span>
                     </div>
                   </div>
                   <div className="row justify-content-end px-4">
