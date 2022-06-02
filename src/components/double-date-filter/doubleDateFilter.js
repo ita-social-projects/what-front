@@ -7,7 +7,7 @@ import { commonHelpers } from "@/utils";
 import { Button } from '@components/index.js';
 
 export const DoubleDateFilter = (props) => {
-  const { rawItemsList, setFilteredItemsList, setCurrentPage, component } = props;
+  const { rawItemsList, setFilteredItemsList, component } = props;
   let initialStartDate = `${new Date().getFullYear()}-01-01`;
   let initialFinishDate = `${commonHelpers.transformDateTime({}).reverseDate}`;
   let rawList;
@@ -43,7 +43,6 @@ export const DoubleDateFilter = (props) => {
     );
 
     setFilteredItemsList(newArray);
-    setCurrentPage(1);
   };
 
   return (
@@ -87,6 +86,5 @@ export const DoubleDateFilter = (props) => {
 DoubleDateFilter.propTypes = {
   rawItemsList: propTypes.array.isRequired,
   setFilteredItemsList: propTypes.func.isRequired,
-  setCurrentPage: propTypes.func.isRequired,
   component: propTypes.string
 };

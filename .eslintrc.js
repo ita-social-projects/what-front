@@ -3,12 +3,14 @@ module.exports = {
     browser: true,
     commonjs: true,
     es2021: true,
+    jest: true,
   },
   extends: [
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'airbnb',
     'airbnb/hooks',
+    'prettier',
   ],
   parser: '@babel/eslint-parser',
   parserOptions: {
@@ -18,11 +20,7 @@ module.exports = {
     },
     ecmaVersion: 12,
   },
-  plugins: [
-    'babel',
-    'react',
-    'react-hooks',
-  ],
+  plugins: ['babel', 'react', 'react-hooks', 'prettier'],
   rules: {
     semi: ['error', 'always'],
     quotes: ['error', 'single'],
@@ -30,9 +28,7 @@ module.exports = {
     'eol-last': 0,
     'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
     'import/prefer-default-export': 'off',
-    'import/extensions': ['error', 'ignorePackages', {
-      js: 'always',
-    }],
+    'import/extensions': 'off',
     'react/button-has-type': 'off',
     'object-curly-spacing': [2, 'always'],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],

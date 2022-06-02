@@ -16,17 +16,17 @@ export const StudentDetails = () => {
     isLoaded: isStudentLoaded,
     error: studentError,
   } = useSelector(currentStudentSelector, shallowEqual);
-
+  
   const {
-    data: studentGroups,
-    isLoading: areStudentGroupsLoading,
-  } = useSelector(currentStudentGroupsSelector, shallowEqual);
-
-  const {
-    data: studentLessons,
-    isLoading: studentLessonsIsLoading,
-    isLoaded: studentLessonsIsLoaded,
-  } = useSelector(studentLessonsSelector, shallowEqual);
+      data: studentGroups,
+      isLoading: areStudentGroupsLoading,
+    } = useSelector(currentStudentGroupsSelector, shallowEqual);
+    
+    const {
+      data: studentLessons,
+      isLoading: studentLessonsIsLoading,
+      isLoaded: studentLessonsIsLoaded,
+    } = useSelector(studentLessonsSelector, shallowEqual);
 
   useEffect(() => {
     if (studentError && !isStudentLoading) {
@@ -47,17 +47,17 @@ export const StudentDetails = () => {
             >
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>First name: </span></div>
-                <div className="col-12 col-md-6"><span>{student?.firstName}</span></div>
+                <div className="col-12 col-md-6"><span data-testid='firstName'>{student?.firstName}</span></div>
               </div>
               <hr />
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Last name: </span></div>
-                <div className="col-12 col-md-6 "><span>{student?.lastName}</span></div>
+                <div className="col-12 col-md-6 "><span data-testid='lastName'>{student?.lastName}</span></div>
               </div>
               <hr />
               <div className="row">
                 <div className="col-12 col-md-6 font-weight-bolder"><span>Email: </span></div>
-                <div className="col-12 col-md-6 "><span>{student?.email}</span></div>
+                <div className="col-12 col-md-6 "><span data-testid='email'>{student?.email}</span></div>
               </div>
               <hr />
               <div className="row">
@@ -74,6 +74,8 @@ export const StudentDetails = () => {
                             <Link
                               to={`${paths.GROUPS_DETAILS}/${id}`}
                               className="text-decoration-none text-white"
+                              data-testid='groupLink'
+                              data-testgroupidparam={id}
                             >{name}
                             </Link>
                           </Badge>
@@ -97,6 +99,8 @@ export const StudentDetails = () => {
                             <Link
                               to={`${paths.LESSON_DETAILS}/${id}`}
                               className="text-decoration-none text-white"
+                              data-testid='lessonLink'
+                              data-testlessonidparam={id}
                             >{themeName}
                             </Link>
                           </Badge>

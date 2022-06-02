@@ -53,6 +53,11 @@ export const deleteMentor = (id) => ({
   payload: { id },
 });
 
+export const reactivateMentor = (id) => ({
+  type: types.REACTIVATE_MENTOR,
+  payload: { id },
+});
+
 function* fetchAsyncMentors() {
   try {
     yield put({ type: types.FETCHING_MENTORS_STARTED });
@@ -155,6 +160,7 @@ function* editAsyncMentor({ payload }) {
 }
 
 function* deleteAsyncMentor({ payload }) {
+  console.log("delete")
   try {
     yield put({ type: types.DELETING_MENTOR_STARTED });
     const mentorId = payload.id;
@@ -163,6 +169,19 @@ function* deleteAsyncMentor({ payload }) {
     yield put({ type: types.CLEAR_LOADED });
   } catch (error) {
     yield put({ type: types.DELETING_MENTOR_FAILED, payload: { error } });
+  }
+}
+
+function* reactivateAsyncMentor({ payload }) {
+  console.log("reactiavte")
+  try {
+    yield put({ type: types.REACTIVATING_MENTOR_STARTED });
+    const mentorId = payload.id;
+    yield call(ApiService.reactivate, `/mentors/${mentorId}`);
+    yield put({ type: types.REACTIVATING_MENTOR_SUCCEED, payload: { id: mentorId } });
+    yield put({ type: types.CLEAR_LOADED });
+  } catch (error) {
+    yield put({ type: types.REACTIVATING_MENTOR_FAILED, payload: { error } });
   }
 }
 
@@ -205,6 +224,10 @@ function* deletingMentorWatcher() {
   yield takeEvery(types.DELETE_MENTOR, deleteAsyncMentor);
 }
 
+function* reactivatingMentorWatcher() {
+  yield takeEvery(types.REACTIVATE_MENTOR, reactivateAsyncMentor);
+}
+
 export function* mentorsWatcher() {
   yield all([
     fork(fetchingMentorsWatcher),
@@ -217,5 +240,6 @@ export function* mentorsWatcher() {
     fork(addingMentorWatcher),
     fork(editingMentorWatcher),
     fork(deletingMentorWatcher),
+    fork(reactivatingMentorWatcher),
   ]);
 }

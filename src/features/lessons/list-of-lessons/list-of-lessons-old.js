@@ -86,8 +86,8 @@ export const ListOfLessonsOld = () => {
               id={lesson.id}
               title={lesson.themeName}
               buttonName="Details"
-              iconName={currentUser.role !== 3 ? "Edit" : null}
-              onEdit={currentUser.role !== 3 ? editLesson : null}
+              iconName={currentUser.role !== 8 ? "Edit" : null}
+              onEdit={currentUser.role !== 8 ? editLesson : null}
               onDetails={() => lessonDetails(lesson.id)}
             >
               <p className={styles.timeDate}>Date: {date}</p>
@@ -146,7 +146,7 @@ export const ListOfLessonsOld = () => {
         <div className="col-md-4 offset-md-2 text-center pl-3">
           <Search onSearch={handleSearchTheme} placeholder="Lesson's name" />
         </div>
-        {currentUser.role !== 3 &&
+        {currentUser.role !== 8 &&
           <div className="col-md-4 col-12 text-right">
             <Button onClick={addLesson} variant="warning">
               <Icon icon="Plus" className="icon" />
